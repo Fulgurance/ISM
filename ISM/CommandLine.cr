@@ -25,7 +25,7 @@ module ISM
                 if matchingOption
                     @options[matchingOptionIndex].start
                 else
-                    puts "#{ISM::Default::Message::ErrorUnknowArgument.colorize(:yellow)}" +                                        "#{ARGV[0].colorize(:white)}"
+                    puts "#{ISM::Default::Message::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
                     puts    "#{ISM::Default::Message::ErrorUnknowArgumentHelp1.colorize(:white)}" +
                             "#{ISM::Default::Message::ErrorUnknowArgumentHelp2.colorize(:green)}" +
                             "#{ISM::Default::Message::ErrorUnknowArgumentHelp3.colorize(:white)}"
