@@ -18,7 +18,6 @@ module ISM
         end
 
         def start
-
         end
 
     end

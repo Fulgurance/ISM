@@ -25,16 +25,16 @@ module ISM
                 if matchingOption
                     @options[matchingOptionIndex].start
                 else
-                    puts "#{ISM::Default::Message::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                    puts    "#{ISM::Default::Message::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                            "#{ISM::Default::Message::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                            "#{ISM::Default::Message::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                    puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
+                    puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                            "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                            "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
                 end
             end
         end
 
         def showHelp
-            puts ISM::Default::Message::Title
+            puts ISM::Default::CommandLine::Title
             @options.each do |argument|
                 puts    "\t" + "#{argument.shortText.colorize(:white)}" +
                         "\t" + "#{argument.longText.colorize(:white)}" +
