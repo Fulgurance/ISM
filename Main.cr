@@ -1,11 +1,11 @@
-require "./ISM/Default/CommandLineOption"
-require "./ISM/CommandLineOption"
-require "./ISM/Default/CommandLine"
-require "./ISM/CommandLine"
-require "./ISM/Default/Message"
+
+require "./ISM/Default/Option/*"
+require "./ISM/Default/*"
+require "./ISM/Option/*"
+require "./ISM/*"
 require "colorize"
 
-options = [ISM::CommandLineOption.new("-h","--help","Show help")]
+options = [ISM::Option::Help]
 
 ism = ISM::CommandLine.new(options)
 ism.start

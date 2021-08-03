@@ -9,14 +9,14 @@ module ISM
         end
 
         def start
-            if ARGV.empty?
+            if ARGV.empty? || ARGV[0] == ISM::Default::Option::Help::ShortText || ARGV[0] == ISM::Default::Option::Help::LongText
                 showHelp
             else
                 matchingOption = false
                 matchingOptionIndex = 0
 
                 @options.each_with_index do |argument, index|
-                    if ARGV[0].includes?(argument.shortText) || ARGV[0].includes?(argument.longText)
+                    if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
                         matchingOption = true
                         matchingOptionIndex = index
                     end

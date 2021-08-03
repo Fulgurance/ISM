@@ -6,10 +6,6 @@ module ISM
 
       Title = "Ingenius System Manager"
 
-      HelpOption = "--help"
-      HelpShortOption = "-h"
-      HelpOptionDescription = "Display the help how to use ISM"
-
       VersionOption = "--version"
       VersionShortOption = "-v"
       VersionOptionDescription = "Display the version of ISM"
@@ -22,7 +18,7 @@ module ISM
 
       ErrorUnknowArgument = "ISM error: unknow argument "
       ErrorUnknowArgumentHelp1 = "Use "
-      ErrorUnknowArgumentHelp2 = "ism --help"
+      ErrorUnknowArgumentHelp2 = "ism --help "
       ErrorUnknowArgumentHelp3 = "to know how to use ISM"
 
     end

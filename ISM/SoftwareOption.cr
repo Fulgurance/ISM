@@ -1,14 +1,14 @@
 module ISM
 
-  class Option
+  class SoftwareOption
 
-    property name = ISM::Default::Option::Name
-    property description = ISM::Default::Option::Description
-    property active = ISM::Default::Option::Active
+    property name = ISM::Default::SoftwareOption::Name
+    property description = ISM::Default::SoftwareOption::Description
+    property active = ISM::Default::SoftwareOption::Active
 
-    def initialize( name = ISM::Default::Option::Name,
-                    description = ISM::Default::Option::Description,
-                    active = ISM::Default::Option::Active)
+    def initialize( name = ISM::Default::SoftwareOption::Name,
+                    description = ISM::Default::SoftwareOption::Description,
+                    active = ISM::Default::SoftwareOption::Active)
                     @name = name
                     @description = description
                     @active = active
