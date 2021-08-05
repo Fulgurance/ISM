@@ -7,7 +7,6 @@ module ISM
             Name = ""
             Description = ""
             Website = ""
-            Binary = false
             DownloadLinks = Array(String).new
             SignatureLinks = Array(String).new
             ShasumLinks = Array(String).new

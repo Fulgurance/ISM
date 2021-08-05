@@ -9,6 +9,17 @@ module ISM
         end
 
         def start
+            checkSoftwareDatabase
+            checkEnteredArguments
+        end
+
+        def checkSoftwareDatabase
+            if !Dir.exists?(ISM::Default::Path::SoftwareDatabase)
+                Dir.mkdir(ISM::Default::Path::SoftwareDatabase)
+            end
+        end
+
+        def checkEnteredArguments
             if ARGV.empty? || ARGV[0] == ISM::Default::Option::Help::ShortText || ARGV[0] == ISM::Default::Option::Help::LongText
                 showHelp
             else
@@ -25,10 +36,7 @@ module ISM
                 if matchingOption
                     @options[matchingOptionIndex].start
                 else
-                    puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                    puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                            "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                            "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                    showErrorUnknowArgument
                 end
             end
         end
@@ -40,6 +48,13 @@ module ISM
                         "\t" + "#{argument.longText.colorize(:white)}" +
                         "\t" + "#{argument.description.colorize(:green)}"
             end
+        end
+
+        def showErrorUnknowArgument
+            puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
+            puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
         end
 
     end
