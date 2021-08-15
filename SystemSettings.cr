@@ -1,0 +1,1 @@
+SystemSettings = {"LC_ALL" => "POSIX"}

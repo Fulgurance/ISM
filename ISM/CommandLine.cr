@@ -3,9 +3,12 @@ module ISM
     class CommandLine
 
         property options = ISM::Default::CommandLine::Options
+        property settings = ISM::Default::CommandLine::Settings
 
-        def initialize(options = ISM::Default::CommandLine::Options)
+        def initialize( options = ISM::Default::CommandLine::Options,
+                        settings = ISM::Default::CommandLine::Settings)
             @options = options
+            @settings = settings
         end
 
         def start

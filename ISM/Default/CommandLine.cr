@@ -5,6 +5,7 @@ module ISM
         class CommandLine
 
             Options = Array(ISM::CommandLineOption).new
+            Settings = ISM::CommandLineSettings.new
             Title = "Ingenius System Manager"
             ErrorUnknowArgument = "ISM error: unknow argument "
             ErrorUnknowArgumentHelp1 = "Use "

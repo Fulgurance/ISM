@@ -1,5 +1,6 @@
 SoftwareInformation = { 
 "Name" => "Binutils",
+"Architectures" => ["x86_64"],
 "Description" => "The GNU collection of binary tools",
 "Website" => "https://www.gnu.org/software/binutils/",
 "DownloadLinks" => ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"],
@@ -16,7 +17,9 @@ SoftwareInformation = {
 "Configure" => configure,
 "Build" => build,
 "Install" => install,
-"Uninstall" => uninstall
+"Uninstall" => uninstall,
+"EnableOption" => enableOption,
+"DisableOption" => disableOption
                         }
 
 def download
@@ -39,15 +42,15 @@ end
 
 def configure
     if SoftwareInformation["Options"]["Pass1"]["Enabled"] == true
-        `../configure   --prefix=
-                        --with-sysroot=
-                        --target=
+        `../configure   --prefix=#{ism.settings.toolsPath}
+                        --with-sysroot=#{ism.settings.rootPath}
+                        --target=#{ism.settings.target}
                         --disable-nls
                         --disable-werror`
     elsif SoftwareInformation["Options"]["Pass2"]["Enabled"] == true
-        `../configure   --prefix=
-                        --build=
-                        --host=
+        `../configure   --prefix=/usr
+                        --build=$(../config.guess)
+                        --host=#{ism.settings.target}
                         --disable-nls
                         --enable-shared
                         --disable-werror
@@ -76,7 +79,7 @@ def install
     if SoftwareInformation["Options"]["Pass1"]["Enabled"] == true
         `make -j1 install`
     elsif SoftwareInformation["Options"]["Pass2"]["Enabled"] == true
-        `make DESTDIR= install -j1`
+        `make DESTDIR=#{ism.settings.rootPath} install -j1`
         `install -vm755 libctf/.libs/libctf.so.0.0.0 $LFS/usr/lib`
     else
         `make tooldir=/usr install -j1`
@@ -86,4 +89,20 @@ end
 
 def uninstall
 
+end
+
+def enableOption(option)
+    if SoftwareInformation["Options"][option] == "Pass1"
+        SoftwareInformation["Options"]["Pass1"]["Enabled"] = true
+        SoftwareInformation["Options"]["Pass2"]["Enabled"] = false
+    elsif SoftwareInformation["Options"][option] == "Pass2"
+        SoftwareInformation["Options"]["Pass2"]["Enabled"] = true
+        SoftwareInformation["Options"]["Pass1"]["Enabled"] = false
+    else
+        SoftwareInformation["Options"][option]["Enabled"] = true
+    end
+end
+
+def disableOption(option)
+    SoftwareInformation["Options"][option]["Enabled"] = false
 end

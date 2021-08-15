@@ -3,6 +3,7 @@ module ISM
   class SoftwareInformation
 
     property name = ISM::Default::SoftwareInformation::Name
+    property architectures = ISM::Default::SoftwareInformation::Architectures
     property description = ISM::Default::SoftwareInformation::Description
     property website = ISM::Default::SoftwareInformation::Website
     property downloadLinks = ISM::Default::SoftwareInformation::DownloadLinks
@@ -12,6 +13,7 @@ module ISM
     property options = ISM::Default::SoftwareInformation::Options
 
     def initialize( name = ISM::Default::SoftwareInformation::Name,
+                    architectures = ISM::Default::SoftwareInformation::Architectures,
                     description = ISM::Default::SoftwareInformation::Description,
                     website = ISM::Default::SoftwareInformation::Website,
                     downloadLinks = ISM::Default::SoftwareInformation::DownloadLinks,
@@ -21,6 +23,7 @@ module ISM
                     options = ISM::Default::SoftwareInformation::Options)
 
                     @name = name
+                    @architectures = architectures
                     @description = description
                     @website = website
                     @downloadLinks = downloadLinks
