@@ -4,11 +4,14 @@ module ISM
 
         property options = ISM::Default::CommandLine::Options
         property settings = ISM::Default::CommandLine::Settings
+        property softwares = ISM::Default::CommandLine::Softwares
 
         def initialize( options = ISM::Default::CommandLine::Options,
-                        settings = ISM::Default::CommandLine::Settings)
+                        settings = ISM::Default::CommandLine::Settings,
+                        softwares = ISM::Default::CommandLine::Softwares)
             @options = options
             @settings = settings
+            @softwares = softwares
         end
 
         def start
@@ -27,18 +30,16 @@ module ISM
                 showHelp
             else
                 matchingOption = false
-                matchingOptionIndex = 0
 
                 @options.each_with_index do |argument, index|
                     if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
                         matchingOption = true
-                        matchingOptionIndex = index
+                        @options[index].start
+                        break
                     end
                 end
 
-                if matchingOption
-                    @options[matchingOptionIndex].start
-                else
+                if !matchingOption
                     showErrorUnknowArgument
                 end
             end

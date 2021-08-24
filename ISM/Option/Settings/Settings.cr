@@ -18,18 +18,16 @@ module ISM
                     showHelp
                 #else
                     #matchingOption = false
-                    #matchingOptionIndex = 0
     
                     #@options.each_with_index do |argument, index|
                         #if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
                             #matchingOption = true
-                            #matchingOptionIndex = index
+                            #@options[index].start
+                            #break
                         #end
                     #end
     
-                    #if matchingOption
-                        #@options[matchingOptionIndex].start
-                    #else
+                    #if !matchingOption
                         #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
                         #puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
                                 #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +

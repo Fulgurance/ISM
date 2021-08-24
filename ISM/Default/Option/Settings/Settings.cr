@@ -6,7 +6,7 @@ module ISM
 
             module Settings
 
-                ShortText = "settings"
+                ShortText = "-se"
                 LongText = "settings"
                 Description = "Configure ISM settings"
                 Options = [ ISM::CommandLineOption.new( "setrootpath",

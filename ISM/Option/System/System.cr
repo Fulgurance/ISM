@@ -2,13 +2,13 @@ module ISM
 
     module Option
 
-        class Software < ISM::CommandLineOption
+        class System < ISM::CommandLineOption
 
             def initialize
-                super(  ISM::Default::Option::Software::ShortText,
-                        ISM::Default::Option::Software::LongText,
-                        ISM::Default::Option::Software::Description,
-                        ISM::Default::Option::Software::Options)
+                super(  ISM::Default::Option::System::ShortText,
+                        ISM::Default::Option::System::LongText,
+                        ISM::Default::Option::System::Description,
+                        ISM::Default::Option::System::Options)
             end
 
             def start
@@ -18,18 +18,16 @@ module ISM
                     showHelp
                 #else
                     #matchingOption = false
-                    #matchingOptionIndex = 0
     
                     #@options.each_with_index do |argument, index|
                         #if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
                             #matchingOption = true
-                            #matchingOptionIndex = index
+                            #@options[index].start
+                            #break
                         #end
                     #end
     
-                    #if matchingOption
-                        #@options[matchingOptionIndex].start
-                    #else
+                    #if !matchingOption
                         #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
                         #puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
                                 #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +

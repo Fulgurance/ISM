@@ -80,7 +80,7 @@ def install
         `make -j1 install`
     elsif SoftwareInformation["Options"]["Pass2"]["Enabled"] == true
         `make DESTDIR=#{ism.settings.rootPath} install -j1`
-        `install -vm755 libctf/.libs/libctf.so.0.0.0 $LFS/usr/lib`
+        `install -vm755 libctf/.libs/libctf.so.0.0.0 #{ism.settings.rootPath}/usr/lib`
     else
         `make tooldir=/usr install -j1`
         `rm -fv /usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes}.a`

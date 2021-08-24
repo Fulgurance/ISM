@@ -6,7 +6,7 @@ module ISM
 
             module System
 
-                ShortText = "system"
+                ShortText = "-sy"
                 LongText = "system"
                 Description = "Configure the system settings"
                 Options = [ ISM::CommandLineOption.new( "setlcall",

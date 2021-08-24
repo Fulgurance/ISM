@@ -4,11 +4,11 @@ module ISM
 
         module Option
 
-            module Help
+            module Version
 
-                ShortText = "-h"
-                LongText = "--help"
-                Description = "Display the help how to use ISM"
+                ShortText = "-v"
+                LongText = "version"
+                Description = "Display the ISM version"
                 Options = Array(ISM::CommandLineOption).new
 
             end
