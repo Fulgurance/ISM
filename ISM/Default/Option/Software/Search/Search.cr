@@ -4,11 +4,11 @@ module ISM
 
         module Option
 
-            module SoftwareRemove
+            module SoftwareSearch
 
-                ShortText = "-r"
-                LongText = "remove"
-                Description = "Remove specific(s) software(s)"
+                ShortText = "-se"
+                LongText = "search"
+                Description = "Search specific(s) software(s)"
                 Options = Array(ISM::CommandLineOption).new
 
             end

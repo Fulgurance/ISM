@@ -20,8 +20,8 @@ module ISM
         end
 
         def checkSoftwareDatabase
-            if !Dir.exists?(ISM::Default::Path::SoftwareDatabase)
-                Dir.mkdir(ISM::Default::Path::SoftwareDatabase)
+            if !Dir.exists?(ISM::Default::Path::SoftwaresDirectory)
+                Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
             end
         end
 

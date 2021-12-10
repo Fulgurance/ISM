@@ -15,28 +15,45 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    #matchingOption = false
                     matchingSoftware = false
                     matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
 
-                    #@options.each_with_index do |argument, index|
-                        #if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
-                            #matchingOption = true
-                            #@options[index].start
-                            #break
-                        #end
-                    #end
-
                     Ism.softwares.each_with_index do |software, index|
                         if ARGV[2].downcase == software.name
-                            matchingOption = true
+                            matchingSoftware = true
                             matchingSoftwaresArray << software
                         end
                     end
 
-                    puts matchingSoftwaresArray
+                    if matchingSoftware
+                        userInput = ""
+                        userAgreement = false
+                        
+                        #puts "Would you like to install this software ? [y/n]"
+
+                        puts ISM::Default::Option::SoftwareInstall::InstallQuestion + 
+                                "[" + "#{ISM::Default::Option::SoftwareInstall::YesReplyOption.colorize(:green)}" + 
+                                "/" + "#{ISM::Default::Option::SoftwareInstall::NoReplyOption.colorize(:red)}" + "]"
+
+                        loop do
+                            userAgreement = gets
+                        
+                            if userInput == ISM::Default::Option::SoftwareInstall::YesReplyOption || userInput == ISM::Default::Option::SoftwareInstall::NoReplyOption
+                                if userInput == "y"
+                                    userAgreement = true
+                                end
+                                break
+                            end
+                        end
+
+                        if userAgreement
+                            matchingSoftwaresArray.each_with_index do |software, index|
+                                software.install
+                            end
+                        end
+                    end
     
-                    #if !matchingOption
+                    #if !matchingSoftware
                         #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
                         #puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
                                 #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +

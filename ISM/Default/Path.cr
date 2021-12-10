@@ -3,7 +3,7 @@ module ISM
     module Default
 
         module Path
-            SoftwareDatabase = "Softwares"
+            SoftwaresDirectory = "Softwares"
         end
 
     end

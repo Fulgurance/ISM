@@ -18,7 +18,7 @@ module ISM
                     matchingOption = false
     
                     @options.each_with_index do |argument, index|
-                        if ARGV[1] == argument.shortText || ARGV[1] == argument.longText
+                        if ARGV[index] == argument.shortText || ARGV[index] == argument.longText
                             matchingOption = true
                             @options[index].start
                             break

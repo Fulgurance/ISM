@@ -1,4 +1,4 @@
-class Binutils < Software
+class Target < ISM::Software
 
     def initialize
         super
@@ -17,7 +17,7 @@ class Binutils < Software
         option2.name = "Pass2"
         option2.description = "Build the second pass to make a system from scratch"
 
-        @options = [option1, option2]
+        @options = [option1, option2] of ISM::SoftwareOption
     end
 
     def download
