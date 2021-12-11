@@ -16,10 +16,10 @@ module ISM
                     showHelp
                 else
                     matchingSoftware = false
-                    matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
+                    matchingSoftwaresArray = Array(ISM::Software).new
 
                     Ism.softwares.each_with_index do |software, index|
-                        if ARGV[2].downcase == software.name
+                        if ARGV[2].downcase == software.information.name
                             matchingSoftware = true
                             matchingSoftwaresArray << software
                         end

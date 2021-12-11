@@ -2,12 +2,12 @@ class Target < ISM::Software
 
     def initialize
         super
-        @name = "Binutils"
-        @architectures = ["x86_64"]
-        @description = "The GNU collection of binary tools"
-        @website = "https://www.gnu.org/software/binutils/"
-        @downloadLinks = ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"]
-        @signatureLinks = ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz.sig"]
+        @information.name = "Binutils"
+        @information.architectures = ["x86_64"]
+        @information.description = "The GNU collection of binary tools"
+        @information.website = "https://www.gnu.org/software/binutils/"
+        @information.downloadLinks = ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"]
+        @information.signatureLinks = ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz.sig"]
 
         option1 = ISM::SoftwareOption.new
         option1.name = "Pass1"
@@ -17,7 +17,7 @@ class Target < ISM::Software
         option2.name = "Pass2"
         option2.description = "Build the second pass to make a system from scratch"
 
-        @options = [option1, option2] of ISM::SoftwareOption
+        @information.options = [option1, option2] of ISM::SoftwareOption
     end
 
     def download
@@ -44,7 +44,7 @@ class Target < ISM::Software
     
     def configure
         super
-        if @options[0].active == true
+        if @information.options[0].active == true
             `../configure   --prefix=#{ism.settings.toolsPath}
                             --with-sysroot=#{ism.settings.rootPath}
                             --target=#{ism.settings.target}
@@ -72,7 +72,7 @@ class Target < ISM::Software
     
     def build
         super
-        if @options[0] || @options[1] == true
+        if @information.options[0] || @information.options[1]
             `make`
         else
             `make tooldir=/usr`
@@ -81,9 +81,9 @@ class Target < ISM::Software
     
     def install
         super
-        if @options[0] == true
+        if @information.options[0] == true
             `make -j1 install`
-        elsif @options[1] == true
+        elsif @information.options[1] == true
             `make DESTDIR=#{ism.settings.rootPath} install -j1`
             `install -vm755 libctf/.libs/libctf.so.0.0.0 #{ism.settings.rootPath}/usr/lib`
         else
@@ -99,15 +99,15 @@ class Target < ISM::Software
     def enableOption(option)
         super
         if option == option1.name
-            @options[0] = true
-            @options[1] = false
+            @information.options[0] = true
+            @information.options[1] = false
         elsif option == option2.name
-            @options[1] = true
-            @options[0] = false
+            @information.options[1] = true
+            @information.options[0] = false
         else
-            @options.each_with_index do |data, index|
+            @information.options.each_with_index do |data, index|
                 if data.name = option
-                    @options[index] = true
+                    @information.options[index] = true
                     break
                 end
             end
@@ -116,9 +116,9 @@ class Target < ISM::Software
     
     def disableOption(option)
         super
-        @options.each_with_index do |data, index|
+        @information.options.each_with_index do |data, index|
             if data.name = option
-                @options[index] = false
+                @information.options[index] = false
                 break
             end
         end
