@@ -29,7 +29,7 @@ module ISM
                         userInput = ""
                         userAgreement = false
                         
-                        #puts "Would you like to install this software ? [y/n]"
+                        puts "Would you like to install this software ? [y/n]"
 
                         puts ISM::Default::Option::SoftwareInstall::InstallQuestion + 
                                 "[" + "#{ISM::Default::Option::SoftwareInstall::YesReplyOption.colorize(:green)}" + 
@@ -46,11 +46,11 @@ module ISM
                             end
                         end
 
-                        if userAgreement
-                            matchingSoftwaresArray.each_with_index do |software, index|
-                                software.install
-                            end
-                        end
+                        #if userAgreement
+                            #matchingSoftwaresArray.each_with_index do |software, index|
+                                #software.install
+                            #end
+                        #end
                     end
     
                     #if !matchingSoftware
