@@ -1,3 +1,6 @@
+require "json"
+require "http"
+require "colorize"
 require "./ISM/*"
 require "./ISM/Default/*"
 require "./ISM/Default/Option/Help/Help"
@@ -24,8 +27,6 @@ require "./ISM/Option/Software/Remove/Remove"
 require "./ISM/Option/Software/Search/Search"
 require "./ISM/Option/Software/Synchronize/Synchronize"
 require "./ISM/Option/Software/Update/Update" 
-require "http"
-require "colorize"
 
 Options = [ ISM::Option::Help.new,
             ISM::Option::Version.new,

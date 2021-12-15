@@ -13,6 +13,7 @@ module ISM
                 InstallQuestion = "Would you like to install this software ?"
                 YesReplyOption = "y"
                 NoReplyOption = "n"
+                NoMatchFound = "No match found with the database."
 
             end
             

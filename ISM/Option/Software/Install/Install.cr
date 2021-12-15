@@ -28,37 +28,32 @@ module ISM
                     if matchingSoftware
                         userInput = ""
                         userAgreement = false
-                        
-                        puts "Would you like to install this software ? [y/n]"
 
                         puts ISM::Default::Option::SoftwareInstall::InstallQuestion + 
                                 "[" + "#{ISM::Default::Option::SoftwareInstall::YesReplyOption.colorize(:green)}" + 
                                 "/" + "#{ISM::Default::Option::SoftwareInstall::NoReplyOption.colorize(:red)}" + "]"
 
                         loop do
-                            userAgreement = gets
+                            userInput = gets
                         
-                            if userInput == ISM::Default::Option::SoftwareInstall::YesReplyOption || userInput == ISM::Default::Option::SoftwareInstall::NoReplyOption
-                                if userInput == "y"
-                                    userAgreement = true
-                                end
+                            if userInput == ISM::Default::Option::SoftwareInstall::YesReplyOption
+                                userAgreement = true
+                                break
+                            end
+                            if userInput == ISM::Default::Option::SoftwareInstall::NoReplyOption
                                 break
                             end
                         end
 
-                        #if userAgreement
-                            #matchingSoftwaresArray.each_with_index do |software, index|
-                                #software.install
-                            #end
-                        #end
+                        if userAgreement
+                            matchingSoftwaresArray.each_with_index do |software, index|
+                                software.install
+                            end
+                        end
+                    else
+                        puts ISM::Default::Option::SoftwareInstall::NoMatchFound
                     end
     
-                    #if !matchingSoftware
-                        #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                        #puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
-                    #end
                 end
             end
 

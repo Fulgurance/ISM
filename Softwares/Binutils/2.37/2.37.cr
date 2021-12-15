@@ -1,23 +1,48 @@
+require "colorize"
+require "json"
+require "../../../ISM/Default/SoftwareOption"
+require "../../../ISM/SoftwareOption"
+require "../../../ISM/Default/SoftwareDependency"
+require "../../../ISM/SoftwareDependency"
+require "../../../ISM/Default/SoftwareInformation"
+require "../../../ISM/SoftwareInformation"
+require "../../../ISM/Default/Software"
+require "../../../ISM/Software"
+
 class Target < ISM::Software
 
     def initialize
         super
-        @information.name = "Binutils"
-        @information.architectures = ["x86_64"]
-        @information.description = "The GNU collection of binary tools"
-        @information.website = "https://www.gnu.org/software/binutils/"
-        @information.downloadLinks = ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"]
-        @information.signatureLinks = ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz.sig"]
+        information = Information.from_json(File.read("Information.json"))
 
-        option1 = ISM::SoftwareOption.new
-        option1.name = "Pass1"
-        option1.description = "Build the first pass to make a system from scratch"
+        @information.name = information.name
+        @information.architectures = information.architectures
+        @information.description = information.description
+        @information.website = information.website
+        @information.downloadLinks = information.downloadLinks
+        @information.signatureLinks = information.signatureLinks
+        @information.shasumLinks = information.shasumLinks
 
-        option2 = ISM::SoftwareOption.new
-        option2.name = "Pass2"
-        option2.description = "Build the second pass to make a system from scratch"
-
-        @information.options = [option1, option2] of ISM::SoftwareOption
+        information.dependencies.each do |data|
+            dependency = ISM::SoftwareDependency.new
+            dependency.name = data.name
+            dependency.version = data.version
+            data.options.each do |entry|
+                option = ISM::SoftwareOption.new
+                option.name = entry.name
+                option.description = entry.description
+                option.active = entry.active
+                dependency.options.push(option)
+            end
+            @information.dependencies.push(dependency)
+        end
+        
+        information.options.each do |data|
+            option = ISM::SoftwareOption.new
+            option.name = data.name
+            option.description = data.description
+            @information.options.push(option)
+        end
     end
 
     def download
@@ -125,3 +150,5 @@ class Target < ISM::Software
     end
 
 end
+
+target = Target.new

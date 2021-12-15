@@ -11,7 +11,7 @@ module ISM
                     options = ISM::Default::SoftwareDependency::Options)
                     @name = name
                     @version = version
-                    @options = option
+                    @options = options
     end
 
   end

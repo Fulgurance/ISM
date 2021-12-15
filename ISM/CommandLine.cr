@@ -15,13 +15,30 @@ module ISM
         end
 
         def start
-            checkSoftwareDatabase
             checkEnteredArguments
+            loadSoftwareDatabase
         end
 
-        def checkSoftwareDatabase
+        def loadSoftwareDatabase
             if !Dir.exists?(ISM::Default::Path::SoftwaresDirectory)
                 Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
+            end
+            files = Dir.entries(ISM::Default::Path::SoftwaresDirectory)
+            files.shift
+            files.shift
+
+            files.each do |filename|
+                versions = Dir.entries(ISM::Default::Path::SoftwaresDirectory+filename)
+                
+                versions.each do |version|
+                    data = File.read_lines(ISM::Default::Path::SoftwaresDirectory+filename)
+                    
+                    data.each do |string|
+                        
+                    end
+
+                    @softwares << 
+                end
             end
         end
 
