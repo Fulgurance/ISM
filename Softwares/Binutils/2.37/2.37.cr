@@ -13,36 +13,7 @@ class Target < ISM::Software
 
     def initialize
         super
-        information = Information.from_json(File.read("Information.json"))
-
-        @information.name = information.name
-        @information.architectures = information.architectures
-        @information.description = information.description
-        @information.website = information.website
-        @information.downloadLinks = information.downloadLinks
-        @information.signatureLinks = information.signatureLinks
-        @information.shasumLinks = information.shasumLinks
-
-        information.dependencies.each do |data|
-            dependency = ISM::SoftwareDependency.new
-            dependency.name = data.name
-            dependency.version = data.version
-            data.options.each do |entry|
-                option = ISM::SoftwareOption.new
-                option.name = entry.name
-                option.description = entry.description
-                option.active = entry.active
-                dependency.options.push(option)
-            end
-            @information.dependencies.push(dependency)
-        end
-        
-        information.options.each do |data|
-            option = ISM::SoftwareOption.new
-            option.name = data.name
-            option.description = data.description
-            @information.options.push(option)
-        end
+        @information.loadInformationFile("Information.json")
     end
 
     def download
@@ -150,5 +121,3 @@ class Target < ISM::Software
     end
 
 end
-
-target = Target.new

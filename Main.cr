@@ -1,5 +1,4 @@
 require "json"
-require "http"
 require "colorize"
 require "./ISM/*"
 require "./ISM/Default/*"

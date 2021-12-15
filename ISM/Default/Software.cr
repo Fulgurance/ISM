@@ -5,6 +5,7 @@ module ISM
         module Software
 
             Information = ISM::SoftwareInformation.new
+            InformationFilePath = ""
             DownloadText = "Downloading "
             CheckText = "Checking "
             ExtractText = "Extracting "

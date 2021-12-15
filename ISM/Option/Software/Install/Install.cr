@@ -16,10 +16,10 @@ module ISM
                     showHelp
                 else
                     matchingSoftware = false
-                    matchingSoftwaresArray = Array(ISM::Software).new
+                    matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
 
                     Ism.softwares.each_with_index do |software, index|
-                        if ARGV[2].downcase == software.information.name
+                        if ARGV[2] == software.name || ARGV[2] == software.name.downcase
                             matchingSoftware = true
                             matchingSoftwaresArray << software
                         end
@@ -47,7 +47,7 @@ module ISM
 
                         if userAgreement
                             matchingSoftwaresArray.each_with_index do |software, index|
-                                software.install
+                                #software.install
                             end
                         end
                     else

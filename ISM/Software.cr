@@ -2,33 +2,6 @@ module ISM
 
     class Software
 
-        record Option,
-            name : String,
-            description : String,
-            active : Bool do
-            include JSON::Serializable
-        end
-    
-        record Dependency,
-            name : String,
-            version : String,
-            options : Array(Option) do
-            include JSON::Serializable
-        end
-    
-        record Information,
-            name : String,
-            architectures : Array(String),
-            description : String,
-            website : String,
-            downloadLinks : Array(String),
-            signatureLinks : Array(String),
-            shasumLinks : Array(String),
-            dependencies : Array(Dependency),
-            options : Array(Option) do
-            include JSON::Serializable
-        end
-
         property information = ISM::Default::Software::Information
 
         def initialize(information = ISM::Default::Software::Information)

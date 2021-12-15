@@ -15,29 +15,28 @@ module ISM
         end
 
         def start
-            checkEnteredArguments
             loadSoftwareDatabase
+            checkEnteredArguments
         end
 
         def loadSoftwareDatabase
             if !Dir.exists?(ISM::Default::Path::SoftwaresDirectory)
                 Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
             end
-            files = Dir.entries(ISM::Default::Path::SoftwaresDirectory)
-            files.shift
-            files.shift
+            
+            softwareDirectories = Dir.entries(ISM::Default::Path::SoftwaresDirectory)
+            softwareDirectories.shift
+            softwareDirectories.shift
 
-            files.each do |filename|
-                versions = Dir.entries(ISM::Default::Path::SoftwaresDirectory+filename)
-                
-                versions.each do |version|
-                    data = File.read_lines(ISM::Default::Path::SoftwaresDirectory+filename)
-                    
-                    data.each do |string|
-                        
-                    end
+            softwareDirectories.each do |softwareDirectory|
+                versionDirectories = Dir.entries(ISM::Default::Path::SoftwaresDirectory+softwareDirectory)
+                versionDirectories.shift
+                versionDirectories.shift
 
-                    @softwares << 
+                versionDirectories.each do |versionDirectory|
+                    softwareInformation = ISM::SoftwareInformation.new
+                    softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory+"/"+softwareDirectory+"/"+versionDirectory+"/"+ISM::Default::Filename::Information)
+                    @softwares.push(softwareInformation)
                 end
             end
         end

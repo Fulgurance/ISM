@@ -16,8 +16,8 @@ module ISM
                     showHelp
                 else
                     #matchingOption = false
-                    matchingSoftware = false
-                    matchingSoftwaresArray = Array(ISM::Software).new
+                    #matchingSoftware = false
+                    #matchingSoftwaresArray = Array(ISM::Software).new
 
                     #@options.each_with_index do |argument, index|
                         #if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
@@ -27,14 +27,12 @@ module ISM
                         #end
                     #end
 
-                    Ism.softwares.each_with_index do |software, index|
-                        if ARGV[2].downcase == software.information.name
-                            matchingOption = true
-                            matchingSoftwaresArray << software
-                        end
-                    end
-
-                    puts matchingSoftwaresArray
+                    #Ism.softwares.each_with_index do |software, index|
+                        #if ARGV[2].downcase == software.information.name
+                            #matchingOption = true
+                            #matchingSoftwaresArray << software
+                        #end
+                    #end
     
                     #if !matchingOption
                         #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"

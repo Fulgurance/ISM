@@ -2,6 +2,33 @@ module ISM
 
   class SoftwareInformation
 
+    record Option,
+        name : String,
+        description : String,
+        active : Bool do
+        include JSON::Serializable
+    end
+    
+    record Dependency,
+        name : String,
+        version : String,
+        options : Array(Option) do
+        include JSON::Serializable
+    end
+    
+    record Information,
+        name : String,
+        architectures : Array(String),
+        description : String,
+        website : String,
+        downloadLinks : Array(String),
+        signatureLinks : Array(String),
+        shasumLinks : Array(String),
+        dependencies : Array(Dependency),
+        options : Array(Option) do
+        include JSON::Serializable
+    end
+
     property name = ISM::Default::SoftwareInformation::Name
     property architectures = ISM::Default::SoftwareInformation::Architectures
     property description = ISM::Default::SoftwareInformation::Description
@@ -32,6 +59,39 @@ module ISM
                     @dependencies = dependencies
                     @options = options
     end
+
+    def loadInformationFile(informationFilePath = ISM::Default::Software::InformationFilePath)
+      information = Information.from_json(File.read(informationFilePath))
+
+      @name = information.name
+      @architectures = information.architectures
+      @description = information.description
+      @website = information.website
+      @downloadLinks = information.downloadLinks
+      @signatureLinks = information.signatureLinks
+      @shasumLinks = information.shasumLinks
+
+      information.dependencies.each do |data|
+          dependency = ISM::SoftwareDependency.new
+          dependency.name = data.name
+          dependency.version = data.version
+          data.options.each do |entry|
+              option = ISM::SoftwareOption.new
+              option.name = entry.name
+              option.description = entry.description
+              option.active = entry.active
+              dependency.options.push(option)
+          end
+          @dependencies.push(dependency)
+      end
+      
+      information.options.each do |data|
+          option = ISM::SoftwareOption.new
+          option.name = data.name
+          option.description = data.description
+          @options.push(option)
+      end
+  end
 
   end
 
