@@ -5,6 +5,7 @@ module ISM
         module SoftwareInformation
   
             Name = ""
+            Version = ""
             Architectures = Array(String).new
             Description = ""
             Website = ""

@@ -13,8 +13,9 @@ module ISM
                 InstallQuestion = "Would you like to install this software ?"
                 YesReplyOption = "y"
                 NoReplyOption = "n"
-                NoMatchFound = "No match found with the database."
-
+                NoMatchFound = "No match found with the database for "
+                NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                
             end
             
         end

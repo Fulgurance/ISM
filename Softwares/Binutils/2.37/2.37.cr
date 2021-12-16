@@ -13,33 +13,28 @@ class Target < ISM::Software
 
     def initialize
         super
-        @information.loadInformationFile("Information.json")
+        @information.loadInformationFile("./Softwares/Binutils/2.37/Information.json")
     end
 
     def download
-        super
         `wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz`
         `wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.sig`
     end
     
     def check
-        super
         `gpg binutils-2.37.tar.xz.sig`
     end
     
     def extract
-        super
         `tar -xf binutils-2.37.tar.xz`
     end
     
     def prepare
-        super
         Dir.mkdir("build")
         Dir.cd("build")
     end
     
     def configure
-        super
         if @information.options[0].active == true
             `../configure   --prefix=#{ism.settings.toolsPath}
                             --with-sysroot=#{ism.settings.rootPath}
@@ -67,7 +62,6 @@ class Target < ISM::Software
     end
     
     def build
-        super
         if @information.options[0] || @information.options[1]
             `make`
         else
@@ -76,7 +70,6 @@ class Target < ISM::Software
     end
     
     def install
-        super
         if @information.options[0] == true
             `make -j1 install`
         elsif @information.options[1] == true
@@ -89,11 +82,9 @@ class Target < ISM::Software
     end
     
     def uninstall
-        super
     end
     
     def enableOption(option)
-        super
         if option == option1.name
             @information.options[0] = true
             @information.options[1] = false
@@ -111,7 +102,6 @@ class Target < ISM::Software
     end
     
     def disableOption(option)
-        super
         @information.options.each_with_index do |data, index|
             if data.name = option
                 @information.options[index] = false

@@ -18,6 +18,7 @@ module ISM
     
     record Information,
         name : String,
+        version : String,
         architectures : Array(String),
         description : String,
         website : String,
@@ -30,6 +31,7 @@ module ISM
     end
 
     property name = ISM::Default::SoftwareInformation::Name
+    property version = ISM::Default::SoftwareInformation::Version
     property architectures = ISM::Default::SoftwareInformation::Architectures
     property description = ISM::Default::SoftwareInformation::Description
     property website = ISM::Default::SoftwareInformation::Website
@@ -40,6 +42,7 @@ module ISM
     property options = ISM::Default::SoftwareInformation::Options
 
     def initialize( name = ISM::Default::SoftwareInformation::Name,
+                    version = ISM::Default::SoftwareInformation::Version,
                     architectures = ISM::Default::SoftwareInformation::Architectures,
                     description = ISM::Default::SoftwareInformation::Description,
                     website = ISM::Default::SoftwareInformation::Website,
@@ -50,6 +53,7 @@ module ISM
                     options = ISM::Default::SoftwareInformation::Options)
 
                     @name = name
+                    @version = version
                     @architectures = architectures
                     @description = description
                     @website = website
@@ -64,6 +68,7 @@ module ISM
       information = Information.from_json(File.read(informationFilePath))
 
       @name = information.name
+      @version = information.version
       @architectures = information.architectures
       @description = information.description
       @website = information.website
@@ -91,7 +96,12 @@ module ISM
           option.description = data.description
           @options.push(option)
       end
-  end
+    
+    end
+
+    def versionName
+        return @name+"-"+@version
+    end
 
   end
 

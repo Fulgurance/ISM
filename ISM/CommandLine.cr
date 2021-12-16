@@ -24,19 +24,17 @@ module ISM
                 Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
             end
             
-            softwareDirectories = Dir.entries(ISM::Default::Path::SoftwaresDirectory)
-            softwareDirectories.shift
-            softwareDirectories.shift
+            softwareDirectories = Dir.entries(ISM::Default::Path::SoftwaresDirectory).reject!(&.starts_with?('.'))
 
             softwareDirectories.each do |softwareDirectory|
-                versionDirectories = Dir.entries(ISM::Default::Path::SoftwaresDirectory+softwareDirectory)
-                versionDirectories.shift
-                versionDirectories.shift
+                versionDirectories = Dir.entries(ISM::Default::Path::SoftwaresDirectory+softwareDirectory).reject!(&.starts_with?('.'))
+                availableSoftware = ISM::AvailableSoftware.new(softwareDirectory)
 
                 versionDirectories.each do |versionDirectory|
                     softwareInformation = ISM::SoftwareInformation.new
                     softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory+"/"+softwareDirectory+"/"+versionDirectory+"/"+ISM::Default::Filename::Information)
-                    @softwares.push(softwareInformation)
+                    availableSoftware.versions.push(softwareInformation)
+                    @softwares.push(availableSoftware)
                 end
             end
         end
@@ -75,6 +73,54 @@ module ISM
             puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
                     "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
                     "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+        end
+
+        def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::DownloadText +
+                    softwareInformation.name
+        end
+        
+        def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::CheckText +
+                    softwareInformation.name
+        end
+        
+        def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::ExtractText +
+                    softwareInformation.name
+        end
+        
+        def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::PrepareText +
+                    softwareInformation.name
+        end
+        
+        def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::ConfigureText +
+                    softwareInformation.name
+        end
+        
+        def notifyOfBuild(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::BuildText +
+                    softwareInformation.name
+        end
+        
+        def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::InstallText +
+                    softwareInformation.name
+        end
+        
+        def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::UninstallText +
+                    softwareInformation.name
         end
 
     end
