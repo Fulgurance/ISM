@@ -64,7 +64,7 @@ module ISM
                     @options = options
     end
 
-    def loadInformationFile(informationFilePath = ISM::Default::Software::InformationFilePath)
+    def loadInformationFile(informationFilePath = ISM::Default::Path::InformationFile)
       information = Information.from_json(File.read(informationFilePath))
 
       @name = information.name

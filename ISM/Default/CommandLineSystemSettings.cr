@@ -5,6 +5,7 @@ module ISM
         module CommandLineSystemSettings
 
             LcAll = "POSIX"
+            SystemSettingsFilePath = "./Settings/ISM/SystemSettings.json"
 
         end
 

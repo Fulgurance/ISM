@@ -4,18 +4,22 @@ module ISM
 
         property options = ISM::Default::CommandLine::Options
         property settings = ISM::Default::CommandLine::Settings
+        property systemSettings = ISM::Default::CommandLine::SystemSettings
         property softwares = ISM::Default::CommandLine::Softwares
 
         def initialize( options = ISM::Default::CommandLine::Options,
                         settings = ISM::Default::CommandLine::Settings,
+                        systemSettings = ISM::Default::CommandLine::SystemSettings,
                         softwares = ISM::Default::CommandLine::Softwares)
             @options = options
             @settings = settings
+            @systemSettings = systemSettings
             @softwares = softwares
         end
 
         def start
             loadSoftwareDatabase
+            loadSettingsFiles
             checkEnteredArguments
         end
 
@@ -36,6 +40,20 @@ module ISM
                     availableSoftware.versions.push(softwareInformation)
                     @softwares.push(availableSoftware)
                 end
+            end
+        end
+
+        def loadSettingsFiles
+            if File.exists?(ISM::Default::CommandLineSettings::SettingsFilePath)
+                @settings.loadSettingsFile
+            else
+                @settings.writeSettingsFile
+            end
+
+            if File.exists?(ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath)
+                @systemSettings.loadSystemSettingsFile
+            else
+                @systemSettings.writeSystemSettingsFile
             end
         end
 

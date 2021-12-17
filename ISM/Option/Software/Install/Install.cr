@@ -43,10 +43,24 @@ module ISM
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{badEntry.colorize(:green)}"
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
                     else
+                        puts "\n"
+
                         matchingSoftwaresArray.each do |software|
-                            text = software.name + "-" + software.version
-                            puts "\t" + "#{text.colorize(:green)}"
+                            softwareText = software.name + "-" + "#{software.version.colorize(:green)}"
+                            optionsText = "{ "
+                            software.options.each do |option|
+                                if option.active
+                                    optionsText += "#{option.name.colorize(:red)}"
+                                else
+                                    optionsText += "#{option.name.colorize(:blue)}"
+                                end
+                                optionsText += " "
+                            end
+                            optionsText += "}"
+                            puts "\t" + softwareText + " " + optionsText + "\n"
                         end
+
+                        puts "\n"
 
                         userInput = ""
                         userAgreement = false
@@ -68,14 +82,9 @@ module ISM
                         end
 
                         if userAgreement
+                            #Temporary, need to be adapted for each software
                             matchingSoftwaresArray.each_with_index do |software, index|
-                                #software.install
                                 file = File.open("ISM.task", "w")
-                                #File.write( software.name+".task",
-                                            #"require \"#{ISM::Default::Path::SoftwaresDirectory + "/" + software.name + "/" + "2.37" + "/" + "2.37"}\"\t")
-                                #File.write( software.name+".task",
-                                            #"target = Target.new\t")
-                                #file.close
                                 file << "require \"./#{ISM::Default::Path::SoftwaresDirectory + software.name + "/" + "2.37" + "/" + "2.37" + ".cr"}\"\n"
                                 file << "target = Target.new\n"
                                 file << "target.download"
