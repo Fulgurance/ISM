@@ -6,6 +6,7 @@ module ISM
 
             RootPath = "/"
             ToolsPath = "/tools"
+            SourcesPath = "/sources"
             SystemName = "Unknow"
             TargetName = "unknow"
             Architecture = "x86_64"

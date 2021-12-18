@@ -9,10 +9,7 @@ module ISM
                 ShortText = "-sy"
                 LongText = "system"
                 Description = "Configure the system settings"
-                Options = [ ISM::CommandLineOption.new( "setlcall",
-                                                        "setlcall",
-                                                        "Set the default value for LC_ALL variable",
-                                                        Array(ISM::CommandLineOption).new)]
+                Options = [ ISM::Option::SystemSetLcAll.new ] of ISM::CommandLineOption
 
             end
         end

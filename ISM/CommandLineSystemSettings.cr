@@ -26,6 +26,12 @@ module ISM
             systemSettings.to_json(file)
             file.close
         end
+
+        def setLcAll(lcAll = ISM::Default::CommandLineSystemSettings::LcAll)
+            @lcAll = lcAll
+            writeSystemSettingsFile
+        end
+
     end
 
 end
