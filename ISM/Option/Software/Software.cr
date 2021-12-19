@@ -24,12 +24,24 @@ module ISM
                             break
                         end
                     end
-    
+
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareEnableOption::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareEnableOption::LongText
+                        matchingOption = true
+                        @options[1].start
+                    end
+
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDisableOption::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDisableOption::LongText
+                        matchingOption = true
+                        @options[0].start
+                    end
+
                     if !matchingOption
-                        #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                        #puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                        puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[1].colorize(:white)}"
+                        puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
                     end
                 end
             end

@@ -64,8 +64,8 @@ module ISM
                     @options = options
     end
 
-    def loadInformationFile(informationFilePath = ISM::Default::Path::InformationFile)
-      information = Information.from_json(File.read(informationFilePath))
+    def loadInformationFile(loadInformationFilePath = ISM::Default::Filename::Information)
+      information = Information.from_json(File.read(loadInformationFilePath))
 
       @name = information.name
       @version = information.version
@@ -97,6 +97,40 @@ module ISM
           @options.push(option)
       end
     
+    end
+
+    def writeInformationFile(writeInformationFilePath = ISM::Default::Filename::Information)
+        dependencies = Array(Dependency).new
+        @dependencies.each do |data|
+            options = Array(Option).new
+            data.options.each do |entry|
+                option = Option.new(entry.name,entry.description,entry.active)
+                options.push(option)
+            end
+            dependency = Dependency.new(data.name,data.version,options)
+            dependencies.push(dependency)
+        end
+
+        options = Array(Option).new
+        @options.each do |data|
+            option = Option.new(data.name,data.description,data.active)
+            options.push(option)
+        end
+
+        information = Information.new(  @name,
+                                        @version,
+                                        @architectures,
+                                        @description,
+                                        @website,
+                                        @downloadLinks,
+                                        @signatureLinks,
+                                        @shasumLinks,
+                                        dependencies,
+                                        options)
+
+        file = File.open(writeInformationFilePath,"w")
+        information.to_json(file)
+        file.close
     end
 
     def versionName

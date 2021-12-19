@@ -5,6 +5,7 @@ module ISM
         module Path
             
             SoftwaresDirectory = "Softwares/"
+            SettingsSoftwaresDirectory = "Settings/Softwares/"
 
         end
 

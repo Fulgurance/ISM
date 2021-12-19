@@ -12,37 +12,84 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2
+                if ARGV.size == 2 || ARGV.size == 3
                     showHelp
                 else
-                    #matchingOption = false
-                    #matchingSoftware = false
-                    #matchingSoftwaresArray = Array(ISM::Software).new
+                    wrongMatch = false
+                    badEntry = ""
+                    matchingSoftware = ISM::SoftwareInformation.new
 
-                    #@options.each_with_index do |argument, index|
-                        #if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
-                            #matchingOption = true
-                            #@options[index].start
-                            #break
-                        #end
-                    #end
+                    Ism.softwares.each_with_index do |software, index|
+                        if ARGV[1] == software.name || ARGV[1] == software.name.downcase
+                            matchingSoftware = software.versions.last
+                        else
+                            software.versions.each do |version|
+                                if ARGV[1] == version.versionName || ARGV[1] == version.versionName.downcase
+                                    matchingSoftware = version
+                                else
+                                    wrongMatch = true
+                                    badEntry = ARGV[1]
+                                    break
+                                end
+                            end
+                        end
+                        if wrongMatch
+                            break
+                        end
+                    end
 
-                    #Ism.softwares.each_with_index do |software, index|
-                        #if ARGV[2].downcase == software.information.name
-                            #matchingOption = true
-                            #matchingSoftwaresArray << software
-                        #end
-                    #end
+                    if wrongMatch
+                        puts ISM::Default::Option::SoftwareDisableOption::NoMatchFound + "#{badEntry.colorize(:green)}"
+                        puts ISM::Default::Option::SoftwareDisableOption::NoMatchFoundAdvice
+                    else
+                        if ARGV[2] == @shortText || ARGV[2] == @longText
+                            match = false
+                            matchingOption = ISM::SoftwareOption.new
 
-                    #puts matchingSoftwaresArray
-    
-                    #if !matchingOption
-                        #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                        #puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
-                    #end
+                            matchingSoftware.options.each_with_index do |option, index|
+                                if ARGV[3] == option.name || ARGV[3] == option.name.downcase
+                                    matchingSoftware.options[index].active = false
+                                    matchingOption = option
+                                    match = true
+                                end
+                            end
+
+                            if match
+                                if !Dir.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                matchingSoftware.name + "/" +
+                                                matchingSoftware.version)
+                                    Dir.mkdir_p(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                matchingSoftware.name + "/" +
+                                                matchingSoftware.version)
+                                end
+                                matchingSoftware.writeInformationFile(  ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                                        matchingSoftware.name + "/" +
+                                                                        matchingSoftware.version + "/" +
+                                                                        ISM::Default::Filename::SoftwareSettings)
+                                puts    "#{"* ".colorize(:green)}" +
+                                        ISM::Default::Option::SoftwareDisableOption::SetText1 +
+                                        matchingOption.name +
+                                        ISM::Default::Option::SoftwareDisableOption::SetText2 +
+                                        matchingSoftware.name
+                            else
+                                puts    ISM::Default::Option::SoftwareDisableOption::OptionNoMatchFound1 +
+                                        ARGV[3] +
+                                        ISM::Default::Option::SoftwareDisableOption::OptionNoMatchFound2 +
+                                        matchingSoftware.name
+                            end
+                        else
+                            showHelp
+                        end
+                    end    
+
                 end
+
+            end
+
+            def showHelp
+                puts    ISM::Default::Option::SoftwareDisableOption::ShowHelpDescription +
+                        "\n\n\t" + ISM::Default::Option::SoftwareDisableOption::ShowHelpExampleText1 +
+                        "\t" + "#{ISM::Default::Option::SoftwareDisableOption::ShowHelpExampleText2.colorize(:green)}"
             end
 
         end

@@ -46,7 +46,7 @@ module ISM
                         puts "\n"
 
                         matchingSoftwaresArray.each do |software|
-                            softwareText = software.name + "-" + "#{software.version.colorize(:green)}"
+                            softwareText = "#{software.name.colorize(:green)}" + "-" + software.version
                             optionsText = "{ "
                             software.options.each do |option|
                                 if option.active
@@ -82,10 +82,9 @@ module ISM
                         end
 
                         if userAgreement
-                            #Temporary, need to be adapted for each software
                             matchingSoftwaresArray.each_with_index do |software, index|
                                 file = File.open("ISM.task", "w")
-                                file << "require \"./#{ISM::Default::Path::SoftwaresDirectory + software.name + "/" + "2.37" + "/" + "2.37" + ".cr"}\"\n"
+                                file << "require \"./#{ISM::Default::Path::SoftwaresDirectory + software.name + "/" + software.version + "/" + software.version + ".cr"}\"\n"
                                 file << "target = Target.new\n"
                                 file << "target.download"
                                 file.close

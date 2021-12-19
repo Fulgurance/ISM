@@ -4,6 +4,7 @@ module ISM
 
         module Filename
             Information = "Information.json"
+            SoftwareSettings = "Settings.json"
         end
 
     end
