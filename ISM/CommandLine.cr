@@ -6,17 +6,20 @@ module ISM
         property settings = ISM::Default::CommandLine::Settings
         property systemSettings = ISM::Default::CommandLine::SystemSettings
         property softwares = ISM::Default::CommandLine::Softwares
+        property installedSoftwares = ISM::Default::CommandLine::InstalledSoftwares
         property version = ISM::Default::CommandLine::Version
 
         def initialize( options = ISM::Default::CommandLine::Options,
                         settings = ISM::Default::CommandLine::Settings,
                         systemSettings = ISM::Default::CommandLine::SystemSettings,
                         softwares = ISM::Default::CommandLine::Softwares,
+                        installedSoftwares = ISM::Default::CommandLine::InstalledSoftwares,
                         version = ISM::Default::CommandLine::Version)
             @options = options
             @settings = settings
             @systemSettings = systemSettings
             @softwares = softwares
+            @installedSoftwares = installedSoftwares
             @version = version
         end
 

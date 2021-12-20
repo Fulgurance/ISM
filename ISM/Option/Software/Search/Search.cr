@@ -47,7 +47,16 @@ module ISM
                                 end
                                 puts "Available(s) Version(s): " + "#{versionsText}"
 
-                                puts "Installed Version: "
+                                installedVersionText = "" 
+                                Ism.installedSoftwares.each do |installed|
+                                    if software.name == installed.name
+                                        installedVersionText += "#{installed.name.colorize(:green)}"
+                                    end
+                                end
+                                if installedVersionText.empty?
+                                    installedVersionText = "None"
+                                end
+                                puts "Installed Version: " + "#{installedVersionText.colorize(:green)}"
 
                                 optionsText = ""
                                 software.versions.last.options.each_with_index do |option, index|

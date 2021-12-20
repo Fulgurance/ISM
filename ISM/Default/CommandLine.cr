@@ -9,6 +9,7 @@ module ISM
             Settings = ISM::CommandLineSettings.new
             SystemSettings = ISM::CommandLineSystemSettings.new
             Softwares = Array(ISM::AvailableSoftware).new
+            InstalledSoftwares = Array(ISM::SoftwareInformation).new
             Title = "Ingenius System Manager"
             ErrorUnknowArgument = "ISM error: unknow argument "
             ErrorUnknowArgumentHelp1 = "Use "
