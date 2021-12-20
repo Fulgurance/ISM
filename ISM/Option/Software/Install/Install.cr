@@ -15,32 +15,26 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    wrongMatch = false
-                    badEntry = ""
                     matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
 
-                    Ism.softwares.each_with_index do |software, index|
-                        if ARGV[2] == software.name || ARGV[2] == software.name.downcase
-                            matchingSoftwaresArray << software.versions.last
-                        else
-                            software.versions.each do |version|
-                                if ARGV[2] == version.versionName || ARGV[2] == version.versionName.downcase
-                                    matchingSoftwaresArray << version
-                                else
-                                    wrongMatch = true
-                                    badEntry = ARGV[2]
-                                    break
+                    #Remove duplicate softwares (example: I have two similars arguments)
+                    ARGV[2..-1].each do |argument|
+                        Ism.softwares.each do |software|
+                            if argument == software.name || argument == software.name.downcase
+                                matchingSoftwaresArray << software.versions.last
+                            else
+                                software.versions.each do |version|
+                                    if argument == version.versionName || argument == version.versionName.downcase
+                                        matchingSoftwaresArray << version
+                                    end
                                 end
                             end
-                        end
-                        if wrongMatch
-                            break
                         end
                     end
 
                     #Add method to check dependencies, needed options ...
-                    if wrongMatch
-                        puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{badEntry.colorize(:green)}"
+                    if ARGV.size-2 == matchingSoftwaresArray
+                        puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{ARGV[2].colorize(:green)}"
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
                     else
                         puts "\n"

@@ -15,31 +15,59 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    #matchingOption = false
-                    #matchingSoftware = false
-                    #matchingSoftwaresArray = Array(ISM::Software).new
-
-                    #@options.each_with_index do |argument, index|
-                        #if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
-                            #matchingOption = true
-                            #@options[index].start
-                            #break
-                        #end
-                    #end
-
-                    #Ism.softwares.each_with_index do |software, index|
-                        #if ARGV[2].downcase == software.information.name
-                            #matchingOption = true
-                            #matchingSoftwaresArray << software
-                        #end
-                    #end
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        matchingSoftwaresArray = Array(ISM::AvailableSoftware).new
     
-                    #if !matchingOption
-                        #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                        #puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
-                    #end
+                        Ism.softwares.each do |software|
+                            if software.name.includes?(ARGV[2]) || software.name.downcase.includes?(ARGV[2])
+                                matchingSoftwaresArray << software
+                            end
+                        end
+
+                        if matchingSoftwaresArray.empty?
+                            puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{ARGV[2].colorize(:green)}"
+                            puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
+                        else
+                            puts "\n"
+
+                            matchingSoftwaresArray.each do |software|
+                                puts "Name: " + "#{software.name.colorize(:green)}"
+                                puts "Description: " + "#{software.versions.last.description.colorize(:green)}"
+                                puts "Architectures: " + "#{software.versions.last.description.colorize(:green)}"
+                                puts "Website: " + "#{software.versions.last.website.colorize(:green)}"
+                                
+                                versionsText = ""
+                                software.versions.each_with_index do |version, index|
+                                    versionsText += "#{version.version.colorize(:green)}"
+                                    if index+1 < software.versions.size
+                                        versionsText += " | "
+                                    end
+                                end
+                                puts "Available(s) Version(s): " + "#{versionsText}"
+
+                                puts "Installed Version: "
+
+                                optionsText = ""
+                                software.versions.last.options.each_with_index do |option, index|
+                                    if option.active
+                                        optionsText += "#{option.name.colorize(:red)}"
+                                    else
+                                        optionsText += "#{option.name.colorize(:blue)}"
+                                    end
+                                    if index+1 < software.versions.last.options.size
+                                        optionsText += " | "
+                                    end
+                                end
+                                puts "Options: " + "#{optionsText}"
+
+                                puts "\n"
+                            end
+                        end
+
+                    end
+    
                 end
             end
 
