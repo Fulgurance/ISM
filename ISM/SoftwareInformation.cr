@@ -89,14 +89,15 @@ module ISM
           end
           @dependencies.push(dependency)
       end
-      
+
       information.options.each do |data|
           option = ISM::SoftwareOption.new
           option.name = data.name
           option.description = data.description
+          option.active = data.active
           @options.push(option)
       end
-    
+
     end
 
     def writeInformationFile(writeInformationFilePath = ISM::Default::Filename::Information)

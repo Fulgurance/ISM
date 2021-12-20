@@ -40,7 +40,21 @@ module ISM
 
                 versionDirectories.each do |versionDirectory|
                     softwareInformation = ISM::SoftwareInformation.new
-                    softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory+"/"+softwareDirectory+"/"+versionDirectory+"/"+ISM::Default::Filename::Information)
+
+                    if File.exists?( ISM::Default::Path::SettingsSoftwaresDirectory +
+                                    softwareDirectory + "/" +
+                                    versionDirectory + "/" +
+                                    ISM::Default::Filename::SoftwareSettings)
+                        softwareInformation.loadInformationFile( ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                                        softwareDirectory + "/" +
+                                                                        versionDirectory + "/" +
+                                                                        ISM::Default::Filename::SoftwareSettings)
+                    else
+                        softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory +
+                                                                softwareDirectory + "/" +
+                                                                versionDirectory + "/" +
+                                                                ISM::Default::Filename::Information)
+                    end
                     availableSoftware.versions.push(softwareInformation)
                     @softwares.push(availableSoftware)
                 end
