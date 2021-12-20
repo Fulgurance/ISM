@@ -6,20 +6,24 @@ module ISM
         property settings = ISM::Default::CommandLine::Settings
         property systemSettings = ISM::Default::CommandLine::SystemSettings
         property softwares = ISM::Default::CommandLine::Softwares
+        property version = ISM::Default::CommandLine::Version
 
         def initialize( options = ISM::Default::CommandLine::Options,
                         settings = ISM::Default::CommandLine::Settings,
                         systemSettings = ISM::Default::CommandLine::SystemSettings,
-                        softwares = ISM::Default::CommandLine::Softwares)
+                        softwares = ISM::Default::CommandLine::Softwares,
+                        version = ISM::Default::CommandLine::Version)
             @options = options
             @settings = settings
             @systemSettings = systemSettings
             @softwares = softwares
+            @version = version
         end
 
         def start
             loadSoftwareDatabase
             loadSettingsFiles
+            version.loadVersionFile
             checkEnteredArguments
         end
 
@@ -28,10 +32,10 @@ module ISM
                 Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
             end
             
-            softwareDirectories = Dir.entries(ISM::Default::Path::SoftwaresDirectory).reject!(&.starts_with?('.'))
+            softwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory)
 
             softwareDirectories.each do |softwareDirectory|
-                versionDirectories = Dir.entries(ISM::Default::Path::SoftwaresDirectory+softwareDirectory).reject!(&.starts_with?('.'))
+                versionDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory+softwareDirectory)
                 availableSoftware = ISM::AvailableSoftware.new(softwareDirectory)
 
                 versionDirectories.each do |versionDirectory|

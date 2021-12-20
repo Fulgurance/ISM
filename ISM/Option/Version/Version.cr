@@ -12,7 +12,13 @@ module ISM
             end
 
             def start
-
+                puts ISM::Default::CommandLine::Title
+                puts    Ism.version.stage + "-" +
+                        "#{Ism.version.majorVersion.colorize(:green)}" +
+                        "#{".".colorize(:green)}" +
+                        "#{Ism.version.minorVersion.colorize(:green)}" +
+                        "#{".".colorize(:green)}" +
+                        "#{Ism.version.patchVersion.colorize(:green)}"
             end
 
         end

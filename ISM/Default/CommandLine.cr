@@ -4,6 +4,7 @@ module ISM
 
         class CommandLine
 
+            Version = ISM::Version.new
             Options = Array(ISM::CommandLineOption).new
             Settings = ISM::CommandLineSettings.new
             SystemSettings = ISM::CommandLineSystemSettings.new
