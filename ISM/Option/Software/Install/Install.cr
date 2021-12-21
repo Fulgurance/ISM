@@ -24,22 +24,23 @@ module ISM
                         matching = false
 
                         Ism.softwares.each do |software|
+
                             if argument == software.name || argument == software.name.downcase
+                                puts software.name
+                                puts software.name.downcase
                                 matchingSoftwaresArray << software.versions.last
                                 matching = true
                             else
                                 software.versions.each do |version|
+                                    puts version.versionName
+                                    puts version.versionName.downcase
                                     if argument == version.versionName || argument == version.versionName.downcase
                                         matchingSoftwaresArray << version
                                         matching = true
                                     end
                                 end
                             end
-                            puts matching
-                            if !matching
-                                wrongArgument = argument
-                                break
-                            end
+
                         end
                         if !matching
                             wrongArgument = argument
