@@ -16,25 +16,41 @@ module ISM
                     showHelp
                 else
                     matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
+                    matching = false
+                    wrongArgument = ""
 
                     #Remove duplicate softwares (example: I have two similars arguments)
                     ARGV[2..-1].each do |argument|
+                        matching = false
+
                         Ism.softwares.each do |software|
                             if argument == software.name || argument == software.name.downcase
                                 matchingSoftwaresArray << software.versions.last
+                                matching = true
                             else
                                 software.versions.each do |version|
                                     if argument == version.versionName || argument == version.versionName.downcase
                                         matchingSoftwaresArray << version
+                                        matching = true
                                     end
                                 end
                             end
+                            puts matching
+                            if !matching
+                                wrongArgument = argument
+                                break
+                            end
                         end
+                        if !matching
+                            wrongArgument = argument
+                            break
+                        end
+                        
                     end
 
                     #Add method to check dependencies, needed options ...
-                    if ARGV.size-2 != matchingSoftwaresArray.size
-                        puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{ARGV[2].colorize(:green)}"
+                    if !matching
+                        puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArgument.colorize(:green)}"#"#{ARGV[2].colorize(:green)}"
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
                     else
                         puts "\n"
