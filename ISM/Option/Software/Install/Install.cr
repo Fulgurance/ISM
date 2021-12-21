@@ -33,7 +33,7 @@ module ISM
                     end
 
                     #Add method to check dependencies, needed options ...
-                    if ARGV.size-2 == matchingSoftwaresArray
+                    if ARGV.size-2 != matchingSoftwaresArray.size
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{ARGV[2].colorize(:green)}"
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
                     else

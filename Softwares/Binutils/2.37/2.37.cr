@@ -83,31 +83,5 @@ class Target < ISM::Software
     
     def uninstall
     end
-    
-    def enableOption(option)
-        if option == option1.name
-            @information.options[0] = true
-            @information.options[1] = false
-        elsif option == option2.name
-            @information.options[1] = true
-            @information.options[0] = false
-        else
-            @information.options.each_with_index do |data, index|
-                if data.name = option
-                    @information.options[index] = true
-                    break
-                end
-            end
-        end
-    end
-    
-    def disableOption(option)
-        @information.options.each_with_index do |data, index|
-            if data.name = option
-                @information.options[index] = false
-                break
-            end
-        end
-    end
 
 end

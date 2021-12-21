@@ -27,16 +27,33 @@ module ISM
                         end
 
                         if matchingSoftwaresArray.empty?
-                            puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{ARGV[2].colorize(:green)}"
-                            puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
+                            puts ISM::Default::Option::SoftwareSearch::NoMatchFound + "#{ARGV[2].colorize(:green)}"
+                            puts ISM::Default::Option::SoftwareSearch::NoMatchFoundAdvice
                         else
                             puts "\n"
 
                             matchingSoftwaresArray.each do |software|
-                                puts "Name: " + "#{software.name.colorize(:green)}"
-                                puts "Description: " + "#{software.versions.last.description.colorize(:green)}"
-                                puts "Architectures: " + "#{software.versions.last.description.colorize(:green)}"
-                                puts "Website: " + "#{software.versions.last.website.colorize(:green)}"
+                                puts    ISM::Default::Option::SoftwareSearch::NameField +
+                                        "#{software.name.colorize(:green)}"
+
+                                puts    ISM::Default::Option::SoftwareSearch::DescriptionField +
+                                        "#{software.versions.last.description.colorize(:green)}"
+                                
+                                architecturesText = "" 
+                                software.versions.last.architectures.each_with_index do |architecture, index|
+                                    architecturesText += "#{architecture.colorize(:green)}"
+                                    if index+1 < software.versions.last.architectures.size
+                                        architecturesText += " | "
+                                    end
+                                end
+                                if architecturesText.empty?
+                                    architecturesText = "None"
+                                end
+                                puts    ISM::Default::Option::SoftwareSearch::AvailablesArchitecturesField +
+                                        "#{architecturesText.colorize(:green)}"
+                                
+                                puts    ISM::Default::Option::SoftwareSearch::WebsiteField +
+                                        "#{software.versions.last.website.colorize(:green)}"
                                 
                                 versionsText = ""
                                 software.versions.each_with_index do |version, index|
@@ -45,7 +62,8 @@ module ISM
                                         versionsText += " | "
                                     end
                                 end
-                                puts "Available(s) Version(s): " + "#{versionsText}"
+                                puts    ISM::Default::Option::SoftwareSearch::AvailablesVersionsField +
+                                        "#{versionsText}"
 
                                 installedVersionText = "" 
                                 Ism.installedSoftwares.each do |installed|
@@ -56,7 +74,8 @@ module ISM
                                 if installedVersionText.empty?
                                     installedVersionText = "None"
                                 end
-                                puts "Installed Version: " + "#{installedVersionText.colorize(:green)}"
+                                puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
+                                        "#{installedVersionText.colorize(:green)}"
 
                                 optionsText = ""
                                 software.versions.last.options.each_with_index do |option, index|
@@ -69,7 +88,8 @@ module ISM
                                         optionsText += " | "
                                     end
                                 end
-                                puts "Options: " + "#{optionsText}"
+                                puts    ISM::Default::Option::SoftwareSearch::OptionsField +
+                                        "#{optionsText}"
 
                                 puts "\n"
                             end

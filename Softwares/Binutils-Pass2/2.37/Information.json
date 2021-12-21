@@ -1,0 +1,113 @@
+{
+  "name": "Binutils-Pass2",
+  "version": "2.37",
+  "architectures": ["x86_64"],
+  "description": "The GNU collection of binary tools (Temporary Tools).",
+  "website": "https://www.gnu.org/software/binutils/",
+  "downloadLinks": ["https://ftp.gnu.org/gnu/binutils/"],
+  "signatureLinks": ["https://ftp.gnu.org/gnu/binutils/"],
+  "shasumLinks": [],
+  "dependencies": [
+    {
+      "name": "Binutils-Pass1",
+      "version": "2.37",
+      "options": []
+    },
+    {
+      "name": "Gcc-Pass1",
+      "version": "11.2.0",
+      "options": []
+    },
+    {
+      "name": "Linux-API-Headers-Pass1",
+      "version": "5.13.12",
+      "options": []
+    },
+    {
+      "name": "Glibc-Pass1",
+      "version": "2.34",
+      "options": []
+    },
+    {
+      "name": "Libstdc++-Pass1",
+      "version": "11.2.0",
+      "options": []
+    },
+    {
+      "name": "M4-Pass2",
+      "version": "1.14.19",
+      "options": []
+    },
+    {
+      "name": "Ncurses-Pass2",
+      "version": "6.2",
+      "options": []
+    },
+    {
+      "name": "Bash-Pass2",
+      "version": "5.1.8",
+      "options": []
+    },
+    {
+      "name": "Coreutils-Pass2",
+      "version": "8.32",
+      "options": []
+    },
+    {
+      "name": "Diffutils-Pass2",
+      "version": "3.8",
+      "options": []
+    },
+    {
+      "name": "File-Pass2",
+      "version": "5.4",
+      "options": []
+    },
+    {
+      "name": "Findutils-Pass2",
+      "version": "4.8.0",
+      "options": []
+    },
+    {
+      "name": "Gawk-Pass2",
+      "version": "5.1.0",
+      "options": []
+    },
+    {
+      "name": "Grep-Pass2",
+      "version": "3.7",
+      "options": []
+    },
+    {
+      "name": "Gzip-Pass2",
+      "version": "1.10",
+      "options": []
+    },
+    {
+      "name": "Make-Pass2",
+      "version": "4.3",
+      "options": []
+    },
+    {
+      "name": "Patch-Pass2",
+      "version": "2.7.6",
+      "options": []
+    },
+    {
+      "name": "Sed-Pass2",
+      "version": "4.8",
+      "options": []
+    },
+    {
+      "name": "Tar-Pass2",
+      "version": "1.34",
+      "options": []
+    },
+    {
+      "name": "Xz-Pass2",
+      "version": "5.2.5",
+      "options": []
+    }
+  ],
+  "options": []
+}

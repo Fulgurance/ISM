@@ -39,29 +39,36 @@ module ISM
 
             softwareDirectories.each do |softwareDirectory|
                 versionDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory+softwareDirectory)
-                availableSoftware = ISM::AvailableSoftware.new(softwareDirectory)
+                softwaresInformations = Array(ISM::SoftwareInformation).new
 
                 versionDirectories.each do |versionDirectory|
+
                     softwareInformation = ISM::SoftwareInformation.new
 
-                    if File.exists?( ISM::Default::Path::SettingsSoftwaresDirectory +
+                    if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
                                     softwareDirectory + "/" +
                                     versionDirectory + "/" +
                                     ISM::Default::Filename::SoftwareSettings)
-                        softwareInformation.loadInformationFile( ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                                        softwareDirectory + "/" +
-                                                                        versionDirectory + "/" +
-                                                                        ISM::Default::Filename::SoftwareSettings)
+                        softwareInformation.loadInformationFile(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                                softwareDirectory + "/" +
+                                                                versionDirectory + "/" +
+                                                                ISM::Default::Filename::SoftwareSettings)
                     else
                         softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory +
                                                                 softwareDirectory + "/" +
                                                                 versionDirectory + "/" +
                                                                 ISM::Default::Filename::Information)
                     end
-                    availableSoftware.versions.push(softwareInformation)
-                    @softwares.push(availableSoftware)
+
+                    softwaresInformations << softwareInformation
+    
                 end
+
+                @softwares << ISM::AvailableSoftware.new(softwareDirectory,
+                softwaresInformations)
+
             end
+
         end
 
         def loadSettingsFiles
