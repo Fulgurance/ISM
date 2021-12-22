@@ -1,0 +1,18 @@
+{
+  "name": "Gcc-Pass1",
+  "version": "11.2.0",
+  "architectures": ["x86_64"],
+  "description": "The GNU Compiler Collection (Cross Toolchain)",
+  "website": "https://gcc.gnu.org/",
+  "downloadLinks": ["https://ftp.gnu.org/gnu/gcc"],
+  "signatureLinks": ["https://ftp.gnu.org/gnu/gcc"],
+  "shasumLinks": [],
+  "dependencies": [
+    {
+      "name": "Binutils-Pass1",
+      "version": "2.37",
+      "options": []
+    }
+  ],
+  "options": []
+}

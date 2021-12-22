@@ -34,6 +34,9 @@ class Target < ISM::Software
         Dir.cd("build")
     end
     
+    def patch
+    end
+
     def configure
         `../configure   --prefix=/usr
                             --build=$(../config.guess)

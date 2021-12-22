@@ -53,7 +53,7 @@ module ISM
                         puts "\n"
 
                         matchingSoftwaresArray.each do |software|
-                            softwareText = "#{software.name.colorize(:green)}" + "-" + software.version
+                            softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(:cyan)}" + "/ "
                             optionsText = "{ "
                             software.options.each do |option|
                                 if option.active
@@ -72,7 +72,7 @@ module ISM
                         userInput = ""
                         userAgreement = false
 
-                        puts ISM::Default::Option::SoftwareInstall::InstallQuestion + 
+                        puts "#{ISM::Default::Option::SoftwareInstall::InstallQuestion.colorize.mode(:underline)}" + 
                                 "[" + "#{ISM::Default::Option::SoftwareInstall::YesReplyOption.colorize(:green)}" + 
                                 "/" + "#{ISM::Default::Option::SoftwareInstall::NoReplyOption.colorize(:red)}" + "]"
 

@@ -29,6 +29,9 @@ class Target < ISM::Software
         `tar -xf binutils-2.37.tar.xz`
     end
     
+    def patch
+    end
+
     def prepare
         Dir.mkdir("build")
         Dir.cd("build")
