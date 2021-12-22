@@ -36,6 +36,7 @@ module ISM
             end
             
             softwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory)
+            softwareDirectories.delete("SoftwaresLibrairies.cr")
 
             softwareDirectories.each do |softwareDirectory|
                 versionDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory+softwareDirectory)

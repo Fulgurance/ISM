@@ -1,13 +1,4 @@
-require "colorize"
-require "json"
-require "../../../ISM/Default/SoftwareOption"
-require "../../../ISM/SoftwareOption"
-require "../../../ISM/Default/SoftwareDependency"
-require "../../../ISM/SoftwareDependency"
-require "../../../ISM/Default/SoftwareInformation"
-require "../../../ISM/SoftwareInformation"
-require "../../../ISM/Default/Software"
-require "../../../ISM/Software"
+require "../../SoftwaresLibrairies"
 
 class Target < ISM::Software
 
@@ -45,35 +36,36 @@ class Target < ISM::Software
                   -i.orig gcc/config/i386/t-linux64
            ;;
         esac`
+        Dir.cd("gcc-11.2.0")
         Dir.mkdir("build")
         Dir.cd("build")
     end
     
     def configure
-        `../configure   --prefix=#{Ism.settings.toolsPath}
-                        --with-sysroot=#{Ism.settings.rootPath}
-                        --target=#{Ism.settings.target}
-                        --disable-nls
+        `../configure   --prefix=#{Ism.settings.toolsPath} \
+                        --with-sysroot=#{Ism.settings.rootPath} \
+                        --target=#{Ism.settings.target} \
+                        --disable-nls \
                         --disable-werror`
 
-        `../configure   --target=#{Ism.settings.target}                             
-                        --prefix=#{Ism.settings.toolsPath}                           
-                        --with-glibc-version=2.11                      
-                        --with-sysroot=#{Ism.settings.rootPath}                           
-                        --with-newlib                                  
-                        --without-headers                              
-                        --enable-initfini-array                        
-                        --disable-nls                                  
-                        --disable-shared                               
-                        --disable-multilib                             
-                        --disable-decimal-float                        
-                        --disable-threads                              
-                        --disable-libatomic                            
-                        --disable-libgomp                              
-                        --disable-libquadmath                          
-                        --disable-libssp                               
-                        --disable-libvtv                               
-                        --disable-libstdcxx                            
+        `../configure   --target=#{Ism.settings.target} \                          
+                        --prefix=#{Ism.settings.toolsPath} \                         
+                        --with-glibc-version=2.11 \               
+                        --with-sysroot=#{Ism.settings.rootPath} \                          
+                        --with-newlib \                             
+                        --without-headers \                             
+                        --enable-initfini-array \                    
+                        --disable-nls \                                 
+                        --disable-shared \                       
+                        --disable-multilib \                            
+                        --disable-decimal-float \                    
+                        --disable-threads \                            
+                        --disable-libatomic \                        
+                        --disable-libgomp \                        
+                        --disable-libquadmath \                       
+                        --disable-libssp \                           
+                        --disable-libvtv \                              
+                        --disable-libstdcxx \                        
                         --enable-languages=c,c++`
     end
     

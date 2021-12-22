@@ -1,13 +1,4 @@
-require "colorize"
-require "json"
-require "../../../ISM/Default/SoftwareOption"
-require "../../../ISM/SoftwareOption"
-require "../../../ISM/Default/SoftwareDependency"
-require "../../../ISM/SoftwareDependency"
-require "../../../ISM/Default/SoftwareInformation"
-require "../../../ISM/SoftwareInformation"
-require "../../../ISM/Default/Software"
-require "../../../ISM/Software"
+require "../../SoftwaresLibrairies"
 
 class Target < ISM::Software
 
@@ -30,6 +21,7 @@ class Target < ISM::Software
     end
     
     def prepare
+        Dir.cd("binutils-2.37")
         Dir.mkdir("build")
         Dir.cd("build")
     end
@@ -38,13 +30,13 @@ class Target < ISM::Software
     end
 
     def configure
-        `../configure   --prefix=/usr
-                            --build=$(../config.guess)
-                            --host=#{Ism.settings.target}
-                            --disable-nls
-                            --enable-shared
-                            --disable-werror
-                            --enable-64-bit-bfd`
+        `../configure   --prefix=/usr \
+                        --build=$(../config.guess) \
+                        --host=#{Ism.settings.target} \
+                        --disable-nls \
+                        --enable-shared \
+                        --disable-werror \
+                        --enable-64-bit-bfd`
     end
     
     def build
