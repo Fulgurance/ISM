@@ -93,10 +93,16 @@ module ISM
                                 file = File.open("ISM.task", "w")
                                 file << "require \"./#{ISM::Default::Path::SoftwaresDirectory + software.name + "/" + software.version + "/" + software.version + ".cr"}\"\n"
                                 file << "target = Target.new\n"
-                                file << "target.download"
+                                file << "target.download\n"
+                                file << "target.check\n"
+                                file << "target.extract\n"
+                                file << "target.patch\n"
+                                file << "target.prepare\n"
+                                file << "target.configure\n"
+                                file << "target.build\n"
+                                file << "target.install\n"
                                 file.close
-                                Ism.notifyOfDownload(software)
-                                puts `crystal ISM.task`
+                                Process.run("crystal",args: ["ISM.task"],output: :inherit)
                             end
                         end
 

@@ -140,6 +140,12 @@ module ISM
                     softwareInformation.name
         end
         
+        def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::PatchText +
+                    softwareInformation.name
+        end
+
         def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
             puts    "#{"* ".colorize(:green)}" +
                     ISM::Default::CommandLine::PrepareText +

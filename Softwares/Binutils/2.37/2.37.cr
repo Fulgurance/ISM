@@ -8,16 +8,16 @@ class Target < ISM::Software
     end
 
     def download
-        `wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz`
-        `wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.sig`
+        Process.run("wget",args: ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"],output: :inherit)
+        #Process.run("wget",args: ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.sig"],output: :inherit)
     end
     
     def check
-        `gpg binutils-2.37.tar.xz.sig`
+        #Process.run("gpg",args: ["binutils-2.37.tar.xz.sig"],output: :inherit)
     end
 
     def extract
-        `tar -xf binutils-2.37.tar.xz`
+        Process.run("tar",args: ["-xf", "binutils-2.37.tar.xz"],output: :inherit)
     end
     
     def patch
@@ -30,23 +30,27 @@ class Target < ISM::Software
     end
     
     def configure
-        `../configure   --prefix=/usr \
-                        --enable-gold \
-                        --enable-ld=default \
-                        --enable-plugins \
-                        --enable-shared \
-                        --disable-werror \
-                        --enable-64-bit-bfd \
-                        --with-system-zlib`
+        Process.run("../configure",args: [  "--prefix=/usr", 
+                                            "--enable-gold",
+                                            "--enable-ld=default",
+                                            "--enable-plugins",
+                                            "--enable-shared",
+                                            "--disable-werror",
+                                            "--enable-64-bit-bfd",
+                                            "--with-system-zlib"],output: :inherit)
     end
     
     def build
-        `make tooldir=/usr`
+        Process.run("make",args: ["tooldir=/usr", "#{Ism.settings.makeOptions}"],output: :inherit)
     end
     
     def install
-        `make tooldir=/usr install -j1`
-        `rm -fv /usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes}.a`
+        Process.run("make",args: [  "tooldir=/usr", 
+                                    "#{Ism.settings.makeOptions}",
+                                    "install",
+                                    "-j1"],output: :inherit)
+        Process.run("rm",args: [  "-fv", 
+                                    "/usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes}.a"],output: :inherit)
     end
     
     def uninstall

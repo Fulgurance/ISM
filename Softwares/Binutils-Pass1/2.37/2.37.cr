@@ -8,16 +8,16 @@ class Target < ISM::Software
     end
 
     def download
-        `wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz`
-        #`wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.sig`
+        Process.run("wget",args: ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"],output: :inherit)
+        #Process.run("wget",args: ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.sig"],output: :inherit)
     end
     
     def check
-        #`gpg binutils-2.37.tar.xz.sig`
+        #Process.run("gpg",args: ["binutils-2.37.tar.xz.sig"],output: :inherit)
     end
     
     def extract
-        `tar -xf binutils-2.37.tar.xz`
+        Process.run("tar",args: ["-xf", "binutils-2.37.tar.xz"],output: :inherit)
     end
     
     def patch
@@ -30,19 +30,19 @@ class Target < ISM::Software
     end
     
     def configure
-        #Probleme, variable Ism n'est pas disponible
-        `../configure   --prefix=#{Ism.settings.toolsPath} \
-                        --with-sysroot=#{Ism.settings.rootPath} \
-                        --target=#{Ism.settings.target} \
-                        --disable-nls \
-                        --disable-werror`
+        Process.run("../configure",args: [  "--prefix=#{Ism.settings.toolsPath}", 
+                                            "--with-sysroot=#{Ism.settings.rootPath}",
+                                            "--target=#{Ism.settings.target}",
+                                            "--disable-nls",
+                                            "--disable-werror"],output: :inherit)
     end
     
     def build
-        `make #{Ism.settings.makeOptions}`
+        Process.run("make",args: ["#{Ism.settings.makeOptions}"],output: :inherit)
     end
     
     def install
+        Process.run("make",args: ["-j1","install"],output: :inherit)
         `make -j1 install`
     end
     

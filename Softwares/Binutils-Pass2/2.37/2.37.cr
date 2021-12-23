@@ -8,16 +8,16 @@ class Target < ISM::Software
     end
 
     def download
-        `wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz`
-        `wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.sig`
+        Process.run("wget",args: ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"],output: :inherit)
+        #Process.run("wget",args: ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.sig"],output: :inherit)
     end
     
     def check
-        `gpg binutils-2.37.tar.xz.sig`
+        #Process.run("gpg",args: ["binutils-2.37.tar.xz.sig"],output: :inherit)
     end
     
     def extract
-        `tar -xf binutils-2.37.tar.xz`
+        Process.run("tar",args: ["-xf", "binutils-2.37.tar.xz"],output: :inherit)
     end
     
     def prepare
@@ -30,22 +30,25 @@ class Target < ISM::Software
     end
 
     def configure
-        `../configure   --prefix=/usr \
-                        --build=$(../config.guess) \
-                        --host=#{Ism.settings.target} \
-                        --disable-nls \
-                        --enable-shared \
-                        --disable-werror \
-                        --enable-64-bit-bfd`
+        Process.run("../configure",args: [  "--prefix=/usr", 
+                                            "--build=$(../config.guess)",
+                                            "--host=#{Ism.settings.target}",
+                                            "--disable-nls",
+                                            "--disable-werror",
+                                            "--enable-64-bit-bfd"],output: :inherit)
     end
     
     def build
-        `make #{Ism.settings.makeOptions}`
+        Process.run("make",args: ["#{Ism.settings.makeOptions}"],output: :inherit)
     end
     
     def install
-        `make DESTDIR=#{Ism.settings.rootPath} install -j1`
-        `install -vm755 libctf/.libs/libctf.so.0.0.0 #{Ism.settings.rootPath}/usr/lib`
+        Process.run("make",args: [  "DESTDIR=#{Ism.settings.rootPath}",
+                                    "install",
+                                    "-j1"],output: :inherit)
+        Process.run("install",args: ["-vm755",
+                                    "libctf/.libs/libctf.so.0.0.0",
+                                    "#{Ism.settings.rootPath}/usr/lib"],output: :inherit)
     end
     
     def uninstall

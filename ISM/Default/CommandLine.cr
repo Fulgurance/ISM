@@ -18,6 +18,7 @@ module ISM
             DownloadText = "Downloading "
             CheckText = "Checking "
             ExtractText = "Extracting "
+            PatchText = "Patching "
             PrepareText =  "Preparing " 
             ConfigureText = "Configuring "
             BuildText = "Building "

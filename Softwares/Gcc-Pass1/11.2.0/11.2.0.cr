@@ -8,22 +8,22 @@ class Target < ISM::Software
     end
 
     def download
-        `wget https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz`
-        `wget https://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz`
-        `wget https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz`
-        `wget https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz`
+        Process.run("wget",args: ["https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"],output: :inherit)
+        Process.run("wget",args: ["https://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz"],output: :inherit)
+        Process.run("wget",args: ["https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz"],output: :inherit)
+        Process.run("wget",args: ["https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz"],output: :inherit)
     end
     
     def check
     end
     
     def extract
-        `tar -xf ../mpfr-4.1.0.tar.xz`
-        `mv -v mpfr-4.1.0 mpfr`
-        `tar -xf ../gmp-6.2.1.tar.xz`
-        `mv -v gmp-6.2.1 gmp`
-        `tar -xf ../mpc-1.2.1.tar.gz`
-        `mv -v mpc-1.2.1 mpc`
+        Process.run("tar",args: ["-xf", "../mpfr-4.1.0.tar.xz"],output: :inherit)
+        Process.run("mv",args: ["-v", "mpfr-4.1.0", "mpfr"],output: :inherit)
+        Process.run("tar",args: ["-xf", "../gmp-6.2.1.tar.xz"],output: :inherit)
+        Process.run("mv",args: ["-v", "gmp-6.2.1", "gmp"],output: :inherit)
+        Process.run("tar",args: ["-xf", "../mpc-1.2.1.tar.gz"],output: :inherit)
+        Process.run("mv",args: ["-v", "mpc-1.2.1", "mpc"],output: :inherit)
     end
     
     def patch
@@ -42,42 +42,41 @@ class Target < ISM::Software
     end
     
     def configure
-        `../configure   --prefix=#{Ism.settings.toolsPath} \
-                        --with-sysroot=#{Ism.settings.rootPath} \
-                        --target=#{Ism.settings.target} \
-                        --disable-nls \
-                        --disable-werror`
-
-        `../configure   --target=#{Ism.settings.target} \                          
-                        --prefix=#{Ism.settings.toolsPath} \                         
-                        --with-glibc-version=2.11 \               
-                        --with-sysroot=#{Ism.settings.rootPath} \                          
-                        --with-newlib \                             
-                        --without-headers \                             
-                        --enable-initfini-array \                    
-                        --disable-nls \                                 
-                        --disable-shared \                       
-                        --disable-multilib \                            
-                        --disable-decimal-float \                    
-                        --disable-threads \                            
-                        --disable-libatomic \                        
-                        --disable-libgomp \                        
-                        --disable-libquadmath \                       
-                        --disable-libssp \                           
-                        --disable-libvtv \                              
-                        --disable-libstdcxx \                        
-                        --enable-languages=c,c++`
+        Process.run("../configure",args: [  "--target=#{Ism.settings.target}", 
+                                            "--prefix=#{Ism.settings.toolsPath}",
+                                            "--with-glibc-version=2.11",
+                                            "--with-sysroot=#{Ism.settings.rootPath}",
+                                            "--with-newlib",
+                                            "--without-headers",
+                                            "--enable-initfini-array",
+                                            "--disable-nls",
+                                            "--disable-shared",
+                                            "--disable-multilib",
+                                            "--disable-decimal-float",
+                                            "--disable-threads",
+                                            "--disable-libatomic",
+                                            "--disable-libgomp",
+                                            "--disable-libquadmath",
+                                            "--disable-libssp",
+                                            "--disable-libvtv",
+                                            "--disable-libstdcxx",
+                                            "--enable-languages=c,c++"],output: :inherit)
     end
     
     def build
-        `make #{Ism.settings.makeOptions}`
+        Process.run("make",args: ["#{Ism.settings.makeOptions}"],output: :inherit)
     end
     
     def install
-        `make #{Ism.settings.makeOptions} install`
-        Dir.cd("build")
-        `cat gcc/limitx.h gcc/glimits.h gcc/limity.h >
-        \`dirname $(#{Ism.settings.target} -print-libgcc-file-name)\`/install-tools/include/limits.h`
+        Process.run("make",args: ["#{Ism.settings.makeOptions}", "install"],output: :inherit)
+        Dir.cd("..")
+        Process.run("cat",args: [  "gcc/limitx.h", 
+                                    "gcc/glimits.h",
+                                    "gcc/limity.h",
+                                    ">",
+                                    "`dirname",
+                                    "$(#{Ism.settings.target}-gcc",
+                                    "-print-libgcc-file-name)`/install-tools/include/limits.h"],output: :inherit)
     end
     
     def uninstall
