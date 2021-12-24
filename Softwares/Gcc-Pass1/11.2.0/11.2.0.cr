@@ -3,20 +3,7 @@ require "../../SoftwaresLibrairies"
 class Target < ISM::Software
 
     def initialize
-        super
-        @information.loadInformationFile("./Softwares/Gcc-Pass1/11.2.0/Information.json")
-    end
-
-    def download
-        super
-        Process.run("wget",args: ["https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"],output: :inherit)
-        Process.run("wget",args: ["https://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz"],output: :inherit)
-        Process.run("wget",args: ["https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz"],output: :inherit)
-        Process.run("wget",args: ["https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz"],output: :inherit)
-    end
-    
-    def check
-        super
+        super("./Softwares/Gcc-Pass1/11.2.0/Information.json")
     end
     
     def extract
@@ -25,10 +12,6 @@ class Target < ISM::Software
         Process.run("tar",args: ["-xf", "mpfr-4.1.0.tar.xz"],output: :inherit)
         Process.run("tar",args: ["-xf", "gmp-6.2.1.tar.xz"],output: :inherit)
         Process.run("tar",args: ["-xf", "mpc-1.2.1.tar.gz"],output: :inherit)
-    end
-    
-    def patch
-        super
     end
 
     def prepare
@@ -89,10 +72,6 @@ class Target < ISM::Software
                                     "`dirname",
                                     "$(#{Ism.settings.target}-gcc",
                                     "-print-libgcc-file-name)`/install-tools/include/limits.h"],output: :inherit)
-    end
-    
-    def uninstall
-        super
     end
 
 end

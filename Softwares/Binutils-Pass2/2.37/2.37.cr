@@ -3,19 +3,7 @@ require "../../SoftwaresLibrairies"
 class Target < ISM::Software
 
     def initialize
-        super
-        @information.loadInformationFile("./Softwares/Binutils-Pass2/2.37/Information.json")
-    end
-
-    def download
-        super
-        Process.run("wget",args: ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"],output: :inherit)
-        #Process.run("wget",args: ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.sig"],output: :inherit)
-    end
-    
-    def check
-        super
-        #Process.run("gpg",args: ["binutils-2.37.tar.xz.sig"],output: :inherit)
+        super("./Softwares/Binutils-Pass2/2.37/Information.json")
     end
     
     def extract
@@ -28,10 +16,6 @@ class Target < ISM::Software
         Dir.cd("binutils-2.37")
         Dir.mkdir("build")
         Dir.cd("build")
-    end
-    
-    def patch
-        super
     end
 
     def configure
@@ -57,10 +41,6 @@ class Target < ISM::Software
         Process.run("install",args: ["-vm755",
                                     "libctf/.libs/libctf.so.0.0.0",
                                     "#{Ism.settings.rootPath}/usr/lib"],output: :inherit)
-    end
-    
-    def uninstall
-        super
     end
 
 end

@@ -169,6 +169,12 @@ module ISM
                     ISM::Default::CommandLine::InstallText +
                     softwareInformation.name
         end
+
+        def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
+            puts    "#{"* ".colorize(:green)}" +
+                    ISM::Default::CommandLine::CleanText +
+                    softwareInformation.name
+        end
         
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
             puts    "#{"* ".colorize(:green)}" +

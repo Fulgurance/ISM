@@ -101,6 +101,7 @@ module ISM
                                 file << "target.configure\n"
                                 file << "target.build\n"
                                 file << "target.install\n"
+                                file << "target.clean\n"
                                 file.close
                                 Process.run("crystal",args: ["ISM.task"],output: :inherit)
                             end

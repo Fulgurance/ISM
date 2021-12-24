@@ -4,12 +4,22 @@ module ISM
 
         property information = ISM::Default::Software::Information
 
-        def initialize(information = ISM::Default::Software::Information)
-            @information = information
+        def initialize(informationPath = ISM::Default::Filename::Information)
+            @information = ISM::SoftwareInformation.new
+            @information.loadInformationFile(informationPatch)
         end
 
         def download
+            Dir.cd(Ism.settings.sourcesPath)
             Ism.notifyOfDownload(@information)
+
+            downloadList =  @information.downloadLinks +
+                            @information.signatureLinks + 
+                            @information.shasumLinks
+
+            downloadList.each do |link|
+                Process.run("curl",args: ["-O","#{link}"],output: :inherit)
+            end
         end
         
         def check
@@ -40,6 +50,10 @@ module ISM
             Ism.notifyOfInstall(@information)
         end
         
+        def clean
+            Ism.notifyOfClean(@information)
+        end
+
         def uninstall
             Ism.notifyOfUninstall(@information)
         end

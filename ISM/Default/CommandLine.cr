@@ -23,6 +23,7 @@ module ISM
             ConfigureText = "Configuring "
             BuildText = "Building "
             InstallText = "Installing "
+            CleanText = "Cleaning "
             UninstallText = "Uninstalling "
 
         end

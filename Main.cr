@@ -1,5 +1,5 @@
-require "json"
 require "colorize"
+require "json"
 require "./ISM/CommandLine"
 require "./ISM/CommandLineOption"
 require "./ISM/CommandLineSettings"
