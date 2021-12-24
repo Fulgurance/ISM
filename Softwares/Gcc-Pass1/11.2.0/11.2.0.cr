@@ -8,6 +8,7 @@ class Target < ISM::Software
     end
 
     def download
+        super
         Process.run("wget",args: ["https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"],output: :inherit)
         Process.run("wget",args: ["https://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz"],output: :inherit)
         Process.run("wget",args: ["https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz"],output: :inherit)
@@ -15,33 +16,42 @@ class Target < ISM::Software
     end
     
     def check
+        super
     end
     
     def extract
-        Process.run("tar",args: ["-xf", "../mpfr-4.1.0.tar.xz"],output: :inherit)
-        Process.run("mv",args: ["-v", "mpfr-4.1.0", "mpfr"],output: :inherit)
-        Process.run("tar",args: ["-xf", "../gmp-6.2.1.tar.xz"],output: :inherit)
-        Process.run("mv",args: ["-v", "gmp-6.2.1", "gmp"],output: :inherit)
-        Process.run("tar",args: ["-xf", "../mpc-1.2.1.tar.gz"],output: :inherit)
-        Process.run("mv",args: ["-v", "mpc-1.2.1", "mpc"],output: :inherit)
+        super
+        Process.run("tar",args: ["-xf", "gcc-11.2.0.tar.xz"],output: :inherit)
+        Process.run("tar",args: ["-xf", "mpfr-4.1.0.tar.xz"],output: :inherit)
+        Process.run("tar",args: ["-xf", "gmp-6.2.1.tar.xz"],output: :inherit)
+        Process.run("tar",args: ["-xf", "mpc-1.2.1.tar.gz"],output: :inherit)
     end
     
     def patch
+        super
     end
 
     def prepare
+        super
+        Process.run("mv",args: ["-v", "mpfr-4.1.0", "mpfr"],output: :inherit)
+        Process.run("mv",args: ["-v", "gmp-6.2.1", "gmp"],output: :inherit)
+        Process.run("mv",args: ["-v", "mpc-1.2.1", "mpc"],output: :inherit)
+        Process.run("mv",args: ["-v", "mpfr", "gcc-11.2.0/"],output: :inherit)
+        Process.run("mv",args: ["-v", "gmp", "gcc-11.2.0/"],output: :inherit)
+        Process.run("mv",args: ["-v", "mpc", "gcc-11.2.0/"],output: :inherit)
+        Dir.cd("gcc-11.2.0")
         `case $(uname -m) in
             x86_64)
               sed -e '/m64=/s/lib64/lib/' \
                   -i.orig gcc/config/i386/t-linux64
            ;;
         esac`
-        Dir.cd("gcc-11.2.0")
         Dir.mkdir("build")
         Dir.cd("build")
     end
     
     def configure
+        super
         Process.run("../configure",args: [  "--target=#{Ism.settings.target}", 
                                             "--prefix=#{Ism.settings.toolsPath}",
                                             "--with-glibc-version=2.11",
@@ -64,10 +74,12 @@ class Target < ISM::Software
     end
     
     def build
+        super
         Process.run("make",args: ["#{Ism.settings.makeOptions}"],output: :inherit)
     end
     
     def install
+        super
         Process.run("make",args: ["#{Ism.settings.makeOptions}", "install"],output: :inherit)
         Dir.cd("..")
         Process.run("cat",args: [  "gcc/limitx.h", 
@@ -80,6 +92,7 @@ class Target < ISM::Software
     end
     
     def uninstall
+        super
     end
 
 end
