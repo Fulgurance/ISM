@@ -6,7 +6,7 @@ module ISM
 
         def initialize(informationPath = ISM::Default::Filename::Information)
             @information = ISM::SoftwareInformation.new
-            @information.loadInformationFile(informationPatch)
+            @information.loadInformationFile(informationPath)
         end
 
         def download
