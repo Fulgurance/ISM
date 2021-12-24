@@ -72,7 +72,7 @@ module ISM
                         userInput = ""
                         userAgreement = false
 
-                        puts "#{ISM::Default::Option::SoftwareInstall::InstallQuestion.colorize.mode(:underline)}" + 
+                        print   "#{ISM::Default::Option::SoftwareInstall::InstallQuestion.colorize.mode(:underline)}" + 
                                 "[" + "#{ISM::Default::Option::SoftwareInstall::YesReplyOption.colorize(:green)}" + 
                                 "/" + "#{ISM::Default::Option::SoftwareInstall::NoReplyOption.colorize(:red)}" + "]"
 
