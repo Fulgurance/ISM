@@ -1,4 +1,5 @@
 require "colorize"
+require "file_utils"
 require "json"
 require "./ISM/CommandLine"
 require "./ISM/CommandLineOption"

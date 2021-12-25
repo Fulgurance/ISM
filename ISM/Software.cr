@@ -34,7 +34,7 @@ module ISM
         
         def extract
             Ism.notifyOfExtract(@information)
-            Process.run("tar",args: ["-xf", "#{@mainSourceName+@mainSourceExtensionName}"],output: :inherit)
+            Process.run("tar",args: ["-xf", "#{@mainSourceName}"+"."+"#{@mainSourceExtensionName}"],output: :inherit)
             Dir.cd(@mainSourceDirectoryName)
         end
         
@@ -61,7 +61,7 @@ module ISM
         def clean
             Ism.notifyOfClean(@information)
             Dir.cd(Ism.settings.sourcesPath)
-            Dir.delete(Ism.settings.sourcesPath)
+            FileUtils.rm_r(@information.versionName)
         end
 
         def uninstall

@@ -3,7 +3,10 @@ require "../../SoftwaresLibrairies"
 class Target < ISM::Software
 
     def initialize
-        super("./Softwares/Binutils-Pass2/2.37/Information.json")
+        super(  "./Softwares/Binutils-Pass2/2.37/Information.json",
+                "binutils-2.37",
+                "tar.xz",
+                "binutils-2.37")
     end
     
     def prepare
