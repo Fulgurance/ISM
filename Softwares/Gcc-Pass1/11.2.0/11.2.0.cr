@@ -33,9 +33,6 @@ class Target < ISM::Software
         FileUtils.mv("mpfr-4.1.0", "mpfr")
         FileUtils.mv("gmp-6.2.1", "gmp")
         FileUtils.mv("mpc-1.2.1", "mpc")
-        FileUtils.mv("mpfr", @mainSourceDirectoryName+"/mpfr")
-        FileUtils.mv("gmp", @mainSourceDirectoryName+"/gmp")
-        FileUtils.mv("mpc", @mainSourceDirectoryName+"mpc")
 
         `case $(uname -m) in
             x86_64)
