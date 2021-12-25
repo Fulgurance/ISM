@@ -3,32 +3,47 @@ require "../../SoftwaresLibrairies"
 class Target < ISM::Software
 
     def initialize
-        super("./Softwares/Gcc-Pass1/11.2.0/Information.json")
+        super(  "./Softwares/Gcc-Pass1/11.2.0/Information.json",
+                "gcc-11.2.0",
+                "tar.xz",
+                "gcc-11.2.0")
     end
     
-    def extract
+    def download
         super
-        Process.run("tar",args: ["-xf", "gcc-11.2.0.tar.xz"],output: :inherit)
-        Process.run("tar",args: ["-xf", "mpfr-4.1.0.tar.xz"],output: :inherit)
-        Process.run("tar",args: ["-xf", "gmp-6.2.1.tar.xz"],output: :inherit)
-        Process.run("tar",args: ["-xf", "mpc-1.2.1.tar.gz"],output: :inherit)
+        Process.run("curl",args: ["-O","https://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz"],output: :inherit)
+        Process.run("curl",args: ["-O","https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz"],output: :inherit)
+        Process.run("curl",args: ["-O","https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz"],output: :inherit)
     end
 
     def prepare
         super
-        Process.run("mv",args: ["-v", "mpfr-4.1.0", "mpfr"],output: :inherit)
-        Process.run("mv",args: ["-v", "gmp-6.2.1", "gmp"],output: :inherit)
-        Process.run("mv",args: ["-v", "mpc-1.2.1", "mpc"],output: :inherit)
-        Process.run("mv",args: ["-v", "mpfr", "gcc-11.2.0/"],output: :inherit)
-        Process.run("mv",args: ["-v", "gmp", "gcc-11.2.0/"],output: :inherit)
-        Process.run("mv",args: ["-v", "mpc", "gcc-11.2.0/"],output: :inherit)
-        Dir.cd("gcc-11.2.0")
+        Dir.cd(Ism.settings.sourcesPath+@information.versionName)
+
+        FileUtils.mv("mpfr-4.1.0.tar.xz", @mainSourceDirectoryName)
+        FileUtils.mv("gmp-6.2.1.tar.xz", @mainSourceDirectoryName)
+        FileUtils.mv("mpc-1.2.1.tar.gz", @mainSourceDirectoryName)
+
+        Dir.cd(@mainSourceDirectoryName)
+
+        Process.run("tar",args: ["-xf", "mpfr-4.1.0.tar.xz"],output: :inherit)
+        Process.run("tar",args: ["-xf", "gmp-6.2.1.tar.xz"],output: :inherit)
+        Process.run("tar",args: ["-xf", "mpc-1.2.1.tar.gz"],output: :inherit)
+
+        FileUtils.mv("mpfr-4.1.0", "mpfr")
+        FileUtils.mv("gmp-6.2.1", "gmp")
+        FileUtils.mv("mpc-1.2.1", "mpc")
+        FileUtils.mv("mpfr", @mainSourceDirectoryName)
+        FileUtils.mv("mpfr", @mainSourceDirectoryName)
+        FileUtils.mv("mpfr", @mainSourceDirectoryName)
+
         `case $(uname -m) in
             x86_64)
               sed -e '/m64=/s/lib64/lib/' \
                   -i.orig gcc/config/i386/t-linux64
            ;;
         esac`
+
         Dir.mkdir("build")
         Dir.cd("build")
     end
