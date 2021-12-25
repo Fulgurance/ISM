@@ -70,12 +70,12 @@ class Target < ISM::Software
     
     def build
         super
-        Process.run("make",args: ["#{Ism.settings.makeOptions}"],output: :inherit)
+        Process.run("make",args: [Ism.settings.makeOptions],output: :inherit)
     end
     
     def install
         super
-        Process.run("make",args: ["#{Ism.settings.makeOptions}", "install"],output: :inherit)
+        Process.run("make",args: [Ism.settings.makeOptions, "install"],output: :inherit)
         Dir.cd("..")
         Process.run("cat",args: [  "gcc/limitx.h", 
                                     "gcc/glimits.h",

@@ -19,7 +19,7 @@
       "options": []
     },
     {
-      "name": "Linux-API-Headers-Pass1",
+      "name": "Linux-API-Headers",
       "version": "5.13.12",
       "options": []
     },
@@ -34,77 +34,77 @@
       "options": []
     },
     {
-      "name": "M4-Pass2",
+      "name": "M4-Pass1",
       "version": "1.14.19",
       "options": []
     },
     {
-      "name": "Ncurses-Pass2",
+      "name": "Ncurses-Pass1",
       "version": "6.2",
       "options": []
     },
     {
-      "name": "Bash-Pass2",
+      "name": "Bash-Pass1",
       "version": "5.1.8",
       "options": []
     },
     {
-      "name": "Coreutils-Pass2",
+      "name": "Coreutils-Pass1",
       "version": "8.32",
       "options": []
     },
     {
-      "name": "Diffutils-Pass2",
+      "name": "Diffutils-Pass1",
       "version": "3.8",
       "options": []
     },
     {
-      "name": "File-Pass2",
+      "name": "File-Pass1",
       "version": "5.4",
       "options": []
     },
     {
-      "name": "Findutils-Pass2",
+      "name": "Findutils-Pass1",
       "version": "4.8.0",
       "options": []
     },
     {
-      "name": "Gawk-Pass2",
+      "name": "Gawk-Pass1",
       "version": "5.1.0",
       "options": []
     },
     {
-      "name": "Grep-Pass2",
+      "name": "Grep-Pass1",
       "version": "3.7",
       "options": []
     },
     {
-      "name": "Gzip-Pass2",
+      "name": "Gzip-Pass1",
       "version": "1.10",
       "options": []
     },
     {
-      "name": "Make-Pass2",
+      "name": "Make-Pass1",
       "version": "4.3",
       "options": []
     },
     {
-      "name": "Patch-Pass2",
+      "name": "Patch-Pass1",
       "version": "2.7.6",
       "options": []
     },
     {
-      "name": "Sed-Pass2",
+      "name": "Sed-Pass1",
       "version": "4.8",
       "options": []
     },
     {
-      "name": "Tar-Pass2",
+      "name": "Tar-Pass1",
       "version": "1.34",
       "options": []
     },
     {
-      "name": "Xz-Pass2",
+      "name": "Xz-Pass1",
       "version": "5.2.5",
       "options": []
     }

@@ -26,7 +26,7 @@ class Target < ISM::Software
     
     def build
         super
-        Process.run("make",args: ["#{Ism.settings.makeOptions}"],output: :inherit)
+        Process.run("make",args: [Ism.settings.makeOptions],output: :inherit)
     end
     
     def install
