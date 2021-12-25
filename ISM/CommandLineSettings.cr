@@ -15,15 +15,15 @@ module ISM
             include JSON::Serializable
         end
 
-        property rootPath = ISM::Default::CommandLineSettings::RootPath
-        property toolsPath = ISM::Default::CommandLineSettings::ToolsPath
-        property sourcesPath = ISM::Default::CommandLineSettings::SourcesPath
-        property systemName = ISM::Default::CommandLineSettings::SystemName
-        property targetName = ISM::Default::CommandLineSettings::TargetName
-        property architecture = ISM::Default::CommandLineSettings::Architecture
-        property target = ISM::Default::CommandLineSettings::Target
-        property makeOptions = ISM::Default::CommandLineSettings::MakeOptions
-        property buildOptions = ISM::Default::CommandLineSettings::BuildOptions
+        property    rootPath = ISM::Default::CommandLineSettings::RootPath
+        property    toolsPath = ISM::Default::CommandLineSettings::ToolsPath
+        property    sourcesPath = ISM::Default::CommandLineSettings::SourcesPath
+        property    systemName = ISM::Default::CommandLineSettings::SystemName
+        property    targetName = ISM::Default::CommandLineSettings::TargetName
+        property    architecture = ISM::Default::CommandLineSettings::Architecture
+        getter      target = ISM::Default::CommandLineSettings::Target
+        property    makeOptions = ISM::Default::CommandLineSettings::MakeOptions
+        property    buildOptions = ISM::Default::CommandLineSettings::BuildOptions
 
         def initialize( rootPath = ISM::Default::CommandLineSettings::RootPath,
                         toolsPath = ISM::Default::CommandLineSettings::ToolsPath,
@@ -85,7 +85,7 @@ module ISM
             writeSettingsFile
         end
 
-        def setSourcesPath(toolsPath = ISM::Default::CommandLineSettings::SourcesPath)
+        def setSourcesPath(sourcesPath = ISM::Default::CommandLineSettings::SourcesPath)
             @sourcesPath = sourcesPath
             writeSettingsFile
         end
@@ -98,15 +98,17 @@ module ISM
         def setTargetName(targetName = ISM::Default::CommandLineSettings::TargetName)
             @targetName = targetName
             writeSettingsFile
+            setTarget
         end
 
         def setArchitecture(architecture = ISM::Default::CommandLineSettings::Architecture)
             @architecture = architecture
             writeSettingsFile
+            setTarget
         end
 
-        def setTarget(target = ISM::Default::CommandLineSettings::Target)
-            @target = target
+        def setTarget
+            @target = @architecture + "-" + @targetName + "-" + "linux-gnu"
             writeSettingsFile
         end
 

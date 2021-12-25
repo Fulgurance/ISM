@@ -11,6 +11,8 @@ module ISM
 
         def download
             Dir.cd(Ism.settings.sourcesPath)
+            Dir.mkdir(@information.versionName)
+            Dir.cd(@information.versionName)
             Ism.notifyOfDownload(@information)
 
             downloadList =  @information.downloadLinks +
@@ -52,6 +54,8 @@ module ISM
         
         def clean
             Ism.notifyOfClean(@information)
+            Dir.cd(Ism.settings.sourcesPath)
+            Dir.rmdir(Ism.settings.sourcesPath)
         end
 
         def uninstall
