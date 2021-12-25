@@ -40,7 +40,7 @@ class Target < ISM::Software
         super
         Process.run("make",args: [Ism.settings.makeOptions,"DESTDIR=#{Ism.settings.rootPath}","install"],output: :inherit)
         Process.run("sed",args: ["'/RTLDLIST=/s@/usr@@g'","-i","#{Ism.settings.rootPath}/usr/bin/ldd"],output: :inherit)
-        Process.run("#{Ism.settings.rootPath}/tools/libexec/gcc/$LFS_TGT/11.2.0/install-tools/mkheaders",output: :inherit)
+        Process.run("#{Ism.settings.rootPath}/tools/libexec/gcc/#{Ism.settings.target}/11.2.0/install-tools/mkheaders",output: :inherit)
     end
 
 end

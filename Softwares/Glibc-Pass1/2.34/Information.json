@@ -7,7 +7,7 @@
   "downloadLinks": ["https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.xz"],
   "signatureLinks": [],
   "shasumLinks": [],
-  "patchesLinks": [],
+  "patchesLinks": ["https://www.linuxfromscratch.org/patches/lfs/11.0/glibc-2.34-fhs-1.patch"],
   "dependencies": [
     {
       "name": "Binutils-Pass1",
