@@ -3,17 +3,14 @@ require "../../SoftwaresLibrairies"
 class Target < ISM::Software
 
     def initialize
-        super("./Softwares/Binutils-Pass1/2.37/Information.json")
-    end
-    
-    def extract
-        super
-        Process.run("tar",args: ["-xf", "binutils-2.37.tar.xz"],output: :inherit)
+        super(  "./Softwares/Binutils-Pass1/2.37/Information.json",
+                "binutils-2.37",
+                "tar.xz",
+                "binutils-2.37")
     end
 
     def prepare
         super
-        Dir.cd("binutils-2.37")
         Dir.mkdir("build")
         Dir.cd("build")
     end
@@ -35,7 +32,6 @@ class Target < ISM::Software
     def install
         super
         Process.run("make",args: ["-j1","install"],output: :inherit)
-        `make -j1 install`
     end
 
 end

@@ -5,6 +5,9 @@ module ISM
         module Software
 
             Information = ISM::SoftwareInformation.new
+            MainSourceName = ""
+            InformationMainSourceExtensionName = ""
+            InformationMainSourceDirectoryName = ""
 
         end
 

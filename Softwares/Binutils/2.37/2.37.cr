@@ -6,14 +6,8 @@ class Target < ISM::Software
         super("./Softwares/Binutils/2.37/Information.json")
     end
 
-    def extract
-        super
-        Process.run("tar",args: ["-xf", "binutils-2.37.tar.xz"],output: :inherit)
-    end
-
     def prepare
         super
-        Dir.cd("binutils-2.37")
         Dir.mkdir("build")
         Dir.cd("build")
     end

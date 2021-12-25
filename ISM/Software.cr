@@ -3,10 +3,19 @@ module ISM
     class Software
 
         property information = ISM::Default::Software::Information
+        property mainSourceName = ISM::Default::Software::MainSourceName
+        property mainSourceExtensionName = ISM::Default::Software::InformationMainSourceExtensionName
+        property mainSourceDirectoryName = ISM::Default::Software::InformationMainSourceDirectoryName
 
-        def initialize(informationPath = ISM::Default::Filename::Information)
+        def initialize( informationPath = ISM::Default::Filename::Information,
+                        mainSourceName = ISM::Default::Software::MainSourceName,
+                        mainSourceExtensionName = ISM::Default::Software::InformationMainSourceExtensionName,
+                        mainSourceDirectoryName = ISM::Default::Software::InformationMainSourceDirectoryName)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
+            @mainSourceName = mainSourceName
+            @mainSourceExtensionName = mainSourceExtensionName
+            @mainSourceDirectoryName = mainSourceDirectoryName
         end
 
         def download
@@ -15,15 +24,8 @@ module ISM
             Dir.cd(@information.versionName)
             Ism.notifyOfDownload(@information)
 
-            #Improve this part to after alternate to an another link if the first one is broken
-            #downloadList =  @information.downloadLinks[0] #+
-                            #@information.signatureLinks + 
-                            #@information.shasumLinks
-
-            #downloadList.each do |link|
-                #Process.run("curl",args: ["-O","#{link}"],output: :inherit)
-            #end
-            Process.run("curl",args: ["#{@information.downloadLinks[0]}", ">", "#{@information.versionName}+.tar.xz"],output: :inherit)
+            #Adapt when multiple links are available and when some of there are broken
+            Process.run("curl",args: ["-O","#{@information.downloadLinks[0]}"],output: :inherit)
         end
         
         def check
@@ -32,7 +34,8 @@ module ISM
         
         def extract
             Ism.notifyOfExtract(@information)
-            Process.run("tar",args: ["-xf", "#{@information.versionName}+.tar.xz"],output: :inherit)
+            Process.run("tar",args: ["-xf", "#{@mainSourceName+@mainSourceExtensionName}"],output: :inherit)
+            Dir.cd(@mainSourceDirectoryName)
         end
         
         def patch
