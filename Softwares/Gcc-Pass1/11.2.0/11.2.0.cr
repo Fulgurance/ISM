@@ -11,9 +11,9 @@ class Target < ISM::Software
     
     def download
         super
-        Process.run("curl",args: ["-O","https://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz"],output: :inherit)
-        Process.run("curl",args: ["-O","https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz"],output: :inherit)
-        Process.run("curl",args: ["-O","https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz"],output: :inherit)
+        Process.run("wget",args: ["https://www.mpfr.org/mpfr-4.1.0/mpfr-4.1.0.tar.xz"],output: :inherit)
+        Process.run("wget",args: ["https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz"],output: :inherit)
+        Process.run("wget",args: ["https://ftp.gnu.org/gnu/mpc/mpc-1.2.1.tar.gz"],output: :inherit)
     end
 
     def prepare

@@ -25,7 +25,7 @@ module ISM
             Ism.notifyOfDownload(@information)
 
             #Adapt when multiple links are available and when some of there are broken
-            Process.run("curl",args: ["-O","#{@information.downloadLinks[0]}"],output: :inherit)
+            Process.run("wget",args: [@information.downloadLinks[0]],output: :inherit)
         end
         
         def check
