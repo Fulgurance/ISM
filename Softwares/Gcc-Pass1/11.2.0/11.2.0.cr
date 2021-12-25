@@ -18,11 +18,11 @@ class Target < ISM::Software
 
     def prepare
         super
-        Dir.cd(Ism.settings.sourcesPath+@information.versionName)
+        Dir.cd(Ism.settings.sourcesPath+"/"+@information.versionName)
 
-        FileUtils.mv("mpfr-4.1.0.tar.xz", @mainSourceDirectoryName)
-        FileUtils.mv("gmp-6.2.1.tar.xz", @mainSourceDirectoryName)
-        FileUtils.mv("mpc-1.2.1.tar.gz", @mainSourceDirectoryName)
+        FileUtils.mv("mpfr-4.1.0.tar.xz", @mainSourceDirectoryName+"/mpfr-4.1.0.tar.xz")
+        FileUtils.mv("gmp-6.2.1.tar.xz", @mainSourceDirectoryName+"/gmp-6.2.1.tar.xz")
+        FileUtils.mv("mpc-1.2.1.tar.gz", @mainSourceDirectoryName+"/mpc-1.2.1.tar.gz")
 
         Dir.cd(@mainSourceDirectoryName)
 
@@ -33,9 +33,9 @@ class Target < ISM::Software
         FileUtils.mv("mpfr-4.1.0", "mpfr")
         FileUtils.mv("gmp-6.2.1", "gmp")
         FileUtils.mv("mpc-1.2.1", "mpc")
-        FileUtils.mv("mpfr", @mainSourceDirectoryName)
-        FileUtils.mv("mpfr", @mainSourceDirectoryName)
-        FileUtils.mv("mpfr", @mainSourceDirectoryName)
+        FileUtils.mv("mpfr", @mainSourceDirectoryName+"/mpfr")
+        FileUtils.mv("gmp", @mainSourceDirectoryName+"/gmp")
+        FileUtils.mv("mpc", @mainSourceDirectoryName+"mpc")
 
         `case $(uname -m) in
             x86_64)
