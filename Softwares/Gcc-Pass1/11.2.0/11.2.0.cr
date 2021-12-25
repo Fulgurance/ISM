@@ -4,8 +4,6 @@ class Target < ISM::Software
 
     def initialize
         super(  "./Softwares/Gcc-Pass1/11.2.0/Information.json",
-                "gcc-11.2.0",
-                "tar.xz",
                 "gcc-11.2.0")
     end
     

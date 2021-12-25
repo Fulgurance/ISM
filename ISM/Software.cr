@@ -3,18 +3,12 @@ module ISM
     class Software
 
         property information = ISM::Default::Software::Information
-        property mainSourceName = ISM::Default::Software::MainSourceName
-        property mainSourceExtensionName = ISM::Default::Software::InformationMainSourceExtensionName
         property mainSourceDirectoryName = ISM::Default::Software::InformationMainSourceDirectoryName
 
         def initialize( informationPath = ISM::Default::Filename::Information,
-                        mainSourceName = ISM::Default::Software::MainSourceName,
-                        mainSourceExtensionName = ISM::Default::Software::InformationMainSourceExtensionName,
                         mainSourceDirectoryName = ISM::Default::Software::InformationMainSourceDirectoryName)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
-            @mainSourceName = mainSourceName
-            @mainSourceExtensionName = mainSourceExtensionName
             @mainSourceDirectoryName = mainSourceDirectoryName
         end
 
@@ -26,6 +20,7 @@ module ISM
 
             #Adapt when multiple links are available and when some of there are broken
             Process.run("wget",args: [@information.downloadLinks[0]],output: :inherit)
+            Process.run("wget",args: [@information.patchesLinks[0]],output: :inherit)
         end
         
         def check
@@ -34,12 +29,13 @@ module ISM
         
         def extract
             Ism.notifyOfExtract(@information)
-            Process.run("tar",args: ["-xf", "#{@mainSourceName}"+"."+"#{@mainSourceExtensionName}"],output: :inherit)
+            Process.run("tar",args: ["-xf", @information.downloadLinks[0].lchop(@information.downloadLinks[0][0..str.rindex("/")])],output: :inherit)
             Dir.cd(@mainSourceDirectoryName)
         end
         
         def patch
             Ism.notifyOfPatch(@information)
+            Process.run("patch",args: ["-Np1","-i",@information.patchesLinks[0].lchop(@information.patchesLinks[0][0..str.rindex("/")])],output: :inherit)
         end
     
         def prepare

@@ -4,8 +4,6 @@ class Target < ISM::Software
 
     def initialize
         super(  "./Softwares/Linux-API-Headers/5.13.12/Information.json",
-                "linux-5.13.12",
-                "tar.xz",
                 "linux-5.13.12")
     end
     

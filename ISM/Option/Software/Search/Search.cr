@@ -88,8 +88,11 @@ module ISM
                                         optionsText += " | "
                                     end
                                 end
+                                if optionsText.empty?
+                                    optionsText = "None"
+                                end
                                 puts    ISM::Default::Option::SoftwareSearch::OptionsField +
-                                        "#{optionsText}"
+                                        "#{optionsText.colorize(:green)}"
 
                                 puts "\n"
                             end

@@ -25,6 +25,7 @@ module ISM
         downloadLinks : Array(String),
         signatureLinks : Array(String),
         shasumLinks : Array(String),
+        patchesLinks : Array(String),
         dependencies : Array(Dependency),
         options : Array(Option) do
         include JSON::Serializable
@@ -38,6 +39,7 @@ module ISM
     property downloadLinks = ISM::Default::SoftwareInformation::DownloadLinks
     property signatureLinks = ISM::Default::SoftwareInformation::SignatureLinks
     property shasumLinks = ISM::Default::SoftwareInformation::ShasumLinks
+    property patchesLinks = ISM::Default::SoftwareInformation::PatchesLinks
     property dependencies = ISM::Default::SoftwareInformation::Dependencies
     property options = ISM::Default::SoftwareInformation::Options
 
@@ -49,6 +51,7 @@ module ISM
                     downloadLinks = ISM::Default::SoftwareInformation::DownloadLinks,
                     signatureLinks = ISM::Default::SoftwareInformation::SignatureLinks,
                     shasumLinks = ISM::Default::SoftwareInformation::ShasumLinks,
+                    patchesLinks = ISM::Default::SoftwareInformation::PatchesLinks,
                     dependencies = ISM::Default::SoftwareInformation::Dependencies,
                     options = ISM::Default::SoftwareInformation::Options)
 
@@ -60,6 +63,7 @@ module ISM
                     @downloadLinks = downloadLinks
                     @signatureLinks = signatureLinks
                     @shasumLinks = shasumLinks
+                    @patchesLinks = patchesLinks
                     @dependencies = dependencies
                     @options = options
     end
@@ -75,6 +79,7 @@ module ISM
       @downloadLinks = information.downloadLinks
       @signatureLinks = information.signatureLinks
       @shasumLinks = information.shasumLinks
+      @patchesLinks = information.patchesLinks
 
       information.dependencies.each do |data|
           dependency = ISM::SoftwareDependency.new
@@ -126,6 +131,7 @@ module ISM
                                         @downloadLinks,
                                         @signatureLinks,
                                         @shasumLinks,
+                                        @patchesLinks,
                                         dependencies,
                                         options)
 
