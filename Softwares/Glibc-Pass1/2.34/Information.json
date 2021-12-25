@@ -1,0 +1,28 @@
+{
+  "name": "Glibc-Pass1",
+  "version": "2.34",
+  "architectures": ["x86_64"],
+  "description": "The GNU C Library project (Cross Toolchain)",
+  "website": "https://www.gnu.org/software/libc/",
+  "downloadLinks": ["https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.xz"],
+  "signatureLinks": [],
+  "shasumLinks": [],
+  "dependencies": [
+    {
+      "name": "Binutils-Pass1",
+      "version": "2.37",
+      "options": []
+    },
+    {
+      "name": "Gcc-Pass1",
+      "version": "11.2.0",
+      "options": []
+    },
+    {
+      "name": "Linux-API-Headers-5.13.12",
+      "version": "2.37",
+      "options": []
+    }
+  ],
+  "options": []
+}

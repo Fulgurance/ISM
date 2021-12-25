@@ -15,7 +15,7 @@
     },
     {
       "name": "Gcc-Pass1",
-      "version": "2.37",
+      "version": "11.2.0",
       "options": []
     }
   ],
