@@ -4,8 +4,8 @@
   "architectures": ["x86_64"],
   "description": "The GNU Compiler Collection (Cross Toolchain)",
   "website": "https://gcc.gnu.org/",
-  "downloadLinks": ["https://ftp.gnu.org/gnu/gcc"],
-  "signatureLinks": ["https://ftp.gnu.org/gnu/gcc"],
+  "downloadLinks": ["https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"],
+  "signatureLinks": [],
   "shasumLinks": [],
   "dependencies": [
     {

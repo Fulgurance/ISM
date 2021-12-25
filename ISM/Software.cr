@@ -15,13 +15,15 @@ module ISM
             Dir.cd(@information.versionName)
             Ism.notifyOfDownload(@information)
 
-            downloadList =  @information.downloadLinks +
-                            @information.signatureLinks + 
-                            @information.shasumLinks
+            #Improve this part to after alternate to an another link if the first one is broken
+            #downloadList =  @information.downloadLinks[0] #+
+                            #@information.signatureLinks + 
+                            #@information.shasumLinks
 
-            downloadList.each do |link|
-                Process.run("curl",args: ["-O","#{link}"],output: :inherit)
-            end
+            #downloadList.each do |link|
+                #Process.run("curl",args: ["-O","#{link}"],output: :inherit)
+            #end
+            Process.run("curl",args: ["#{@information.downloadLinks[0]}", ">", "#{@information.versionName}+.tar.xz"],output: :inherit)
         end
         
         def check
@@ -30,6 +32,7 @@ module ISM
         
         def extract
             Ism.notifyOfExtract(@information)
+            Process.run("tar",args: ["-xf", "#{@information.versionName}+.tar.xz"],output: :inherit)
         end
         
         def patch
@@ -55,7 +58,7 @@ module ISM
         def clean
             Ism.notifyOfClean(@information)
             Dir.cd(Ism.settings.sourcesPath)
-            Dir.rmdir(Ism.settings.sourcesPath)
+            Dir.delete(Ism.settings.sourcesPath)
         end
 
         def uninstall

@@ -4,8 +4,8 @@
   "architectures": ["x86_64"],
   "description": "The GNU collection of binary tools (Temporary Tools).",
   "website": "https://www.gnu.org/software/binutils/",
-  "downloadLinks": ["https://ftp.gnu.org/gnu/binutils/"],
-  "signatureLinks": ["https://ftp.gnu.org/gnu/binutils/"],
+  "downloadLinks": ["https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"],
+  "signatureLinks": [],
   "shasumLinks": [],
   "dependencies": [
     {
