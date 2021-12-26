@@ -54,3 +54,7 @@ Configure ISM settings
 
 ISM is made to use all of the settings, for the compilation as well and pass all wanted arguments,
 like GCC flags, number of parallels jobs, custom machine targets.
+
+##About
+It's actually highly experimental, and actually it's only possible to build the Cross-Toolchain of the LFS book.
+Don't use that in a production environment, only in a virtual machine, except if you assume you are totally crazy (this is possible).
