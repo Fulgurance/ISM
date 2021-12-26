@@ -38,7 +38,9 @@ module ISM
         
         def patch
             Ism.notifyOfPatch(@information)
-            Process.run("patch",args: ["-Np1","-i",@information.patchesLinks[0].lchop(@information.patchesLinks[0][0..@information.patchesLinks[0].rindex("/")])],output: :inherit)
+            if !@information.patchesLinks.empty?
+                Process.run("patch",args: ["-Np1","-i",@information.patchesLinks[0].lchop(@information.patchesLinks[0][0..@information.patchesLinks[0].rindex("/")])],output: :inherit)
+            end
         end
     
         def prepare

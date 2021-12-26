@@ -17,7 +17,7 @@ module ISM
                 AvailablesArchitecturesField = "Available(s) architecture(s): "
                 WebsiteField = "Website: "
                 AvailablesVersionsField = "Available(s) Version(s): "
-                InstalledVersionField = "Installed Version: "
+                InstalledVersionField = "Installed Version(s): "
                 OptionsField = "Options: "
             end
             

@@ -19,8 +19,7 @@ module ISM
                     matching = false
                     wrongArgument = ""
 
-                    #Remove duplicate softwares (example: I have two similars arguments)
-                    ARGV[2..-1].each do |argument|
+                    ARGV[2..-1].uniq.each do |argument|
                         matching = false
 
                         Ism.softwares.each do |software|
