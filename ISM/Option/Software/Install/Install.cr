@@ -93,8 +93,6 @@ module ISM
 
                     end
 
-                    neededSoftwaresTree
-
                     neededSoftwaresTree.each do |level|
                         level.each do |dependency|
                             neededSoftwares << dependency
@@ -105,7 +103,7 @@ module ISM
                                                             dependency.version,
                                                             dependency.options] }
 
-                    neededSoftwares.each do |software|
+                    neededSoftwares.reverse.each do |software|
                         matchingSoftwaresArray.unshift(Ism.getDependencyInformation(software.name, software.version))
                     end
 
