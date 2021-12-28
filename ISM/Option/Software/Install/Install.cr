@@ -22,7 +22,6 @@ module ISM
                     #####################
                     #Get wanted softwares
                     #####################
-                    ####Doit tenir compte des configs ?
                     ARGV[2..-1].uniq.each do |argument|
                         matching = false
 
@@ -52,12 +51,23 @@ module ISM
                     #Get dependencies array by level
                     #####################
                     currentDependenciesArray = Array(ISM::SoftwareDependency).new
-                    currentDependenciesArray = matchingSoftwaresArray
-                    nextDependenciesArray = Array(ISM::SoftwareDependency).new
+
+                    matchingSoftwaresArray.each do |software|
+                        currentDependency = ISM::SoftwareDependency.new
+                        currentDependency.name = software.name
+                        currentDependency.version = software.version
+                        currentDependency.options = software.options
+                        currentDependenciesArray << currentDependency
+                    end
+
+                    nextDependenciesArray = currentDependenciesArray
+                    dependenciesLevelArray = currentDependenciesArray
+
                     dependencies = Array(ISM::SoftwareDependency).new
-                    dependenciesLevelArray = Array(ISM::SoftwareDependency).new
                     neededSoftwaresTree = Array(Array(ISM::SoftwareDependency)).new
                     neededSoftwares = Array(ISM::SoftwareDependency).new
+
+                    matchingSoftwaresArray.clear
 
                     while 0
                         
@@ -65,12 +75,11 @@ module ISM
                         #avec les dependances precedemment ajoutees
 
                         currentDependenciesArray.each do |software|
-                            dependencies = Ism.getDependencies(software.name,software.version)
+                            dependencies = software.getDependencies
 
                             if !dependencies.empty?
                                 nextDependenciesArray = nextDependenciesArray + dependencies
                                 dependenciesLevelArray = dependenciesLevelArray + dependencies
-                                #Checker les options et si elles sont actives par defaut
                             end
                         end
                         
@@ -93,25 +102,23 @@ module ISM
 
                     end
 
-                    neededSoftwaresTree.each do |level|
+                    neededSoftwaresTree.reverse.each do |level|
                         level.each do |dependency|
                             neededSoftwares << dependency
                         end
                     end
-                    
+
                     neededSoftwares.uniq! { |dependency| [  dependency.name,
                                                             dependency.version,
                                                             dependency.options] }
 
-                    neededSoftwares.reverse.each do |software|
-                        matchingSoftwaresArray.unshift(Ism.getDependencyInformation(software.name, software.version))
+                    neededSoftwares.each do |software|
+                        matchingSoftwaresArray << software.getInformation
                     end
 
                     matchingSoftwaresArray.uniq!
 
                     #Retirer encore les doublons si il y a des paquets de meme nom ou version, ou version differente, ou options differentes
-
-                    #Add method to check dependencies, needed options ...
                     if !matching
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArgument.colorize(:green)}"#"#{ARGV[2].colorize(:green)}"
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
@@ -119,7 +126,7 @@ module ISM
                         puts "\n"
 
                         matchingSoftwaresArray.each do |software|
-                            softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(:cyan)}" + "/ "
+                            softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                             optionsText = "{ "
                             software.options.each do |option|
                                 if option.active

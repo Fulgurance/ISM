@@ -12,6 +12,50 @@ module ISM
       @options = Array(ISM::SoftwareOption).new
     end
 
+    def getDependencies
+      dependencies = Array(ISM::SoftwareDependency).new
+
+      Ism.softwares.each do |software|
+
+          if software.name == @name
+
+              software.versions.each do |version|
+
+                  if @version == version.version
+                      dependencies = dependencies + version.dependencies
+                      break
+                  end
+
+              end
+              
+          end
+      end
+
+      return dependencies
+    end
+
+    def getInformation
+      dependencyInformation = ISM::SoftwareInformation.new
+
+      Ism.softwares.each do |software|
+
+          if software.name == @name
+
+              software.versions.each do |version|
+
+                  if @version == version.version
+                      dependencyInformation = version
+                      break
+                  end
+
+              end
+              
+          end
+      end
+
+      return dependencyInformation
+    end
+
   end
 
 end
