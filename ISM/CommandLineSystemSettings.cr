@@ -7,28 +7,26 @@ module ISM
             include JSON::Serializable
         end
 
-        property lcAll = ISM::Default::CommandLineSystemSettings::LcAll
+        property lcAll : String
 
-        def initialize( lcAll = ISM::Default::CommandLineSystemSettings::LcAll)
-            @lcAll = lcAll
+        def initialize(@lcAll = ISM::Default::CommandLineSystemSettings::LcAll)
         end
 
-        def loadSystemSettingsFile(systemSettingsFilePath = ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath)
-            information = SystemSettings.from_json(File.read(systemSettingsFilePath))
+        def loadSystemSettingsFile
+            information = SystemSettings.from_json(File.read(ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath))
       
             @lcAll = information.lcAll
         end
 
-        def writeSystemSettingsFile(systemSettingsFilePath = ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath)
+        def writeSystemSettingsFile
             systemSettings = SystemSettings.new(@lcAll)
 
-            file = File.open(systemSettingsFilePath,"w")
+            file = File.open(ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath,"w")
             systemSettings.to_json(file)
             file.close
         end
 
-        def setLcAll(lcAll = ISM::Default::CommandLineSystemSettings::LcAll)
-            @lcAll = lcAll
+        def setLcAll(@lcAll)
             writeSystemSettingsFile
         end
 

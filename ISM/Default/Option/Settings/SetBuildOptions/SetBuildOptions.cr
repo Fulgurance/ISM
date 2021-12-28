@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-sbo"
                 LongText = "setbuildoptions"
                 Description = "Set the default CPU flags for the compiler"
-                Options = Array(ISM::CommandLineOption).new
                 SetText = "Setting buildOptions to the value "
 
             end

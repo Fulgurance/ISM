@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-ssn"
                 LongText = "setsystemname"
                 Description = "Set the name of the future installed system"
-                Options = Array(ISM::CommandLineOption).new
                 SetText = "Setting systemName to the value "
 
             end

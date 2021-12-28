@@ -2,25 +2,20 @@ module ISM
 
     class CommandLine
 
-        property options = ISM::Default::CommandLine::Options
-        property settings = ISM::Default::CommandLine::Settings
-        property systemSettings = ISM::Default::CommandLine::SystemSettings
-        property softwares = ISM::Default::CommandLine::Softwares
-        property installedSoftwares = ISM::Default::CommandLine::InstalledSoftwares
-        property version = ISM::Default::CommandLine::Version
+        property options : Array(ISM::CommandLineOption)
+        property settings : ISM::CommandLineSettings
+        property systemSettings : ISM::CommandLineSystemSettings
+        property softwares : Array(ISM::AvailableSoftware)
+        property installedSoftwares : Array(ISM::SoftwareInformation)
+        property version : ISM::Version
 
-        def initialize( options = ISM::Default::CommandLine::Options,
-                        settings = ISM::Default::CommandLine::Settings,
-                        systemSettings = ISM::Default::CommandLine::SystemSettings,
-                        softwares = ISM::Default::CommandLine::Softwares,
-                        installedSoftwares = ISM::Default::CommandLine::InstalledSoftwares,
-                        version = ISM::Default::CommandLine::Version)
-            @options = options
-            @settings = settings
-            @systemSettings = systemSettings
-            @softwares = softwares
-            @installedSoftwares = installedSoftwares
-            @version = version
+        def initialize
+            @options = ISM::Default::CommandLine::Options
+            @settings = ISM::CommandLineSettings.new
+            @systemSettings = ISM::CommandLineSystemSettings.new
+            @softwares = Array(ISM::AvailableSoftware).new
+            @installedSoftwares = Array(ISM::SoftwareInformation).new
+            @version = ISM::Version.new
         end
 
         def start
@@ -54,6 +49,7 @@ module ISM
                                                                 softwareDirectory + "/" +
                                                                 versionDirectory + "/" +
                                                                 ISM::Default::Filename::SoftwareSettings)
+                        
                     else
                         softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory +
                                                                 softwareDirectory + "/" +
@@ -104,6 +100,28 @@ module ISM
                     showErrorUnknowArgument
                 end
             end
+        end
+
+        def getDependencies(softwareName : String, softwareVersion : String)
+            dependencies = Array(ISM::SoftwareDependency).new
+
+            @softwares.each do |software|
+
+                if softwareName == software.name
+
+                    software.versions.each do |version|
+
+                        if softwareVersion == version.version
+                            dependencies = dependencies + version.dependencies
+                            break
+                        end
+
+                    end
+                    
+                end
+            end
+
+            return dependencies
         end
 
         def showHelp

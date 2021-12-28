@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-v"
                 LongText = "version"
                 Description = "Display the ISM version"
-                Options = Array(ISM::CommandLineOption).new
 
             end
         end

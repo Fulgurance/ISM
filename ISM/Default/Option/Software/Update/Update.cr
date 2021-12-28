@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-u"
                 LongText = "update"
                 Description = "Update specified software(s)"
-                Options = Array(ISM::CommandLineOption).new
 
             end
             

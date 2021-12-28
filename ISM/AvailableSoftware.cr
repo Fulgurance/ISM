@@ -2,14 +2,10 @@ module ISM
 
     class AvailableSoftware
 
-        property name = ISM::Default::AvailableSoftware::Name
-        property versions = ISM::Default::AvailableSoftware::Versions
+        property name : String
+        property versions : Array(ISM::SoftwareInformation)
 
-        def initialize( name = ISM::Default::AvailableSoftware::Name,
-                        versions = ISM::Default::AvailableSoftware::Versions)
-
-            @name = name
-            @versions = versions
+        def initialize(@name, @versions)
         end
 
     end

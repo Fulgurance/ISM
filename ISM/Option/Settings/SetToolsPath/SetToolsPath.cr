@@ -8,7 +8,7 @@ module ISM
                 super(  ISM::Default::Option::SettingsSetToolsPath::ShortText,
                         ISM::Default::Option::SettingsSetToolsPath::LongText,
                         ISM::Default::Option::SettingsSetToolsPath::Description,
-                        ISM::Default::Option::SettingsSetToolsPath::Options)
+                        Array(ISM::CommandLineOption).new)
             end
 
             def start

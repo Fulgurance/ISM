@@ -4,12 +4,6 @@ module ISM
 
         class CommandLine
 
-            Version = ISM::Version.new
-            Options = Array(ISM::CommandLineOption).new
-            Settings = ISM::CommandLineSettings.new
-            SystemSettings = ISM::CommandLineSystemSettings.new
-            Softwares = Array(ISM::AvailableSoftware).new
-            InstalledSoftwares = Array(ISM::SoftwareInformation).new
             Title = "Ingenius System Manager"
             ErrorUnknowArgument = "ISM error: unknow argument "
             ErrorUnknowArgumentHelp1 = "Use "
@@ -25,6 +19,11 @@ module ISM
             InstallText = "Installing "
             CleanText = "Cleaning "
             UninstallText = "Uninstalling "
+            Options = [ ISM::Option::Help.new,
+                        ISM::Option::Version.new,
+                        ISM::Option::Software.new,
+                        ISM::Option::System.new,
+                        ISM::Option::Settings.new]
 
         end
 

@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-sy"
                 LongText = "synchronize"
                 Description = "Synchronize the software database"
-                Options = Array(ISM::CommandLineOption).new
 
             end
             

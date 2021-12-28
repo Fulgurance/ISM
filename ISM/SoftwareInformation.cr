@@ -31,44 +31,33 @@ module ISM
         include JSON::Serializable
     end
 
-    property name = ISM::Default::SoftwareInformation::Name
-    property version = ISM::Default::SoftwareInformation::Version
-    property architectures = ISM::Default::SoftwareInformation::Architectures
-    property description = ISM::Default::SoftwareInformation::Description
-    property website = ISM::Default::SoftwareInformation::Website
-    property downloadLinks = ISM::Default::SoftwareInformation::DownloadLinks
-    property signatureLinks = ISM::Default::SoftwareInformation::SignatureLinks
-    property shasumLinks = ISM::Default::SoftwareInformation::ShasumLinks
-    property patchesLinks = ISM::Default::SoftwareInformation::PatchesLinks
-    property dependencies = ISM::Default::SoftwareInformation::Dependencies
-    property options = ISM::Default::SoftwareInformation::Options
+    property name : String
+    property version : String
+    property architectures : Array(String)
+    property description : String
+    property website : String
+    property downloadLinks : Array(String)
+    property signatureLinks : Array(String)
+    property shasumLinks : Array(String)
+    property patchesLinks : Array(String)
+    property dependencies : Array(ISM::SoftwareDependency)
+    property options : Array(ISM::SoftwareOption)
 
-    def initialize( name = ISM::Default::SoftwareInformation::Name,
-                    version = ISM::Default::SoftwareInformation::Version,
-                    architectures = ISM::Default::SoftwareInformation::Architectures,
-                    description = ISM::Default::SoftwareInformation::Description,
-                    website = ISM::Default::SoftwareInformation::Website,
-                    downloadLinks = ISM::Default::SoftwareInformation::DownloadLinks,
-                    signatureLinks = ISM::Default::SoftwareInformation::SignatureLinks,
-                    shasumLinks = ISM::Default::SoftwareInformation::ShasumLinks,
-                    patchesLinks = ISM::Default::SoftwareInformation::PatchesLinks,
-                    dependencies = ISM::Default::SoftwareInformation::Dependencies,
-                    options = ISM::Default::SoftwareInformation::Options)
-
-                    @name = name
-                    @version = version
-                    @architectures = architectures
-                    @description = description
-                    @website = website
-                    @downloadLinks = downloadLinks
-                    @signatureLinks = signatureLinks
-                    @shasumLinks = shasumLinks
-                    @patchesLinks = patchesLinks
-                    @dependencies = dependencies
-                    @options = options
+    def initialize
+        @name = String.new
+        @version = String.new
+        @architectures = Array(String).new
+        @description = String.new
+        @website = String.new
+        @downloadLinks = Array(String).new
+        @signatureLinks = Array(String).new
+        @shasumLinks = Array(String).new
+        @patchesLinks = Array(String).new
+        @dependencies = Array(ISM::SoftwareDependency).new
+        @options = Array(ISM::SoftwareOption).new
     end
 
-    def loadInformationFile(loadInformationFilePath = ISM::Default::Filename::Information)
+    def loadInformationFile(loadInformationFilePath : String)
       information = Information.from_json(File.read(loadInformationFilePath))
 
       @name = information.name
@@ -105,7 +94,7 @@ module ISM
 
     end
 
-    def writeInformationFile(writeInformationFilePath = ISM::Default::Filename::Information)
+    def writeInformationFile(writeInformationFilePath : String)
         dependencies = Array(Dependency).new
         @dependencies.each do |data|
             options = Array(Option).new

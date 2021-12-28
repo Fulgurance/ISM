@@ -12,7 +12,6 @@ module ISM
                 ShowHelpDescription = "Enable a specific software option"
                 ShowHelpExampleText1 = "Need to be use like this:"
                 ShowHelpExampleText2 = "ism software [softwarename] enableoption [optionname]"
-                Options = Array(ISM::CommandLineOption).new
                 NoMatchFound = "No match found with the database for "
                 NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
                 SetText1 = "Enabling the option "

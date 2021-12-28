@@ -2,19 +2,12 @@ module ISM
 
     class CommandLineOption
 
-        property shortText = ISM::Default::CommandLineOption::ShortText
-        property longText = ISM::Default::CommandLineOption::LongText
-        property description = ISM::Default::CommandLineOption::Description
-        property options = ISM::Default::CommandLineOption::Options
+        property shortText : String
+        property longText : String
+        property description : String
+        property options : Array(ISM::CommandLineOption)
 
-        def initialize( shortText = ISM::Default::CommandLineOption::ShortText,
-                        longText = ISM::Default::CommandLineOption::LongText,
-                        description = ISM::Default::CommandLineOption::Description,
-                        options = ISM::Default::CommandLineOption::Options)
-            @shortText = shortText
-            @longText = longText
-            @description = description
-            @options = options
+        def initialize(@shortText, @longText, @description, @options)
         end
 
         def start

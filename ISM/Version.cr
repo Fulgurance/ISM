@@ -10,24 +10,20 @@ module ISM
         include JSON::Serializable
     end
 
-    property stage = ISM::Default::Version::Stage
-    property majorVersion = ISM::Default::Version::MajorVersion
-    property minorVersion = ISM::Default::Version::MinorVersion
-    property patchVersion = ISM::Default::Version::PatchVersion
+    property stage : String
+    property majorVersion : String
+    property minorVersion : String
+    property patchVersion : String
 
-    def initialize( stage = ISM::Default::Version::Stage,
-                    majorVersion = ISM::Default::Version::MajorVersion,
-                    minorVersion = ISM::Default::Version::MinorVersion,
-                    patchVersion = ISM::Default::Version::PatchVersion)
-
-                    @stage = stage
-                    @majorVersion = majorVersion
-                    @minorVersion = minorVersion
-                    @patchVersion = patchVersion
+    def initialize
+      @stage = String.new
+      @majorVersion = String.new
+      @minorVersion = String.new
+      @patchVersion = String.new
     end
 
-    def loadVersionFile(loadVersionFilePath = ISM::Default::Filename::Version)
-        version = VersionStructure.from_json(File.read(loadVersionFilePath))
+    def loadVersionFile
+        version = VersionStructure.from_json(File.read(ISM::Default::Filename::Version))
 
         @stage = version.stage
         @majorVersion = version.majorVersion

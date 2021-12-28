@@ -15,38 +15,29 @@ module ISM
             include JSON::Serializable
         end
 
-        property    rootPath = ISM::Default::CommandLineSettings::RootPath
-        property    toolsPath = ISM::Default::CommandLineSettings::ToolsPath
-        property    sourcesPath = ISM::Default::CommandLineSettings::SourcesPath
-        property    systemName = ISM::Default::CommandLineSettings::SystemName
-        property    targetName = ISM::Default::CommandLineSettings::TargetName
-        property    architecture = ISM::Default::CommandLineSettings::Architecture
-        getter      target = ISM::Default::CommandLineSettings::Target
-        property    makeOptions = ISM::Default::CommandLineSettings::MakeOptions
-        property    buildOptions = ISM::Default::CommandLineSettings::BuildOptions
+        property    rootPath : String
+        property    toolsPath : String
+        property    sourcesPath : String
+        property    systemName : String
+        property    targetName : String
+        property    architecture : String
+        getter      target : String
+        property    makeOptions : String
+        property    buildOptions : String
 
-        def initialize( rootPath = ISM::Default::CommandLineSettings::RootPath,
-                        toolsPath = ISM::Default::CommandLineSettings::ToolsPath,
-                        sourcesPath = ISM::Default::CommandLineSettings::SourcesPath,
-                        systemName = ISM::Default::CommandLineSettings::SystemName,
-                        targetName = ISM::Default::CommandLineSettings::TargetName,
-                        architecture = ISM::Default::CommandLineSettings::Architecture,
-                        target = ISM::Default::CommandLineSettings::Target,
-                        makeOptions = ISM::Default::CommandLineSettings::MakeOptions,
-                        buildOptions = ISM::Default::CommandLineSettings::BuildOptions)
-            @rootPath = rootPath
-            @toolsPath = toolsPath
-            @sourcesPath = sourcesPath
-            @systemName = systemName
-            @targetName = targetName
-            @architecture = architecture
-            @target = target
-            @makeOptions = makeOptions
-            @buildOptions = buildOptions
+        def initialize( @rootPath = ISM::Default::CommandLineSettings::RootPath,
+                        @toolsPath = ISM::Default::CommandLineSettings::ToolsPath,
+                        @sourcesPath = ISM::Default::CommandLineSettings::SourcesPath,
+                        @systemName = ISM::Default::CommandLineSettings::SystemName,
+                        @targetName = ISM::Default::CommandLineSettings::TargetName,
+                        @architecture = ISM::Default::CommandLineSettings::Architecture,
+                        @target = ISM::Default::CommandLineSettings::Target,
+                        @makeOptions = ISM::Default::CommandLineSettings::MakeOptions,
+                        @buildOptions = ISM::Default::CommandLineSettings::BuildOptions)
         end
 
-        def loadSettingsFile(settingsFilePath = ISM::Default::CommandLineSettings::SettingsFilePath)
-            information = Settings.from_json(File.read(settingsFilePath))
+        def loadSettingsFile
+            information = Settings.from_json(File.read(ISM::Default::CommandLineSettings::SettingsFilePath))
       
             @rootPath = information.rootPath
             @toolsPath = information.toolsPath
@@ -59,7 +50,7 @@ module ISM
             @buildOptions = information.buildOptions
         end
 
-        def writeSettingsFile(settingsFilePath = ISM::Default::CommandLineSettings::SettingsFilePath)
+        def writeSettingsFile
             settings = Settings.new(@rootPath,
                                     @toolsPath,
                                     @sourcesPath,
@@ -70,39 +61,33 @@ module ISM
                                     @makeOptions,
                                     @buildOptions)
 
-            file = File.open(settingsFilePath,"w")
+            file = File.open(ISM::Default::CommandLineSettings::SettingsFilePath,"w")
             settings.to_json(file)
             file.close
         end
 
-        def setRootPath(rootPath = ISM::Default::CommandLineSettings::RootPath)
-            @rootPath = rootPath
+        def setRootPath(@rootPath)
             writeSettingsFile
         end
 
-        def setToolsPath(toolsPath = ISM::Default::CommandLineSettings::ToolsPath)
-            @toolsPath = toolsPath
+        def setToolsPath(@toolsPath)
             writeSettingsFile
         end
 
-        def setSourcesPath(sourcesPath = ISM::Default::CommandLineSettings::SourcesPath)
-            @sourcesPath = sourcesPath
+        def setSourcesPath(@sourcesPath)
             writeSettingsFile
         end
 
-        def setSystemName(systemName = ISM::Default::CommandLineSettings::SystemName)
-            @systemName = systemName
+        def setSystemName(@systemName)
             writeSettingsFile
         end
 
-        def setTargetName(targetName = ISM::Default::CommandLineSettings::TargetName)
-            @targetName = targetName
+        def setTargetName(@targetName)
             writeSettingsFile
             setTarget
         end
 
-        def setArchitecture(architecture = ISM::Default::CommandLineSettings::Architecture)
-            @architecture = architecture
+        def setArchitecture(@architecture)
             writeSettingsFile
             setTarget
         end
@@ -112,13 +97,11 @@ module ISM
             writeSettingsFile
         end
 
-        def setMakeOptions(makeOptions = ISM::Default::CommandLineSettings::MakeOptions)
-            @makeOptions = makeOptions
+        def setMakeOptions(@makeOptions)
             writeSettingsFile
         end
 
-        def setBuildOptions(buildOptions = ISM::Default::CommandLineSettings::BuildOptions)
-            @buildOptions = buildOptions
+        def setBuildOptions(@buildOptions)
             writeSettingsFile
         end
 

@@ -8,7 +8,7 @@ module ISM
                 super(  ISM::Default::Option::SoftwareUpdate::ShortText,
                         ISM::Default::Option::SoftwareUpdate::LongText,
                         ISM::Default::Option::SoftwareUpdate::Description,
-                        ISM::Default::Option::SoftwareUpdate::Options)
+                        Array(ISM::CommandLineOption).new)
             end
 
             def start

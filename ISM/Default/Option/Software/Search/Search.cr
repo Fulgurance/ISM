@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-se"
                 LongText = "search"
                 Description = "Search specific(s) software(s)"
-                Options = Array(ISM::CommandLineOption).new
                 NoMatchFound = "No match found with the database for "
                 NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
                 NameField = "Name: "

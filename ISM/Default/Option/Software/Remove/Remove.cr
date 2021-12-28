@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-r"
                 LongText = "remove"
                 Description = "Remove specific(s) software(s)"
-                Options = Array(ISM::CommandLineOption).new
 
             end
             

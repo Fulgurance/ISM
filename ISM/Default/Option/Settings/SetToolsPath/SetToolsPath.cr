@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-stp"
                 LongText = "settoolspath"
                 Description = "Set the default path where ISM will install the tools"
-                Options = Array(ISM::CommandLineOption).new
                 SetText = "Setting toolsPath to the value "
 
             end

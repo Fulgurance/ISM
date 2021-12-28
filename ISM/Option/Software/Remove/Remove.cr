@@ -8,7 +8,7 @@ module ISM
                 super(  ISM::Default::Option::SoftwareRemove::ShortText,
                         ISM::Default::Option::SoftwareRemove::LongText,
                         ISM::Default::Option::SoftwareRemove::Description,
-                        ISM::Default::Option::SoftwareRemove::Options)
+                        Array(ISM::CommandLineOption).new)
             end
 
             def start

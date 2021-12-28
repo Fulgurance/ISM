@@ -9,7 +9,6 @@ module ISM
                 ShortText = "-stn"
                 LongText = "settargetname"
                 Description = "Set the default machine target for the compiler"
-                Options = Array(ISM::CommandLineOption).new
                 SetText = "Setting targetName to the value "
 
             end

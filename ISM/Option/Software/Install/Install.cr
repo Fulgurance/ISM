@@ -8,7 +8,7 @@ module ISM
                 super(  ISM::Default::Option::SoftwareInstall::ShortText,
                         ISM::Default::Option::SoftwareInstall::LongText,
                         ISM::Default::Option::SoftwareInstall::Description,
-                        ISM::Default::Option::SoftwareInstall::Options)
+                        Array(ISM::CommandLineOption).new)
             end
 
             def start
@@ -19,6 +19,10 @@ module ISM
                     matching = false
                     wrongArgument = ""
 
+                    #####################
+                    #Get wanted softwares
+                    #####################
+                    ####Doit tenir compte des configs ?
                     ARGV[2..-1].uniq.each do |argument|
                         matching = false
 
@@ -43,6 +47,40 @@ module ISM
                         end
                         
                     end
+
+                    #####################
+                    #Get dependencies array by level
+                    #####################
+                    currentDependenciesArray = Array(ISM::SoftwareDependency).new
+                    currentDependenciesArray = matchingSoftwaresArray
+                    nextDependenciesArray = Array(ISM::SoftwareDependency).new
+
+                    neededSoftwares = Array(Array(ISM::SoftwareDependency)).new
+
+                    while 0
+                        
+                        #Ajouter un nouveau tableau pour checker les doublons sur chaque niveau
+                        #avec les dependances precedemment ajoutees
+
+                        currentDependenciesArray.each do |software|
+                            dependencies = Ism.getDependencies(software.name,software.version)
+                            if !dependencies.empty?
+                                nextDependenciesArray = nextDependenciesArray + dependencies
+                                neededSoftwares.push(dependencies)
+                                #Checker les options et si elles sont actives par defaut
+                            end
+                        end
+
+                        if nextDependenciesArray.empty?
+                            break
+                        end
+
+                        currentDependenciesArray = nextDependenciesArray.uniq
+                        nextDependenciesArray.clear
+
+                    end
+
+                    puts neededSoftwares
 
                     #Add method to check dependencies, needed options ...
                     if !matching

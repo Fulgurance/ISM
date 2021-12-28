@@ -2,14 +2,13 @@ module ISM
 
     class Software
 
-        property information = ISM::Default::Software::Information
-        property mainSourceDirectoryName = ISM::Default::Software::InformationMainSourceDirectoryName
+        property information : ISM::SoftwareInformation
+        property mainSourceDirectoryName : String
 
-        def initialize( informationPath = ISM::Default::Filename::Information,
-                        mainSourceDirectoryName = ISM::Default::Software::InformationMainSourceDirectoryName)
+        def initialize( informationPath : String,
+                        @mainSourceDirectoryName)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
-            @mainSourceDirectoryName = mainSourceDirectoryName
         end
 
         def download

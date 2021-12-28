@@ -8,7 +8,7 @@ module ISM
                 super(  ISM::Default::Option::SettingsSetMakeOptions::ShortText,
                         ISM::Default::Option::SettingsSetMakeOptions::LongText,
                         ISM::Default::Option::SettingsSetMakeOptions::Description,
-                        ISM::Default::Option::SettingsSetMakeOptions::Options)
+                        Array(ISM::CommandLineOption).new)
             end
 
             def start

@@ -11,18 +11,11 @@ require "./ISM/SoftwareOption"
 require "./ISM/Software"
 require "./ISM/AvailableSoftware"
 require "./ISM/Version"
-require "./ISM/Default/AvailableSoftware"
 require "./ISM/Default/CommandLine"
-require "./ISM/Default/CommandLineOption"
 require "./ISM/Default/CommandLineSettings"
 require "./ISM/Default/CommandLineSystemSettings"
 require "./ISM/Default/Filename"
 require "./ISM/Default/Path"
-require "./ISM/Default/Software"
-require "./ISM/Default/SoftwareDependency"
-require "./ISM/Default/SoftwareInformation"
-require "./ISM/Default/SoftwareOption"
-require "./ISM/Default/Version"
 require "./ISM/Default/Option/Help/Help"
 require "./ISM/Default/Option/Settings/Settings"
 require "./ISM/Default/Option/Settings/SetArchitecture/SetArchitecture"
@@ -66,11 +59,5 @@ require "./ISM/Option/System/System"
 require "./ISM/Option/System/SetLcAll/SetLcAll"
 require "./ISM/Option/Version/Version"
 
-Options = [ ISM::Option::Help.new,
-            ISM::Option::Version.new,
-            ISM::Option::Software.new,
-            ISM::Option::System.new,
-            ISM::Option::Settings.new]
-
-Ism = ISM::CommandLine.new(Options)
+Ism = ISM::CommandLine.new
 Ism.start
