@@ -107,8 +107,9 @@ module ISM
                         matchingSoftwaresArray.unshift(Ism.getDependencyInformation(software.name, software.version))
                     end
 
+                    matchingSoftwaresArray.uniq!
+
                     #Retirer encore les doublons si il y a des paquets de meme nom ou version, ou version differente, ou options differentes
-                    #Retirer les doublons avec les logiciels saisies par l'utilisateur
 
                     #Add method to check dependencies, needed options ...
                     if !matching
@@ -154,7 +155,7 @@ module ISM
                         end
 
                         if userAgreement
-                            matchingSoftwaresArray.each_with_index do |software, index|
+                            matchingSoftwaresArray.each do |software|
                                 file = File.open("ISM.task", "w")
                                 file << "require \"./#{ISM::Default::Path::SoftwaresDirectory + software.name + "/" + software.version + "/" + software.version + ".cr"}\"\n"
                                 file << "target = Target.new\n"
