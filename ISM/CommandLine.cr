@@ -102,6 +102,7 @@ module ISM
             end
         end
 
+        #Ajouter les options en parametres, car ca impacte 
         def getDependencies(softwareName : String, softwareVersion : String)
             dependencies = Array(ISM::SoftwareDependency).new
 
@@ -122,6 +123,29 @@ module ISM
             end
 
             return dependencies
+        end
+
+        #Ajouter les options en parametres, car ca impacte 
+        def getDependencyInformation(softwareName : String, softwareVersion : String)
+            dependencyInformation = ISM::SoftwareInformation.new
+
+            @softwares.each do |software|
+
+                if softwareName == software.name
+
+                    software.versions.each do |version|
+
+                        if softwareVersion == version.version
+                            dependencyInformation = version
+                            break
+                        end
+
+                    end
+                    
+                end
+            end
+
+            return dependencyInformation
         end
 
         def showHelp

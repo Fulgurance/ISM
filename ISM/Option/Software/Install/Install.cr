@@ -54,8 +54,10 @@ module ISM
                     currentDependenciesArray = Array(ISM::SoftwareDependency).new
                     currentDependenciesArray = matchingSoftwaresArray
                     nextDependenciesArray = Array(ISM::SoftwareDependency).new
-
-                    neededSoftwares = Array(Array(ISM::SoftwareDependency)).new
+                    dependencies = Array(ISM::SoftwareDependency).new
+                    dependenciesLevelArray = Array(ISM::SoftwareDependency).new
+                    neededSoftwaresTree = Array(Array(ISM::SoftwareDependency)).new
+                    neededSoftwares = Array(ISM::SoftwareDependency).new
 
                     while 0
                         
@@ -64,11 +66,21 @@ module ISM
 
                         currentDependenciesArray.each do |software|
                             dependencies = Ism.getDependencies(software.name,software.version)
+
                             if !dependencies.empty?
                                 nextDependenciesArray = nextDependenciesArray + dependencies
-                                neededSoftwares.push(dependencies)
+                                dependenciesLevelArray = dependenciesLevelArray + dependencies
                                 #Checker les options et si elles sont actives par defaut
                             end
+                        end
+                        
+                        #Remove duplicate elements for each level
+                        dependenciesLevelArray.uniq! { |dependency| [   dependency.name,
+                                                                        dependency.version,
+                                                                        dependency.options] }
+
+                        if !dependenciesLevelArray.empty?
+                            neededSoftwaresTree << dependenciesLevelArray.dup
                         end
 
                         if nextDependenciesArray.empty?
@@ -77,10 +89,28 @@ module ISM
 
                         currentDependenciesArray = nextDependenciesArray.uniq
                         nextDependenciesArray.clear
+                        dependenciesLevelArray.clear
 
                     end
 
-                    puts neededSoftwares
+                    neededSoftwaresTree
+
+                    neededSoftwaresTree.each do |level|
+                        level.each do |dependency|
+                            neededSoftwares << dependency
+                        end
+                    end
+                    
+                    neededSoftwares.uniq! { |dependency| [  dependency.name,
+                                                            dependency.version,
+                                                            dependency.options] }
+
+                    neededSoftwares.each do |software|
+                        matchingSoftwaresArray.unshift(Ism.getDependencyInformation(software.name, software.version))
+                    end
+
+                    #Retirer encore les doublons si il y a des paquets de meme nom ou version, ou version differente, ou options differentes
+                    #Retirer les doublons avec les logiciels saisies par l'utilisateur
 
                     #Add method to check dependencies, needed options ...
                     if !matching

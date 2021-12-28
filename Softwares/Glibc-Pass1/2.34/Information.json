@@ -20,8 +20,8 @@
       "options": []
     },
     {
-      "name": "Linux-API-Headers-5.13.12",
-      "version": "2.37",
+      "name": "Linux-API-Headers",
+      "version": "5.13.12",
       "options": []
     }
   ],
