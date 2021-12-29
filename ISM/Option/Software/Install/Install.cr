@@ -112,6 +112,8 @@ module ISM
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
 
                     elsif inextricableDependency
+                        inextricableDependenciesArray = Array(ISM::SoftwareInformation).new
+
                         neededSoftwaresTree.each do |level|
                             level.each do |dependency|
                                 matchingSoftwaresArray << dependency.getInformation
@@ -120,10 +122,24 @@ module ISM
 
                         matchingSoftwaresArray.uniq!
 
+                        matchingSoftwaresArray.each do |software|
+                            software.dependencies.each do |dependency|
+                                temporaryArray = dependency.getInformation.dependencies + software.dependencies
+                                if temporaryArray.map(&.name).includes?(software.name) &&
+                                    temporaryArray.map(&.name).includes?(dependency.name)
+                                    inextricableDependenciesArray << software
+                                end
+                            end
+                        end
+
+                        if inextricableDependenciesArray.empty?
+                            inextricableDependenciesArray = matchingSoftwaresArray
+                        end
+
                         puts "#{ISM::Default::Option::SoftwareInstall::InextricableText.colorize(:yellow)}"
                         puts "\n"
 
-                        matchingSoftwaresArray.each do |software|
+                        inextricableDependenciesArray.each do |software|
                             softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                             optionsText = "{ "
                             software.options.each do |option|
