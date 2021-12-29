@@ -10,21 +10,6 @@
   "patchesLinks": [],
   "dependencies": [
     {
-      "name": "Binutils-Pass1",
-      "version": "2.37",
-      "options": []
-    },
-    {
-      "name": "Gcc-Pass1",
-      "version": "11.2.0",
-      "options": []
-    },
-    {
-      "name": "Linux-API-Headers",
-      "version": "5.13.12",
-      "options": []
-    },
-    {
       "name": "Glibc-Pass1",
       "version": "2.34",
       "options": []

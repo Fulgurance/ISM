@@ -10,16 +10,6 @@
   "patchesLinks": ["https://www.linuxfromscratch.org/patches/lfs/11.0/glibc-2.34-fhs-1.patch"],
   "dependencies": [
     {
-      "name": "Binutils-Pass1",
-      "version": "2.37",
-      "options": []
-    },
-    {
-      "name": "Gcc-Pass1",
-      "version": "11.2.0",
-      "options": []
-    },
-    {
       "name": "Linux-API-Headers",
       "version": "5.13.12",
       "options": []

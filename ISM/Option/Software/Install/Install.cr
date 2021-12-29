@@ -47,9 +47,9 @@ module ISM
                         
                     end
 
-                    #####################
+                    ################################
                     #Get dependencies array by level
-                    #####################
+                    ################################
                     currentDependenciesArray = Array(ISM::SoftwareDependency).new
 
                     matchingSoftwaresArray.each do |software|
@@ -69,11 +69,9 @@ module ISM
 
                     matchingSoftwaresArray.clear
 
-                    while 0
-                        
-                        #Ajouter un nouveau tableau pour checker les doublons sur chaque niveau
-                        #avec les dependances precedemment ajoutees
+                    inextricableDependency = false
 
+                    loop do
                         currentDependenciesArray.each do |software|
                             dependencies = software.getDependencies
 
@@ -83,7 +81,6 @@ module ISM
                             end
                         end
                         
-                        #Remove duplicate elements for each level
                         dependenciesLevelArray.uniq! { |dependency| [   dependency.name,
                                                                         dependency.version,
                                                                         dependency.options] }
@@ -96,33 +93,62 @@ module ISM
                             break
                         end
 
+                        if neededSoftwaresTree.size != neededSoftwaresTree.uniq.size
+                            inextricableDependency = true
+                            neededSoftwaresTree = neededSoftwaresTree & neededSoftwaresTree.uniq
+                            break
+                        end
+
                         currentDependenciesArray = nextDependenciesArray.uniq
+
                         nextDependenciesArray.clear
                         dependenciesLevelArray.clear
 
                     end
 
-                    neededSoftwaresTree.reverse.each do |level|
-                        level.each do |dependency|
-                            neededSoftwares << dependency
-                        end
-                    end
-
-                    neededSoftwares.uniq! { |dependency| [  dependency.name,
-                                                            dependency.version,
-                                                            dependency.options] }
-
-                    neededSoftwares.each do |software|
-                        matchingSoftwaresArray << software.getInformation
-                    end
-
-                    matchingSoftwaresArray.uniq!
-
-                    #Retirer encore les doublons si il y a des paquets de meme nom ou version, ou version differente, ou options differentes
+                    #Retirer encore les doublons si il y a des paquets de meme nom ou version differente, ou options differentes
                     if !matching
-                        puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArgument.colorize(:green)}"#"#{ARGV[2].colorize(:green)}"
+                        puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArgument.colorize(:green)}"
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
+
+                    elsif inextricableDependency
+                        neededSoftwaresTree.each do |level|
+                            level.each do |dependency|
+                                matchingSoftwaresArray << dependency.getInformation
+                            end
+                        end
+
+                        matchingSoftwaresArray.uniq!
+
+                        puts "#{ISM::Default::Option::SoftwareInstall::InextricableText.colorize(:yellow)}"
+                        puts "\n"
+
+                        matchingSoftwaresArray.each do |software|
+                            softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                            optionsText = "{ "
+                            software.options.each do |option|
+                                if option.active
+                                    optionsText += "#{option.name.colorize(:red)}"
+                                else
+                                    optionsText += "#{option.name.colorize(:blue)}"
+                                end
+                                optionsText += " "
+                            end
+                            optionsText += "}"
+                            puts "\t" + softwareText + " " + optionsText + "\n"
+                        end
+
+                        puts "\n"
+
                     else
+                        neededSoftwaresTree.reverse.each do |level|
+                            level.each do |dependency|
+                                matchingSoftwaresArray << dependency.getInformation
+                            end
+                        end
+    
+                        matchingSoftwaresArray.uniq!
+
                         puts "\n"
 
                         matchingSoftwaresArray.each do |software|
