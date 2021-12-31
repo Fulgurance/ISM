@@ -70,9 +70,43 @@ module ISM
                     matchingSoftwaresArray.clear
 
                     inextricableDependency = false
+                    calculationStartingTime = Time.monotonic
+                    frameIndex = 0
+                    reverseAnimation = false
+
+                    print ISM::Default::Option::SoftwareInstall::CalculationTitle
+                    text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
 
                     loop do
+
+                        currentTime = Time.monotonic
+
+                        if (currentTime - calculationStartingTime).milliseconds > 40
+                            if frameIndex >= text.size
+                                reverseAnimation = true
+                            end
+
+                            if frameIndex < 1
+                                reverseAnimation = false
+                            end
+
+                            if reverseAnimation
+                                print "\033[1D"
+                                print " "
+                                print "\033[1D"
+                                frameIndex -= 1
+                            end
+
+                            if !reverseAnimation
+                                print "#{text[frameIndex].colorize(:green)}"
+                                frameIndex += 1
+                            end
+
+                            calculationStartingTime = Time.monotonic
+                        end
+
                         currentDependenciesArray.each do |software|
+
                             dependencies = software.getDependencies
 
                             if !dependencies.empty?
@@ -80,7 +114,7 @@ module ISM
                                 dependenciesLevelArray = dependenciesLevelArray + dependencies
                             end
                         end
-                        
+
                         dependenciesLevelArray.uniq! { |dependency| [   dependency.name,
                                                                         dependency.version,
                                                                         dependency.options] }
@@ -105,6 +139,8 @@ module ISM
                         dependenciesLevelArray.clear
 
                     end
+
+                    print "#{ISM::Default::Option::SoftwareInstall::CalculationDoneText.colorize(:green)}\n"
 
                     #Retirer encore les doublons si il y a des paquets de meme nom ou version differente, ou options differentes
                     if !matching
