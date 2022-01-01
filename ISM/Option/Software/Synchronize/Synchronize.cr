@@ -15,31 +15,21 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    #matchingOption = false
-                    #matchingSoftware = false
-                    #matchingSoftwaresArray = Array(ISM::Software).new
+                    #if Dir.children("ISM-Softwares").reject!(&.starts_with?(".git")).empty?
 
-                    #@options.each_with_index do |argument, index|
-                        #if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
-                            #matchingOption = true
-                            #@options[index].start
-                            #break
-                        #end
-                    #end
-
-                    #Ism.softwares.each_with_index do |software, index|
-                        #if ARGV[2].downcase == software.information.name
-                            #matchingOption = true
-                            #matchingSoftwaresArray << software
-                        #end
-                    #end
-    
-                    #if !matchingOption
-                        #puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                        #puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                #"#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
-                    #end
+                    if Dir.children(ISM::Default::Path::SoftwaresDirectory).empty?
+                        Dir.cd(ISM::Default::Path::SoftwaresDirectory)
+                        Process.run("git",args: ["init"],output: :inherit)
+                        Process.run("git",args: [   "remote",
+                                                    "add",
+                                                    "origin",
+                                                    "https://github.com/Fulgurance/ISM-Softwares.git"],output: :inherit)
+                        Process.run("git",args: ["pull","origin","master"],output: :inherit)
+                    else
+                        Dir.cd(ISM::Default::Path::SoftwaresDirectory)
+                        Process.run("git",args: ["pull","origin","master"],output: :inherit)
+                    end
+                    
                 end
             end
 
