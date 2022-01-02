@@ -26,43 +26,46 @@ module ISM
         end
 
         def loadSoftwareDatabase
-            if !Dir.exists?(ISM::Default::Path::SoftwaresDirectory)
-                Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
-            end
-            
-            softwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory).reject!(&.starts_with?(".git"))
-            softwareDirectories.delete("SoftwaresLibrairies.cr")
+            portDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory)
+            portDirectories.delete("SoftwaresLibrairies.cr")
 
-            softwareDirectories.each do |softwareDirectory|
-                versionDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory+softwareDirectory)
-                softwaresInformations = Array(ISM::SoftwareInformation).new
+            portDirectories.each do |portDirectory|
+                portSoftwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory+portDirectory).reject!(&.starts_with?(".git"))
 
-                versionDirectories.each do |versionDirectory|
+                portSoftwareDirectories.each do |softwareDirectory|
+                    versionDirectories = Dir.children(  ISM::Default::Path::SoftwaresDirectory+portDirectory + "/" +
+                                                        softwareDirectory)
+                    softwaresInformations = Array(ISM::SoftwareInformation).new
 
-                    softwareInformation = ISM::SoftwareInformation.new
+                    versionDirectories.each do |versionDirectory|
 
-                    if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
-                                    softwareDirectory + "/" +
-                                    versionDirectory + "/" +
-                                    ISM::Default::Filename::SoftwareSettings)
-                        softwareInformation.loadInformationFile(ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                                softwareDirectory + "/" +
-                                                                versionDirectory + "/" +
-                                                                ISM::Default::Filename::SoftwareSettings)
-                        
-                    else
-                        softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory +
-                                                                softwareDirectory + "/" +
-                                                                versionDirectory + "/" +
-                                                                ISM::Default::Filename::Information)
+                        softwareInformation = ISM::SoftwareInformation.new
+
+                        if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                        softwareDirectory + "/" +
+                                        versionDirectory + "/" +
+                                        ISM::Default::Filename::SoftwareSettings)
+                            softwareInformation.loadInformationFile(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                                    portDirectory+ "/" +
+                                                                    softwareDirectory + "/" +
+                                                                    versionDirectory + "/" +
+                                                                    ISM::Default::Filename::SoftwareSettings)
+                            
+                        else
+                            softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory +
+                                                                    portDirectory+ "/" +
+                                                                    softwareDirectory + "/" +
+                                                                    versionDirectory + "/" +
+                                                                    ISM::Default::Filename::Information)
+                        end
+
+                        softwaresInformations << softwareInformation
+        
                     end
 
-                    softwaresInformations << softwareInformation
-    
-                end
+                    @softwares << ISM::AvailableSoftware.new(softwareDirectory,softwaresInformations)
 
-                @softwares << ISM::AvailableSoftware.new(softwareDirectory,
-                softwaresInformations)
+                end
 
             end
 
