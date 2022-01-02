@@ -30,7 +30,7 @@ module ISM
                 Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
             end
             
-            softwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory)
+            softwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory).reject!(&.starts_with?(".git"))
             softwareDirectories.delete("SoftwaresLibrairies.cr")
 
             softwareDirectories.each do |softwareDirectory|
