@@ -4,6 +4,7 @@ module ISM
 
         module Path
             
+            PortsDirectory = "Ports/"
             SoftwaresDirectory = "Softwares/"
             SettingsSoftwaresDirectory = "Settings/Softwares/"
 

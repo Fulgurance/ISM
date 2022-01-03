@@ -19,21 +19,8 @@ module ISM
                 print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
                 text = ISM::Default::Option::SoftwareSynchronize::SynchronizationWaitingText
 
-                #Si vide, cloner les dépots ajoutés par paramètres
-                #Tenir compte de la librairie
-                #if Dir.children(ISM::Default::Path::SoftwaresDirectory).empty?
-                    #Dir.cd(ISM::Default::Path::SoftwaresDirectory)
-                    #Process.run("git",args: ["init"])
-                    #Process.run("git",args: [   "remote",
-                                                #"add",
-                                                #"origin",
-                                                #"https://github.com/Fulgurance/ISM-Softwares.git"])
-                #else
-                    Dir.cd(ISM::Default::Path::SoftwaresDirectory)
-                #end
-
                 #Pour chaque dépot, utiliser les branches selon la stabilité voulue (stable, testing ...etc)
-                Dir.children(ISM::Default::Path::SoftwaresDirectory).each do |repositoryName|
+                Ism.ports.each do |port|
                     currentTime = Time.monotonic
 
                     if (currentTime - synchronizationStartingTime).milliseconds > 40
@@ -60,9 +47,8 @@ module ISM
                         synchronizationStartingTime = Time.monotonic
                     end
 
-                    Dir.cd(ISM::Default::Path::SoftwaresDirectory+repositoryName)
-                    Process.run("git",args: ["pull","origin","master"])
-                    Dir.cd(ISM::Default::Path::SoftwaresDirectory)
+                    Process.run("git",  args: ["pull","origin","master"],
+                                        chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
                 end
 
                 print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"

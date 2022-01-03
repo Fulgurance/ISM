@@ -7,6 +7,7 @@ module ISM
         property systemSettings : ISM::CommandLineSystemSettings
         property softwares : Array(ISM::AvailableSoftware)
         property installedSoftwares : Array(ISM::SoftwareInformation)
+        property ports : Array(ISM::Port)
         property version : ISM::Version
 
         def initialize
@@ -15,19 +16,20 @@ module ISM
             @systemSettings = ISM::CommandLineSystemSettings.new
             @softwares = Array(ISM::AvailableSoftware).new
             @installedSoftwares = Array(ISM::SoftwareInformation).new
+            @ports = Array(ISM::Port).new
             @version = ISM::Version.new
         end
 
         def start
             loadSoftwareDatabase
+            loadPortsDatabase
             loadSettingsFiles
             version.loadVersionFile
             checkEnteredArguments
         end
 
         def loadSoftwareDatabase
-            portDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory)
-            portDirectories.delete("SoftwaresLibrairies.cr")
+            portDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory).reject!("SoftwaresLibrairies.cr")
 
             portDirectories.each do |portDirectory|
                 portSoftwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory+portDirectory).reject!(&.starts_with?(".git"))
@@ -69,6 +71,16 @@ module ISM
 
             end
 
+        end
+
+        def loadPortsDatabase
+            portsFiles = Dir.children(ISM::Default::Path::PortsDirectory)
+
+            portsFiles.each do |portFile|
+                port = ISM::Port.new
+                port.loadPortFile(ISM::Default::Path::PortsDirectory+portFile)
+                @ports << port
+            end
         end
 
         def loadSettingsFiles
