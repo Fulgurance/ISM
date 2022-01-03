@@ -13,6 +13,7 @@ Ingenius System Manager
         -h      help    Display the help how to use ISM
         -v      version Display the ISM version
         -so     software        Install, configure and remove softwares
+        -p      port    Manage ISM ports
         -sy     system  Configure the system settings
         -se     settings        Configure ISM settings
 ```
@@ -31,6 +32,13 @@ Install, configure and remove softwares
         -se     search  Search specific(s) software(s)
         -sy     synchronize     Synchronize the software database
         -u      update  Update specified software(s)
+```
+
+```
+user $ ism port
+Manage ISM ports
+        -o      open    Open the specified port
+        -c      close   Close the specified port
 ```
 
 ```
