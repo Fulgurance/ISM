@@ -17,6 +17,7 @@ module ISM
     end
     
     record Information,
+        port : String,
         name : String,
         version : String,
         architectures : Array(String),
@@ -31,6 +32,7 @@ module ISM
         include JSON::Serializable
     end
 
+    property port : String
     property name : String
     property version : String
     property architectures : Array(String)
@@ -44,6 +46,7 @@ module ISM
     property options : Array(ISM::SoftwareOption)
 
     def initialize
+        @port = String.new
         @name = String.new
         @version = String.new
         @architectures = Array(String).new
@@ -60,6 +63,7 @@ module ISM
     def loadInformationFile(loadInformationFilePath : String)
       information = Information.from_json(File.read(loadInformationFilePath))
 
+      @port = information.port
       @name = information.name
       @version = information.version
       @architectures = information.architectures
@@ -112,7 +116,8 @@ module ISM
             options.push(option)
         end
 
-        information = Information.new(  @name,
+        information = Information.new(  @port,
+                                        @name,
                                         @version,
                                         @architectures,
                                         @description,
