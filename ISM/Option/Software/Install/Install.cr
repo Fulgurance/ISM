@@ -243,7 +243,7 @@ module ISM
                             matchingSoftwaresArray.each do |software|
 
                                 file = File.open("ISM.task", "w")
-                                file << "require \"./#{software.port + ISM::Default::Path::SoftwaresDirectory + software.name + "/" + software.version + "/" + software.version + ".cr"}\"\n"
+                                file << "require \"./#{software.port + "/"  + ISM::Default::Path::SoftwaresDirectory + software.name + "/" + software.version + "/" + software.version + ".cr"}\"\n"
                                 file << "target = Target.new\n"
                                 file << "target.download\n"
                                 file << "target.check\n"
