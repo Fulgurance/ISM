@@ -248,15 +248,20 @@ module ISM
                                 tasks = <<-CODE
                                 require "./#{path + software.version + ".cr"}"
                                 target = Target.new("#{path + "Information.json"}")
-                                target.download
-                                target.check
-                                target.extract
-                                target.patch
-                                target.prepare
-                                target.configure
-                                target.build
-                                target.install
-                                target.clean
+                                processList = [ target.download,
+                                                target.check,
+                                                target.extract,
+                                                target.patch,
+                                                target.prepare,
+                                                target.configure,
+                                                target.build,
+                                                target.install,
+                                                target.clean]
+                                processList.each do |process|
+                                    if !process.success?
+                                        exit 1
+                                    end
+                                end
                                 CODE
 
                                 File.write("ISM.task", tasks)
