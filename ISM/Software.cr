@@ -5,25 +5,23 @@ module ISM
         property information : ISM::SoftwareInformation
         property mainSourceDirectoryName : String
 
-        def initialize( informationPath : String,
-                        @mainSourceDirectoryName)
+        def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
+            @mainSourceDirectoryName = String.new
         end
 
         def download
             Dir.mkdir(Ism.settings.sourcesPath+"/"+@information.versionName)
             Ism.notifyOfDownload(@information)
+        end
 
-            #Adapt when multiple links are available and when some of there are broken
-            Process.run("wget", args: [@information.downloadLinks[0]],
-                                output: :inherit,
-                                chdir: Ism.settings.sourcesPath+"/"+@information.versionName)
-            
-            if !@information.patchesLinks.empty?
-                Process.run("wget", args: [@information.patchesLinks[0]],
-                                    output: :inherit,
-                                    chdir: Ism.settings.sourcesPath+"/"+@information.versionName)
+        def downloadSource(link : String)
+            if !Process.run("wget", args: [link],
+                output: :inherit,
+                error: :inherit,
+                chdir: Ism.settings.sourcesPath+"/"+@information.versionName).success?
+                exit 1
             end
         end
         
@@ -33,30 +31,77 @@ module ISM
         
         def extract
             Ism.notifyOfExtract(@information)
-            Process.run("tar",  args: ["-xf", @information.downloadLinks[0].lchop(@information.downloadLinks[0][0..@information.downloadLinks[0].rindex("/")])],
-                                output: :inherit,
-                                chdir: Ism.settings.sourcesPath+"/"+@information.versionName)
+        end
+
+        def extractSource(archive : String)
+            if !Process.run("tar",  args: ["-xf", archive],
+                                    output: :inherit,
+                                    chdir: Ism.settings.sourcesPath+"/"+@information.versionName).success?
+                exit 1
+            end
         end
         
         def patch
             Ism.notifyOfPatch(@information)
-            if !@information.patchesLinks.empty?
-                Process.run("patch",args: ["-Np1","-i",@information.patchesLinks[0].lchop(@information.patchesLinks[0][0..@information.patchesLinks[0].rindex("/")])],
-                                    output: :inherit,
-                                    chdir: Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName)
+        end
+        
+        def applyPatch(patch : String)
+            if !Process.run("patch",    args: ["-Np1","-i",patch],
+                                        output: :inherit,
+                                        chdir: Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName).success?
+                exit 1
             end
         end
-    
+
         def prepare
             Ism.notifyOfPrepare(@information)
+        end
+
+        def moveFile(path : String, newPath : String)
+            FileUtils.mv(   Ism.settings.sourcesPath + "/" + 
+                            @information.versionName + "/" +
+                            path,
+                            Ism.settings.sourcesPath + "/" + 
+                            @information.versionName + "/" +
+                            newPath)
+        end
+
+        def makeDirectory(directory : String)
+            Dir.mkdir(  Ism.settings.sourcesPath + "/" + 
+                        @information.versionName + "/" +
+                        directory)
         end
         
         def configure
             Ism.notifyOfConfigure(@information)
         end
+
+        def configureSource(arguments : Array(String), path = String.new)
+            if !Process.run("./configure", args: arguments,
+                                            output: :inherit,
+                                            error: :inherit,
+                                            chdir:  Ism.settings.sourcesPath + "/" + 
+                                                    @information.versionName + "/" +
+                                                    @mainSourceDirectoryName + "/" +
+                                                    path)
+                exit 1
+            end
+        end
         
         def build
             Ism.notifyOfBuild(@information)
+        end
+
+        def makeSource(arguments : Array(String), path = String.new)
+            if !Process.run("make", args: arguments,
+                                    output: :inherit,
+                                    error: :inherit,
+                                    chdir:  Ism.settings.sourcesPath + "/" + 
+                                            @information.versionName + "/" +
+                                            @mainSourceDirectoryName + "/" +
+                                            path)
+                exit 1
+            end
         end
         
         def install

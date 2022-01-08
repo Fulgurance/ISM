@@ -27,7 +27,7 @@ module ISM
                     Dir.mkdir(ISM::Default::Path::SoftwaresDirectory+port.name)
                     Process.run("git",  args: ["init"],
                                         chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
-                    Process.run("git",  args: [   "remote",
+                    Process.run("git",  args: [ "remote",
                                                 "add",
                                                 "origin",
                                                 port.url],

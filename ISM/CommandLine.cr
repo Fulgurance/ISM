@@ -74,6 +74,10 @@ module ISM
         end
 
         def loadPortsDatabase
+            if !Dir.exists?(ISM::Default::Path::PortsDirectory)
+                Dir.mkdir(ISM::Default::Path::PortsDirectory)
+            end
+
             portsFiles = Dir.children(ISM::Default::Path::PortsDirectory)
 
             portsFiles.each do |portFile|

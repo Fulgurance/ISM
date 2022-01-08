@@ -241,21 +241,28 @@ module ISM
 
                         if userAgreement
                             matchingSoftwaresArray.each do |software|
+                                puts ""
 
-                                file = File.open("ISM.task", "w")
-                                file << "require \"./#{ISM::Default::Path::SoftwaresDirectory + "/" + software.port + "/" + software.name + "/" + software.version + "/" + software.version + ".cr"}\"\n"
-                                file << "target = Target.new\n"
-                                file << "target.download\n"
-                                file << "target.check\n"
-                                file << "target.extract\n"
-                                file << "target.patch\n"
-                                file << "target.prepare\n"
-                                file << "target.configure\n"
-                                file << "target.build\n"
-                                file << "target.install\n"
-                                file << "target.clean\n"
-                                file.close
+                                path = ISM::Default::Path::SoftwaresDirectory + software.port + "/" + software.name + "/" + software.version + "/" + software.version + ".cr"
+
+                                tasks = <<-CODE
+                                require "./#{path + software.version + ".cr"}"
+                                target = Target.new("#{path + "Information.cr"}")
+                                target.download
+                                target.check
+                                target.extract
+                                target.patch
+                                target.prepare
+                                target.configure
+                                target.build
+                                target.install
+                                target.clean
+                                CODE
+
+                                File.write("ISM.task", tasks)
+
                                 Process.run("crystal",args: ["ISM.task"],output: :inherit)
+
                             end
                         end
 
