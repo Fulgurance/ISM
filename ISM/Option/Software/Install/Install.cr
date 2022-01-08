@@ -261,8 +261,9 @@ module ISM
 
                                 File.write("ISM.task", tasks)
 
-                                Process.run("crystal",args: ["ISM.task"],output: :inherit)
-
+                                if !Process.run("crystal",args: ["ISM.task"],output: :inherit).success?
+                                    break
+                                end
                             end
                         end
 

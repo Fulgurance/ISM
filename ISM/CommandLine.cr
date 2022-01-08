@@ -137,64 +137,72 @@ module ISM
                     "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
         end
 
+        def printProcessNotification(message : String)
+            puts "#{"* ".colorize(:green)}" + message
+        end
+
+        def printErrorNotification(message : String)
+            puts "[" + "#{"!".colorize(:red)}" + "] " + message
+        end
+
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::DownloadText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::DownloadText+softwareInformation.name)
         end
         
         def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::CheckText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::CheckText+softwareInformation.name)
         end
         
         def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::ExtractText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::ExtractText+softwareInformation.name)
         end
         
         def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::PatchText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::PatchText+softwareInformation.name)
         end
 
         def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::PrepareText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::PrepareText+softwareInformation.name)
         end
         
         def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::ConfigureText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::ConfigureText+softwareInformation.name)
         end
         
         def notifyOfBuild(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::BuildText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::BuildText+softwareInformation.name)
         end
         
         def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::InstallText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::InstallText+softwareInformation.name)
         end
 
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::CleanText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::CleanText+softwareInformation.name)
         end
         
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
-            puts    "#{"* ".colorize(:green)}" +
-                    ISM::Default::CommandLine::UninstallText +
-                    softwareInformation.name
+            printProcessNotification(ISM::Default::CommandLine::UninstallText+softwareInformation.name)
+        end
+
+        def notifyOfDownloadError(link : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link)
+        end
+
+        def notifyOfExtractError(archiveName : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorExtractText+archiveName)
+        end
+
+        def notifyOfApplyPatchError(patchName : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName)
+        end
+
+        def notifyOfConfigureError(sourceName : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName)
+        end
+
+        def notifyOfMakeError(path : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorMakeText+path)
         end
 
     end

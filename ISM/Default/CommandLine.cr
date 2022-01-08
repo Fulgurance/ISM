@@ -19,6 +19,11 @@ module ISM
             InstallText = "Installing "
             CleanText = "Cleaning "
             UninstallText = "Uninstalling "
+            ErrorDownloadText = "Failed to download from "
+            ErrorExtractText = "Failed to extract the archive "
+            ErrorApplyPatchText = "Failed to apply the patch "
+            ErrorConfigureText = "Failed to configure the source "
+            ErrorMakeText = "Failed to run make in  "
             Options = [ ISM::Option::Help.new,
                         ISM::Option::Version.new,
                         ISM::Option::Software.new,
