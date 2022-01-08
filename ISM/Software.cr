@@ -21,7 +21,7 @@ module ISM
                 output: :inherit,
                 error: :inherit,
                 chdir: Ism.settings.sourcesPath+"/"+@information.versionName).success?
-                notifyOfDownloadError(link)
+                Ism.notifyOfDownloadError(link)
                 exit 1
             end
         end
@@ -38,7 +38,7 @@ module ISM
             if !Process.run("tar",  args: ["-xf", archive],
                                     output: :inherit,
                                     chdir: Ism.settings.sourcesPath+"/"+@information.versionName).success?
-                notifyOfExtractError(archive)
+                Ism.notifyOfExtractError(archive)
                 exit 1
             end
         end
@@ -51,7 +51,7 @@ module ISM
             if !Process.run("patch",    args: ["-Np1","-i",patch],
                                         output: :inherit,
                                         chdir: Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName).success?
-                notifyOfApplyPatchError(patch)
+                Ism.notifyOfApplyPatchError(patch)
                 exit 1
             end
         end
@@ -87,7 +87,7 @@ module ISM
                                                     @information.versionName + "/" +
                                                     @mainSourceDirectoryName + "/" +
                                                     path)
-                notifyOfConfigureError(path)
+                Ism.notifyOfConfigureError(path)
                 exit 1
             end
         end
@@ -104,7 +104,7 @@ module ISM
                                             @information.versionName + "/" +
                                             @mainSourceDirectoryName + "/" +
                                             path)
-                notifyOfMakeError(path)
+                Ism.notifyOfMakeError(path)
                 exit 1
             end
         end
