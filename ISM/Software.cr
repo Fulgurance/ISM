@@ -110,7 +110,7 @@ module ISM
         
         def clean
             Ism.notifyOfClean(@information)
-            FileUtils.rm_r(Ism.settings.sourcesPath+@information.versionName)
+            FileUtils.rm_r(Ism.settings.sourcesPath+"/"+@information.versionName)
         end
 
         def uninstall

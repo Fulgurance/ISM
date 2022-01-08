@@ -243,11 +243,11 @@ module ISM
                             matchingSoftwaresArray.each do |software|
                                 puts ""
 
-                                path = ISM::Default::Path::SoftwaresDirectory + software.port + "/" + software.name + "/" + software.version + "/" + software.version + ".cr"
+                                path = ISM::Default::Path::SoftwaresDirectory + software.port + "/" + software.name + "/" + software.version + "/"
 
                                 tasks = <<-CODE
                                 require "./#{path + software.version + ".cr"}"
-                                target = Target.new("#{path + "Information.cr"}")
+                                target = Target.new("#{path + "Information.json"}")
                                 target.download
                                 target.check
                                 target.extract
