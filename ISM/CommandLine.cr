@@ -44,6 +44,7 @@ module ISM
                         softwareInformation = ISM::SoftwareInformation.new
 
                         if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                        portDirectory+ "/" +
                                         softwareDirectory + "/" +
                                         versionDirectory + "/" +
                                         ISM::Default::Filename::SoftwareSettings)
