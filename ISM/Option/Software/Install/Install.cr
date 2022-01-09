@@ -240,6 +240,8 @@ module ISM
                         end
 
                         if userAgreement
+                            puts "\n"
+
                             matchingSoftwaresArray.each_with_index do |software, index|
                                 puts    "#{"<<".colorize(:light_magenta)}" +
                                         " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
