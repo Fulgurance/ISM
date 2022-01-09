@@ -240,8 +240,11 @@ module ISM
                         end
 
                         if userAgreement
-                            matchingSoftwaresArray.each do |software|
-                                puts ""
+                            matchingSoftwaresArray.each_with_index do |software, index|
+                                puts    "#{"<<".colorize(:light_magenta)}" +
+                                        " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                                        " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}" +
+                                        "] Installing "+"#{software.name.colorize(:green)}"+"\n\n"
 
                                 path = ISM::Default::Path::SoftwaresDirectory + software.port + "/" + software.name + "/" + software.version + "/"
 
@@ -269,7 +272,13 @@ module ISM
                                 if !Process.run("crystal",args: ["ISM.task"],output: :inherit).success?
                                     break
                                 end
+
+                                puts    "#{software.name.colorize(:green)}" +
+                                        " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                                        " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}"+"] " +
+                                        "#{">>".colorize(:light_magenta)}"
                             end
+
                         end
 
                     end
