@@ -15,30 +15,29 @@ module ISM
                 if ARGV.size == 2 || ARGV.size == 3
                     showHelp
                 else
-                    wrongMatch = false
+                    matching = false
                     badEntry = ""
                     matchingSoftware = ISM::SoftwareInformation.new
 
                     Ism.softwares.each_with_index do |software, index|
                         if ARGV[1] == software.name || ARGV[1] == software.name.downcase
                             matchingSoftware = software.versions.last
+                            matching = true
+                            break
                         else
                             software.versions.each do |version|
                                 if ARGV[1] == version.versionName || ARGV[1] == version.versionName.downcase
                                     matchingSoftware = version
-                                else
-                                    wrongMatch = true
-                                    badEntry = ARGV[1]
+                                    matching = true
                                     break
+                                else
+                                    badEntry = ARGV[1]
                                 end
                             end
                         end
-                        if wrongMatch
-                            break
-                        end
                     end
 
-                    if wrongMatch
+                    if !matching
                         puts ISM::Default::Option::SoftwareDisableOption::NoMatchFound + "#{badEntry.colorize(:green)}"
                         puts ISM::Default::Option::SoftwareDisableOption::NoMatchFoundAdvice
                     else
@@ -56,13 +55,16 @@ module ISM
 
                             if match
                                 if !Dir.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                matchingSoftware.port + "/" +
                                                 matchingSoftware.name + "/" +
                                                 matchingSoftware.version)
                                     Dir.mkdir_p(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                matchingSoftware.port + "/" +
                                                 matchingSoftware.name + "/" +
                                                 matchingSoftware.version)
                                 end
                                 matchingSoftware.writeInformationFile(  ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                                        matchingSoftware.port + "/" +
                                                                         matchingSoftware.name + "/" +
                                                                         matchingSoftware.version + "/" +
                                                                         ISM::Default::Filename::SoftwareSettings)

@@ -36,7 +36,6 @@ module ISM
 
         def extractSource(archive : String)
             if !Process.run("tar",  args: ["-xf", archive],
-                                    output: :inherit,
                                     chdir: Ism.settings.sourcesPath+"/"+@information.versionName).success?
                 Ism.notifyOfExtractError(archive)
                 exit 1
@@ -49,7 +48,6 @@ module ISM
         
         def applyPatch(patch : String)
             if !Process.run("patch",    args: ["-Np1","-i",patch],
-                                        output: :inherit,
                                         chdir: Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName).success?
                 Ism.notifyOfApplyPatchError(patch)
                 exit 1

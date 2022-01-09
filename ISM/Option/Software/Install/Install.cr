@@ -248,25 +248,39 @@ module ISM
                                         " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}" +
                                         "] Installing "+"#{software.name.colorize(:green)}"+"\n\n"
 
-                                path = ISM::Default::Path::SoftwaresDirectory + software.port + "/" + software.name + "/" + software.version + "/"
+                                if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                software.name + "/" +
+                                                software.version + "/" +
+                                                ISM::Default::Filename::SoftwareSettings)
+                                    targetPath =    ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                    software.name + "/" +
+                                                    software.version + "/" +
+                                                    ISM::Default::Filename::SoftwareSettings
+                                else
+                                    targetPath =    ISM::Default::Path::SoftwaresDirectory +
+                                                    software.port + "/" +
+                                                    software.name + "/" +
+                                                    software.version + "/" +
+                                                    ISM::Default::Filename::Information
+                                end
+                                requirePath =   ISM::Default::Path::SoftwaresDirectory +
+                                                software.port + "/" + 
+                                                software.name + "/" + 
+                                                software.version + "/" + 
+                                                software.version + ".cr"
 
                                 tasks = <<-CODE
-                                require "./#{path + software.version + ".cr"}"
-                                target = Target.new("#{path + "Information.json"}")
-                                processList = [ target.download,
-                                                target.check,
-                                                target.extract,
-                                                target.patch,
-                                                target.prepare,
-                                                target.configure,
-                                                target.build,
-                                                target.install,
-                                                target.clean]
-                                processList.each do |process|
-                                    if !process.success?
-                                        exit 1
-                                    end
-                                end
+                                require "./#{requirePath}"
+                                target = Target.new("#{targetPath}")
+                                target.download
+                                target.check
+                                target.extract
+                                target.patch
+                                target.prepare
+                                target.configure
+                                target.build
+                                target.install
+                                target.clean
                                 CODE
 
                                 File.write("ISM.task", tasks)
