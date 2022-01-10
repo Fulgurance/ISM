@@ -276,15 +276,21 @@ module ISM
                                 tasks = <<-CODE
                                 require "./#{requirePath}"
                                 target = Target.new("#{targetPath}")
-                                target.download
-                                target.check
-                                target.extract
-                                target.patch
-                                target.prepare
-                                target.configure
-                                target.build
-                                target.install
-                                target.clean
+                                
+                                begin
+                                    target.download
+                                    target.check
+                                    target.extract
+                                    target.patch
+                                    target.prepare
+                                    target.configure
+                                    target.build
+                                    target.install
+                                    target.clean
+                                rescue
+                                    exit 1
+                                end
+
                                 CODE
 
                                 File.write("ISM.task", tasks)
