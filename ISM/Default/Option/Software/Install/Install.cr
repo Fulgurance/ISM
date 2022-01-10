@@ -13,6 +13,7 @@ module ISM
                 CalculationTitle = "ISM start to calculate depencies: "
                 CalculationWaitingText = "Making dependencies tree"
                 CalculationDoneText = "Done !"
+                SummaryText = " new softwares will be install"
                 InstallQuestion = "Would you like to install these softwares ?"
                 YesReplyOption = "y"
                 NoReplyOption = "n"

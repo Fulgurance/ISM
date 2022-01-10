@@ -120,6 +120,16 @@ module ISM
             Ism.notifyOfUninstall(@information)
         end
 
+        def option?(optionName : String) : Bool
+            result = false
+            @information.options.each do |option|
+                if optionName == option.name
+                    result = option.active
+                end
+            end
+            return result
+        end
+
     end
 
 end

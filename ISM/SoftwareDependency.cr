@@ -12,7 +12,7 @@ module ISM
       @options = Array(ISM::SoftwareOption).new
     end
 
-    def getDependencies
+    def getDependencies : Array(ISM::SoftwareDependency)
       dependencies = Array(ISM::SoftwareDependency).new
 
       Ism.softwares.each do |software|
@@ -34,7 +34,7 @@ module ISM
       return dependencies
     end
 
-    def getInformation
+    def getInformation : ISM::SoftwareInformation
       dependencyInformation = ISM::SoftwareInformation.new
 
       Ism.softwares.each do |software|
