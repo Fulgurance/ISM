@@ -17,10 +17,11 @@ module ISM
         end
 
         def downloadSource(link : String)
-            if !Process.run("wget", args: [link],
-                output: :inherit,
-                error: :inherit,
-                chdir: Ism.settings.sourcesPath+"/"+@information.versionName).success?
+            process = Process.run("wget",   args: [link],
+                                            output: :inherit,
+                                            error: :inherit,
+                                            chdir: Ism.settings.sourcesPath+"/"+@information.versionName)
+            if !process.success?
                 Ism.notifyOfDownloadError(link)
                 exit 1
             end
@@ -35,8 +36,9 @@ module ISM
         end
 
         def extractSource(archive : String)
-            if !Process.run("tar",  args: ["-xf", archive],
-                                    chdir: Ism.settings.sourcesPath+"/"+@information.versionName).success?
+            process = Process.run("tar",args: ["-xf", archive],
+                                        chdir: Ism.settings.sourcesPath+"/"+@information.versionName)
+            if !process.success?
                 Ism.notifyOfExtractError(archive)
                 exit 1
             end
@@ -47,8 +49,9 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            if !Process.run("patch",    args: ["-Np1","-i",patch],
-                                        chdir: Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName).success?
+            process = Process.run("patch",  args: ["-Np1","-i",patch],
+                                            chdir: Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName)
+            if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 exit 1
             end
@@ -78,13 +81,14 @@ module ISM
         end
 
         def configureSource(arguments : Array(String), path = String.new)
-            if !Process.run("./configure", args: arguments,
-                                            output: :inherit,
-                                            error: :inherit,
-                                            chdir:  Ism.settings.sourcesPath + "/" + 
-                                                    @information.versionName + "/" +
-                                                    @mainSourceDirectoryName + "/" +
-                                                    path)
+            process = Process.run("./configure",args: arguments,
+                                                output: :inherit,
+                                                error: :inherit,
+                                                chdir:  Ism.settings.sourcesPath + "/" + 
+                                                        @information.versionName + "/" +
+                                                        @mainSourceDirectoryName + "/" +
+                                                        path)
+            if !process.success?
                 Ism.notifyOfConfigureError(path)
                 exit 1
             end
@@ -95,13 +99,14 @@ module ISM
         end
 
         def makeSource(arguments : Array(String), path = String.new)
-            if !Process.run("make", args: arguments,
-                                    output: :inherit,
-                                    error: :inherit,
-                                    chdir:  Ism.settings.sourcesPath + "/" + 
-                                            @information.versionName + "/" +
-                                            @mainSourceDirectoryName + "/" +
-                                            path)
+            process = Process.run("make",   args: arguments,
+                                            output: :inherit,
+                                            error: :inherit,
+                                            chdir:  Ism.settings.sourcesPath + "/" + 
+                                                    @information.versionName + "/" +
+                                                    @mainSourceDirectoryName + "/" +
+                                                    path)
+            if !process.success?
                 Ism.notifyOfMakeError(path)
                 exit 1
             end

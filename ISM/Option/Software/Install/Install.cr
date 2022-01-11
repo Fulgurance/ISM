@@ -295,14 +295,16 @@ module ISM
 
                                 File.write("ISM.task", tasks)
 
-                                if !Process.run("crystal",args: ["ISM.task"],output: :inherit).success?
+                                process = Process.run("crystal",args: ["ISM.task"],output: :inherit,error: :inherit,)
+
+                                if !process.success?
                                     break
                                 end
 
                                 puts    "#{software.name.colorize(:green)}" +
                                         " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                         " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}"+"] " +
-                                        "#{">>".colorize(:light_magenta)}"
+                                        "#{">>".colorize(:light_magenta)}"+"\n\n"
                             end
 
                         end
