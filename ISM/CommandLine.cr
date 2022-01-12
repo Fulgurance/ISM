@@ -217,6 +217,15 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorMakeDirectoryText+directory)
         end
 
+        def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String)
+            printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorFileReplaceText2 +
+                                    newText +
+                                    ISM::Default::CommandLine::ErrorFileReplaceText3 +
+                                    filePath)
+        end
+
     end
 
 end

@@ -71,6 +71,7 @@ module ISM
                                 newPath)
             rescue
                 Ism.notifyOfMoveFileError(path, newPath)
+                exit 1
             end
         end
 
@@ -81,6 +82,26 @@ module ISM
                             directory)
             rescue
                 Ism.notifyOfMakeDirectoryError(directory)
+                exit 1
+            end
+        end
+
+        def fileReplaceText(filePath : String, text : String, newText : String)
+            begin
+                content = File.read_lines(filePath)
+
+                File.open(filePath,"w") do |flux|
+                    content.each do |line|
+                        if line.includes?(text)
+                            flux << line.gsub(text, newText)+"\n"
+                        else
+                            flux << line+"\n"
+                        end
+                    end
+                end
+            rescue
+                Ism.notifyOfFileReplaceTextError(filePath,text,newText)
+                exit 1
             end
         end
         

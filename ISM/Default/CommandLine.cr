@@ -2,7 +2,7 @@ module ISM
 
     module Default
 
-        class CommandLine
+        module CommandLine
 
             Title = "Ingenius System Manager"
             ErrorUnknowArgument = "ISM error: unknow argument "
@@ -25,8 +25,11 @@ module ISM
             ErrorConfigureText = "Failed to configure the source "
             ErrorMakeText = "Failed to run make in  "
             ErrorMoveFileText1 = "Failed to move "
-            ErrorMoveFileText1 = " to "
+            ErrorMoveFileText2 = " to "
             ErrorMakeDirectory = "Failed to make directory "
+            ErrorFileReplaceText1 = "Failed to replace the occurence "
+            ErrorFileReplaceText2 = " to "
+            ErrorFileReplaceText3 = " in the file "
             Options = [ ISM::Option::Help.new,
                         ISM::Option::Version.new,
                         ISM::Option::Software.new,
