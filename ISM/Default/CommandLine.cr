@@ -24,6 +24,9 @@ module ISM
             ErrorApplyPatchText = "Failed to apply the patch "
             ErrorConfigureText = "Failed to configure the source "
             ErrorMakeText = "Failed to run make in  "
+            ErrorMoveFileText1 = "Failed to move "
+            ErrorMoveFileText1 = " to "
+            ErrorMakeDirectory = "Failed to make directory "
             Options = [ ISM::Option::Help.new,
                         ISM::Option::Version.new,
                         ISM::Option::Software.new,

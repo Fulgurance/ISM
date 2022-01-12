@@ -62,18 +62,26 @@ module ISM
         end
 
         def moveFile(path : String, newPath : String)
-            FileUtils.mv(   Ism.settings.sourcesPath + "/" + 
-                            @information.versionName + "/" +
-                            path,
-                            Ism.settings.sourcesPath + "/" + 
-                            @information.versionName + "/" +
-                            newPath)
+            begin
+                FileUtils.mv(   Ism.settings.sourcesPath + "/" + 
+                                @information.versionName + "/" +
+                                path,
+                                Ism.settings.sourcesPath + "/" + 
+                                @information.versionName + "/" +
+                                newPath)
+            rescue
+                Ism.notifyOfMoveFileError(path, newPath)
+            end
         end
 
         def makeDirectory(directory : String)
-            Dir.mkdir(  Ism.settings.sourcesPath + "/" + 
-                        @information.versionName + "/" +
-                        directory)
+            begin
+                Dir.mkdir(  Ism.settings.sourcesPath + "/" + 
+                            @information.versionName + "/" +
+                            directory)
+            rescue
+                Ism.notifyOfMakeDirectoryError(directory)
+            end
         end
         
         def configure

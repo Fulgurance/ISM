@@ -206,6 +206,17 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorMakeText+path)
         end
 
+        def notifyOfMoveFileError(path : String, newPath : String)
+            printErrorNotification( ISM::Default::CommandLine::ErrorMoveFileText1 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorMoveFileText2 +
+                                    newPath)
+        end
+
+        def notifyOfMakeDirectoryError(directory : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorMakeDirectoryText+directory)
+        end
+
     end
 
 end
