@@ -26,7 +26,7 @@ module ISM
             ErrorMakeText = "Failed to run make in  "
             ErrorMoveFileText1 = "Failed to move "
             ErrorMoveFileText2 = " to "
-            ErrorMakeDirectory = "Failed to make directory "
+            ErrorMakeDirectoryText = "Failed to make directory "
             ErrorFileReplaceText1 = "Failed to replace the occurence "
             ErrorFileReplaceText2 = " to "
             ErrorFileReplaceText3 = " in the file "
