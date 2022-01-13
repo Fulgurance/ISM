@@ -30,6 +30,9 @@ module ISM
             ErrorFileReplaceText1 = "Failed to replace the occurence "
             ErrorFileReplaceText2 = " to "
             ErrorFileReplaceText3 = " in the file "
+            ErrorGetFileContentText = "Failed to get file content from "
+            ErrorFileWriteDataText = "Failed to write data to "
+            ErrorFileAppendDataText = "Failed to write data to "
             Options = [ ISM::Option::Help.new,
                         ISM::Option::Version.new,
                         ISM::Option::Software.new,

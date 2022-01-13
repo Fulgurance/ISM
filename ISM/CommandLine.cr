@@ -226,6 +226,18 @@ module ISM
                                     filePath)
         end
 
+        def notifyOfGetFileContentError(filePath : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath)
+        end
+        
+        def notifyOfFileWriteDataError(filePath : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorFileWriteDataText+filePath)
+        end
+
+        def notifyOfFileAppendDataError(filePath : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorFileAppendDataText+filePath)
+        end
+
     end
 
 end

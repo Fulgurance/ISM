@@ -88,22 +88,62 @@ module ISM
 
         def fileReplaceText(filePath : String, text : String, newText : String)
             begin
-                content = File.read_lines(filePath)
+                content = File.read_lines(  Ism.settings.sourcesPath + "/" +
+                                            @information.versionName + "/" +
+                                            filePath)
 
-                File.open(filePath,"w") do |flux|
+                File.open(  Ism.settings.sourcesPath + "/" +
+                            @information.versionName + "/" +
+                            filePath,
+                            "w") do |file|
+
                     content.each do |line|
                         if line.includes?(text)
-                            flux << line.gsub(text, newText)+"\n"
+                            file << line.gsub(text, newText)+"\n"
                         else
-                            flux << line+"\n"
+                            file << line+"\n"
                         end
                     end
                 end
             rescue
-                Ism.notifyOfFileReplaceTextError(filePath,text,newText)
+                Ism.notifyOfFileReplaceTextError(   Ism.settings.sourcesPath + "/" +
+                                                    @information.versionName + "/" +
+                                                    filePath,
+                                                    text,
+                                                    newText)
                 exit 1
             end
         end
+
+        def getFileContent(filePath : String) : String
+            begin
+                content = File.read(filePath)
+            rescue
+                Ism.notifyOfGetFileContentError(filePath)
+                exit 1
+            end
+            return content
+        end
+
+        def fileWriteData(filePath : String, data : String)
+            begin
+                File.write(filepath, data)
+            rescue
+                Ism.notifyOfFileWriteDataError(filePath)
+                exit 1
+            end
+        end
+
+        def fileAppendData(filePath : String, data : String)
+            begin
+                File.open(filePath,"a") do |file|
+                    file.puts(data)
+                end
+            rescue
+                Ism.notifyOfFileAppendDataError(filePath)
+                exit 1
+            end
+        end 
         
         def configure
             Ism.notifyOfConfigure(@information)
