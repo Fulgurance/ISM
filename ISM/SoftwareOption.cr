@@ -12,6 +12,10 @@ module ISM
       @active = false
     end
 
+    def == (other : ISM::SoftwareOption) : Bool
+      return @name == other.name && @description == other.description && @active == other.active
+    end
+
   end
 
 end

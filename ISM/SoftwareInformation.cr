@@ -138,6 +138,10 @@ module ISM
         return @name+"-"+@version
     end
 
+    def == (other : ISM::SoftwareInformation) : Bool
+        return @name == other.name && @version == other.version && @options == other.options
+    end
+
   end
 
 end
