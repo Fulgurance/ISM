@@ -22,6 +22,7 @@ module ISM
 
         def start
             loadSoftwareDatabase
+            loadInstalledSoftwareDatabase
             loadPortsDatabase
             loadSettingsFiles
             version.loadVersionFile
@@ -100,6 +101,64 @@ module ISM
             else
                 @systemSettings.writeSystemSettingsFile
             end
+        end
+
+        def loadInstalledSoftwareDatabase
+            portDirectories = Dir.children(ISM::Default::Path::InstalledSoftwaresDirectory)
+
+            portDirectories.each do |portDirectory|
+                portSoftwareDirectories = Dir.children(ISM::Default::Path::InstalledSoftwaresDirectory+portDirectory)
+
+                portSoftwareDirectories.each do |softwareDirectory|
+                    versionDirectories = Dir.children(  ISM::Default::Path::InstalledSoftwaresDirectory+portDirectory + "/" +
+                                                        softwareDirectory)
+
+                    versionDirectories.each do |versionDirectory|
+
+                        softwareInformation = ISM::SoftwareInformation.new
+
+                        softwareInformation.loadInformationFile(ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                                portDirectory+ "/" +
+                                                                softwareDirectory + "/" +
+                                                                versionDirectory + "/" +
+                                                                ISM::Default::Filename::Information)
+
+                        @installedSoftwares << softwareInformation
+        
+                    end
+
+                end
+
+            end
+        end
+
+        def addInstalledSoftware(path : String)
+            installedSoftware = ISM::SoftwareInformation.new
+            installedSoftware.loadInformationFile(targetPath)
+
+            if !Dir.exists?(ISM::Default::Path::InstalledSoftwaresDirectory +
+                            installedSoftware.port + "/" + 
+                            installedSoftware.name + "/" + 
+                            installedSoftware.version)
+                Dir.mkdir_p(ISM::Default::Path::InstalledSoftwaresDirectory +
+                            installedSoftware.port + "/" + 
+                            installedSoftware.name + "/" + 
+                            installedSoftware.version)
+            end
+
+            installedSoftware.writeInformationFile( ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                    installedSoftware.port + "/" + 
+                                                    installedSoftware.name + "/" + 
+                                                    installedSoftware.version + "/" + 
+                                                    ISM::Default::Filename::Information)
+        end
+
+        def removeInstalledSoftware(installedSoftware : ISM::SoftwareInformation)
+
+        end
+
+        def softwareIsInstalled?(software : ISM::SoftwareInformation) : Bool
+            return @installedSoftwares.includes?(software)
         end
 
         def checkEnteredArguments

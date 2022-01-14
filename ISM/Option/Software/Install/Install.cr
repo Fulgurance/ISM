@@ -195,7 +195,9 @@ module ISM
                     else
                         neededSoftwaresTree.reverse.each do |level|
                             level.each do |dependency|
-                                matchingSoftwaresArray << dependency.getInformation
+                                if !Ism.softwareIsInstalled?(dependency.getInformation)
+                                    matchingSoftwaresArray << dependency.getInformation
+                                end
                             end
                         end
     
@@ -300,6 +302,8 @@ module ISM
                                 if !process.success?
                                     break
                                 end
+
+                                Ism.addInstalledSoftware(targetPath)
 
                                 puts    "#{software.name.colorize(:green)}" +
                                         " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
