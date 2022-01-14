@@ -104,6 +104,10 @@ module ISM
         end
 
         def loadInstalledSoftwareDatabase
+            if !Dir.exists?(ISM::Default::Path::InstalledSoftwaresDirectory)
+                Dir.mkdir(ISM::Default::Path::InstalledSoftwaresDirectory)
+            end
+
             portDirectories = Dir.children(ISM::Default::Path::InstalledSoftwaresDirectory)
 
             portDirectories.each do |portDirectory|
@@ -134,7 +138,7 @@ module ISM
 
         def addInstalledSoftware(path : String)
             installedSoftware = ISM::SoftwareInformation.new
-            installedSoftware.loadInformationFile(targetPath)
+            installedSoftware.loadInformationFile(path)
 
             if !Dir.exists?(ISM::Default::Path::InstalledSoftwaresDirectory +
                             installedSoftware.port + "/" + 
