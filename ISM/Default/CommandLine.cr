@@ -22,6 +22,8 @@ module ISM
             ErrorDownloadText = "Failed to download from "
             ErrorExtractText = "Failed to extract the archive "
             ErrorApplyPatchText = "Failed to apply the patch "
+            ErrorMakeSymbolicLinkText1 = "Failed to make symbolic link from "
+            ErrorMakeSymbolicLinkText2 = " to "
             ErrorConfigureText = "Failed to configure the source "
             ErrorMakeText = "Failed to run make in  "
             ErrorMoveFileText1 = "Failed to move "

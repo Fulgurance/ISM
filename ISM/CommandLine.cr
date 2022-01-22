@@ -261,6 +261,13 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName)
         end
 
+        def notifyOfMakeSymbolicLinkError(path : String, targetPath : String)
+            printErrorNotification( ISM::Default::CommandLine::ErrorMakeSymbolicLinkText1 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorMakeSymbolicLinkText2 +
+                                    targetPath)
+        end
+
         def notifyOfConfigureError(sourceName : String)
             printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName)
         end

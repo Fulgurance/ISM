@@ -57,6 +57,10 @@ module ISM
             end
         end
 
+        def mainWorkingDirectory : String
+            return Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName
+        end
+
         def prepare
             Ism.notifyOfPrepare(@information)
         end
@@ -145,18 +149,35 @@ module ISM
             end
         end 
         
+        def makeSymbolicLink(path : String, targetPath : String)
+            begin
+                FileUtils.ln_sf(path, targetPath)
+            rescue
+                Ism.notifyOfMakeSymbolicLinkError(path, targetPath)
+                exit 1
+            end
+        end
+
         def configure
             Ism.notifyOfConfigure(@information)
         end
 
-        def configureSource(arguments : Array(String), path = String.new)
-            process = Process.run("./configure",args: arguments,
-                                                output: :inherit,
-                                                error: :inherit,
-                                                chdir:  Ism.settings.sourcesPath + "/" + 
-                                                        @information.versionName + "/" +
-                                                        @mainSourceDirectoryName + "/" +
-                                                        path)
+        def configureSource(arguments : Array(String), path = String.new, buildDirectory = false)
+            if buildDirectory
+                configureCommand = "../configure "
+            else
+                configureCommand = "./configure "
+            end
+
+            configureCommand += arguments.join(" ")
+
+            process = Process.run(configureCommand, output: :inherit,
+                                                    error: :inherit,
+                                                    shell: true,
+                                                    chdir:  Ism.settings.sourcesPath + "/" +
+                                                            @information.versionName + "/" +
+                                                            @mainSourceDirectoryName + "/" +
+                                                            path)
             if !process.success?
                 Ism.notifyOfConfigureError(path)
                 exit 1
@@ -202,6 +223,10 @@ module ISM
                 end
             end
             return result
+        end
+
+        def architecture?(architecture : String) : Bool
+            return Ism.settings.architecture == architecture
         end
 
     end
