@@ -277,6 +277,10 @@ module ISM
                                                 software.version + ".cr"
 
                                 tasks = <<-CODE
+                                require "./RequiredLibraries"
+                                Ism = ISM::CommandLine.new
+                                Ism.loadSoftwareDatabase
+                                Ism.loadSettingsFiles
                                 require "./#{requirePath}"
                                 target = Target.new("#{targetPath}")
                                 

@@ -30,7 +30,11 @@ module ISM
         end
 
         def loadSoftwareDatabase
-            portDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory).reject!("SoftwaresLibrairies.cr")
+            if !Dir.exists?(ISM::Default::Path::SoftwaresDirectory)
+                Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
+            end
+
+            portDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory)
 
             portDirectories.each do |portDirectory|
                 portSoftwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory+portDirectory).reject!(&.starts_with?(".git"))
