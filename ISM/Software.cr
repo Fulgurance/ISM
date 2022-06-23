@@ -158,6 +158,41 @@ module ISM
             end
         end
 
+        def deleteFile(path : String)
+            begin
+                File.delete(path)
+            rescue
+                Ism.notifyOfDeleteFileError(path)
+                exit 1
+            end
+        end
+
+        def deleteAllHiddenFiles(path : String)
+            begin
+                (Dir.children(path+"/"+".").select {|f| File.file? f}).each do |file|
+                    if file.starts_with?(".")
+                        deleteFile(path+"/"+file)
+                    end
+                end
+            rescue
+                Ism.notifyOfDeleteAllHiddenFilesError(path)
+                exit 1
+            end
+        end
+
+        def deleteAllHiddenFilesRecursively(path : String)
+            begin
+                deleteAllHiddenFiles(path)
+
+                (Dir.children(path+"/"+".").select {|f| File.directory? f}).each do |directory|
+                    deleteAllHiddenFiles(directory)
+                end
+            rescue
+                Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path)
+                exit 1
+            end
+        end
+
         def configure
             Ism.notifyOfConfigure(@information)
         end
