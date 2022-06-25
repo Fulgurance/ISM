@@ -73,8 +73,9 @@ module ISM
                                 Ism.settings.sourcesPath + "/" + 
                                 @information.versionName + "/" +
                                 newPath)
-            rescue
+            rescue error
                 Ism.notifyOfMoveFileError(path, newPath)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end
@@ -84,8 +85,9 @@ module ISM
                 Dir.mkdir(  Ism.settings.sourcesPath + "/" + 
                             @information.versionName + "/" +
                             directory)
-            rescue
+            rescue error
                 Ism.notifyOfMakeDirectoryError(directory)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end
@@ -109,12 +111,13 @@ module ISM
                         end
                     end
                 end
-            rescue
+            rescue error
                 Ism.notifyOfFileReplaceTextError(   Ism.settings.sourcesPath + "/" +
                                                     @information.versionName + "/" +
                                                     filePath,
                                                     text,
                                                     newText)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end
@@ -122,8 +125,9 @@ module ISM
         def getFileContent(filePath : String) : String
             begin
                 content = File.read(filePath)
-            rescue
+            rescue error
                 Ism.notifyOfGetFileContentError(filePath)
+                Ism.printErrorNotification(error)
                 exit 1
             end
             return content
@@ -132,8 +136,9 @@ module ISM
         def fileWriteData(filePath : String, data : String)
             begin
                 File.write(filepath, data)
-            rescue
+            rescue error
                 Ism.notifyOfFileWriteDataError(filePath)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end
@@ -143,8 +148,9 @@ module ISM
                 File.open(filePath,"a") do |file|
                     file.puts(data)
                 end
-            rescue
+            rescue error
                 Ism.notifyOfFileAppendDataError(filePath)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end 
@@ -152,8 +158,9 @@ module ISM
         def makeSymbolicLink(path : String, targetPath : String)
             begin
                 FileUtils.ln_sf(path, targetPath)
-            rescue
+            rescue error
                 Ism.notifyOfMakeSymbolicLinkError(path, targetPath)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end
@@ -161,8 +168,9 @@ module ISM
         def deleteFile(path : String)
             begin
                 File.delete(path)
-            rescue
+            rescue error
                 Ism.notifyOfDeleteFileError(path)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end
@@ -174,8 +182,9 @@ module ISM
                         deleteFile(path+"/"+file)
                     end
                 end
-            rescue
+            rescue error
                 Ism.notifyOfDeleteAllHiddenFilesError(path)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end
@@ -187,8 +196,9 @@ module ISM
                 (Dir.children(path+"/"+".").select {|f| File.directory? f}).each do |directory|
                     deleteAllHiddenFiles(directory)
                 end
-            rescue
+            rescue error
                 Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path)
+                Ism.printErrorNotification(error)
                 exit 1
             end
         end
