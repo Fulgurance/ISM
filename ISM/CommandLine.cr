@@ -272,6 +272,18 @@ module ISM
                                     targetPath)
         end
 
+        def notifyOfDeleteFileError(path : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path)
+        end
+
+        def notifyOfDeleteAllHiddenFilesError(path : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesText+path)
+        end
+
+        def notifyOfDeleteAllHiddenFilesRecursivelyError(path : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path)
+        end
+
         def notifyOfConfigureError(sourceName : String)
             printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName)
         end
