@@ -75,7 +75,7 @@ module ISM
                                 newPath)
             rescue error
                 Ism.notifyOfMoveFileError(path, newPath)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end
@@ -87,7 +87,7 @@ module ISM
                             directory)
             rescue error
                 Ism.notifyOfMakeDirectoryError(directory)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end
@@ -117,7 +117,7 @@ module ISM
                                                     filePath,
                                                     text,
                                                     newText)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end
@@ -127,7 +127,7 @@ module ISM
                 content = File.read(filePath)
             rescue error
                 Ism.notifyOfGetFileContentError(filePath)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
             return content
@@ -138,7 +138,7 @@ module ISM
                 File.write(filepath, data)
             rescue error
                 Ism.notifyOfFileWriteDataError(filePath)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end
@@ -150,7 +150,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfFileAppendDataError(filePath)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end 
@@ -160,7 +160,7 @@ module ISM
                 FileUtils.ln_sf(path, targetPath)
             rescue error
                 Ism.notifyOfMakeSymbolicLinkError(path, targetPath)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end
@@ -170,7 +170,7 @@ module ISM
                 File.delete(path)
             rescue error
                 Ism.notifyOfDeleteFileError(path)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end
@@ -184,7 +184,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfDeleteAllHiddenFilesError(path)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end
@@ -198,7 +198,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path)
-                Ism.printErrorNotification(error)
+                pp error
                 exit 1
             end
         end
