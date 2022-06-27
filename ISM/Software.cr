@@ -157,9 +157,32 @@ module ISM
         
         def makeSymbolicLink(path : String, targetPath : String)
             begin
+                if File.symlink?(targetPath)
+                    File.delete(targetPath)
+                end
                 FileUtils.ln_sf(path, targetPath)
             rescue error
                 Ism.notifyOfMakeSymbolicLinkError(path, targetPath)
+                pp error
+                exit 1
+            end
+        end
+
+        def copyFile(path : String, targetPath : String)
+            begin
+                FileUtils.cp(path, targetPath)
+            rescue error
+                Ism.notifyOfCopyFileError(path, targetPath)
+                pp error
+                exit 1
+            end
+        end
+
+        def copyDirectory(path : String, targetPath : String)
+            begin
+                FileUtils.cp_r(path, targetPath)
+            rescue error
+                Ism.notifyOfCopyDirectoryError(path, targetPath)
                 pp error
                 exit 1
             end
@@ -177,9 +200,9 @@ module ISM
 
         def deleteAllHiddenFiles(path : String)
             begin
-                (Dir.children(path+"/"+".").select {|f| File.file? f}).each do |file|
-                    if file.starts_with?(".")
-                        deleteFile(path+"/"+file)
+                Dir.glob("#{path}/.*", match_hidden: true) do |file_path|
+                    if File.file?(file_path)
+                        deleteFile(file_path)
                     end
                 end
             rescue error
@@ -192,9 +215,10 @@ module ISM
         def deleteAllHiddenFilesRecursively(path : String)
             begin
                 deleteAllHiddenFiles(path)
-
-                (Dir.children(path+"/"+".").select {|f| File.directory? f}).each do |directory|
-                    deleteAllHiddenFiles(directory)
+                Dir.glob("#{path}/*") do |file_path|
+                    if File.directory?(file_path)
+                        deleteAllHiddenFiles(file_path)
+                    end
                 end
             rescue error
                 Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path)

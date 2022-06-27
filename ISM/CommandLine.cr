@@ -272,6 +272,20 @@ module ISM
                                     targetPath)
         end
 
+        def notifyOfCopyFileError(path : String, targetPath : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorCopyFileText1 +
+                                   path +
+                                   ISM::Default::CommandLine::ErrorCopyFileText2 +
+                                   targetPath)
+        end
+
+        def notifyOfCopyDirectoryError(path : String, targetPath : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorCopyDirectoryText1 +
+                                   path +
+                                   ISM::Default::CommandLine::ErrorCopyDirectoryText2 +
+                                   targetPath)
+        end
+
         def notifyOfDeleteFileError(path : String)
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path)
         end
