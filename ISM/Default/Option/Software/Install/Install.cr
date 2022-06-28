@@ -17,6 +17,7 @@ module ISM
                 InstallQuestion = "Would you like to install these softwares ?"
                 YesReplyOption = "y"
                 NoReplyOption = "n"
+                AlreadyInstalledText = "All requested softwares are installed yet. Task cancelled."
                 NoMatchFound = "No match found with the database for "
                 NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
                 

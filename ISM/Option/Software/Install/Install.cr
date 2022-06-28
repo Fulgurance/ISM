@@ -203,119 +203,126 @@ module ISM
     
                         matchingSoftwaresArray.uniq!
 
-                        puts "\n"
+                        if matchingSoftwaresArray.size > 0
 
-                        matchingSoftwaresArray.each do |software|
-                            softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
-                            optionsText = "{ "
-                            software.options.each do |option|
-                                if option.active
-                                    optionsText += "#{option.name.colorize(:red)}"
-                                else
-                                    optionsText += "#{option.name.colorize(:blue)}"
-                                end
-                                optionsText += " "
-                            end
-                            optionsText += "}"
-                            puts "\t" + softwareText + " " + optionsText + "\n"
-                        end
-
-                        puts "\n"
-
-                        userInput = ""
-                        userAgreement = false
-
-                        summaryText = matchingSoftwaresArray.size.to_s + ISM::Default::Option::SoftwareInstall::SummaryText + "\n"
-
-                        puts "#{summaryText.colorize(:green)}"
-
-                        print   "#{ISM::Default::Option::SoftwareInstall::InstallQuestion.colorize.mode(:underline)}" + 
-                                "[" + "#{ISM::Default::Option::SoftwareInstall::YesReplyOption.colorize(:green)}" + 
-                                "/" + "#{ISM::Default::Option::SoftwareInstall::NoReplyOption.colorize(:red)}" + "]"
-
-                        loop do
-                            userInput = gets
-                        
-                            if userInput == ISM::Default::Option::SoftwareInstall::YesReplyOption
-                                userAgreement = true
-                                break
-                            end
-                            if userInput == ISM::Default::Option::SoftwareInstall::NoReplyOption
-                                break
-                            end
-                        end
-
-                        if userAgreement
                             puts "\n"
 
-                            matchingSoftwaresArray.each_with_index do |software, index|
-                                puts    "#{"<<".colorize(:light_magenta)}" +
-                                        " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
-                                        " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}" +
-                                        "] Installing "+"#{software.name.colorize(:green)}"+"\n\n"
+                            matchingSoftwaresArray.each do |software|
+                                softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                                optionsText = "{ "
+                                software.options.each do |option|
+                                    if option.active
+                                        optionsText += "#{option.name.colorize(:red)}"
+                                    else
+                                        optionsText += "#{option.name.colorize(:blue)}"
+                                    end
+                                    optionsText += " "
+                                end
+                                optionsText += "}"
+                                puts "\t" + softwareText + " " + optionsText + "\n"
+                            end
 
-                                if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                software.name + "/" +
-                                                software.version + "/" +
-                                                ISM::Default::Filename::SoftwareSettings)
-                                    targetPath =    ISM::Default::Path::SettingsSoftwaresDirectory +
+                            puts "\n"
+
+                            userInput = ""
+                            userAgreement = false
+
+                            summaryText = matchingSoftwaresArray.size.to_s + ISM::Default::Option::SoftwareInstall::SummaryText + "\n"
+
+                            puts "#{summaryText.colorize(:green)}"
+
+                            print   "#{ISM::Default::Option::SoftwareInstall::InstallQuestion.colorize.mode(:underline)}" +
+                                    "[" + "#{ISM::Default::Option::SoftwareInstall::YesReplyOption.colorize(:green)}" +
+                                    "/" + "#{ISM::Default::Option::SoftwareInstall::NoReplyOption.colorize(:red)}" + "]"
+
+                            loop do
+                                userInput = gets
+
+                                if userInput == ISM::Default::Option::SoftwareInstall::YesReplyOption
+                                    userAgreement = true
+                                    break
+                                end
+                                if userInput == ISM::Default::Option::SoftwareInstall::NoReplyOption
+                                    break
+                                end
+                            end
+
+                            if userAgreement
+                                puts "\n"
+
+                                matchingSoftwaresArray.each_with_index do |software, index|
+                                    puts    "#{"<<".colorize(:light_magenta)}" +
+                                            " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                                            " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}" +
+                                            "] Installing "+"#{software.name.colorize(:green)}"+"\n\n"
+
+                                    if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
                                                     software.name + "/" +
                                                     software.version + "/" +
-                                                    ISM::Default::Filename::SoftwareSettings
-                                else
-                                    targetPath =    ISM::Default::Path::SoftwaresDirectory +
+                                                    ISM::Default::Filename::SoftwareSettings)
+                                        targetPath =    ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                        software.name + "/" +
+                                                        software.version + "/" +
+                                                        ISM::Default::Filename::SoftwareSettings
+                                    else
+                                        targetPath =    ISM::Default::Path::SoftwaresDirectory +
+                                                        software.port + "/" +
+                                                        software.name + "/" +
+                                                        software.version + "/" +
+                                                        ISM::Default::Filename::Information
+                                    end
+
+                                    requirePath =   ISM::Default::Path::SoftwaresDirectory +
                                                     software.port + "/" +
                                                     software.name + "/" +
                                                     software.version + "/" +
-                                                    ISM::Default::Filename::Information
+                                                    software.version + ".cr"
+
+                                    tasks = <<-CODE
+                                    require "./RequiredLibraries"
+                                    Ism = ISM::CommandLine.new
+                                    Ism.loadSoftwareDatabase
+                                    Ism.loadSettingsFiles
+                                    require "./#{requirePath}"
+                                    target = Target.new("#{targetPath}")
+
+                                    begin
+                                        target.download
+                                        target.check
+                                        target.extract
+                                        target.patch
+                                        target.prepare
+                                        target.configure
+                                        target.build
+                                        target.install
+                                        target.clean
+                                    rescue
+                                        exit 1
+                                    end
+
+                                    CODE
+
+                                    File.write("ISM.task", tasks)
+
+                                    process = Process.run("crystal",args: ["ISM.task"],output: :inherit,error: :inherit,)
+
+                                    if !process.success?
+                                        break
+                                    end
+
+                                    Ism.addInstalledSoftware(targetPath)
+
+                                    puts    "#{software.name.colorize(:green)}" +
+                                            " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                                            " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}"+"] " +
+                                            "#{">>".colorize(:light_magenta)}"+"\n\n"
                                 end
 
-                                requirePath =   ISM::Default::Path::SoftwaresDirectory +
-                                                software.port + "/" + 
-                                                software.name + "/" + 
-                                                software.version + "/" + 
-                                                software.version + ".cr"
-
-                                tasks = <<-CODE
-                                require "./RequiredLibraries"
-                                Ism = ISM::CommandLine.new
-                                Ism.loadSoftwareDatabase
-                                Ism.loadSettingsFiles
-                                require "./#{requirePath}"
-                                target = Target.new("#{targetPath}")
-                                
-                                begin
-                                    target.download
-                                    target.check
-                                    target.extract
-                                    target.patch
-                                    target.prepare
-                                    target.configure
-                                    target.build
-                                    target.install
-                                    target.clean
-                                rescue
-                                    exit 1
-                                end
-
-                                CODE
-
-                                File.write("ISM.task", tasks)
-
-                                process = Process.run("crystal",args: ["ISM.task"],output: :inherit,error: :inherit,)
-
-                                if !process.success?
-                                    break
-                                end
-
-                                Ism.addInstalledSoftware(targetPath)
-
-                                puts    "#{software.name.colorize(:green)}" +
-                                        " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
-                                        " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}"+"] " +
-                                        "#{">>".colorize(:light_magenta)}"+"\n\n"
                             end
 
+                        else
+                            puts
+                            puts "#{ISM::Default::Option::SoftwareInstall::AlreadyInstalledText.colorize(:green)}"
                         end
 
                     end
