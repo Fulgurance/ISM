@@ -233,9 +233,9 @@ module ISM
 
         def configureSource(arguments : Array(String), path = String.new, buildDirectory = false, configureDirectory = String.new)
             if buildDirectory
-                configureCommand = "../#{configureDirectory}configure "
+                configureCommand = "../#{configureDirectory}/configure "
             else
-                configureCommand = "./#{configureDirectory}configure "
+                configureCommand = "./#{configureDirectory}/configure "
             end
 
             configureCommand += arguments.join(" ")
