@@ -231,11 +231,11 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
-        def configureSource(arguments : Array(String), path = String.new, buildDirectory = false)
+        def configureSource(arguments : Array(String), path = String.new, buildDirectory = false, configureDirectory = String.new)
             if buildDirectory
-                configureCommand = "../configure "
+                configureCommand = "../#{configureDirectory}configure "
             else
-                configureCommand = "./configure "
+                configureCommand = "./#{configureDirectory}configure "
             end
 
             configureCommand += arguments.join(" ")
