@@ -12,13 +12,13 @@ module ISM
             end
 
             def start
-                if ARGV.size == 1
+                if ARGV.size == 1+Ism.debugLevel
                     showHelp
                 else
                     matchingOption = false
     
                     @options.each_with_index do |argument, index|
-                        if ARGV[1] == argument.shortText || ARGV[1] == argument.longText
+                        if ARGV[1+Ism.debugLevel] == argument.shortText || ARGV[1+Ism.debugLevel] == argument.longText
                             matchingOption = true
                             @options[index].start
                             break
@@ -26,7 +26,7 @@ module ISM
                     end
     
                     if !matchingOption
-                        puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
+                        puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0+Ism.debugLevel].colorize(:white)}"
                         puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
                                 "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
                                 "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"

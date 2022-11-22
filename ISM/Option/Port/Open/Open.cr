@@ -12,16 +12,16 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2
+                if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    portName = ARGV[2].lchop(ARGV[2][0..ARGV[2].rindex("/")])
+                    portName = ARGV[2+Ism.debugLevel].lchop(ARGV[2+Ism.debugLevel][0..ARGV[2+Ism.debugLevel].rindex("/")])
 
                     puts    "#{"* ".colorize(:green)}" +
                             ISM::Default::Option::PortOpen::OpenText +
                             portName
 
-                    port = ISM::Port.new(portName,ARGV[2])
+                    port = ISM::Port.new(portName,ARGV[2+Ism.debugLevel])
                     port.writePortFile(ISM::Default::Path::PortsDirectory+portName+".json")
 
                     Dir.mkdir(ISM::Default::Path::SoftwaresDirectory+port.name)

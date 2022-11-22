@@ -2,6 +2,7 @@ module ISM
 
     class CommandLine
 
+        property debugLevel : Int32
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
         property systemSettings : ISM::CommandLineSystemSettings
@@ -11,6 +12,7 @@ module ISM
         property version : ISM::Version
 
         def initialize
+            @debugLevel = ISM::Default::CommandLine::DebugLevel
             @options = ISM::Default::CommandLine::Options
             @settings = ISM::CommandLineSettings.new
             @systemSettings = ISM::CommandLineSystemSettings.new
@@ -170,31 +172,37 @@ module ISM
         end
 
         def checkEnteredArguments
-            if ARGV.empty? || ARGV[0] == ISM::Default::Option::Help::ShortText || ARGV[0] == ISM::Default::Option::Help::LongText
-                showHelp
-            else
-                matchingOption = false
+            matchingOption = false
 
+            if ARGV.empty?
+                matchingOption = true
+                @options[0+@debugLevel].start
+            else
                 @options.each_with_index do |argument, index|
-                    if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
-                        matchingOption = true
-                        @options[index].start
-                        break
+                    if ARGV[0] == ISM::Default::Option::Debug::ShortText || ARGV[0] == ISM::Default::Option::Debug::LongText
+                        @debugLevel = 1
+                    end
+
+                    if @debugLevel == 0 || @debugLevel == 1 && ARGV.size < 2 || @debugLevel == 1 && ARGV.size == 1
+                        if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
+                            matchingOption = true
+                            @options[index].start
+                            break
+                        end
+                    end
+
+                    if @debugLevel == 1 && ARGV.size > 1
+                        if ARGV[0+@debugLevel] == argument.shortText || ARGV[0+@debugLevel] == argument.longText
+                            matchingOption = true
+                            @options[index].start
+                            break
+                        end
                     end
                 end
-
-                if !matchingOption
-                    showErrorUnknowArgument
-                end
             end
-        end
 
-        def showHelp
-            puts ISM::Default::CommandLine::Title
-            @options.each do |argument|
-                puts    "\t" + "#{argument.shortText.colorize(:white)}" +
-                        "\t" + "#{argument.longText.colorize(:white)}" +
-                        "\t" + "#{argument.description.colorize(:green)}"
+            if !matchingOption
+                showErrorUnknowArgument
             end
         end
 

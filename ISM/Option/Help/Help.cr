@@ -11,6 +11,15 @@ module ISM
                         Array(ISM::CommandLineOption).new)
             end
 
+            def start
+                puts ISM::Default::CommandLine::Title
+                Ism.options.each do |argument|
+                    puts    "\t" + "#{argument.shortText.colorize(:white)}" +
+                            "\t" + "#{argument.longText.colorize(:white)}" +
+                            "\t" + "#{argument.description.colorize(:green)}"
+                end
+            end
+
         end
         
     end

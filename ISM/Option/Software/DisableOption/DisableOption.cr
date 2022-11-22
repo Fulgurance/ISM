@@ -12,7 +12,7 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2 || ARGV.size == 3
+                if ARGV.size == 2+Ism.debugLevel || ARGV.size == 3+Ism.debugLevel
                     showHelp
                 else
                     matching = false
@@ -20,13 +20,13 @@ module ISM
                     matchingSoftware = ISM::SoftwareInformation.new
 
                     Ism.softwares.each_with_index do |software, index|
-                        if ARGV[1] == software.name || ARGV[1] == software.name.downcase
+                        if ARGV[1+Ism.debugLevel] == software.name || ARGV[1+Ism.debugLevel] == software.name.downcase
                             matchingSoftware = software.versions.last
                             matching = true
                             break
                         else
                             software.versions.each do |version|
-                                if ARGV[1] == version.versionName || ARGV[1] == version.versionName.downcase
+                                if ARGV[1+Ism.debugLevel] == version.versionName || ARGV[1+Ism.debugLevel] == version.versionName.downcase
                                     matchingSoftware = version
                                     matching = true
                                     break
@@ -41,12 +41,12 @@ module ISM
                         puts ISM::Default::Option::SoftwareDisableOption::NoMatchFound + "#{badEntry.colorize(:green)}"
                         puts ISM::Default::Option::SoftwareDisableOption::NoMatchFoundAdvice
                     else
-                        if ARGV[2] == @shortText || ARGV[2] == @longText
+                        if ARGV[2+Ism.debugLevel] == @shortText || ARGV[2+Ism.debugLevel] == @longText
                             match = false
                             matchingOption = ISM::SoftwareOption.new
 
                             matchingSoftware.options.each_with_index do |option, index|
-                                if ARGV[3] == option.name || ARGV[3] == option.name.downcase
+                                if ARGV[3+Ism.debugLevel] == option.name || ARGV[3+Ism.debugLevel] == option.name.downcase
                                     matchingSoftware.options[index].active = false
                                     matchingOption = option
                                     match = true
@@ -75,7 +75,7 @@ module ISM
                                         matchingSoftware.name
                             else
                                 puts    ISM::Default::Option::SoftwareDisableOption::OptionNoMatchFound1 +
-                                        ARGV[3] +
+                                        ARGV[3+Ism.debugLevel] +
                                         ISM::Default::Option::SoftwareDisableOption::OptionNoMatchFound2 +
                                         matchingSoftware.name
                             end

@@ -4,6 +4,7 @@ module ISM
 
         module CommandLine
 
+            DebugLevel = 0
             Title = "Ingenius System Manager"
             ErrorUnknowArgument = "ISM error: unknow argument "
             ErrorUnknowArgumentHelp1 = "Use "
@@ -47,7 +48,8 @@ module ISM
                         ISM::Option::Software.new,
                         ISM::Option::Port.new,
                         ISM::Option::System.new,
-                        ISM::Option::Settings.new]
+                        ISM::Option::Settings.new,
+                        ISM::Option::Debug.new]
 
         end
 

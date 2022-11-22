@@ -12,7 +12,7 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2
+                if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
                     matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
@@ -22,7 +22,7 @@ module ISM
                     #####################
                     #Get wanted softwares
                     #####################
-                    ARGV[2..-1].uniq.each do |argument|
+                    ARGV[2+Ism.debugLevel..-1].uniq.each do |argument|
                         matching = false
 
                         Ism.softwares.each do |software|

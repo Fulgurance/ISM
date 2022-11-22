@@ -12,13 +12,13 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2
+                if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    Ism.settings.setSystemName(ARGV[2])
+                    Ism.settings.setSystemName(ARGV[2+Ism.debugLevel])
                     puts    "#{"* ".colorize(:green)}" +
                             ISM::Default::Option::SettingsSetSystemName::SetText +
-                            ARGV[2]
+                            ARGV[2+Ism.debugLevel]
                 end
             end
 

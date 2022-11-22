@@ -12,13 +12,13 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2
+                if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    Ism.systemSettings.setLcAll(ARGV[2])
+                    Ism.systemSettings.setLcAll(ARGV[2+Ism.debugLevel])
                     puts    "#{"* ".colorize(:green)}" +
                             ISM::Default::Option::SystemSetLcAll::SetText +
-                            ARGV[2]
+                            ARGV[2+Ism.debugLevel]
                 end
             end
 
