@@ -88,15 +88,15 @@ module ISM
         end
 
         def temporaryPath
-            "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
+            "#{@rootPath}/#{ISM::Default::Path::TemporaryDirectory}"
         end
 
         def sourcesPath
-            return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
+            return "#{@rootPath}/#{ISM::Default::Path::SourcesDirectory}"
         end
 
         def toolsPath
-            return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
+            return "#{@rootPath}/#{ISM::Default::Path::ToolsDirectory}"
         end
 
     end

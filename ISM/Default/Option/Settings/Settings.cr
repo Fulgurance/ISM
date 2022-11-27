@@ -14,10 +14,8 @@ module ISM
                             ISM::Option::SettingsSetBuildOptions.new,
                             ISM::Option::SettingsSetMakeOptions.new,
                             ISM::Option::SettingsSetRootPath.new,
-                            ISM::Option::SettingsSetSourcesPath.new,
                             ISM::Option::SettingsSetSystemName.new,
-                            ISM::Option::SettingsSetTargetName.new,
-                            ISM::Option::SettingsSetToolsPath.new]
+                            ISM::Option::SettingsSetTargetName.new]
 
             end
         end
