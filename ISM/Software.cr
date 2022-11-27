@@ -260,6 +260,7 @@ module ISM
         def makeSource(arguments : Array(String), path = String.new)
             process = Process.run("make",   args: arguments,
                                             output: :inherit,
+                                            #env: {"DESTDIR" => "#{Ism.settings.temporaryPath}"},
                                             error: :inherit,
                                             chdir:  Ism.settings.sourcesPath + "/" + 
                                                     @information.versionName + "/" +

@@ -1,1 +1,1 @@
-{"rootPath":"/","toolsPath":"/tools","sourcesPath":"/sources","systemName":"Unknow","targetName":"unknow","architecture":"x86_64","target":"x86_64-unknow-linux-gnu","makeOptions":"-j1","buildOptions":"-march=native -O2 -pipe"}
+{"rootPath":"/","systemName":"Unknow","targetName":"unknow","architecture":"x86_64","target":"x86_64-unknow-linux-gnu","makeOptions":"-j1","buildOptions":"-march=native -O2 -pipe"}

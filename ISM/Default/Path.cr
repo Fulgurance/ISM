@@ -5,9 +5,15 @@ module ISM
         module Path
             
             PortsDirectory = "Ports/"
+            SettingsDirectory = "Settings/"
+            IsmDirectory = "ISM/"
             SoftwaresDirectory = "Softwares/"
-            SettingsSoftwaresDirectory = "Settings/Softwares/"
             InstalledSoftwaresDirectory = "InstalledSoftwares/"
+            SettingsIsmDirectory = "#{SettingsDirectory}#{IsmDirectory}"
+            SettingsSoftwaresDirectory = "#{SettingsDirectory}#{SoftwaresDirectory}/"
+            TemporaryDirectory = "tmp/ism/"
+            ToolsDirectory = "tools/"
+            SourcesDirectory = "sources/"
 
         end
 

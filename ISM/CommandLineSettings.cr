@@ -4,8 +4,6 @@ module ISM
 
         record Settings,
             rootPath : String,
-            toolsPath : String,
-            sourcesPath : String,
             systemName : String,
             targetName : String,
             architecture : String,
@@ -16,8 +14,6 @@ module ISM
         end
 
         property    rootPath : String
-        property    toolsPath : String
-        property    sourcesPath : String
         property    systemName : String
         property    targetName : String
         property    architecture : String
@@ -26,8 +22,6 @@ module ISM
         property    buildOptions : String
 
         def initialize( @rootPath = ISM::Default::CommandLineSettings::RootPath,
-                        @toolsPath = ISM::Default::CommandLineSettings::ToolsPath,
-                        @sourcesPath = ISM::Default::CommandLineSettings::SourcesPath,
                         @systemName = ISM::Default::CommandLineSettings::SystemName,
                         @targetName = ISM::Default::CommandLineSettings::TargetName,
                         @architecture = ISM::Default::CommandLineSettings::Architecture,
@@ -40,8 +34,6 @@ module ISM
             information = Settings.from_json(File.read(ISM::Default::CommandLineSettings::SettingsFilePath))
       
             @rootPath = information.rootPath
-            @toolsPath = information.toolsPath
-            @sourcesPath = information.sourcesPath
             @systemName = information.systemName
             @targetName = information.targetName
             @architecture = information.architecture
@@ -52,8 +44,6 @@ module ISM
 
         def writeSettingsFile
             settings = Settings.new(@rootPath,
-                                    @toolsPath,
-                                    @sourcesPath,
                                     @systemName,
                                     @targetName,
                                     @architecture,
@@ -67,14 +57,6 @@ module ISM
         end
 
         def setRootPath(@rootPath)
-            writeSettingsFile
-        end
-
-        def setToolsPath(@toolsPath)
-            writeSettingsFile
-        end
-
-        def setSourcesPath(@sourcesPath)
             writeSettingsFile
         end
 
@@ -103,6 +85,18 @@ module ISM
 
         def setBuildOptions(@buildOptions)
             writeSettingsFile
+        end
+
+        def temporaryPath
+            "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
+        end
+
+        def sourcesPath
+            return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
+        end
+
+        def toolsPath
+            return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
         end
 
     end
