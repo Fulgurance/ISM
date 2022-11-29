@@ -278,6 +278,10 @@ module ISM
                                                     software.version + "/" +
                                                     software.version + ".cr"
 
+                                    builtSoftwarePath = "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{software.port}/#{software.name}/#{software.version}"
+
+                                    Dir.mkdir_p(builtSoftwarePath)
+
                                     tasks = <<-CODE
                                     require "./RequiredLibraries"
                                     Ism = ISM::CommandLine.new
@@ -294,6 +298,7 @@ module ISM
                                         target.prepare
                                         target.configure
                                         target.build
+                                        target.prepareInstallation
                                         target.install
                                         target.clean
                                     rescue
@@ -310,7 +315,11 @@ module ISM
                                         break
                                     end
 
-                                    Ism.addInstalledSoftware(targetPath)
+                                    installedFiles = Dir.glob("#{builtSoftwarePath}/**/*")
+
+                                    Ism.addInstalledSoftware(targetPath, installedFiles)
+
+                                    FileUtils.rm_r(builtSoftwarePath)
 
                                     puts    "#{software.name.colorize(:green)}" +
                                             " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +

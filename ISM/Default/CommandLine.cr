@@ -17,6 +17,7 @@ module ISM
             PrepareText =  "Preparing " 
             ConfigureText = "Configuring "
             BuildText = "Building "
+            PrepareInstallationText = "Preparing installation for "
             InstallText = "Installing "
             CleanText = "Cleaning "
             UninstallText = "Uninstalling "

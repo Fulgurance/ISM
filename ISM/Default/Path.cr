@@ -12,6 +12,7 @@ module ISM
             SettingsIsmDirectory = "#{SettingsDirectory}#{IsmDirectory}"
             SettingsSoftwaresDirectory = "#{SettingsDirectory}#{SoftwaresDirectory}/"
             TemporaryDirectory = "tmp/ism/"
+            BuiltSoftwaresDirectory = "#{TemporaryDirectory}builtsoftwares/"
             ToolsDirectory = "tools/"
             SourcesDirectory = "sources/"
 

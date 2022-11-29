@@ -260,7 +260,6 @@ module ISM
         def makeSource(arguments : Array(String), path = String.new)
             process = Process.run("make",   args: arguments,
                                             output: :inherit,
-                                            #env: {"DESTDIR" => "#{Ism.settings.temporaryPath}"},
                                             error: :inherit,
                                             chdir:  Ism.settings.sourcesPath + "/" + 
                                                     @information.versionName + "/" +
@@ -271,9 +270,28 @@ module ISM
                 exit 1
             end
         end
-        
+
+        def prepareInstallation
+            Ism.notifyOfPrepareInstallation(@information)
+        end
+
         def install
             Ism.notifyOfInstall(@information)
+
+            builtSoftwarePath = "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@information.port}/#{@information.name}/#{@information.version}"
+
+            filesList = Dir.glob("#{builtSoftwarePath}/**/*")
+
+            filesList.each do |entry|
+                finalDestination = entry.delete_at(1,builtSoftwarePath.size)
+                if File.directory?(entry)
+                    if !Dir.exists(finalDestination)
+                        Dir.mkdir(finalDestination)
+                    end
+                else
+                    FileUtils.cp(entry,finalDestination)
+                end
+            end
         end
         
         def clean

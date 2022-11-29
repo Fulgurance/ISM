@@ -142,7 +142,7 @@ module ISM
             end
         end
 
-        def addInstalledSoftware(path : String)
+        def addInstalledSoftware(path : String, installedFiles : Array(String))
             installedSoftware = ISM::SoftwareInformation.new
             installedSoftware.loadInformationFile(path)
 
@@ -249,6 +249,10 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::BuildText+softwareInformation.name)
         end
         
+        def notifyOfPrepareInstallation(softwareInformation : ISM::SoftwareInformation)
+            printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+softwareInformation.name)
+        end
+
         def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::InstallText+softwareInformation.name)
         end

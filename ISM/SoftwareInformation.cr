@@ -27,6 +27,7 @@ module ISM
         signatureLinks : Array(String),
         shasumLinks : Array(String),
         patchesLinks : Array(String),
+        installedFiles : Array(String),
         dependencies : Array(Dependency),
         options : Array(Option) do
         include JSON::Serializable
@@ -44,8 +45,9 @@ module ISM
     property patchesLinks : Array(String)
     property dependencies : Array(ISM::SoftwareDependency)
     property options : Array(ISM::SoftwareOption)
+    property installedFiles : Array(String)
 
-    def initialize
+    def initialize(@installedFiles = Array(String).new)
         @port = String.new
         @name = String.new
         @version = String.new
@@ -73,6 +75,7 @@ module ISM
       @signatureLinks = information.signatureLinks
       @shasumLinks = information.shasumLinks
       @patchesLinks = information.patchesLinks
+      @installedFiles = information.installedFiles
 
       information.dependencies.each do |data|
           dependency = ISM::SoftwareDependency.new
@@ -126,6 +129,7 @@ module ISM
                                         @signatureLinks,
                                         @shasumLinks,
                                         @patchesLinks,
+                                        @installedFiles,
                                         dependencies,
                                         options)
 
