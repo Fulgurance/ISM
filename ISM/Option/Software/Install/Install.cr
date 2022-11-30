@@ -278,7 +278,7 @@ module ISM
                                                     software.version + "/" +
                                                     software.version + ".cr"
 
-                                    builtSoftwarePath = "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{software.port}/#{software.name}/#{software.version}"
+                                    builtSoftwarePath = "#{Ism.settings.rootPath}/#{ISM::Default::Path::BuiltSoftwaresDirectory}#{software.port}/#{software.name}/#{software.version}"
 
                                     Dir.mkdir_p(builtSoftwarePath)
 
