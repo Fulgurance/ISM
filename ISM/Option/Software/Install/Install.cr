@@ -278,9 +278,7 @@ module ISM
                                                     software.version + "/" +
                                                     software.version + ".cr"
 
-                                    builtSoftwarePath = "#{Ism.settings.rootPath}/#{ISM::Default::Path::BuiltSoftwaresDirectory}#{software.port}/#{software.name}/#{software.version}"
-
-                                    Dir.mkdir_p(builtSoftwarePath)
+                                    Dir.mkdir_p(software.builtSoftwareDirectoryPath)
 
                                     tasks = <<-CODE
                                     require "./RequiredLibraries"
@@ -315,21 +313,19 @@ module ISM
                                         break
                                     end
 
-                                    builtSoftwareFilesList = Dir.glob("#{builtSoftwarePath}/**/*")
+                                    builtSoftwareFilesList = Dir.glob("#{software.builtSoftwareDirectoryPath}/**/*")
                                     installedFiles = Array(String).new
 
                                     builtSoftwareFilesList.each do |entry|
-                                        finalDestination = entry.delete_at(1,builtSoftwarePath.size)
+                                        finalDestination = entry.delete_at(0,software.builtSoftwareDirectoryPath.size+Ism.settings.rootPath.size)
                                         if File.file?(entry)
                                             installedFiles << finalDestination
                                         end
                                     end
 
-                                    #installedFiles = Dir.glob("#{builtSoftwarePath}/**/*")
-
                                     Ism.addInstalledSoftware(targetPath, installedFiles)
 
-                                    FileUtils.rm_r(builtSoftwarePath)
+                                    FileUtils.rm_r(software.builtSoftwareDirectoryPath)
 
                                     puts    "#{software.name.colorize(:green)}" +
                                             " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +

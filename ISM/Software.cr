@@ -278,12 +278,10 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            builtSoftwarePath = "#{Ism.settings.rootPath}/#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@information.port}/#{@information.name}/#{@information.version}"
-
-            filesList = Dir.glob("#{builtSoftwarePath}/**/*")
+            filesList = Dir.glob("#{@information.builtSoftwareDirectoryPath}/**/*")
 
             filesList.each do |entry|
-                finalDestination = entry.delete_at(1,builtSoftwarePath.size)
+                finalDestination = entry.delete_at(1,@information.builtSoftwareDirectoryPath.size)
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
                         Dir.mkdir(finalDestination)

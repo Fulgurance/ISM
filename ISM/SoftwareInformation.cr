@@ -143,6 +143,10 @@ module ISM
         return @name+"-"+@version
     end
 
+    def builtSoftwareDirectoryPath
+        return "#{Ism.settings.rootPath}/#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}"
+    end
+
     def == (other : ISM::SoftwareInformation) : Bool
         return @name == other.name && @version == other.version && @options == other.options
     end
