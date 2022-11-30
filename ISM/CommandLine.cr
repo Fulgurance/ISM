@@ -145,6 +145,7 @@ module ISM
         def addInstalledSoftware(path : String, installedFiles : Array(String))
             installedSoftware = ISM::SoftwareInformation.new
             installedSoftware.loadInformationFile(path)
+            installedSoftware.installedFiles = installedFiles
 
             if !Dir.exists?(ISM::Default::Path::InstalledSoftwaresDirectory +
                             installedSoftware.port + "/" + 

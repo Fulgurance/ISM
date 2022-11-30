@@ -47,7 +47,7 @@ module ISM
     property options : Array(ISM::SoftwareOption)
     property installedFiles : Array(String)
 
-    def initialize(@installedFiles = Array(String).new)
+    def initialize
         @port = String.new
         @name = String.new
         @version = String.new
@@ -58,6 +58,7 @@ module ISM
         @signatureLinks = Array(String).new
         @shasumLinks = Array(String).new
         @patchesLinks = Array(String).new
+        @installedFiles = Array(String).new
         @dependencies = Array(ISM::SoftwareDependency).new
         @options = Array(ISM::SoftwareOption).new
     end
