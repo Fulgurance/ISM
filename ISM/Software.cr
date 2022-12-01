@@ -82,9 +82,7 @@ module ISM
 
         def makeDirectory(directory : String)
             begin
-                Dir.mkdir(  Ism.settings.sourcesPath + "/" + 
-                            @information.versionName + "/" +
-                            directory)
+                Dir.mkdir(directory)
             rescue error
                 Ism.notifyOfMakeDirectoryError(directory)
                 pp error
