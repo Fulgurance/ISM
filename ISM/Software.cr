@@ -11,8 +11,16 @@ module ISM
             @mainSourceDirectoryName = String.new
         end
 
+        def workDirectoryPath : String
+            return Ism.settings.sourcesPath+"/"+@information.versionName
+        end
+
+        def mainWorkingDirectory : String
+            return workDirectoryPath+"/"+@mainSourceDirectoryName
+        end
+
         def download
-            Dir.mkdir(Ism.settings.sourcesPath+"/"+@information.versionName)
+            Dir.mkdir(workDirectoryPath)
             Ism.notifyOfDownload(@information)
         end
 
@@ -20,7 +28,7 @@ module ISM
             process = Process.run("wget",   args: [link],
                                             output: :inherit,
                                             error: :inherit,
-                                            chdir: Ism.settings.sourcesPath+"/"+@information.versionName)
+                                            chdir: workDirectoryPath)
             if !process.success?
                 Ism.notifyOfDownloadError(link)
                 exit 1
@@ -37,7 +45,7 @@ module ISM
 
         def extractSource(archive : String)
             process = Process.run("tar",args: ["-xf", archive],
-                                        chdir: Ism.settings.sourcesPath+"/"+@information.versionName)
+                                        chdir: workDirectoryPath)
             if !process.success?
                 Ism.notifyOfExtractError(archive)
                 exit 1
@@ -50,29 +58,21 @@ module ISM
         
         def applyPatch(patch : String)
             process = Process.run("patch",  args: ["-Np1","-i",patch],
-                                            chdir: Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName)
+                                            chdir: workDirectoryPath+"/"+@mainSourceDirectoryName)
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 exit 1
             end
         end
 
-        def mainWorkingDirectory : String
-            return Ism.settings.sourcesPath+"/"+@information.versionName+"/"+@mainSourceDirectoryName
-        end
-
         def prepare
             Ism.notifyOfPrepare(@information)
+            makeDirectory(mainWorkingDirectory)
         end
 
         def moveFile(path : String, newPath : String)
             begin
-                FileUtils.mv(   Ism.settings.sourcesPath + "/" + 
-                                @information.versionName + "/" +
-                                path,
-                                Ism.settings.sourcesPath + "/" + 
-                                @information.versionName + "/" +
-                                newPath)
+                FileUtils.mv(path, newPath)
             rescue error
                 Ism.notifyOfMoveFileError(path, newPath)
                 pp error
@@ -92,15 +92,9 @@ module ISM
 
         def fileReplaceText(filePath : String, text : String, newText : String)
             begin
-                content = File.read_lines(  Ism.settings.sourcesPath + "/" +
-                                            @information.versionName + "/" +
-                                            filePath)
+                content = File.read_lines(filePath)
 
-                File.open(  Ism.settings.sourcesPath + "/" +
-                            @information.versionName + "/" +
-                            filePath,
-                            "w") do |file|
-
+                File.open(filePath,"w") do |file|
                     content.each do |line|
                         if line.includes?(text)
                             file << line.gsub(text, newText)+"\n"
@@ -110,11 +104,7 @@ module ISM
                     end
                 end
             rescue error
-                Ism.notifyOfFileReplaceTextError(   Ism.settings.sourcesPath + "/" +
-                                                    @information.versionName + "/" +
-                                                    filePath,
-                                                    text,
-                                                    newText)
+                Ism.notifyOfFileReplaceTextError(filePath, text, newText)
                 pp error
                 exit 1
             end
@@ -241,10 +231,7 @@ module ISM
             process = Process.run(configureCommand, output: :inherit,
                                                     error: :inherit,
                                                     shell: true,
-                                                    chdir:  Ism.settings.sourcesPath + "/" +
-                                                            @information.versionName + "/" +
-                                                            @mainSourceDirectoryName + "/" +
-                                                            path)
+                                                    chdir: path)
             if !process.success?
                 Ism.notifyOfConfigureError(path)
                 exit 1
@@ -259,10 +246,7 @@ module ISM
             process = Process.run("make",   args: arguments,
                                             output: :inherit,
                                             error: :inherit,
-                                            chdir:  Ism.settings.sourcesPath + "/" + 
-                                                    @information.versionName + "/" +
-                                                    @mainSourceDirectoryName + "/" +
-                                                    path)
+                                            chdir: path)
             if !process.success?
                 Ism.notifyOfMakeError(path)
                 exit 1
@@ -292,7 +276,7 @@ module ISM
         
         def clean
             Ism.notifyOfClean(@information)
-            FileUtils.rm_r(Ism.settings.sourcesPath+"/"+@information.versionName)
+            FileUtils.rm_r(workDirectoryPath)
         end
 
         def uninstall
