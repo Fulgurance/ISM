@@ -327,6 +327,7 @@ module ISM
 
                                     FileUtils.rm_r(software.builtSoftwareDirectoryPath)
 
+                                    puts
                                     puts    "#{software.name.colorize(:green)}" +
                                             " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                             " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}"+"] " +

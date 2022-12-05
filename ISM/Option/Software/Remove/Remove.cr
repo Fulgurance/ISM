@@ -83,6 +83,8 @@ module ISM
                                 end
                             end
                         end
+
+                        uselessSoftwares.uniq!
                     end
                     ##########################################
 
@@ -137,7 +139,7 @@ module ISM
                                 puts    "#{"<<".colorize(:light_magenta)}" +
                                         " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                         " / "+"#{uselessSoftwares.size.to_s.colorize(:light_red)}" +
-                                        "] Installing "+"#{software.name.colorize(:green)}"+"\n\n"
+                                        "] Uninstalling "+"#{software.name.colorize(:green)}"+"\n\n"
 
                                 if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
                                                     software.name + "/" +
@@ -186,7 +188,7 @@ module ISM
                                 end
 
                                 #If process is okay, remove the installed recording file
-
+                                puts
                                 puts    "#{software.name.colorize(:green)}" +
                                         " is uninstalled "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                         " / "+"#{uselessSoftwares.size.to_s.colorize(:light_red)}"+"] " +

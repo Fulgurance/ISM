@@ -9,7 +9,7 @@ module ISM
                 ShortText = "-r"
                 LongText = "remove"
                 Description = "Remove specific(s) software(s)"
-                SummaryText = " new softwares will be uninstall"
+                SummaryText = " softwares will be uninstall"
                 UninstallQuestion = "Would you like to uninstall these softwares ?"
                 YesReplyOption = "y"
                 NoReplyOption = "n"
