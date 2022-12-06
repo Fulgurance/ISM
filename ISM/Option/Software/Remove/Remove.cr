@@ -141,21 +141,11 @@ module ISM
                                         " / "+"#{uselessSoftwares.size.to_s.colorize(:light_red)}" +
                                         "] Uninstalling "+"#{software.name.colorize(:green)}"+"\n\n"
 
-                                if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                    software.name + "/" +
-                                                    software.version + "/" +
-                                                    ISM::Default::Filename::SoftwareSettings)
-                                    targetPath =    ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                    software.name + "/" +
-                                                    software.version + "/" +
-                                                    ISM::Default::Filename::SoftwareSettings
-                                else
-                                    targetPath =    ISM::Default::Path::SoftwaresDirectory +
-                                                    software.port + "/" +
-                                                    software.name + "/" +
-                                                    software.version + "/" +
-                                                    ISM::Default::Filename::Information
-                                end
+                                targetPath =    ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                software.port + "/" +
+                                                software.name + "/" +
+                                                software.version + "/" +
+                                                ISM::Default::Filename::Information
 
                                 requirePath =   ISM::Default::Path::SoftwaresDirectory +
                                                 software.port + "/" +
@@ -187,7 +177,10 @@ module ISM
                                     break
                                 end
 
-                                #If process is okay, remove the installed recording file
+                                FileUtils.rm_r( ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                software.port + "/" +
+                                                software.name)
+
                                 puts
                                 puts    "#{software.name.colorize(:green)}" +
                                         " is uninstalled "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +

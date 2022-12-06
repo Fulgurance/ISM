@@ -281,6 +281,9 @@ module ISM
 
         def uninstall
             Ism.notifyOfUninstall(@information)
+            information.installedFiles.each do |file|
+                deleteFile(Ism.settings.rootPath+file)
+            end
         end
 
         def option?(optionName : String) : Bool
