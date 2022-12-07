@@ -19,19 +19,42 @@ module ISM
                     matching = false
                     wrongArgument = ""
 
+                    calculationStartingTime = Time.monotonic
+                    frameIndex = 0
+                    reverseAnimation = false
+
+                    print ISM::Default::Option::SoftwareInstall::CalculationTitle
+                    text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
+
                     #####################
                     #Get wanted softwares
                     #####################
                     ARGV[2+Ism.debugLevel..-1].uniq.each do |argument|
                         matching = false
 
+                        animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                        calculationStartingTime = animationVariables[0]
+                        frameIndex = animationVariables[1]
+
                         Ism.softwares.each do |software|
+
+                            animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                            calculationStartingTime = animationVariables[0]
+                            frameIndex = animationVariables[1]
 
                             if argument == software.name || argument == software.name.downcase
                                 matchingSoftwaresArray << software.versions.last
                                 matching = true
                             else
                                 software.versions.each do |version|
+
+                                    animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                                    calculationStartingTime = animationVariables[0]
+                                    frameIndex = animationVariables[1]
+
                                     if argument == version.versionName || argument == version.versionName.downcase
                                         matchingSoftwaresArray << version
                                         matching = true
@@ -44,7 +67,7 @@ module ISM
                             wrongArgument = argument
                             break
                         end
-                        
+
                     end
 
                     ################################
@@ -53,6 +76,12 @@ module ISM
                     currentDependenciesArray = Array(ISM::SoftwareDependency).new
 
                     matchingSoftwaresArray.each do |software|
+
+                        animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                        calculationStartingTime = animationVariables[0]
+                        frameIndex = animationVariables[1]
+
                         currentDependency = ISM::SoftwareDependency.new
                         currentDependency.name = software.name
                         currentDependency.version = software.version
@@ -70,42 +99,20 @@ module ISM
                     matchingSoftwaresArray.clear
 
                     inextricableDependency = false
-                    calculationStartingTime = Time.monotonic
-                    frameIndex = 0
-                    reverseAnimation = false
-
-                    print ISM::Default::Option::SoftwareInstall::CalculationTitle
-                    text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
 
                     loop do
 
-                        currentTime = Time.monotonic
+                        animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
 
-                        if (currentTime - calculationStartingTime).milliseconds > 40
-                            if frameIndex >= text.size
-                                reverseAnimation = true
-                            end
-
-                            if frameIndex < 1
-                                reverseAnimation = false
-                            end
-
-                            if reverseAnimation
-                                print "\033[1D"
-                                print " "
-                                print "\033[1D"
-                                frameIndex -= 1
-                            end
-
-                            if !reverseAnimation
-                                print "#{text[frameIndex].colorize(:green)}"
-                                frameIndex += 1
-                            end
-
-                            calculationStartingTime = Time.monotonic
-                        end
+                        calculationStartingTime = animationVariables[0]
+                        frameIndex = animationVariables[1]
 
                         currentDependenciesArray.each do |software|
+
+                            animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                            calculationStartingTime = animationVariables[0]
+                            frameIndex = animationVariables[1]
 
                             dependencies = software.getDependencies
 
@@ -142,10 +149,14 @@ module ISM
 
                     print "#{ISM::Default::Option::SoftwareInstall::CalculationDoneText.colorize(:green)}\n"
 
+
+
                     #Retirer encore les doublons si il y a des paquets de meme nom ou version differente, ou options differentes
                     if !matching
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArgument.colorize(:green)}"
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
+                        puts
+                        puts "#{ISM::Default::Option::SoftwareInstall::DoesntExistText.colorize(:green)}"
 
                     elsif inextricableDependency
                         inextricableDependenciesArray = Array(ISM::SoftwareInformation).new
@@ -200,7 +211,7 @@ module ISM
                                 end
                             end
                         end
-    
+
                         matchingSoftwaresArray.uniq!
 
                         if matchingSoftwaresArray.size > 0
@@ -342,12 +353,12 @@ module ISM
                         end
 
                     end
-    
+
                 end
             end
 
         end
-        
+
     end
 
 end

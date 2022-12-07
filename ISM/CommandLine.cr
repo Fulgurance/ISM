@@ -351,6 +351,36 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorFileAppendDataText+filePath)
         end
 
+        def playCalculationAnimation(calculationStartingTime, frameIndex, text)
+            currentTime = Time.monotonic
+
+            if (currentTime - calculationStartingTime).milliseconds > 40
+                if frameIndex >= text.size
+                    reverseAnimation = true
+                end
+
+                if frameIndex < 1
+                    reverseAnimation = false
+                end
+
+                if reverseAnimation
+                    print "\033[1D"
+                    print " "
+                    print "\033[1D"
+                    frameIndex -= 1
+                end
+
+                if !reverseAnimation
+                    print "#{text[frameIndex].colorize(:green)}"
+                    frameIndex += 1
+                end
+
+                calculationStartingTime = Time.monotonic
+            end
+
+            return calculationStartingTime, frameIndex
+        end
+
     end
 
 end

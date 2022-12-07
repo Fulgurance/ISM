@@ -19,19 +19,43 @@ module ISM
                     matching = false
                     wrongArgument = ""
 
+                    calculationStartingTime = Time.monotonic
+                    frameIndex = 0
+                    reverseAnimation = false
+
+                    print ISM::Default::Option::SoftwareRemove::CalculationTitle
+                    text = ISM::Default::Option::SoftwareRemove::CalculationWaitingText
+
                     #####################
                     #Get wanted softwares
                     #####################
                     ARGV[2+Ism.debugLevel..-1].uniq.each do |argument|
+
+                        animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                        calculationStartingTime = animationVariables[0]
+                        frameIndex = animationVariables[1]
+
                         matching = false
 
                         Ism.softwares.each do |software|
+
+                            animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                            calculationStartingTime = animationVariables[0]
+                            frameIndex = animationVariables[1]
 
                             if argument == software.name || argument == software.name.downcase
                                 matchingSoftwaresArray << software.versions.last
                                 matching = true
                             else
                                 software.versions.each do |version|
+
+                                    animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                                    calculationStartingTime = animationVariables[0]
+                                    frameIndex = animationVariables[1]
+
                                     if argument == version.versionName || argument == version.versionName.downcase
                                         matchingSoftwaresArray << version
                                         matching = true
@@ -53,11 +77,14 @@ module ISM
                     #####################
                     #Get matching installed softwares
                     #####################
-                    if !matching
-                        puts ISM::Default::Option::SoftwareRemove::NoInstalledMatchFound + "#{wrongArgument.colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareRemove::NoInstalledMatchFoundAdvice
-                    else
+                    if matching
                         matchingSoftwaresArray.each do |software|
+
+                            animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                            calculationStartingTime = animationVariables[0]
+                            frameIndex = animationVariables[1]
+
                             if Ism.softwareIsInstalled?(software)
                                 matchingInstalledSoftwares = true
                                 matchingInstalledSoftwaresArray << software
@@ -72,12 +99,21 @@ module ISM
                     #####################
                     #Get useless softwares
                     #####################
-                    if !matchingInstalledSoftwares
-                        puts ISM::Default::Option::SoftwareRemove::NoInstalledMatchFound + "#{wrongArgument.colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareRemove::NoInstalledMatchFoundAdvice
-                    else
+                    if matchingInstalledSoftwares
                         Ism.installedSoftwares.each do |installedSoftwares|
+
+                            animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                            calculationStartingTime = animationVariables[0]
+                            frameIndex = animationVariables[1]
+
                             matchingInstalledSoftwaresArray.each do |matchingInstalledSoftwares|
+
+                                animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                                calculationStartingTime = animationVariables[0]
+                                frameIndex = animationVariables[1]
+
                                 if !installedSoftwares.dependencies.includes?(matchingInstalledSoftwares)
                                     uselessSoftwares << matchingInstalledSoftwares
                                 end
@@ -87,6 +123,13 @@ module ISM
                         uselessSoftwares.uniq!
                     end
                     ##########################################
+
+                    print "#{ISM::Default::Option::SoftwareRemove::CalculationDoneText.colorize(:green)}\n"
+
+                    if !matching || !matchingInstalledSoftwares
+                        puts ISM::Default::Option::SoftwareRemove::NoInstalledMatchFound + "#{wrongArgument.colorize(:green)}"
+                        puts ISM::Default::Option::SoftwareRemove::NoInstalledMatchFoundAdvice
+                    end
 
                     if uselessSoftwares.size > 0
 
