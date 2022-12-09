@@ -381,6 +381,46 @@ module ISM
             return calculationStartingTime, frameIndex
         end
 
+        def getRequestedSoftwares(list, calculationStartingTime, frameIndex, text)
+            matching = false
+            wrongArgument = ""
+            matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
+
+            list.each do |argument|
+                matching = false
+
+                calculationStartingTime, frameIndex = playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                Ism.softwares.each do |software|
+
+                    calculationStartingTime, frameIndex = playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                    if argument == software.name || argument == software.name.downcase
+                        matchingSoftwaresArray << software.versions.last
+                        matching = true
+                    else
+                        software.versions.each do |version|
+
+                            calculationStartingTime, frameIndex = playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                            if argument == version.versionName || argument == version.versionName.downcase
+                                matchingSoftwaresArray << version
+                                matching = true
+                            end
+                        end
+                    end
+
+                end
+                if !matching
+                    wrongArgument = argument
+                    break
+                end
+
+            end
+
+            return matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex
+        end
+
     end
 
 end

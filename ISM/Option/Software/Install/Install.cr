@@ -15,7 +15,6 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
                     matching = false
                     wrongArgument = ""
 
@@ -26,49 +25,10 @@ module ISM
                     print ISM::Default::Option::SoftwareInstall::CalculationTitle
                     text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
 
-                    #####################
-                    #Get wanted softwares
-                    #####################
-                    ARGV[2+Ism.debugLevel..-1].uniq.each do |argument|
-                        matching = false
-
-                        animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
-
-                        calculationStartingTime = animationVariables[0]
-                        frameIndex = animationVariables[1]
-
-                        Ism.softwares.each do |software|
-
-                            animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
-
-                            calculationStartingTime = animationVariables[0]
-                            frameIndex = animationVariables[1]
-
-                            if argument == software.name || argument == software.name.downcase
-                                matchingSoftwaresArray << software.versions.last
-                                matching = true
-                            else
-                                software.versions.each do |version|
-
-                                    animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
-
-                                    calculationStartingTime = animationVariables[0]
-                                    frameIndex = animationVariables[1]
-
-                                    if argument == version.versionName || argument == version.versionName.downcase
-                                        matchingSoftwaresArray << version
-                                        matching = true
-                                    end
-                                end
-                            end
-
-                        end
-                        if !matching
-                            wrongArgument = argument
-                            break
-                        end
-
-                    end
+                    matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex = Ism.getRequestedSoftwares(   ARGV[2+Ism.debugLevel..-1].uniq,
+                                                                                                                                        calculationStartingTime,
+                                                                                                                                        frameIndex,
+                                                                                                                                        ISM::Default::Option::SoftwareInstall::CalculationWaitingText)
 
                     ################################
                     #Get dependencies array by level
@@ -77,10 +37,7 @@ module ISM
 
                     matchingSoftwaresArray.each do |software|
 
-                        animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
-
-                        calculationStartingTime = animationVariables[0]
-                        frameIndex = animationVariables[1]
+                        calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
 
                         currentDependency = ISM::SoftwareDependency.new
                         currentDependency.name = software.name
@@ -102,10 +59,7 @@ module ISM
 
                     loop do
 
-                        animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
-
-                        calculationStartingTime = animationVariables[0]
-                        frameIndex = animationVariables[1]
+                        calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
 
                         currentDependenciesArray.each do |software|
 
