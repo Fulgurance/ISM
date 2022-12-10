@@ -20,7 +20,6 @@ module ISM
 
                     calculationStartingTime = Time.monotonic
                     frameIndex = 0
-                    reverseAnimation = false
 
                     print ISM::Default::Option::SoftwareRemove::CalculationTitle
                     text = ISM::Default::Option::SoftwareRemove::CalculationWaitingText
@@ -30,12 +29,12 @@ module ISM
                                                                                                                                         frameIndex,
                                                                                                                                         ISM::Default::Option::SoftwareInstall::CalculationWaitingText)
 
-                    matchingInstalledSoftwares = false
-                    matchingInstalledSoftwaresArray = Array(ISM::SoftwareInformation).new
-
                     #####################
                     #Get matching installed softwares
                     #####################
+                    matchingInstalledSoftwares = false
+                    matchingInstalledSoftwaresArray = Array(ISM::SoftwareInformation).new
+
                     if matching
                         matchingSoftwaresArray.each do |software|
 
@@ -50,12 +49,33 @@ module ISM
                         matchingSoftwaresArray.uniq!
                     end
 
+                    #####################
+                    #Check if requested softwares are not dependencies for other softwares
+                    #####################
+                    requestedSoftwaresAreDependencies = false
+
+                    matchingInstalledSoftwaresArray.each do |software|
+
+                        calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                        Ism.installedSoftwares.each do |installedSoftware|
+
+                            calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+
+                            if installedSoftware.dependencies.includes?(software)
+                                requestedSoftwaresAreDependencies = true
+                                break
+                            end
+                        end
+
+                    end
+
                     uselessSoftwares = Array(ISM::SoftwareInformation).new
 
                     #####################
                     #Get useless softwares
                     #####################
-                    if matchingInstalledSoftwares
+                    if matchingInstalledSoftwares && !requestedSoftwaresAreDependencies
                         Ism.installedSoftwares.each do |installedSoftwares|
 
                             calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
@@ -67,12 +87,12 @@ module ISM
                                 if !installedSoftwares.dependencies.includes?(matchingInstalledSoftwares)
                                     uselessSoftwares << matchingInstalledSoftwares
                                 end
+
                             end
                         end
 
                         uselessSoftwares.uniq!
                     end
-                    ##########################################
 
                     print "#{ISM::Default::Option::SoftwareRemove::CalculationDoneText.colorize(:green)}\n"
 
@@ -81,7 +101,15 @@ module ISM
                         puts ISM::Default::Option::SoftwareRemove::NoInstalledMatchFoundAdvice
                     end
 
-                    if uselessSoftwares.size > 0
+                    if requestedSoftwaresAreDependencies
+                        puts ISM::Default::Option::SoftwareRemove::RequestedSoftwaresAreDependencies
+
+                        #Mettre la liste des softwares qui sont dépendants
+
+                        puts ISM::Default::Option::SoftwareRemove::RequestedSoftwaresAreDependenciesAdvice
+                    end
+
+                    if uselessSoftwares.size > 0 && !requestedSoftwaresAreDependencies
 
                             puts "\n"
 

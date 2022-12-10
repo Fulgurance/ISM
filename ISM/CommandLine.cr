@@ -391,7 +391,7 @@ module ISM
 
                 calculationStartingTime, frameIndex = playCalculationAnimation(calculationStartingTime, frameIndex, text)
 
-                Ism.softwares.each do |software|
+                @softwares.each do |software|
 
                     calculationStartingTime, frameIndex = playCalculationAnimation(calculationStartingTime, frameIndex, text)
 

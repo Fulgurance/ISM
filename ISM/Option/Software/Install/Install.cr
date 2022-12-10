@@ -20,7 +20,6 @@ module ISM
 
                     calculationStartingTime = Time.monotonic
                     frameIndex = 0
-                    reverseAnimation = false
 
                     print ISM::Default::Option::SoftwareInstall::CalculationTitle
                     text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText

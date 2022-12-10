@@ -14,38 +14,14 @@ module ISM
             def start
                 synchronizationStartingTime = Time.monotonic
                 frameIndex = 0
-                reverseAnimation = false
                 
                 print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
                 text = ISM::Default::Option::SoftwareSynchronize::SynchronizationWaitingText
 
                 #Pour chaque dépot, utiliser les branches selon la stabilité voulue (stable, testing ...etc)
                 Ism.ports.each do |port|
-                    currentTime = Time.monotonic
 
-                    if (currentTime - synchronizationStartingTime).milliseconds > 40
-                        if frameIndex >= text.size
-                            reverseAnimation = true
-                        end
-
-                        if frameIndex < 1
-                            reverseAnimation = false
-                        end
-
-                        if reverseAnimation
-                            print "\033[1D"
-                            print " "
-                            print "\033[1D"
-                            frameIndex -= 1
-                        end
-
-                        if !reverseAnimation
-                            print "#{text[frameIndex].colorize(:green)}"
-                            frameIndex += 1
-                        end
-
-                        synchronizationStartingTime = Time.monotonic
-                    end
+                    calculationStartingTime, frameIndex = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, text)
 
                     Process.run("git",  args: ["pull","origin","master"],
                                         chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
