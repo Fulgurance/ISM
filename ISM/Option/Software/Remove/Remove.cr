@@ -53,6 +53,7 @@ module ISM
                     #Check if requested softwares are not dependencies for other softwares
                     #####################
                     requestedSoftwaresAreDependencies = false
+                    requestedSoftwaresAreDependenciesArray = Array(Array(ISM::SoftwareInformation)).new
 
                     matchingInstalledSoftwaresArray.each do |software|
 
@@ -64,7 +65,8 @@ module ISM
 
                             if installedSoftware.dependencies.includes?(software.toSoftwareDependency)
                                 requestedSoftwaresAreDependencies = true
-                                break
+                                ##### NEW
+                                requestedSoftwaresAreDependenciesArray << [installedSoftware, software]
                             end
                         end
 
@@ -105,6 +107,41 @@ module ISM
                         puts ISM::Default::Option::SoftwareRemove::RequestedSoftwaresAreDependencies
 
                         #Mettre la liste des softwares qui sont dépendants
+
+                        ####################################################
+                        puts "\n"
+
+                        requestedSoftwaresAreDependenciesArray.each do |softwares|
+                            softwareText1 = "#{softwares[0].name.colorize(:green)}" + " /" + "#{softwares[0].version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                            optionsText1 = "{ "
+                            softwares[0].options.each do |option|
+                                if option.active
+                                    optionsText1 += "#{option.name.colorize(:red)}"
+                                else
+                                    optionsText1 += "#{option.name.colorize(:blue)}"
+                                end
+                                optionsText1 += " "
+                            end
+                            optionsText1 += "}"
+
+                            softwareText2 = "#{softwares[1].name.colorize(:green)}" + " /" + "#{softwares[1].version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                            optionsText2 = "{ "
+                            softwares[1].options.each do |option|
+                                if option.active
+                                    optionsText2 += "#{option.name.colorize(:red)}"
+                                else
+                                    optionsText2 += "#{option.name.colorize(:blue)}"
+                                end
+                                optionsText2 += " "
+                            end
+                            optionsText2 += "}"
+                            ###############################
+                            puts "\t" + softwareText1 + " " + optionsText1 + " depend of " + softwareText2 + " " + optionsText2 + "\n"
+                        end
+
+                        puts "\n"
+
+                        ####################################################
 
                         puts ISM::Default::Option::SoftwareRemove::RequestedSoftwaresAreDependenciesAdvice
                     end
