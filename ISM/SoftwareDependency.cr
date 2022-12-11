@@ -56,6 +56,10 @@ module ISM
       return dependencyInformation
     end
 
+    def == (other : ISM::SoftwareDependency) : Bool
+        return @name == other.name && @version == other.version && @options == other.options
+    end
+
   end
 
 end
