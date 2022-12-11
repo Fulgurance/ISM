@@ -105,10 +105,6 @@ module ISM
 
                     if requestedSoftwaresAreDependencies
                         puts ISM::Default::Option::SoftwareRemove::RequestedSoftwaresAreDependencies
-
-                        #Mettre la liste des softwares qui sont dépendants
-
-                        ####################################################
                         puts "\n"
 
                         requestedSoftwaresAreDependenciesArray.each do |softwares|
@@ -135,14 +131,11 @@ module ISM
                                 optionsText2 += " "
                             end
                             optionsText2 += "}"
-                            ###############################
+
                             puts "\t" + softwareText1 + " " + optionsText1 + " depend of " + softwareText2 + " " + optionsText2 + "\n"
                         end
 
                         puts "\n"
-
-                        ####################################################
-
                         puts ISM::Default::Option::SoftwareRemove::RequestedSoftwaresAreDependenciesAdvice
                     end
 
@@ -250,7 +243,11 @@ module ISM
 
                     else
                         puts
-                        puts "#{ISM::Default::Option::SoftwareRemove::NotInstalledText.colorize(:green)}"
+                        if requestedSoftwaresAreDependencies
+                            puts "#{ISM::Default::Option::SoftwareRemove::RequestedSoftwaresAreDependenciesText.colorize(:green)}"
+                        else
+                            puts "#{ISM::Default::Option::SoftwareRemove::NotInstalledText.colorize(:green)}"
+                        end
                     end
 
                     ##########################################

@@ -17,6 +17,7 @@ module ISM
                 YesReplyOption = "y"
                 NoReplyOption = "n"
                 NotInstalledText = "All requested softwares are not installed. Task cancelled."
+                RequestedSoftwaresAreDependenciesText = "Removal impossible for some requested softwares. Task cancelled."
                 NoInstalledMatchFound = "No match found with the database for "
                 NoInstalledMatchFoundAdvice = "Maybe it's needed of refresh the database?"
                 RequestedSoftwaresAreDependencies = "Some requested softwares are dependencies for others installed softwares:"
