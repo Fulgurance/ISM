@@ -147,6 +147,16 @@ module ISM
         return "#{Ism.settings.rootPath}/#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}"
     end
 
+    def toSoftwareDependency : ISM::SoftwareDependency
+        softwareDependency = ISM::SoftwareDependency.new
+
+        softwareDependency.name = @name
+        softwareDependency.version = @version
+        softwareDependency.options = @options
+
+        return softwareDependency
+    end
+
     def == (other : ISM::SoftwareInformation) : Bool
         return @name == other.name && @version == other.version && @options == other.options
     end

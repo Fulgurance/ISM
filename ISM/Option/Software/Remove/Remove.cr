@@ -62,7 +62,7 @@ module ISM
 
                             calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
 
-                            if installedSoftware.dependencies.includes?(software)
+                            if installedSoftware.dependencies.includes?(software.toSoftwareDependency)
                                 requestedSoftwaresAreDependencies = true
                                 break
                             end
@@ -76,16 +76,16 @@ module ISM
                     #Get useless softwares
                     #####################
                     if matchingInstalledSoftwares && !requestedSoftwaresAreDependencies
-                        Ism.installedSoftwares.each do |installedSoftwares|
+                        Ism.installedSoftwares.each do |installedSoftware|
 
                             calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
 
-                            matchingInstalledSoftwaresArray.each do |matchingInstalledSoftwares|
+                            matchingInstalledSoftwaresArray.each do |matchingInstalledSoftware|
 
                                 calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
 
-                                if !installedSoftwares.dependencies.includes?(matchingInstalledSoftwares)
-                                    uselessSoftwares << matchingInstalledSoftwares
+                                if !installedSoftware.dependencies.includes?(matchingInstalledSoftware.toSoftwareDependency)
+                                    uselessSoftwares << matchingInstalledSoftware
                                 end
 
                             end
