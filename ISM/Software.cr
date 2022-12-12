@@ -76,7 +76,9 @@ module ISM
 
         def prepare
             Ism.notifyOfPrepare(@information)
-            makeDirectory(mainWorkingDirectory)
+            if !Dir.exists?(buildDirectoryPath)
+                makeDirectory(buildDirectoryPath)
+            end
         end
 
         def moveFile(path : String, newPath : String)
