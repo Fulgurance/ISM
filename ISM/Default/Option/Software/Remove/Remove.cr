@@ -12,6 +12,7 @@ module ISM
                 CalculationTitle = "ISM start to calculate depencies: "
                 CalculationWaitingText = "Checking dependencies tree"
                 CalculationDoneText = "Done !"
+                DependOfText = " depend of "
                 SummaryText = " softwares will be uninstall"
                 UninstallQuestion = "Would you like to uninstall these softwares ?"
                 YesReplyOption = "y"

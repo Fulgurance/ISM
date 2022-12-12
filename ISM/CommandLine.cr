@@ -330,6 +330,14 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorMakeDirectoryText+directory)
         end
 
+        def notifyOfDeleteDirectoryError(directory : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory)
+        end
+
+        def notifyOfDeleteDirectoryRecursivelyError(directory : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryRecursivelyText+directory)
+        end
+
         def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String)
             printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceText1 +
                                     text +

@@ -132,7 +132,7 @@ module ISM
                             end
                             optionsText2 += "}"
 
-                            puts "\t" + softwareText1 + " " + optionsText1 + " depend of " + softwareText2 + " " + optionsText2 + "\n"
+                            puts "\t" + softwareText1 + " " + optionsText1 + ISM::Default::Option::SoftwareRemove::DependOfText + softwareText2 + " " + optionsText2 + "\n"
                         end
 
                         puts "\n"

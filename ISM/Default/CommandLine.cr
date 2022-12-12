@@ -38,6 +38,8 @@ module ISM
             ErrorMoveFileText1 = "Failed to move "
             ErrorMoveFileText2 = " to "
             ErrorMakeDirectoryText = "Failed to make directory "
+            ErrorDeleteDirectoryText = "Failed to delete directory "
+            ErrorDeleteDirectoryRecursivelyText = "Failed to delete directory recursively "
             ErrorFileReplaceText1 = "Failed to replace the occurence "
             ErrorFileReplaceText2 = " to "
             ErrorFileReplaceText3 = " in the file "

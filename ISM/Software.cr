@@ -20,7 +20,10 @@ module ISM
         end
 
         def download
-            Dir.mkdir(workDirectoryPath)
+            if Dir.exists?(workDirectoryPath)
+                deleteDirectoryRecursively(workDirectoryPath)
+            end
+            makeDirectory(workDirectoryPath)
             Ism.notifyOfDownload(@information)
         end
 
@@ -90,6 +93,26 @@ module ISM
             end
         end
 
+        def deleteDirectory(directory : String)
+            begin
+                Dir.delete(directory)
+            rescue error
+                Ism.notifyOfDeleteDirectoryError(directory)
+                pp error
+                exit 1
+            end
+        end
+
+        def deleteDirectoryRecursively(directory : String)
+            begin
+                FileUtils.rm_r(directory)
+            rescue error
+                Ism.notifyOfDeleteDirectoryRecursivelyError(directory)
+                pp error
+                exit 1
+            end
+        end
+
         def fileReplaceText(filePath : String, text : String, newText : String)
             begin
                 content = File.read_lines(filePath)
@@ -146,7 +169,7 @@ module ISM
         def makeSymbolicLink(path : String, targetPath : String)
             begin
                 if File.symlink?(targetPath)
-                    File.delete(targetPath)
+                    deleteFile(targetPath)
                 end
                 FileUtils.ln_sf(path, targetPath)
             rescue error
@@ -266,17 +289,17 @@ module ISM
                 finalDestination = entry.delete_at(1,@information.builtSoftwareDirectoryPath.size)
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
-                        Dir.mkdir(finalDestination)
+                        makeDirectory(finalDestination)
                     end
                 else
-                    FileUtils.cp(entry,finalDestination)
+                    copyFile(entry,finalDestination)
                 end
             end
         end
         
         def clean
             Ism.notifyOfClean(@information)
-            FileUtils.rm_r(workDirectoryPath)
+            deleteDirectoryRecursively(workDirectoryPath)
         end
 
         def uninstall
