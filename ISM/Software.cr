@@ -4,19 +4,25 @@ module ISM
 
         property information : ISM::SoftwareInformation
         property mainSourceDirectoryName : String
+        property buildDirectory : Bool
 
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
             @mainSourceDirectoryName = String.new
+            @buildDirectory = false
         end
 
         def workDirectoryPath : String
             return Ism.settings.sourcesPath+"/"+@information.versionName
         end
 
-        def mainWorkingDirectory : String
+        def mainWorkDirectoryPath : String
             return workDirectoryPath+"/"+@mainSourceDirectoryName
+        end
+
+        def buildDirectoryPath : String
+            return mainWorkDirectoryPath+"/"+"#{@buildDirectory ? "/build" : ""}"
         end
 
         def download
@@ -242,8 +248,8 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
-        def configureSource(arguments : Array(String), path = String.new, buildDirectory = false, configureDirectory = String.new)
-            if buildDirectory
+        def configureSource(arguments : Array(String), path = String.new, configureDirectory = String.new)
+            if @buildDirectory
                 configureCommand = "../#{configureDirectory}/configure "
             else
                 configureCommand = "./#{configureDirectory}/configure "
