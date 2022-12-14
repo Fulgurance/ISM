@@ -93,7 +93,7 @@ module ISM
 
         def makeDirectory(directory : String)
             begin
-                Dir.mkdir(directory)
+                FileUtils.mkdir_p(directory)
             rescue error
                 Ism.notifyOfMakeDirectoryError(directory)
                 pp error
@@ -253,7 +253,7 @@ module ISM
                                     shell: true,
                                     chdir: "#{path}")
             if !process.success?
-                Ism.notifyOfRunScriptError(path)
+                Ism.notifyOfRunScriptError(file, path)
                 exit 1
             end
         end
