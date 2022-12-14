@@ -246,6 +246,18 @@ module ISM
             end
         end
 
+        def runScript(file : String, path : String)
+            process = Process.run(  "./#{file}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: "#{path}")
+            if !process.success?
+                Ism.notifyOfRunScriptError(path)
+                exit 1
+            end
+        end
+
         def configure
             Ism.notifyOfConfigure(@information)
         end

@@ -241,7 +241,7 @@ module ISM
         def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::PrepareText+softwareInformation.name)
         end
-        
+
         def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::ConfigureText+softwareInformation.name)
         end
@@ -309,6 +309,13 @@ module ISM
 
         def notifyOfDeleteAllHiddenFilesRecursivelyError(path : String)
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path)
+        end
+
+        def notifyOfRunScriptError(file : String, path : String)
+            printErrorNotification( ISM::Default::CommandLine::ErrorRunScriptText1 +
+                                    file +
+                                    ISM::Default::CommandLine::ErrorRunScriptText2 +
+                                    path)
         end
 
         def notifyOfConfigureError(sourceName : String)
