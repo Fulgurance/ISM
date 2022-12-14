@@ -246,12 +246,15 @@ module ISM
             end
         end
 
-        def runScript(file : String, path : String)
-            process = Process.run(  "./#{file}",
+        def runScript(file : String, path : String, arguments = Array(String).new)
+            scriptCommand = "./#{file}"
+            scriptCommand += arguments.join(" ")
+
+            process = Process.run(  scriptCommand,
                                     output: :inherit,
                                     error: :inherit,
                                     shell: true,
-                                    chdir: "#{path}")
+                                    chdir: path)
             if !process.success?
                 Ism.notifyOfRunScriptError(file, path)
                 exit 1
@@ -271,10 +274,11 @@ module ISM
 
             configureCommand += arguments.join(" ")
 
-            process = Process.run(configureCommand, output: :inherit,
-                                                    error: :inherit,
-                                                    shell: true,
-                                                    chdir: path)
+            process = Process.run(  configureCommand,
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: path)
             if !process.success?
                 Ism.notifyOfConfigureError(path)
                 exit 1
