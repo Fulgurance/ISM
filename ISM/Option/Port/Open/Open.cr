@@ -17,6 +17,10 @@ module ISM
                 else
                     portName = ARGV[2+Ism.debugLevel].lchop(ARGV[2+Ism.debugLevel][0..ARGV[2+Ism.debugLevel].rindex("/")])
 
+                    if portName[-4..-1] == ".git"
+                        portName = portName[0..-5]
+                    end
+
                     puts    "#{"* ".colorize(:green)}" +
                             ISM::Default::Option::PortOpen::OpenText +
                             portName
