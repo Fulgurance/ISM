@@ -26,11 +26,20 @@ module ISM
         end
 
         def download
+            Ism.notifyOfDownload(@information)
+
             if Dir.exists?(workDirectoryPath)
                 deleteDirectoryRecursively(workDirectoryPath)
             end
             makeDirectory(workDirectoryPath)
-            Ism.notifyOfDownload(@information)
+
+            @information.downloadLinks.each do |link|
+                downloadSource(link)
+            end
+
+            @information.patchesLinks.each do |link|
+                downloadSource(link)
+            end
         end
 
         def downloadSource(link : String)
@@ -50,6 +59,10 @@ module ISM
         
         def extract
             Ism.notifyOfExtract(@information)
+
+            @information.downloadLinks.each do |source|
+                extractSource(source.lchop(source[0..source.rindex("/")]))
+            end
         end
 
         def extractSource(archive : String)
@@ -63,6 +76,9 @@ module ISM
         
         def patch
             Ism.notifyOfPatch(@information)
+            @information.patchesLinks.each do |patch|
+                applyPatch(patch.lchop(patch[0..patch.rindex("/")]))
+            end
         end
         
         def applyPatch(patch : String)
