@@ -9,7 +9,8 @@ module ISM
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
-            @mainSourceDirectoryName = String.new
+            mainSourceLink = @information.downloadLinks[0]
+            @mainSourceDirectoryName = mainSourceLink.lchop(mainSourceLink[0..mainSourceLink.rindex("/")])[0..-5]
             @buildDirectory = false
         end
 
@@ -82,8 +83,8 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            process = Process.run("patch",  args: ["-Np1","-i",patch],
-                                            chdir: workDirectoryPath+"/"+@mainSourceDirectoryName)
+            process = Process.run("patch",  args: ["-Np1","-i","#{workDirectoryPath}/#{patch}"],
+                                            chdir: mainWorkDirectoryPath)
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 exit 1

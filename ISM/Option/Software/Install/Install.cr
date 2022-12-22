@@ -218,7 +218,7 @@ module ISM
                                     puts    "#{"<<".colorize(:light_magenta)}" +
                                             " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                             " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}" +
-                                            "] Installing "+"#{software.name.colorize(:green)}"+"\n\n"
+                                            "] Installing "+"#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"+"\n\n"
 
                                     if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
                                                     software.name + "/" +
