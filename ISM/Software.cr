@@ -9,9 +9,24 @@ module ISM
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
-            mainSourceLink = @information.downloadLinks[0]
-            @mainSourceDirectoryName = mainSourceLink.lchop(mainSourceLink[0..mainSourceLink.rindex("/")])[0..-5]
+            @mainSourceDirectoryName = getMainSourceDirectoryName
             @buildDirectory = false
+        end
+
+        def getMainSourceDirectoryName
+            result = String.new
+
+            if !@information.downloadLinks.empty?
+                result = @information.downloadLinks[0]
+                result = result.lchop(result[0..result.rindex("/")])
+                if result[-7..-1] == ".tar.gz" || result[-7..-1] == ".tar.xz"
+                    result = result[0..-8]
+                end
+                if result[-8..-1] == ".tar.bz2"
+                    result = result[0..-9]
+                end
+            end
+            return result
         end
 
         def workDirectoryPath : String
