@@ -20,10 +20,10 @@ module ISM
                 result = @information.downloadLinks[0]
                 result = result.lchop(result[0..result.rindex("/")])
                 if result[-7..-1] == ".tar.gz" || result[-7..-1] == ".tar.xz"
-                    result = result[0..-8]
+                    result = result[0..-8]+"/"
                 end
                 if result[-8..-1] == ".tar.bz2"
-                    result = result[0..-9]
+                    result = result[0..-9]+"/"
                 end
             end
             return result
