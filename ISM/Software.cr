@@ -30,7 +30,7 @@ module ISM
         end
 
         def workDirectoryPath : String
-            return Ism.settings.sourcesPath+"/"+@information.versionName
+            return Ism.settings.sourcesPath+"/"+@information.name+"/"+@information.version
         end
 
         def mainWorkDirectoryPath : String

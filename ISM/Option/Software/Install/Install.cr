@@ -245,6 +245,7 @@ module ISM
                                     if Dir.exists?(software.builtSoftwareDirectoryPath)
                                         FileUtils.rm_r(software.builtSoftwareDirectoryPath)
                                     end
+
                                     Dir.mkdir_p(software.builtSoftwareDirectoryPath)
 
                                     tasks = <<-CODE
@@ -274,7 +275,17 @@ module ISM
 
                                     File.write("ISM.task", tasks)
 
-                                    process = Process.run("crystal",args: ["ISM.task"],output: :inherit,error: :inherit,)
+                                    if !Dir.exists?("#{ISM::Default::Path::LogsDirectory}/#{software.port}")
+                                        Dir.mkdir_p("#{ISM::Default::Path::LogsDirectory}/#{software.port}")
+                                    end
+
+                                    logFile = File.open("#{ISM::Default::Path::LogsDirectory}/#{software.port}/#{software.versionName}.log","w")
+
+                                    writer = IO::MultiWriter.new(STDOUT,logFile)
+
+                                    process = Process.run("crystal",args: ["ISM.task"],output: writer,error: writer)
+
+                                    logFile.close
 
                                     if !process.success?
                                         break
