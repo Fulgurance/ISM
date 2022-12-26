@@ -75,7 +75,6 @@ module ISM
         
         def extract
             Ism.notifyOfExtract(@information)
-
             @information.downloadLinks.each do |source|
                 extractSource(source.lchop(source[0..source.rindex("/")]))
             end
@@ -93,7 +92,12 @@ module ISM
         def patch
             Ism.notifyOfPatch(@information)
             @information.patchesLinks.each do |patch|
-                applyPatch(patch.lchop(patch[0..patch.rindex("/")]))
+                patchFileName = patch.lchop(patch[0..patch.rindex("/")])
+                if patchFileName[-6..-1] != ".patch"
+                    moveFile("#{workDirectoryPath}/#{patchFileName}","#{workDirectoryPath}/#{patchFileName}.patch")
+                    patchFileName = "#{patchFileName}.patch"
+                end
+                applyPatch(patchFileName)
             end
         end
         
