@@ -209,13 +209,19 @@ module ISM
                 exit 1
             end
         end 
-        
-        def makeSymbolicLink(path : String, targetPath : String)
+
+        def makeLink(path : String, targetPath : String, linkType : Symbol)
             begin
-                if File.symlink?(targetPath)
-                    deleteFile(targetPath)
+                case linkType
+                when :hardLink
+                    FileUtils.ln(path, targetPath)
+                when :symbolicLink
+                    FileUtils.ln_s(path, targetPath)
+                when :symbolicLinkByOverwrite
+                    FileUtils.ln_sf(path, targetPath)
+                else
+                    exit 1
                 end
-                FileUtils.ln_sf(path, targetPath)
             rescue error
                 Ism.notifyOfMakeSymbolicLinkError(path, targetPath)
                 pp error
