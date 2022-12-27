@@ -59,12 +59,14 @@ module ISM
         end
 
         def downloadSource(link : String)
+            result = IO::Memory.new
+
             process = Process.run("wget",   args: [link],
                                             output: :inherit,
-                                            error: :inherit,
+                                            error: result,
                                             chdir: workDirectoryPath)
             if !process.success?
-                Ism.notifyOfDownloadError(link)
+                Ism.notifyOfDownloadError(link, result.to_s)
                 exit 1
             end
         end
@@ -81,10 +83,13 @@ module ISM
         end
 
         def extractSource(archive : String)
+            result = IO::Memory.new
+
             process = Process.run("tar",args: ["-xf", archive],
+                                        error: result,
                                         chdir: workDirectoryPath)
             if !process.success?
-                Ism.notifyOfExtractError(archive)
+                Ism.notifyOfExtractError(archive, result.to_s)
                 exit 1
             end
         end
@@ -102,10 +107,13 @@ module ISM
         end
         
         def applyPatch(patch : String)
+            result = IO::Memory.new
+
             process = Process.run("patch",  args: ["-Np1","-i","#{workDirectoryPath}/#{patch}"],
+                                            error: result,
                                             chdir: mainWorkDirectoryPath)
             if !process.success?
-                Ism.notifyOfApplyPatchError(patch)
+                Ism.notifyOfApplyPatchError(patch, result.to_s)
                 exit 1
             end
         end
@@ -121,8 +129,7 @@ module ISM
             begin
                 FileUtils.mv(path, newPath)
             rescue error
-                Ism.notifyOfMoveFileError(path, newPath)
-                pp error
+                Ism.notifyOfMoveFileError(path, newPath, error)
                 exit 1
             end
         end
@@ -131,8 +138,7 @@ module ISM
             begin
                 FileUtils.mkdir_p(directory)
             rescue error
-                Ism.notifyOfMakeDirectoryError(directory)
-                pp error
+                Ism.notifyOfMakeDirectoryError(directory, error)
                 exit 1
             end
         end
@@ -141,8 +147,7 @@ module ISM
             begin
                 Dir.delete(directory)
             rescue error
-                Ism.notifyOfDeleteDirectoryError(directory)
-                pp error
+                Ism.notifyOfDeleteDirectoryError(directory, error)
                 exit 1
             end
         end
@@ -151,8 +156,7 @@ module ISM
             begin
                 FileUtils.rm_r(directory)
             rescue error
-                Ism.notifyOfDeleteDirectoryRecursivelyError(directory)
-                pp error
+                Ism.notifyOfDeleteDirectoryRecursivelyError(directory, error)
                 exit 1
             end
         end
@@ -171,8 +175,7 @@ module ISM
                     end
                 end
             rescue error
-                Ism.notifyOfFileReplaceTextError(filePath, text, newText)
-                pp error
+                Ism.notifyOfFileReplaceTextError(filePath, text, newText, error)
                 exit 1
             end
         end
@@ -181,8 +184,7 @@ module ISM
             begin
                 content = File.read(filePath)
             rescue error
-                Ism.notifyOfGetFileContentError(filePath)
-                pp error
+                Ism.notifyOfGetFileContentError(filePath, error)
                 exit 1
             end
             return content
@@ -192,8 +194,7 @@ module ISM
             begin
                 File.write(filepath, data)
             rescue error
-                Ism.notifyOfFileWriteDataError(filePath)
-                pp error
+                Ism.notifyOfFileWriteDataError(filePath, error)
                 exit 1
             end
         end
@@ -204,8 +205,7 @@ module ISM
                     file.puts(data)
                 end
             rescue error
-                Ism.notifyOfFileAppendDataError(filePath)
-                pp error
+                Ism.notifyOfFileAppendDataError(filePath, error)
                 exit 1
             end
         end 
@@ -223,8 +223,7 @@ module ISM
                     exit 1
                 end
             rescue error
-                Ism.notifyOfMakeSymbolicLinkError(path, targetPath)
-                pp error
+                Ism.notifyOfMakeSymbolicLinkError(path, targetPath, error)
                 exit 1
             end
         end
@@ -233,8 +232,7 @@ module ISM
             begin
                 FileUtils.cp(path, targetPath)
             rescue error
-                Ism.notifyOfCopyFileError(path, targetPath)
-                pp error
+                Ism.notifyOfCopyFileError(path, targetPath, error)
                 exit 1
             end
         end
@@ -243,8 +241,7 @@ module ISM
             begin
                 FileUtils.cp_r(path, targetPath)
             rescue error
-                Ism.notifyOfCopyDirectoryError(path, targetPath)
-                pp error
+                Ism.notifyOfCopyDirectoryError(path, targetPath, error)
                 exit 1
             end
         end
@@ -253,8 +250,7 @@ module ISM
             begin
                 File.delete(path)
             rescue error
-                Ism.notifyOfDeleteFileError(path)
-                pp error
+                Ism.notifyOfDeleteFileError(path, error)
                 exit 1
             end
         end
@@ -267,8 +263,7 @@ module ISM
                     end
                 end
             rescue error
-                Ism.notifyOfDeleteAllHiddenFilesError(path)
-                pp error
+                Ism.notifyOfDeleteAllHiddenFilesError(path, error)
                 exit 1
             end
         end
@@ -282,23 +277,24 @@ module ISM
                     end
                 end
             rescue error
-                Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path)
-                pp error
+                Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path, error)
                 exit 1
             end
         end
 
         def runScript(file : String, path : String, arguments = Array(String).new)
+            result = IO::Memory.new
+
             scriptCommand = "./#{file}"
             scriptCommand += arguments.join(" ")
 
             process = Process.run(  scriptCommand,
                                     output: :inherit,
-                                    error: :inherit,
+                                    error: result,
                                     shell: true,
                                     chdir: path)
             if !process.success?
-                Ism.notifyOfRunScriptError(file, path)
+                Ism.notifyOfRunScriptError(file, path, result.to_s)
                 exit 1
             end
         end
@@ -308,6 +304,8 @@ module ISM
         end
 
         def configureSource(arguments : Array(String), path = String.new, configureDirectory = String.new)
+            result = IO::Memory.new
+
             if @buildDirectory
                 configureCommand = "../#{configureDirectory}/configure "
             else
@@ -318,11 +316,11 @@ module ISM
 
             process = Process.run(  configureCommand,
                                     output: :inherit,
-                                    error: :inherit,
+                                    error: result,
                                     shell: true,
                                     chdir: path)
             if !process.success?
-                Ism.notifyOfConfigureError(path)
+                Ism.notifyOfConfigureError(path, result.to_s)
                 exit 1
             end
         end
@@ -332,12 +330,14 @@ module ISM
         end
 
         def makeSource(arguments : Array(String), path = String.new)
+            result = IO::Memory.new
+
             process = Process.run("make",   args: arguments,
                                             output: :inherit,
-                                            error: :inherit,
+                                            error: result,
                                             chdir: path)
             if !process.success?
-                Ism.notifyOfMakeError(path)
+                Ism.notifyOfMakeError(path, result.to_s)
                 exit 1
             end
         end

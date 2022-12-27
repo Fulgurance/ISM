@@ -218,8 +218,9 @@ module ISM
             puts "#{"* ".colorize(:green)}" + message
         end
 
-        def printErrorNotification(message : String)
+        def printErrorNotification(message : String, errorMessage : String)
             puts "[" + "#{"!".colorize(:red)}" + "] " + message
+            pp errorMessage
         end
 
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
@@ -266,104 +267,104 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::UninstallText+softwareInformation.name)
         end
 
-        def notifyOfDownloadError(link : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link)
+        def notifyOfDownloadError(link : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link, errorMessage)
         end
 
-        def notifyOfExtractError(archiveName : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorExtractText+archiveName)
+        def notifyOfExtractError(archiveName : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorExtractText+archiveName, errorMessage)
         end
 
-        def notifyOfApplyPatchError(patchName : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName)
+        def notifyOfApplyPatchError(patchName : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName, errorMessage)
         end
 
-        def notifyOfMakeSymbolicLinkError(path : String, targetPath : String)
+        def notifyOfMakeSymbolicLinkError(path : String, targetPath : String, errorMessage : String)
             printErrorNotification( ISM::Default::CommandLine::ErrorMakeSymbolicLinkText1 +
                                     path +
                                     ISM::Default::CommandLine::ErrorMakeSymbolicLinkText2 +
-                                    targetPath)
+                                    targetPath, errorMessage)
         end
 
-        def notifyOfCopyFileError(path : String, targetPath : String)
+        def notifyOfCopyFileError(path : String, targetPath : String, errorMessage : String)
             printErrorNotification(ISM::Default::CommandLine::ErrorCopyFileText1 +
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyFileText2 +
-                                   targetPath)
+                                   targetPath, errorMessage)
         end
 
-        def notifyOfCopyDirectoryError(path : String, targetPath : String)
+        def notifyOfCopyDirectoryError(path : String, targetPath : String, errorMessage : String)
             printErrorNotification(ISM::Default::CommandLine::ErrorCopyDirectoryText1 +
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyDirectoryText2 +
-                                   targetPath)
+                                   targetPath, errorMessage)
         end
 
-        def notifyOfDeleteFileError(path : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path)
+        def notifyOfDeleteFileError(path : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, errorMessage)
         end
 
-        def notifyOfDeleteAllHiddenFilesError(path : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesText+path)
+        def notifyOfDeleteAllHiddenFilesError(path : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesText+path, errorMessage)
         end
 
-        def notifyOfDeleteAllHiddenFilesRecursivelyError(path : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path)
+        def notifyOfDeleteAllHiddenFilesRecursivelyError(path : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, errorMessage)
         end
 
-        def notifyOfRunScriptError(file : String, path : String)
+        def notifyOfRunScriptError(file : String, path : String, errorMessage : String)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunScriptText1 +
                                     file +
                                     ISM::Default::CommandLine::ErrorRunScriptText2 +
-                                    path)
+                                    path, errorMessage)
         end
 
-        def notifyOfConfigureError(sourceName : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName)
+        def notifyOfConfigureError(sourceName : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName, errorMessage)
         end
 
-        def notifyOfMakeError(path : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorMakeText+path)
+        def notifyOfMakeError(path : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorMakeText+path, errorMessage)
         end
 
-        def notifyOfMoveFileError(path : String, newPath : String)
+        def notifyOfMoveFileError(path : String, newPath : String, errorMessage : String)
             printErrorNotification( ISM::Default::CommandLine::ErrorMoveFileText1 +
                                     path +
                                     ISM::Default::CommandLine::ErrorMoveFileText2 +
-                                    newPath)
+                                    newPath, errorMessage)
         end
 
-        def notifyOfMakeDirectoryError(directory : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorMakeDirectoryText+directory)
+        def notifyOfMakeDirectoryError(directory : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorMakeDirectoryText+directory, errorMessage)
         end
 
-        def notifyOfDeleteDirectoryError(directory : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory)
+        def notifyOfDeleteDirectoryError(directory : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory, errorMessage)
         end
 
-        def notifyOfDeleteDirectoryRecursivelyError(directory : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryRecursivelyText+directory)
+        def notifyOfDeleteDirectoryRecursivelyError(directory : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryRecursivelyText+directory, errorMessage)
         end
 
-        def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String)
+        def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String, errorMessage : String)
             printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceText1 +
                                     text +
                                     ISM::Default::CommandLine::ErrorFileReplaceText2 +
                                     newText +
                                     ISM::Default::CommandLine::ErrorFileReplaceText3 +
-                                    filePath)
+                                    filePath, errorMessage)
         end
 
-        def notifyOfGetFileContentError(filePath : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath)
+        def notifyOfGetFileContentError(filePath : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, errorMessage)
         end
         
-        def notifyOfFileWriteDataError(filePath : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorFileWriteDataText+filePath)
+        def notifyOfFileWriteDataError(filePath : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorFileWriteDataText+filePath, errorMessage)
         end
 
-        def notifyOfFileAppendDataError(filePath : String)
-            printErrorNotification(ISM::Default::CommandLine::ErrorFileAppendDataText+filePath)
+        def notifyOfFileAppendDataError(filePath : String, errorMessage : String)
+            printErrorNotification(ISM::Default::CommandLine::ErrorFileAppendDataText+filePath, errorMessage)
         end
 
         def playCalculationAnimation(calculationStartingTime, frameIndex, text)
