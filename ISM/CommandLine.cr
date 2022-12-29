@@ -221,9 +221,8 @@ module ISM
         def printErrorNotification(message : String, error)
             puts "[" + "#{"!".colorize(:red)}" + "] " + message
             if typeof(error) == Exception
+                puts "[" + "#{"!".colorize(:red)}" + "] "
                 pp error
-            else
-                puts "[" + "#{"!".colorize(:red)}" + "] " + error
             end
         end
 

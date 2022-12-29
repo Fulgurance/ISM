@@ -59,14 +59,14 @@ module ISM
         end
 
         def downloadSource(link : String)
-            result = IO::Memory.new
+            #result = IO::Memory.new
 
             process = Process.run("wget",   args: [link],
                                             output: :inherit,
-                                            error: result,
+                                            error: :inherit,#result,
                                             chdir: workDirectoryPath)
             if !process.success?
-                Ism.notifyOfDownloadError(link, result.to_s)
+                Ism.notifyOfDownloadError(link)#, result.to_s)
                 exit 1
             end
         end
@@ -83,13 +83,13 @@ module ISM
         end
 
         def extractSource(archive : String)
-            result = IO::Memory.new
+            #result = IO::Memory.new
 
             process = Process.run("tar",args: ["-xf", archive],
-                                        error: result,
+                                        error: :inherit,#result,
                                         chdir: workDirectoryPath)
             if !process.success?
-                Ism.notifyOfExtractError(archive, result.to_s)
+                Ism.notifyOfExtractError(archive)#, result.to_s)
                 exit 1
             end
         end
@@ -107,13 +107,13 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            result = IO::Memory.new
+            #result = IO::Memory.new
 
             process = Process.run("patch",  args: ["-Np1","-i","#{workDirectoryPath}/#{patch}"],
-                                            error: result,
+                                            error: :inherit,#result,
                                             chdir: mainWorkDirectoryPath)
             if !process.success?
-                Ism.notifyOfApplyPatchError(patch, result.to_s)
+                Ism.notifyOfApplyPatchError(patch)#, result.to_s)
                 exit 1
             end
         end
@@ -283,18 +283,18 @@ module ISM
         end
 
         def runScript(file : String, path : String, arguments = Array(String).new)
-            result = IO::Memory.new
+            #result = IO::Memory.new
 
             scriptCommand = "./#{file}"
             scriptCommand += arguments.join(" ")
 
             process = Process.run(  scriptCommand,
                                     output: :inherit,
-                                    error: result,
+                                    error: :inherit,#result,
                                     shell: true,
                                     chdir: path)
             if !process.success?
-                Ism.notifyOfRunScriptError(file, path, result.to_s)
+                Ism.notifyOfRunScriptError(file, path)#, result.to_s)
                 exit 1
             end
         end
@@ -304,7 +304,7 @@ module ISM
         end
 
         def configureSource(arguments : Array(String), path = String.new, configureDirectory = String.new)
-            result = IO::Memory.new
+            #result = IO::Memory.new
 
             if @buildDirectory
                 configureCommand = "../#{configureDirectory}/configure "
@@ -316,11 +316,11 @@ module ISM
 
             process = Process.run(  configureCommand,
                                     output: :inherit,
-                                    error: result,
+                                    error: :inherit,#result,
                                     shell: true,
                                     chdir: path)
             if !process.success?
-                Ism.notifyOfConfigureError(path, result.to_s)
+                Ism.notifyOfConfigureError(path)#, result.to_s)
                 exit 1
             end
         end
@@ -330,14 +330,14 @@ module ISM
         end
 
         def makeSource(arguments : Array(String), path = String.new)
-            result = IO::Memory.new
+            #result = IO::Memory.new
 
             process = Process.run("make",   args: arguments,
                                             output: :inherit,
-                                            error: result,
+                                            error: :inherit,#result,
                                             chdir: path)
             if !process.success?
-                Ism.notifyOfMakeError(path, result.to_s)
+                Ism.notifyOfMakeError(path)#, result.to_s)
                 exit 1
             end
         end
