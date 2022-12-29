@@ -270,86 +270,86 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::UninstallText+softwareInformation.name)
         end
 
-        def notifyOfDownloadError(link : String, error)
+        def notifyOfDownloadError(link : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link, error)
         end
 
-        def notifyOfExtractError(archiveName : String, error)
+        def notifyOfExtractError(archiveName : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorExtractText+archiveName, error)
         end
 
-        def notifyOfApplyPatchError(patchName : String, error)
+        def notifyOfApplyPatchError(patchName : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName, error)
         end
 
-        def notifyOfMakeSymbolicLinkError(path : String, targetPath : String, error)
+        def notifyOfMakeSymbolicLinkError(path : String, targetPath : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorMakeSymbolicLinkText1 +
                                     path +
                                     ISM::Default::CommandLine::ErrorMakeSymbolicLinkText2 +
                                     targetPath, error)
         end
 
-        def notifyOfCopyFileError(path : String, targetPath : String, error)
+        def notifyOfCopyFileError(path : String, targetPath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorCopyFileText1 +
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyFileText2 +
                                    targetPath, error)
         end
 
-        def notifyOfCopyDirectoryError(path : String, targetPath : String, error)
+        def notifyOfCopyDirectoryError(path : String, targetPath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorCopyDirectoryText1 +
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyDirectoryText2 +
                                    targetPath, error)
         end
 
-        def notifyOfDeleteFileError(path : String, error)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, errorMessage)
+        def notifyOfDeleteFileError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, error)
         end
 
-        def notifyOfDeleteAllHiddenFilesError(path : String, error)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesText+path, errorMessage)
+        def notifyOfDeleteAllHiddenFilesError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesText+path, error)
         end
 
-        def notifyOfDeleteAllHiddenFilesRecursivelyError(path : String, error)
+        def notifyOfDeleteAllHiddenFilesRecursivelyError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, error)
         end
 
-        def notifyOfRunScriptError(file : String, path : String, error)
+        def notifyOfRunScriptError(file : String, path : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunScriptText1 +
                                     file +
                                     ISM::Default::CommandLine::ErrorRunScriptText2 +
                                     path, error)
         end
 
-        def notifyOfConfigureError(sourceName : String, error)
+        def notifyOfConfigureError(sourceName : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName, error)
         end
 
-        def notifyOfMakeError(path : String, error)
+        def notifyOfMakeError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorMakeText+path, error)
         end
 
-        def notifyOfMoveFileError(path : String, newPath : String, error)
+        def notifyOfMoveFileError(path : String, newPath : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorMoveFileText1 +
                                     path +
                                     ISM::Default::CommandLine::ErrorMoveFileText2 +
                                     newPath, error)
         end
 
-        def notifyOfMakeDirectoryError(directory : String, error)
+        def notifyOfMakeDirectoryError(directory : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorMakeDirectoryText+directory, error)
         end
 
-        def notifyOfDeleteDirectoryError(directory : String, error)
+        def notifyOfDeleteDirectoryError(directory : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory, error)
         end
 
-        def notifyOfDeleteDirectoryRecursivelyError(directory : String, error)
+        def notifyOfDeleteDirectoryRecursivelyError(directory : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryRecursivelyText+directory, error)
         end
 
-        def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String, error)
+        def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceText1 +
                                     text +
                                     ISM::Default::CommandLine::ErrorFileReplaceText2 +
@@ -358,15 +358,15 @@ module ISM
                                     filePath, error)
         end
 
-        def notifyOfGetFileContentError(filePath : String, error)
+        def notifyOfGetFileContentError(filePath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
         end
         
-        def notifyOfFileWriteDataError(filePath : String, error)
+        def notifyOfFileWriteDataError(filePath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorFileWriteDataText+filePath, error)
         end
 
-        def notifyOfFileAppendDataError(filePath : String, error)
+        def notifyOfFileAppendDataError(filePath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorFileAppendDataText+filePath, error)
         end
 
