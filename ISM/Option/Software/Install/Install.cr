@@ -242,11 +242,11 @@ module ISM
                                                     software.version + "/" +
                                                     software.version + ".cr"
 
-                                    if Dir.exists?(software.builtSoftwareDirectoryPath)
-                                        FileUtils.rm_r(software.builtSoftwareDirectoryPath)
+                                    if Dir.exists?(Ism.settings.rootPath+"/"+software.builtSoftwareDirectoryPath)
+                                        FileUtils.rm_r(Ism.settings.rootPath+"/"+software.builtSoftwareDirectoryPath)
                                     end
 
-                                    Dir.mkdir_p(software.builtSoftwareDirectoryPath)
+                                    Dir.mkdir_p(Ism.settings.rootPath+"/"+software.builtSoftwareDirectoryPath)
 
                                     tasks = <<-CODE
                                     require "./RequiredLibraries"

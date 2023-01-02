@@ -296,9 +296,15 @@ module ISM
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+"/"+ISM::Default::Filename::Task, chrootTasks)
 
+            process = Process.run("chmod",  args: [ "+x",
+                                                    "#{Ism.settings.rootPath}/#{ISM::Default::Filename::Task}"],
+                                            output: :inherit,
+                                            error: :inherit,
+                                            shell: true)
+
             process = Process.run("sudo",   args: [ "chroot",
                                                     Ism.settings.rootPath,
-                                                    "./#{ISM::Default::Filename::Task}"]
+                                                    "./#{ISM::Default::Filename::Task}"],
                                             output: :inherit,
                                             error: :inherit,
                                             shell: true)
@@ -311,7 +317,11 @@ module ISM
         end
 
         def configureSource(arguments : Array(String), path = String.new, configureDirectory = String.new)
-            @buildDirectory ? configureCommand = "../#{configureDirectory}/configure " : configureCommand = "./#{configureDirectory}/configure "
+            if @buildDirectory
+                configureCommand = "../#{configureDirectory}/configure "
+            else
+                configureCommand = "./#{configureDirectory}/configure "
+            end
 
             configureCommand += arguments.join(" ")
 
@@ -344,7 +354,7 @@ module ISM
             if @useChroot
                 chrootMakeCommand = <<-CODE
                 #!/bin/bash
-                cd #{path} && make #{arguments}
+                cd #{path} && make #{arguments.join(" ")}
                 CODE
 
                 process = runChrootTasks(chrootMakeCommand)
@@ -367,10 +377,12 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            filesList = Dir.glob("#{@information.builtSoftwareDirectoryPath}/**/*")
+            path = "#{Ism.settings.rootPath}/#{@information.builtSoftwareDirectoryPath}"
+
+            filesList = Dir.glob("#{path}/**/*")
 
             filesList.each do |entry|
-                finalDestination = entry.delete_at(1,@information.builtSoftwareDirectoryPath.size)
+                finalDestination = entry.delete_at(1,path.size)
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
                         makeDirectory(finalDestination)

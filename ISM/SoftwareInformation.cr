@@ -144,7 +144,7 @@ module ISM
     end
 
     def builtSoftwareDirectoryPath
-        return "#{Ism.settings.rootPath}/#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}"
+        return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}"
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency
