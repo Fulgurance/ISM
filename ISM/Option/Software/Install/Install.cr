@@ -273,7 +273,7 @@ module ISM
 
                                     CODE
 
-                                    File.write("ISM.task", tasks)
+                                    File.write(ISM::Default::Filename::Task, tasks)
 
                                     if !Dir.exists?("#{ISM::Default::Path::LogsDirectory}/#{software.port}")
                                         Dir.mkdir_p("#{ISM::Default::Path::LogsDirectory}/#{software.port}")

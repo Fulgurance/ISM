@@ -5,12 +5,14 @@ module ISM
         property information : ISM::SoftwareInformation
         property mainSourceDirectoryName : String
         property buildDirectory : Bool
+        property useChroot : Bool
 
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
             @mainSourceDirectoryName = getMainSourceDirectoryName
             @buildDirectory = false
+            @useChroot = false
         end
 
         def getMainSourceDirectoryName
@@ -30,7 +32,7 @@ module ISM
         end
 
         def workDirectoryPath : String
-            return Ism.settings.sourcesPath+"/"+@information.name+"/"+@information.version
+            return @useChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+"/"+@information.name+"/"+@information.version
         end
 
         def mainWorkDirectoryPath : String
@@ -59,14 +61,12 @@ module ISM
         end
 
         def downloadSource(link : String)
-            #result = IO::Memory.new
-
             process = Process.run("wget",   args: [link],
                                             output: :inherit,
-                                            error: :inherit,#result,
+                                            error: :inherit,
                                             chdir: workDirectoryPath)
             if !process.success?
-                Ism.notifyOfDownloadError(link)#, result.to_s)
+                Ism.notifyOfDownloadError(link)
                 exit 1
             end
         end
@@ -83,13 +83,11 @@ module ISM
         end
 
         def extractSource(archive : String)
-            #result = IO::Memory.new
-
             process = Process.run("tar",args: ["-xf", archive],
-                                        error: :inherit,#result,
+                                        error: :inherit,
                                         chdir: workDirectoryPath)
             if !process.success?
-                Ism.notifyOfExtractError(archive)#, result.to_s)
+                Ism.notifyOfExtractError(archive)
                 exit 1
             end
         end
@@ -107,13 +105,11 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            #result = IO::Memory.new
-
             process = Process.run("patch",  args: ["-Np1","-i","#{workDirectoryPath}/#{patch}"],
-                                            error: :inherit,#result,
+                                            error: :inherit,
                                             chdir: mainWorkDirectoryPath)
             if !process.success?
-                Ism.notifyOfApplyPatchError(patch)#, result.to_s)
+                Ism.notifyOfApplyPatchError(patch)
                 exit 1
             end
         end
@@ -283,20 +279,31 @@ module ISM
         end
 
         def runScript(file : String, path : String, arguments = Array(String).new)
-            #result = IO::Memory.new
-
             scriptCommand = "./#{file}"
             scriptCommand += arguments.join(" ")
 
             process = Process.run(  scriptCommand,
                                     output: :inherit,
-                                    error: :inherit,#result,
+                                    error: :inherit,
                                     shell: true,
                                     chdir: path)
             if !process.success?
-                Ism.notifyOfRunScriptError(file, path)#, result.to_s)
+                Ism.notifyOfRunScriptError(file, path)
                 exit 1
             end
+        end
+
+        def runChrootTasks(chrootTasks) : Process::Status
+            File.write(Ism.settings.rootPath+"/"+ISM::Default::Filename::Task, chrootTasks)
+
+            process = Process.run("sudo",   args: [ "chroot",
+                                                    Ism.settings.rootPath,
+                                                    "./#{ISM::Default::Filename::Task}"]
+                                            output: :inherit,
+                                            error: :inherit,
+                                            shell: true)
+
+            return process
         end
 
         def configure
@@ -304,23 +311,27 @@ module ISM
         end
 
         def configureSource(arguments : Array(String), path = String.new, configureDirectory = String.new)
-            #result = IO::Memory.new
-
-            if @buildDirectory
-                configureCommand = "../#{configureDirectory}/configure "
-            else
-                configureCommand = "./#{configureDirectory}/configure "
-            end
+            @buildDirectory ? configureCommand = "../#{configureDirectory}/configure " : configureCommand = "./#{configureDirectory}/configure "
 
             configureCommand += arguments.join(" ")
 
-            process = Process.run(  configureCommand,
-                                    output: :inherit,
-                                    error: :inherit,#result,
-                                    shell: true,
-                                    chdir: path)
+            if @useChroot
+                chrootConfigureCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{configureCommand}
+                CODE
+
+                process = runChrootTasks(chrootConfigureCommand)
+            else
+                process = Process.run(  configureCommand,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path)
+            end
+
             if !process.success?
-                Ism.notifyOfConfigureError(path)#, result.to_s)
+                Ism.notifyOfConfigureError(path)
                 exit 1
             end
         end
@@ -330,14 +341,21 @@ module ISM
         end
 
         def makeSource(arguments : Array(String), path = String.new)
-            #result = IO::Memory.new
+            if @useChroot
+                chrootMakeCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && make #{arguments}
+                CODE
 
-            process = Process.run("make",   args: arguments,
-                                            output: :inherit,
-                                            error: :inherit,#result,
-                                            chdir: path)
+                process = runChrootTasks(chrootMakeCommand)
+            else
+                process = Process.run("make",   args: arguments,
+                                                output: :inherit,
+                                                error: :inherit,
+                                                chdir: path)
+            end
             if !process.success?
-                Ism.notifyOfMakeError(path)#, result.to_s)
+                Ism.notifyOfMakeError(path)
                 exit 1
             end
         end
