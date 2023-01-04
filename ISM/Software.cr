@@ -280,9 +280,9 @@ module ISM
 
         def runScript(file : String, path : String, arguments = Array(String).new)
             scriptCommand = "./#{file}"
-            scriptCommand += arguments.join(" ")
 
             process = Process.run(  scriptCommand,
+                                    args: arguments,
                                     output: :inherit,
                                     error: :inherit,
                                     shell: true,
