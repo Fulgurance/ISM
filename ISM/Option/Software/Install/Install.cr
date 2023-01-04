@@ -303,7 +303,7 @@ module ISM
 
                                     Ism.addInstalledSoftware(targetPath, installedFiles)
 
-                                    FileUtils.rm_r(software.builtSoftwareDirectoryPath)
+                                    FileUtils.rm_r(Ism.settings.rootPath+"/"+software.builtSoftwareDirectoryPath)
 
                                     puts
                                     puts    "#{software.name.colorize(:green)}" +
