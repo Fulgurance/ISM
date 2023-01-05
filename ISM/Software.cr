@@ -43,6 +43,10 @@ module ISM
             return mainWorkDirectoryPath+"/"+"#{@buildDirectory ? "/build" : ""}"
         end
 
+        def builtSoftwareDirectoryPath : String
+            return @useChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}/#{@information.builtSoftwareDirectoryPath}"
+        end
+
         def download
             Ism.notifyOfDownload(@information)
 
@@ -377,12 +381,10 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            path = "#{Ism.settings.rootPath}/#{@information.builtSoftwareDirectoryPath}"
-
-            filesList = Dir.glob("#{path}/**/*")
+            filesList = Dir.glob("#{builtSoftwareDirectoryPath}/**/*")
 
             filesList.each do |entry|
-                finalDestination = entry.delete_at(1,path.size)
+                finalDestination = entry.delete_at(1,builtSoftwareDirectoryPath.size)
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
                         makeDirectory(finalDestination)
