@@ -77,16 +77,17 @@ module ISM
         
         def check
             Ism.notifyOfCheck(@information)
-            @information.downloadLinks.each.with_index do |source, index|
-                checkSource(source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
+            @information.downloadLinks.each_with_index do |source, index|
+                checkSource(workDirectoryPath+"/"+source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
             end
         end
 
         def checkSource(archive : String, md5sum : String)
             digest = Digest::MD5.new
             digest.file(archive)
+            archiveMd5sum = digest.hexfinal
 
-            if digest.hexfinal != md5sum
+            if archiveMd5sum != md5sum
                 Ism.notifyOfCheckError(archive, md5sum)
                 exit 1
             end
