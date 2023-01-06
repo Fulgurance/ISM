@@ -77,7 +77,7 @@ module ISM
         
         def check
             Ism.notifyOfCheck(@information)
-            @information.downloadLinks.each do |source, index|
+            @information.downloadLinks.each.with_index do |source, index|
                 checkSource(source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
             end
         end
