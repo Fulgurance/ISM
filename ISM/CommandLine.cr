@@ -274,6 +274,13 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link, error)
         end
 
+        def notifyOfCheckError(archive : String, md5sum : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorCheckText1 +
+                                    archive +
+                                    ISM::Default::CommandLine::ErrorCheckText2 +
+                                    md5sum, error)
+        end
+
         def notifyOfExtractError(archiveName : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorExtractText+archiveName, error)
         end

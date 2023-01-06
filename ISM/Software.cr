@@ -77,6 +77,19 @@ module ISM
         
         def check
             Ism.notifyOfCheck(@information)
+            @information.downloadLinks.each do |source, index|
+                checkSource(source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
+            end
+        end
+
+        def checkSource(archive : String, md5sum : String)
+            digest = Digest::MD5.new
+            digest.file(archive)
+
+            if digest.hexfinal != md5sum
+                Ism.notifyOfCheckError(archive, md5sum)
+                exit 1
+            end
         end
         
         def extract

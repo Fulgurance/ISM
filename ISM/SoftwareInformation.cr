@@ -24,8 +24,7 @@ module ISM
         description : String,
         website : String,
         downloadLinks : Array(String),
-        signatureLinks : Array(String),
-        shasumLinks : Array(String),
+        md5sums : Array(String),
         patchesLinks : Array(String),
         installedFiles : Array(String),
         dependencies : Array(Dependency),
@@ -40,8 +39,7 @@ module ISM
     property description : String
     property website : String
     property downloadLinks : Array(String)
-    property signatureLinks : Array(String)
-    property shasumLinks : Array(String)
+    property md5sums : Array(String)
     property patchesLinks : Array(String)
     property dependencies : Array(ISM::SoftwareDependency)
     property options : Array(ISM::SoftwareOption)
@@ -55,8 +53,7 @@ module ISM
         @description = String.new
         @website = String.new
         @downloadLinks = Array(String).new
-        @signatureLinks = Array(String).new
-        @shasumLinks = Array(String).new
+        @md5sums = Array(String).new
         @patchesLinks = Array(String).new
         @installedFiles = Array(String).new
         @dependencies = Array(ISM::SoftwareDependency).new
@@ -73,8 +70,7 @@ module ISM
       @description = information.description
       @website = information.website
       @downloadLinks = information.downloadLinks
-      @signatureLinks = information.signatureLinks
-      @shasumLinks = information.shasumLinks
+      @md5sums = information.md5sums
       @patchesLinks = information.patchesLinks
       @installedFiles = information.installedFiles
 
@@ -127,8 +123,7 @@ module ISM
                                         @description,
                                         @website,
                                         @downloadLinks,
-                                        @signatureLinks,
-                                        @shasumLinks,
+                                        @md5sums,
                                         @patchesLinks,
                                         @installedFiles,
                                         dependencies,

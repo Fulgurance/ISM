@@ -22,6 +22,8 @@ module ISM
             CleanText = "Cleaning "
             UninstallText = "Uninstalling "
             ErrorDownloadText = "Failed to download from "
+            ErrorCheckText1 = "Failed check because the md5sum digest of "
+            ErrorCheckText2 = " doesn't match with the given md5sum value "
             ErrorExtractText = "Failed to extract the archive "
             ErrorApplyPatchText = "Failed to apply the patch "
             ErrorMakeSymbolicLinkText1 = "Failed to make symbolic link from "
