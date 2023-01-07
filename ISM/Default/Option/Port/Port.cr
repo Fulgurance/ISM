@@ -10,7 +10,8 @@ module ISM
                 LongText = "port"
                 Description = "Manage ISM ports"
                 Options = [ ISM::Option::PortOpen.new,
-                            ISM::Option::PortClose.new]
+                            ISM::Option::PortClose.new,
+                            ISM::Option::PortSetTargetVersion.new]
 
             end
         end
