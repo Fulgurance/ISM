@@ -14,26 +14,36 @@ module ISM
             def start
                 puts ISM::Default::CommandLine::Title
 
-                versionName = String.new
-
                 result = IO::Memory.new
-                process = Process.run("git",   args: [  "describe",
+                process = Process.run("git",args: [  "describe",
                                                         "--tags"],
-                                                            output: result)
+                                            output: result)
 
                 snapshot = process.success?
 
+                versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
+                versionName = result.to_s.strip
+
                 if !snapshot
                     result.clear
+
                     process = Process.run("git",args: [ "branch",
                                                         "--show-current"],
-                                                            output: result)
+                                                output: result)
+
+                    versionName = result.to_s.strip
+                    result.clear
+
+                    process = Process.run("git",args: [ "rev-parse",
+                                                        "HEAD"],
+                                                output: result)
+
+                    versionName = versionName+"-"+result.to_s.strip
                 end
 
-                versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
-                versionName = versionPrefix + "#{result.to_s.colorize(:green)}"
+                version = versionPrefix + "#{versionName.colorize(:green)}"
 
-                puts versionName
+                puts version
             end
 
         end
