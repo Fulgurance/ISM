@@ -398,7 +398,7 @@ module ISM
             filesList = Dir.glob("#{builtSoftwareDirectoryPath}/**/*")
 
             filesList.each do |entry|
-                finalDestination = entry.delete_at(1,builtSoftwareDirectoryPath.size)
+                finalDestination = entry.delete_at(1,builtSoftwareDirectoryPath.size-1)
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
                         makeDirectory(finalDestination)
