@@ -9,7 +9,6 @@ module ISM
         property softwares : Array(ISM::AvailableSoftware)
         property installedSoftwares : Array(ISM::SoftwareInformation)
         property ports : Array(ISM::Port)
-        property version : ISM::Version
 
         def initialize
             @debugLevel = ISM::Default::CommandLine::DebugLevel
@@ -19,7 +18,6 @@ module ISM
             @softwares = Array(ISM::AvailableSoftware).new
             @installedSoftwares = Array(ISM::SoftwareInformation).new
             @ports = Array(ISM::Port).new
-            @version = ISM::Version.new
         end
 
         def start
@@ -27,7 +25,6 @@ module ISM
             loadInstalledSoftwareDatabase
             loadPortsDatabase
             loadSettingsFiles
-            version.loadVersionFile
             checkEnteredArguments
         end
 

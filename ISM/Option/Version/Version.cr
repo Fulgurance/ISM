@@ -13,12 +13,27 @@ module ISM
 
             def start
                 puts ISM::Default::CommandLine::Title
-                puts    Ism.version.stage + "-" +
-                        "#{Ism.version.majorVersion.colorize(:green)}" +
-                        "#{".".colorize(:green)}" +
-                        "#{Ism.version.minorVersion.colorize(:green)}" +
-                        "#{".".colorize(:green)}" +
-                        "#{Ism.version.patchVersion.colorize(:green)}"
+
+                versionName = String.new
+
+                result = IO::Memory.new
+                process = Process.run("git",   args: [  "describe",
+                                                        "--tags"],
+                                                            output: result)
+
+                snapshot = process.success?
+
+                if !snapshot
+                    result.clear
+                    process = Process.run("git",args: [ "branch",
+                                                        "--show-current"],
+                                                            output: result)
+                end
+
+                versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
+                versionName = versionPrefix + "#{result.to_s.colorize(:green)}"
+
+                puts versionName
             end
 
         end
