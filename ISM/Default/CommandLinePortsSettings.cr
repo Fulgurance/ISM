@@ -4,7 +4,7 @@ module ISM
 
         module CommandLinePortsSettings
 
-            TargetVersion = "none"
+            TargetVersion = "master"
             PortsSettingsFilePath = "./Settings/ISM/PortsSettings.json"
 
         end
