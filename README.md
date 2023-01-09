@@ -4,6 +4,8 @@ ISM or Ingenius System Manager is an extremely advanced tool to build and manage
 ISM is not only a tool to manage and update software. It facilitates the way to configure the system,
 enable specific options for each packages, change Linux variables and settings... etc
 
+***Guide***: https://github.com/Fulgurance/ISM/wiki/Guide
+
 ## Usage
 
 You can see main functionnalities when you just type ism in a terminal:
@@ -16,6 +18,7 @@ Ingenius System Manager
         -p      port    Manage ISM ports
         -sy     system  Configure the system settings
         -se     settings        Configure ISM settings
+        -d      debug   Enable debug mode to track any error
 ```
 
 ```
@@ -39,6 +42,7 @@ user $ ism port
 Manage ISM ports
         -o      open    Open the specified port
         -c      close   Close the specified port
+        -stv    settargetversion        Set the target version for all ports, based on a ISM version
 ```
 
 ```
@@ -50,14 +54,13 @@ Configure the system settings
 ```
 user $ ism settings
 Configure ISM settings
+        -s      show    Show the current settings
         -sa     setarchitecture Set the default target architecture for the compiler
         -sbo    setbuildoptions Set the default CPU flags for the compiler
         -smo    setmakeoptions  Set the default parallel make jobs number for the compiler
         -srp    setrootpath     Set the default root path where to install softwares
-        -ssp    setsourcespath  Set the default path where ISM will download softwares sources
         -ssn    setsystemname   Set the name of the future installed system
         -stn    settargetname   Set the default machine target for the compiler
-        -stp    settoolspath    Set the default path where ISM will install the tools
 ```
 
 ISM is made to use all of the settings, for the compilation as well and pass all wanted arguments,
