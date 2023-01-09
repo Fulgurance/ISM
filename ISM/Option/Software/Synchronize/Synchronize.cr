@@ -25,6 +25,7 @@ module ISM
 
                     until process.terminated?
                         calculationStartingTime, frameIndex = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, text)
+                        sleep 0
                     end
 
                 end

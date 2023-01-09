@@ -31,6 +31,7 @@ module ISM
 
                             until process.terminated?
                                 calculationStartingTime, frameIndex = Ism.playCalculationAnimation(setStartingTime, frameIndex, text)
+                                sleep 0
                             end
 
                             validVersion = !process.error?
@@ -40,6 +41,8 @@ module ISM
                             end
                         end
                     end
+
+                    puts
 
                     if validVersion
                         Ism.portsSettings.setTargetVersion(targetVersion)
