@@ -21,10 +21,6 @@ module ISM
                         portName = portName[0..-5]
                     end
 
-                    puts    "#{"* ".colorize(:green)}" +
-                            ISM::Default::Option::PortOpen::OpenText +
-                            portName
-
                     port = ISM::Port.new(portName,ARGV[2+Ism.debugLevel])
                     port.writePortFile(ISM::Default::Path::PortsDirectory+portName+".json")
 
@@ -36,6 +32,22 @@ module ISM
                                                 "origin",
                                                 port.url],
                                         chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
+
+                    process = Process.new("git",args: [ "ls-remote"],
+                                                chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
+
+                    if !process.error?
+                        puts    "#{"* ".colorize(:green)}" +
+                            ISM::Default::Option::PortOpen::OpenText +
+                            portName
+                    else
+                        FileUtils.rm_r(ISM::Default::Path::SoftwaresDirectory+port.name)
+
+                        puts    "#{"* ".colorize(:red)}" +
+                            ISM::Default::Option::PortOpen::OpenTextError1 +
+                            portName +
+                            ISM::Default::Option::PortOpen::OpenTextError2
+                    end
                 end
             end
 

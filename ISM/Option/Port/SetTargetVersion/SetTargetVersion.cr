@@ -15,10 +15,43 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    Ism.portsSettings.setTargetVersion(ARGV[2+Ism.debugLevel])
-                    puts    "#{"* ".colorize(:green)}" +
-                            ISM::Default::Option::PortSetTargetVersion::SetText +
-                            ARGV[2+Ism.debugLevel]
+                    targetVersion = ARGV[2+Ism.debugLevel]
+                    validVersion = false
+
+                    if !Ism.ports.empty?
+                        setStartingTime = Time.monotonic
+                        frameIndex = 0
+
+                        print ISM::Default::Option::PortSetTargetVersion::SetTitle
+                        text = ISM::Default::Option::PortSetTargetVersion::SetWaitingText
+
+                        Ism.ports.each do |port|
+                            process = Process.new("git",args: ["switch","--detach",targetVersion],
+                                                        chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
+
+                            until process.terminated?
+                                calculationStartingTime, frameIndex = Ism.playCalculationAnimation(setStartingTime, frameIndex, text)
+                            end
+
+                            validVersion = !process.error?
+
+                            if !validVersion
+                                break
+                            end
+                        end
+                    end
+
+                    if validVersion
+                        Ism.portsSettings.setTargetVersion(targetVersion)
+                        puts    "#{"* ".colorize(:green)}" +
+                                ISM::Default::Option::PortSetTargetVersion::SetText +
+                                targetVersion
+                    else
+                        puts    "#{"* ".colorize(:red)}" +
+                                ISM::Default::Option::PortSetTargetVersion::SetTextError1 +
+                                "#{targetVersion.colorize(:red)}" +
+                                ISM::Default::Option::PortSetTargetVersion::SetTextError2
+                    end
                 end
             end
 

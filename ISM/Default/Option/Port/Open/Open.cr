@@ -10,6 +10,8 @@ module ISM
                 LongText = "open"
                 Description = "Open the specified port"
                 OpenText = "Opening port "
+                OpenTextError1 = "Failed to open the port: "
+                OpenTextError2 = ". The given port doesn't exist."
 
             end
             

@@ -18,13 +18,15 @@ module ISM
                 print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
                 text = ISM::Default::Option::SoftwareSynchronize::SynchronizationWaitingText
 
-                #Pour chaque dépot, utiliser les branches selon la stabilité voulue (stable, testing ...etc)
                 Ism.ports.each do |port|
 
-                    calculationStartingTime, frameIndex = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, text)
+                    process = Process.new("git",args: ["pull","origin",Ism.portsSettings.targetVersion],
+                                                chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
 
-                    Process.run("git",  args: ["pull","origin","master"],
-                                        chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
+                    until process.terminated?
+                        calculationStartingTime, frameIndex = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, text)
+                    end
+
                 end
 
                 print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
