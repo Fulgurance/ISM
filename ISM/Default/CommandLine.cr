@@ -39,6 +39,7 @@ module ISM
             ErrorRunScriptText2 = " located at "
             ErrorConfigureText = "Failed to configure the source "
             ErrorMakeText = "Failed to run make in  "
+            ErrorGenerateEmptyFile = "Failed to generate the empty file "
             ErrorMoveFileText1 = "Failed to move "
             ErrorMoveFileText2 = " to "
             ErrorMakeDirectoryText = "Failed to make directory "

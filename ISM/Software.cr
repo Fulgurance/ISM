@@ -139,6 +139,15 @@ module ISM
             end
         end
 
+        def generateEmptyFile(path : String)
+            begin
+                FileUtils.touch(path)
+            rescue error
+                Ism.notifyOfGenerateEmptyFileError(path, error)
+                exit 1
+            end
+        end
+
         def moveFile(path : String, newPath : String)
             begin
                 FileUtils.mv(path, newPath)

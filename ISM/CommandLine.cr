@@ -342,6 +342,10 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorMakeText+path, error)
         end
 
+        def notifyOfGenerateEmptyFileError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorGenerateEmptyFile+path, error)
+        end
+
         def notifyOfMoveFileError(path : String, newPath : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorMoveFileText1 +
                                     path +
