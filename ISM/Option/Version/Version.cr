@@ -8,44 +8,30 @@ module ISM
                 super(  ISM::Default::Option::Version::ShortText,
                         ISM::Default::Option::Version::LongText,
                         ISM::Default::Option::Version::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::Version::Options)
             end
 
             def start
-                puts ISM::Default::CommandLine::Title
+                if ARGV.size == 1+Ism.debugLevel
+                    showHelp
+                else
+                    matchingOption = false
 
-                processResult = IO::Memory.new
+                    @options.each_with_index do |argument, index|
+                        if ARGV[1+Ism.debugLevel] == argument.shortText || ARGV[1+Ism.debugLevel] == argument.longText
+                            matchingOption = true
+                            @options[index].start
+                            break
+                        end
+                    end
 
-                process = Process.run("git",args: [  "describe",
-                                                        "--all"],
-                                            output: processResult)
-                currentVersion = processResult.to_s.strip
-                currentVersion = currentVersion.lchop(currentVersion[0..currentVersion.rindex("/")])
-
-                processResult.clear
-
-                process = Process.run("git",args: [  "describe",
-                                                        "--tags"],
-                                            output: processResult)
-                currentTag = processResult.to_s.strip
-
-                processResult.clear
-
-                snapshot = (currentVersion == currentTag)
-
-                versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
-
-                if !snapshot
-                    process = Process.run("git",args: [ "rev-parse",
-                                                        "HEAD"],
-                                                output: processResult)
-
-                    currentVersion = currentVersion+"-"+processResult.to_s.strip
+                    if !matchingOption
+                        puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0+Ism.debugLevel].colorize(:white)}"
+                        puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                    end
                 end
-
-                version = versionPrefix + "#{currentVersion.colorize(:green)}"
-
-                puts version
             end
 
         end
