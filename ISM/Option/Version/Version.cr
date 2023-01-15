@@ -14,34 +14,36 @@ module ISM
             def start
                 puts ISM::Default::CommandLine::Title
 
-                result = IO::Memory.new
+                processResult = IO::Memory.new
+
+                process = Process.run("git",args: [  "describe",
+                                                        "--all"],
+                                            output: processResult)
+                currentVersion = processResult.to_s.strip
+                currentVersion = currentVersion.lchop(currentVersion[0..currentVersion.rindex("/")])
+
+                processResult.clear
+
                 process = Process.run("git",args: [  "describe",
                                                         "--tags"],
-                                            output: result)
+                                            output: processResult)
+                currentTag = processResult.to_s.strip
 
-                snapshot = process.success?
+                processResult.clear
+
+                snapshot = (currentVersion == currentTag)
 
                 versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
-                versionName = result.to_s.strip
 
                 if !snapshot
-                    result.clear
-
-                    process = Process.run("git",args: [ "branch",
-                                                        "--show-current"],
-                                                output: result)
-
-                    versionName = result.to_s.strip
-                    result.clear
-
                     process = Process.run("git",args: [ "rev-parse",
                                                         "HEAD"],
-                                                output: result)
+                                                output: processResult)
 
-                    versionName = versionName+"-"+result.to_s.strip
+                    currentVersion = currentVersion+"-"+processResult.to_s.strip
                 end
 
-                version = versionPrefix + "#{versionName.colorize(:green)}"
+                version = versionPrefix + "#{currentVersion.colorize(:green)}"
 
                 puts version
             end
