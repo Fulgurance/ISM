@@ -203,6 +203,25 @@ module ISM
             end
         end
 
+        def fileReplaceLineContaining(filePath : String, text : String, newLine : String)
+            begin
+                content = File.read_lines(filePath)
+
+                File.open(filePath,"w") do |file|
+                    content.each do |line|
+                        if line.includes?(text)
+                            file << newLine+"\n"
+                        else
+                            file << line+"\n"
+                        end
+                    end
+                end
+            rescue error
+                Ism.notifyOfFileReplaceLineContainingError(filePath, text, newLine, error)
+                exit 1
+            end
+        end
+
         def getFileContent(filePath : String) : String
             begin
                 content = File.read(filePath)

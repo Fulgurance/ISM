@@ -374,6 +374,15 @@ module ISM
                                     filePath, error)
         end
 
+        def notifyOfFileReplaceLineContainingError(filePath : String, text : String, newLine : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceLineContainingText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorFileReplaceLineContainingText2 +
+                                    newLine +
+                                    ISM::Default::CommandLine::ErrorFileReplaceLineContainingText3 +
+                                    filePath, error)
+        end
+
         def notifyOfGetFileContentError(filePath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
         end
