@@ -35,6 +35,7 @@ module ISM
             ErrorDeleteFileText = "Failed to delete the file "
             ErrorDeleteAllHiddenFilesText = "Failed to delete hidden files in "
             ErrorDeleteAllHiddenFilesRecursivelyText = "Failed to delete hidden files recursively in "
+            ErrorFileMakeinfo = "Failed to run makeinfo in  "
             ErrorRunScriptText1 = "Failed to run the script "
             ErrorRunScriptText2 = " located at "
             ErrorConfigureText = "Failed to configure the source "

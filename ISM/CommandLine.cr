@@ -327,6 +327,10 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, error)
         end
 
+        def notifyOfFileMakeinfoError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorFileMakeinfo+path, error)
+        end
+
         def notifyOfRunScriptError(file : String, path : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunScriptText1 +
                                     file +

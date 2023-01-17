@@ -324,6 +324,16 @@ module ISM
             end
         end
 
+        def fileMakeinfo(arguments : Array(String), path = String.new)
+            process = Process.run("makeinfo",   args: arguments,
+                                                chdir: path)
+
+            if !process.success?
+                Ism.notifyOfFileMakeinfoError(path)
+                exit 1
+            end
+        end
+
         def runScript(file : String, path : String, arguments = Array(String).new)
             scriptCommand = "./#{file}"
 
