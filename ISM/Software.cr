@@ -222,6 +222,23 @@ module ISM
             end
         end
 
+        def fileDeleteLine(filePath : String, lineNumber : UInt64)
+            begin
+                content = File.read_lines(filePath)
+
+                File.open(filePath,"w") do |file|
+                    content.each_with_index do |line, index|
+                        if !(index+1 == lineNumber)
+                            file << line+"\n"
+                        end
+                    end
+                end
+            rescue error
+                Ism.notifyOfFileDeleteLineError(filePath, lineNumber, error)
+                exit 1
+            end
+        end
+
         def getFileContent(filePath : String) : String
             begin
                 content = File.read(filePath)
@@ -293,6 +310,33 @@ module ISM
                 File.delete(path)
             rescue error
                 Ism.notifyOfDeleteFileError(path, error)
+                exit 1
+            end
+        end
+
+        def deleteAllFilesFinishing(path : String, text : String)
+            begin
+                Dir.glob("#{path}/*") do |file_path|
+                    if File.file?(file_path) && file_path[-text.size..-1] == text
+                        deleteFile(file_path)
+                    end
+                end
+            rescue error
+                Ism.notifyOfDeleteAllFilesFinishingError(path, error)
+                exit 1
+            end
+        end
+
+        def deleteAllFilesRecursivelyFinishing(path : String, text : String)
+            begin
+                deleteAllFilesFinishing(path,text)
+                Dir.glob("#{path}/*") do |file_path|
+                    if File.directory?(file_path)
+                        deleteAllFilesFinishing(file_path,text)
+                    end
+                end
+            rescue error
+                Ism.notifyOfDeleteAllFilesRecursivelyFinishingError(path, error)
                 exit 1
             end
         end

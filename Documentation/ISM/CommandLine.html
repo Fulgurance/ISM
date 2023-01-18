@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 1.5.0">
+<meta name="crystal_docs.project_version" content="master">
+<meta name="crystal_docs.project_name" content="ISM">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="ISM">
+  <title>ISM::CommandLine - ISM master</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          ISM
+        </a>
+      </h1>
+
+      <span class="project-version">
+        master
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="ISM/ISM" data-name="ism">
+      <a href="../ISM.html">ISM</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/AvailableSoftware" data-name="ism::availablesoftware">
+      <a href="../ISM/AvailableSoftware.html">AvailableSoftware</a>
+      
+    </li>
+  
+  <li class=" current" data-id="ISM/ISM/CommandLine" data-name="ism::commandline">
+      <a href="../ISM/CommandLine.html">CommandLine</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/CommandLineOption" data-name="ism::commandlineoption">
+      <a href="../ISM/CommandLineOption.html">CommandLineOption</a>
+      
+    </li>
+  
+  <li class="parent " data-id="ISM/ISM/CommandLinePortsSettings" data-name="ism::commandlineportssettings">
+      <a href="../ISM/CommandLinePortsSettings.html">CommandLinePortsSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/CommandLinePortsSettings/PortsSettings" data-name="ism::commandlineportssettings::portssettings">
+      <a href="../ISM/CommandLinePortsSettings/PortsSettings.html">PortsSettings</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="ISM/ISM/CommandLineSettings" data-name="ism::commandlinesettings">
+      <a href="../ISM/CommandLineSettings.html">CommandLineSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/CommandLineSettings/Settings" data-name="ism::commandlinesettings::settings">
+      <a href="../ISM/CommandLineSettings/Settings.html">Settings</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="ISM/ISM/CommandLineSystemSettings" data-name="ism::commandlinesystemsettings">
+      <a href="../ISM/CommandLineSystemSettings.html">CommandLineSystemSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/CommandLineSystemSettings/SystemSettings" data-name="ism::commandlinesystemsettings::systemsettings">
+      <a href="../ISM/CommandLineSystemSettings/SystemSettings.html">SystemSettings</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="ISM/ISM/Default" data-name="ism::default">
+      <a href="../ISM/Default.html">Default</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/Default/CommandLine" data-name="ism::default::commandline">
+      <a href="../ISM/Default/CommandLine.html">CommandLine</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/CommandLinePortsSettings" data-name="ism::default::commandlineportssettings">
+      <a href="../ISM/Default/CommandLinePortsSettings.html">CommandLinePortsSettings</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/CommandLineSettings" data-name="ism::default::commandlinesettings">
+      <a href="../ISM/Default/CommandLineSettings.html">CommandLineSettings</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/CommandLineSystemSettings" data-name="ism::default::commandlinesystemsettings">
+      <a href="../ISM/Default/CommandLineSystemSettings.html">CommandLineSystemSettings</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Filename" data-name="ism::default::filename">
+      <a href="../ISM/Default/Filename.html">Filename</a>
+      
+    </li>
+  
+  <li class="parent " data-id="ISM/ISM/Default/Option" data-name="ism::default::option">
+      <a href="../ISM/Default/Option.html">Option</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/Debug" data-name="ism::default::option::debug">
+      <a href="../ISM/Default/Option/Debug.html">Debug</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/Help" data-name="ism::default::option::help">
+      <a href="../ISM/Default/Option/Help.html">Help</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/Port" data-name="ism::default::option::port">
+      <a href="../ISM/Default/Option/Port.html">Port</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/PortClose" data-name="ism::default::option::portclose">
+      <a href="../ISM/Default/Option/PortClose.html">PortClose</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/PortOpen" data-name="ism::default::option::portopen">
+      <a href="../ISM/Default/Option/PortOpen.html">PortOpen</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/PortSetTargetVersion" data-name="ism::default::option::portsettargetversion">
+      <a href="../ISM/Default/Option/PortSetTargetVersion.html">PortSetTargetVersion</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/Settings" data-name="ism::default::option::settings">
+      <a href="../ISM/Default/Option/Settings.html">Settings</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SettingsSetArchitecture" data-name="ism::default::option::settingssetarchitecture">
+      <a href="../ISM/Default/Option/SettingsSetArchitecture.html">SettingsSetArchitecture</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SettingsSetBuildOptions" data-name="ism::default::option::settingssetbuildoptions">
+      <a href="../ISM/Default/Option/SettingsSetBuildOptions.html">SettingsSetBuildOptions</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SettingsSetMakeOptions" data-name="ism::default::option::settingssetmakeoptions">
+      <a href="../ISM/Default/Option/SettingsSetMakeOptions.html">SettingsSetMakeOptions</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SettingsSetRootPath" data-name="ism::default::option::settingssetrootpath">
+      <a href="../ISM/Default/Option/SettingsSetRootPath.html">SettingsSetRootPath</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SettingsSetSystemName" data-name="ism::default::option::settingssetsystemname">
+      <a href="../ISM/Default/Option/SettingsSetSystemName.html">SettingsSetSystemName</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SettingsSetTargetName" data-name="ism::default::option::settingssettargetname">
+      <a href="../ISM/Default/Option/SettingsSetTargetName.html">SettingsSetTargetName</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SettingsShow" data-name="ism::default::option::settingsshow">
+      <a href="../ISM/Default/Option/SettingsShow.html">SettingsShow</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/Software" data-name="ism::default::option::software">
+      <a href="../ISM/Default/Option/Software.html">Software</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SoftwareDisableOption" data-name="ism::default::option::softwaredisableoption">
+      <a href="../ISM/Default/Option/SoftwareDisableOption.html">SoftwareDisableOption</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SoftwareEnableOption" data-name="ism::default::option::softwareenableoption">
+      <a href="../ISM/Default/Option/SoftwareEnableOption.html">SoftwareEnableOption</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SoftwareInstall" data-name="ism::default::option::softwareinstall">
+      <a href="../ISM/Default/Option/SoftwareInstall.html">SoftwareInstall</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SoftwareRemove" data-name="ism::default::option::softwareremove">
+      <a href="../ISM/Default/Option/SoftwareRemove.html">SoftwareRemove</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SoftwareSearch" data-name="ism::default::option::softwaresearch">
+      <a href="../ISM/Default/Option/SoftwareSearch.html">SoftwareSearch</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SoftwareSynchronize" data-name="ism::default::option::softwaresynchronize">
+      <a href="../ISM/Default/Option/SoftwareSynchronize.html">SoftwareSynchronize</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SoftwareUpdate" data-name="ism::default::option::softwareupdate">
+      <a href="../ISM/Default/Option/SoftwareUpdate.html">SoftwareUpdate</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/System" data-name="ism::default::option::system">
+      <a href="../ISM/Default/Option/System.html">System</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/SystemSetLcAll" data-name="ism::default::option::systemsetlcall">
+      <a href="../ISM/Default/Option/SystemSetLcAll.html">SystemSetLcAll</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/Version" data-name="ism::default::option::version">
+      <a href="../ISM/Default/Option/Version.html">Version</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/VersionShow" data-name="ism::default::option::versionshow">
+      <a href="../ISM/Default/Option/VersionShow.html">VersionShow</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Option/VersionSwitch" data-name="ism::default::option::versionswitch">
+      <a href="../ISM/Default/Option/VersionSwitch.html">VersionSwitch</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Default/Path" data-name="ism::default::path">
+      <a href="../ISM/Default/Path.html">Path</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="ISM/ISM/Option" data-name="ism::option">
+      <a href="../ISM/Option.html">Option</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/Option/Debug" data-name="ism::option::debug">
+      <a href="../ISM/Option/Debug.html">Debug</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/Help" data-name="ism::option::help">
+      <a href="../ISM/Option/Help.html">Help</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/Port" data-name="ism::option::port">
+      <a href="../ISM/Option/Port.html">Port</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/PortClose" data-name="ism::option::portclose">
+      <a href="../ISM/Option/PortClose.html">PortClose</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/PortOpen" data-name="ism::option::portopen">
+      <a href="../ISM/Option/PortOpen.html">PortOpen</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/PortSetTargetVersion" data-name="ism::option::portsettargetversion">
+      <a href="../ISM/Option/PortSetTargetVersion.html">PortSetTargetVersion</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/Settings" data-name="ism::option::settings">
+      <a href="../ISM/Option/Settings.html">Settings</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SettingsSetArchitecture" data-name="ism::option::settingssetarchitecture">
+      <a href="../ISM/Option/SettingsSetArchitecture.html">SettingsSetArchitecture</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SettingsSetBuildOptions" data-name="ism::option::settingssetbuildoptions">
+      <a href="../ISM/Option/SettingsSetBuildOptions.html">SettingsSetBuildOptions</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SettingsSetMakeOptions" data-name="ism::option::settingssetmakeoptions">
+      <a href="../ISM/Option/SettingsSetMakeOptions.html">SettingsSetMakeOptions</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SettingsSetRootPath" data-name="ism::option::settingssetrootpath">
+      <a href="../ISM/Option/SettingsSetRootPath.html">SettingsSetRootPath</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SettingsSetSystemName" data-name="ism::option::settingssetsystemname">
+      <a href="../ISM/Option/SettingsSetSystemName.html">SettingsSetSystemName</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SettingsSetTargetName" data-name="ism::option::settingssettargetname">
+      <a href="../ISM/Option/SettingsSetTargetName.html">SettingsSetTargetName</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SettingsShow" data-name="ism::option::settingsshow">
+      <a href="../ISM/Option/SettingsShow.html">SettingsShow</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/Software" data-name="ism::option::software">
+      <a href="../ISM/Option/Software.html">Software</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SoftwareDisableOption" data-name="ism::option::softwaredisableoption">
+      <a href="../ISM/Option/SoftwareDisableOption.html">SoftwareDisableOption</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SoftwareEnableOption" data-name="ism::option::softwareenableoption">
+      <a href="../ISM/Option/SoftwareEnableOption.html">SoftwareEnableOption</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SoftwareInstall" data-name="ism::option::softwareinstall">
+      <a href="../ISM/Option/SoftwareInstall.html">SoftwareInstall</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SoftwareRemove" data-name="ism::option::softwareremove">
+      <a href="../ISM/Option/SoftwareRemove.html">SoftwareRemove</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SoftwareSearch" data-name="ism::option::softwaresearch">
+      <a href="../ISM/Option/SoftwareSearch.html">SoftwareSearch</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SoftwareSynchronize" data-name="ism::option::softwaresynchronize">
+      <a href="../ISM/Option/SoftwareSynchronize.html">SoftwareSynchronize</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SoftwareUpdate" data-name="ism::option::softwareupdate">
+      <a href="../ISM/Option/SoftwareUpdate.html">SoftwareUpdate</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/System" data-name="ism::option::system">
+      <a href="../ISM/Option/System.html">System</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/SystemSetLcAll" data-name="ism::option::systemsetlcall">
+      <a href="../ISM/Option/SystemSetLcAll.html">SystemSetLcAll</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/Version" data-name="ism::option::version">
+      <a href="../ISM/Option/Version.html">Version</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/VersionShow" data-name="ism::option::versionshow">
+      <a href="../ISM/Option/VersionShow.html">VersionShow</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Option/VersionSwitch" data-name="ism::option::versionswitch">
+      <a href="../ISM/Option/VersionSwitch.html">VersionSwitch</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="ISM/ISM/Port" data-name="ism::port">
+      <a href="../ISM/Port.html">Port</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/Port/Port" data-name="ism::port::port">
+      <a href="../ISM/Port/Port.html">Port</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/Software" data-name="ism::software">
+      <a href="../ISM/Software.html">Software</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/SoftwareDependency" data-name="ism::softwaredependency">
+      <a href="../ISM/SoftwareDependency.html">SoftwareDependency</a>
+      
+    </li>
+  
+  <li class="parent " data-id="ISM/ISM/SoftwareInformation" data-name="ism::softwareinformation">
+      <a href="../ISM/SoftwareInformation.html">SoftwareInformation</a>
+      
+        <ul>
+  
+  <li class=" " data-id="ISM/ISM/SoftwareInformation/Dependency" data-name="ism::softwareinformation::dependency">
+      <a href="../ISM/SoftwareInformation/Dependency.html">Dependency</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/SoftwareInformation/Information" data-name="ism::softwareinformation::information">
+      <a href="../ISM/SoftwareInformation/Information.html">Information</a>
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/SoftwareInformation/Option" data-name="ism::softwareinformation::option">
+      <a href="../ISM/SoftwareInformation/Option.html">Option</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="ISM/ISM/SoftwareOption" data-name="ism::softwareoption">
+      <a href="../ISM/SoftwareOption.html">SoftwareOption</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> ISM::CommandLine
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../ISM/CommandLine.html">ISM::CommandLine</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      ISM/CommandLine.cr
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#addInstalledSoftware%28path%3AString%2CinstalledFiles%3AArray%28String%29%29-instance-method" class="signature"><strong>#addInstalledSoftware</strong>(path : String, installedFiles : Array(String))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#checkEnteredArguments-instance-method" class="signature"><strong>#checkEnteredArguments</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#debugLevel%3AInt32-instance-method" class="signature"><strong>#debugLevel</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#debugLevel%3D%28debugLevel%3AInt32%29-instance-method" class="signature"><strong>#debugLevel=</strong>(debugLevel : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#getRequestedSoftwares%28list%2CcalculationStartingTime%2CframeIndex%2Ctext%29-instance-method" class="signature"><strong>#getRequestedSoftwares</strong>(list, calculationStartingTime, frameIndex, text)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#installedSoftwares%3AArray%28ISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#installedSoftwares</strong> : Array(ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#installedSoftwares%3D%28installedSoftwares%3AArray%28ISM%3A%3ASoftwareInformation%29%29-instance-method" class="signature"><strong>#installedSoftwares=</strong>(installedSoftwares : Array(ISM::SoftwareInformation))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#loadInstalledSoftwareDatabase-instance-method" class="signature"><strong>#loadInstalledSoftwareDatabase</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#loadPortsDatabase-instance-method" class="signature"><strong>#loadPortsDatabase</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#loadSettingsFiles-instance-method" class="signature"><strong>#loadSettingsFiles</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#loadSoftwareDatabase-instance-method" class="signature"><strong>#loadSoftwareDatabase</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfApplyPatchError%28patchName%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfApplyPatchError</strong>(patchName : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfBuild%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfBuild</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfCheck%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfCheck</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfCheckError%28archive%3AString%2Cmd5sum%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfCheckError</strong>(archive : String, md5sum : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfClean%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfClean</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfConfigure%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfConfigure</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfConfigureError%28sourceName%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfConfigureError</strong>(sourceName : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfCopyDirectoryError%28path%3AString%2CtargetPath%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfCopyDirectoryError</strong>(path : String, targetPath : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfCopyFileError%28path%3AString%2CtargetPath%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfCopyFileError</strong>(path : String, targetPath : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfDeleteAllHiddenFilesError%28path%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfDeleteAllHiddenFilesError</strong>(path : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfDeleteAllHiddenFilesRecursivelyError%28path%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfDeleteAllHiddenFilesRecursivelyError</strong>(path : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfDeleteDirectoryError%28directory%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfDeleteDirectoryError</strong>(directory : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfDeleteDirectoryRecursivelyError%28directory%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfDeleteDirectoryRecursivelyError</strong>(directory : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfDeleteFileError%28path%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfDeleteFileError</strong>(path : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfDownload%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfDownload</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfDownloadError%28link%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfDownloadError</strong>(link : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfExtract%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfExtract</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfExtractError%28archiveName%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfExtractError</strong>(archiveName : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfFileAppendDataError%28filePath%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfFileAppendDataError</strong>(filePath : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfFileMakeinfoError%28path%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfFileMakeinfoError</strong>(path : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfFileReplaceLineContainingError%28filePath%3AString%2Ctext%3AString%2CnewLine%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfFileReplaceLineContainingError</strong>(filePath : String, text : String, newLine : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfFileReplaceTextError%28filePath%3AString%2Ctext%3AString%2CnewText%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfFileReplaceTextError</strong>(filePath : String, text : String, newText : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfFileWriteDataError%28filePath%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfFileWriteDataError</strong>(filePath : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfGenerateEmptyFileError%28path%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfGenerateEmptyFileError</strong>(path : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfGetFileContentError%28filePath%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfGetFileContentError</strong>(filePath : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfInstall%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfInstall</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfMakeDirectoryError%28directory%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfMakeDirectoryError</strong>(directory : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfMakeError%28path%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfMakeError</strong>(path : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfMakeSymbolicLinkError%28path%3AString%2CtargetPath%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfMakeSymbolicLinkError</strong>(path : String, targetPath : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfMoveFileError%28path%3AString%2CnewPath%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfMoveFileError</strong>(path : String, newPath : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfPatch%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfPatch</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfPrepare%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfPrepare</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfPrepareInstallation%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfPrepareInstallation</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfRunScriptError%28file%3AString%2Cpath%3AString%2Cerror%3Dnil%29-instance-method" class="signature"><strong>#notifyOfRunScriptError</strong>(file : String, path : String, error = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#notifyOfUninstall%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#notifyOfUninstall</strong>(softwareInformation : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#options%3AArray%28ISM%3A%3ACommandLineOption%29-instance-method" class="signature"><strong>#options</strong> : Array(ISM::CommandLineOption)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#options%3D%28options%3AArray%28ISM%3A%3ACommandLineOption%29%29-instance-method" class="signature"><strong>#options=</strong>(options : Array(ISM::CommandLineOption))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#playCalculationAnimation%28calculationStartingTime%2CframeIndex%2Ctext%29-instance-method" class="signature"><strong>#playCalculationAnimation</strong>(calculationStartingTime, frameIndex, text)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ports%3AArray%28ISM%3A%3APort%29-instance-method" class="signature"><strong>#ports</strong> : Array(ISM::Port)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ports%3D%28ports%3AArray%28ISM%3A%3APort%29%29-instance-method" class="signature"><strong>#ports=</strong>(ports : Array(ISM::Port))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#portsSettings%3AISM%3A%3ACommandLinePortsSettings-instance-method" class="signature"><strong>#portsSettings</strong> : ISM::CommandLinePortsSettings</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#portsSettings%3D%28portsSettings%3AISM%3A%3ACommandLinePortsSettings%29-instance-method" class="signature"><strong>#portsSettings=</strong>(portsSettings : ISM::CommandLinePortsSettings)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#printErrorNotification%28message%3AString%2Cerror%29-instance-method" class="signature"><strong>#printErrorNotification</strong>(message : String, error)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#printProcessNotification%28message%3AString%29-instance-method" class="signature"><strong>#printProcessNotification</strong>(message : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#removeInstalledSoftware%28installedSoftware%3AISM%3A%3ASoftwareInformation%29-instance-method" class="signature"><strong>#removeInstalledSoftware</strong>(installedSoftware : ISM::SoftwareInformation)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#settings%3AISM%3A%3ACommandLineSettings-instance-method" class="signature"><strong>#settings</strong> : ISM::CommandLineSettings</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#settings%3D%28settings%3AISM%3A%3ACommandLineSettings%29-instance-method" class="signature"><strong>#settings=</strong>(settings : ISM::CommandLineSettings)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#showErrorUnknowArgument-instance-method" class="signature"><strong>#showErrorUnknowArgument</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#softwareIsInstalled%3F%28software%3AISM%3A%3ASoftwareInformation%29%3ABool-instance-method" class="signature"><strong>#softwareIsInstalled?</strong>(software : ISM::SoftwareInformation) : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#softwares%3AArray%28ISM%3A%3AAvailableSoftware%29-instance-method" class="signature"><strong>#softwares</strong> : Array(ISM::AvailableSoftware)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#softwares%3D%28softwares%3AArray%28ISM%3A%3AAvailableSoftware%29%29-instance-method" class="signature"><strong>#softwares=</strong>(softwares : Array(ISM::AvailableSoftware))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#start-instance-method" class="signature"><strong>#start</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#systemSettings%3AISM%3A%3ACommandLineSystemSettings-instance-method" class="signature"><strong>#systemSettings</strong> : ISM::CommandLineSystemSettings</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#systemSettings%3D%28systemSettings%3AISM%3A%3ACommandLineSystemSettings%29-instance-method" class="signature"><strong>#systemSettings=</strong>(systemSettings : ISM::CommandLineSystemSettings)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>
+
+        <a class="method-permalink" href="#new-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="addInstalledSoftware(path:String,installedFiles:Array(String))-instance-method">
+      <div class="signature">
+        
+        def <strong>addInstalledSoftware</strong>(path : String, installedFiles : Array(String))
+
+        <a class="method-permalink" href="#addInstalledSoftware%28path%3AString%2CinstalledFiles%3AArray%28String%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="checkEnteredArguments-instance-method">
+      <div class="signature">
+        
+        def <strong>checkEnteredArguments</strong>
+
+        <a class="method-permalink" href="#checkEnteredArguments-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="debugLevel:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>debugLevel</strong> : Int32
+
+        <a class="method-permalink" href="#debugLevel%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="debugLevel=(debugLevel:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>debugLevel=</strong>(debugLevel : Int32)
+
+        <a class="method-permalink" href="#debugLevel%3D%28debugLevel%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="getRequestedSoftwares(list,calculationStartingTime,frameIndex,text)-instance-method">
+      <div class="signature">
+        
+        def <strong>getRequestedSoftwares</strong>(list, calculationStartingTime, frameIndex, text)
+
+        <a class="method-permalink" href="#getRequestedSoftwares%28list%2CcalculationStartingTime%2CframeIndex%2Ctext%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="installedSoftwares:Array(ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>installedSoftwares</strong> : Array(<a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#installedSoftwares%3AArray%28ISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="installedSoftwares=(installedSoftwares:Array(ISM::SoftwareInformation))-instance-method">
+      <div class="signature">
+        
+        def <strong>installedSoftwares=</strong>(installedSoftwares : Array(<a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>))
+
+        <a class="method-permalink" href="#installedSoftwares%3D%28installedSoftwares%3AArray%28ISM%3A%3ASoftwareInformation%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="loadInstalledSoftwareDatabase-instance-method">
+      <div class="signature">
+        
+        def <strong>loadInstalledSoftwareDatabase</strong>
+
+        <a class="method-permalink" href="#loadInstalledSoftwareDatabase-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="loadPortsDatabase-instance-method">
+      <div class="signature">
+        
+        def <strong>loadPortsDatabase</strong>
+
+        <a class="method-permalink" href="#loadPortsDatabase-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="loadSettingsFiles-instance-method">
+      <div class="signature">
+        
+        def <strong>loadSettingsFiles</strong>
+
+        <a class="method-permalink" href="#loadSettingsFiles-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="loadSoftwareDatabase-instance-method">
+      <div class="signature">
+        
+        def <strong>loadSoftwareDatabase</strong>
+
+        <a class="method-permalink" href="#loadSoftwareDatabase-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfApplyPatchError(patchName:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfApplyPatchError</strong>(patchName : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfApplyPatchError%28patchName%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfBuild(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfBuild</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfBuild%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfCheck(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfCheck</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfCheck%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfCheckError(archive:String,md5sum:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfCheckError</strong>(archive : String, md5sum : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfCheckError%28archive%3AString%2Cmd5sum%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfClean(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfClean</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfClean%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfConfigure(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfConfigure</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfConfigure%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfConfigureError(sourceName:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfConfigureError</strong>(sourceName : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfConfigureError%28sourceName%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfCopyDirectoryError(path:String,targetPath:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfCopyDirectoryError</strong>(path : String, targetPath : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfCopyDirectoryError%28path%3AString%2CtargetPath%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfCopyFileError(path:String,targetPath:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfCopyFileError</strong>(path : String, targetPath : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfCopyFileError%28path%3AString%2CtargetPath%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfDeleteAllHiddenFilesError(path:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfDeleteAllHiddenFilesError</strong>(path : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfDeleteAllHiddenFilesError%28path%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfDeleteAllHiddenFilesRecursivelyError(path:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfDeleteAllHiddenFilesRecursivelyError</strong>(path : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfDeleteAllHiddenFilesRecursivelyError%28path%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfDeleteDirectoryError(directory:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfDeleteDirectoryError</strong>(directory : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfDeleteDirectoryError%28directory%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfDeleteDirectoryRecursivelyError(directory:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfDeleteDirectoryRecursivelyError</strong>(directory : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfDeleteDirectoryRecursivelyError%28directory%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfDeleteFileError(path:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfDeleteFileError</strong>(path : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfDeleteFileError%28path%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfDownload(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfDownload</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfDownload%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfDownloadError(link:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfDownloadError</strong>(link : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfDownloadError%28link%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfExtract(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfExtract</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfExtract%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfExtractError(archiveName:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfExtractError</strong>(archiveName : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfExtractError%28archiveName%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfFileAppendDataError(filePath:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfFileAppendDataError</strong>(filePath : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfFileAppendDataError%28filePath%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfFileMakeinfoError(path:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfFileMakeinfoError</strong>(path : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfFileMakeinfoError%28path%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfFileReplaceLineContainingError(filePath:String,text:String,newLine:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfFileReplaceLineContainingError</strong>(filePath : String, text : String, newLine : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfFileReplaceLineContainingError%28filePath%3AString%2Ctext%3AString%2CnewLine%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfFileReplaceTextError(filePath:String,text:String,newText:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfFileReplaceTextError</strong>(filePath : String, text : String, newText : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfFileReplaceTextError%28filePath%3AString%2Ctext%3AString%2CnewText%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfFileWriteDataError(filePath:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfFileWriteDataError</strong>(filePath : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfFileWriteDataError%28filePath%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfGenerateEmptyFileError(path:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfGenerateEmptyFileError</strong>(path : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfGenerateEmptyFileError%28path%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfGetFileContentError(filePath:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfGetFileContentError</strong>(filePath : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfGetFileContentError%28filePath%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfInstall(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfInstall</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfInstall%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfMakeDirectoryError(directory:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfMakeDirectoryError</strong>(directory : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfMakeDirectoryError%28directory%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfMakeError(path:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfMakeError</strong>(path : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfMakeError%28path%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfMakeSymbolicLinkError(path:String,targetPath:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfMakeSymbolicLinkError</strong>(path : String, targetPath : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfMakeSymbolicLinkError%28path%3AString%2CtargetPath%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfMoveFileError(path:String,newPath:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfMoveFileError</strong>(path : String, newPath : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfMoveFileError%28path%3AString%2CnewPath%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfPatch(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfPatch</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfPatch%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfPrepare(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfPrepare</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfPrepare%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfPrepareInstallation(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfPrepareInstallation</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfPrepareInstallation%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfRunScriptError(file:String,path:String,error=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfRunScriptError</strong>(file : String, path : String, error = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#notifyOfRunScriptError%28file%3AString%2Cpath%3AString%2Cerror%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="notifyOfUninstall(softwareInformation:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>notifyOfUninstall</strong>(softwareInformation : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#notifyOfUninstall%28softwareInformation%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="options:Array(ISM::CommandLineOption)-instance-method">
+      <div class="signature">
+        
+        def <strong>options</strong> : Array(<a href="../ISM/CommandLineOption.html">ISM::CommandLineOption</a>)
+
+        <a class="method-permalink" href="#options%3AArray%28ISM%3A%3ACommandLineOption%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="options=(options:Array(ISM::CommandLineOption))-instance-method">
+      <div class="signature">
+        
+        def <strong>options=</strong>(options : Array(<a href="../ISM/CommandLineOption.html">ISM::CommandLineOption</a>))
+
+        <a class="method-permalink" href="#options%3D%28options%3AArray%28ISM%3A%3ACommandLineOption%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="playCalculationAnimation(calculationStartingTime,frameIndex,text)-instance-method">
+      <div class="signature">
+        
+        def <strong>playCalculationAnimation</strong>(calculationStartingTime, frameIndex, text)
+
+        <a class="method-permalink" href="#playCalculationAnimation%28calculationStartingTime%2CframeIndex%2Ctext%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ports:Array(ISM::Port)-instance-method">
+      <div class="signature">
+        
+        def <strong>ports</strong> : Array(<a href="../ISM/Port.html">ISM::Port</a>)
+
+        <a class="method-permalink" href="#ports%3AArray%28ISM%3A%3APort%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ports=(ports:Array(ISM::Port))-instance-method">
+      <div class="signature">
+        
+        def <strong>ports=</strong>(ports : Array(<a href="../ISM/Port.html">ISM::Port</a>))
+
+        <a class="method-permalink" href="#ports%3D%28ports%3AArray%28ISM%3A%3APort%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="portsSettings:ISM::CommandLinePortsSettings-instance-method">
+      <div class="signature">
+        
+        def <strong>portsSettings</strong> : <a href="../ISM/CommandLinePortsSettings.html">ISM::CommandLinePortsSettings</a>
+
+        <a class="method-permalink" href="#portsSettings%3AISM%3A%3ACommandLinePortsSettings-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="portsSettings=(portsSettings:ISM::CommandLinePortsSettings)-instance-method">
+      <div class="signature">
+        
+        def <strong>portsSettings=</strong>(portsSettings : <a href="../ISM/CommandLinePortsSettings.html">ISM::CommandLinePortsSettings</a>)
+
+        <a class="method-permalink" href="#portsSettings%3D%28portsSettings%3AISM%3A%3ACommandLinePortsSettings%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="printErrorNotification(message:String,error)-instance-method">
+      <div class="signature">
+        
+        def <strong>printErrorNotification</strong>(message : String, error)
+
+        <a class="method-permalink" href="#printErrorNotification%28message%3AString%2Cerror%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="printProcessNotification(message:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>printProcessNotification</strong>(message : String)
+
+        <a class="method-permalink" href="#printProcessNotification%28message%3AString%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="removeInstalledSoftware(installedSoftware:ISM::SoftwareInformation)-instance-method">
+      <div class="signature">
+        
+        def <strong>removeInstalledSoftware</strong>(installedSoftware : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>)
+
+        <a class="method-permalink" href="#removeInstalledSoftware%28installedSoftware%3AISM%3A%3ASoftwareInformation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="settings:ISM::CommandLineSettings-instance-method">
+      <div class="signature">
+        
+        def <strong>settings</strong> : <a href="../ISM/CommandLineSettings.html">ISM::CommandLineSettings</a>
+
+        <a class="method-permalink" href="#settings%3AISM%3A%3ACommandLineSettings-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="settings=(settings:ISM::CommandLineSettings)-instance-method">
+      <div class="signature">
+        
+        def <strong>settings=</strong>(settings : <a href="../ISM/CommandLineSettings.html">ISM::CommandLineSettings</a>)
+
+        <a class="method-permalink" href="#settings%3D%28settings%3AISM%3A%3ACommandLineSettings%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="showErrorUnknowArgument-instance-method">
+      <div class="signature">
+        
+        def <strong>showErrorUnknowArgument</strong>
+
+        <a class="method-permalink" href="#showErrorUnknowArgument-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="softwareIsInstalled?(software:ISM::SoftwareInformation):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>softwareIsInstalled?</strong>(software : <a href="../ISM/SoftwareInformation.html">ISM::SoftwareInformation</a>) : Bool
+
+        <a class="method-permalink" href="#softwareIsInstalled%3F%28software%3AISM%3A%3ASoftwareInformation%29%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="softwares:Array(ISM::AvailableSoftware)-instance-method">
+      <div class="signature">
+        
+        def <strong>softwares</strong> : Array(<a href="../ISM/AvailableSoftware.html">ISM::AvailableSoftware</a>)
+
+        <a class="method-permalink" href="#softwares%3AArray%28ISM%3A%3AAvailableSoftware%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="softwares=(softwares:Array(ISM::AvailableSoftware))-instance-method">
+      <div class="signature">
+        
+        def <strong>softwares=</strong>(softwares : Array(<a href="../ISM/AvailableSoftware.html">ISM::AvailableSoftware</a>))
+
+        <a class="method-permalink" href="#softwares%3D%28softwares%3AArray%28ISM%3A%3AAvailableSoftware%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="start-instance-method">
+      <div class="signature">
+        
+        def <strong>start</strong>
+
+        <a class="method-permalink" href="#start-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="systemSettings:ISM::CommandLineSystemSettings-instance-method">
+      <div class="signature">
+        
+        def <strong>systemSettings</strong> : <a href="../ISM/CommandLineSystemSettings.html">ISM::CommandLineSystemSettings</a>
+
+        <a class="method-permalink" href="#systemSettings%3AISM%3A%3ACommandLineSystemSettings-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="systemSettings=(systemSettings:ISM::CommandLineSystemSettings)-instance-method">
+      <div class="signature">
+        
+        def <strong>systemSettings=</strong>(systemSettings : <a href="../ISM/CommandLineSystemSettings.html">ISM::CommandLineSystemSettings</a>)
+
+        <a class="method-permalink" href="#systemSettings%3D%28systemSettings%3AISM%3A%3ACommandLineSystemSettings%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
