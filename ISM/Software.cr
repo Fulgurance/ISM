@@ -496,6 +496,17 @@ module ISM
             Ism.notifyOfBuild(@information)
         end
 
+        def makePerlSource(path = String.new)
+            process = Process.run("perl",   args: ["Makefile.PL"],
+                                            output: :inherit,
+                                            error: :inherit,
+                                            chdir: path)
+            if !process.success?
+                Ism.notifyOfMakePerlSourceError(path)
+                exit 1
+            end
+        end
+
         def makeSource(arguments : Array(String), path = String.new)
             if @useChroot
                 chrootMakeCommand = <<-CODE
@@ -511,7 +522,7 @@ module ISM
                                                 chdir: path)
             end
             if !process.success?
-                Ism.notifyOfMakeError(path)
+                Ism.notifyOfMakeSourceError(path)
                 exit 1
             end
         end

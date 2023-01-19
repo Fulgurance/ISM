@@ -364,8 +364,12 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName, error)
         end
 
-        def notifyOfMakeError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorMakeText+path, error)
+        def notifyOfMakePerlSourceError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorMakePerlSourceText+path, error)
+        end
+
+        def notifyOfMakeSourceError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorMakeSourceText+path, error)
         end
 
         def notifyOfGenerateEmptyFileError(path : String, error = nil)
