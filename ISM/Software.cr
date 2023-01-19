@@ -222,6 +222,25 @@ module ISM
             end
         end
 
+        def fileReplaceTextAtLineNumber(filePath : String, text : String, newText : String,lineNumber : UInt64)
+            begin
+                content = File.read_lines(filePath)
+
+                File.open(filePath,"w") do |file|
+                    content.each_with_index do |line, index|
+                        if !(index+1 == lineNumber)
+                            file << line+"\n"
+                        else
+                            file << line.gsub(text, newText)+"\n"
+                        end
+                    end
+                end
+            rescue error
+                Ism.notifyOfReplaceTextAtLineNumberError(filePath, text, newText, lineNumber, error)
+                exit 1
+            end
+        end
+
         def fileDeleteLine(filePath : String, lineNumber : UInt64)
             begin
                 content = File.read_lines(filePath)
@@ -310,6 +329,33 @@ module ISM
                 File.delete(path)
             rescue error
                 Ism.notifyOfDeleteFileError(path, error)
+                exit 1
+            end
+        end
+
+        def replaceTextAllFilesNamed(path : String, filename : String, text : String, newText : String)
+            begin
+                Dir.glob("#{path}/*") do |file_path|
+                    if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
+                        fileReplaceText(file_path, text, newText)
+                    end
+                end
+            rescue error
+                Ism.notifyOfReplaceTextAllFilesNamedError(path, filename, text, newText, error)
+                exit 1
+            end
+        end
+
+        def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
+            begin
+                replaceTextAllFilesNamed(path, filename, text, newText)
+                Dir.glob("#{path}/*") do |file_path|
+                    if File.directory?(file_path)
+                        replaceTextAllFilesNamed(file_path, filename, text, newText)
+                    end
+                end
+            rescue error
+                Ism.notifyOfReplaceTextAllFilesRecursivelyNamedError(path, filename, text, newText, error)
                 exit 1
             end
         end

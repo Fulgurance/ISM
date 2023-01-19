@@ -319,6 +319,28 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, error)
         end
 
+        def notifyOfReplaceTextAllFilesNamedError(path : String, filename : String, text : String, newText : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorReplaceTextAllFilesNamedText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesNamedText2 +
+                                    newText +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesNamedText3 +
+                                    filename +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesNamedText4 +
+                                    path, error)
+        end
+
+        def notifyOfReplaceTextAllFilesRecursivelyNamedError(path : String, filename : String, text : String, newText : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorReplaceTextAllFilesRecursivelyNamedText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesRecursivelyNamedText2 +
+                                    newText +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesRecursivelyNamedText3 +
+                                    filename +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesRecursivelyNamedText4 +
+                                    path, error)
+        end
+
         def notifyOfDeleteAllHiddenFilesError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesText+path, error)
         end
@@ -370,11 +392,11 @@ module ISM
         end
 
         def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceText1 +
+            printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceTextText1 +
                                     text +
-                                    ISM::Default::CommandLine::ErrorFileReplaceText2 +
+                                    ISM::Default::CommandLine::ErrorFileReplaceTextText2 +
                                     newText +
-                                    ISM::Default::CommandLine::ErrorFileReplaceText3 +
+                                    ISM::Default::CommandLine::ErrorFileReplaceTextText3 +
                                     filePath, error)
         end
 
@@ -384,6 +406,24 @@ module ISM
                                     ISM::Default::CommandLine::ErrorFileReplaceLineContainingText2 +
                                     newLine +
                                     ISM::Default::CommandLine::ErrorFileReplaceLineContainingText3 +
+                                    filePath, error)
+        end
+
+        def notifyOfReplaceTextAtLineNumberError(filePath : String, text : String, newText : String, lineNumber : UInt64, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText2 +
+                                    newText +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText3 +
+                                    filePath +
+                                    ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText4 +
+                                    lineNumber, error)
+        end
+
+        def notifyOfFileDeleteLineError(filePath : String, lineNumber : UInt64, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorFileDeleteLineText1 +
+                                    lineNumber +
+                                    ISM::Default::CommandLine::ErrorFileDeleteLineText2 +
                                     filePath, error)
         end
 
