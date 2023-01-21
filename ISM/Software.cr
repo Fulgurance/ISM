@@ -429,21 +429,6 @@ module ISM
             end
         end
 
-        def runScript(file : String, path : String, arguments = Array(String).new)
-            scriptCommand = "./#{file}"
-
-            process = Process.run(  scriptCommand,
-                                    args: arguments,
-                                    output: :inherit,
-                                    error: :inherit,
-                                    shell: true,
-                                    chdir: path)
-            if !process.success?
-                Ism.notifyOfRunScriptError(file, path)
-                exit 1
-            end
-        end
-
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+"/"+ISM::Default::Filename::Task, chrootTasks)
 
@@ -461,6 +446,30 @@ module ISM
                                             shell: true)
 
             return process
+        end
+
+        def runScript(file : String, arguments = Array(String).new, path = String.new)
+            scriptCommand = "./#{file}"
+
+            if @useChroot
+                chrootMakeCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{scriptCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootMakeCommand)
+            else
+                process = Process.run(  scriptCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path)
+            end
+            if !process.success?
+                Ism.notifyOfRunScriptError(file, path)
+                exit 1
+            end
         end
 
         def configure
@@ -502,10 +511,19 @@ module ISM
         end
 
         def makePerlSource(path = String.new)
-            process = Process.run("perl",   args: ["Makefile.PL"],
-                                            output: :inherit,
-                                            error: :inherit,
-                                            chdir: path)
+            if @useChroot
+                chrootMakeCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && perl Makefile.PL
+                CODE
+
+                process = runChrootTasks(chrootMakeCommand)
+            else
+                process = Process.run("perl",   args: ["Makefile.PL"],
+                                                output: :inherit,
+                                                error: :inherit,
+                                                chdir: path)
+            end
             if !process.success?
                 Ism.notifyOfMakePerlSourceError(path)
                 exit 1
