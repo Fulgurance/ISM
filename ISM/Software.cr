@@ -448,13 +448,14 @@ module ISM
             return process
         end
 
-        def runScript(file : String, arguments = Array(String).new, path = String.new)
+        def runScript(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new))
             scriptCommand = "./#{file}"
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if @useChroot
                 chrootMakeCommand = <<-CODE
                 #!/bin/bash
-                cd #{path} && #{scriptCommand} #{arguments.join(" ")}
+                cd #{path} && #{environmentCommand} #{scriptCommand} #{arguments.join(" ")}
                 CODE
 
                 process = runChrootTasks(chrootMakeCommand)
@@ -464,7 +465,8 @@ module ISM
                                         output: :inherit,
                                         error: :inherit,
                                         shell: true,
-                                        chdir: path)
+                                        chdir: path,
+                                        env: environment)
             end
             if !process.success?
                 Ism.notifyOfRunScriptError(file, path)
