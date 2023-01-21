@@ -476,7 +476,7 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
-        def configureSource(arguments : Array(String), path = String.new, configureDirectory = String.new)
+        def configureSource(arguments : Array(String), path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
             if @buildDirectory
                 configureCommand = "../#{configureDirectory}/configure "
             else
@@ -484,11 +484,12 @@ module ISM
             end
 
             configureCommand += arguments.join(" ")
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if @useChroot
                 chrootConfigureCommand = <<-CODE
                 #!/bin/bash
-                cd #{path} && #{configureCommand}
+                cd #{path} && #{environmentCommand} #{configureCommand}
                 CODE
 
                 process = runChrootTasks(chrootConfigureCommand)
@@ -497,7 +498,8 @@ module ISM
                                         output: :inherit,
                                         error: :inherit,
                                         shell: true,
-                                        chdir: path)
+                                        chdir: path,
+                                        env: environment)
             end
 
             if !process.success?
