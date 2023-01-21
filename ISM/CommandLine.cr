@@ -302,6 +302,9 @@ module ISM
         end
 
         def notifyOfCopyFileError(path : String | Enumerable(String), targetPath : String, error = nil)
+            if path.is_a?(Enumerable(String))
+                path = path.join(",")
+            end
             printErrorNotification(ISM::Default::CommandLine::ErrorCopyFileText1 +
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyFileText2 +
