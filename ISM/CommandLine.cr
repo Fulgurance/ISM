@@ -301,7 +301,7 @@ module ISM
                                     targetPath, error)
         end
 
-        def notifyOfCopyFileError(path : String, targetPath : String, error = nil)
+        def notifyOfCopyFileError(path : String | Enumerable(String), targetPath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorCopyFileText1 +
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyFileText2 +

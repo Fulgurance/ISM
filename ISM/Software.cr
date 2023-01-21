@@ -311,7 +311,7 @@ module ISM
             end
         end
 
-        def copyFile(path : String, targetPath : String)
+        def copyFile(path : String | Enumerable(String), targetPath : String)
             begin
                 FileUtils.cp(path, targetPath)
             rescue error
