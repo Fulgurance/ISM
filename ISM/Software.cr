@@ -5,14 +5,12 @@ module ISM
         property information : ISM::SoftwareInformation
         property mainSourceDirectoryName : String
         property buildDirectory : Bool
-        property useChroot : Bool
 
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
             @mainSourceDirectoryName = getMainSourceDirectoryName
             @buildDirectory = false
-            @useChroot = false
         end
 
         def getMainSourceDirectoryName
@@ -32,7 +30,7 @@ module ISM
         end
 
         def workDirectoryPath : String
-            return @useChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+"/"+@information.name+"/"+@information.version
+            return Ism.settings.installByChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+"/"+@information.name+"/"+@information.version
         end
 
         def mainWorkDirectoryPath : String
@@ -44,7 +42,7 @@ module ISM
         end
 
         def builtSoftwareDirectoryPath : String
-            return @useChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}/#{@information.builtSoftwareDirectoryPath}"
+            return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}/#{@information.builtSoftwareDirectoryPath}"
         end
 
         def download
@@ -448,11 +446,11 @@ module ISM
             return process
         end
 
-        def runScript(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new))
+        def runScript(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
             scriptCommand = "./#{file}"
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
-            if @useChroot
+            if Ism.settings.installByChroot
                 chrootMakeCommand = <<-CODE
                 #!/bin/bash
                 cd #{path} && #{environmentCommand} #{scriptCommand} #{arguments.join(" ")}
@@ -488,7 +486,7 @@ module ISM
             configureCommand += arguments.join(" ")
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
-            if @useChroot
+            if Ism.settings.installByChroot
                 chrootConfigureCommand = <<-CODE
                 #!/bin/bash
                 cd #{path} && #{environmentCommand} #{configureCommand}
@@ -515,7 +513,7 @@ module ISM
         end
 
         def makePerlSource(path = String.new)
-            if @useChroot
+            if Ism.settings.installByChroot
                 chrootMakeCommand = <<-CODE
                 #!/bin/bash
                 cd #{path} && perl Makefile.PL
@@ -535,7 +533,7 @@ module ISM
         end
 
         def makeSource(arguments : Array(String), path = String.new)
-            if @useChroot
+            if Ism.settings.installByChroot
                 chrootMakeCommand = <<-CODE
                 #!/bin/bash
                 cd #{path} && make #{arguments.join(" ")}

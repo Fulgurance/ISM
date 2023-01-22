@@ -11,6 +11,7 @@ module ISM
             Target = "#{Architecture}-#{TargetName}-linux-gnu"
             MakeOptions = "-j1"
             BuildOptions = "-march=native -O2 -pipe"
+            InstallByChroot = false
             SettingsFilePath = "#{ISM::Default::Path::SettingsIsmDirectory}Settings.json"
 
         end

@@ -13,6 +13,7 @@ module ISM
 
             def start
                 puts "#{ISM::Default::Option::SettingsShow::TitleText}:".colorize(:yellow)
+                puts "\t#{ISM::Default::Option::SettingsShow::InstallByChrootText}: #{Ism.settings.installByChroot.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::RootPathText}: #{Ism.settings.rootPath.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::ToolsPathText}: #{Ism.settings.toolsPath.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::SourcesPathText}: #{Ism.settings.sourcesPath.colorize(:green)}"

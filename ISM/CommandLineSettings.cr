@@ -9,7 +9,8 @@ module ISM
             architecture : String,
             target : String,
             makeOptions : String,
-            buildOptions : String do
+            buildOptions : String,
+            installByChroot : Bool do
             include JSON::Serializable
         end
 
@@ -20,6 +21,7 @@ module ISM
         getter      target : String
         property    makeOptions : String
         property    buildOptions : String
+        property    installByChroot : Bool
 
         def initialize( @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @systemName = ISM::Default::CommandLineSettings::SystemName,
@@ -27,7 +29,8 @@ module ISM
                         @architecture = ISM::Default::CommandLineSettings::Architecture,
                         @target = ISM::Default::CommandLineSettings::Target,
                         @makeOptions = ISM::Default::CommandLineSettings::MakeOptions,
-                        @buildOptions = ISM::Default::CommandLineSettings::BuildOptions)
+                        @buildOptions = ISM::Default::CommandLineSettings::BuildOptions,
+                        @installByChroot = ISM::Default::CommandLineSettings::InstallByChroot)
         end
 
         def loadSettingsFile
@@ -40,6 +43,7 @@ module ISM
             @target = information.target
             @makeOptions = information.makeOptions
             @buildOptions = information.buildOptions
+            @installByChroot = information.installByChroot
         end
 
         def writeSettingsFile
@@ -49,7 +53,8 @@ module ISM
                                     @architecture,
                                     @target,
                                     @makeOptions,
-                                    @buildOptions)
+                                    @buildOptions,
+                                    @installByChroot)
 
             file = File.open(ISM::Default::CommandLineSettings::SettingsFilePath,"w")
             settings.to_json(file)
@@ -84,6 +89,10 @@ module ISM
         end
 
         def setBuildOptions(@buildOptions)
+            writeSettingsFile
+        end
+
+        def setInstallByChroot(@installByChroot)
             writeSettingsFile
         end
 

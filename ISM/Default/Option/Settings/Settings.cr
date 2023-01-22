@@ -10,6 +10,8 @@ module ISM
                 LongText = "settings"
                 Description = "Configure ISM settings"
                 Options = [ ISM::Option::SettingsShow.new,
+                            ISM::Option::SettingsEnableInstallByChroot.new,
+                            ISM::Option::SettingsDisableInstallByChroot.new,
                             ISM::Option::SettingsSetArchitecture.new,
                             ISM::Option::SettingsSetBuildOptions.new,
                             ISM::Option::SettingsSetMakeOptions.new,

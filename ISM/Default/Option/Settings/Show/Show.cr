@@ -10,6 +10,7 @@ module ISM
                 LongText = "show"
                 Description = "Show the current settings"
                 TitleText = "Current ISM settings"
+                InstallByChrootText = "Install by chroot"
                 RootPathText = "Root path"
                 ToolsPathText = "Tools path"
                 SourcesPathText = "Sources path"
