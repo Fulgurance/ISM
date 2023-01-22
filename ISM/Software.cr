@@ -101,10 +101,7 @@ module ISM
         def extractSource(archive : String)
             makeDirectory("#{workDirectoryPath}/#{getMainSourceDirectoryName}")
             process = Process.run("tar",args: [ "-xf",
-                                                archive,
-                                                "--strip-components=1",
-                                                "-C",
-                                                "#{getMainSourceDirectoryName}"],
+                                                archive],
                                         error: :inherit,
                                         chdir: workDirectoryPath)
             if !process.success?
