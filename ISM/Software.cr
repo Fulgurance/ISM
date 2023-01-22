@@ -29,29 +29,29 @@ module ISM
             return result
         end
 
-        def workDirectoryPath : String
-            return Ism.settings.installByChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+"/"+@information.name+"/"+@information.version
+        def workDirectoryPath(relatedToChroot = true) : String
+            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+"/"+@information.name+"/"+@information.version
         end
 
-        def mainWorkDirectoryPath : String
-            return workDirectoryPath+"/"+@mainSourceDirectoryName
+        def mainWorkDirectoryPath(relatedToChroot = true) : String
+            return workDirectoryPath(relatedToChroot)+"/"+@mainSourceDirectoryName
         end
 
-        def buildDirectoryPath : String
-            return mainWorkDirectoryPath+"/"+"#{@buildDirectory ? "/build" : ""}"
+        def buildDirectoryPath(relatedToChroot = true) : String
+            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? "/build" : ""}"
         end
 
-        def builtSoftwareDirectoryPath : String
-            return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}/#{@information.builtSoftwareDirectoryPath}"
+        def builtSoftwareDirectoryPath(relatedToChroot = true) : String
+            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}/#{@information.builtSoftwareDirectoryPath}"
         end
 
         def download
             Ism.notifyOfDownload(@information)
 
-            if Dir.exists?(workDirectoryPath)
-                deleteDirectoryRecursively(workDirectoryPath)
+            if Dir.exists?(workDirectoryPath(false))
+                deleteDirectoryRecursively(workDirectoryPath(false))
             end
-            makeDirectory(workDirectoryPath)
+            makeDirectory(workDirectoryPath(false))
 
             @information.downloadLinks.each do |link|
                 downloadSource(link)
@@ -66,7 +66,7 @@ module ISM
             process = Process.run("wget",   args: [link],
                                             output: :inherit,
                                             error: :inherit,
-                                            chdir: workDirectoryPath)
+                                            chdir: workDirectoryPath(false))
             if !process.success?
                 Ism.notifyOfDownloadError(link)
                 exit 1
@@ -76,7 +76,7 @@ module ISM
         def check
             Ism.notifyOfCheck(@information)
             @information.downloadLinks.each_with_index do |source, index|
-                checkSource(workDirectoryPath+"/"+source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
+                checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
             end
         end
 
@@ -102,7 +102,7 @@ module ISM
             process = Process.run("tar",args: [ "-xf",
                                                 archive],
                                         error: :inherit,
-                                        chdir: workDirectoryPath)
+                                        chdir: workDirectoryPath(false))
             if !process.success?
                 Ism.notifyOfExtractError(archive)
                 exit 1
@@ -114,7 +114,7 @@ module ISM
             @information.patchesLinks.each do |patch|
                 patchFileName = patch.lchop(patch[0..patch.rindex("/")])
                 if patchFileName[-6..-1] != ".patch"
-                    moveFile("#{workDirectoryPath}/#{patchFileName}","#{workDirectoryPath}/#{patchFileName}.patch")
+                    moveFile("#{workDirectoryPath(false)}/#{patchFileName}","#{workDirectoryPath(false)}/#{patchFileName}.patch")
                     patchFileName = "#{patchFileName}.patch"
                 end
                 applyPatch(patchFileName)
@@ -122,9 +122,9 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            process = Process.run("patch",  args: ["-Np1","-i","#{workDirectoryPath}/#{patch}"],
+            process = Process.run("patch",  args: ["-Np1","-i","#{workDirectoryPath(false)}/#{patch}"],
                                             error: :inherit,
-                                            chdir: mainWorkDirectoryPath)
+                                            chdir: mainWorkDirectoryPath(false))
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 exit 1
@@ -133,8 +133,8 @@ module ISM
 
         def prepare
             Ism.notifyOfPrepare(@information)
-            if !Dir.exists?(buildDirectoryPath)
-                makeDirectory(buildDirectoryPath)
+            if !Dir.exists?(buildDirectoryPath(false))
+                makeDirectory(buildDirectoryPath(false))
             end
         end
 
@@ -555,10 +555,10 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            filesList = Dir.glob("#{builtSoftwareDirectoryPath}/**/*")
+            filesList = Dir.glob("#{builtSoftwareDirectoryPath(false)}/**/*")
 
             filesList.each do |entry|
-                finalDestination = entry.delete_at(1,builtSoftwareDirectoryPath.size-1)
+                finalDestination = entry.delete_at(1,builtSoftwareDirectoryPath(false).size-1)
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
                         makeDirectory(finalDestination)
@@ -571,7 +571,7 @@ module ISM
         
         def clean
             Ism.notifyOfClean(@information)
-            deleteDirectoryRecursively(workDirectoryPath)
+            deleteDirectoryRecursively(workDirectoryPath(false))
         end
 
         def uninstall
