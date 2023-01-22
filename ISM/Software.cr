@@ -99,7 +99,6 @@ module ISM
         end
 
         def extractSource(archive : String)
-            makeDirectory("#{workDirectoryPath}/#{getMainSourceDirectoryName}")
             process = Process.run("tar",args: [ "-xf",
                                                 archive],
                                         error: :inherit,
