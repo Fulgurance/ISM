@@ -323,9 +323,9 @@ module ISM
             end
         end
 
-        def deleteFile(path : String)
+        def deleteFile(path : String | Enumerable(String))
             begin
-                File.delete(path)
+                FileUtils.rm(path)
             rescue error
                 Ism.notifyOfDeleteFileError(path, error)
                 exit 1

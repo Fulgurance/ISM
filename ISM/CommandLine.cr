@@ -318,7 +318,10 @@ module ISM
                                    targetPath, error)
         end
 
-        def notifyOfDeleteFileError(path : String, error = nil)
+        def notifyOfDeleteFileError(path : String | Enumerable(String), error = nil)
+            if path.is_a?(Enumerable(String))
+                path = path.join(",")
+            end
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, error)
         end
 
