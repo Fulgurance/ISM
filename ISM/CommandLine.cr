@@ -351,7 +351,7 @@ module ISM
                                     path, error)
         end
 
-        def notifyOfdeleteAllFilesRecursivelyFinishingError(path : String, text : String, error = nil)
+        def notifyOfDeleteAllFilesRecursivelyFinishingError(path : String, text : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorDeleteAllFilesRecursivelyFinishingText1 +
                                     text +
                                     ISM::Default::CommandLine::ErrorDeleteAllFilesRecursivelyFinishingText2 +
