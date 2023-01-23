@@ -180,6 +180,9 @@ module ISM
         def checkEnteredArguments
             matchingOption = false
 
+            terminalTitleArguments = (ARGV.empty? ? "" : ARGV.join(" "))
+            setTerminalTitle("#{ISM::Default::CommandLine::Name} #{terminalTitleArguments}")
+
             if ARGV.empty?
                 matchingOption = true
                 @options[0+@debugLevel].start
@@ -370,7 +373,7 @@ module ISM
         end
 
         def notifyOfFileMakeinfoError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorFileMakeinfo+path, error)
+            printErrorNotification(ISM::Default::CommandLine::ErrorFileMakeinfoText+path, error)
         end
 
         def notifyOfRunScriptError(file : String, path : String, error = nil)
@@ -378,6 +381,14 @@ module ISM
                                     file +
                                     ISM::Default::CommandLine::ErrorRunScriptText2 +
                                     path, error)
+        end
+
+        def notifyOfRunPythonScriptError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonScriptText+path, error)
+        end
+
+        def notifyOfRunAutoreconfCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunAutoreconfCommandText+path, error)
         end
 
         def notifyOfConfigureError(sourceName : String, error = nil)
@@ -393,7 +404,7 @@ module ISM
         end
 
         def notifyOfGenerateEmptyFileError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorGenerateEmptyFile+path, error)
+            printErrorNotification(ISM::Default::CommandLine::ErrorGenerateEmptyFileText+path, error)
         end
 
         def notifyOfMoveFileError(path : String, newPath : String, error = nil)
@@ -531,6 +542,10 @@ module ISM
             end
 
             return matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex
+        end
+
+        def setTerminalTitle(title : String)
+            STDOUT << "\e]0; #{title}\e\\"
         end
 
     end

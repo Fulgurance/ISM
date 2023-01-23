@@ -439,6 +439,8 @@ module ISM
                                             error: :inherit,
                                             shell: true)
 
+            File.delete(Ism.settings.rootPath+"/"+ISM::Default::Filename::Task)
+
             return process
         end
 
@@ -447,12 +449,12 @@ module ISM
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if Ism.settings.installByChroot
-                chrootMakeCommand = <<-CODE
+                chrootScriptCommand = <<-CODE
                 #!/bin/bash
                 cd #{path} && #{environmentCommand} #{scriptCommand} #{arguments.join(" ")}
                 CODE
 
-                process = runChrootTasks(chrootMakeCommand)
+                process = runChrootTasks(chrootScriptCommand)
             else
                 process = Process.run(  scriptCommand,
                                         args: arguments,
@@ -464,6 +466,58 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunScriptError(file, path)
+                exit 1
+            end
+        end
+
+        def runPythonScript(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            pythonCommand = "python"
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+
+            if Ism.settings.installByChroot
+                chrootPythonScriptCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{environmentCommand} #{pythonCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootPythonScriptCommand)
+            else
+                process = Process.run(  pythonCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path,
+                                        env: environment)
+            end
+            if !process.success?
+                Ism.notifyOfRunPythonScriptError(path)
+                exit 1
+            end
+        end
+
+        def runAutoreconfCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            autoreconfCommand = "autoreconf"
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+
+            if Ism.settings.installByChroot
+                chrootAutoreconfCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{environmentCommand} #{autoreconfCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootAutoreconfCommand)
+            else
+                process = Process.run(  autoreconfCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path,
+                                        env: environment)
+            end
+            if !process.success?
+                Ism.notifyOfRunAutoreconfCommandError(path)
                 exit 1
             end
         end
@@ -510,12 +564,12 @@ module ISM
 
         def makePerlSource(path = String.new)
             if Ism.settings.installByChroot
-                chrootMakeCommand = <<-CODE
+                chrootPerlCommand = <<-CODE
                 #!/bin/bash
                 cd #{path} && perl Makefile.PL
                 CODE
 
-                process = runChrootTasks(chrootMakeCommand)
+                process = runChrootTasks(chrootPerlCommand)
             else
                 process = Process.run("perl",   args: ["Makefile.PL"],
                                                 output: :inherit,

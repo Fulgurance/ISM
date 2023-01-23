@@ -215,10 +215,12 @@ module ISM
                                 puts "\n"
 
                                 matchingSoftwaresArray.each_with_index do |software, index|
+                                    Ism.setTerminalTitle("#{ISM::Default::CommandLine::Name}: [#{(index+1)} / #{matchingSoftwaresArray.size}] #{ISM::Default::Option::SoftwareInstall::InstallingText} #{software.name} /#{software.version}")
+
                                     puts    "#{"<<".colorize(:light_magenta)}" +
                                             " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                             " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}" +
-                                            "] Installing "+"#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"+"\n\n"
+                                            "] #{ISM::Default::Option::SoftwareInstall::InstallingText} "+"#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"+"\n\n"
 
                                     if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
                                                     software.name + "/" +
@@ -283,7 +285,7 @@ module ISM
 
                                     writer = IO::MultiWriter.new(STDOUT,logFile)
 
-                                    process = Process.run("crystal",args: ["ISM.task"],output: writer,error: writer)
+                                    process = Process.run("crystal",args: [ISM::Default::Filename::Task],output: writer,error: writer)
 
                                     logFile.close
 
