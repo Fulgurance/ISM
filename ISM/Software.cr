@@ -367,7 +367,7 @@ module ISM
                     end
                 end
             rescue error
-                Ism.notifyOfDeleteAllFilesFinishingError(path, error)
+                Ism.notifyOfDeleteAllFilesFinishingError(path, text, error)
                 exit 1
             end
         end
@@ -381,7 +381,7 @@ module ISM
                     end
                 end
             rescue error
-                Ism.notifyOfDeleteAllFilesRecursivelyFinishingError(path, error)
+                Ism.notifyOfDeleteAllFilesRecursivelyFinishingError(path, text, error)
                 exit 1
             end
         end

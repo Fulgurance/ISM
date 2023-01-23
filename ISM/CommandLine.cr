@@ -344,6 +344,20 @@ module ISM
                                     path, error)
         end
 
+        def notifyOfDeleteAllFilesFinishingError(path : String, text : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorDeleteAllFilesFinishingText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorDeleteAllFilesFinishingText2 +
+                                    path, error)
+        end
+
+        def notifyOfdeleteAllFilesRecursivelyFinishingError(path : String, text : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorDeleteAllFilesRecursivelyFinishingText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorDeleteAllFilesRecursivelyFinishingText2 +
+                                    path, error)
+        end
+
         def notifyOfDeleteAllHiddenFilesError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesText+path, error)
         end
@@ -424,12 +438,12 @@ module ISM
                                     ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText3 +
                                     filePath +
                                     ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText4 +
-                                    lineNumber, error)
+                                    lineNumber.to_s, error)
         end
 
         def notifyOfFileDeleteLineError(filePath : String, lineNumber : UInt64, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorFileDeleteLineText1 +
-                                    lineNumber +
+                                    lineNumber.to_s +
                                     ISM::Default::CommandLine::ErrorFileDeleteLineText2 +
                                     filePath, error)
         end
