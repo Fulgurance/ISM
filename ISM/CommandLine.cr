@@ -426,6 +426,22 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryRecursivelyText+directory, error)
         end
 
+        def notifyOfFileSetPermissionsError(path : String, permissions : Int, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorFileSetPermissionsText1 +
+                                    permissions.to_s +
+                                    ISM::Default::CommandLine::ErrorFileSetPermissionsText2 +
+                                    path, error)
+        end
+
+        def notifyOfFileSetOwnerError(path : String, uid : Int, gid : Int, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorFileSetOwnerText1 +
+                                    uid.to_s +
+                                    ISM::Default::CommandLine::ErrorFileSetOwnerText2 +
+                                    gid.to_s +
+                                    ISM::Default::CommandLine::ErrorFileSetOwnerText3 +
+                                    path, error)
+        end
+
         def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceTextText1 +
                                     text +

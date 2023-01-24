@@ -183,6 +183,24 @@ module ISM
             end
         end
 
+        def fileSetPermissions(path : String, permissions : Int)
+            begin
+                File.chmod(path,permissions)
+            rescue error
+                Ism.notifyOfFileSetPermissionsError(path, permissions, error)
+                exit 1
+            end
+        end
+
+        def fileSetOwner(path : String, uid : Int, gid : Int)
+            begin
+                File.chown(path,uid,gid)
+            rescue error
+                Ism.notifyOfFileSetOwnerError(path, uid, gid, error)
+                exit 1
+            end
+        end
+
         def fileReplaceText(filePath : String, text : String, newText : String)
             begin
                 content = File.read_lines(filePath)
