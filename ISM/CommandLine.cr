@@ -23,10 +23,10 @@ module ISM
         end
 
         def start
+            loadSettingsFiles
             loadSoftwareDatabase
             loadInstalledSoftwareDatabase
             loadPortsDatabase
-            loadSettingsFiles
             checkEnteredArguments
         end
 
