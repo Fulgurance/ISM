@@ -17,7 +17,7 @@ module ISM
                 else
                     path = ARGV[2+Ism.debugLevel]
 
-                    if path[-1] != "/"
+                    if path[-1] != '/'
                         path = path+"/"
                     end
 
