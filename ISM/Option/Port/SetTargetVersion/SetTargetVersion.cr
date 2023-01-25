@@ -27,7 +27,7 @@ module ISM
 
                         Ism.ports.each do |port|
                             process = Process.new("git",args: ["switch","--detach",targetVersion],
-                                                        chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
+                                                        chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
                             until process.terminated?
                                 calculationStartingTime, frameIndex = Ism.playCalculationAnimation(setStartingTime, frameIndex, text)

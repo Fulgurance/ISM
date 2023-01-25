@@ -12,7 +12,8 @@ module ISM
             MakeOptions = "-j1"
             BuildOptions = "-march=native -O2 -pipe"
             InstallByChroot = false
-            SettingsFilePath = "#{ISM::Default::Path::SettingsIsmDirectory}Settings.json"
+            SettingsFilePath = "#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::Settings}"
+
 
         end
 

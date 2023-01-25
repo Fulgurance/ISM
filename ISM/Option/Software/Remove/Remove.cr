@@ -141,75 +141,79 @@ module ISM
 
                     if uselessSoftwares.size > 0 && !requestedSoftwaresAreDependencies
 
+                        puts "\n"
+
+                        uselessSoftwares.each do |software|
+                            softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                            optionsText = "{ "
+                            software.options.each do |option|
+                                if option.active
+                                    optionsText += "#{option.name.colorize(:red)}"
+                                else
+                                    optionsText += "#{option.name.colorize(:blue)}"
+                                end
+                                optionsText += " "
+                            end
+                            optionsText += "}"
+                            puts "\t" + softwareText + " " + optionsText + "\n"
+                        end
+
+                        puts "\n"
+
+                        userInput = ""
+                        userAgreement = false
+
+                        summaryText = uselessSoftwares.size.to_s + ISM::Default::Option::SoftwareRemove::SummaryText + "\n"
+
+                        puts "#{summaryText.colorize(:green)}"
+
+                        print   "#{ISM::Default::Option::SoftwareRemove::UninstallQuestion.colorize.mode(:underline)}" +
+                                "[" + "#{ISM::Default::Option::SoftwareRemove::YesReplyOption.colorize(:green)}" +
+                                "/" + "#{ISM::Default::Option::SoftwareRemove::NoReplyOption.colorize(:red)}" + "]"
+
+                        loop do
+                            userInput = gets
+
+                            if userInput == ISM::Default::Option::SoftwareRemove::YesReplyOption
+                                userAgreement = true
+                                break
+                            end
+                            if userInput == ISM::Default::Option::SoftwareRemove::NoReplyOption
+                                break
+                            end
+                        end
+
+                        if userAgreement
                             puts "\n"
 
-                            uselessSoftwares.each do |software|
-                                softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
-                                optionsText = "{ "
-                                software.options.each do |option|
-                                    if option.active
-                                        optionsText += "#{option.name.colorize(:red)}"
-                                    else
-                                        optionsText += "#{option.name.colorize(:blue)}"
-                                    end
-                                    optionsText += " "
-                                end
-                                optionsText += "}"
-                                puts "\t" + softwareText + " " + optionsText + "\n"
-                            end
+                            uselessSoftwares.each_with_index do |software, index|
+                                Ism.setTerminalTitle("#{ISM::Default::CommandLine::Name}: [#{(index+1)} / #{matchingSoftwaresArray.size}] #{ISM::Default::Option::SoftwareRemove::UninstallingText} #{software.name} /#{software.version}")
 
-                            puts "\n"
-
-                            userInput = ""
-                            userAgreement = false
-
-                            summaryText = uselessSoftwares.size.to_s + ISM::Default::Option::SoftwareRemove::SummaryText + "\n"
-
-                            puts "#{summaryText.colorize(:green)}"
-
-                            print   "#{ISM::Default::Option::SoftwareRemove::UninstallQuestion.colorize.mode(:underline)}" +
-                                    "[" + "#{ISM::Default::Option::SoftwareRemove::YesReplyOption.colorize(:green)}" +
-                                    "/" + "#{ISM::Default::Option::SoftwareRemove::NoReplyOption.colorize(:red)}" + "]"
-
-                            loop do
-                                userInput = gets
-
-                                if userInput == ISM::Default::Option::SoftwareRemove::YesReplyOption
-                                    userAgreement = true
-                                    break
-                                end
-                                if userInput == ISM::Default::Option::SoftwareRemove::NoReplyOption
-                                    break
-                                end
-                            end
-
-                            if userAgreement
-                                puts "\n"
-
-                                uselessSoftwares.each_with_index do |software, index|
                                 puts    "#{"<<".colorize(:light_magenta)}" +
                                         " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                         " / "+"#{uselessSoftwares.size.to_s.colorize(:light_red)}" +
-                                        "] Uninstalling "+"#{software.name.colorize(:green)}"+"\n\n"
+                                        "] #{ISM::Default::Option::SoftwareRemove::UninstallingText} "+"#{software.name.colorize(:green)}"+"\n\n"
 
-                                targetPath =    ISM::Default::Path::InstalledSoftwaresDirectory +
+                                targetPath =    Ism.settings.rootPath +
+                                                ISM::Default::Path::InstalledSoftwaresDirectory +
                                                 software.port + "/" +
                                                 software.name + "/" +
                                                 software.version + "/" +
                                                 ISM::Default::Filename::Information
 
-                                requirePath =   ISM::Default::Path::SoftwaresDirectory +
+                                requirePath =   Ism.settings.rootPath +
+                                                ISM::Default::Path::SoftwaresDirectory +
                                                 software.port + "/" +
                                                 software.name + "/" +
                                                 software.version + "/" +
                                                 software.version + ".cr"
 
                                 tasks = <<-CODE
-                                require "./RequiredLibraries"
+                                require "#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}RequiredLibraries"
                                 Ism = ISM::CommandLine.new
                                 Ism.loadSoftwareDatabase
                                 Ism.loadSettingsFiles
-                                require "./#{requirePath}"
+                                require "#{requirePath}"
                                 target = Target.new("#{targetPath}")
 
                                 begin
@@ -220,21 +224,24 @@ module ISM
 
                                 CODE
 
-                                File.write("ISM.task", tasks)
+                                File.write("#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}", tasks)
 
-                                process = Process.run("crystal",args: ["ISM.task"],output: :inherit,error: :inherit,)
+                                process = Process.run("crystal",args: ["#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
+                                                                output: :inherit,
+                                                                error: :inherit,)
 
                                 if !process.success?
                                     break
                                 end
 
-                                FileUtils.rm_r( ISM::Default::Path::InstalledSoftwaresDirectory +
+                                FileUtils.rm_r( Ism.settings.rootPath +
+                                                ISM::Default::Path::InstalledSoftwaresDirectory +
                                                 software.port + "/" +
                                                 software.name)
 
                                 puts
                                 puts    "#{software.name.colorize(:green)}" +
-                                        " is uninstalled "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                                        " #{ISM::Default::Option::SoftwareRemove::UninstalledText} "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                         " / "+"#{uselessSoftwares.size.to_s.colorize(:light_red)}"+"] " +
                                         "#{">>".colorize(:light_magenta)}"+"\n\n"
                             end
@@ -250,7 +257,6 @@ module ISM
                         end
                     end
 
-                    ##########################################
                 end
             end
 

@@ -34,7 +34,7 @@ module ISM
         end
 
         def loadSettingsFile
-            information = Settings.from_json(File.read(ISM::Default::CommandLineSettings::SettingsFilePath))
+            information = Settings.from_json(File.read(Ism.settings.rootPath+ISM::Default::CommandLineSettings::SettingsFilePath))
       
             @rootPath = information.rootPath
             @systemName = information.systemName
@@ -56,7 +56,7 @@ module ISM
                                     @buildOptions,
                                     @installByChroot)
 
-            file = File.open(ISM::Default::CommandLineSettings::SettingsFilePath,"w")
+            file = File.open(Ism.settings.rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,"w")
             settings.to_json(file)
             file.close
         end

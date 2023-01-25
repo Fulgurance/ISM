@@ -13,7 +13,7 @@ module ISM
         end
 
         def loadSystemSettingsFile
-            information = SystemSettings.from_json(File.read(ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath))
+            information = SystemSettings.from_json(File.read(Ism.settings.rootPath+ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath))
       
             @lcAll = information.lcAll
         end
@@ -21,7 +21,7 @@ module ISM
         def writeSystemSettingsFile
             systemSettings = SystemSettings.new(@lcAll)
 
-            file = File.open(ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath,"w")
+            file = File.open(Ism.settings.rootPath+ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath,"w")
             systemSettings.to_json(file)
             file.close
         end

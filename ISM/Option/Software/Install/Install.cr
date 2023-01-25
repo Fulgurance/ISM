@@ -102,8 +102,6 @@ module ISM
 
                     print "#{ISM::Default::Option::SoftwareInstall::CalculationDoneText.colorize(:green)}\n"
 
-
-
                     #Retirer encore les doublons si il y a des paquets de meme nom ou version differente, ou options differentes
                     if !matching
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArgument.colorize(:green)}"
@@ -222,40 +220,44 @@ module ISM
                                             " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}" +
                                             "] #{ISM::Default::Option::SoftwareInstall::InstallingText} "+"#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"+"\n\n"
 
-                                    if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
+                                    if File.exists?(Ism.settings.rootPath +
+                                                    ISM::Default::Path::SettingsSoftwaresDirectory +
                                                     software.name + "/" +
                                                     software.version + "/" +
                                                     ISM::Default::Filename::SoftwareSettings)
-                                        targetPath =    ISM::Default::Path::SettingsSoftwaresDirectory +
+                                        targetPath =    Ism.settings.rootPath +
+                                                        ISM::Default::Path::SettingsSoftwaresDirectory +
                                                         software.name + "/" +
                                                         software.version + "/" +
                                                         ISM::Default::Filename::SoftwareSettings
                                     else
-                                        targetPath =    ISM::Default::Path::SoftwaresDirectory +
+                                        targetPath =    Ism.settings.rootPath +
+                                                        ISM::Default::Path::SoftwaresDirectory +
                                                         software.port + "/" +
                                                         software.name + "/" +
                                                         software.version + "/" +
                                                         ISM::Default::Filename::Information
                                     end
 
-                                    requirePath =   ISM::Default::Path::SoftwaresDirectory +
+                                    requirePath =   Ism.settings.rootPath +
+                                                    ISM::Default::Path::SoftwaresDirectory +
                                                     software.port + "/" +
                                                     software.name + "/" +
                                                     software.version + "/" +
                                                     software.version + ".cr"
 
-                                    if Dir.exists?(Ism.settings.rootPath+"/"+software.builtSoftwareDirectoryPath)
-                                        FileUtils.rm_r(Ism.settings.rootPath+"/"+software.builtSoftwareDirectoryPath)
+                                    if Dir.exists?(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
+                                        FileUtils.rm_r(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
                                     end
 
-                                    Dir.mkdir_p(Ism.settings.rootPath+"/"+software.builtSoftwareDirectoryPath)
+                                    Dir.mkdir_p(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
 
                                     tasks = <<-CODE
-                                    require "./RequiredLibraries"
+                                    require "#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}RequiredLibraries"
                                     Ism = ISM::CommandLine.new
                                     Ism.loadSoftwareDatabase
                                     Ism.loadSettingsFiles
-                                    require "./#{requirePath}"
+                                    require "#{requirePath}"
                                     target = Target.new("#{targetPath}")
 
                                     begin
@@ -275,17 +277,19 @@ module ISM
 
                                     CODE
 
-                                    File.write(ISM::Default::Filename::Task, tasks)
+                                    File.write("#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}", tasks)
 
-                                    if !Dir.exists?("#{ISM::Default::Path::LogsDirectory}/#{software.port}")
-                                        Dir.mkdir_p("#{ISM::Default::Path::LogsDirectory}/#{software.port}")
+                                    if !Dir.exists?("#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}")
+                                        Dir.mkdir_p("#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}")
                                     end
 
-                                    logFile = File.open("#{ISM::Default::Path::LogsDirectory}/#{software.port}/#{software.versionName}.log","w")
+                                    logFile = File.open("#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}/#{software.versionName}.log","w")
 
                                     writer = IO::MultiWriter.new(STDOUT,logFile)
 
-                                    process = Process.run("crystal",args: [ISM::Default::Filename::Task],output: writer,error: writer)
+                                    process = Process.run("crystal",args: ["#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
+                                                                    output: writer,
+                                                                    error: writer)
 
                                     logFile.close
 
@@ -293,11 +297,11 @@ module ISM
                                         break
                                     end
 
-                                    builtSoftwareFilesList = Dir.glob("#{software.builtSoftwareDirectoryPath}/**/*")
+                                    builtSoftwareFilesList = Dir.glob("#{software.builtSoftwareDirectoryPath}**/*")
                                     installedFiles = Array(String).new
 
                                     builtSoftwareFilesList.each do |entry|
-                                        finalDestination = entry.delete_at(0,software.builtSoftwareDirectoryPath.size+Ism.settings.rootPath.size)
+                                        finalDestination = entry.delete_at(0,software.builtSoftwareDirectoryPath.size+Ism.settings.rootPath.size)# -1 ? (A cause de l'ajout de /)
                                         if File.file?(entry)
                                             installedFiles << finalDestination
                                         end
@@ -305,11 +309,11 @@ module ISM
 
                                     Ism.addInstalledSoftware(targetPath, installedFiles)
 
-                                    FileUtils.rm_r(Ism.settings.rootPath+"/"+software.builtSoftwareDirectoryPath)
+                                    FileUtils.rm_r(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
 
                                     puts
                                     puts    "#{software.name.colorize(:green)}" +
-                                            " is installed "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                                            " #{ISM::Default::Option::SoftwareInstall::InstalledText} "+"["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                                             " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}"+"] " +
                                             "#{">>".colorize(:light_magenta)}"+"\n\n"
                                 end

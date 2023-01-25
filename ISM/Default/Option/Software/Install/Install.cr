@@ -22,6 +22,7 @@ module ISM
                 DoesntExistText = "All requested softwares doesn't exist. Task cancelled."
                 NoMatchFound = "No match found with the database for "
                 NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                InstalledText = "is installed"
                 
             end
             

@@ -23,28 +23,28 @@ module ISM
 
                     port = ISM::Port.new(portName,ARGV[2+Ism.debugLevel])
 
-                    Dir.mkdir(ISM::Default::Path::SoftwaresDirectory+port.name)
+                    Dir.mkdir(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
                     Process.run("git",  args: ["init"],
-                                        chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
+                                        chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
                     Process.run("git",  args: [ "remote",
                                                 "add",
                                                 "origin",
                                                 port.url],
-                                        chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
+                                        chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
                     process = Process.new("git",args: [ "ls-remote"],
-                                                chdir: ISM::Default::Path::SoftwaresDirectory+port.name)
+                                                chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
                     result = process.wait
 
                     if result.success?
-                        port.writePortFile(ISM::Default::Path::PortsDirectory+portName+".json")
+                        port.writePortFile(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory+portName+".json")
 
                         puts    "#{"* ".colorize(:green)}" +
                             ISM::Default::Option::PortOpen::OpenText +
                             portName
                     else
-                        FileUtils.rm_r(ISM::Default::Path::SoftwaresDirectory+port.name)
+                        FileUtils.rm_r(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
                         puts    "#{"* ".colorize(:red)}" +
                             ISM::Default::Option::PortOpen::OpenTextError1 +

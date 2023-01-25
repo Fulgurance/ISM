@@ -31,17 +31,18 @@ module ISM
         end
 
         def loadSoftwareDatabase
-            if !Dir.exists?(ISM::Default::Path::SoftwaresDirectory)
-                Dir.mkdir(ISM::Default::Path::SoftwaresDirectory)
+            if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
+                Dir.mkdir(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
             end
 
-            portDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory)
+            portDirectories = Dir.children(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
 
             portDirectories.each do |portDirectory|
-                portSoftwareDirectories = Dir.children(ISM::Default::Path::SoftwaresDirectory+portDirectory).reject!(&.starts_with?(".git"))
+                portSoftwareDirectories = Dir.children(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+portDirectory).reject!(&.starts_with?(".git"))
 
                 portSoftwareDirectories.each do |softwareDirectory|
-                    versionDirectories = Dir.children(  ISM::Default::Path::SoftwaresDirectory+portDirectory + "/" +
+                    versionDirectories = Dir.children(  Ism.settings.rootPath +
+                                                        ISM::Default::Path::SoftwaresDirectory+portDirectory + "/" +
                                                         softwareDirectory)
                     softwaresInformations = Array(ISM::SoftwareInformation).new
 
@@ -49,19 +50,22 @@ module ISM
 
                         softwareInformation = ISM::SoftwareInformation.new
 
-                        if File.exists?(ISM::Default::Path::SettingsSoftwaresDirectory +
+                        if File.exists?(Ism.settings.rootPath +
+                                        ISM::Default::Path::SettingsSoftwaresDirectory +
                                         portDirectory+ "/" +
                                         softwareDirectory + "/" +
                                         versionDirectory + "/" +
                                         ISM::Default::Filename::SoftwareSettings)
-                            softwareInformation.loadInformationFile(ISM::Default::Path::SettingsSoftwaresDirectory +
+                            softwareInformation.loadInformationFile(Ism.settings.rootPath +
+                                                                    ISM::Default::Path::SettingsSoftwaresDirectory +
                                                                     portDirectory+ "/" +
                                                                     softwareDirectory + "/" +
                                                                     versionDirectory + "/" +
                                                                     ISM::Default::Filename::SoftwareSettings)
                             
                         else
-                            softwareInformation.loadInformationFile(ISM::Default::Path::SoftwaresDirectory +
+                            softwareInformation.loadInformationFile(Ism.settings.rootPath +
+                                                                    ISM::Default::Path::SoftwaresDirectory +
                                                                     portDirectory+ "/" +
                                                                     softwareDirectory + "/" +
                                                                     versionDirectory + "/" +
@@ -81,33 +85,33 @@ module ISM
         end
 
         def loadPortsDatabase
-            if !Dir.exists?(ISM::Default::Path::PortsDirectory)
-                Dir.mkdir(ISM::Default::Path::PortsDirectory)
+            if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
+                Dir.mkdir(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
             end
 
-            portsFiles = Dir.children(ISM::Default::Path::PortsDirectory)
+            portsFiles = Dir.children(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
 
             portsFiles.each do |portFile|
                 port = ISM::Port.new
-                port.loadPortFile(ISM::Default::Path::PortsDirectory+portFile)
+                port.loadPortFile(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory+portFile)
                 @ports << port
             end
         end
 
         def loadSettingsFiles
-            if File.exists?(ISM::Default::CommandLineSettings::SettingsFilePath)
+            if File.exists?(Ism.settings.rootPath+ISM::Default::CommandLineSettings::SettingsFilePath)
                 @settings.loadSettingsFile
             else
                 @settings.writeSettingsFile
             end
 
-            if File.exists?(ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath)
+            if File.exists?(Ism.settings.rootPath+ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath)
                 @systemSettings.loadSystemSettingsFile
             else
                 @systemSettings.writeSystemSettingsFile
             end
 
-            if File.exists?(ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath)
+            if File.exists?(Ism.settings.rootPath+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath)
                 @portsSettings.loadPortsSettingsFile
             else
                 @portsSettings.writePortsSettingsFile
@@ -115,24 +119,26 @@ module ISM
         end
 
         def loadInstalledSoftwareDatabase
-            if !Dir.exists?(ISM::Default::Path::InstalledSoftwaresDirectory)
-                Dir.mkdir(ISM::Default::Path::InstalledSoftwaresDirectory)
+            if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
+                Dir.mkdir(Ism.settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
             end
 
-            portDirectories = Dir.children(ISM::Default::Path::InstalledSoftwaresDirectory)
+            portDirectories = Dir.children(Ism.settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
 
             portDirectories.each do |portDirectory|
-                portSoftwareDirectories = Dir.children(ISM::Default::Path::InstalledSoftwaresDirectory+portDirectory)
+                portSoftwareDirectories = Dir.children(Ism.settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory+portDirectory)
 
                 portSoftwareDirectories.each do |softwareDirectory|
-                    versionDirectories = Dir.children(  ISM::Default::Path::InstalledSoftwaresDirectory+portDirectory + "/" +
+                    versionDirectories = Dir.children(  Ism.settings.rootPath +
+                                                        ISM::Default::Path::InstalledSoftwaresDirectory+portDirectory + "/" +
                                                         softwareDirectory)
 
                     versionDirectories.each do |versionDirectory|
 
                         softwareInformation = ISM::SoftwareInformation.new
 
-                        softwareInformation.loadInformationFile(ISM::Default::Path::InstalledSoftwaresDirectory +
+                        softwareInformation.loadInformationFile(Ism.settings.rootPath +
+                                                                ISM::Default::Path::InstalledSoftwaresDirectory +
                                                                 portDirectory+ "/" +
                                                                 softwareDirectory + "/" +
                                                                 versionDirectory + "/" +
@@ -152,17 +158,20 @@ module ISM
             installedSoftware.loadInformationFile(path)
             installedSoftware.installedFiles = installedFiles
 
-            if !Dir.exists?(ISM::Default::Path::InstalledSoftwaresDirectory +
+            if !Dir.exists?(Ism.settings.rootPath +
+                            ISM::Default::Path::InstalledSoftwaresDirectory +
                             installedSoftware.port + "/" + 
                             installedSoftware.name + "/" + 
                             installedSoftware.version)
-                Dir.mkdir_p(ISM::Default::Path::InstalledSoftwaresDirectory +
+                Dir.mkdir_p(Ism.settings.rootPath +
+                            ISM::Default::Path::InstalledSoftwaresDirectory +
                             installedSoftware.port + "/" + 
                             installedSoftware.name + "/" + 
                             installedSoftware.version)
             end
 
-            installedSoftware.writeInformationFile( ISM::Default::Path::InstalledSoftwaresDirectory +
+            installedSoftware.writeInformationFile( Ism.settings.rootPath +
+                                                    ISM::Default::Path::InstalledSoftwaresDirectory +
                                                     installedSoftware.port + "/" + 
                                                     installedSoftware.name + "/" + 
                                                     installedSoftware.version + "/" + 

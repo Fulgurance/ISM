@@ -4,18 +4,20 @@ module ISM
 
         module Path
             
-            PortsDirectory = "Ports/"
-            SettingsDirectory = "Settings/"
-            IsmDirectory = "ISM/"
-            SoftwaresDirectory = "Softwares/"
-            InstalledSoftwaresDirectory = "InstalledSoftwares/"
-            SettingsIsmDirectory = "#{SettingsDirectory}#{IsmDirectory}"
-            SettingsSoftwaresDirectory = "#{SettingsDirectory}#{SoftwaresDirectory}/"
-            LogsDirectory = "Logs/"
-            TemporaryDirectory = "tmp/ism/"
-            BuiltSoftwaresDirectory = "#{TemporaryDirectory}builtsoftwares/"
+            IsmDirectory = "ism/"
+            BinaryDirectory = "bin/"
             ToolsDirectory = "tools/"
             SourcesDirectory = "sources/"
+            RuntimeDataDirectory = "var/run/#{IsmDirectory}"
+            TemporaryDirectory = "tmp/#{IsmDirectory}"
+            SettingsDirectory = "etc/#{IsmDirectory}"
+            LogsDirectory = "var/log/#{IsmDirectory}"
+            LibraryDirectory = "usr/share/#{IsmDirectory}"
+            PortsDirectory = "#{RuntimeDataDirectory}ports/"
+            SoftwaresDirectory = "#{RuntimeDataDirectory}softwares/"
+            InstalledSoftwaresDirectory = "#{RuntimeDataDirectory}installedsoftwares/"
+            SettingsSoftwaresDirectory = "#{SettingsDirectory}softwares/"
+            BuiltSoftwaresDirectory = "#{TemporaryDirectory}builtsoftwares/"
 
         end
 

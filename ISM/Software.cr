@@ -30,7 +30,7 @@ module ISM
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
-            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+"/"+@information.name+"/"+@information.version
+            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.name+"/"+@information.version
         end
 
         def mainWorkDirectoryPath(relatedToChroot = true) : String
@@ -38,11 +38,11 @@ module ISM
         end
 
         def buildDirectoryPath(relatedToChroot = true) : String
-            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? "/build" : ""}"
+            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? "build" : ""}"
         end
 
         def builtSoftwareDirectoryPath(relatedToChroot = true) : String
-            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}/#{@information.builtSoftwareDirectoryPath}"
+            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
         end
 
         def download
@@ -191,6 +191,37 @@ module ISM
                 exit 1
             end
         end
+
+        #####################
+
+        def deleteAllHiddenFiles(path : String)
+            begin
+                Dir.glob("#{path}/.*", match_hidden: true) do |file_path|
+                    if File.file?(file_path)
+                        deleteFile(file_path)
+                    end
+                end
+            rescue error
+                Ism.notifyOfDeleteAllHiddenFilesError(path, error)
+                exit 1
+            end
+        end
+
+        def deleteAllHiddenFilesRecursively(path : String)
+            begin
+                deleteAllHiddenFiles(path)
+                Dir.glob("#{path}/*") do |file_path|
+                    if File.directory?(file_path)
+                        deleteAllHiddenFiles(file_path)
+                    end
+                end
+            rescue error
+                Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path, error)
+                exit 1
+            end
+        end
+
+        #####################
 
         def fileSetOwner(path : String, uid : Int, gid : Int)
             begin
@@ -445,14 +476,14 @@ module ISM
             File.write(Ism.settings.rootPath+"/"+ISM::Default::Filename::Task, chrootTasks)
 
             process = Process.run("chmod",  args: [ "+x",
-                                                    "#{Ism.settings.rootPath}/#{ISM::Default::Filename::Task}"],
+                                                    "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
                                             output: :inherit,
                                             error: :inherit,
                                             shell: true)
 
             process = Process.run("sudo",   args: [ "chroot",
                                                     Ism.settings.rootPath,
-                                                    "./#{ISM::Default::Filename::Task}"],
+                                                    "./#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
                                             output: :inherit,
                                             error: :inherit,
                                             shell: true)

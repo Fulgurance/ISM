@@ -12,44 +12,44 @@ module ISM
             end
 
             def start
-                #if ARGV.size == 2+Ism.debugLevel
-                    #showHelp
-                #else
-                    puts ISM::Default::CommandLine::Title
+                puts ISM::Default::CommandLine::Title
 
-                    processResult = IO::Memory.new
+                processResult = IO::Memory.new
 
-                    process = Process.run("git",args: [  "describe",
-                                                            "--all"],
-                                                output: processResult)
-                    currentVersion = processResult.to_s.strip
-                    currentVersion = currentVersion.lchop(currentVersion[0..currentVersion.rindex("/")])
+                process = Process.run("git",args: [ "describe",
+                                                    "--all"],
+                                                    output: processResult,
+                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                currentVersion = processResult.to_s.strip
+                currentVersion = currentVersion.lchop(currentVersion[0..currentVersion.rindex("/")])
 
-                    processResult.clear
+                processResult.clear
 
-                    process = Process.run("git",args: [  "describe",
-                                                            "--tags"],
-                                                output: processResult)
-                    currentTag = processResult.to_s.strip
+                process = Process.run("git",args: [ "describe",
+                                                    "--tags"],
+                                                    output: processResult,
+                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                currentTag = processResult.to_s.strip
 
-                    processResult.clear
+                processResult.clear
 
-                    snapshot = (currentVersion == currentTag)
+                snapshot = (currentVersion == currentTag)
 
-                    versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
+                versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
 
-                    if !snapshot
-                        process = Process.run("git",args: [ "rev-parse",
-                                                            "HEAD"],
-                                                    output: processResult)
+                if !snapshot
+                    process = Process.run("git",args: [ "rev-parse",
+                                                        "HEAD"],
+                                                        output: processResult,
+                                                        chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
 
-                        currentVersion = currentVersion+"-"+processResult.to_s.strip
-                    end
+                    currentVersion = currentVersion+"-"+processResult.to_s.strip
+                end
 
-                    version = versionPrefix + "#{currentVersion.colorize(:green)}"
+                version = versionPrefix + "#{currentVersion.colorize(:green)}"
 
-                    puts version
-                #end
+                puts version
+
             end
 
         end

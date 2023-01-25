@@ -15,10 +15,16 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    Ism.settings.setRootPath(ARGV[2+Ism.debugLevel])
+                    path = ARGV[2+Ism.debugLevel]
+
+                    if path[-1] != "/"
+                        path = path+"/"
+                    end
+
+                    Ism.settings.setRootPath(path)
                     puts    "#{"* ".colorize(:green)}" +
                             ISM::Default::Option::SettingsSetRootPath::SetText +
-                            ARGV[2+Ism.debugLevel]
+                            path
                 end
             end
 
