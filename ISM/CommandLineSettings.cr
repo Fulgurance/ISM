@@ -56,7 +56,7 @@ module ISM
                                     @buildOptions,
                                     @installByChroot)
 
-            file = File.open(Ism.settings.rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,"w")
+            file = File.open((Ism.settings.rootPath == "/" ? Ism.settings.rootPath : "/")+ISM::Default::CommandLineSettings::SettingsFilePath,"w")
             settings.to_json(file)
             file.close
         end
