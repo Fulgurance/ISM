@@ -208,7 +208,7 @@ module ISM
                                                 software.version + "/" +
                                                 software.version + ".cr"
 
-                                requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}")
+                                requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{ISM::Default::Filename::RequiredLibraries}")
                                 requiredLibraries = String.new
                                 requireFileContent.each do |line|
                                     if line.includes?("require \".")
