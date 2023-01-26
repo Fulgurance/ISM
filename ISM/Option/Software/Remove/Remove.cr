@@ -209,11 +209,12 @@ module ISM
                                                 software.version + ".cr"
 
                                 tasks = <<-CODE
-                                require "#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}RequiredLibraries"
+                                {{ read_file("/#{ISM::Default::Path::LibraryDirectory}RequiredLibraries").id }}
                                 Ism = ISM::CommandLine.new
                                 Ism.loadSoftwareDatabase
                                 Ism.loadSettingsFiles
-                                require "#{requirePath}"
+
+                                {{ read_file("#{requirePath}").id }}
                                 target = Target.new("#{targetPath}")
 
                                 begin
@@ -224,11 +225,30 @@ module ISM
 
                                 CODE
 
-                                File.write("#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}", tasks)
+                                File.write("#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)#####################EXPERIMENTAL (add .cr)
 
-                                process = Process.run("crystal",args: ["#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
+
+                                #######################EXPERIMENTAL (Task compilation) #######################
+
+                                #process = Process.run("crystal",args: ["#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
+                                                                #output: :inherit,
+                                                                #error: :inherit,)
+
+                                #COMPILE THE TASK
+                                process = Process.run("crystal",args: [ "build",
+                                                                        "#{ISM::Default::Filename::Task}.cr",
+                                                                        "-o",
+                                                                        "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
                                                                 output: :inherit,
-                                                                error: :inherit,)
+                                                                error: :inherit,
+                                                                chdir: "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+                                #RUN THE TASK
+                                process = Process.run("./#{ISM::Default::Filename::Task}",  output: :inherit,
+                                                                                            error: :inherit,
+                                                                                            chdir: "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+                                ##############################################################################
 
                                 if !process.success?
                                     break
