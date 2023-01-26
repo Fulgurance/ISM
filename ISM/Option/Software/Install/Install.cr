@@ -252,8 +252,89 @@ module ISM
 
                                     Dir.mkdir_p(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
 
+                                    #####################################TEMPORARY FIX#################################
+                                    #{{ read_file("/#{ISM::Default::Path::LibraryDirectory}RequiredLibraries.cr").id }}
+
                                     tasks = <<-CODE
-                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}RequiredLibraries").id }}
+                                    require "colorize"
+                                    require "file_utils"
+                                    require "json"
+                                    require "digest"
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/CommandLine").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/CommandLineOption").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/CommandLineSettings").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/CommandLineSystemSettings").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/CommandLinePortsSettings").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Port").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/SoftwareDependency").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/SoftwareInformation").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/SoftwareOption").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Software").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/AvailableSoftware").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/CommandLine").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/CommandLineSettings").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/CommandLineSystemSettings").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/CommandLinePortsSettings").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Filename").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Path").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Debug/Debug").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Help/Help").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/Settings").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/Show/Show").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/EnableInstallByChroot/EnableInstallByChroot").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/DisableInstallByChroot/DisableInstallByChroot").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/SetArchitecture/SetArchitecture").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/SetBuildOptions/SetBuildOptions").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/SetMakeOptions/SetMakeOptions").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/SetRootPath/SetRootPath").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/SetSystemName/SetSystemName").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Settings/SetTargetName/SetTargetName").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Software/Software").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Software/DisableOption/DisableOption").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Software/EnableOption/EnableOption").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Software/Install/Install").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Software/Remove/Remove").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Software/Search/Search").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Software/Synchronize/Synchronize").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Software/Update/Update").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Port/Port").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Port/Open/Open").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Port/Close/Close").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Port/SetTargetVersion/SetTargetVersion").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/System/System").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/System/SetLcAll/SetLcAll").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Version/Version").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Version/Show/Show").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Default/Option/Version/Switch/Switch").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Debug/Debug").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Help/Help").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/Settings").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/Show/Show").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/EnableInstallByChroot/EnableInstallByChroot").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/DisableInstallByChroot/DisableInstallByChroot").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/SetArchitecture/SetArchitecture").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/SetBuildOptions/SetBuildOptions").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/SetMakeOptions/SetMakeOptions").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/SetRootPath/SetRootPath").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/SetSystemName/SetSystemName").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Settings/SetTargetName/SetTargetName").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Software/Software").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Software/DisableOption/DisableOption").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Software/EnableOption/EnableOption").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Software/Install/Install").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Software/Remove/Remove").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Software/Search/Search").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Software/Synchronize/Synchronize").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Software/Update/Update").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Port/Port").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Port/Open/Open").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Port/Close/Close").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Port/SetTargetVersion/SetTargetVersion").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/System/System").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/System/SetLcAll/SetLcAll").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Version/Version").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Version/Show/Show").id }}
+                                    {{ read_file("/#{ISM::Default::Path::LibraryDirectory}ISM/Option/Version/Switch/Switch").id }}
                                     Ism = ISM::CommandLine.new
                                     Ism.loadSoftwareDatabase
                                     Ism.loadSettingsFiles
