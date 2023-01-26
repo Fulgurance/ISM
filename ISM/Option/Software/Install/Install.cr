@@ -252,7 +252,7 @@ module ISM
 
                                     Dir.mkdir_p(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
 
-                                    requireFileContent = File.read_lines(requirePath)
+                                    requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}")
                                     requiredLibraries = String.new
                                     requireFileContent.each do |line|
                                         if line.includes?("require \".")
