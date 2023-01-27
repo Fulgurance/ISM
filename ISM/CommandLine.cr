@@ -443,19 +443,35 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryRecursivelyText+directory, error)
         end
 
-        def notifyOfFileSetPermissionsError(path : String, permissions : Int, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorFileSetPermissionsText1 +
+        def notifyOfSetPermissionsError(path : String, permissions : Int, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorSetPermissionsText1 +
                                     permissions.to_s +
-                                    ISM::Default::CommandLine::ErrorFileSetPermissionsText2 +
+                                    ISM::Default::CommandLine::ErrorSetPermissionsText2 +
                                     path, error)
         end
 
-        def notifyOfFileSetOwnerError(path : String, uid : Int, gid : Int, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorFileSetOwnerText1 +
+        def notifyOfSetPermissionsRecursivelyError(path : String, permissions : Int, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorSetPermissionsRecursivelyText1 +
+                                    permissions.to_s +
+                                    ISM::Default::CommandLine::ErrorSetPermissionsRecursivelyText2 +
+                                    path, error)
+        end
+
+        def notifyOfSetOwnerError(path : String, uid : Int, gid : Int, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorSetOwnerText1 +
                                     uid.to_s +
-                                    ISM::Default::CommandLine::ErrorFileSetOwnerText2 +
+                                    ISM::Default::CommandLine::ErrorSetOwnerText2 +
                                     gid.to_s +
-                                    ISM::Default::CommandLine::ErrorFileSetOwnerText3 +
+                                    ISM::Default::CommandLine::ErrorSetOwnerText3 +
+                                    path, error)
+        end
+
+        def notifyOfSetOwnerRecursivelyError(path : String, uid : Int, gid : Int, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorSetOwnerRecursivelyText1 +
+                                    uid.to_s +
+                                    ISM::Default::CommandLine::ErrorSetOwnerRecursivelyText2 +
+                                    gid.to_s +
+                                    ISM::Default::CommandLine::ErrorSetOwnerRecursivelyText3 +
                                     path, error)
         end
 

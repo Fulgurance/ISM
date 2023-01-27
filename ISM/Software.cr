@@ -183,20 +183,42 @@ module ISM
             end
         end
 
-        def fileSetPermissions(path : String, permissions : Int)
+        def setPermissions(path : String, permissions : Int)
             begin
                 File.chmod(path,permissions)
             rescue error
-                Ism.notifyOfFileSetPermissionsError(path, permissions, error)
+                Ism.notifyOfSetPermissionsError(path, permissions, error)
                 exit 1
             end
         end
 
-        def fileSetOwner(path : String, uid : Int, gid : Int)
+        def setOwner(path : String, uid : Int, gid : Int)
             begin
                 File.chown(path,uid,gid)
             rescue error
-                Ism.notifyOfFileSetOwnerError(path, uid, gid, error)
+                Ism.notifyOfSetOwnerError(path, uid, gid, error)
+                exit 1
+            end
+        end
+
+        def setPermissionsRecursively(path : String, permissions : Int)
+            begin
+                Dir.glob("#{path}/**/*") do |file_path|
+                    setPermissions(path, permissions)
+                end
+            rescue error
+                Ism.notifyOfSetPermissionsRecursivelyError(path, permissions, error)
+                exit 1
+            end
+        end
+
+        def setOwnerRecursively(path : String, uid : Int, gid : Int)
+            begin
+                Dir.glob("#{path}/**/*") do |file_path|
+                    setOwner(path, uid, gid)
+                end
+            rescue error
+                Ism.notifyOfSetOwnerRecursivelyError(path, uid, gid, error)
                 exit 1
             end
         end
@@ -365,10 +387,9 @@ module ISM
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
             begin
-                replaceTextAllFilesNamed(path, filename, text, newText)
-                Dir.glob("#{path}/*") do |file_path|
-                    if File.directory?(file_path)
-                        replaceTextAllFilesNamed(file_path, filename, text, newText)
+                Dir.glob("#{path}/**/*") do |file_path|
+                    if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
+                        fileReplaceText(file_path, text, newText)
                     end
                 end
             rescue error
@@ -392,10 +413,9 @@ module ISM
 
         def deleteAllFilesRecursivelyFinishing(path : String, text : String)
             begin
-                deleteAllFilesFinishing(path,text)
-                Dir.glob("#{path}/*") do |file_path|
-                    if File.directory?(file_path)
-                        deleteAllFilesFinishing(file_path,text)
+                Dir.glob("#{path}/**/*") do |file_path|
+                    if File.file?(file_path) && file_path[-text.size..-1] == text
+                        deleteFile(file_path)
                     end
                 end
             rescue error
@@ -419,10 +439,9 @@ module ISM
 
         def deleteAllHiddenFilesRecursively(path : String)
             begin
-                deleteAllHiddenFiles(path)
-                Dir.glob("#{path}/*") do |file_path|
-                    if File.directory?(file_path)
-                        deleteAllHiddenFiles(file_path)
+                Dir.glob("#{path}/**/.*", match_hidden: true) do |file_path|
+                    if File.file?(file_path)
+                        deleteFile(file_path)
                     end
                 end
             rescue error
