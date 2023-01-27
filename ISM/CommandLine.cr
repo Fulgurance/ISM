@@ -381,10 +381,6 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, error)
         end
 
-        def notifyOfFileMakeinfoError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorFileMakeinfoText+path, error)
-        end
-
         def notifyOfRunScriptError(file : String, path : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunScriptText1 +
                                     file +
@@ -396,8 +392,20 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonScriptText+path, error)
         end
 
+        def notifyOfRunMakeinfoCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunMakeinfoCommandText+path, error)
+        end
+
+        def notifyOfRunInstallinfoCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunInstallinfoCommandText+path, error)
+        end
+
         def notifyOfRunAutoreconfCommandError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorRunAutoreconfCommandText+path, error)
+        end
+
+        def notifyOfRunGunzipCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunGunzipCommandText+path, error)
         end
 
         def notifyOfConfigureError(sourceName : String, error = nil)

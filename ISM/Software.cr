@@ -192,37 +192,6 @@ module ISM
             end
         end
 
-        #####################
-
-        def deleteAllHiddenFiles(path : String)
-            begin
-                Dir.glob("#{path}/.*", match_hidden: true) do |file_path|
-                    if File.file?(file_path)
-                        deleteFile(file_path)
-                    end
-                end
-            rescue error
-                Ism.notifyOfDeleteAllHiddenFilesError(path, error)
-                exit 1
-            end
-        end
-
-        def deleteAllHiddenFilesRecursively(path : String)
-            begin
-                deleteAllHiddenFiles(path)
-                Dir.glob("#{path}/*") do |file_path|
-                    if File.directory?(file_path)
-                        deleteAllHiddenFiles(file_path)
-                    end
-                end
-            rescue error
-                Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path, error)
-                exit 1
-            end
-        end
-
-        #####################
-
         def fileSetOwner(path : String, uid : Int, gid : Int)
             begin
                 File.chown(path,uid,gid)
@@ -462,16 +431,6 @@ module ISM
             end
         end
 
-        def fileMakeinfo(arguments : Array(String), path = String.new)
-            process = Process.run("makeinfo",   args: arguments,
-                                                chdir: path)
-
-            if !process.success?
-                Ism.notifyOfFileMakeinfoError(path)
-                exit 1
-            end
-        end
-
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+"/"+ISM::Default::Filename::Task, chrootTasks)
 
@@ -545,6 +504,26 @@ module ISM
             end
         end
 
+        def runMakeinfoCommand(arguments : Array(String), path = String.new)
+            process = Process.run("makeinfo",   args: arguments,
+                                                chdir: path)
+
+            if !process.success?
+                Ism.notifyOfRunMakeinfoError(path)
+                exit 1
+            end
+        end
+
+        def runInstallinfoCommand(arguments : Array(String), path = String.new)
+            process = Process.run("install-info",   args: arguments,
+                                                    chdir: path)
+
+            if !process.success?
+                Ism.notifyOfRunInstallinfoError(path)
+                exit 1
+            end
+        end
+
         def runAutoreconfCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
             autoreconfCommand = "autoreconf"
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
@@ -567,6 +546,16 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunAutoreconfCommandError(path)
+                exit 1
+            end
+        end
+
+        def runGunzipCommand(arguments : Array(String), path = String.new)
+            process = Process.run("gunzip", args: arguments,
+                                            chdir: path)
+
+            if !process.success?
+                Ism.notifyOfRunGunzipError(path)
                 exit 1
             end
         end
