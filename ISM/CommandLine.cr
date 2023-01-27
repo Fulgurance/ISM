@@ -457,7 +457,7 @@ module ISM
                                     path, error)
         end
 
-        def notifyOfSetOwnerError(path : String, uid : Int, gid : Int, error = nil)
+        def notifyOfSetOwnerError(path : String, uid : Int | String, gid : Int | String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorSetOwnerText1 +
                                     uid.to_s +
                                     ISM::Default::CommandLine::ErrorSetOwnerText2 +
@@ -466,7 +466,7 @@ module ISM
                                     path, error)
         end
 
-        def notifyOfSetOwnerRecursivelyError(path : String, uid : Int, gid : Int, error = nil)
+        def notifyOfSetOwnerRecursivelyError(path : String, uid : Int | String, gid : Int | String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorSetOwnerRecursivelyText1 +
                                     uid.to_s +
                                     ISM::Default::CommandLine::ErrorSetOwnerRecursivelyText2 +
