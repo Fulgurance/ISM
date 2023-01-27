@@ -192,9 +192,11 @@ module ISM
             end
         end
 
-        def setOwner(path : String, uid : Int, gid : Int)
+        def setOwner(path : String, uid : Int | String, gid : Int | String)
             begin
-                File.chown(path,uid,gid)
+                File.chown( path,
+                            (uid.is_a?(String) ? System::Group.find_by(name: uid).id : uid).to_i,
+                            (gid.is_a?(String) ? System::Group.find_by(name: gid).id : gid).to_i)
             rescue error
                 Ism.notifyOfSetOwnerError(path, uid, gid, error)
                 exit 1
