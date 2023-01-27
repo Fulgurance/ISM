@@ -311,7 +311,7 @@ module ISM
 
         def fileWriteData(filePath : String, data : String)
             begin
-                File.write(filepath, data)
+                File.write(filePath, data)
             rescue error
                 Ism.notifyOfFileWriteDataError(filePath, error)
                 exit 1
