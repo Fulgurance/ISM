@@ -214,7 +214,7 @@ module ISM
             end
         end
 
-        def setOwnerRecursively(path : String, uid : Int, gid : Int)
+        def setOwnerRecursively(path : String, uid : Int | String, gid : Int | String)
             begin
                 Dir.glob("#{path}/**/*") do |file_path|
                     setOwner(path, uid, gid)
