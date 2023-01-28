@@ -20,12 +20,12 @@ module ISM
                 TargetText = "Target"
                 MakeOptionsText = "Make options"
                 BuildOptionsText = "Build options"
-                ChrootSystemNameText = "Chroot system name"
-                ChrootTargetNameText = "Chroot target name"
-                ChrootArchitectureText = "Chroot architecture"
-                ChrootTargetText = "Chroot target"
-                ChrootMakeOptionsText = "Chroot make options"
-                ChrootBuildOptionsText = "Chroot build options"
+                ChrootSystemNameText = "Chroot System name"
+                ChrootTargetNameText = "Chroot Target name"
+                ChrootArchitectureText = "Chroot Architecture"
+                ChrootTargetText = "Chroot Target"
+                ChrootMakeOptionsText = "Chroot Make options"
+                ChrootBuildOptionsText = "Chroot Build options"
 
             end
             

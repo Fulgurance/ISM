@@ -144,28 +144,52 @@ module ISM
             end
         end
 
-        def systemName : String
-            return (Ism.settings.rootPath != "/" ? @chrootSystemName : @systemName)
+        def systemName(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootSystemName : @systemName)
+            else
+                return @systemName
+            end
         end
 
-        def targetName : String
-            return (Ism.settings.rootPath != "/" ? @chrootTargetName : @targetName)
+        def targetName(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootTargetName : @targetName)
+            else
+                return @targetName
+            end
         end
 
-        def architecture : String
-            return (Ism.settings.rootPath != "/" ? @chrootArchitecture : @architecture)
+        def architecture(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootArchitecture : @architecture)
+            else
+                return @architecture
+            end
         end
 
-        def target : String
-            return (Ism.settings.rootPath != "/" ? @chrootTarget : @target)
+        def target(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootTarget : @target)
+            else
+                return @target
+            end
         end
 
-        def makeOptions : String
-            return (Ism.settings.rootPath != "/" ? @chrootMakeOptions : @makeOptions)
+        def makeOptions(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootMakeOptions : @makeOptions)
+            else
+                return @makeOptions
+            end
         end
 
-        def buildOptions : String
-            return (Ism.settings.rootPath != "/" ? @chrootBuildOptions : @buildOptions)
+        def buildOptions(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootBuildOptions : @buildOptions)
+            else
+                return @buildOptions
+            end
         end
 
         def setRootPath(@rootPath)
