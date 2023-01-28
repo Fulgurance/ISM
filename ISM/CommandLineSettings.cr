@@ -46,6 +46,10 @@ module ISM
         end
 
         def loadSettingsFile
+            if !File.exists?("/"+ISM::Default::CommandLineSettings::SettingsFilePath)
+                writeSettingsFile
+            end
+
             information = Settings.from_json(File.read("/"+ISM::Default::CommandLineSettings::SettingsFilePath))
       
             @rootPath = information.rootPath
@@ -64,46 +68,80 @@ module ISM
             @chrootBuildOptions = information.chrootBuildOptions
         end
 
-        def writeSettingsFile
-            settings = Settings.new(@rootPath,
-                                    @systemName,
-                                    @targetName,
-                                    @architecture,
-                                    @target,
-                                    @makeOptions,
-                                    @buildOptions,
-                                    @installByChroot,
-                                    @chrootSystemName,
-                                    @chrootTargetName,
-                                    @chrootArchitecture,
-                                    @chrootTarget,
-                                    @chrootMakeOptions,
-                                    @chrootBuildOptions)
+        def writeSettings(  filePath : String,
+                            rootPath : String,
+                            systemName : String,
+                            targetName : String,
+                            architecture : String,
+                            target : String,
+                            makeOptions : String,
+                            buildOptions : String,
+                            installByChroot : Bool,
+                            chrootSystemName : String,
+                            chrootTargetName : String,
+                            chrootArchitecture : String,
+                            chrootTarget : String,
+                            chrootMakeOptions : String,
+                            chrootBuildOptions : String)
 
-            file = File.open("/"+ISM::Default::CommandLineSettings::SettingsFilePath,"w")
+            settings = Settings.new(filePath,
+                                    rootPath,
+                                    systemName,
+                                    targetName,
+                                    architecture,
+                                    target,
+                                    makeOptions,
+                                    buildOptions,
+                                    installByChroot,
+                                    chrootSystemName,
+                                    chrootTargetName,
+                                    chrootArchitecture,
+                                    chrootTarget,
+                                    chrootMakeOptions,
+                                    chrootBuildOptions)
+
+            file = File.open(filePath,"w")
             settings.to_json(file)
             file.close
+        end
 
-            if Ism.settings.rootPath != "/"
-                chrootFile = File.open(Ism.settings.rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,"w")
+        def writeChrootSettingsFile
+            writeSettings(  @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
+                            ISM::Default::CommandLineSettings::RootPath,
+                            @chrootSystemName,
+                            @chrootTargetName,
+                            @chrootArchitecture,
+                            @chrootTarget,
+                            @chrootMakeOptions,
+                            @chrootBuildOptions,
+                            ISM::Default::CommandLineSettings::InstallByChroot,
+                            ISM::Default::CommandLineSettings::SystemName,
+                            ISM::Default::CommandLineSettings::TargetName,
+                            ISM::Default::CommandLineSettings::Architecture,
+                            ISM::Default::CommandLineSettings::Target,
+                            ISM::Default::CommandLineSettings::MakeOptions,
+                            ISM::Default::CommandLineSettings::BuildOptions)
+        end
 
-                chrootSettings = Settings.new(  ISM::Default::CommandLineSettings::RootPath,
-                                                @chrootSystemName,
-                                                @chrootTargetName,
-                                                @chrootArchitecture,
-                                                @chrootTarget,
-                                                @chrootMakeOptions,
-                                                @chrootBuildOptions,
-                                                ISM::Default::CommandLineSettings::InstallByChroot,
-                                                ISM::Default::CommandLineSettings::SystemName,
-                                                ISM::Default::CommandLineSettings::TargetName,
-                                                ISM::Default::CommandLineSettings::Architecture,
-                                                ISM::Default::CommandLineSettings::Target,
-                                                ISM::Default::CommandLineSettings::MakeOptions,
-                                                ISM::Default::CommandLineSettings::BuildOptions)
-                chrootSettings.to_json(chrootFile)
+        def writeSettingsFile
+            writeSettings(  "/"+ISM::Default::CommandLineSettings::SettingsFilePath,
+                            @rootPath,
+                            @systemName,
+                            @targetName,
+                            @architecture,
+                            @target,
+                            @makeOptions,
+                            @buildOptions,
+                            @installByChroot,
+                            @chrootSystemName,
+                            @chrootTargetName,
+                            @chrootArchitecture,
+                            @chrootTarget,
+                            @chrootMakeOptions,
+                            @chrootBuildOptions)
 
-                chrootFile.close
+            if @rootPath != "/"
+                writeChrootSettingsFile
             end
         end
 

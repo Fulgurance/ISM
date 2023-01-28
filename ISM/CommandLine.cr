@@ -99,23 +99,9 @@ module ISM
         end
 
         def loadSettingsFiles
-            if File.exists?("/"+ISM::Default::CommandLineSettings::SettingsFilePath)
-                @settings.loadSettingsFile
-            else
-                @settings.writeSettingsFile
-            end
-
-            if File.exists?("/"+ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath)
-                @systemSettings.loadSystemSettingsFile
-            else
-                @systemSettings.writeSystemSettingsFile
-            end
-
-            if File.exists?("/"+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath)
-                @portsSettings.loadPortsSettingsFile
-            else
-                @portsSettings.writePortsSettingsFile
-            end
+            @settings.loadSettingsFile
+            @systemSettings.loadSystemSettingsFile
+            @portsSettings.loadPortsSettingsFile
         end
 
         def loadInstalledSoftwareDatabase

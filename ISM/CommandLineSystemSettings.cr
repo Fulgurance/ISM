@@ -13,8 +13,11 @@ module ISM
         end
 
         def loadSystemSettingsFile
+            if !File.exists?(Ism.settings.rootPath+ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath)
+                writeSystemSettingsFile
+            end
+
             information = SystemSettings.from_json(File.read(Ism.settings.rootPath+ISM::Default::CommandLineSystemSettings::SystemSettingsFilePath))
-      
             @lcAll = information.lcAll
         end
 
