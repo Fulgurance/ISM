@@ -19,7 +19,7 @@ module ISM
                 process = Process.run("git",args: [ "describe",
                                                     "--all"],
                                                     output: processResult,
-                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                                                    chdir: "/"+ISM::Default::Path::LibraryDirectory)
                 currentVersion = processResult.to_s.strip
                 currentVersion = currentVersion.lchop(currentVersion[0..currentVersion.rindex("/")])
 
@@ -28,7 +28,7 @@ module ISM
                 process = Process.run("git",args: [ "describe",
                                                     "--tags"],
                                                     output: processResult,
-                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                                                    chdir: "/"+ISM::Default::Path::LibraryDirectory)
                 currentTag = processResult.to_s.strip
 
                 processResult.clear
@@ -41,7 +41,7 @@ module ISM
                     process = Process.run("git",args: [ "rev-parse",
                                                         "HEAD"],
                                                         output: processResult,
-                                                        chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                                                        chdir: "/"+ISM::Default::Path::LibraryDirectory)
 
                     currentVersion = currentVersion+"-"+processResult.to_s.strip
                 end

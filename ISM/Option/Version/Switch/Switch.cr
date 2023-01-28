@@ -22,30 +22,30 @@ module ISM
                     process = Process.run("git",args: [ "describe",
                                                         "--all"],
                                                 output: processResult,
-                                                chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                                                chdir: "/"+ISM::Default::Path::LibraryDirectory)
                     previousVersion = processResult.to_s.strip
                     previousVersion = previousVersion.lchop(previousVersion[0..previousVersion.rindex("/")])
 
                     process = Process.run("git",args: [ "switch",
                                                         "--detach",
                                                         currentVersion],
-                                                chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                                                chdir: "/"+ISM::Default::Path::LibraryDirectory)
                     if !process.success?
                         process = Process.run("git",args: [ "switch",
                                                             currentVersion],
-                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                                                    chdir: "/"+ISM::Default::Path::LibraryDirectory)
                     end
 
                     process = Process.run("crystal",args: [ "build",
                                                             "Main.cr",
                                                             "-o",
                                                             Ism.settings.rootPath+ISM::Default::Path::BinaryDirectory+ISM::Default::Filename::IsmBinary],
-                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                                                    chdir: "/"+ISM::Default::Path::LibraryDirectory)
 
                     process = Process.run("git",args: [ "update-ref",
                                                             "-d",
                                                             "/refs/heads/#{previousVersion}"],
-                                                chdir: Ism.settings.rootPath+ISM::Default::Path::LibraryDirectory)
+                                                chdir: "/"+ISM::Default::Path::LibraryDirectory)
                 end
             end
 
