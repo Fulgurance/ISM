@@ -13,11 +13,11 @@ module ISM
             BuildOptions = "-march=native -O2 -pipe"
             InstallByChroot = false
             ChrootSystemName = "#{SystemName}"
-            ChrootTargetName = "#{ChrootTargetName}"
-            ChrootArchitecture = "#{ChrootArchitecture}"
-            ChrootTarget = "#{ChrootTarget}"
-            ChrootMakeOptions = "#{ChrootMakeOptions}"
-            ChrootBuildOptions = "#{ChrootBuildOptions}"
+            ChrootTargetName = "#{TargetName}"
+            ChrootArchitecture = "#{Architecture}"
+            ChrootTarget = "#{Target}"
+            ChrootMakeOptions = "#{MakeOptions}"
+            ChrootBuildOptions = "#{BuildOptions}"
             SettingsFilePath = "#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::Settings}"
 
 
