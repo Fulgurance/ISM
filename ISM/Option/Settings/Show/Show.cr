@@ -23,6 +23,12 @@ module ISM
                 puts "\t#{ISM::Default::Option::SettingsShow::TargetText}: #{Ism.settings.target.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::MakeOptionsText}: #{Ism.settings.makeOptions.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::BuildOptionsText}: #{Ism.settings.buildOptions.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::ChrootSystemNameText}: #{Ism.settings.chrootSystemName.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::ChrootTargetNameText}: #{Ism.settings.chrootTargetName.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::ChrootArchitectureText}: #{Ism.settings.chrootArchitecture.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::ChrootTargetText}: #{Ism.settings.chrootTarget.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::ChrootMakeOptionsText}: #{Ism.settings.chrootMakeOptions.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::ChrootBuildOptionsText}: #{Ism.settings.chrootBuildOptions.colorize(:green)}"
             end
 
         end

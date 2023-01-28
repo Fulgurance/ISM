@@ -12,12 +12,17 @@ module ISM
                 Options = [ ISM::Option::SettingsShow.new,
                             ISM::Option::SettingsEnableInstallByChroot.new,
                             ISM::Option::SettingsDisableInstallByChroot.new,
+                            ISM::Option::SettingsSetRootPath.new,
                             ISM::Option::SettingsSetArchitecture.new,
                             ISM::Option::SettingsSetBuildOptions.new,
                             ISM::Option::SettingsSetMakeOptions.new,
-                            ISM::Option::SettingsSetRootPath.new,
                             ISM::Option::SettingsSetSystemName.new,
-                            ISM::Option::SettingsSetTargetName.new]
+                            ISM::Option::SettingsSetTargetName.new,
+                            ISM::Option::SettingsSetChrootArchitecture.new,
+                            ISM::Option::SettingsSetChrootBuildOptions.new,
+                            ISM::Option::SettingsSetChrootMakeOptions.new,
+                            ISM::Option::SettingsSetChrootSystemName.new,
+                            ISM::Option::SettingsSetChrootTargetName.new]
 
             end
         end
