@@ -84,8 +84,7 @@ module ISM
                             chrootMakeOptions : String,
                             chrootBuildOptions : String)
 
-            settings = Settings.new(filePath,
-                                    rootPath,
+            settings = Settings.new(rootPath,
                                     systemName,
                                     targetName,
                                     architecture,
