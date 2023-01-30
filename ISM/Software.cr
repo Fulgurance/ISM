@@ -453,7 +453,7 @@ module ISM
         end
 
         def runChrootTasks(chrootTasks) : Process::Status
-            File.write(Ism.settings.rootPath+"/"+ISM::Default::Filename::Task, chrootTasks)
+            File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
             process = Process.run("chmod",  args: [ "+x",
                                                     "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
@@ -468,7 +468,7 @@ module ISM
                                             error: :inherit,
                                             shell: true)
 
-            File.delete(Ism.settings.rootPath+"/"+ISM::Default::Filename::Task)
+            File.delete(Ism.settings.rootPath+ISM::Default::Filename::Task)
 
             return process
         end
@@ -525,6 +525,75 @@ module ISM
             end
         end
 
+        def runPwconvCommand(arguments : Array(String).new)
+            pwconvCommand = "pwconv"
+
+            if Ism.settings.installByChroot
+                chrootPwconvScriptCommand = <<-CODE
+                #!/bin/bash
+                #{pwconvCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootPwconvScriptCommand)
+            else
+                process = Process.run(  pwconvCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunPwconvCommandError(arguments)
+                exit 1
+            end
+        end
+
+        def runGrpconvCommand(arguments : Array(String).new)
+            grpconvCommand = "grpconv"
+
+            if Ism.settings.installByChroot
+                chrootGrpconvScriptCommand = <<-CODE
+                #!/bin/bash
+                #{grpconvCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootGrpconvScriptCommand)
+            else
+                process = Process.run(  grpconvCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunGrpconvCommandError(arguments)
+                exit 1
+            end
+        end
+
+        def runUdevadmCommand(arguments : Array(String))
+            udevadmCommand = "udevadm"
+
+            if Ism.settings.installByChroot
+                chrootUdevadmScriptCommand = <<-CODE
+                #!/bin/bash
+                #{udevadmCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootUdevadmScriptCommand)
+            else
+                process = Process.run(  udevadmCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunUdevadmCommandError(arguments)
+                exit 1
+            end
+        end
+
         def runMakeinfoCommand(arguments : Array(String), path = String.new)
             process = Process.run("makeinfo",   args: arguments,
                                                 chdir: path)
@@ -567,6 +636,29 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunAutoreconfCommandError(path)
+                exit 1
+            end
+        end
+
+        def runLocaledefCommand(arguments : Array(String))
+            localedefCommand = "localedef"
+
+            if Ism.settings.installByChroot
+                chrootLocaledefScriptCommand = <<-CODE
+                #!/bin/bash
+                #{localedefCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootLocaledefScriptCommand)
+            else
+                process = Process.run(  localedefCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunLocaledefCommandError(arguments)
                 exit 1
             end
         end

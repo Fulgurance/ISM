@@ -378,6 +378,18 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonScriptText+path, error)
         end
 
+        def notifyOfRunPwconvCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunPwconvCommandText+arguments.join(" "), error)
+        end
+
+        def notifyOfRunGrpconvCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunRunGrpconvCommandText+arguments.join(" "), error)
+        end
+
+        def notifyOfRunUdevadmCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunUdevadmCommandText+arguments.join(" "), error)
+        end
+
         def notifyOfRunMakeinfoCommandError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorRunMakeinfoCommandText+path, error)
         end
@@ -388,6 +400,10 @@ module ISM
 
         def notifyOfRunAutoreconfCommandError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorRunAutoreconfCommandText+path, error)
+        end
+
+        def notifyOfRunLocaledefCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunLocaledefCommandText+arguments.join(" "), error)
         end
 
         def notifyOfRunGunzipCommandError(path : String, error = nil)
