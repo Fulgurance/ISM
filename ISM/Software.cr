@@ -147,7 +147,7 @@ module ISM
             end
         end
 
-        def moveFile(path : String, newPath : String)
+        def moveFile(path : String | Enumerable(String), newPath : String)
             begin
                 FileUtils.mv(path, newPath)
             rescue error
