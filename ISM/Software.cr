@@ -525,7 +525,7 @@ module ISM
             end
         end
 
-        def runPwconvCommand(arguments : Array(String).new)
+        def runPwconvCommand(arguments = Array(String).new)
             pwconvCommand = "pwconv"
 
             if Ism.settings.installByChroot
@@ -548,7 +548,7 @@ module ISM
             end
         end
 
-        def runGrpconvCommand(arguments : Array(String).new)
+        def runGrpconvCommand(arguments = Array(String).new)
             grpconvCommand = "grpconv"
 
             if Ism.settings.installByChroot
