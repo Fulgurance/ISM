@@ -598,7 +598,7 @@ module ISM
                                                 chdir: path)
 
             if !process.success?
-                Ism.notifyOfRunMakeinfoError(path)
+                Ism.notifyOfRunMakeinfoCommandError(path)
                 exit 1
             end
         end
