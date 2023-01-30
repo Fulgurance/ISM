@@ -42,7 +42,7 @@ module ISM
         end
 
         def builtSoftwareDirectoryPath(relatedToChroot = true) : String
-            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
+            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
         end
 
         def download
