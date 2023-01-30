@@ -456,14 +456,13 @@ module ISM
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
             process = Process.run("chmod",  args: [ "+x",
-                                                    "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
+                                                    "#{Ism.settings.rootPath}#{ISM::Default::Filename::Task}"],
                                             output: :inherit,
                                             error: :inherit,
                                             shell: true)
 
-            process = Process.run("sudo",   args: [ "chroot",
-                                                    Ism.settings.rootPath,
-                                                    "./#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
+            process = Process.run("chroot",   args: [ Ism.settings.rootPath,
+                                                    "./#{ISM::Default::Filename::Task}"],
                                             output: :inherit,
                                             error: :inherit,
                                             shell: true)
