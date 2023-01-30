@@ -608,7 +608,7 @@ module ISM
                                                     chdir: path)
 
             if !process.success?
-                Ism.notifyOfRunInstallinfoError(path)
+                Ism.notifyOfRunInstallinfoCommandError(path)
                 exit 1
             end
         end
