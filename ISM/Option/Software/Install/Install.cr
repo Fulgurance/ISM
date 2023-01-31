@@ -318,11 +318,11 @@ module ISM
                                         break
                                     end
 
-                                    builtSoftwareFilesList = Dir.glob("#{software.builtSoftwareDirectoryPath}**/*")
+                                    builtSoftwareFilesList = Dir.glob("#{Ism.settings.rootPath}#{software.builtSoftwareDirectoryPath}**/*", match_hidden: true)
                                     installedFiles = Array(String).new
 
                                     builtSoftwareFilesList.each do |entry|
-                                        finalDestination = entry.delete_at(0,software.builtSoftwareDirectoryPath.size+Ism.settings.rootPath.size)# -1 ? (A cause de l'ajout de /)
+                                        finalDestination = entry.delete_at(0,Ism.settings.rootPath.size+software.builtSoftwareDirectoryPath.size+Ism.settings.rootPath.size-2)
                                         if File.file?(entry)
                                             installedFiles << finalDestination
                                         end
