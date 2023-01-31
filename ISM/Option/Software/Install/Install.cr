@@ -284,6 +284,7 @@ module ISM
                                         target.prepareInstallation
                                         target.install
                                         target.clean
+                                        target.showInformations
                                     rescue
                                         exit 1
                                     end

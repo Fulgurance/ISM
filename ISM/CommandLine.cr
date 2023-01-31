@@ -218,15 +218,23 @@ module ISM
         end
 
         def printProcessNotification(message : String)
-            puts "#{"* ".colorize(:green)}" + message
+            puts "#{"* ".colorize(:green)}#{message}"
         end
 
         def printErrorNotification(message : String, error)
-            puts "[" + "#{"!".colorize(:red)}" + "] " + message
+            puts "[#{"!".colorize(:red)}] #{message}"
             if typeof(error) == Exception
-                puts "[" + "#{"!".colorize(:red)}" + "] "
+                puts "[#{"!".colorize(:red)}] "
                 pp error
             end
+        end
+
+        def printInformationNotification(message : String)
+            puts "[#{"Info".colorize(:green)}] #{message}"
+        end
+
+        def printInformationCodeNotification(message : String)
+            puts "#{message.colorize(:magenta).back(Colorize::ColorRGB.new(80, 80, 80))}"
         end
 
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)

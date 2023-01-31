@@ -778,6 +778,9 @@ module ISM
             deleteDirectoryRecursively(workDirectoryPath(false))
         end
 
+        def showInformations
+        end
+
         def uninstall
             Ism.notifyOfUninstall(@information)
             information.installedFiles.each do |file|
@@ -797,6 +800,14 @@ module ISM
 
         def architecture?(architecture : String) : Bool
             return Ism.settings.architecture == architecture
+        end
+
+        def showInfo(message : String)
+            Ism.printInformationNotification(message)
+        end
+
+        def showInfoCode(message : String)
+            Ism.printInformationCodeNotification(message)
         end
 
     end
