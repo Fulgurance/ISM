@@ -163,9 +163,9 @@ module ISM
             dependency.name = object.name
 
             dependencyVersion = object.version.tr("><=","")
-            if dependency.version.includes?("<") || dependency.version.includes?(">")
+            if object.version.includes?("<") || object.version.includes?(">")
 
-                if dependency.version[0] == ">" && dependency.version[1] != "="
+                if object.version[0] == ">" && object.version[1] != "="
                     Ism.softwares.each do |software|
                         if dependency.name == software.name
                             temporaryDependencyVersion = dependency.version.tr("><=","")
@@ -181,7 +181,7 @@ module ISM
                     end
                 end
 
-                if dependency.version[0] == "<" && dependency.version[1] != "="
+                if object.version[0] == "<" && object.version[1] != "="
                     Ism.softwares.each do |software|
                         if dependency.name == software.name
                             temporaryDependencyVersion = dependency.version.tr("><=","")
@@ -196,7 +196,7 @@ module ISM
                     end
                 end
 
-                if dependency.version[0..1] == ">="
+                if object.version[0..1] == ">="
                     Ism.softwares.each do |software|
                         if dependency.name == software.name
                             temporaryDependencyVersion = dependency.version.tr("><=","")
@@ -211,7 +211,7 @@ module ISM
                     end
                 end
 
-                if dependency.version[0..1] == "<="
+                if object.version[0..1] == "<="
                     Ism.softwares.each do |software|
                         if dependency.name == software.name
                             temporaryDependencyVersion = dependency.version.tr("><=","")
