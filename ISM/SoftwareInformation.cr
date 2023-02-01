@@ -41,7 +41,6 @@ module ISM
     property downloadLinks : Array(String)
     property md5sums : Array(String)
     property patchesLinks : Array(String)
-    property dependencies : Array(ISM::SoftwareDependency)
     property options : Array(ISM::SoftwareOption)
     property installedFiles : Array(String)
 
@@ -154,6 +153,88 @@ module ISM
 
     def == (other : ISM::SoftwareInformation) : Bool
         return @name == other.name && @version == other.version && @options == other.options
+    end
+
+    def dependencies : Array(ISM::SoftwareDependency)
+        dependenciesArray = Array(ISM::SoftwareDependency).new
+
+        @dependencies.each do |object|
+            dependency = ISM::SoftwareDependency.new
+            dependency.name = object.name
+
+            dependencyVersion = object.version.tr("><=","")
+            if dependency.version.includes?("<") || dependency.version.includes?(">")
+
+                if dependency.version[0] == ">" && dependency.version[1] != "="
+                    Ism.softwares.each do |software|
+                        if dependency.name == software.name
+                            temporaryDependencyVersion = dependency.version.tr("><=","")
+
+                            software.versions.each do |information|
+                                temporarySoftwareVersion = information.version.tr("><=","")
+                                if temporaryDependencyVersion < temporarySoftwareVersion && dependencyVersion < temporarySoftwareVersion
+                                    dependencyVersion = temporarySoftwareVersion
+                                end
+                            end
+
+                        end
+                    end
+                end
+
+                if dependency.version[0] == "<" && dependency.version[1] != "="
+                    Ism.softwares.each do |software|
+                        if dependency.name == software.name
+                            temporaryDependencyVersion = dependency.version.tr("><=","")
+
+                            software.versions.each do |information|
+                                temporarySoftwareVersion = information.version.tr("><=","")
+                                if temporaryDependencyVersion > temporarySoftwareVersion && dependencyVersion > temporarySoftwareVersion
+                                    dependencyVersion = temporarySoftwareVersion
+                                end
+                            end
+                        end
+                    end
+                end
+
+                if dependency.version[0..1] == ">="
+                    Ism.softwares.each do |software|
+                        if dependency.name == software.name
+                            temporaryDependencyVersion = dependency.version.tr("><=","")
+
+                            software.versions.each do |information|
+                                temporarySoftwareVersion = information.version.tr("><=","")
+                                if temporaryDependencyVersion <= temporarySoftwareVersion && dependencyVersion <= temporarySoftwareVersion
+                                    dependencyVersion = temporarySoftwareVersion
+                                end
+                            end
+                        end
+                    end
+                end
+
+                if dependency.version[0..1] == "<="
+                    Ism.softwares.each do |software|
+                        if dependency.name == software.name
+                            temporaryDependencyVersion = dependency.version.tr("><=","")
+
+                            software.versions.each do |information|
+                                temporarySoftwareVersion = information.version.tr("><=","")
+                                if temporaryDependencyVersion >= temporarySoftwareVersion && dependencyVersion >= temporarySoftwareVersion
+                                    dependencyVersion = temporarySoftwareVersion
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+
+            dependency.version = dependencyVersion
+            dependency.options = object.options
+
+            dependenciesArray << dependency
+
+        end
+
+        return dependenciesArray
     end
 
   end
