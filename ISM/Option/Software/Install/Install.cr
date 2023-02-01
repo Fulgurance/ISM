@@ -117,6 +117,8 @@ module ISM
 
                         if !unavailableSoftware
                             matchingSoftwaresArray.uniq!
+                        else
+                            unavailableSoftwaresArray.uniq!
                         end
                     end
 

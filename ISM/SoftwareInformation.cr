@@ -155,23 +155,23 @@ module ISM
         return @name == other.name && @version == other.version && @options == other.options
     end
 
-    def dependencies : Array(ISM::SoftwareDependency)
+    def dependencies(includeComparators = false) : Array(ISM::SoftwareDependency)
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
         @dependencies.each do |object|
             dependency = ISM::SoftwareDependency.new
             dependency.name = object.name
 
-            dependencyVersion = object.version.tr("><=","")
+            dependencyVersion = includeComparators ? object.version.tr("><=","") : object.version
             if object.version.includes?("<") || object.version.includes?(">")
 
                 if object.version[0] == ">" && object.version[1] != "="
                     Ism.softwares.each do |software|
                         if dependency.name == software.name
-                            temporaryDependencyVersion = dependency.version.tr("><=","")
+                            temporaryDependencyVersion = includeComparators ? dependency.version.tr("><=","") : dependency.version
 
                             software.versions.each do |information|
-                                temporarySoftwareVersion = information.version.tr("><=","")
+                                temporarySoftwareVersion = includeComparators ? information.version.tr("><=","") : information.version
                                 if temporaryDependencyVersion < temporarySoftwareVersion && dependencyVersion < temporarySoftwareVersion
                                     dependencyVersion = temporarySoftwareVersion
                                 end
@@ -184,10 +184,10 @@ module ISM
                 if object.version[0] == "<" && object.version[1] != "="
                     Ism.softwares.each do |software|
                         if dependency.name == software.name
-                            temporaryDependencyVersion = dependency.version.tr("><=","")
+                            temporaryDependencyVersion = includeComparators ? dependency.version.tr("><=","") : dependency.version
 
                             software.versions.each do |information|
-                                temporarySoftwareVersion = information.version.tr("><=","")
+                                temporarySoftwareVersion = includeComparators ? information.version.tr("><=","") : information.version
                                 if temporaryDependencyVersion > temporarySoftwareVersion && dependencyVersion > temporarySoftwareVersion
                                     dependencyVersion = temporarySoftwareVersion
                                 end
@@ -199,10 +199,10 @@ module ISM
                 if object.version[0..1] == ">="
                     Ism.softwares.each do |software|
                         if dependency.name == software.name
-                            temporaryDependencyVersion = dependency.version.tr("><=","")
+                            temporaryDependencyVersion = includeComparators ? dependency.version.tr("><=","") : dependency.version
 
                             software.versions.each do |information|
-                                temporarySoftwareVersion = information.version.tr("><=","")
+                                temporarySoftwareVersion = includeComparators ? information.version.tr("><=","") : information.version
                                 if temporaryDependencyVersion <= temporarySoftwareVersion && dependencyVersion <= temporarySoftwareVersion
                                     dependencyVersion = temporarySoftwareVersion
                                 end
@@ -214,10 +214,10 @@ module ISM
                 if object.version[0..1] == "<="
                     Ism.softwares.each do |software|
                         if dependency.name == software.name
-                            temporaryDependencyVersion = dependency.version.tr("><=","")
+                            temporaryDependencyVersion = includeComparators ? dependency.version.tr("><=","") : dependency.version
 
                             software.versions.each do |information|
-                                temporarySoftwareVersion = information.version.tr("><=","")
+                                temporarySoftwareVersion = includeComparators ? information.version.tr("><=","") : information.version
                                 if temporaryDependencyVersion >= temporarySoftwareVersion && dependencyVersion >= temporarySoftwareVersion
                                     dependencyVersion = temporarySoftwareVersion
                                 end
