@@ -16,6 +16,8 @@ module ISM
                     showHelp
                 else
                     matching = false
+                    unavailableSoftware = false
+                    unavailableSoftwaresArray = Array(ISM::SoftwareDependency).new
                     wrongArgument = ""
 
                     calculationStartingTime = Time.monotonic
@@ -100,6 +102,24 @@ module ISM
 
                     end
 
+                    if !inextricableDependency
+                        neededSoftwaresTree.reverse.each do |level|
+                            level.each do |dependency|
+                                dependencyInformation = dependency.getInformation
+                                if !Ism.softwareIsInstalled?(dependencyInformation) && dependencyInformation.name != ""
+                                    matchingSoftwaresArray << dependencyInformation
+                                else
+                                    unavailableSoftwaresArray << dependency
+                                    unavailableSoftware = true
+                                end
+                            end
+                        end
+
+                        if !unavailableSoftware
+                            matchingSoftwaresArray.uniq!
+                        end
+                    end
+
                     print "#{ISM::Default::Option::SoftwareInstall::CalculationDoneText.colorize(:green)}\n"
 
                     #Retirer encore les doublons si il y a des paquets de meme nom ou version differente, ou options differentes
@@ -138,6 +158,28 @@ module ISM
                         puts "\n"
 
                         inextricableDependenciesArray.each do |software|
+                            softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                            optionsText = "{ "
+                            software.options.each do |option|
+                                if option.active
+                                    optionsText += "#{option.name.colorize(:red)}"
+                                else
+                                    optionsText += "#{option.name.colorize(:blue)}"
+                                end
+                                optionsText += " "
+                            end
+                            optionsText += "}"
+                            puts "\t" + softwareText + " " + optionsText + "\n"
+                        end
+
+                        puts "\n"
+
+                    elsif unavailableSoftware
+
+                        puts "#{ISM::Default::Option::SoftwareInstall::UnavailableText.colorize(:yellow)}"
+                        puts "\n"
+
+                        unavailableSoftwaresArray.each do |software|
                             softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                             optionsText = "{ "
                             software.options.each do |option|

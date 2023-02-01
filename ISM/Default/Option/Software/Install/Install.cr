@@ -10,6 +10,7 @@ module ISM
                 LongText = "install"
                 Description = "Install specific(s) software(s)"
                 InextricableText = "ISM stopped due to an inextricable problem of dependencies with these softwares:"
+                UnavailableText = "ISM stopped due to some missing dependencies for the requested softwares:"
                 CalculationTitle = "ISM start to calculate depencies: "
                 CalculationWaitingText = "Checking dependencies tree"
                 CalculationDoneText = "Done !"
