@@ -197,15 +197,6 @@ module ISM
                         puts "\n"
 
                     else
-                        neededSoftwaresTree.reverse.each do |level|
-                            level.each do |dependency|
-                                if !Ism.softwareIsInstalled?(dependency.getInformation)
-                                    matchingSoftwaresArray << dependency.getInformation
-                                end
-                            end
-                        end
-
-                        matchingSoftwaresArray.uniq!
 
                         if matchingSoftwaresArray.size > 0
 
