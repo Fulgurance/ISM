@@ -3,7 +3,6 @@ module ISM
     class SoftwareDependency
 
         property name : String
-        #property version : String
         property options : Array(ISM::SoftwareOption)
 
         def initialize
@@ -12,19 +11,22 @@ module ISM
             @options = Array(ISM::SoftwareOption).new
         end
 
-        def version
-            availableVersion = version
+        def version=(@version)
+        end
 
-            if version.includes?("<") || version.includes?(">")
-                if version[0] == ">" && version[1] != "="
+        def version
+            availableVersion = @version
+
+            if @version.includes?("<") || @version.includes?(">")
+                if @version[0] == ">" && @version[1] != "="
                     Ism.softwares.each do |software|
-                        if name == software.name
-                            temporaryVersion = version.tr("><=","")
+                        if @name == software.name
+                            temporaryVersion = @version.tr("><=","")
 
                             software.versions.each do |information|
                                 temporarySoftwareVersion = information.version.tr("><=","")
                                 if temporaryVersion < temporarySoftwareVersion && availableVersion < temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion
+                                    availableVersion = information.version
                                 end
                             end
 
@@ -32,45 +34,45 @@ module ISM
                     end
                 end
 
-                if version[0] == "<" && version[1] != "="
+                if @version[0] == "<" && @version[1] != "="
                     Ism.softwares.each do |software|
-                        if name == software.name
-                            temporaryVersion = version.tr("><=","")
+                        if @name == software.name
+                            temporaryVersion = @version.tr("><=","")
 
                             software.versions.each do |information|
                                 temporarySoftwareVersion = information.version.tr("><=","")
                                 if temporaryVersion > temporarySoftwareVersion && availableVersion > temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion
+                                    availableVersion = information.version
                                 end
                             end
                         end
                     end
                 end
 
-                if version[0..1] == ">="
+                if @version[0..1] == ">="
                     Ism.softwares.each do |software|
-                        if name == software.name
-                            temporaryVersion = version.tr("><=","")
+                        if @name == software.name
+                            temporaryVersion = @version.tr("><=","")
 
                             software.versions.each do |information|
                                 temporarySoftwareVersion = information.version.tr("><=","")
                                 if temporaryVersion <= temporarySoftwareVersion && availableVersion <= temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion
+                                    availableVersion = information.version
                                 end
                             end
                         end
                     end
                 end
 
-                if version[0..1] == "<="
+                if @version[0..1] == "<="
                     Ism.softwares.each do |software|
-                        if name == software.name
-                            temporaryVersion = version.tr("><=","")
+                        if @name == software.name
+                            temporaryVersion = @version.tr("><=","")
 
                             software.versions.each do |information|
                                 temporarySoftwareVersion = information.version.tr("><=","")
                                 if temporaryVersion >= temporarySoftwareVersion && availableVersion >= temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion
+                                    availableVersion = information.version
                                 end
                             end
                         end
