@@ -43,6 +43,7 @@ module ISM
     property patchesLinks : Array(String)
     property options : Array(ISM::SoftwareOption)
     property installedFiles : Array(String)
+    property dependencies : Array(ISM::SoftwareDependency)
 
     def initialize
         @port = String.new
@@ -153,88 +154,6 @@ module ISM
 
     def == (other : ISM::SoftwareInformation) : Bool
         return @name == other.name && @version == other.version && @options == other.options
-    end
-
-    def dependencies : Array(ISM::SoftwareDependency)
-        dependenciesArray = Array(ISM::SoftwareDependency).new
-
-        @dependencies.each do |object|
-            dependency = ISM::SoftwareDependency.new
-            dependency.name = object.name
-
-            dependencyVersion = object.version
-            if object.version.includes?("<") || object.version.includes?(">")
-
-                if object.version[0] == ">" && object.version[1] != "="
-                    Ism.softwares.each do |software|
-                        if dependency.name == software.name
-                            temporaryDependencyVersion = dependency.version
-
-                            software.versions.each do |information|
-                                temporarySoftwareVersion = information.version
-                                if temporaryDependencyVersion < temporarySoftwareVersion && dependencyVersion < temporarySoftwareVersion
-                                    dependencyVersion = temporarySoftwareVersion
-                                end
-                            end
-
-                        end
-                    end
-                end
-
-                if object.version[0] == "<" && object.version[1] != "="
-                    Ism.softwares.each do |software|
-                        if dependency.name == software.name
-                            temporaryDependencyVersion = dependency.version
-
-                            software.versions.each do |information|
-                                temporarySoftwareVersion = information.version
-                                if temporaryDependencyVersion > temporarySoftwareVersion && dependencyVersion > temporarySoftwareVersion
-                                    dependencyVersion = temporarySoftwareVersion
-                                end
-                            end
-                        end
-                    end
-                end
-
-                if object.version[0..1] == ">="
-                    Ism.softwares.each do |software|
-                        if dependency.name == software.name
-                            temporaryDependencyVersion = dependency.version
-
-                            software.versions.each do |information|
-                                temporarySoftwareVersion = information.version
-                                if temporaryDependencyVersion <= temporarySoftwareVersion && dependencyVersion <= temporarySoftwareVersion
-                                    dependencyVersion = temporarySoftwareVersion
-                                end
-                            end
-                        end
-                    end
-                end
-
-                if object.version[0..1] == "<="
-                    Ism.softwares.each do |software|
-                        if dependency.name == software.name
-                            temporaryDependencyVersion = dependency.version
-
-                            software.versions.each do |information|
-                                temporarySoftwareVersion = information.version
-                                if temporaryDependencyVersion >= temporarySoftwareVersion && dependencyVersion >= temporarySoftwareVersion
-                                    dependencyVersion = temporarySoftwareVersion
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-
-            dependency.version = dependencyVersion
-            dependency.options = object.options
-
-            dependenciesArray << dependency
-
-        end
-
-        return dependenciesArray
     end
 
   end

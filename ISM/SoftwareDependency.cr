@@ -19,6 +19,8 @@ module ISM
 
             if @version.includes?("<") || @version.includes?(">")
                 if @version[0] == ">" && @version[1] != "="
+                    availableVersion = @version.tr("><=","")
+
                     Ism.softwares.each do |software|
                         if @name == software.name
                             temporaryVersion = @version.tr("><=","")
@@ -26,7 +28,9 @@ module ISM
                             software.versions.each do |information|
                                 temporarySoftwareVersion = information.version.tr("><=","")
                                 if temporaryVersion < temporarySoftwareVersion && availableVersion < temporarySoftwareVersion
-                                    availableVersion = information.version
+                                    availableVersion = temporarySoftwareVersion
+                                else
+                                    availableVersion = @version
                                 end
                             end
 
@@ -35,6 +39,8 @@ module ISM
                 end
 
                 if @version[0] == "<" && @version[1] != "="
+                    availableVersion = @version.tr("><=","")
+
                     Ism.softwares.each do |software|
                         if @name == software.name
                             temporaryVersion = @version.tr("><=","")
@@ -42,7 +48,9 @@ module ISM
                             software.versions.each do |information|
                                 temporarySoftwareVersion = information.version.tr("><=","")
                                 if temporaryVersion > temporarySoftwareVersion && availableVersion > temporarySoftwareVersion
-                                    availableVersion = information.version
+                                    availableVersion = temporarySoftwareVersion
+                                else
+                                    availableVersion = @version
                                 end
                             end
                         end
@@ -50,6 +58,8 @@ module ISM
                 end
 
                 if @version[0..1] == ">="
+                    availableVersion = @version.tr("><=","")
+
                     Ism.softwares.each do |software|
                         if @name == software.name
                             temporaryVersion = @version.tr("><=","")
@@ -57,7 +67,9 @@ module ISM
                             software.versions.each do |information|
                                 temporarySoftwareVersion = information.version.tr("><=","")
                                 if temporaryVersion <= temporarySoftwareVersion && availableVersion <= temporarySoftwareVersion
-                                    availableVersion = information.version
+                                    availableVersion = temporarySoftwareVersion
+                                else
+                                    availableVersion = @version
                                 end
                             end
                         end
@@ -65,6 +77,8 @@ module ISM
                 end
 
                 if @version[0..1] == "<="
+                    availableVersion = @version.tr("><=","")
+
                     Ism.softwares.each do |software|
                         if @name == software.name
                             temporaryVersion = @version.tr("><=","")
@@ -72,7 +86,9 @@ module ISM
                             software.versions.each do |information|
                                 temporarySoftwareVersion = information.version.tr("><=","")
                                 if temporaryVersion >= temporarySoftwareVersion && availableVersion >= temporarySoftwareVersion
-                                    availableVersion = information.version
+                                    availableVersion = temporarySoftwareVersion
+                                else
+                                    availableVersion = @version
                                 end
                             end
                         end

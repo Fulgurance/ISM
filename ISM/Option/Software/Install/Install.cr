@@ -106,20 +106,18 @@ module ISM
                         neededSoftwaresTree.reverse.each do |level|
                             level.each do |dependency|
                                 dependencyInformation = dependency.getInformation
-                                if !Ism.softwareIsInstalled?(dependencyInformation) && dependencyInformation.name != ""
-                                    matchingSoftwaresArray << dependencyInformation
-                                else
-                                    unavailableSoftwaresArray << dependency
-                                    unavailableSoftware = true
+                                if !Ism.softwareIsInstalled?(dependencyInformation)
+                                    if dependencyInformation.name != ""
+                                        matchingSoftwaresArray << dependencyInformation
+                                    else
+                                        unavailableSoftwaresArray << dependency
+                                        unavailableSoftware = true
+                                    end
                                 end
                             end
                         end
 
-                        if !unavailableSoftware
-                            matchingSoftwaresArray.uniq!
-                        else
-                            unavailableSoftwaresArray.uniq!
-                        end
+                        unavailableSoftware ? unavailableSoftwaresArray.uniq! : matchingSoftwaresArray.uniq!
                     end
 
                     print "#{ISM::Default::Option::SoftwareInstall::CalculationDoneText.colorize(:green)}\n"
