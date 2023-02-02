@@ -106,10 +106,10 @@ module ISM
 
                 if software.name == @name
 
-                    software.versions.each do |version|
+                    software.versions.each do |softwareVersion|
 
-                        if @version == version.version
-                            dependencies = dependencies + version.dependencies
+                        if version == softwareVersion.version
+                            dependencies = dependencies + softwareVersion.dependencies
                             break
                         end
 
@@ -128,10 +128,10 @@ module ISM
 
                 if software.name == @name
 
-                    software.versions.each do |version|
+                    software.versions.each do |softwareVersion|
 
-                        if @version == version.version
-                            dependencyInformation = version
+                        if version == softwareVersion.version
+                            dependencyInformation = softwareVersion
                             break
                         end
 
