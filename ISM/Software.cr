@@ -524,6 +524,32 @@ module ISM
             end
         end
 
+        def runCrystalCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            crystalCommand = "crystal"
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+
+            if Ism.settings.installByChroot
+                chrootCrystalCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{environmentCommand} #{crystalCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootCrystalCommand)
+            else
+                process = Process.run(  crystalCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path,
+                                        env: environment)
+            end
+            if !process.success?
+                Ism.notifyOfRunCrystalCommandError(path)
+                exit 1
+            end
+        end
+
         def runCmakeCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
             cmakeCommand = "cmake"
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")

@@ -39,6 +39,7 @@ module ISM
             ErrorRunScriptText1 = "Failed to run the script "
             ErrorRunScriptText2 = " located at "
             ErrorRunPythonScriptText = "Failed to run the python script located at "
+            ErrorRunCrystalCommandText = "Failed to run crystal in "
             ErrorRunPwconvCommandText = "Failed to run pwconv "
             ErrorRunRunGrpconvCommandText = "Failed to run grpconv "
             ErrorRunUdevadmCommandText = "Failed to run udevadm "

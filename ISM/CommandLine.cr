@@ -386,8 +386,12 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonScriptText+path, error)
         end
 
+        def notifyOfRunCrystalCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonScriptText+path, error)
+        end
+
         def notifyOfRunPwconvCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunPwconvCommandText+arguments.join(" "), error)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunCrystalCommandText+arguments.join(" "), error)
         end
 
         def notifyOfRunGrpconvCommandError(arguments : Array(String), error = nil)
