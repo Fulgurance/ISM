@@ -548,11 +548,11 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorFileAppendDataText+filePath, error)
         end
 
-        def playCalculationAnimation(calculationStartingTime, frameIndex, text)
+        def playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
             currentTime = Time.monotonic
 
             if (currentTime - calculationStartingTime).milliseconds > 40
-                if frameIndex >= text.size
+                if frameIndex == text.size && !reverseAnimation
                     reverseAnimation = true
                 end
 
@@ -575,10 +575,10 @@ module ISM
                 calculationStartingTime = Time.monotonic
             end
 
-            return calculationStartingTime, frameIndex
+            return calculationStartingTime, frameIndex, reverseAnimation
         end
 
-        def getRequestedSoftwares(list, calculationStartingTime, frameIndex, text)
+        def getRequestedSoftwares(list, calculationStartingTime, frameIndex, reverseAnimation, text)
             matching = false
             wrongArgument = ""
             matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
@@ -586,11 +586,11 @@ module ISM
             list.each do |argument|
                 matching = false
 
-                calculationStartingTime, frameIndex = playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                calculationStartingTime, frameIndex, reverseAnimation = playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                 @softwares.each do |software|
 
-                    calculationStartingTime, frameIndex = playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                    calculationStartingTime, frameIndex, reverseAnimation = playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                     if argument == software.name || argument == software.name.downcase
                         matchingSoftwaresArray << software.versions.last
@@ -598,7 +598,7 @@ module ISM
                     else
                         software.versions.each do |version|
 
-                            calculationStartingTime, frameIndex = playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                            calculationStartingTime, frameIndex, reverseAnimation = playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                             if argument == version.versionName || argument == version.versionName.downcase
                                 matchingSoftwaresArray << version
@@ -615,7 +615,7 @@ module ISM
 
             end
 
-            return matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex
+            return matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex, reverseAnimation
         end
 
         def setTerminalTitle(title : String)

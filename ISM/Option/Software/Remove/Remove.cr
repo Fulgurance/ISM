@@ -20,14 +20,16 @@ module ISM
 
                     calculationStartingTime = Time.monotonic
                     frameIndex = 0
+                    reverseAnimation = false
 
                     print ISM::Default::Option::SoftwareRemove::CalculationTitle
                     text = ISM::Default::Option::SoftwareRemove::CalculationWaitingText
 
-                    matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex = Ism.getRequestedSoftwares(   ARGV[2+Ism.debugLevel..-1].uniq,
-                                                                                                                                        calculationStartingTime,
-                                                                                                                                        frameIndex,
-                                                                                                                                        ISM::Default::Option::SoftwareInstall::CalculationWaitingText)
+                    matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex, reverseAnimation = Ism.getRequestedSoftwares( ARGV[2+Ism.debugLevel..-1].uniq,
+                                                                                                                                                        calculationStartingTime,
+                                                                                                                                                        frameIndex,
+                                                                                                                                                        reverseAnimation,
+                                                                                                                                                        ISM::Default::Option::SoftwareInstall::CalculationWaitingText)
 
                     ##################################
                     #Get matching installed softwares#
@@ -38,7 +40,7 @@ module ISM
                     if matching
                         matchingSoftwaresArray.each do |software|
 
-                            calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                            calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                             if Ism.softwareIsInstalled?(software)
                                 matchingInstalledSoftwares = true
@@ -57,15 +59,14 @@ module ISM
 
                     matchingInstalledSoftwaresArray.each do |software|
 
-                        calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                        calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                         Ism.installedSoftwares.each do |installedSoftware|
 
-                            calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                            calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                             if installedSoftware.dependencies.includes?(software.toSoftwareDependency)
                                 requestedSoftwaresAreDependencies = true
-                                ##### NEW
                                 requestedSoftwaresAreDependenciesArray << [installedSoftware, software]
                             end
                         end
@@ -80,11 +81,11 @@ module ISM
                     if matchingInstalledSoftwares && !requestedSoftwaresAreDependencies
                         Ism.installedSoftwares.each do |installedSoftware|
 
-                            calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                            calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                             matchingInstalledSoftwaresArray.each do |matchingInstalledSoftware|
 
-                                calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                                calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                                 if !installedSoftware.dependencies.includes?(matchingInstalledSoftware.toSoftwareDependency)
                                     uselessSoftwares << matchingInstalledSoftware

@@ -22,13 +22,15 @@ module ISM
 
                     calculationStartingTime = Time.monotonic
                     frameIndex = 0
+                    reverseAnimation = false
 
                     print ISM::Default::Option::SoftwareInstall::CalculationTitle
                     text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
 
-                    matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex = Ism.getRequestedSoftwares(   ARGV[2+Ism.debugLevel..-1].uniq,
+                    matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex, reverseAnimation = Ism.getRequestedSoftwares(   ARGV[2+Ism.debugLevel..-1].uniq,
                                                                                                                                         calculationStartingTime,
                                                                                                                                         frameIndex,
+                                                                                                                                        reverseAnimation,
                                                                                                                                         ISM::Default::Option::SoftwareInstall::CalculationWaitingText)
 
                     #################################
@@ -38,7 +40,7 @@ module ISM
 
                     matchingSoftwaresArray.each do |software|
 
-                        calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                        calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                         currentDependency = ISM::SoftwareDependency.new
                         currentDependency.name = software.name
@@ -60,14 +62,15 @@ module ISM
 
                     loop do
 
-                        calculationStartingTime, frameIndex = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                        calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                         currentDependenciesArray.each do |software|
 
-                            animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, text)
+                            animationVariables = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                             calculationStartingTime = animationVariables[0]
                             frameIndex = animationVariables[1]
+                            reverseAnimation = animationVariables[2]
 
                             dependencies = software.getDependencies
 

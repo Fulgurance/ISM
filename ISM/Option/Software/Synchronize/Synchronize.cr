@@ -14,6 +14,7 @@ module ISM
             def start
                 synchronizationStartingTime = Time.monotonic
                 frameIndex = 0
+                reverseAnimation = false
                 
                 print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
                 text = ISM::Default::Option::SoftwareSynchronize::SynchronizationWaitingText
@@ -24,7 +25,7 @@ module ISM
                                                 chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
                     until process.terminated?
-                        calculationStartingTime, frameIndex = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, text)
+                        calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, reverseAnimation, text)
                         sleep 0
                     end
 
