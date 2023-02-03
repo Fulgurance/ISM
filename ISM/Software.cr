@@ -22,7 +22,7 @@ module ISM
                 if result[-7..-1] == ".tar.gz" || result[-7..-1] == ".tar.xz"
                     result = result[0..-8]+"/"
                 end
-                if result[-8..-1] == ".tar.bz2"
+                if result.size > 7 && result[-8..-1] == ".tar.bz2"
                     result = result[0..-9]+"/"
                 end
             end
@@ -810,19 +810,25 @@ module ISM
             end
         end
 
-        def makeSource(arguments : Array(String), path = String.new)
+        def makeSource(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            makeSourceCommand = "make"
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+
             if Ism.settings.installByChroot
-                chrootMakeCommand = <<-CODE
+                chrootMakeSourceCommand = <<-CODE
                 #!/bin/bash
-                cd #{path} && make #{arguments.join(" ")}
+                cd #{path} && #{environmentCommand} #{makeSourceCommand} #{arguments.join(" ")}
                 CODE
 
-                process = runChrootTasks(chrootMakeCommand)
+                process = runChrootTasks(chrootMakeSourceCommand)
             else
-                process = Process.run("make",   args: arguments,
-                                                output: :inherit,
-                                                error: :inherit,
-                                                chdir: path)
+                process = Process.run(  makeSourceCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path,
+                                        env: environment)
             end
             if !process.success?
                 Ism.notifyOfMakeSourceError(path)
