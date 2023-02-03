@@ -418,6 +418,14 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunGunzipCommandText+path, error)
         end
 
+        def notifyOfRunCmakeCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunCmakeCommandText+path, error)
+        end
+
+        def notifyOfRunNinjaCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunNinjaCommandText+path, error)
+        end
+
         def notifyOfConfigureError(sourceName : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName, error)
         end

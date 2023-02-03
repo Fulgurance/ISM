@@ -524,6 +524,58 @@ module ISM
             end
         end
 
+        def runCmakeCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            cmakeCommand = "cmake"
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+
+            if Ism.settings.installByChroot
+                chrootCmakeCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{environmentCommand} #{cmakeCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootCmakeCommand)
+            else
+                process = Process.run(  cmakeCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path,
+                                        env: environment)
+            end
+            if !process.success?
+                Ism.notifyOfRunCmakeCommandError(path)
+                exit 1
+            end
+        end
+
+        def runNinjaCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            ninjaCommand = "ninja"
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+
+            if Ism.settings.installByChroot
+                chrootNinjaCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{environmentCommand} #{ninjaCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootNinjaCommand)
+            else
+                process = Process.run(  ninjaCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path,
+                                        env: environment)
+            end
+            if !process.success?
+                Ism.notifyOfRunNinjaCommandError(path)
+                exit 1
+            end
+        end
+
         def runPwconvCommand(arguments = Array(String).new)
             pwconvCommand = "pwconv"
 

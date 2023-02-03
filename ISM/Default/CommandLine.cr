@@ -47,6 +47,8 @@ module ISM
             ErrorRunAutoreconfCommandText = "Failed to run the autoreconf command located at "
             ErrorRunLocaledefCommandText = "Failed to run localedef "
             ErrorRunGunzipCommandText = "Failed to run makeinfo in  "
+            ErrorRunCmakeCommandText = "Failed to run cmake in  "
+            ErrorRunNinjaCommandText = "Failed to run ninja in  "
             ErrorConfigureText = "Failed to configure the source "
             ErrorMakePerlSourceText = "Failed to run the perl Makefile.PL in "
             ErrorMakeSourceText = "Failed to run make in  "
