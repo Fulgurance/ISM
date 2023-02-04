@@ -25,7 +25,7 @@ module ISM
                                                 chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
                     until process.terminated?
-                        calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, reverseAnimation, text)
+                        synchronizationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, reverseAnimation, text)
                         sleep 0
                     end
 
