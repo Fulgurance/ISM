@@ -154,7 +154,7 @@ module ISM
 
     def == (other : ISM::SoftwareInformation) : Bool
         return @name == other.name &&
-            SemanticVersion.parse(@version) == SemanticVersion.parse(other.version) &&
+            @version == other.version &&
             @options == other.options
     end
 

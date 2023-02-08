@@ -39,16 +39,16 @@ module ISM
 
             if includeComparators
                 if greaterComparator
-                    availableVersion = @version.tr("><=","")
+                    temporaryAvailableVersion = SemanticVersion.parse(@version.tr("><=",""))
 
                     Ism.softwares.each do |software|
                         if @name == software.name
-                            temporaryVersion = @version.tr("><=","")
+                            temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
 
                             software.versions.each do |information|
-                                temporarySoftwareVersion = information.version.tr("><=","")
-                                if temporaryVersion < temporarySoftwareVersion && availableVersion < temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion
+                                temporarySoftwareVersion = SemanticVersion.parse(information.version.tr("><=",""))
+                                if temporaryVersion < temporarySoftwareVersion && temporaryAvailableVersion < temporarySoftwareVersion
+                                    availableVersion = temporarySoftwareVersion.to_s
                                 else
                                     availableVersion = @version
                                 end
@@ -59,16 +59,16 @@ module ISM
                 end
 
                 if lessComparator
-                    availableVersion = @version.tr("><=","")
+                    temporaryAvailableVersion = SemanticVersion.parse(@version.tr("><=",""))
 
                     Ism.softwares.each do |software|
                         if @name == software.name
-                            temporaryVersion = @version.tr("><=","")
+                            temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
 
                             software.versions.each do |information|
-                                temporarySoftwareVersion = information.version.tr("><=","")
-                                if temporaryVersion > temporarySoftwareVersion && availableVersion > temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion
+                                temporarySoftwareVersion = SemanticVersion.parse(information.version.tr("><=",""))
+                                if temporaryVersion > temporarySoftwareVersion && temporaryAvailableVersion > temporarySoftwareVersion
+                                    availableVersion = temporarySoftwareVersion.to_s
                                 else
                                     availableVersion = @version
                                 end
@@ -78,16 +78,16 @@ module ISM
                 end
 
                 if greaterOrEqualComparator
-                    availableVersion = @version.tr("><=","")
+                    temporaryAvailableVersion = SemanticVersion.parse(@version.tr("><=",""))
 
                     Ism.softwares.each do |software|
                         if @name == software.name
-                            temporaryVersion = @version.tr("><=","")
+                            temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
 
                             software.versions.each do |information|
-                                temporarySoftwareVersion = information.version.tr("><=","")
-                                if temporaryVersion <= temporarySoftwareVersion && availableVersion <= temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion
+                                temporarySoftwareVersion = SemanticVersion.parse(information.version.tr("><=",""))
+                                if temporaryVersion <= temporarySoftwareVersion && temporaryAvailableVersion <= temporarySoftwareVersion
+                                    availableVersion = temporarySoftwareVersion.to_s
                                 else
                                     availableVersion = @version
                                 end
@@ -97,16 +97,16 @@ module ISM
                 end
 
                 if lessOrEqualComparator
-                    availableVersion = @version.tr("><=","")
+                    temporaryAvailableVersion = SemanticVersion.parse(@version.tr("><=",""))
 
                     Ism.softwares.each do |software|
                         if @name == software.name
-                            temporaryVersion = @version.tr("><=","")
+                            temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
 
                             software.versions.each do |information|
-                                temporarySoftwareVersion = information.version.tr("><=","")
-                                if temporaryVersion >= temporarySoftwareVersion && availableVersion >= temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion
+                                temporarySoftwareVersion = SemanticVersion.parse(information.version.tr("><=",""))
+                                if temporaryVersion >= temporarySoftwareVersion && temporaryAvailableVersion >= temporarySoftwareVersion
+                                    availableVersion = temporarySoftwareVersion.to_s
                                 else
                                     availableVersion = @version
                                 end
@@ -129,7 +129,7 @@ module ISM
                     software.versions.each do |softwareVersion|
 
                         if version == softwareVersion.version
-                            dependencies = dependencies + softwareVersion.dependencies
+                            dependencies = softwareVersion.dependencies
                             break
                         end
 
@@ -165,7 +165,7 @@ module ISM
 
         def == (other : ISM::SoftwareDependency) : Bool
             return @name == other.name &&
-            SemanticVersion.parse(@version) == SemanticVersion.parse(other.version) &&
+            version == other.version &&
             @options == other.options
         end
 
