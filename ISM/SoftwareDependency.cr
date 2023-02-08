@@ -14,11 +14,31 @@ module ISM
         def version=(@version)
         end
 
+        def includeComparators : Bool
+            return @version.includes?("<") || @version.includes?(">")
+        end
+
+        def greaterComparator : Bool
+            return @version[0] == ">" && @version[1] != "="
+        end
+
+        def lessComparator : Bool
+            return @version[0] == "<" && @version[1] != "="
+        end
+
+        def greaterOrEqualComparator : Bool
+            return @version[0..1] == ">="
+        end
+
+        def lessOrEqualComparator : Bool
+            return @version[0..1] == "<="
+        end
+
         def version
             availableVersion = @version
 
-            if @version.includes?("<") || @version.includes?(">")
-                if @version[0] == ">" && @version[1] != "="
+            if includeComparators
+                if greaterComparator
                     availableVersion = @version.tr("><=","")
 
                     Ism.softwares.each do |software|
@@ -38,7 +58,7 @@ module ISM
                     end
                 end
 
-                if @version[0] == "<" && @version[1] != "="
+                if lessComparator
                     availableVersion = @version.tr("><=","")
 
                     Ism.softwares.each do |software|
@@ -57,7 +77,7 @@ module ISM
                     end
                 end
 
-                if @version[0..1] == ">="
+                if greaterOrEqualComparator
                     availableVersion = @version.tr("><=","")
 
                     Ism.softwares.each do |software|
@@ -76,7 +96,7 @@ module ISM
                     end
                 end
 
-                if @version[0..1] == "<="
+                if lessOrEqualComparator
                     availableVersion = @version.tr("><=","")
 
                     Ism.softwares.each do |software|
@@ -144,7 +164,9 @@ module ISM
         end
 
         def == (other : ISM::SoftwareDependency) : Bool
-            return @name == other.name && @version == other.version && @options == other.options
+            return @name == other.name &&
+            SemanticVersion.parse(@version) == SemanticVersion.parse(other.version) &&
+            @options == other.options
         end
 
     end
