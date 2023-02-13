@@ -576,6 +576,32 @@ module ISM
             end
         end
 
+        def runMesonCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            mesonCommand = "meson"
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+
+            if Ism.settings.installByChroot
+                chrootMesonCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{environmentCommand} #{mesonCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootMesonCommand)
+            else
+                process = Process.run(  mesonCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path,
+                                        env: environment)
+            end
+            if !process.success?
+                Ism.notifyOfRunMesonCommandError(path)
+                exit 1
+            end
+        end
+
         def runNinjaCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
             ninjaCommand = "ninja"
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")

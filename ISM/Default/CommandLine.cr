@@ -49,6 +49,7 @@ module ISM
             ErrorRunLocaledefCommandText = "Failed to run localedef "
             ErrorRunGunzipCommandText = "Failed to run makeinfo in  "
             ErrorRunCmakeCommandText = "Failed to run cmake in  "
+            ErrorRunMesonCommandText = "Failed to run meson in  "
             ErrorRunNinjaCommandText = "Failed to run ninja in  "
             ErrorRunMakeCaCommandText = "Failed to run make-ca "
             ErrorConfigureText = "Failed to configure the source "

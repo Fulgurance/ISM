@@ -426,6 +426,10 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunCmakeCommandText+path, error)
         end
 
+        def notifyOfRunMesonCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunMesonCommandText+path, error)
+        end
+
         def notifyOfRunNinjaCommandError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorRunNinjaCommandText+path, error)
         end
