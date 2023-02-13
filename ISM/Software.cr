@@ -11,6 +11,7 @@ module ISM
             @information.loadInformationFile(informationPath)
             @mainSourceDirectoryName = getMainSourceDirectoryName
             @buildDirectory = false
+            @buildDirectoryName = "build"
         end
 
         def getMainSourceDirectoryName
@@ -38,7 +39,7 @@ module ISM
         end
 
         def buildDirectoryPath(relatedToChroot = true) : String
-            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? "build" : ""}"
+            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? @buildDirectoryName : ""}"
         end
 
         def builtSoftwareDirectoryPath(relatedToChroot = true) : String
