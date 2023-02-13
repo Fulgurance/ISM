@@ -50,6 +50,7 @@ module ISM
             ErrorRunGunzipCommandText = "Failed to run makeinfo in  "
             ErrorRunCmakeCommandText = "Failed to run cmake in  "
             ErrorRunNinjaCommandText = "Failed to run ninja in  "
+            ErrorRunMakeCaCommandText = "Failed to run make-ca "
             ErrorConfigureText = "Failed to configure the source "
             ErrorMakePerlSourceText = "Failed to run the perl Makefile.PL in "
             ErrorMakeSourceText = "Failed to run make in  "

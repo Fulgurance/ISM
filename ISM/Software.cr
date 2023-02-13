@@ -750,6 +750,29 @@ module ISM
             end
         end
 
+        def runMakeCaCommand(arguments : Array(String))
+            makeCaCommand = "make-ca"
+
+            if Ism.settings.installByChroot
+                chrootMakeCaScriptCommand = <<-CODE
+                #!/bin/bash
+                #{makeCaCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootMakeCaScriptCommand)
+            else
+                process = Process.run(  makeCaCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunMakeCaCommandError(arguments)
+                exit 1
+            end
+        end
+
         def configure
             Ism.notifyOfConfigure(@information)
         end
