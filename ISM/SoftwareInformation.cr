@@ -142,7 +142,9 @@ module ISM
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
         @options.each do |option|
-            dependenciesArray = dependenciesArray+option.dependencies
+            if option.active
+                dependenciesArray = dependenciesArray+option.dependencies
+            end
         end
 
         return @dependencies+dependenciesArray
