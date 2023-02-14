@@ -168,7 +168,7 @@ module ISM
 
         end
 
-        def softwareIsInstalled?(software : ISM::SoftwareInformation) : Bool
+        def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
             return @installedSoftwares.includes?(software)
         end
 

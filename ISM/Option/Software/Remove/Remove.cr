@@ -42,7 +42,7 @@ module ISM
 
                             calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
-                            if Ism.softwareIsInstalled?(software)
+                            if Ism.softwareIsInstalled(software)
                                 matchingInstalledSoftwares = true
                                 matchingInstalledSoftwaresArray << software
                             end

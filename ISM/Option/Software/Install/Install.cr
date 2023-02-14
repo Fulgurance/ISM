@@ -42,10 +42,7 @@ module ISM
 
                         calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
-                        currentDependency = ISM::SoftwareDependency.new
-                        currentDependency.name = software.name
-                        currentDependency.version = software.version
-                        currentDependency.options = software.options
+                        currentDependency = software.toSoftwareDependency
                         currentDependenciesArray << currentDependency
                     end
 
@@ -72,7 +69,7 @@ module ISM
                             frameIndex = animationVariables[1]
                             reverseAnimation = animationVariables[2]
 
-                            dependencies = software.getDependencies
+                            dependencies = software.dependencies
 
                             if !dependencies.empty?
                                 nextDependenciesArray = nextDependenciesArray + dependencies
@@ -108,8 +105,8 @@ module ISM
                     if !inextricableDependency
                         neededSoftwaresTree.reverse.each do |level|
                             level.each do |dependency|
-                                dependencyInformation = dependency.getInformation
-                                if !Ism.softwareIsInstalled?(dependencyInformation)
+                                dependencyInformation = dependency.information
+                                if !Ism.softwareIsInstalled(dependencyInformation)
                                     if dependencyInformation.name != ""
                                         matchingSoftwaresArray << dependencyInformation
                                     else
@@ -137,7 +134,7 @@ module ISM
 
                         neededSoftwaresTree.each do |level|
                             level.each do |dependency|
-                                matchingSoftwaresArray << dependency.getInformation
+                                matchingSoftwaresArray << dependency.information
                             end
                         end
 
@@ -145,7 +142,7 @@ module ISM
 
                         matchingSoftwaresArray.each do |software|
                             software.dependencies.each do |dependency|
-                                temporaryArray = dependency.getInformation.dependencies + software.dependencies
+                                temporaryArray = dependency.information.dependencies + software.dependencies
                                 if temporaryArray.map(&.name).includes?(software.name) &&
                                     temporaryArray.map(&.name).includes?(dependency.name)
                                     inextricableDependenciesArray << software
@@ -185,7 +182,7 @@ module ISM
                         unavailableSoftwaresArray.each do |software|
                             softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                             optionsText = "{ "
-                            software.options.each do |option|
+                            software.information.options.each do |option|
                                 if option.active
                                     optionsText += "#{option.name.colorize(:red)}"
                                 else

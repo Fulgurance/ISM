@@ -3,12 +3,12 @@ module ISM
     class SoftwareDependency
 
         property name : String
-        property options : Array(ISM::SoftwareOption)
+        property options : Array(String)
 
         def initialize
             @name = String.new
             @version = String.new
-            @options = Array(ISM::SoftwareOption).new
+            @options = Array(String).new
         end
 
         def version=(@version)
@@ -45,8 +45,8 @@ module ISM
                         if @name == software.name
                             temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
 
-                            software.versions.each do |information|
-                                temporarySoftwareVersion = SemanticVersion.parse(information.version.tr("><=",""))
+                            software.versions.each do |versionInformation|
+                                temporarySoftwareVersion = SemanticVersion.parse(versionInformation.version.tr("><=",""))
                                 if temporaryVersion < temporarySoftwareVersion && temporaryAvailableVersion < temporarySoftwareVersion
                                     availableVersion = temporarySoftwareVersion.to_s
                                 else
@@ -65,8 +65,8 @@ module ISM
                         if @name == software.name
                             temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
 
-                            software.versions.each do |information|
-                                temporarySoftwareVersion = SemanticVersion.parse(information.version.tr("><=",""))
+                            software.versions.each do |versionInformation|
+                                temporarySoftwareVersion = SemanticVersion.parse(versionInformation.version.tr("><=",""))
                                 if temporaryVersion > temporarySoftwareVersion && temporaryAvailableVersion > temporarySoftwareVersion
                                     availableVersion = temporarySoftwareVersion.to_s
                                 else
@@ -84,8 +84,8 @@ module ISM
                         if @name == software.name
                             temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
 
-                            software.versions.each do |information|
-                                temporarySoftwareVersion = SemanticVersion.parse(information.version.tr("><=",""))
+                            software.versions.each do |versionInformation|
+                                temporarySoftwareVersion = SemanticVersion.parse(versionInformation.version.tr("><=",""))
                                 if temporaryVersion <= temporarySoftwareVersion && temporaryAvailableVersion <= temporarySoftwareVersion
                                     availableVersion = temporarySoftwareVersion.to_s
                                 else
@@ -103,8 +103,8 @@ module ISM
                         if @name == software.name
                             temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
 
-                            software.versions.each do |information|
-                                temporarySoftwareVersion = SemanticVersion.parse(information.version.tr("><=",""))
+                            software.versions.each do |versionInformation|
+                                temporarySoftwareVersion = SemanticVersion.parse(versionInformation.version.tr("><=",""))
                                 if temporaryVersion >= temporarySoftwareVersion && temporaryAvailableVersion >= temporarySoftwareVersion
                                     availableVersion = temporarySoftwareVersion.to_s
                                 else
@@ -119,29 +119,7 @@ module ISM
             return availableVersion
         end
 
-        def getDependencies : Array(ISM::SoftwareDependency)
-            dependencies = Array(ISM::SoftwareDependency).new
-
-            Ism.softwares.each do |software|
-
-                if software.name == @name
-
-                    software.versions.each do |softwareVersion|
-
-                        if version == softwareVersion.version
-                            dependencies = softwareVersion.dependencies
-                            break
-                        end
-
-                    end
-
-                end
-            end
-
-            return dependencies
-        end
-
-        def getInformation : ISM::SoftwareInformation
+        def information : ISM::SoftwareInformation
             dependencyInformation = ISM::SoftwareInformation.new
 
             Ism.softwares.each do |software|
@@ -161,6 +139,10 @@ module ISM
             end
 
             return dependencyInformation
+        end
+
+        def dependencies : Array(ISM::SoftwareDependency)
+            return information.dependencies
         end
 
         def == (other : ISM::SoftwareDependency) : Bool

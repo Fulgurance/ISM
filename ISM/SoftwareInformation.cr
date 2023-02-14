@@ -5,14 +5,15 @@ module ISM
     record Option,
         name : String,
         description : String,
-        active : Bool do
+        active : Bool,
+        dependencies : Array(Dependency) do
         include JSON::Serializable
     end
     
     record Dependency,
         name : String,
         version : String,
-        options : Array(Option) do
+        options : Array(String) do
         include JSON::Serializable
     end
     
@@ -43,7 +44,7 @@ module ISM
     property patchesLinks : Array(String)
     property options : Array(ISM::SoftwareOption)
     property installedFiles : Array(String)
-    property dependencies : Array(ISM::SoftwareDependency)
+    setter dependencies : Array(ISM::SoftwareDependency)
 
     def initialize
         @port = String.new
@@ -78,13 +79,7 @@ module ISM
           dependency = ISM::SoftwareDependency.new
           dependency.name = data.name
           dependency.version = data.version
-          data.options.each do |entry|
-              option = ISM::SoftwareOption.new
-              option.name = entry.name
-              option.description = entry.description
-              option.active = entry.active
-              dependency.options.push(option)
-          end
+          dependency.options = data.options
           @dependencies.push(dependency)
       end
 
@@ -99,21 +94,22 @@ module ISM
     end
 
     def writeInformationFile(writeInformationFilePath : String)
-        dependencies = Array(Dependency).new
+        dependenciesArray = Array(Dependency).new
         @dependencies.each do |data|
-            options = Array(Option).new
-            data.options.each do |entry|
-                option = Option.new(entry.name,entry.description,entry.active)
-                options.push(option)
-            end
-            dependency = Dependency.new(data.name,data.version,options)
-            dependencies.push(dependency)
+            dependenciesArray.push(Dependency.new(data.name,data.version,data.options))
         end
 
-        options = Array(Option).new
+        optionsArray = Array(Option).new
+        optionsDependenciesArray = Array(Dependency).new
         @options.each do |data|
-            option = Option.new(data.name,data.description,data.active)
-            options.push(option)
+            data.dependencies.each do |dependencyData|
+                dependency = Dependency.new(dependencyData.name,dependencyData.version,dependencyData.options)
+                optionsDependenciesArray.push(dependency)
+            end
+
+            option = Option.new(data.name,data.description,data.active,optionsDependenciesArray)
+            optionsArray.push(option)
+            optionsDependenciesArray.clear
         end
 
         information = Information.new(  @port,
@@ -126,8 +122,8 @@ module ISM
                                         @md5sums,
                                         @patchesLinks,
                                         @installedFiles,
-                                        dependencies,
-                                        options)
+                                        dependenciesArray,
+                                        optionsArray)
 
         file = File.open(writeInformationFilePath,"w")
         information.to_json(file)
@@ -142,12 +138,27 @@ module ISM
         return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
     end
 
+    def dependencies : Array(ISM::SoftwareDependency)
+        dependenciesArray = Array(ISM::SoftwareDependency).new
+
+        @options.each do |option|
+            dependenciesArray = dependenciesArray+option.dependencies
+        end
+
+        return @dependencies+dependenciesArray
+    end
+
     def toSoftwareDependency : ISM::SoftwareDependency
         softwareDependency = ISM::SoftwareDependency.new
 
         softwareDependency.name = @name
         softwareDependency.version = @version
-        softwareDependency.options = @options
+
+        @options.each do |option|
+            if option.active
+                softwareDependency.options << option.name
+            end
+        end
 
         return softwareDependency
     end
