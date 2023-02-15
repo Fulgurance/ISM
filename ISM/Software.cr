@@ -772,7 +772,7 @@ module ISM
                                             chdir: path)
 
             if !process.success?
-                Ism.notifyOfRunGunzipError(path)
+                Ism.notifyOfRunGunzipCommandError(path)
                 exit 1
             end
         end
