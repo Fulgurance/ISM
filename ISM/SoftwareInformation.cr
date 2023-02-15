@@ -62,34 +62,44 @@ module ISM
     end
 
     def loadInformationFile(loadInformationFilePath : String)
-      information = Information.from_json(File.read(loadInformationFilePath))
+        information = Information.from_json(File.read(loadInformationFilePath))
 
-      @port = information.port
-      @name = information.name
-      @version = information.version
-      @architectures = information.architectures
-      @description = information.description
-      @website = information.website
-      @downloadLinks = information.downloadLinks
-      @md5sums = information.md5sums
-      @patchesLinks = information.patchesLinks
-      @installedFiles = information.installedFiles
+        @port = information.port
+        @name = information.name
+        @version = information.version
+        @architectures = information.architectures
+        @description = information.description
+        @website = information.website
+        @downloadLinks = information.downloadLinks
+        @md5sums = information.md5sums
+        @patchesLinks = information.patchesLinks
+        @installedFiles = information.installedFiles
 
-      information.dependencies.each do |data|
-          dependency = ISM::SoftwareDependency.new
-          dependency.name = data.name
-          dependency.version = data.version
-          dependency.options = data.options
-          @dependencies.push(dependency)
-      end
+        information.dependencies.each do |data|
+            dependency = ISM::SoftwareDependency.new
+            dependency.name = data.name
+            dependency.version = data.version
+            dependency.options = data.options
+            @dependencies.push(dependency)
+        end
 
-      information.options.each do |data|
-          option = ISM::SoftwareOption.new
-          option.name = data.name
-          option.description = data.description
-          option.active = data.active
-          @options.push(option)
-      end
+        information.options.each do |data|
+            dependenciesArray = Array(ISM::SoftwareDependency).new
+            data.dependencies.each do |dependency|
+                temporary = ISM::SoftwareDependency.new
+                temporary.name = dependency.name
+                temporary.version = dependency.version
+                temporary.options = dependency.options
+                dependenciesArray << temporary
+            end
+
+            option = ISM::SoftwareOption.new
+            option.name = data.name
+            option.description = data.description
+            option.active = data.active
+            option.dependencies = dependenciesArray
+            @options.push(option)
+        end
 
     end
 
