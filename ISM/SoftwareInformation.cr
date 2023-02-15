@@ -110,8 +110,8 @@ module ISM
         end
 
         optionsArray = Array(Option).new
-        optionsDependenciesArray = Array(Dependency).new
         @options.each do |data|
+            optionsDependenciesArray = Array(Dependency).new
             data.dependencies.each do |dependencyData|
                 dependency = Dependency.new(dependencyData.name,dependencyData.version,dependencyData.options)
                 optionsDependenciesArray.push(dependency)
@@ -119,7 +119,6 @@ module ISM
 
             option = Option.new(data.name,data.description,data.active,optionsDependenciesArray)
             optionsArray.push(option)
-            optionsDependenciesArray.clear
         end
 
         information = Information.new(  @port,
