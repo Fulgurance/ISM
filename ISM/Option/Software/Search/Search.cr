@@ -80,22 +80,11 @@ module ISM
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
                                         "#{installedVersionText.colorize(:green)}"
 
-                            optionsText = ""
-                            software.versions.last.options.each_with_index do |option, index|
-                                if option.active
-                                    optionsText += "#{option.name.colorize(:red)}"
-                                else
-                                    optionsText += "#{option.name.colorize(:blue)}"
-                                end
-                                if index+1 < software.versions.last.options.size
-                                    optionsText += " | "
-                                end
+                            puts    "#{ISM::Default::Option::SoftwareSearch::OptionsField}#{software.versions.last.options.empty? ? "None".colorize(:green) : ""}"
+
+                            software.versions.last.options.each do |option|
+                                puts "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
                             end
-                            if optionsText.empty?
-                                optionsText = "None"
-                            end
-                            puts    ISM::Default::Option::SoftwareSearch::OptionsField +
-                                        "#{optionsText.colorize(:green)}"
 
                             puts "\n"
                         end
