@@ -80,7 +80,7 @@ module ISM
             dependency.name = data.name
             dependency.version = data.version
             dependency.options = data.options
-            @dependencies.push(dependency)
+            @dependencies << dependency
         end
 
         information.options.each do |data|
@@ -98,7 +98,7 @@ module ISM
             option.description = data.description
             option.active = data.active
             option.dependencies = dependenciesArray
-            @options.push(option)
+            @options << option
         end
 
     end
@@ -106,7 +106,7 @@ module ISM
     def writeInformationFile(writeInformationFilePath : String)
         dependenciesArray = Array(Dependency).new
         @dependencies.each do |data|
-            dependenciesArray.push(Dependency.new(data.name,data.version,data.options))
+            dependenciesArray << Dependency.new(data.name,data.version,data.options)
         end
 
         optionsArray = Array(Option).new
@@ -114,11 +114,10 @@ module ISM
             optionsDependenciesArray = Array(Dependency).new
             data.dependencies.each do |dependencyData|
                 dependency = Dependency.new(dependencyData.name,dependencyData.version,dependencyData.options)
-                optionsDependenciesArray.push(dependency)
+                optionsDependenciesArray << dependency
             end
 
-            option = Option.new(data.name,data.description,data.active,optionsDependenciesArray)
-            optionsArray.push(option)
+            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray)
         end
 
         information = Information.new(  @port,
