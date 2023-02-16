@@ -902,7 +902,7 @@ module ISM
                         makeDirectory(finalDestination)
                     end
                 else
-                    copyFile(entry,finalDestination)
+                    moveFile(entry,finalDestination)
                 end
             end
         end
