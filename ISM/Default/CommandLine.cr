@@ -44,7 +44,7 @@ module ISM
             ErrorRunRunGrpconvCommandText = "Failed to run grpconv "
             ErrorRunUdevadmCommandText = "Failed to run udevadm "
             ErrorRunMakeinfoCommandText = "Failed to run makeinfo in  "
-            ErrorRunInstallinfoCommandText = "Failed to run install-info in  "
+            ErrorRunInstallInfoCommandText = "Failed to run install-info "
             ErrorRunAutoreconfCommandText = "Failed to run the autoreconf command located at "
             ErrorRunLocaledefCommandText = "Failed to run localedef "
             ErrorRunGunzipCommandText = "Failed to run makeinfo in  "

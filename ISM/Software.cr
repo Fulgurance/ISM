@@ -708,12 +708,25 @@ module ISM
             end
         end
 
-        def runInstallinfoCommand(arguments : Array(String), path = String.new)
-            process = Process.run("install-info",   args: arguments,
-                                                    chdir: path)
+        def runInstallInfoCommand(arguments : Array(String))
+            installInfoCommand = "install-info"
 
+            if Ism.settings.installByChroot
+                chrootInstallInfoScriptCommand = <<-CODE
+                #!/bin/bash
+                #{installInfoCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootInstallInfoScriptCommand)
+            else
+                process = Process.run(  installInfoCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
             if !process.success?
-                Ism.notifyOfRunInstallinfoCommandError(path)
+                Ism.notifyOfRunInstallInfoCommandError(arguments)
                 exit 1
             end
         end

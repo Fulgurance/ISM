@@ -406,8 +406,8 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunMakeinfoCommandText+path, error)
         end
 
-        def notifyOfRunInstallinfoCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunInstallinfoCommandText+path, error)
+        def notifyOfRunInstallInfoCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunInstallInfoCommandText+arguments.join(" "), error)
         end
 
         def notifyOfRunAutoreconfCommandError(path : String, error = nil)
