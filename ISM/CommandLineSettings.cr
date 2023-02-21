@@ -84,6 +84,12 @@ module ISM
                             chrootMakeOptions : String,
                             chrootBuildOptions : String)
 
+            path = filePath.chomp(filePath[filePath.rindex("/")..-1])
+
+            if !Dir.exists?(path)
+                Dir.mkdir_p(path)
+            end
+
             settings = Settings.new(rootPath,
                                     systemName,
                                     targetName,
@@ -99,7 +105,7 @@ module ISM
                                     chrootMakeOptions,
                                     chrootBuildOptions)
 
-            file = File.open(filePath,"w")
+            file = File.open(path,"w")
             settings.to_json(file)
             file.close
         end
