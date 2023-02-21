@@ -105,7 +105,7 @@ module ISM
                                     chrootMakeOptions,
                                     chrootBuildOptions)
 
-            file = File.open(path,"w")
+            file = File.open(filePath,"w")
             settings.to_json(file)
             file.close
         end
