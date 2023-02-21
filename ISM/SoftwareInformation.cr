@@ -174,7 +174,7 @@ module ISM
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
         @options.each do |option|
-            if option.name.starts_with?(/Pass[0-9]/) && option.active
+            if option.isPass && option.active
                 dependenciesArray = option.dependencies
                 passEnabled = true
                 break

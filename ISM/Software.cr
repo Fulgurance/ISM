@@ -64,6 +64,14 @@ module ISM
             @information.patchesLinks.each do |link|
                 downloadSource(link)
             end
+
+            @information.options.each do |option|
+                if option.active
+                    option.downloadLinks.each do |link|
+                        downloadSource(link)
+                    end
+                end
+            end
         end
 
         def downloadSource(link : String)
@@ -79,8 +87,17 @@ module ISM
         
         def check
             Ism.notifyOfCheck(@information)
+
             @information.downloadLinks.each_with_index do |source, index|
                 checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
+            end
+
+            @information.options.each do |option|
+                if option.active
+                    option.downloadLinks.each_with_index do |source, index|
+                        checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),option.md5sums[index])
+                    end
+                end
             end
         end
 
@@ -97,8 +114,17 @@ module ISM
         
         def extract
             Ism.notifyOfExtract(@information)
+
             @information.downloadLinks.each do |source|
                 extractSource(source.lchop(source[0..source.rindex("/")]))
+            end
+
+            @information.options.each do |option|
+                if option.active
+                    option.downloadLinks.each do |source|
+                        extractSource(source.lchop(source[0..source.rindex("/")]))
+                    end
+                end
             end
         end
 

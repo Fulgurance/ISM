@@ -22,6 +22,10 @@ module ISM
             return @name == other.name && @description == other.description && @active == other.active
         end
 
+        def isPass : Bool
+            return @name.starts_with?(/Pass[0-9]/)
+        end
+
     end
 
 end
