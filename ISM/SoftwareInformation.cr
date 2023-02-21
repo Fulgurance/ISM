@@ -6,7 +6,9 @@ module ISM
         name : String,
         description : String,
         active : Bool,
-        dependencies : Array(Dependency) do
+        dependencies : Array(Dependency),
+        downloadLinks : Array(String),
+        md5sums : Array(String) do
         include JSON::Serializable
     end
     
@@ -98,6 +100,8 @@ module ISM
             option.description = data.description
             option.active = data.active
             option.dependencies = dependenciesArray
+            option.downloadLinks = data.downloadLinks
+            option.md5sums = data.md5sums
             @options << option
         end
 
@@ -124,7 +128,7 @@ module ISM
                 optionsDependenciesArray << dependency
             end
 
-            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray)
+            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray,data.downloadLinks,data.md5sums)
         end
 
         information = Information.new(  @port,
