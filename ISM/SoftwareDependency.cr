@@ -138,6 +138,14 @@ module ISM
                 end
             end
 
+            @options.each do |option|
+                dependencyInformation.options.each_with_index do |optionInformation, index|
+                    if option == optionInformation.name
+                        dependencyInformation.options[index].active = true
+                    end
+                end
+            end
+
             return dependencyInformation
         end
 
