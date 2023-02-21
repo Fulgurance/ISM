@@ -23,7 +23,7 @@ module ISM
 
                     port = ISM::Port.new(portName,ARGV[2+Ism.debugLevel])
 
-                    Dir.mkdir(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
+                    Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
                     Process.run("git",  args: ["init"],
                                         chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
                     Process.run("git",  args: [ "remote",

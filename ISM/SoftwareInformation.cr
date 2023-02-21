@@ -104,6 +104,13 @@ module ISM
     end
 
     def writeInformationFile(writeInformationFilePath : String)
+        path = writeInformationFilePath.chomp(writeInformationFilePath[writeInformationFilePath.rindex("/")..-1])
+
+        if !Dir.exists?(path)
+            Dir.mkdir_p(path)
+        end
+
+
         dependenciesArray = Array(Dependency).new
         @dependencies.each do |data|
             dependenciesArray << Dependency.new(data.name,data.version,data.options)
@@ -146,16 +153,35 @@ module ISM
         return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
     end
 
-    def dependencies : Array(ISM::SoftwareDependency)
-        dependenciesArray = Array(ISM::SoftwareDependency).new
+    def option(optionName : String) : Bool
+        result = false
 
         @options.each do |option|
-            if option.active
-                dependenciesArray = dependenciesArray+option.dependencies
+            if optionName == option.name
+                result = option.active
             end
         end
 
-        return @dependencies+dependenciesArray
+        return result
+    end
+
+    def dependencies : Array(ISM::SoftwareDependency)
+        passEnabled = false
+        dependenciesArray = Array(ISM::SoftwareDependency).new
+
+        @options.each do |option|
+            if option.name.starts_with?(/Pass[0-9]/) && option.active
+                dependenciesArray = option.dependencies
+                passEnabled = true
+                break
+            else
+                if option.active
+                    dependenciesArray = dependenciesArray+option.dependencies
+                end
+            end
+        end
+
+        return (passEnabled ? dependenciesArray : @dependencies+dependenciesArray)
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency

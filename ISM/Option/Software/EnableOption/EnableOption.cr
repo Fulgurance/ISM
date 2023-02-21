@@ -54,17 +54,6 @@ module ISM
                             end
 
                             if match
-                                if !Dir.exists?(Ism.settings.rootPath +
-                                                ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                matchingSoftware.port + "/" +
-                                                matchingSoftware.name + "/" +
-                                                matchingSoftware.version)
-                                    Dir.mkdir_p(Ism.settings.rootPath +
-                                                ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                matchingSoftware.port + "/" +
-                                                matchingSoftware.name + "/" +
-                                                matchingSoftware.version)
-                                end
                                 matchingSoftware.writeInformationFile(  Ism.settings.rootPath +
                                                                         ISM::Default::Path::SettingsSoftwaresDirectory +
                                                                         matchingSoftware.port + "/" +

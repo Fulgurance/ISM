@@ -32,7 +32,7 @@ module ISM
 
         def loadSoftwareDatabase
             if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
-                Dir.mkdir(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
+                Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
             end
 
             portDirectories = Dir.children(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
@@ -86,7 +86,7 @@ module ISM
 
         def loadPortsDatabase
             if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
-                Dir.mkdir(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
+                Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
             end
 
             portsFiles = Dir.children(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
@@ -106,7 +106,7 @@ module ISM
 
         def loadInstalledSoftwareDatabase
             if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
-                Dir.mkdir(Ism.settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
+                Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
             end
 
             portDirectories = Dir.children(Ism.settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
@@ -143,18 +143,6 @@ module ISM
             installedSoftware = ISM::SoftwareInformation.new
             installedSoftware.loadInformationFile(path)
             installedSoftware.installedFiles = installedFiles
-
-            if !Dir.exists?(Ism.settings.rootPath +
-                            ISM::Default::Path::InstalledSoftwaresDirectory +
-                            installedSoftware.port + "/" + 
-                            installedSoftware.name + "/" + 
-                            installedSoftware.version)
-                Dir.mkdir_p(Ism.settings.rootPath +
-                            ISM::Default::Path::InstalledSoftwaresDirectory +
-                            installedSoftware.port + "/" + 
-                            installedSoftware.name + "/" + 
-                            installedSoftware.version)
-            end
 
             installedSoftware.writeInformationFile( Ism.settings.rootPath +
                                                     ISM::Default::Path::InstalledSoftwaresDirectory +

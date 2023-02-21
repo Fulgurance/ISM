@@ -938,17 +938,11 @@ module ISM
             end
         end
 
-        def option?(optionName : String) : Bool
-            result = false
-            @information.options.each do |option|
-                if optionName == option.name
-                    result = option.active
-                end
-            end
-            return result
+        def option(optionName : String) : Bool
+            return @information.option(optionName)
         end
 
-        def architecture?(architecture : String) : Bool
+        def architecture(architecture : String) : Bool
             return Ism.settings.architecture == architecture
         end
 
