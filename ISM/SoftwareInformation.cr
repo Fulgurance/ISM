@@ -64,7 +64,14 @@ module ISM
     end
 
     def loadInformationFile(loadInformationFilePath : String)
-        information = Information.from_json(File.read(loadInformationFilePath))
+        begin
+            information = Information.from_json(File.read(loadInformationFilePath))
+        rescue
+            puts    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
+                    loadInformationFilePath +
+                    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText2
+            return
+        end
 
         @port = information.port
         @name = information.name
