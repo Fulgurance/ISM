@@ -180,7 +180,7 @@ module ISM
     def enableOption(optionName : String)
         @options.each_with_index do |option, index|
             if optionName == option.name
-                @option[index].active = true
+                @options[index].active = true
             end
         end
     end
@@ -188,7 +188,7 @@ module ISM
     def disableOption(optionName : String)
         @options.each_with_index do |option, index|
             if optionName == option.name
-                @option[index].active = false
+                @options[index].active = false
             end
         end
     end

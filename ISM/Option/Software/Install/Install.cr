@@ -300,9 +300,9 @@ module ISM
                                     requiredOptions = String.new
                                     software.options.each do |option|
                                         if option.active
-                                            requiredOptions += "target.information.options.enableOption(\"#{option.name}\")\n"
+                                            requiredOptions += "target.information.enableOption(\"#{option.name}\")\n"
                                         else
-                                            requiredOptions += "target.information.options.disableOption(\"#{option.name}\")\n"
+                                            requiredOptions += "target.information.disableOption(\"#{option.name}\")\n"
                                         end
                                     end
 
@@ -372,7 +372,7 @@ module ISM
                                         end
                                     end
 
-                                    Ism.addInstalledSoftware(targetPath, installedFiles)
+                                    Ism.addInstalledSoftware(software, installedFiles)
 
                                     FileUtils.rm_r(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
 

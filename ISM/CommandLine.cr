@@ -139,17 +139,15 @@ module ISM
             end
         end
 
-        def addInstalledSoftware(path : String, installedFiles : Array(String))
-            installedSoftware = ISM::SoftwareInformation.new
-            installedSoftware.loadInformationFile(path)
-            installedSoftware.installedFiles = installedFiles
+        def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles : Array(String))
+            softwareInformation.installedFiles = installedFiles
 
-            installedSoftware.writeInformationFile( Ism.settings.rootPath +
-                                                    ISM::Default::Path::InstalledSoftwaresDirectory +
-                                                    installedSoftware.port + "/" + 
-                                                    installedSoftware.name + "/" + 
-                                                    installedSoftware.version + "/" + 
-                                                    ISM::Default::Filename::Information)
+            softwareInformation.writeInformationFile(   Ism.settings.rootPath +
+                                                        ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                        softwareInformation.port + "/" +
+                                                        softwareInformation.name + "/" +
+                                                        softwareInformation.version + "/" +
+                                                        ISM::Default::Filename::Information)
         end
 
         def removeInstalledSoftware(installedSoftware : ISM::SoftwareInformation)
