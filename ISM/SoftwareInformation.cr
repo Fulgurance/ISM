@@ -66,10 +66,11 @@ module ISM
     def loadInformationFile(loadInformationFilePath : String)
         begin
             information = Information.from_json(File.read(loadInformationFilePath))
-        rescue
+        rescue error : JSON::ParseException
             puts    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
                     loadInformationFilePath +
-                    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText2
+                    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText2 +
+                    error.line_number.to_s
             return
         end
 
