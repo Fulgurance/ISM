@@ -177,6 +177,22 @@ module ISM
         return result
     end
 
+    def enableOption(optionName : String)
+        @options.each_with_index do |option, index|
+            if optionName == option.name
+                @option[index].active = true
+            end
+        end
+    end
+
+    def disableOption(optionName : String)
+        @options.each_with_index do |option, index|
+            if optionName == option.name
+                @option[index].active = false
+            end
+        end
+    end
+
     def dependencies : Array(ISM::SoftwareDependency)
         passEnabled = false
         dependenciesArray = Array(ISM::SoftwareDependency).new

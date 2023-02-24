@@ -297,6 +297,15 @@ module ISM
                                         end
                                     end
 
+                                    requiredOptions = String.new
+                                    software.options.each do |option|
+                                        if option.active
+                                            requiredOptions += "target.information.options.enableOption(\"#{option.name}\")\n"
+                                        else
+                                            requiredOptions += "target.information.options.disableOption(\"#{option.name}\")\n"
+                                        end
+                                    end
+
                                     tasks = <<-CODE
                                     #{requiredLibraries}
                                     Ism = ISM::CommandLine.new
@@ -305,6 +314,7 @@ module ISM
 
                                     {{ read_file("#{requirePath}").id }}
                                     target = Target.new("#{targetPath}")
+                                    #{requiredOptions}
 
                                     begin
                                         target.download

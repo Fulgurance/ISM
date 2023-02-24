@@ -169,6 +169,7 @@ module ISM
             if ARGV.empty?
                 matchingOption = true
                 @options[0+@debugLevel].start
+                resetTerminalTitle
             else
                 @options.each_with_index do |argument, index|
                     if ARGV[0] == ISM::Default::Option::Debug::ShortText || ARGV[0] == ISM::Default::Option::Debug::LongText
@@ -179,6 +180,7 @@ module ISM
                         if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
                             matchingOption = true
                             @options[index].start
+                            resetTerminalTitle
                             break
                         end
                     end
@@ -187,6 +189,7 @@ module ISM
                         if ARGV[0+@debugLevel] == argument.shortText || ARGV[0+@debugLevel] == argument.longText
                             matchingOption = true
                             @options[index].start
+                            resetTerminalTitle
                             break
                         end
                     end
@@ -615,7 +618,12 @@ module ISM
         end
 
         def setTerminalTitle(title : String)
+            STDOUT << "\e[22t"
             STDOUT << "\e]0; #{title}\e\\"
+        end
+
+        def resetTerminalTitle
+            STDOUT << "\e[23t"
         end
 
     end
