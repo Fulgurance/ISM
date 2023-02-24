@@ -67,10 +67,10 @@ module ISM
         begin
             information = Information.from_json(File.read(loadInformationFilePath))
         rescue error : JSON::ParseException
-            puts    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
+            puts    "#{ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
                     loadInformationFilePath +
                     ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText2 +
-                    error.line_number.to_s
+                    error.line_number.to_s}".colorize(:yellow)
             return
         end
 
