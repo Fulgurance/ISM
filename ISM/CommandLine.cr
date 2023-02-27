@@ -11,6 +11,7 @@ module ISM
         property ports : Array(ISM::Port)
         property portsSettings : ISM::CommandLinePortsSettings
 
+
         def initialize
             @debugLevel = ISM::Default::CommandLine::DebugLevel
             @options = ISM::Default::CommandLine::Options
@@ -20,6 +21,7 @@ module ISM
             @installedSoftwares = Array(ISM::SoftwareInformation).new
             @ports = Array(ISM::Port).new
             @portsSettings = ISM::CommandLinePortsSettings.new
+            @terminalTitleSaved = false
         end
 
         def start
@@ -616,7 +618,10 @@ module ISM
         end
 
         def setTerminalTitle(title : String)
-            STDOUT << "\e[22t"
+            if !@terminalTitleSaved
+                STDOUT << "\e[22t"
+                @terminalTitleSaved = true
+            end
             STDOUT << "\e]0; #{title}\e\\"
         end
 

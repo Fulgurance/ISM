@@ -44,7 +44,7 @@ module ISM
     property downloadLinks : Array(String)
     property md5sums : Array(String)
     property patchesLinks : Array(String)
-    property options : Array(ISM::SoftwareOption)
+    setter options : Array(ISM::SoftwareOption)
     property installedFiles : Array(String)
     setter dependencies : Array(ISM::SoftwareDependency)
 
@@ -163,6 +163,63 @@ module ISM
 
     def builtSoftwareDirectoryPath
         return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
+    end
+
+    def filePath : String
+        return Ism.settings.rootPath +
+               ISM::Default::Path::SoftwaresDirectory +
+               @port + "/" +
+               @name + "/" +
+               @version + "/" +
+               ISM::Default::Filename::Information
+    end
+
+    def requireFilePath : String
+        return Ism.settings.rootPath +
+               ISM::Default::Path::SoftwaresDirectory +
+               @port + "/" +
+               @name + "/" +
+               @version + "/" +
+               @version + ".cr"
+    end
+
+    def settingsFilePath : String
+        return  Ism.settings.rootPath +
+                ISM::Default::Path::SettingsSoftwaresDirectory +
+                @name + "/" +
+                @version + "/" +
+                ISM::Default::Filename::SoftwareSettings
+    end
+
+    def options : Array(ISM::SoftwareOption)
+        if File.exists?(settingsFilePath)
+            settingsInformation = Information.from_json(File.read(settingsFilePath))
+            settingsOptions = Array(ISM::SoftwareOption).new
+
+            settingsInformation.options.each do |data|
+                dependenciesArray = Array(ISM::SoftwareDependency).new
+                data.dependencies.each do |dependency|
+                    temporary = ISM::SoftwareDependency.new
+                    temporary.name = dependency.name
+                    temporary.version = dependency.version
+                    temporary.options = dependency.options
+                    dependenciesArray << temporary
+                end
+
+                option = ISM::SoftwareOption.new
+                option.name = data.name
+                option.description = data.description
+                option.active = data.active
+                option.dependencies = dependenciesArray
+                option.downloadLinks = data.downloadLinks
+                option.md5sums = data.md5sums
+                settingsOptions << option
+            end
+
+            return settingsOptions
+        end
+
+        return @options
     end
 
     def option(optionName : String) : Bool

@@ -195,19 +195,9 @@ module ISM
                                         " / "+"#{uselessSoftwares.size.to_s.colorize(:light_red)}" +
                                         "] #{ISM::Default::Option::SoftwareRemove::UninstallingText} "+"#{software.name.colorize(:green)}"+"\n\n"
 
-                                targetPath =    Ism.settings.rootPath +
-                                                ISM::Default::Path::InstalledSoftwaresDirectory +
-                                                software.port + "/" +
-                                                software.name + "/" +
-                                                software.version + "/" +
-                                                ISM::Default::Filename::Information
+                                targetPath = software.filePath
 
-                                requirePath =   Ism.settings.rootPath +
-                                                ISM::Default::Path::SoftwaresDirectory +
-                                                software.port + "/" +
-                                                software.name + "/" +
-                                                software.version + "/" +
-                                                software.version + ".cr"
+                                requirePath = software.requireFilePath
 
                                 requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{ISM::Default::Filename::RequiredLibraries}")
                                 requiredLibraries = String.new

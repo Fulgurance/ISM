@@ -253,31 +253,13 @@ module ISM
                                             " / "+"#{matchingSoftwaresArray.size.to_s.colorize(:light_red)}" +
                                             "] #{ISM::Default::Option::SoftwareInstall::InstallingText} "+"#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"+"\n\n"
 
-                                    if File.exists?(Ism.settings.rootPath +
-                                                    ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                    software.name + "/" +
-                                                    software.version + "/" +
-                                                    ISM::Default::Filename::SoftwareSettings)
-                                        targetPath =    Ism.settings.rootPath +
-                                                        ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                        software.name + "/" +
-                                                        software.version + "/" +
-                                                        ISM::Default::Filename::SoftwareSettings
+                                    if File.exists?(software.settingsFilePath)
+                                        targetPath = software.settingsFilePath
                                     else
-                                        targetPath =    Ism.settings.rootPath +
-                                                        ISM::Default::Path::SoftwaresDirectory +
-                                                        software.port + "/" +
-                                                        software.name + "/" +
-                                                        software.version + "/" +
-                                                        ISM::Default::Filename::Information
+                                        targetPath = software.filePath
                                     end
 
-                                    requirePath =   Ism.settings.rootPath +
-                                                    ISM::Default::Path::SoftwaresDirectory +
-                                                    software.port + "/" +
-                                                    software.name + "/" +
-                                                    software.version + "/" +
-                                                    software.version + ".cr"
+                                    requirePath = software.requireFilePath
 
                                     if Dir.exists?(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
                                         FileUtils.rm_r(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
