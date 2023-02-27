@@ -232,15 +232,13 @@ module ISM
     end
 
     def option(optionName : String) : Bool
-        result = false
-
         @options.each do |option|
             if optionName == option.name
-                result = option.active
+                return option.active
             end
         end
 
-        return result
+        return false
     end
 
     def enableOption(optionName : String)
@@ -257,6 +255,16 @@ module ISM
                 @options[index].active = false
             end
         end
+    end
+
+    def passEnabled : Bool
+        @options.each do |option|
+            if option.isPass
+                return true
+            end
+        end
+
+        return false
     end
 
     def dependencies : Array(ISM::SoftwareDependency)

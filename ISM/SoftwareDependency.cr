@@ -123,6 +123,7 @@ module ISM
             dependencyInformation = Ism.getSoftwareInformation(@name,@version)
 
             @options.each do |option|
+                if !option.match(/Pass[0-9]/) && dependencyInformation.passEnabled
                 dependencyInformation.enableOption(option)
             end
 

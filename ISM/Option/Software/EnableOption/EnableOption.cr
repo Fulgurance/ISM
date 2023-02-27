@@ -54,12 +54,7 @@ module ISM
                             end
 
                             if match
-                                matchingSoftware.writeInformationFile(  Ism.settings.rootPath +
-                                                                        ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                                        matchingSoftware.port + "/" +
-                                                                        matchingSoftware.name + "/" +
-                                                                        matchingSoftware.version + "/" +
-                                                                        ISM::Default::Filename::SoftwareSettings)
+                                matchingSoftware.writeInformationFile(matchingSoftware.settingsFilePath)
                                 puts    "#{"* ".colorize(:green)}" +
                                         ISM::Default::Option::SoftwareEnableOption::SetText1 +
                                         matchingOption.name +
