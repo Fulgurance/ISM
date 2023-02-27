@@ -124,7 +124,8 @@ module ISM
 
             @options.each do |option|
                 if !option.match(/Pass[0-9]/) && dependencyInformation.passEnabled
-                dependencyInformation.enableOption(option)
+                    dependencyInformation.enableOption(option)
+                end
             end
 
             return dependencyInformation
