@@ -144,12 +144,7 @@ module ISM
         def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles : Array(String))
             softwareInformation.installedFiles = installedFiles
 
-            softwareInformation.writeInformationFile(   Ism.settings.rootPath +
-                                                        ISM::Default::Path::InstalledSoftwaresDirectory +
-                                                        softwareInformation.port + "/" +
-                                                        softwareInformation.name + "/" +
-                                                        softwareInformation.version + "/" +
-                                                        ISM::Default::Filename::Information)
+            softwareInformation.writeInformationFile(softwareInformation.installedFilePath)
         end
 
         def removeInstalledSoftware(installedSoftware : ISM::SoftwareInformation)
@@ -158,6 +153,28 @@ module ISM
 
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
             return @installedSoftwares.includes?(software)
+        end
+
+        def getSoftwareInformation(name : String, version : String) : ISM::SoftwareInformation
+            information = ISM::SoftwareInformation.new
+
+            @softwares.each do |software|
+
+                if software.name == name
+
+                    software.versions.each do |softwareVersion|
+
+                        if version == softwareVersion.version
+                            information = softwareVersion
+                            break
+                        end
+
+                    end
+
+                end
+            end
+
+            return information
         end
 
         def checkEnteredArguments

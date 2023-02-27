@@ -120,30 +120,10 @@ module ISM
         end
 
         def information : ISM::SoftwareInformation
-            dependencyInformation = ISM::SoftwareInformation.new
-
-            Ism.softwares.each do |software|
-
-                if software.name == @name
-
-                    software.versions.each do |softwareVersion|
-
-                        if version == softwareVersion.version
-                            dependencyInformation = softwareVersion
-                            break
-                        end
-
-                    end
-
-                end
-            end
+            dependencyInformation = Ism.getSoftwareInformation(@name,@version)
 
             @options.each do |option|
-                dependencyInformation.options.each_with_index do |optionInformation, index|
-                    if option == optionInformation.name
-                        dependencyInformation.options[index].active = true
-                    end
-                end
+                dependencyInformation.enableOption(option)
             end
 
             return dependencyInformation

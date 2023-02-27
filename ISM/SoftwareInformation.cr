@@ -191,6 +191,15 @@ module ISM
                 ISM::Default::Filename::SoftwareSettings
     end
 
+    def installedFilePath : String
+        return Ism.settings.rootPath +
+               ISM::Default::Path::InstalledSoftwaresDirectory +
+               @port + "/" +
+               @name + "/" +
+               @version + "/" +
+               ISM::Default::Filename::Information
+    end
+
     def options : Array(ISM::SoftwareOption)
         if File.exists?(settingsFilePath)
             settingsInformation = Information.from_json(File.read(settingsFilePath))
