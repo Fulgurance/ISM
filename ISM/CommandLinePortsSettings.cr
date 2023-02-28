@@ -12,18 +12,23 @@ module ISM
         def initialize(@targetVersion = ISM::Default::CommandLinePortsSettings::TargetVersion)
         end
 
+        def filePath : String
+            return Ism.settings.rootPath+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath
+        end
+
         def loadPortsSettingsFile
-            if !File.exists?(Ism.settings.rootPath+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath)
+            if !File.exists?(filePath)
                 writePortsSettingsFile
             end
-            information = PortsSettings.from_json(File.read(Ism.settings.rootPath+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath))
+
+            information = PortsSettings.from_json(File.read(filePath))
             @targetVersion = information.targetVersion
         end
 
         def writePortsSettingsFile
             portsSettings = PortsSettings.new(@targetVersion)
 
-            file = File.open(Ism.settings.rootPath+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath,"w")
+            file = File.open(filePath,"w")
             portsSettings.to_json(file)
             file.close
         end

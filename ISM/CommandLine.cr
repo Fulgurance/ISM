@@ -94,8 +94,8 @@ module ISM
             portsFiles = Dir.children(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
 
             portsFiles.each do |portFile|
-                port = ISM::Port.new
-                port.loadPortFile(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory+portFile)
+                port = ISM::Port.new(portFile)
+                port.loadPortFile
                 @ports << port
             end
         end
@@ -156,8 +156,6 @@ module ISM
         end
 
         def getSoftwareInformation(name : String, version : String) : ISM::SoftwareInformation
-            information = ISM::SoftwareInformation.new
-
             @softwares.each do |software|
 
                 if software.name == name
@@ -165,16 +163,16 @@ module ISM
                     software.versions.each do |softwareVersion|
 
                         if version == softwareVersion.version
-                            information = softwareVersion
-                            break
+                            return softwareVersion
                         end
 
                     end
 
                 end
+
             end
 
-            return information
+            return ISM::SoftwareInformation.new
         end
 
         def checkEnteredArguments

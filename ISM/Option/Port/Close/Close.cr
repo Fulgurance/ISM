@@ -15,13 +15,12 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    if File.exists?(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory+ARGV[2+Ism.debugLevel]+".json")
+                    if ISM::Port.exists(ARGV[2+Ism.debugLevel])
                         puts    "#{"* ".colorize(:green)}" +
                             ISM::Default::Option::PortClose::CloseText +
                             ARGV[2+Ism.debugLevel]
                             
-                        File.delete(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory+ARGV[2+Ism.debugLevel]+".json")
-                        FileUtils.rm_r(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+ARGV[2+Ism.debugLevel])
+                        ISM::Port.delete(ARGV[2+Ism.debugLevel])
                     else
                         puts    ISM::Default::Option::PortClose::NoMatchFoundText1 +
                                 ARGV[2+Ism.debugLevel] +

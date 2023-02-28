@@ -21,10 +21,9 @@ module ISM
 
                 Ism.ports.each do |port|
 
-                    process = Process.new("git",args: ["pull","origin",Ism.portsSettings.targetVersion],
-                                                chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
+                    synchronization = port.synchronize
 
-                    until process.terminated?
+                    until synchronization.terminated?
                         synchronizationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, reverseAnimation, text)
                         sleep 0
                     end

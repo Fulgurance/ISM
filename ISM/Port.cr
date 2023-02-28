@@ -14,19 +14,73 @@ module ISM
         def initialize(@name = String.new,@url = String.new)
         end
 
-        def loadPortFile(portFilePath : String)
-            port = Port.from_json(File.read(portFilePath))
+        def self.filePathPrefix : String
+            return Ism.settings.rootPath+ISM::Default::Path::PortsDirectory
+        end
+
+        def self.directoryPathPrefix : String
+            return Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory
+        end
+
+        def self.exists(name : String) : Bool
+            return File.exists?(self.filePathPrefix+name+".json")
+        end
+
+        def self.delete(name : String)
+            File.delete(self.filePathPrefix+ARGV[2+Ism.debugLevel]+".json")
+            FileUtils.rm_r(self.directoryPathPrefix+ARGV[2+Ism.debugLevel])
+        end
+
+        def filePath : String
+            return self.class.filePathPrefix+@name+".json"
+        end
+
+        def directoryPath : String
+            return self.class.directoryPathPrefix+@name
+        end
+
+        def loadPortFile
+            port = Port.from_json(File.read(filePath))
       
             @name = port.name
             @url = port.url
         end
 
-        def writePortFile(portFilePath : String)
+        def writePortFile
             port = Port.new(@name,@url)
 
-            file = File.open(portFilePath,"w")
+            file = File.open(filePath,"w")
             port.to_json(file)
             file.close
+        end
+
+        def open : Bool
+            Dir.mkdir_p(directoryPath)
+
+            Process.run("git",  args: ["init"],
+                                chdir: directoryPath)
+            Process.run("git",  args: [ "remote",
+                                        "add",
+                                        "origin",
+                                        @url],
+                                chdir: directoryPath)
+
+            process = Process.new("git",args: [ "ls-remote"],
+                                        chdir: directoryPath)
+            result = process.wait
+
+            if result.success?
+                writePortFile
+            else
+                FileUtils.rm_r(directoryPath)
+            end
+
+            return result.success?
+        end
+
+        def synchronize : Process
+            return Process.new("git",   args: ["pull","origin",Ism.portsSettings.targetVersion],
+                                        chdir: directoryPath)
         end
 
     end

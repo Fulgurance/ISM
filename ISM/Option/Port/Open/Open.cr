@@ -11,44 +11,30 @@ module ISM
                         Array(ISM::CommandLineOption).new)
             end
 
+            def convertUrlToPort(url : String) : ISM::Port
+                portName = url.lchop(url[0..url.rindex("/")])
+
+                if portName[-4..-1] == ".git"
+                    portName = portName[0..-5]
+                end
+
+                return ISM::Port.new(portName,url)
+            end
+
             def start
                 if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    portName = ARGV[2+Ism.debugLevel].lchop(ARGV[2+Ism.debugLevel][0..ARGV[2+Ism.debugLevel].rindex("/")])
+                    port = convertUrlToPort(ARGV[2+Ism.debugLevel])
 
-                    if portName[-4..-1] == ".git"
-                        portName = portName[0..-5]
-                    end
-
-                    port = ISM::Port.new(portName,ARGV[2+Ism.debugLevel])
-
-                    Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
-                    Process.run("git",  args: ["init"],
-                                        chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
-                    Process.run("git",  args: [ "remote",
-                                                "add",
-                                                "origin",
-                                                port.url],
-                                        chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
-
-                    process = Process.new("git",args: [ "ls-remote"],
-                                                chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
-
-                    result = process.wait
-
-                    if result.success?
-                        port.writePortFile(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory+portName+".json")
-
+                    if port.open
                         puts    "#{"* ".colorize(:green)}" +
                             ISM::Default::Option::PortOpen::OpenText +
-                            portName
+                            port.name
                     else
-                        FileUtils.rm_r(Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
-
                         puts    "#{"* ".colorize(:red)}" +
                             ISM::Default::Option::PortOpen::OpenTextError1 +
-                            "#{portName.colorize(:red)}" +
+                            "#{port.name.colorize(:red)}" +
                             ISM::Default::Option::PortOpen::OpenTextError2
                     end
                 end

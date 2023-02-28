@@ -122,7 +122,6 @@ module ISM
 
                     print "#{ISM::Default::Option::SoftwareInstall::CalculationDoneText.colorize(:green)}\n"
 
-                    #Retirer encore les doublons si il y a des paquets de meme nom ou version differente, ou options differentes
                     if !matching
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArgument.colorize(:green)}"
                         puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
