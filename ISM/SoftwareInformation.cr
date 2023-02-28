@@ -286,22 +286,22 @@ module ISM
     end
 
     def dependencies : Array(ISM::SoftwareDependency)
-        passEnabled = false
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
         @options.each do |option|
-            if option.isPass && option.active
-                dependenciesArray = option.dependencies
-                passEnabled = true
-                break
-            else
-                if option.active
+
+            if option.active
+                if option.isPass
+                    dependenciesArray = option.dependencies
+                    return option.dependencies
+                else
                     dependenciesArray = dependenciesArray+option.dependencies
                 end
             end
+
         end
 
-        return (passEnabled ? dependenciesArray : @dependencies+dependenciesArray)
+        return @dependencies+dependenciesArray
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency
