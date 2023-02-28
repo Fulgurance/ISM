@@ -145,13 +145,7 @@ module ISM
         end
 
         def dependencies : Array(ISM::SoftwareDependency)
-            dependencyInformation = Ism.getSoftwareInformation(@name,@version)
-
-            @options.each do |option|
-                dependencyInformation.enableOption(option)
-            end
-
-            return dependencyInformation.dependencies
+            return information.dependencies
         end
 
         def == (other : ISM::SoftwareDependency) : Bool
