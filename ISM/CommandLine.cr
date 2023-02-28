@@ -94,7 +94,7 @@ module ISM
             portsFiles = Dir.children(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory)
 
             portsFiles.each do |portFile|
-                port = ISM::Port.new(portFile)
+                port = ISM::Port.new(portFile[0..-6])
                 port.loadPortFile
                 @ports << port
             end

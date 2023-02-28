@@ -45,9 +45,9 @@ module ISM
                             match = false
                             matchingOption = ISM::SoftwareOption.new
 
-                            matchingSoftware.options.each_with_index do |option, index|
+                            matchingSoftware.options.each do |option|
                                 if ARGV[3+Ism.debugLevel] == option.name || ARGV[3+Ism.debugLevel] == option.name.downcase
-                                    matchingSoftware.options[index].active = true
+                                    matchingSoftware.enableOption(option.name)
                                     matchingOption = option
                                     match = true
                                 end

@@ -63,6 +63,16 @@ module ISM
         @options = Array(ISM::SoftwareOption).new
     end
 
+    def getEnabledPass : String
+        @options.each do |option|
+            if option.isPass && option.active
+                return option.name
+            end
+        end
+
+        return String.new
+    end
+
     def loadInformationFile(loadInformationFilePath : String)
         begin
             information = Information.from_json(File.read(loadInformationFilePath))
@@ -244,7 +254,15 @@ module ISM
     def enableOption(optionName : String)
         @options.each_with_index do |option, index|
             if optionName == option.name
-                @options[index].active = true
+                if option.isPass
+                    currentEnabledPass = getEnabledPass
+
+                    if passEnabled && currentEnabledPass != optionName
+                        disableOption(currentEnabledPass)
+                    end
+
+                    @options[index].active = true
+                end
             end
         end
     end

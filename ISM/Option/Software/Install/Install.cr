@@ -77,9 +77,7 @@ module ISM
                             end
                         end
 
-                        dependenciesLevelArray.uniq! { |dependency| [   dependency.name,
-                                                                        dependency.version,
-                                                                        dependency.options] }
+                        dependenciesLevelArray.uniq!
 
                         if !dependenciesLevelArray.empty?
                             neededSoftwaresTree << dependenciesLevelArray.dup

@@ -11,6 +11,21 @@ module ISM
             @options = Array(String).new
         end
 
+        def getEnabledPass : String
+            @options.each do |option|
+                if option.starts_with?(/Pass[0-9]/)
+                    return option
+                end
+            end
+
+            return String.new
+        end
+
+        def hiddenName : String
+            passName = getEnabledPass
+            return (passName == "" ? @name : @name+"-"+passName)
+        end
+
         def version=(@version)
         end
 
@@ -123,20 +138,24 @@ module ISM
             dependencyInformation = Ism.getSoftwareInformation(@name,@version)
 
             @options.each do |option|
-                if !option.match(/Pass[0-9]/) && dependencyInformation.passEnabled
-                    dependencyInformation.enableOption(option)
-                end
+                dependencyInformation.enableOption(option)
             end
 
             return dependencyInformation
         end
 
         def dependencies : Array(ISM::SoftwareDependency)
-            return information.dependencies
+            dependencyInformation = Ism.getSoftwareInformation(@name,@version)
+
+            @options.each do |option|
+                dependencyInformation.enableOption(option)
+            end
+
+            return dependencyInformation.dependencies
         end
 
         def == (other : ISM::SoftwareDependency) : Bool
-            return @name == other.name &&
+            return hiddenName == other.hiddenName &&
             version == other.version &&
             @options == other.options
         end
