@@ -29,6 +29,10 @@ module ISM
         def version=(@version)
         end
 
+        def versionName
+            return @name+"-"+version
+        end
+
         def includeComparators : Bool
             return @version.includes?("<") || @version.includes?(">")
         end
@@ -135,7 +139,7 @@ module ISM
         end
 
         def information : ISM::SoftwareInformation
-            dependencyInformation = Ism.getSoftwareInformation(@name,@version)
+            dependencyInformation = Ism.getSoftwareInformation(versionName)
 
             @options.each do |option|
                 dependencyInformation.enableOption(option)

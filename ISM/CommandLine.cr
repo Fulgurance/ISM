@@ -155,24 +155,24 @@ module ISM
             return @installedSoftwares.includes?(software)
         end
 
-        def getSoftwareInformation(name : String, version : String) : ISM::SoftwareInformation
-            @softwares.each do |software|
+        def getSoftwareInformation(versionName : String) : ISM::SoftwareInformation
+            result = ISM::SoftwareInformation.new
 
-                if software.name == name
+            @softwares.each do |entry|
+                if versionName.includes?(entry.name)
+                    result.name = entry.name
+                end
 
-                    software.versions.each do |softwareVersion|
+                entry.versions.each do |software|
 
-                        if version == softwareVersion.version
-                            return softwareVersion
-                        end
-
+                    if versionName == software.versionName
+                        return software
                     end
 
                 end
-
             end
 
-            return ISM::SoftwareInformation.new
+            return result
         end
 
         def checkEnteredArguments
@@ -592,44 +592,17 @@ module ISM
             return calculationStartingTime, frameIndex, reverseAnimation
         end
 
-        def getRequestedSoftwares(list, calculationStartingTime, frameIndex, reverseAnimation, text)
-            matching = false
-            wrongArgument = ""
-            matchingSoftwaresArray = Array(ISM::SoftwareInformation).new
+        def getRequestedSoftwares(list : Array(String)) : Array(ISM::SoftwareInformation)
+            softwaresList = Array(ISM::SoftwareInformation).new
 
-            list.each do |argument|
-                matching = false
-
-                calculationStartingTime, frameIndex, reverseAnimation = playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
-
-                @softwares.each do |software|
-
-                    calculationStartingTime, frameIndex, reverseAnimation = playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
-
-                    if argument == software.name || argument == software.name.downcase
-                        matchingSoftwaresArray << software.versions.last
-                        matching = true
-                    else
-                        software.versions.each do |version|
-
-                            calculationStartingTime, frameIndex, reverseAnimation = playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
-
-                            if argument == version.versionName || argument == version.versionName.downcase
-                                matchingSoftwaresArray << version
-                                matching = true
-                            end
-                        end
-                    end
-
+            list.each do |entry|
+                software = getSoftwareInformation(entry)
+                if software.name != ""
+                    softwaresList << software
                 end
-                if !matching
-                    wrongArgument = argument
-                    break
-                end
-
             end
 
-            return matching, matchingSoftwaresArray, wrongArgument, calculationStartingTime, frameIndex, reverseAnimation
+            return softwaresList
         end
 
         def setTerminalTitle(title : String)
