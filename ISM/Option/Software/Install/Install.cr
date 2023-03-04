@@ -77,13 +77,12 @@ module ISM
                             end
                         else
                             dependencies[dependency.hiddenName] = dependency
-                            nextDependencies << dependency
+                            nextDependencies += dependency.dependencies
                         end
 
                     end
 
-                    currentDependencies.clear
-                    currentDependencies = nextDependencies
+                    currentDependencies = nextDependencies.dup
                     nextDependencies.clear
 
                 end

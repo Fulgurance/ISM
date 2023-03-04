@@ -159,17 +159,20 @@ module ISM
             result = ISM::SoftwareInformation.new
 
             @softwares.each do |entry|
-                if versionName.includes?(entry.name)
+
+                if entry.name.downcase == versionName.downcase
                     result.name = entry.name
-                end
-
-                entry.versions.each do |software|
-
-                    if versionName == software.versionName
-                        return software
+                    if !entry.versions.empty?
+                        return entry.versions.last
                     end
-
+                else
+                    entry.versions.each do |software|
+                        if software.versionName.downcase == versionName.downcase
+                            return software
+                        end
+                    end
                 end
+
             end
 
             return result
