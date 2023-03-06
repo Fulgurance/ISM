@@ -261,8 +261,9 @@ module ISM
                         disableOption(currentEnabledPass)
                     end
 
-                    @options[index].active = true
                 end
+
+                @options[index].active = true
             end
         end
     end
@@ -277,7 +278,7 @@ module ISM
 
     def passEnabled : Bool
         @options.each do |option|
-            if option.isPass
+            if option.isPass && option.active
                 return true
             end
         end
@@ -292,10 +293,9 @@ module ISM
 
             if option.active
                 if option.isPass
-                    dependenciesArray = option.dependencies
                     return option.dependencies
                 else
-                    dependenciesArray = dependenciesArray+option.dependencies
+                    dependenciesArray += option.dependencies
                 end
             end
 
