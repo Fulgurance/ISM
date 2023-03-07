@@ -2,6 +2,8 @@ module ISM
 
     class SoftwareDependency
 
+        def_clone
+
         property name : String
         property options : Array(String)
 

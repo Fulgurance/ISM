@@ -2,6 +2,8 @@ module ISM
 
     class SoftwareOption
 
+        def_clone
+
         property name : String
         property description : String
         property active : Bool

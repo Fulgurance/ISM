@@ -2,6 +2,8 @@ module ISM
 
   class SoftwareInformation
 
+    def_clone
+
     record Option,
         name : String,
         description : String,

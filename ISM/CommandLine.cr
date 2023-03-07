@@ -163,12 +163,12 @@ module ISM
                 if entry.name.downcase == versionName.downcase
                     result.name = entry.name
                     if !entry.versions.empty?
-                        return entry.versions.last
+                        return entry.versions.last.clone
                     end
                 else
                     entry.versions.each do |software|
                         if software.versionName.downcase == versionName.downcase
-                            return software
+                            return software.clone
                         end
                     end
                 end

@@ -36,14 +36,13 @@ module ISM
                     neededSoftwares = getSortedDependencies(dependenciesTable)
 
                     showCalculationDoneMessage
-
                     showNeededSoftwares(neededSoftwares)
 
                 end
             end
 
             def getRequiredDependencies(software : ISM::SoftwareInformation) : Array(ISM::SoftwareDependency)
-                dependencies = Hash(String,SoftwareDependency).new
+                dependencies = Hash(String,ISM::SoftwareDependency).new
 
                 currentDependencies = software.dependencies
                 nextDependencies = Array(ISM::SoftwareDependency).new
@@ -75,6 +74,8 @@ module ISM
 
                                 end
                             end
+
+                            exit 1
                         else
                             dependencies[dependency.hiddenName] = dependency
                             nextDependencies += dependency.dependencies
@@ -94,7 +95,13 @@ module ISM
                 dependenciesTable = Hash(ISM::SoftwareDependency,Array(ISM::SoftwareDependency)).new
 
                 softwareList.each do |software|
-                    dependenciesTable[software.toSoftwareDependency] = getRequiredDependencies(software)
+                    key = software.toSoftwareDependency
+
+                    dependenciesTable[key] = getRequiredDependencies(software)
+
+                    dependenciesTable[key].each do |dependency|
+                        dependenciesTable[dependency] = getRequiredDependencies(dependency.information)
+                    end
                 end
 
                 return dependenciesTable
@@ -116,7 +123,7 @@ module ISM
 
             def showNeededSoftwares(neededSoftwares : Array(ISM::SoftwareDependency))
                 neededSoftwares.each do |software|
-                    puts "\t#{software.version}-#{software.version}"+software.options.to_s
+                    puts "\t#{software.name}-#{software.version}"+software.options.to_s
                 end
             end
 
