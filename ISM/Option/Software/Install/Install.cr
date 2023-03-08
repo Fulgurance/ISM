@@ -44,7 +44,7 @@ module ISM
             def getRequiredDependencies(software : ISM::SoftwareInformation) : Array(ISM::SoftwareDependency)
                 dependencies = Hash(String,ISM::SoftwareDependency).new
 
-                currentDependencies = software.dependencies
+                currentDependencies = [software.toSoftwareDependency]
                 nextDependencies = Array(ISM::SoftwareDependency).new
 
                 loop do
@@ -91,27 +91,27 @@ module ISM
                 return dependencies.values
             end
 
-            def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation)) : Hash(ISM::SoftwareDependency,Array(ISM::SoftwareDependency))
-                dependenciesTable = Hash(ISM::SoftwareDependency,Array(ISM::SoftwareDependency)).new
+            def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation)) : Hash(String,Array(ISM::SoftwareDependency))
+                dependenciesTable = Hash(String,Array(ISM::SoftwareDependency)).new
 
                 softwareList.each do |software|
-                    key = software.toSoftwareDependency
+                    key = software.toSoftwareDependency.hiddenName
 
                     dependenciesTable[key] = getRequiredDependencies(software)
 
                     dependenciesTable[key].each do |dependency|
-                        dependenciesTable[dependency] = getRequiredDependencies(dependency.information)
+                        dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependency.information)
                     end
                 end
 
                 return dependenciesTable
             end
 
-            def getSortedDependencies(dependenciesTable : Hash(ISM::SoftwareDependency,Array(ISM::SoftwareDependency))) : Array(ISM::SoftwareDependency)
+            def getSortedDependencies(dependenciesTable : Hash(String,Array(ISM::SoftwareDependency))) : Array(ISM::SoftwareDependency)
                 result = Array(ISM::SoftwareDependency).new
 
                 dependenciesTable.to_a.sort_by { |k, v| v.size }.each do |item|
-                    result << item[0]
+                    result << item[1][0]
                 end
 
                 return result
