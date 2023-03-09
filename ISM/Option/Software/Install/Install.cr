@@ -241,7 +241,7 @@ module ISM
             end
 
             def updateInstallationTerminalTitle(index : Int32, limit : Int32, name : String, version : String)
-                Ism.setTerminalTitle("#{ISM::Default::CommandLine::Name}: [#{(index+1)} / #{limit}] #{ISM::Default::Option::SoftwareInstall::InstallingText} #{name} /#{version}/")
+                Ism.setTerminalTitle("#{ISM::Default::CommandLine::Name}: #{ISM::Default::Option::SoftwareInstall::InstallingText} #{name} /#{version}/ [#{(index+1)} / #{limit}]")
             end
 
             def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
