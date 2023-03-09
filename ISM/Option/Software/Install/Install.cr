@@ -116,12 +116,18 @@ module ISM
 
                     key = software.toSoftwareDependency.hiddenName
 
-                    dependenciesTable[key] = getRequiredDependencies(software)
+                    if !Ism.softwareIsInstalled(software)
+                        dependenciesTable[key] = getRequiredDependencies(software)
+                    end
 
                     dependenciesTable[key].each do |dependency|
                         calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
-                        dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependency.information)
+                        dependencyInformation = dependency.information
+
+                        if !Ism.softwareIsInstalled(dependencyInformation)
+                            dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependencyInformation)
+                        end
                     end
                 end
 
