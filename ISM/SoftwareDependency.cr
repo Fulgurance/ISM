@@ -150,8 +150,24 @@ module ISM
             return dependencyInformation
         end
 
+        def port : String
+            return information.port
+        end
+
         def dependencies : Array(ISM::SoftwareDependency)
             return information.dependencies
+        end
+
+        def builtSoftwareDirectoryPath : String
+            return information.builtSoftwareDirectoryPath
+        end
+
+        def requireFilePath : String
+            return information.requireFilePath
+        end
+
+        def filePath : String
+            return information.filePath
         end
 
         def == (other : ISM::SoftwareDependency) : Bool

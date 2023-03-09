@@ -35,7 +35,7 @@ module ISM
 
                     showCalculationDoneMessage
                     showNeededSoftwares(neededSoftwares)
-                    showInstallationQuestion
+                    showInstallationQuestion(neededSoftwares.size)
 
                     userAgreement = getUserAgreement
 
@@ -159,11 +159,11 @@ module ISM
                     end
 
                     if !exist
-                        wrongArguments += request
+                        wrongArguments.push(request)
                     end
                 end
 
-                puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArgument.join(", ").colorize(:green)}"
+                puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArguments.join(", ").colorize(:green)}"
                 puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
                 puts
                 puts "#{ISM::Default::Option::SoftwareInstall::DoesntExistText.colorize(:green)}"
@@ -174,11 +174,11 @@ module ISM
 
                 requestedSoftwares.each do |software|
                     if software.version == ""
-                        wrongArguments += software.versionName
+                        wrongArguments.push(software.versionName)
                     end
                 end
 
-                puts ISM::Default::Option::SoftwareInstall::NoVersionAvailable + "#{wrongArgument.join(", ").colorize(:green)}"
+                puts ISM::Default::Option::SoftwareInstall::NoVersionAvailable + "#{wrongArguments.join(", ").colorize(:green)}"
                 puts ISM::Default::Option::SoftwareInstall::NoVersionAvailableAdvice
                 puts
                 puts "#{ISM::Default::Option::SoftwareInstall::DoesntExistText.colorize(:green)}"
@@ -214,8 +214,8 @@ module ISM
                 puts "\n"
             end
 
-            def showInstallationQuestion
-                summaryText = neededSoftwares.size.to_s + ISM::Default::Option::SoftwareInstall::SummaryText + "\n"
+            def showInstallationQuestion(softwareNumber : Int32)
+                summaryText = softwareNumber.to_s + ISM::Default::Option::SoftwareInstall::SummaryText + "\n"
 
                 puts "#{summaryText.colorize(:green)}"
 
@@ -244,12 +244,168 @@ module ISM
                 Ism.setTerminalTitle("#{ISM::Default::CommandLine::Name}: [#{(index+1)} / #{limit}] #{ISM::Default::Option::SoftwareInstall::InstallingText} #{name} /#{version}/")
             end
 
+            def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
+                puts    "#{"<<".colorize(:light_magenta)}" +
+                        " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                        " / #{limit.to_s.colorize(:light_red)}" +
+                        "] #{ISM::Default::Option::SoftwareInstall::InstallingText} " +
+                        "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
+                        "\n\n"
+            end
+
+            def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
+                puts
+                puts    "#{name.colorize(:green)}" +
+                        " #{ISM::Default::Option::SoftwareInstall::InstalledText} " +
+                        "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                        " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
+                        "#{">>".colorize(:light_magenta)}" +
+                        "\n\n"
+            end
+
+            def cleanBuildingDirectory(path : String)
+                if Dir.exists?(path)
+                    FileUtils.rm_r(path)
+                end
+
+                Dir.mkdir_p(path)
+            end
+
+            def runInstallationProcess(software : ISM::SoftwareDependency)
+                cleanBuildingDirectory(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
+            end
+
+            def getRequiredLibraries : String
+                requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{ISM::Default::Filename::RequiredLibraries}")
+                requiredLibraries = String.new
+
+                requireFileContent.each do |line|
+                    if line.includes?("require \".")
+                        newLine = line.gsub("require \".","{{ read_file(\"/#{ISM::Default::Path::LibraryDirectory}")+"\n"
+                        newLine = newLine.insert(-3,".cr")+").id }}"+"\n"
+                        requiredLibraries += newLine
+                    else
+                        requiredLibraries += line+"\n"
+                    end
+                end
+
+                return requiredLibraries
+            end
+
+            def getEnabledOptions(software : ISM::SoftwareDependency) : String
+                requiredOptions = String.new
+
+                software.information.options.each do |option|
+                    if option.active
+                        requiredOptions += "target.information.enableOption(\"#{option.name}\")\n"
+                    else
+                        requiredOptions += "target.information.disableOption(\"#{option.name}\")\n"
+                    end
+                end
+
+                return requiredOptions
+            end
+
+            def generateTasks(software : ISM::SoftwareDependency) : String
+                tasks = <<-CODE
+                        #{getRequiredLibraries}
+                        Ism = ISM::CommandLine.new
+                        Ism.loadSoftwareDatabase
+                        Ism.loadSettingsFiles
+                        {{ read_file("#{software.requireFilePath}").id }}
+                        target = Target.new("#{software.filePath}")
+                        #{getEnabledOptions(software)}
+                        begin
+                            target.download
+                            target.check
+                            target.extract
+                            target.patch
+                            target.prepare
+                            target.configure
+                            target.build
+                            target.prepareInstallation
+                            target.install
+                            target.clean
+                            target.showInformations
+                        rescue
+                            exit 1
+                        end
+
+                        CODE
+
+                return tasks
+            end
+
+            def generateTasksFile(tasks : String)
+                File.write("#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
+            end
+
+            def makeLogDirectory(path : String)
+                if !Dir.exists?(path)
+                    Dir.mkdir_p(path)
+                end
+            end
+
+            def recordInstalledSoftware(software : ISM::SoftwareDependency)
+                builtSoftwareFilesList = Dir.glob("#{Ism.settings.rootPath}#{software.builtSoftwareDirectoryPath}**/*", match_hidden: true)
+                installedFiles = Array(String).new
+
+                builtSoftwareFilesList.each do |entry|
+                    finalDestination = entry.delete_at(0,Ism.settings.rootPath.size+software.builtSoftwareDirectoryPath.size+Ism.settings.rootPath.size-2)
+                    if File.file?(entry)
+                        installedFiles << finalDestination
+                    end
+                end
+
+                Ism.addInstalledSoftware(software.information, installedFiles)
+
+                FileUtils.rm_r(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
+            end
+
+            def runInstallationProcess(software : ISM::SoftwareDependency)
+                tasks = generateTasks(software)
+                generateTasksFile(tasks)
+
+                makeLogDirectory("#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}")
+                logFile = File.open("#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}/#{software.versionName}.log","w")
+                logWriter = IO::MultiWriter.new(STDOUT,logFile)
+
+                process = Process.run("crystal",args: [ "build",
+                                                        "#{ISM::Default::Filename::Task}.cr",
+                                                        "-o",
+                                                        "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
+                                                output: logWriter,
+                                                error: logWriter,
+                                                chdir: "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+                process = Process.run("./#{ISM::Default::Filename::Task}",  output: logWriter,
+                                                                            error: logWriter,
+                                                                            chdir: "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+                logFile.close
+
+                if !process.success?
+                    exit 1
+                end
+
+                recordInstalledSoftware(software)
+            end
+
             def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareDependency))
                 puts "\n"
 
-                neededSoftwares.each do |software|
-                    updateInstallationTerminalTitle
+                neededSoftwares.each_with_index do |software, index|
+                    limit = neededSoftwares.size
+                    name = software.name
+                    version = software.version
 
+                    updateInstallationTerminalTitle(index, limit, name, version)
+
+                    showStartSoftwareInstallingMessage(index, limit, name, version)
+
+                    runInstallationProcess(software)
+
+                    showEndSoftwareInstallingMessage(index, limit, name, version)
                 end
             end
 
