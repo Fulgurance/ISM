@@ -163,12 +163,28 @@ module ISM
                 if entry.name.downcase == versionName.downcase
                     result.name = entry.name
                     if !entry.versions.empty?
-                        return entry.versions.last.clone
+                        temporary = entry.versions.last.clone
+                        settingsFilePath = temporary.settingsFilePath
+
+                        if File.exists?(settingsFilePath)
+                            result.loadInformationFile(settingsFilePath)
+                        else
+                            result = temporary
+                        end
+                        break
                     end
                 else
                     entry.versions.each do |software|
                         if software.versionName.downcase == versionName.downcase
-                            return software.clone
+                            temporary = software.clone
+                            settingsFilePath = temporary.settingsFilePath
+
+                            if File.exists?(settingsFilePath)
+                                result.loadInformationFile(settingsFilePath)
+                            else
+                                result = temporary
+                            end
+                            break
                         end
                     end
                 end
