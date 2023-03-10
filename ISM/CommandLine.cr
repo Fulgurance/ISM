@@ -165,11 +165,18 @@ module ISM
 
                             if option.isPass && installedOptionPass != ""
 
-                                optionEnabledPassNumber = software.getEnabledPass.gsub("Pass","").to_i
+                                enabledOptionPass = software.getEnabledPass
+
+                                if enabledOptionPass != ""
+                                    optionEnabledPassNumber = software.getEnabledPass.gsub("Pass","").to_i
+                                else
+                                    optionEnabledPassNumber = 0
+                                end
+
                                 optionPassNumber = option.name.gsub("Pass","").to_i
                                 installedOptionPassNumber = installedOptionPass.gsub("Pass","").to_i
 
-                                if installedOptionPassNumber > optionPassNumber || installedOptionPassNumber > optionEnabledPassNumber
+                                if installedOptionPassNumber > optionPassNumber || enabledOptionPass != "" && installedOptionPassNumber > optionEnabledPassNumber
                                     if installedOptionPass != option.name && option.active || installedOptionPass == option.name && !option.active
                                        equalScore += 1
                                     end
