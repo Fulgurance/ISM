@@ -21,7 +21,7 @@ module ISM
         end
 
         def == (other : ISM::SoftwareOption) : Bool
-            return @name == other.name && @description == other.description && @active == other.active
+            return @name == other.name && @active == other.active
         end
 
         def isPass : Bool

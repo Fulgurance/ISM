@@ -152,7 +152,41 @@ module ISM
         end
 
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
-            return @installedSoftwares.includes?(software)
+            @installedSoftwares.each do |installedSoftware|
+                if software.name == installedSoftware.name && software.version == installedSoftware.version
+                    equalScore = 0
+
+                    software.options.each do |option|
+
+                        if installedSoftware.options.includes?(option)
+                            equalScore += 1
+                        else
+                            installedOptionPass = installedSoftware.getEnabledPass
+
+                            if option.isPass && installedOptionPass != ""
+
+                                optionEnabledPassNumber = software.getEnabledPass.gsub("Pass","").to_i
+                                optionPassNumber = option.name.gsub("Pass","").to_i
+                                installedOptionPassNumber = installedOptionPass.gsub("Pass","").to_i
+
+                                if installedOptionPassNumber > optionPassNumber || installedOptionPassNumber > optionEnabledPassNumber
+                                    if installedOptionPass != option.name && option.active || installedOptionPass == option.name && !option.active
+                                       equalScore += 1
+                                    end
+                                else
+                                    return false
+                                end
+                            else
+                                return false
+                            end
+                        end
+                    end
+
+                    return (equalScore == software.options.size)
+                end
+            end
+
+            return false
         end
 
         def getSoftwareInformation(versionName : String) : ISM::SoftwareInformation
