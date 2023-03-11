@@ -183,6 +183,8 @@ module ISM
                                 else
                                     return false
                                 end
+                            elsif installedOptionPass == "" && option.isPass && option.active
+                                equalScore += 1
                             else
                                 return false
                             end
