@@ -34,7 +34,7 @@ module ISM
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
-            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.name+"/"+@information.version
+            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
         end
 
         def mainWorkDirectoryPath(relatedToChroot = true) : String
