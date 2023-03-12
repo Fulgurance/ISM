@@ -810,8 +810,23 @@ module ISM
         end
 
         def runGunzipCommand(arguments : Array(String), path = String.new)
-            process = Process.run("gunzip", args: arguments,
-                                            chdir: path)
+            gunzipCommand = "gunzip"
+
+            if Ism.settings.installByChroot
+                chrootGunzipCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{gunzipCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootGunzipCommand)
+            else
+                process = Process.run(  autoreconfCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path)
+            end
 
             if !process.success?
                 Ism.notifyOfRunGunzipCommandError(path)
