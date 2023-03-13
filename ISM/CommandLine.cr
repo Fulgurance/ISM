@@ -506,6 +506,14 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunMakeCaCommandText+arguments.join(" "), error)
         end
 
+        def notifyOfRunInstallCatalogCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunInstallCatalogCommandText+arguments.join(" "), error)
+        end
+
+        def notifyOfRunXmlCatalogCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunXmlCatalogCommandText+arguments.join(" "), error)
+        end
+
         def notifyOfConfigureError(sourceName : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName, error)
         end

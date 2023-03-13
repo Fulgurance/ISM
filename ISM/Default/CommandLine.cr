@@ -52,6 +52,8 @@ module ISM
             ErrorRunMesonCommandText = "Failed to run meson in  "
             ErrorRunNinjaCommandText = "Failed to run ninja in  "
             ErrorRunMakeCaCommandText = "Failed to run make-ca "
+            ErrorRunInstallCatalogCommandText = "Failed to run install-catalog "
+            ErrorRunXmlCatalogCommandText = "Failed to run xmlcatalog "
             ErrorConfigureText = "Failed to configure the source "
             ErrorMakePerlSourceText = "Failed to run the perl Makefile.PL in "
             ErrorMakeSourceText = "Failed to run make in  "

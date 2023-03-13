@@ -20,7 +20,7 @@ module ISM
             if !@information.downloadLinks.empty?
                 result = @information.downloadLinks[0]
                 result = result.lchop(result[0..result.rindex("/")])
-                if result[-4..-1] == ".tgz"
+                if result[-4..-1] == ".tgz" || result[-4..-1] == ".zip"
                     result = result[0..-5]+"/"
                 end
                 if result[-7..-1] == ".tar.gz" || result[-7..-1] == ".tar.xz"
@@ -129,10 +129,21 @@ module ISM
         end
 
         def extractSource(archive : String)
-            process = Process.run("tar",args: [ "-xf",
-                                                archive],
-                                        error: :inherit,
-                                        chdir: workDirectoryPath(false))
+            if archive[-4..-1] == ".zip"
+                extractedDirectory = archive[0..-4]
+
+                makeDirectory("#{workDirectoryPath(false)}#{extractedDirectory}")
+                moveFile("#{workDirectoryPath(false)}#{archive}","#{workDirectoryPath(false)}#{extractedDirectory}")
+
+                process = Process.run("unzip",args: [archive],
+                                            error: :inherit,
+                                            chdir: workDirectoryPath(false)+extractedDirectory)
+            else
+                process = Process.run("tar",args: [ "-xf",
+                                                    archive],
+                                            error: :inherit,
+                                            chdir: workDirectoryPath(false))
+            end
             if !process.success?
                 Ism.notifyOfExtractError(archive)
                 exit 1
@@ -853,6 +864,52 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunMakeCaCommandError(arguments)
+                exit 1
+            end
+        end
+
+        def runInstallCatalogCommand(arguments : Array(String))
+            installCatalogCommand = "install-catalog"
+
+            if Ism.settings.installByChroot
+                chrootInstallCatalogScriptCommand = <<-CODE
+                #!/bin/bash
+                #{installCatalogCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootInstallCatalogScriptCommand)
+            else
+                process = Process.run(  installCatalogCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunInstallCatalogCommandError(arguments)
+                exit 1
+            end
+        end
+
+        def runXmlCatalogCommand(arguments : Array(String))
+            xmlCatalogCommand = "xmlcatalog"
+
+            if Ism.settings.installByChroot
+                chrootXmlCatalogScriptCommand = <<-CODE
+                #!/bin/bash
+                #{xmlCatalogCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootXmlCatalogScriptCommand)
+            else
+                process = Process.run(  xmlCatalogCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunXmlCatalogCommandError(arguments)
                 exit 1
             end
         end
