@@ -388,6 +388,10 @@ module ISM
                                                 error: logWriter,
                                                 chdir: "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
+                if !process.success?
+                    exit 1
+                end
+
                 process = Process.run("./#{ISM::Default::Filename::Task}",  output: logWriter,
                                                                             error: logWriter,
                                                                             chdir: "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
