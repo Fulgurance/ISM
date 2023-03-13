@@ -119,9 +119,10 @@ module ISM
 
                     key = software.toSoftwareDependency.hiddenName
 
-                    if !Ism.softwareIsInstalled(software)
+                    #Just add again already installed requested softwares
+                    #if !Ism.softwareIsInstalled(software)
                         dependenciesTable[key] = getRequiredDependencies(software)
-                    end
+                    #end
 
                     dependenciesTable[key].each do |dependency|
                         calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
