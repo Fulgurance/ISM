@@ -71,10 +71,13 @@ module ISM
                         if dependencies.has_key? dependency.hiddenName
 
                             #Inextricable dependencies
-                            if dependencies[dependency.hiddenName] == dependency
+                            #if dependencies[dependency.hiddenName] == dependency
 
-                                exit 1
-                            else
+                                #exit 1
+                            #else
+                            #
+                            if !dependencies[dependency.hiddenName] == dependency
+                            #
                                 #Multiple versions of single software requested
                                 if dependencies[dependency.hiddenName].version != dependency.version
 

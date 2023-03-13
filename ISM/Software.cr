@@ -130,14 +130,14 @@ module ISM
 
         def extractSource(archive : String)
             if archive[-4..-1] == ".zip"
-                extractedDirectory = archive[0..-4]
+                extractedDirectory = archive[0..-5]
 
-                makeDirectory("#{workDirectoryPath(false)}#{extractedDirectory}")
-                moveFile("#{workDirectoryPath(false)}#{archive}","#{workDirectoryPath(false)}#{extractedDirectory}")
+                makeDirectory("#{workDirectoryPath(false)}/#{extractedDirectory}")
+                moveFile("#{workDirectoryPath(false)}/#{archive}","#{workDirectoryPath(false)}/#{extractedDirectory}/#{archive}")
 
                 process = Process.run("unzip",args: [archive],
                                             error: :inherit,
-                                            chdir: workDirectoryPath(false)+extractedDirectory)
+                                            chdir: workDirectoryPath(false)+"/"+extractedDirectory)
             else
                 process = Process.run("tar",args: [ "-xf",
                                                     archive],
