@@ -21,13 +21,13 @@ module ISM
                     #No match found
                     if userRequest.size != requestedSoftwares.size
                         showNoMatchFoundMessage(userRequest, requestedSoftwares)
-                        exit 1
+                        Ism.exitProgram
                     end
 
                     #No available version found
                     if requestedSoftwares.any? {|software| software.version == ""}
                         showNoVersionAvailableMessage(requestedSoftwares)
-                        exit 1
+                        Ism.exitProgram
                     end
 
                     dependenciesTable = getDependenciesTable(requestedSoftwares)
@@ -73,7 +73,7 @@ module ISM
                             #Inextricable dependencies
                             #if dependencies[dependency.hiddenName] == dependency
 
-                                #exit 1
+                                #Ism.exitProgram
                             #else
                             #
                             if !dependencies[dependency.hiddenName] == dependency
@@ -82,7 +82,7 @@ module ISM
                                 if dependencies[dependency.hiddenName].version != dependency.version
 
 
-                                    exit 1
+                                    Ism.exitProgram
                                 end
                                 #Versions are equal but options are differents
                                 if dependencies[dependency.hiddenName].version == dependency.version
@@ -338,7 +338,7 @@ module ISM
                             target.clean
                             target.showInformations
                         rescue
-                            exit 1
+                            Ism.exitProgram
                         end
 
                         CODE
@@ -389,7 +389,7 @@ module ISM
                                                 chdir: "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
                 if !process.success?
-                    exit 1
+                    Ism.exitProgram
                 end
 
                 process = Process.run("./#{ISM::Default::Filename::Task}",  output: logWriter,
@@ -399,7 +399,7 @@ module ISM
                 logFile.close
 
                 if !process.success?
-                    exit 1
+                    Ism.exitProgram
                 end
 
                 recordInstalledSoftware(software)

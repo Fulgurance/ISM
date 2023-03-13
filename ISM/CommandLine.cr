@@ -687,6 +687,11 @@ module ISM
             STDOUT << "\e[23t"
         end
 
+        def exitProgram
+            resetTerminalTitle
+            exit 1
+        end
+
     end
 
 end

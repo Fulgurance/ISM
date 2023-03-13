@@ -81,7 +81,7 @@ module ISM
                                             chdir: workDirectoryPath(false))
             if !process.success?
                 Ism.notifyOfDownloadError(link)
-                exit 1
+                Ism.exitProgram
             end
         end
         
@@ -108,7 +108,7 @@ module ISM
 
             if archiveMd5sum != md5sum
                 Ism.notifyOfCheckError(archive, md5sum)
-                exit 1
+                Ism.exitProgram
             end
         end
         
@@ -146,7 +146,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfExtractError(archive)
-                exit 1
+                Ism.exitProgram
             end
         end
         
@@ -168,7 +168,7 @@ module ISM
                                             chdir: mainWorkDirectoryPath(false))
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -184,7 +184,7 @@ module ISM
                 FileUtils.touch(path)
             rescue error
                 Ism.notifyOfGenerateEmptyFileError(path, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -193,7 +193,7 @@ module ISM
                 FileUtils.mv(path, newPath)
             rescue error
                 Ism.notifyOfMoveFileError(path, newPath, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -202,7 +202,7 @@ module ISM
                 FileUtils.mkdir_p(directory)
             rescue error
                 Ism.notifyOfMakeDirectoryError(directory, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -211,7 +211,7 @@ module ISM
                 Dir.delete(directory)
             rescue error
                 Ism.notifyOfDeleteDirectoryError(directory, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -220,7 +220,7 @@ module ISM
                 FileUtils.rm_r(directory)
             rescue error
                 Ism.notifyOfDeleteDirectoryRecursivelyError(directory, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -229,7 +229,7 @@ module ISM
                 File.chmod(path,permissions)
             rescue error
                 Ism.notifyOfSetPermissionsError(path, permissions, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -240,7 +240,7 @@ module ISM
                             (gid.is_a?(String) ? System::Group.find_by(name: gid).id : gid).to_i)
             rescue error
                 Ism.notifyOfSetOwnerError(path, uid, gid, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -251,7 +251,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfSetPermissionsRecursivelyError(path, permissions, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -262,7 +262,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfSetOwnerRecursivelyError(path, uid, gid, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -281,7 +281,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfFileReplaceTextError(filePath, text, newText, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -300,7 +300,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfFileReplaceLineContainingError(filePath, text, newLine, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -319,7 +319,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfReplaceTextAtLineNumberError(filePath, text, newText, lineNumber, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -336,7 +336,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfFileDeleteLineError(filePath, lineNumber, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -345,7 +345,7 @@ module ISM
                 content = File.read(filePath)
             rescue error
                 Ism.notifyOfGetFileContentError(filePath, error)
-                exit 1
+                Ism.exitProgram
             end
             return content
         end
@@ -355,7 +355,7 @@ module ISM
                 File.write(filePath, data)
             rescue error
                 Ism.notifyOfFileWriteDataError(filePath, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -366,7 +366,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfFileAppendDataError(filePath, error)
-                exit 1
+                Ism.exitProgram
             end
         end 
 
@@ -380,11 +380,11 @@ module ISM
                 when :symbolicLinkByOverwrite
                     FileUtils.ln_sf(path, targetPath)
                 else
-                    exit 1
+                    Ism.exitProgram
                 end
             rescue error
                 Ism.notifyOfMakeSymbolicLinkError(path, targetPath, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -393,7 +393,7 @@ module ISM
                 FileUtils.cp(path, targetPath)
             rescue error
                 Ism.notifyOfCopyFileError(path, targetPath, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -402,7 +402,7 @@ module ISM
                 FileUtils.cp_r(path, targetPath)
             rescue error
                 Ism.notifyOfCopyDirectoryError(path, targetPath, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -411,7 +411,7 @@ module ISM
                 FileUtils.rm(path)
             rescue error
                 Ism.notifyOfDeleteFileError(path, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -424,7 +424,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfReplaceTextAllFilesNamedError(path, filename, text, newText, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -437,7 +437,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfReplaceTextAllFilesRecursivelyNamedError(path, filename, text, newText, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -450,7 +450,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfDeleteAllFilesFinishingError(path, text, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -463,7 +463,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfDeleteAllFilesRecursivelyFinishingError(path, text, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -476,7 +476,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfDeleteAllHiddenFilesError(path, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -489,7 +489,7 @@ module ISM
                 end
             rescue error
                 Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path, error)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -535,7 +535,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunScriptError(file, path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -561,7 +561,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunPythonScriptError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -587,7 +587,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunCrystalCommandError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -613,7 +613,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunCmakeCommandError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -639,7 +639,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunMesonCommandError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -665,7 +665,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunNinjaCommandError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -688,7 +688,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunPwconvCommandError(arguments)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -711,7 +711,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunGrpconvCommandError(arguments)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -734,7 +734,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunUdevadmCommandError(arguments)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -744,7 +744,7 @@ module ISM
 
             if !process.success?
                 Ism.notifyOfRunMakeinfoCommandError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -767,7 +767,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunInstallInfoCommandError(arguments)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -793,7 +793,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunAutoreconfCommandError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -816,7 +816,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunLocaledefCommandError(arguments)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -841,7 +841,7 @@ module ISM
 
             if !process.success?
                 Ism.notifyOfRunGunzipCommandError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -864,7 +864,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunMakeCaCommandError(arguments)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -887,7 +887,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunInstallCatalogCommandError(arguments)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -910,7 +910,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfRunXmlCatalogCommandError(arguments)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -946,7 +946,7 @@ module ISM
 
             if !process.success?
                 Ism.notifyOfConfigureError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
         
@@ -970,7 +970,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfMakePerlSourceError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
@@ -996,7 +996,7 @@ module ISM
             end
             if !process.success?
                 Ism.notifyOfMakeSourceError(path)
-                exit 1
+                Ism.exitProgram
             end
         end
 
