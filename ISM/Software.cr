@@ -831,7 +831,7 @@ module ISM
 
                 process = runChrootTasks(chrootGunzipCommand)
             else
-                process = Process.run(  autoreconfCommand,
+                process = Process.run(  gunzipCommand,
                                         args: arguments,
                                         output: :inherit,
                                         error: :inherit,
