@@ -352,20 +352,6 @@ module ISM
                 end
             end
 
-            def recordInstalledSoftware(software : ISM::SoftwareDependency)
-                builtSoftwareFilesList = Dir.glob("#{Ism.settings.rootPath}#{software.builtSoftwareDirectoryPath}**/*", match_hidden: true)
-                installedFiles = Array(String).new
-
-                builtSoftwareFilesList.each do |entry|
-                    finalDestination = entry.delete_at(0,Ism.settings.rootPath.size+software.builtSoftwareDirectoryPath.size+Ism.settings.rootPath.size-2)
-                    if File.file?(entry)
-                        installedFiles << finalDestination
-                    end
-                end
-
-                Ism.addInstalledSoftware(software.information, installedFiles)
-            end
-
             def runInstallationProcess(software : ISM::SoftwareDependency)
                 cleanBuildingDirectory(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
 
@@ -397,8 +383,6 @@ module ISM
                 if !process.success?
                     Ism.exitProgram
                 end
-
-                recordInstalledSoftware(software)
 
                 cleanBuildingDirectory(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
             end

@@ -1007,7 +1007,8 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            filesList = Dir.glob("#{builtSoftwareDirectoryPath(false)}/**/*")
+            filesList = Dir.glob("#{builtSoftwareDirectoryPath(false)}/**/*", match_hidden: true)
+            installedFiles = Array(String).new
 
             filesList.each do |entry|
                 finalDestination = entry.delete_at(1,builtSoftwareDirectoryPath(false).size-1)
@@ -1017,8 +1018,11 @@ module ISM
                     end
                 else
                     moveFile(entry,finalDestination)
+                    installedFiles << finalDestination
                 end
             end
+
+            Ism.addInstalledSoftware(@information, installedFiles)
         end
         
         def clean
