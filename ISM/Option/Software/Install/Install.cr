@@ -281,10 +281,6 @@ module ISM
                 Dir.mkdir_p(path)
             end
 
-            def runInstallationProcess(software : ISM::SoftwareDependency)
-                cleanBuildingDirectory(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
-            end
-
             def getRequiredLibraries : String
                 requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{ISM::Default::Filename::RequiredLibraries}")
                 requiredLibraries = String.new
@@ -368,11 +364,11 @@ module ISM
                 end
 
                 Ism.addInstalledSoftware(software.information, installedFiles)
-
-                FileUtils.rm_r(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
             end
 
             def runInstallationProcess(software : ISM::SoftwareDependency)
+                cleanBuildingDirectory(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
+
                 tasks = generateTasks(software)
                 generateTasksFile(tasks)
 
@@ -403,6 +399,8 @@ module ISM
                 end
 
                 recordInstalledSoftware(software)
+
+                cleanBuildingDirectory(Ism.settings.rootPath+software.builtSoftwareDirectoryPath)
             end
 
             def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareDependency))
