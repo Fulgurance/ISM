@@ -1012,14 +1012,16 @@ module ISM
 
             filesList.each do |entry|
                 finalDestination = entry.delete_at(1,builtSoftwareDirectoryPath(false).size+Ism.settings.rootPath-2)
+
                 if File.directory?(entry)
-                    if !Dir.exists?(finalDestination)
-                        makeDirectory(finalDestination)
+                    if !Dir.exists?(Ism.settings.rootPath+finalDestination)
+                        makeDirectory(Ism.settings.rootPath+finalDestination)
                     end
                 else
-                    moveFile(entry,finalDestination)
+                    moveFile(entry,Ism.settings.rootPath+finalDestination)
                     installedFiles << finalDestination
                 end
+
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
