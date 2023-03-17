@@ -738,6 +738,29 @@ module ISM
             end
         end
 
+        def runDbusUuidgenCommand(arguments = Array(String).new)
+            dbusUuidgenCommand = "dbus-uuidgen"
+
+            if Ism.settings.installByChroot
+                chrootDbusUuidgenScriptCommand = <<-CODE
+                #!/bin/bash
+                #{dbusUuidgenCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootDbusUuidgenScriptCommand)
+            else
+                process = Process.run(  dbusUuidgenCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunDbusUuidgenCommandError(arguments)
+                Ism.exitProgram
+            end
+        end
+
         def runMakeinfoCommand(arguments : Array(String), path = String.new)
             process = Process.run("makeinfo",   args: arguments,
                                                 chdir: path)

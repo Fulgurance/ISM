@@ -470,6 +470,10 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunUdevadmCommandText+arguments.join(" "), error)
         end
 
+        def notifyOfRunDbusUuidgenCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunDbusUuidgenCommandText+arguments.join(" "), error)
+        end
+
         def notifyOfRunMakeinfoCommandError(path : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorRunMakeinfoCommandText+path, error)
         end

@@ -65,19 +65,26 @@ module ISM
 
                     currentDependencies.each do |dependency|
 
+                        dependencyInformation = dependency.information
+
+                        #Software not available
+                        if dependencyInformation.name == ""
+
+                            Ism.exitProgram
+                        end
+
+                        #Version not available
+                        if dependencyInformation.version == ""
+
+                            Ism.exitProgram
+                        end
+
                         calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
-                        #Inextricable dependencies or need multiple version or just need to fusion options
+                        #Need multiple version or need to fusion options
                         if dependencies.has_key? dependency.hiddenName
 
-                            #Inextricable dependencies
-                            #if dependencies[dependency.hiddenName] == dependency
-
-                                #Ism.exitProgram
-                            #else
-                            #
                             if !dependencies[dependency.hiddenName] == dependency
-                            #
                                 #Multiple versions of single software requested
                                 if dependencies[dependency.hiddenName].version != dependency.version
 

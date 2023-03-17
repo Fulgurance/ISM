@@ -43,6 +43,7 @@ module ISM
             ErrorRunPwconvCommandText = "Failed to run pwconv "
             ErrorRunRunGrpconvCommandText = "Failed to run grpconv "
             ErrorRunUdevadmCommandText = "Failed to run udevadm "
+            ErrorRunDbusUuidgenCommandText = "Failed to run dbus-uuidgen "
             ErrorRunMakeinfoCommandText = "Failed to run makeinfo in  "
             ErrorRunInstallInfoCommandText = "Failed to run install-info "
             ErrorRunAutoreconfCommandText = "Failed to run the autoreconf command located at "
