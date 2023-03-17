@@ -94,13 +94,13 @@ module ISM
 
                         #Software not available
                         if dependencyInformation.name == ""
-                            showNoMatchFoundMessage([dependencyInformation.name])
+                            showNoMatchFoundMessage([dependency.name])
                             Ism.exitProgram
                         end
 
                         #Version not available
                         if dependencyInformation.version == ""
-                            showNoVersionAvailableMessage([dependencyInformation.versionName])
+                            showNoVersionAvailableMessage([dependency.versionName])
                             Ism.exitProgram
                         end
 
