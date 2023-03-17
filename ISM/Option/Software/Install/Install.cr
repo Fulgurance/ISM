@@ -20,13 +20,38 @@ module ISM
 
                     #No match found
                     if userRequest.size != requestedSoftwares.size
-                        showNoMatchFoundMessage(userRequest, requestedSoftwares)
+                        wrongArguments = Array(String).new
+
+                        userRequest.each do |request|
+                            exist = false
+
+                            requestedSoftwares.each do |software|
+                                if request == software.versionName
+                                    exist = true
+                                    break
+                                end
+                            end
+
+                            if !exist
+                                wrongArguments.push(request)
+                            end
+                        end
+
+                        showNoMatchFoundMessage(wrongArguments)
                         Ism.exitProgram
                     end
 
                     #No available version found
                     if requestedSoftwares.any? {|software| software.version == ""}
-                        showNoVersionAvailableMessage(requestedSoftwares)
+                        wrongArguments = Array(String).new
+
+                        requestedSoftwares.each do |software|
+                            if software.version == ""
+                                wrongArguments.push(software.versionName)
+                            end
+                        end
+
+                        showNoVersionAvailableMessage(wrongArguments)
                         Ism.exitProgram
                     end
 
@@ -69,13 +94,13 @@ module ISM
 
                         #Software not available
                         if dependencyInformation.name == ""
-
+                            showNoMatchFoundMessage([dependencyInformation.name])
                             Ism.exitProgram
                         end
 
                         #Version not available
                         if dependencyInformation.version == ""
-
+                            showNoVersionAvailableMessage([dependencyInformation.versionName])
                             Ism.exitProgram
                         end
 
@@ -87,7 +112,6 @@ module ISM
                             if !dependencies[dependency.hiddenName] == dependency
                                 #Multiple versions of single software requested
                                 if dependencies[dependency.hiddenName].version != dependency.version
-
 
                                     Ism.exitProgram
                                 end
@@ -126,10 +150,7 @@ module ISM
 
                     key = software.toSoftwareDependency.hiddenName
 
-                    #Just add again already installed requested softwares
-                    #if !Ism.softwareIsInstalled(software)
-                        dependenciesTable[key] = getRequiredDependencies(software)
-                    #end
+                    dependenciesTable[key] = getRequiredDependencies(software)
 
                     dependenciesTable[key].each do |dependency|
                         calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
@@ -162,39 +183,14 @@ module ISM
                 return result
             end
 
-            def showNoMatchFoundMessage(userRequest : Array(String),requestedSoftwares : Array(ISM::SoftwareInformation))
-                wrongArguments = Array(String).new
-
-                userRequest.each do |request|
-                    exist = false
-
-                    requestedSoftwares.each do |software|
-                        if request == software.versionName
-                            exist = true
-                            break
-                        end
-                    end
-
-                    if !exist
-                        wrongArguments.push(request)
-                    end
-                end
-
+            def showNoMatchFoundMessage(wrongArguments : Array(String))
                 puts ISM::Default::Option::SoftwareInstall::NoMatchFound + "#{wrongArguments.join(", ").colorize(:green)}"
                 puts ISM::Default::Option::SoftwareInstall::NoMatchFoundAdvice
                 puts
                 puts "#{ISM::Default::Option::SoftwareInstall::DoesntExistText.colorize(:green)}"
             end
 
-            def showNoVersionAvailableMessage(requestedSoftwares : Array(ISM::SoftwareInformation))
-                wrongArguments = Array(String).new
-
-                requestedSoftwares.each do |software|
-                    if software.version == ""
-                        wrongArguments.push(software.versionName)
-                    end
-                end
-
+            def showNoVersionAvailableMessage(wrongArguments : Array(String))
                 puts ISM::Default::Option::SoftwareInstall::NoVersionAvailable + "#{wrongArguments.join(", ").colorize(:green)}"
                 puts ISM::Default::Option::SoftwareInstall::NoVersionAvailableAdvice
                 puts
