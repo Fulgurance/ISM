@@ -86,10 +86,9 @@ module ISM
 
                     calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
-                    currentDependencies.uniq!
-
-                    if dependenciesTree.includes?(currentDependencies)
-                        showInextricableDependenciesMessage(currentDependencies)
+                    uniqDependenciesTree = dependenciesTree.uniq
+                    if dependenciesTree.size != uniqDependenciesTree.size
+                        showInextricableDependenciesMessage(dependenciesTree & uniqDependenciesTree)
                         Ism.exitProgram
                     end
 
