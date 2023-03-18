@@ -104,13 +104,13 @@ module ISM
 
                         #Software not available
                         if dependencyInformation.name == ""
-                            showNoMatchFoundMessage([dependency.name])
+                            showUnavailableDependencyMessage(dependency)
                             Ism.exitProgram
                         end
 
                         #Version not available
                         if dependencyInformation.version == ""
-                            showNoVersionAvailableMessage([dependency.versionName])
+                            showUnavailableDependencyMessage(dependency)
                             Ism.exitProgram
                         end
 
@@ -205,6 +205,27 @@ module ISM
                 puts ISM::Default::Option::SoftwareInstall::NoVersionAvailableAdvice
                 puts
                 puts "#{ISM::Default::Option::SoftwareInstall::DoesntExistText.colorize(:green)}"
+            end
+
+            def showUnavailableDependencyMessage(dependency : ISM::SoftwareDependency)
+                puts "#{ISM::Default::Option::SoftwareInstall::UnavailableText.colorize(:yellow)}"
+                puts "\n"
+
+                softwareText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                optionsText = "{ "
+
+                dependency.information.options.each do |option|
+                    if option.active
+                        optionsText += "#{option.name.colorize(:red)}"
+                    else
+                        optionsText += "#{option.name.colorize(:blue)}"
+                    end
+                    optionsText += " "
+                end
+                optionsText += "}"
+                puts "\t" + softwareText + " " + optionsText + "\n"
+
+                puts "\n"
             end
 
             def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareDependency))

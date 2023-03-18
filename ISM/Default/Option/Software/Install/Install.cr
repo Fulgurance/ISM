@@ -19,7 +19,6 @@ module ISM
                 YesReplyOption = "y"
                 NoReplyOption = "n"
                 InstallingText = "Installing"
-                AlreadyInstalledText = "All requested softwares are installed yet. Task cancelled."
                 DoesntExistText = "Some requested softwares doesn't exist. Task cancelled."
                 NoMatchFound = "No match found with the database for "
                 NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
