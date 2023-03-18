@@ -80,9 +80,20 @@ module ISM
                 currentDependencies = [software.toSoftwareDependency]
                 nextDependencies = Array(ISM::SoftwareDependency).new
 
+                dependenciesTree = Array(ISM::SoftwareDependency).new
+
                 loop do
 
                     calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
+
+                    currentDependencies.uniq!
+
+                    if dependenciesTree.includes?(currentDependencies)
+                        showInextricableDependenciesMessage(currentDependencies)
+                        Ism.exitProgram
+                    end
+
+                    dependenciesTree += currentDependencies
 
                     if currentDependencies.empty?
                         break
@@ -107,7 +118,7 @@ module ISM
                         calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                         #Need multiple version or need to fusion options
-                        if dependencies.has_key? dependency.hiddenName
+                        if dependencies.has_key?(dependency.hiddenName)
 
                             if !dependencies[dependency.hiddenName] == dependency
                                 #Multiple versions of single software requested
@@ -195,6 +206,30 @@ module ISM
                 puts ISM::Default::Option::SoftwareInstall::NoVersionAvailableAdvice
                 puts
                 puts "#{ISM::Default::Option::SoftwareInstall::DoesntExistText.colorize(:green)}"
+            end
+
+            def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareDependency))
+                puts "#{ISM::Default::Option::SoftwareInstall::InextricableText.colorize(:yellow)}"
+                puts "\n"
+
+                dependencies.each do |software|
+                    softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                    optionsText = "{ "
+
+                    software.information.options.each do |option|
+                        if option.active
+                            optionsText += "#{option.name.colorize(:red)}"
+                        else
+                            optionsText += "#{option.name.colorize(:blue)}"
+                        end
+                        optionsText += " "
+                    end
+                    optionsText += "}"
+
+                    puts "\t" + softwareText + " " + optionsText + "\n"
+                end
+
+                puts "\n"
             end
 
             def showCalculationDoneMessage
