@@ -493,6 +493,31 @@ module ISM
             end
         end
 
+        def runChmodCommand(arguments : Array(String), path = String.new)
+            chmodCommand = "chmod"
+
+            if Ism.settings.installByChroot
+                chrootChmodCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{chmodCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootChmodCommand)
+            else
+                process = Process.run(  chmodCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path)
+            end
+
+            if !process.success?
+                Ism.notifyOfRunChmodCommandError(path)
+                Ism.exitProgram
+            end
+        end
+
         def runUserAddCommand(arguments : Array(String))
             userAddCommand = "useradd"
 

@@ -447,6 +447,10 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorRunUserAddCommandText+arguments.join(" "), error)
         end
 
+        def notifyOfRunChmodCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunChmodCommandText+path, error)
+        end
+
         def notifyOfRunGroupAddCommandError(arguments : Array(String), error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorRunGroupAddCommandText+arguments.join(" "), error)
         end

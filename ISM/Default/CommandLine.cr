@@ -36,6 +36,7 @@ module ISM
             ErrorDeleteFileText = "Failed to delete the file "
             ErrorDeleteAllHiddenFilesText = "Failed to delete hidden files in "
             ErrorDeleteAllHiddenFilesRecursivelyText = "Failed to delete hidden files recursively in "
+            ErrorRunChmodCommandText = "Failed to run chmod in "
             ErrorRunUserAddCommandText = "Failed to run useradd "
             ErrorRunGroupAddCommandText = "Failed to run groupadd "
             ErrorRunScriptText1 = "Failed to run the script "
