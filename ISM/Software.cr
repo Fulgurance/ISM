@@ -553,7 +553,7 @@ module ISM
                                         error: :inherit,
                                         shell: true)
             end
-            if !process.success?
+            if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunUserAddCommandError(arguments)
                 Ism.exitProgram
             end
@@ -576,7 +576,7 @@ module ISM
                                         error: :inherit,
                                         shell: true)
             end
-            if !process.success?
+            if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunGroupAddCommandError(arguments)
                 Ism.exitProgram
             end
