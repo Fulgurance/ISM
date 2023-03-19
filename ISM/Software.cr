@@ -493,6 +493,52 @@ module ISM
             end
         end
 
+        def runUserAddCommand(arguments : Array(String))
+            userAddCommand = "useradd"
+
+            if Ism.settings.installByChroot
+                chrootUserAddScriptCommand = <<-CODE
+                #!/bin/bash
+                #{userAddCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootUserAddScriptCommand)
+            else
+                process = Process.run(  userAddCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunUserAddCommandError(arguments)
+                Ism.exitProgram
+            end
+        end
+
+        def runGroupAddCommand(arguments : Array(String))
+            groupAddCommand = "groupadd"
+
+            if Ism.settings.installByChroot
+                chrootGroupAddScriptCommand = <<-CODE
+                #!/bin/bash
+                #{groupAddCommand} #{arguments.join(" ")}
+                CODE
+
+                process = runChrootTasks(chrootGroupAddScriptCommand)
+            else
+                process = Process.run(  groupAddCommand,
+                                        args: arguments,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true)
+            end
+            if !process.success?
+                Ism.notifyOfRunGroupAddCommandError(arguments)
+                Ism.exitProgram
+            end
+        end
+
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 

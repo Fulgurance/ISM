@@ -36,6 +36,8 @@ module ISM
             ErrorDeleteFileText = "Failed to delete the file "
             ErrorDeleteAllHiddenFilesText = "Failed to delete hidden files in "
             ErrorDeleteAllHiddenFilesRecursivelyText = "Failed to delete hidden files recursively in "
+            ErrorRunUserAddCommandText = "Failed to run useradd "
+            ErrorRunGroupAddCommandText = "Failed to run groupadd "
             ErrorRunScriptText1 = "Failed to run the script "
             ErrorRunScriptText2 = " located at "
             ErrorRunPythonScriptText = "Failed to run the python script located at "

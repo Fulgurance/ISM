@@ -443,6 +443,14 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, error)
         end
 
+        def notifyOfRunUserAddCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunUserAddCommandText+arguments.join(" "), error)
+        end
+
+        def notifyOfRunGroupAddCommandError(arguments : Array(String), error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunGroupAddCommandText+arguments.join(" "), error)
+        end
+
         def notifyOfRunScriptError(file : String, path : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunScriptText1 +
                                     file +
