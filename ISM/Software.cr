@@ -116,13 +116,31 @@ module ISM
             Ism.notifyOfExtract(@information)
 
             @information.downloadLinks.each do |source|
-                extractSource(source.lchop(source[0..source.rindex("/")]))
+                sourceName = source.lchop(source[0..source.rindex("/")])
+
+                if  sourceName[-4..-1] == ".tgz" ||
+                    sourceName[-4..-1] == ".zip" ||
+                    sourceName[-7..-1] == ".tar.gz" ||
+                    sourceName[-7..-1] == ".tar.xz" ||
+                    sourceName.size > 7 && sourceName[-8..-1] == ".tar.bz2"
+
+                    extractSource(source.lchop(source[0..source.rindex("/")]))
+                end
             end
 
             @information.options.each do |option|
                 if option.active
                     option.downloadLinks.each do |source|
-                        extractSource(source.lchop(source[0..source.rindex("/")]))
+                        sourceName = source.lchop(source[0..source.rindex("/")])
+
+                        if  sourceName[-4..-1] == ".tgz" ||
+                            sourceName[-4..-1] == ".zip" ||
+                            sourceName[-7..-1] == ".tar.gz" ||
+                            sourceName[-7..-1] == ".tar.xz" ||
+                            sourceName.size > 7 && sourceName[-8..-1] == ".tar.bz2"
+
+                            extractSource(source.lchop(source[0..source.rindex("/")]))
+                        end
                     end
                 end
             end
