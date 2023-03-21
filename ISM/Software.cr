@@ -1086,11 +1086,14 @@ module ISM
             end
         end
 
-        def makeSource(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+        def makeSource(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
             makeSourceCommand = "make"
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if Ism.settings.installByChroot
+                arguments.unshift(buildOptions == "" ? Ism.settings.chrootBuildOptions : chrootBuildOptions)
+                arguments.unshift(makeOptions == "" ? Ism.settings.chrootMakeOptions : chrootMakeOptions)
+
                 chrootMakeSourceCommand = <<-CODE
                 #!/bin/bash
                 cd #{path} && #{environmentCommand} #{makeSourceCommand} #{arguments.join(" ")}
@@ -1098,6 +1101,9 @@ module ISM
 
                 process = runChrootTasks(chrootMakeSourceCommand)
             else
+                arguments.unshift(buildOptions == "" ? Ism.settings.buildOptions : buildOptions)
+                arguments.unshift(makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
+
                 process = Process.run(  makeSourceCommand,
                                         args: arguments,
                                         output: :inherit,
