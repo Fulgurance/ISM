@@ -1091,8 +1091,8 @@ module ISM
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if Ism.settings.installByChroot
-                arguments.unshift(buildOptions == "" ? Ism.settings.chrootBuildOptions : chrootBuildOptions)
-                arguments.unshift(makeOptions == "" ? Ism.settings.chrootMakeOptions : chrootMakeOptions)
+                arguments.unshift(buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions)
+                arguments.unshift(makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
 
                 chrootMakeSourceCommand = <<-CODE
                 #!/bin/bash
