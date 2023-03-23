@@ -400,6 +400,8 @@ module ISM
                 else
                     Ism.exitProgram
                 end
+            rescue File::AlreadyExistsError
+
             rescue error
                 Ism.notifyOfMakeSymbolicLinkError(path, targetPath, error)
                 Ism.exitProgram
