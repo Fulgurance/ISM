@@ -80,19 +80,13 @@ module ISM
                 currentDependencies = [software.toSoftwareDependency]
                 nextDependencies = Array(ISM::SoftwareDependency).new
 
-                dependenciesTree = Array(ISM::SoftwareDependency).new
+                dependenciesTree = [[software.toSoftwareDependency]]
 
                 loop do
 
                     calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
-                    uniqDependenciesTree = dependenciesTree.uniq
-                    if dependenciesTree.size != uniqDependenciesTree.size
-                        showInextricableDependenciesMessage(dependenciesTree & uniqDependenciesTree)
-                        Ism.exitProgram
-                    end
-
-                    dependenciesTree += currentDependencies
+                    currentLevelDependenciesTree = Array(ISM::SoftwareDependency).new
 
                     if currentDependencies.empty?
                         break
@@ -119,25 +113,34 @@ module ISM
                         #Need multiple version or need to fusion options
                         if dependencies.has_key?(dependency.hiddenName)
 
-                            if !dependencies[dependency.hiddenName] == dependency
-                                #Multiple versions of single software requested
-                                if dependencies[dependency.hiddenName].version != dependency.version
+                            #Multiple versions of single software requested
+                            if dependencies[dependency.hiddenName].version != dependency.version
 
-                                    Ism.exitProgram
-                                end
-                                #Versions are equal but options are differents
-                                if dependencies[dependency.hiddenName].version == dependency.version
-
+                                Ism.exitProgram
+                            end
+                            #Versions are equal but options are differents
+                            if dependencies[dependency.hiddenName].version == dependency.version
 
 
-                                end
                             end
                         else
                             dependencies[dependency.hiddenName] = dependency
                             nextDependencies += dependency.dependencies
                         end
 
+                        currentLevelDependenciesTree = currentLevelDependenciesTree+dependency.dependencies
+
                     end
+
+                    #Inextricable dependencies problem
+                    dependenciesTree.each do |branch|
+                        if branch.size == currentLevelDependenciesTree.size && branch & currentLevelDependenciesTree == branch
+                            showInextricableDependenciesMessage(currentLevelDependenciesTree)
+                            Ism.exitProgram
+                        end
+                    end
+
+                    dependenciesTree.push(currentLevelDependenciesTree.uniq)
 
                     currentDependencies = nextDependencies.dup
                     nextDependencies.clear
