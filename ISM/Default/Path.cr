@@ -8,7 +8,7 @@ module ISM
             BinaryDirectory = "bin/"
             ToolsDirectory = "tools/"
             SourcesDirectory = "sources/"
-            RuntimeDataDirectory = "run/#{IsmDirectory}"
+            RuntimeDataDirectory = "var/#{IsmDirectory}"
             TemporaryDirectory = "tmp/#{IsmDirectory}"
             SettingsDirectory = "etc/#{IsmDirectory}"
             LogsDirectory = "var/log/#{IsmDirectory}"
