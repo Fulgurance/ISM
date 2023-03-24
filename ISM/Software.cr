@@ -630,17 +630,17 @@ module ISM
             end
         end
 
-        def runPythonScript(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+        def runPythonCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
             pythonCommand = "python"
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if Ism.settings.installByChroot
-                chrootPythonScriptCommand = <<-CODE
+                chrootPythonCommand = <<-CODE
                 #!/bin/bash
                 cd #{path} && #{environmentCommand} #{pythonCommand} #{arguments.join(" ")}
                 CODE
 
-                process = runChrootTasks(chrootPythonScriptCommand)
+                process = runChrootTasks(chrootPythonCommand)
             else
                 process = Process.run(  pythonCommand,
                                         args: arguments,
@@ -651,7 +651,7 @@ module ISM
                                         env: environment)
             end
             if !process.success?
-                Ism.notifyOfRunPythonScriptError(path)
+                Ism.notifyOfRunPythonCommandError(path)
                 Ism.exitProgram
             end
         end

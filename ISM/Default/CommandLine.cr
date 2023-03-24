@@ -41,7 +41,7 @@ module ISM
             ErrorRunGroupAddCommandText = "Failed to run groupadd "
             ErrorRunScriptText1 = "Failed to run the script "
             ErrorRunScriptText2 = " located at "
-            ErrorRunPythonScriptText = "Failed to run the python script located at "
+            ErrorRunPythonCommandText = "Failed to run python in "
             ErrorRunCrystalCommandText = "Failed to run crystal in "
             ErrorRunPwconvCommandText = "Failed to run pwconv "
             ErrorRunRunGrpconvCommandText = "Failed to run grpconv "

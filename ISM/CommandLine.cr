@@ -462,8 +462,8 @@ module ISM
                                     path, error)
         end
 
-        def notifyOfRunPythonScriptError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonScriptText+path, error)
+        def notifyOfRunPythonCommandError(path : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonCommandText+path, error)
         end
 
         def notifyOfRunCrystalCommandError(path : String, error = nil)
