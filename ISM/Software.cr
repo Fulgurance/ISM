@@ -756,7 +756,7 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
-        def configureSource(arguments : Array(String), path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
+        def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
             if @buildDirectory
                 configureCommand = "../#{configureDirectory}/configure "
             else
