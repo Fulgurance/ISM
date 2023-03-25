@@ -546,8 +546,8 @@ module ISM
             else
                 process = Process.run(  arguments[0],
                                         args: arguments[1..arguments.size-1],
-                                        output: :inherit,
-                                        error: :inherit,
+                                        output: Process::Redirect::Inherit,
+                                        error: Process::Redirect::Inherit,
                                         shell: true,
                                         chdir: path,
                                         env: environment)
