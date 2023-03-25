@@ -758,9 +758,9 @@ module ISM
 
         def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
             if @buildDirectory
-                configureCommand = "../#{configureDirectory}/configure "
+                configureCommand = "../#{configureDirectory}/configure"
             else
-                configureCommand = "./#{configureDirectory}/configure "
+                configureCommand = "./#{configureDirectory}/configure"
             end
 
             process = runSystemCommand([configureCommand]+arguments, path, environment)
