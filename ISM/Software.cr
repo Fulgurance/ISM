@@ -513,77 +513,6 @@ module ISM
             end
         end
 
-        def runChmodCommand(arguments : Array(String), path = String.new)
-            chmodCommand = "chmod"
-
-            if Ism.settings.installByChroot
-                chrootChmodCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{chmodCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootChmodCommand)
-            else
-                process = Process.run(  chmodCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path)
-            end
-
-            if !process.success?
-                Ism.notifyOfRunChmodCommandError(path)
-                Ism.exitProgram
-            end
-        end
-
-        def runUserAddCommand(arguments : Array(String))
-            userAddCommand = "useradd"
-
-            if Ism.settings.installByChroot
-                chrootUserAddScriptCommand = <<-CODE
-                #!/bin/bash
-                #{userAddCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootUserAddScriptCommand)
-            else
-                process = Process.run(  userAddCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
-            if !process.success? && process.exit_code != 9
-                Ism.notifyOfRunUserAddCommandError(arguments)
-                Ism.exitProgram
-            end
-        end
-
-        def runGroupAddCommand(arguments : Array(String))
-            groupAddCommand = "groupadd"
-
-            if Ism.settings.installByChroot
-                chrootGroupAddScriptCommand = <<-CODE
-                #!/bin/bash
-                #{groupAddCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootGroupAddScriptCommand)
-            else
-                process = Process.run(  groupAddCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
-            if !process.success? && process.exit_code != 9
-                Ism.notifyOfRunGroupAddCommandError(arguments)
-                Ism.exitProgram
-            end
-        end
-
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
@@ -604,426 +533,214 @@ module ISM
             return process
         end
 
-        def runScript(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            scriptCommand = "./#{file}"
+        def runSystemCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new) : Process::Status
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if Ism.settings.installByChroot
-                chrootScriptCommand = <<-CODE
+                chrootCommand = <<-CODE
                 #!/bin/bash
-                cd #{path} && #{environmentCommand} #{scriptCommand} #{arguments.join(" ")}
+                cd #{path} && #{environmentCommand} #{arguments.join(" ")}
                 CODE
 
-                process = runChrootTasks(chrootScriptCommand)
+                process = runChrootTasks(chrootCommand)
             else
-                process = Process.run(  scriptCommand,
-                                        args: arguments,
+                process = Process.run(  arguments[0],
+                                        args: arguments[1..arguments.size-1],
                                         output: :inherit,
                                         error: :inherit,
                                         shell: true,
                                         chdir: path,
                                         env: environment)
             end
+
+            return process
+        end
+
+        def runChmodCommand(arguments = Array(String).new, path = String.new)
+            process = runSystemCommand(["chmod"]+arguments, path)
+
             if !process.success?
-                Ism.notifyOfRunScriptError(file, path)
+                Ism.notifyOfRunSystemCommandError(arguments, path)
+                Ism.exitProgram
+            end
+        end
+
+        def runUserAddCommand(arguments : Array(String))
+            process = runSystemCommand(["useradd"]+arguments)
+
+            if !process.success? && process.exit_code != 9
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
+            end
+        end
+
+        def runGroupAddCommand(arguments : Array(String))
+            process = runSystemCommand(["groupadd"]+arguments)
+
+            if !process.success? && process.exit_code != 9
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
+            end
+        end
+
+        def runScript(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            process = runSystemCommand(["./#{file}"]+arguments, path, environment)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runPythonCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            pythonCommand = "python"
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            process = runSystemCommand(["python"]+arguments, path, environment)
 
-            if Ism.settings.installByChroot
-                chrootPythonCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{pythonCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootPythonCommand)
-            else
-                process = Process.run(  pythonCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
-            end
             if !process.success?
-                Ism.notifyOfRunPythonCommandError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runCrystalCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            crystalCommand = "crystal"
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            process = runSystemCommand(["crystal"]+arguments, path, environment)
 
-            if Ism.settings.installByChroot
-                chrootCrystalCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{crystalCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootCrystalCommand)
-            else
-                process = Process.run(  crystalCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
-            end
             if !process.success?
-                Ism.notifyOfRunCrystalCommandError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runCmakeCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            cmakeCommand = "cmake"
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            process = runSystemCommand(["cmake"]+arguments, path, environment)
 
-            if Ism.settings.installByChroot
-                chrootCmakeCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{cmakeCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootCmakeCommand)
-            else
-                process = Process.run(  cmakeCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
-            end
             if !process.success?
-                Ism.notifyOfRunCmakeCommandError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runMesonCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            mesonCommand = "meson"
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            process = runSystemCommand(["meson"]+arguments, path, environment)
 
-            if Ism.settings.installByChroot
-                chrootMesonCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{mesonCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootMesonCommand)
-            else
-                process = Process.run(  mesonCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
-            end
             if !process.success?
-                Ism.notifyOfRunMesonCommandError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runNinjaCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            ninjaCommand = "ninja"
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            process = runSystemCommand(["ninja"]+arguments, path, environment)
 
-            if Ism.settings.installByChroot
-                chrootNinjaCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{ninjaCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootNinjaCommand)
-            else
-                process = Process.run(  ninjaCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
-            end
             if !process.success?
-                Ism.notifyOfRunNinjaCommandError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runPwconvCommand(arguments = Array(String).new)
-            pwconvCommand = "pwconv"
+            process = runSystemCommand(["pwconv"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootPwconvScriptCommand = <<-CODE
-                #!/bin/bash
-                #{pwconvCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootPwconvScriptCommand)
-            else
-                process = Process.run(  pwconvCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunPwconvCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def runGrpconvCommand(arguments = Array(String).new)
-            grpconvCommand = "grpconv"
+            process = runSystemCommand(["grpconv"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootGrpconvScriptCommand = <<-CODE
-                #!/bin/bash
-                #{grpconvCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootGrpconvScriptCommand)
-            else
-                process = Process.run(  grpconvCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunGrpconvCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def runUdevadmCommand(arguments : Array(String))
-            udevadmCommand = "udevadm"
+            process = runSystemCommand(["udevadm"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootUdevadmScriptCommand = <<-CODE
-                #!/bin/bash
-                #{udevadmCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootUdevadmScriptCommand)
-            else
-                process = Process.run(  udevadmCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunUdevadmCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def runDbusUuidgenCommand(arguments = Array(String).new)
-            dbusUuidgenCommand = "dbus-uuidgen"
+            process = runSystemCommand(["dbus-uuidgen"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootDbusUuidgenScriptCommand = <<-CODE
-                #!/bin/bash
-                #{dbusUuidgenCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootDbusUuidgenScriptCommand)
-            else
-                process = Process.run(  dbusUuidgenCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunDbusUuidgenCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def runMakeinfoCommand(arguments : Array(String), path = String.new)
-            process = Process.run("makeinfo",   args: arguments,
-                                                chdir: path)
+            process = runSystemCommand(["makeinfo"]+arguments, path)
 
             if !process.success?
-                Ism.notifyOfRunMakeinfoCommandError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path)
                 Ism.exitProgram
             end
         end
 
         def runInstallInfoCommand(arguments : Array(String))
-            installInfoCommand = "install-info"
+            process = runSystemCommand(["install-info"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootInstallInfoScriptCommand = <<-CODE
-                #!/bin/bash
-                #{installInfoCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootInstallInfoScriptCommand)
-            else
-                process = Process.run(  installInfoCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunInstallInfoCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def runAutoreconfCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            autoreconfCommand = "autoreconf"
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            process = runSystemCommand(["autoreconf"]+arguments, path, environment)
 
-            if Ism.settings.installByChroot
-                chrootAutoreconfCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{autoreconfCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootAutoreconfCommand)
-            else
-                process = Process.run(  autoreconfCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
-            end
             if !process.success?
-                Ism.notifyOfRunAutoreconfCommandError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runLocaledefCommand(arguments : Array(String))
-            localedefCommand = "localedef"
+            process = runSystemCommand(["localedef"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootLocaledefScriptCommand = <<-CODE
-                #!/bin/bash
-                #{localedefCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootLocaledefScriptCommand)
-            else
-                process = Process.run(  localedefCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunLocaledefCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def runGunzipCommand(arguments : Array(String), path = String.new)
-            gunzipCommand = "gunzip"
-
-            if Ism.settings.installByChroot
-                chrootGunzipCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{gunzipCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootGunzipCommand)
-            else
-                process = Process.run(  gunzipCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path)
-            end
+            process = runSystemCommand(["gunzip"]+arguments, path)
 
             if !process.success?
-                Ism.notifyOfRunGunzipCommandError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path)
                 Ism.exitProgram
             end
         end
 
         def runMakeCaCommand(arguments : Array(String))
-            makeCaCommand = "make-ca"
+            process = runSystemCommand(["make-ca"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootMakeCaScriptCommand = <<-CODE
-                #!/bin/bash
-                #{makeCaCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootMakeCaScriptCommand)
-            else
-                process = Process.run(  makeCaCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunMakeCaCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def runInstallCatalogCommand(arguments : Array(String))
-            installCatalogCommand = "install-catalog"
+            process = runSystemCommand(["install-catalog"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootInstallCatalogScriptCommand = <<-CODE
-                #!/bin/bash
-                #{installCatalogCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootInstallCatalogScriptCommand)
-            else
-                process = Process.run(  installCatalogCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunInstallCatalogCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def runXmlCatalogCommand(arguments : Array(String))
-            xmlCatalogCommand = "xmlcatalog"
+            process = runSystemCommand(["xmlcatalog"]+arguments)
 
-            if Ism.settings.installByChroot
-                chrootXmlCatalogScriptCommand = <<-CODE
-                #!/bin/bash
-                #{xmlCatalogCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootXmlCatalogScriptCommand)
-            else
-                process = Process.run(  xmlCatalogCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true)
-            end
             if !process.success?
-                Ism.notifyOfRunXmlCatalogCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
@@ -1039,27 +756,10 @@ module ISM
                 configureCommand = "./#{configureDirectory}/configure "
             end
 
-            configureCommand += arguments.join(" ")
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
-
-            if Ism.settings.installByChroot
-                chrootConfigureCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{configureCommand}
-                CODE
-
-                process = runChrootTasks(chrootConfigureCommand)
-            else
-                process = Process.run(  configureCommand,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
-            end
+            process = runSystemCommand([configureCommand]+arguments, path, environment)
 
             if !process.success?
-                Ism.notifyOfConfigureError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end
@@ -1069,51 +769,26 @@ module ISM
         end
 
         def makePerlSource(path = String.new)
-            if Ism.settings.installByChroot
-                chrootPerlCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && perl Makefile.PL
-                CODE
+            process = runSystemCommand(["perl","Makefile.PL"]+arguments)
 
-                process = runChrootTasks(chrootPerlCommand)
-            else
-                process = Process.run("perl",   args: ["Makefile.PL"],
-                                                output: :inherit,
-                                                error: :inherit,
-                                                chdir: path)
-            end
             if !process.success?
-                Ism.notifyOfMakePerlSourceError(path)
+                Ism.notifyOfRunSystemCommandError(arguments)
                 Ism.exitProgram
             end
         end
 
         def makeSource(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
-            makeSourceCommand = "make"
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if Ism.settings.installByChroot
                 arguments.unshift(makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
-
-                chrootMakeSourceCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{makeSourceCommand} #{arguments.join(" ")}
-                CODE
-
-                process = runChrootTasks(chrootMakeSourceCommand)
             else
                 arguments.unshift(makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
-
-                process = Process.run(  makeSourceCommand,
-                                        args: arguments,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
             end
+
+            process = runSystemCommand(["make"]+arguments, path, environment)
+
             if !process.success?
-                Ism.notifyOfMakeSourceError(path)
+                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
                 Ism.exitProgram
             end
         end

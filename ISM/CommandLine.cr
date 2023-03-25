@@ -443,103 +443,14 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, error)
         end
 
-        def notifyOfRunUserAddCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunUserAddCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunChmodCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunChmodCommandText+path, error)
-        end
-
-        def notifyOfRunGroupAddCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunGroupAddCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunScriptError(file : String, path : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorRunScriptText1 +
-                                    file +
-                                    ISM::Default::CommandLine::ErrorRunScriptText2 +
-                                    path, error)
-        end
-
-        def notifyOfRunPythonCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonCommandText+path, error)
-        end
-
-        def notifyOfRunCrystalCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunPythonScriptText+path, error)
-        end
-
-        def notifyOfRunPwconvCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunCrystalCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunGrpconvCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunRunGrpconvCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunUdevadmCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunUdevadmCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunDbusUuidgenCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunDbusUuidgenCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunMakeinfoCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunMakeinfoCommandText+path, error)
-        end
-
-        def notifyOfRunInstallInfoCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunInstallInfoCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunAutoreconfCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunAutoreconfCommandText+path, error)
-        end
-
-        def notifyOfRunLocaledefCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunLocaledefCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunGunzipCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunGunzipCommandText+path, error)
-        end
-
-        def notifyOfRunCmakeCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunCmakeCommandText+path, error)
-        end
-
-        def notifyOfRunMesonCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunMesonCommandText+path, error)
-        end
-
-        def notifyOfRunNinjaCommandError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunNinjaCommandText+path, error)
-        end
-
-        def notifyOfRunMakeCaCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunMakeCaCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunInstallCatalogCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunInstallCatalogCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfRunXmlCatalogCommandError(arguments : Array(String), error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorRunXmlCatalogCommandText+arguments.join(" "), error)
-        end
-
-        def notifyOfConfigureError(sourceName : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorConfigureText+sourceName, error)
-        end
-
-        def notifyOfMakePerlSourceError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorMakePerlSourceText+path, error)
-        end
-
-        def notifyOfMakeSourceError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorMakeSourceText+path, error)
+        def notifyOfRunSystemCommandError(arguments : Array(String), path : String, environment : Hash, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
+                                    arguments.join(" ") +
+                                    ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
+                                    (environment.map { |key| key.join("=") }).join(" "),
+                                    error)
         end
 
         def notifyOfGenerateEmptyFileError(path : String, error = nil)
