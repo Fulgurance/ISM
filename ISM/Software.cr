@@ -628,7 +628,14 @@ module ISM
             end
         end
 
-        def runNinjaCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+        def runNinjaCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
+
+            if Ism.settings.installByChroot
+                arguments.unshift(makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
+            else
+                arguments.unshift(makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
+            end
+
             process = runSystemCommand(["ninja"]+arguments, path, environment)
 
             if !process.success?
