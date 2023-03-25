@@ -141,7 +141,7 @@ module ISM
             end
         end
 
-        def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles : Array(String))
+        def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
             softwareInformation.installedFiles = installedFiles
 
             softwareInformation.writeInformationFile(softwareInformation.installedFilePath)
