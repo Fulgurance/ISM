@@ -752,6 +752,15 @@ module ISM
             end
         end
 
+        def runLdconfigCommand(arguments : Array(String))
+            process = runSystemCommand(["ldconfig"]+arguments)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
+            end
+        end
+
         def configure
             Ism.notifyOfConfigure(@information)
         end
