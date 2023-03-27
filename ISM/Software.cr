@@ -388,6 +388,18 @@ module ISM
             end
         end 
 
+        def fileUpdateContent(filePath : String, data : String)
+            begin
+                content = getFileContent(filePath)
+                if !content.includes?(data)
+                    fileAppendData(filePath,data)
+                end
+            rescue error
+                Ism.notifyOfFileUpdateContentError(filePath, error)
+                Ism.exitProgram
+            end
+        end
+
         def makeLink(path : String, targetPath : String, linkType : Symbol)
             begin
                 case linkType

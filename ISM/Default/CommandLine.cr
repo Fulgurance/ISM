@@ -82,6 +82,7 @@ module ISM
             ErrorGetFileContentText = "Failed to get file content from "
             ErrorFileWriteDataText = "Failed to write data to "
             ErrorFileAppendDataText = "Failed to write data to "
+            ErrorFileUpdateContentText = "Failed to update file content in "
             Options = [ ISM::Option::Help.new,
                         ISM::Option::Version.new,
                         ISM::Option::Software.new,

@@ -559,6 +559,11 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorFileAppendDataText+filePath, error)
         end
 
+        def notifyOfFileUpdateContentError(filePath : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorFileUpdateContentText+filePath, error)
+        end
+
+
         def playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
             currentTime = Time.monotonic
 
