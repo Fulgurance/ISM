@@ -569,73 +569,89 @@ module ISM
         end
 
         def runChmodCommand(arguments = Array(String).new, path = String.new)
-            process = runSystemCommand(["chmod"]+arguments, path)
+            requestedCommands = ["chmod"]+arguments
+
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
                 Ism.exitProgram
             end
         end
 
         def runUserAddCommand(arguments : Array(String))
-            process = runSystemCommand(["useradd"]+arguments)
+            requestedCommands = ["useradd"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runGroupAddCommand(arguments : Array(String))
-            process = runSystemCommand(["groupadd"]+arguments)
+            requestedCommands = ["groupadd"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runScript(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            process = runSystemCommand(["./#{file}"]+arguments, path, environment)
+            requestedCommands = ["./#{file}"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runPythonCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            process = runSystemCommand(["python"]+arguments, path, environment)
+            requestedCommands = ["python"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runCrystalCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            process = runSystemCommand(["crystal"]+arguments, path, environment)
+            requestedCommands = ["crystal"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runCmakeCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            process = runSystemCommand(["cmake"]+arguments, path, environment)
+            requestedCommands = ["cmake"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runMesonCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            process = runSystemCommand(["meson"]+arguments, path, environment)
+            requestedCommands = ["meson"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
@@ -648,133 +664,163 @@ module ISM
                 arguments.unshift(makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
             end
 
-            process = runSystemCommand(["ninja"]+arguments, path, environment)
+            requestedCommands = ["ninja"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runPwconvCommand(arguments = Array(String).new)
-            process = runSystemCommand(["pwconv"]+arguments)
+            requestedCommands = ["pwconv"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runGrpconvCommand(arguments = Array(String).new)
-            process = runSystemCommand(["grpconv"]+arguments)
+            requestedCommands = ["grpconv"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runUdevadmCommand(arguments : Array(String))
-            process = runSystemCommand(["udevadm"]+arguments)
+            requestedCommands = ["udevadm"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runDbusUuidgenCommand(arguments = Array(String).new)
-            process = runSystemCommand(["dbus-uuidgen"]+arguments)
+            requestedCommands = ["dbus-uuidgen"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runMakeinfoCommand(arguments : Array(String), path = String.new)
-            process = runSystemCommand(["makeinfo"]+arguments, path)
+            requestedCommands = ["makeinfo"]+arguments
+
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
                 Ism.exitProgram
             end
         end
 
         def runInstallInfoCommand(arguments : Array(String))
-            process = runSystemCommand(["install-info"]+arguments)
+            requestedCommands = ["install-info"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runAutoreconfCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            process = runSystemCommand(["autoreconf"]+arguments, path, environment)
+            requestedCommands = ["autoreconf"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
 
         def runLocaledefCommand(arguments : Array(String))
-            process = runSystemCommand(["localedef"]+arguments)
+            requestedCommands = ["localedef"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runGunzipCommand(arguments : Array(String), path = String.new)
-            process = runSystemCommand(["gunzip"]+arguments, path)
+            requestedCommands = ["gunzip"]+arguments
+
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
                 Ism.exitProgram
             end
         end
 
         def runMakeCaCommand(arguments : Array(String))
-            process = runSystemCommand(["make-ca"]+arguments)
+            requestedCommands = ["make-ca"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runInstallCatalogCommand(arguments : Array(String))
-            process = runSystemCommand(["install-catalog"]+arguments)
+            requestedCommands = ["install-catalog"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runXmlCatalogCommand(arguments : Array(String))
-            process = runSystemCommand(["xmlcatalog"]+arguments)
+            requestedCommands = ["xmlcatalog"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runLdconfigCommand(arguments = Array(String).new)
-            process = runSystemCommand(["ldconfig"]+arguments)
+            requestedCommands = ["ldconfig"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def sourceFile(arguments = Array(String).new)
-            process = runSystemCommand(["source"]+arguments)
+            requestedCommands = ["source"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(arguments)
@@ -793,10 +839,12 @@ module ISM
                 configureCommand = "./#{configureDirectory}/configure"
             end
 
-            process = runSystemCommand([configureCommand]+arguments, path, environment)
+            requestedCommands = [configureCommand]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
@@ -806,10 +854,12 @@ module ISM
         end
 
         def makePerlSource(path = String.new)
-            process = runSystemCommand(["perl","Makefile.PL"]+arguments)
+            requestedCommands = ["perl","Makefile.PL"]+arguments
+
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
@@ -822,10 +872,12 @@ module ISM
                 arguments.unshift(makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
             end
 
-            process = runSystemCommand(["make"]+arguments, path, environment)
+            requestedCommands = ["make"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
