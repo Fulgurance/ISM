@@ -854,9 +854,9 @@ module ISM
         end
 
         def makePerlSource(path = String.new)
-            requestedCommands = ["perl","Makefile.PL"]+arguments
+            requestedCommands = ["perl","Makefile.PL"]
 
-            process = runSystemCommand(requestedCommands)
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
