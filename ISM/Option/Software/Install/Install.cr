@@ -4,6 +4,11 @@ module ISM
 
         class SoftwareInstall < ISM::CommandLineOption
 
+            @@calculationStartingTime = Time.monotonic
+            @@frameIndex = 0
+            @@reverseAnimation = false
+            @@text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
+
             def initialize
                 super(  ISM::Default::Option::SoftwareInstall::ShortText,
                         ISM::Default::Option::SoftwareInstall::LongText,
@@ -71,11 +76,6 @@ module ISM
             end
 
             def getRequiredDependencies(software : ISM::SoftwareInformation) : Array(ISM::SoftwareDependency)
-                calculationStartingTime = Time.monotonic
-                frameIndex = 0
-                reverseAnimation = false
-                text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
-
                 dependencies = Hash(String,ISM::SoftwareDependency).new
                 currentDependencies = [software.toSoftwareDependency]
                 nextDependencies = Array(ISM::SoftwareDependency).new
@@ -84,7 +84,7 @@ module ISM
 
                 loop do
 
-                    calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
+                    @@calculationStartingTime, @@frameIndex, @@reverseAnimation = Ism.playCalculationAnimation(@@calculationStartingTime, @@frameIndex, @@reverseAnimation, @@text)
 
                     currentLevelDependenciesTree = Array(ISM::SoftwareDependency).new
 
@@ -93,6 +93,7 @@ module ISM
                     end
 
                     currentDependencies.each do |dependency|
+                        @@calculationStartingTime, @@frameIndex, @@reverseAnimation = Ism.playCalculationAnimation(@@calculationStartingTime, @@frameIndex, @@reverseAnimation, @@text)
 
                         dependencyInformation = dependency.information
 
@@ -107,8 +108,6 @@ module ISM
                             showUnavailableDependencyMessage(dependency)
                             Ism.exitProgram
                         end
-
-                        calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
 
                         #Need multiple version or need to fusion options
                         if dependencies.has_key?(dependency.hiddenName)
@@ -134,6 +133,8 @@ module ISM
 
                     #Inextricable dependencies problem
                     dependenciesTree.each do |branch|
+                        @@calculationStartingTime, @@frameIndex, @@reverseAnimation = Ism.playCalculationAnimation(@@calculationStartingTime, @@frameIndex, @@reverseAnimation, @@text)
+
                         if branch.size == currentLevelDependenciesTree.size && branch & currentLevelDependenciesTree == branch
                             showInextricableDependenciesMessage(currentLevelDependenciesTree)
                             Ism.exitProgram
@@ -151,22 +152,17 @@ module ISM
             end
 
             def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation)) : Hash(String,Array(ISM::SoftwareDependency))
-                calculationStartingTime = Time.monotonic
-                frameIndex = 0
-                reverseAnimation = false
-                text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
-
                 dependenciesTable = Hash(String,Array(ISM::SoftwareDependency)).new
 
                 softwareList.each do |software|
-                    calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
+                    @@calculationStartingTime, @@frameIndex, @@reverseAnimation = Ism.playCalculationAnimation(@@calculationStartingTime, @@frameIndex, @@reverseAnimation, @@text)
 
                     key = software.toSoftwareDependency.hiddenName
 
                     dependenciesTable[key] = getRequiredDependencies(software)
 
                     dependenciesTable[key].each do |dependency|
-                        calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
+                        @@calculationStartingTime, @@frameIndex, @@reverseAnimation = Ism.playCalculationAnimation(@@calculationStartingTime, @@frameIndex, @@reverseAnimation, @@text)
 
                         dependencyInformation = dependency.information
 
@@ -180,15 +176,10 @@ module ISM
             end
 
             def getSortedDependencies(dependenciesTable : Hash(String,Array(ISM::SoftwareDependency))) : Array(ISM::SoftwareDependency)
-                calculationStartingTime = Time.monotonic
-                frameIndex = 0
-                reverseAnimation = false
-                text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
-
                 result = Array(ISM::SoftwareDependency).new
 
                 dependenciesTable.to_a.sort_by { |k, v| v.size }.each do |item|
-                    calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
+                    @@calculationStartingTime, @@frameIndex, @@reverseAnimation = Ism.playCalculationAnimation(@@calculationStartingTime, @@frameIndex, @@reverseAnimation, @@text)
 
                     result << item[1][0]
                 end
