@@ -6,6 +6,8 @@ enable specific options for each packages, change Linux variables and settings..
 
 ***Guide***: https://github.com/Fulgurance/ISM/wiki/Guide
 
+[ISM-Example.png](https://postimg.cc/f3XGJgyq)
+
 ## Usage
 
 You can see main functionnalities when you just type ism in a terminal:
