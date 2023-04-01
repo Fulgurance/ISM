@@ -30,7 +30,7 @@ module ISM
 
                 end
 
-                Ism.cleanCalculationAnimation(@@frameIndex)
+                Ism.cleanCalculationAnimation(frameIndex)
                 print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
                 puts ISM::Default::Option::SoftwareSynchronize::SynchronizedText
                     
