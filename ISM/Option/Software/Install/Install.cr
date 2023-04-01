@@ -60,6 +60,8 @@ module ISM
                         Ism.exitProgram
                     end
 
+                    showCalculationTitleMessage
+
                     dependenciesTable = getDependenciesTable(requestedSoftwares)
                     neededSoftwares = getSortedDependencies(dependenciesTable)
 
@@ -246,7 +248,12 @@ module ISM
                 puts "\n"
             end
 
+            def showCalculationTitleMessage
+                print "#{ISM::Default::Option::SoftwareInstall::CalculationTitle}"
+            end
+
             def showCalculationDoneMessage
+                Ism.cleanCalculationAnimation(@@frameIndex)
                 print "#{ISM::Default::Option::SoftwareInstall::CalculationDoneText.colorize(:green)}\n"
             end
 

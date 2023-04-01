@@ -12,6 +12,7 @@ module ISM
                 SynchronizationTitle = "ISM start to synchronizing: "
                 SynchronizationWaitingText = "Synchronization with the online database"
                 SynchronizationDoneText = "Done !"
+                SynchronizedText = "The database is synchronized"
 
             end
             

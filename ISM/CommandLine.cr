@@ -594,6 +594,19 @@ module ISM
             return calculationStartingTime, frameIndex, reverseAnimation
         end
 
+        def cleanCalculationAnimation(frameIndex)
+            loop do
+                if frameIndex > 0
+                    print "\033[1D"
+                    print " "
+                    print "\033[1D"
+                    frameIndex -= 1
+                else
+                    break
+                end
+            end
+        end
+
         def getRequestedSoftwares(list : Array(String)) : Array(ISM::SoftwareInformation)
             softwaresList = Array(ISM::SoftwareInformation).new
 

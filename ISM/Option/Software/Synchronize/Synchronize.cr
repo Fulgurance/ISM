@@ -30,8 +30,9 @@ module ISM
 
                 end
 
+                Ism.cleanCalculationAnimation(@@frameIndex)
                 print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
-                puts "The database is synchronized"
+                puts ISM::Default::Option::SoftwareSynchronize::SynchronizedText
                     
             end
 
