@@ -545,7 +545,7 @@ module ISM
             return process
         end
 
-        def runSystemCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new) : Process::Status
+        def runSystemCommand(arguments = Array(String).new, path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new) : Process::Status
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
             if Ism.settings.installByChroot
