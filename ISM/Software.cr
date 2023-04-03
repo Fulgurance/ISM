@@ -97,7 +97,7 @@ module ISM
                         totalRead = Int64.new(0)
                         lenght = response.headers["Content-Length"]? ? response.headers["Content-Length"].to_i32 : Int64.new(0)
 
-                        File.open(filepath, "wb") do |data|
+                        File.open(filePath, "wb") do |data|
                             while (pos = resp.body_io.read(buf)) > 0
                                 lapsed = Time.monotonic - lastSpeedUpdate
 
