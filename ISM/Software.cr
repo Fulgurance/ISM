@@ -15,9 +15,22 @@ module ISM
         end
 
         def getMainSourceDirectoryName
-            uri = URI.parse(@information.downloadLinks[0])
+            result = String.new
 
-            return File.basename(uri.path,File.extname(uri.path))
+            if !@information.downloadLinks.empty?
+                result = @information.downloadLinks[0]
+                result = result.lchop(result[0..result.rindex("/")])
+                if result[-4..-1] == ".tgz" || result[-4..-1] == ".zip"
+                    result = result[0..-5]+"/"
+                end
+                if result[-7..-1] == ".tar.gz" || result[-7..-1] == ".tar.xz"
+                    result = result[0..-8]+"/"
+                end
+                if result.size > 7 && result[-8..-1] == ".tar.bz2"
+                    result = result[0..-9]+"/"
+                end
+            end
+            return result
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
@@ -142,15 +155,13 @@ module ISM
             Ism.notifyOfCheck(@information)
 
             @information.downloadLinks.each_with_index do |source, index|
-                uri = URI.parse(source)
-                checkSource(workDirectoryPath(false)+"/"+File.basename(uri.path),@information.md5sums[index])
+                checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
             end
 
             @information.options.each do |option|
                 if option.active
                     option.downloadLinks.each_with_index do |source, index|
-                        uri = URI.parse(source)
-                        checkSource(workDirectoryPath(false)+"/"+File.basename(uri.path),option.md5sums[index])
+                        checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),option.md5sums[index])
                     end
                 end
             end
@@ -171,22 +182,38 @@ module ISM
             Ism.notifyOfExtract(@information)
 
             @information.downloadLinks.each do |source|
-                uri = URI.parse(source)
-                extractSource(File.basename(uri.path))
+                sourceName = source.lchop(source[0..source.rindex("/")])
+
+                if  sourceName[-4..-1] == ".tgz" ||
+                    sourceName[-4..-1] == ".zip" ||
+                    sourceName[-7..-1] == ".tar.gz" ||
+                    sourceName[-7..-1] == ".tar.xz" ||
+                    sourceName.size > 7 && sourceName[-8..-1] == ".tar.bz2"
+
+                    extractSource(source.lchop(source[0..source.rindex("/")]))
+                end
             end
 
             @information.options.each do |option|
                 if option.active
                     option.downloadLinks.each do |source|
-                        uri = URI.parse(source)
-                        extractSource(File.basename(uri.path))
+                        sourceName = source.lchop(source[0..source.rindex("/")])
+
+                        if  sourceName[-4..-1] == ".tgz" ||
+                            sourceName[-4..-1] == ".zip" ||
+                            sourceName[-7..-1] == ".tar.gz" ||
+                            sourceName[-7..-1] == ".tar.xz" ||
+                            sourceName.size > 7 && sourceName[-8..-1] == ".tar.bz2"
+
+                            extractSource(source.lchop(source[0..source.rindex("/")]))
+                        end
                     end
                 end
             end
         end
 
         def extractSource(archive : String)
-            if File.extname(archive) == ".zip"
+            if archive[-4..-1] == ".zip"
                 extractedDirectory = archive[0..-5]
 
                 makeDirectory("#{workDirectoryPath(false)}/#{extractedDirectory}")
@@ -210,14 +237,10 @@ module ISM
         def patch
             Ism.notifyOfPatch(@information)
             @information.patchesLinks.each do |patch|
-                uri = URI.parse(patch)
-
-                File.extname(uri.path)
-
-                patchFileName = File.basename(uri.path)
-                if File.extname(uri.path) != ".patch"
-                    moveFile("#{workDirectoryPath(false)}/#{File.basename(uri.path)}","#{workDirectoryPath(false)}/#{File.basename(uri.path)}.patch")
-                    patchFileName = "#{File.basename(uri.path)}.patch"
+                patchFileName = patch.lchop(patch[0..patch.rindex("/")])
+                if patchFileName[-6..-1] != ".patch"
+                    moveFile("#{workDirectoryPath(false)}/#{patchFileName}","#{workDirectoryPath(false)}/#{patchFileName}.patch")
+                    patchFileName = "#{patchFileName}.patch"
                 end
                 applyPatch(patchFileName)
             end
