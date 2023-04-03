@@ -81,9 +81,9 @@ module ISM
                     end
 
                     uri = URI.parse(link)
-                    fileFullName = File.basename(uri)
-                    fileExtension = File.extname(uri)
-                    fileBaseName = File.basename(uri,fileExtension)
+                    fileFullName = File.basename(uri.path)
+                    fileExtension = File.extname(uri.path)
+                    fileBaseName = File.basename(uri.path,fileExtension)
                     filePath = "#{workDirectoryPath(false)}/#{fileFullName}"
                     colorizedFileFullName = "#{fileBaseName}#{fileExtension.colorize(Colorize::ColorRGB.new(255,100,100))}"
                     colorizedLink = "#{link.colorize(:magenta)}"
