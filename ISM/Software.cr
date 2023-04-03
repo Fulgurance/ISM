@@ -98,7 +98,7 @@ module ISM
                         lenght = response.headers["Content-Length"]? ? response.headers["Content-Length"].to_i32 : Int64.new(0)
 
                         File.open(filePath, "wb") do |data|
-                            while (pos = response.body_io.read(buf)) > 0
+                            while (pos = response.body_io.read(buffer)) > 0
                                 lapsed = Time.monotonic - lastSpeedUpdate
 
                                 if lapsed.total_seconds >= 1
