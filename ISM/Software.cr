@@ -172,30 +172,14 @@ module ISM
 
             @information.downloadLinks.each do |source|
                 uri = URI.parse(source)
-
-                if  File.extname(uri.path) == ".tgz" ||
-                    File.extname(uri.path) == ".zip" ||
-                    File.extname(uri.path) == ".tar.gz" ||
-                    File.extname(uri.path) == ".tar.xz" ||
-                    File.extname(uri.path) == ".tar.bz2"
-
-                    extractSource(File.basename(uri.path))
-                end
+                extractSource(File.basename(uri.path))
             end
 
             @information.options.each do |option|
                 if option.active
                     option.downloadLinks.each do |source|
                         uri = URI.parse(source)
-
-                        if  File.extname(uri.path) == ".tgz" ||
-                            File.extname(uri.path) == ".zip" ||
-                            File.extname(uri.path) == ".tar.gz" ||
-                            File.extname(uri.path) == ".tar.xz" ||
-                            File.extname(uri.path) == ".tar.bz2"
-
-                            extractSource(File.basename(uri.path))
-                        end
+                        extractSource(File.basename(uri.path))
                     end
                 end
             end
