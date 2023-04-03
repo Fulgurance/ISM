@@ -224,7 +224,7 @@ module ISM
         def patch
             Ism.notifyOfPatch(@information)
             @information.patchesLinks.each do |patch|
-                uri = URI.parse(archive)
+                uri = URI.parse(patch)
 
                 File.extname(uri.path)
 
