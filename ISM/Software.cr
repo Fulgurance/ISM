@@ -134,6 +134,8 @@ module ISM
                 Ism.notifyOfDownloadError(link, error)
                 Ism.exitProgram
             end
+
+            puts
         end
         
         def check
