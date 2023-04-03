@@ -115,7 +115,7 @@ module ISM
                                 if lenght > 0
                                     text = "#{colorizedFileFullName} [#{(Int64.new(totalRead*100/lenght).to_s+"%").colorize(:green)}] #{"{".colorize(:green)}#{average.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
                                 else
-                                    text = "#{colorizedFileFullName} [#{"0%".colorize(:green)}] #{"{".colorize(:green)}#{avg.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
+                                    text = "#{colorizedFileFullName} [#{"0%".colorize(:green)}] #{"{".colorize(:green)}#{average.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
                                 end
 
                                 print text+"\r"
@@ -124,7 +124,7 @@ module ISM
 
                         downloaded = true
                     else
-                        error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{resp.status_code}"
+                        error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
                         break
                     end
                 end
