@@ -15,22 +15,9 @@ module ISM
         end
 
         def getMainSourceDirectoryName
-            result = String.new
+            uri = URI.parse(@information.downloadLinks[0])
 
-            if !@information.downloadLinks.empty?
-                result = @information.downloadLinks[0]
-                result = result.lchop(result[0..result.rindex("/")])
-                if result[-4..-1] == ".tgz" || result[-4..-1] == ".zip"
-                    result = result[0..-5]+"/"
-                end
-                if result[-7..-1] == ".tar.gz" || result[-7..-1] == ".tar.xz"
-                    result = result[0..-8]+"/"
-                end
-                if result.size > 7 && result[-8..-1] == ".tar.bz2"
-                    result = result[0..-9]+"/"
-                end
-            end
-            return result
+            return File.basename(uri.path,File.extname(uri.path))
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
@@ -75,12 +62,76 @@ module ISM
         end
 
         def downloadSource(link : String)
-            process = Process.run("wget",   args: [link],
-                                            output: :inherit,
-                                            error: :inherit,
-                                            chdir: workDirectoryPath(false))
-            if !process.success?
-                Ism.notifyOfDownloadError(link)
+            downloaded = false
+            error = String.new
+
+            until downloaded
+                HTTP::Client.get(link) do |response|
+                    if response.status.redirection?
+                        begin
+                            url = response.headers["location"]
+                        rescue
+                            error = "#{ISM::Default::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::DownloadSourceRedirectionErrorText2}"
+                        end
+                        break
+                    end
+
+                    if error != ""
+                        break
+                    end
+
+                    uri = URI.parse(link)
+                    fileFullName = File.basename(uri)
+                    fileExtension = File.extname(uri)
+                    fileBaseName = File.basename(uri,fileExtension)
+                    filePath = "#{workDirectoryPath(false)}/#{fileFullName}"
+                    colorizedFileFullName = "#{fileBaseName}#{fileExtension.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                    colorizedLink = "#{link.colorize(:magenta)}"
+
+                    lastSpeedUpdate = Time.monotonic
+                    average = 0
+                    bytesLastPeriod = 0
+
+                    if response.status_code == 200
+                        buffer = Bytes.new(65536)
+                        totalRead = Int64.new(0)
+                        lenght = response.headers["Content-Length"]? ? response.headers["Content-Length"].to_i32 : Int64.new(0)
+
+                        File.open(filepath, "wb") do |data|
+                            while (pos = resp.body_io.read(buf)) > 0
+                                lapsed = Time.monotonic - lastSpeedUpdate
+
+                                if lapsed.total_seconds >= 1
+                                    div = lapsed.total_nanoseconds / 1_000_000_000
+                                    average = (bytesLastPeriod / div).to_i32!
+                                    bytesLastPeriod = 0
+                                    lastSpeedUpdate = Time.monotonic
+                                end
+
+                                data.write(buffer[0...pos])
+                                bytesLastPeriod += pos
+                                totalRead += pos
+
+                                if len > 0
+                                    text = "#{colorizedFileFullName} [#{(Int64.new(totalRead*100/lenght).to_s+"%").colorize(:green)}] #{"{".colorize(:green)}#{average.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
+                                else
+                                    text = "#{colorizedFileFullName} [#{"0%".colorize(:green)}] #{"{".colorize(:green)}#{avg.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
+                                end
+
+                                print text+"\r"
+                            end
+                        end
+
+                        downloaded = true
+                    else
+                        error = "#{ISM::Default::DownloadSourceCodeErrorText}#{resp.status_code}"
+                        break
+                    end
+                end
+            end
+
+            if !downloaded
+                Ism.notifyOfDownloadError(link, error)
                 Ism.exitProgram
             end
         end
@@ -89,13 +140,15 @@ module ISM
             Ism.notifyOfCheck(@information)
 
             @information.downloadLinks.each_with_index do |source, index|
-                checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
+                uri = URI.parse(source)
+                checkSource(workDirectoryPath(false)+"/"+File.basename(uri.path),@information.md5sums[index])
             end
 
             @information.options.each do |option|
                 if option.active
                     option.downloadLinks.each_with_index do |source, index|
-                        checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),option.md5sums[index])
+                        uri = URI.parse(source)
+                        checkSource(workDirectoryPath(false)+"/"+File.basename(uri.path),option.md5sums[index])
                     end
                 end
             end
@@ -116,30 +169,30 @@ module ISM
             Ism.notifyOfExtract(@information)
 
             @information.downloadLinks.each do |source|
-                sourceName = source.lchop(source[0..source.rindex("/")])
+                uri = URI.parse(source)
 
-                if  sourceName[-4..-1] == ".tgz" ||
-                    sourceName[-4..-1] == ".zip" ||
-                    sourceName[-7..-1] == ".tar.gz" ||
-                    sourceName[-7..-1] == ".tar.xz" ||
-                    sourceName.size > 7 && sourceName[-8..-1] == ".tar.bz2"
+                if  File.extname(uri.path) == ".tgz" ||
+                    File.extname(uri.path) == ".zip" ||
+                    File.extname(uri.path) == ".tar.gz" ||
+                    File.extname(uri.path) == ".tar.xz" ||
+                    File.extname(uri.path) == ".tar.bz2"
 
-                    extractSource(source.lchop(source[0..source.rindex("/")]))
+                    extractSource(File.basename(uri.path))
                 end
             end
 
             @information.options.each do |option|
                 if option.active
                     option.downloadLinks.each do |source|
-                        sourceName = source.lchop(source[0..source.rindex("/")])
+                        uri = URI.parse(source)
 
-                        if  sourceName[-4..-1] == ".tgz" ||
-                            sourceName[-4..-1] == ".zip" ||
-                            sourceName[-7..-1] == ".tar.gz" ||
-                            sourceName[-7..-1] == ".tar.xz" ||
-                            sourceName.size > 7 && sourceName[-8..-1] == ".tar.bz2"
+                        if  File.extname(uri.path) == ".tgz" ||
+                            File.extname(uri.path) == ".zip" ||
+                            File.extname(uri.path) == ".tar.gz" ||
+                            File.extname(uri.path) == ".tar.xz" ||
+                            File.extname(uri.path) == ".tar.bz2"
 
-                            extractSource(source.lchop(source[0..source.rindex("/")]))
+                            extractSource(File.basename(uri.path))
                         end
                     end
                 end
@@ -147,7 +200,7 @@ module ISM
         end
 
         def extractSource(archive : String)
-            if archive[-4..-1] == ".zip"
+            if File.extname(archive) == ".zip"
                 extractedDirectory = archive[0..-5]
 
                 makeDirectory("#{workDirectoryPath(false)}/#{extractedDirectory}")
@@ -171,10 +224,14 @@ module ISM
         def patch
             Ism.notifyOfPatch(@information)
             @information.patchesLinks.each do |patch|
-                patchFileName = patch.lchop(patch[0..patch.rindex("/")])
-                if patchFileName[-6..-1] != ".patch"
-                    moveFile("#{workDirectoryPath(false)}/#{patchFileName}","#{workDirectoryPath(false)}/#{patchFileName}.patch")
-                    patchFileName = "#{patchFileName}.patch"
+                uri = URI.parse(archive)
+
+                File.extname(uri.path)
+
+                patchFileName = File.basename(uri.path)
+                if File.extname(uri.path) != ".patch"
+                    moveFile("#{workDirectoryPath(false)}/#{File.basename(uri.path)}","#{workDirectoryPath(false)}/#{File.basename(uri.path)}.patch")
+                    patchFileName = "#{File.basename(uri.path)}.patch"
                 end
                 applyPatch(patchFileName)
             end
