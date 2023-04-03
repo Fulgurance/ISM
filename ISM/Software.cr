@@ -71,7 +71,7 @@ module ISM
                         begin
                             url = response.headers["location"]
                         rescue
-                            error = "#{ISM::Default::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::DownloadSourceRedirectionErrorText2}"
+                            error = "#{ISM::Default::Software::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::Software::DownloadSourceRedirectionErrorText2}"
                         end
                         break
                     end
@@ -124,7 +124,7 @@ module ISM
 
                         downloaded = true
                     else
-                        error = "#{ISM::Default::DownloadSourceCodeErrorText}#{resp.status_code}"
+                        error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{resp.status_code}"
                         break
                     end
                 end
