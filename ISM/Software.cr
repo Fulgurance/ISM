@@ -85,11 +85,10 @@ module ISM
                             url = response.headers["location"]
                         rescue
                             error = "#{ISM::Default::Software::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::Software::DownloadSourceRedirectionErrorText2}"
-                        end
-                        break
-                    end
 
-                    if error != ""
+                            Ism.notifyOfDownloadError(link, error)
+                            Ism.exitProgram
+                        end
                         break
                     end
 
@@ -138,14 +137,11 @@ module ISM
                         downloaded = true
                     else
                         error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
-                        break
+
+                        Ism.notifyOfDownloadError(link, error)
+                        Ism.exitProgram
                     end
                 end
-            end
-
-            if !downloaded
-                Ism.notifyOfDownloadError(link, error)
-                Ism.exitProgram
             end
 
             puts
