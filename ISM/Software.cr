@@ -75,6 +75,7 @@ module ISM
         end
 
         def downloadSource(link : String)
+            originalLink = link
             downloaded = false
             error = String.new
 
@@ -92,11 +93,13 @@ module ISM
                         break
                     end
 
+                    originalUri = URI.parse(originalLink)
+                    originalFileFullName = File.basename(originalUri.path)
+
                     uri = URI.parse(link)
-                    fileFullName = File.basename(uri.path)
                     fileExtension = File.extname(uri.path)
                     fileBaseName = File.basename(uri.path,fileExtension)
-                    filePath = "#{workDirectoryPath(false)}/#{fileFullName}"
+                    filePath = "#{workDirectoryPath(false)}/#{originalFileFullName}"
                     colorizedFileFullName = "#{fileBaseName}#{fileExtension.colorize(Colorize::ColorRGB.new(255,100,100))}"
                     colorizedLink = "#{link.colorize(:magenta)}"
 
