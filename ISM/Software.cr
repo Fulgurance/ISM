@@ -454,7 +454,7 @@ module ISM
             begin
                 content = getFileContent(filePath)
                 if !content.includes?(data)
-                    fileAppendData(filePath,data)
+                    fileAppendData(filePath,"\n"+data)
                 end
             rescue error
                 Ism.notifyOfFileUpdateContentError(filePath, error)
