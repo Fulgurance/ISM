@@ -82,7 +82,7 @@ module ISM
                 HTTP::Client.get(link) do |response|
                     if response.status.redirection?
                         begin
-                            url = response.headers["location"]
+                            link = response.headers["location"]
                         rescue
                             error = "#{ISM::Default::Software::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::Software::DownloadSourceRedirectionErrorText2}"
 
