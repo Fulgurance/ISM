@@ -101,12 +101,14 @@ module ISM
 
                         #Software not available
                         if dependencyInformation.name == ""
+                            showCalculationDoneMessage
                             showUnavailableDependencyMessage(dependency)
                             Ism.exitProgram
                         end
 
                         #Version not available
                         if dependencyInformation.version == ""
+                            showCalculationDoneMessage
                             showUnavailableDependencyMessage(dependency)
                             Ism.exitProgram
                         end
@@ -138,6 +140,7 @@ module ISM
                         @@calculationStartingTime, @@frameIndex, @@reverseAnimation = Ism.playCalculationAnimation(@@calculationStartingTime, @@frameIndex, @@reverseAnimation, @@text)
 
                         if branch.size == currentLevelDependenciesTree.size && branch & currentLevelDependenciesTree == branch
+                            showCalculationDoneMessage
                             showInextricableDependenciesMessage(currentLevelDependenciesTree)
                             Ism.exitProgram
                         end
