@@ -264,11 +264,23 @@ module ISM
 
         @options.each do |option|
 
-            if option.active
-                if option.isPass
-                    return option.dependencies
-                else
+            if passEnabled
+                if option.active
+                    if option.isPass
+                        return option.dependencies
+                    else
+                        dependenciesArray += option.dependencies
+                    end
+                end
+            else
+                if option.active || option.isPass
                     dependenciesArray += option.dependencies
+                end
+
+                if !option.active && option.isPass
+                    requiredPassDependency = self.toSoftwareDependency
+                    requiredPassDependency.options.push(option.name)
+                    dependenciesArray.push(requiredPassDependency)
                 end
             end
 
