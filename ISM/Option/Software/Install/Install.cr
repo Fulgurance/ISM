@@ -8,6 +8,7 @@ module ISM
             @@frameIndex = 0
             @@reverseAnimation = false
             @@text = ISM::Default::Option::SoftwareInstall::CalculationWaitingText
+            @@requestedSoftwares = Array(ISM::SoftwareInformation).new
 
             def initialize
                 super(  ISM::Default::Option::SoftwareInstall::ShortText,
@@ -21,16 +22,16 @@ module ISM
                     showHelp
                 else
                     userRequest = ARGV[2+Ism.debugLevel..-1].uniq
-                    requestedSoftwares = Ism.getRequestedSoftwares(userRequest)
+                    @@requestedSoftwares = Ism.getRequestedSoftwares(userRequest)
 
                     #No match found
-                    if userRequest.size != requestedSoftwares.size
+                    if userRequest.size != @@requestedSoftwares.size
                         wrongArguments = Array(String).new
 
                         userRequest.each do |request|
                             exist = false
 
-                            requestedSoftwares.each do |software|
+                            @@requestedSoftwares.each do |software|
                                 if request == software.versionName
                                     exist = true
                                     break
@@ -47,10 +48,10 @@ module ISM
                     end
 
                     #No available version found
-                    if requestedSoftwares.any? {|software| software.version == ""}
+                    if @@requestedSoftwares.any? {|software| software.version == ""}
                         wrongArguments = Array(String).new
 
-                        requestedSoftwares.each do |software|
+                        @@requestedSoftwares.each do |software|
                             if software.version == ""
                                 wrongArguments.push(software.versionName)
                             end
@@ -62,7 +63,7 @@ module ISM
 
                     showCalculationTitleMessage
 
-                    dependenciesTable = getDependenciesTable(requestedSoftwares)
+                    dependenciesTable = getDependenciesTable(@@requestedSoftwares)
                     neededSoftwares = getSortedDependencies(dependenciesTable)
 
                     showCalculationDoneMessage
@@ -189,6 +190,27 @@ module ISM
                     result << item[1][0]
                 end
 
+                resultedSoftwareNames = result.map { |dependency| dependency.name }
+                requestedSoftwareNames = @@requestedSoftwares.map { |software| software.name }
+
+                resultedSoftwareNames.shift(resultedSoftwareNames.size - requestedSoftwareNames.size)
+
+                if resultedSoftwareNames & requestedSoftwareNames != requestedSoftwareNames
+                    dependenciesAtUpperLevelList = Array(ISM::SoftwareDependency).new
+
+                    result.reverse.each do |dependency|
+                        if requestedSoftwareNames.includes?(dependency.name)
+                            break
+                        else
+                            dependenciesAtUpperLevelList.push(dependency)
+                        end
+                    end
+
+                    showCalculationDoneMessage
+                    showDependenciesAtUpperLevelMessage(dependenciesAtUpperLevelList)
+                    Ism.exitProgram
+                end
+
                 return result
             end
 
@@ -229,6 +251,30 @@ module ISM
 
             def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareDependency))
                 puts "#{ISM::Default::Option::SoftwareInstall::InextricableText.colorize(:yellow)}"
+                puts "\n"
+
+                dependencies.each do |software|
+                    softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                    optionsText = "{ "
+
+                    software.information.options.each do |option|
+                        if option.active
+                            optionsText += "#{option.name.colorize(:red)}"
+                        else
+                            optionsText += "#{option.name.colorize(:blue)}"
+                        end
+                        optionsText += " "
+                    end
+                    optionsText += "}"
+
+                    puts "\t" + softwareText + " " + optionsText + "\n"
+                end
+
+                puts "\n"
+            end
+
+            def showDependenciesAtUpperLevelMessage(dependencies : Array(ISM::SoftwareDependency))
+                puts "#{ISM::Default::Option::SoftwareInstall::DependenciesAtUpperLevelText.colorize(:yellow)}"
                 puts "\n"
 
                 dependencies.each do |software|
