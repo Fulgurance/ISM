@@ -193,9 +193,7 @@ module ISM
                 resultedSoftwareNames = result.map { |dependency| dependency.name }
                 requestedSoftwareNames = @@requestedSoftwares.map { |software| software.name }
 
-                resultedSoftwareNames.shift(resultedSoftwareNames.size - requestedSoftwareNames.size)
-
-                if resultedSoftwareNames & requestedSoftwareNames != requestedSoftwareNames
+                if !requestedSoftwareNames.includes?(requestedSoftwareNames[-1])
                     dependenciesAtUpperLevelList = Array(ISM::SoftwareDependency).new
 
                     result.reverse.each do |dependency|
