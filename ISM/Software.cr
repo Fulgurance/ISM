@@ -1004,6 +1004,10 @@ module ISM
             return @information.option(optionName)
         end
 
+        def softwareIsInstalled(softwareName : String) : Bool
+            return Ism.softwareIsInstalled(Ism.getSoftwareInformation(softwareName))
+        end
+
         def architecture(architecture : String) : Bool
             return Ism.settings.architecture == architecture
         end
