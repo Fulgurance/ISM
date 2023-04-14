@@ -349,7 +349,7 @@ module ISM
             end
         end
 
-        def fileReplaceText(filePath : String, text : String, newText : String)
+        def fileReplaceText(filePath : String | Enumerable, text : String, newText : String)
             begin
                 content = File.read_lines(filePath)
 
