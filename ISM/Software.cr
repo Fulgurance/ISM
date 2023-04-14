@@ -307,7 +307,7 @@ module ISM
             end
         end
 
-        def setPermissions(path : String, permissions : Int)
+        def setPermissions(path : String | Enumerable(String), permissions : Int)
             begin
                 File.chmod(path,permissions)
             rescue error

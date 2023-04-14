@@ -480,6 +480,9 @@ module ISM
         end
 
         def notifyOfSetPermissionsError(path : String, permissions : Int, error = nil)
+            if path.is_a?(Enumerable(String))
+                path = path.join(",")
+            end
             printErrorNotification( ISM::Default::CommandLine::ErrorSetPermissionsText1 +
                                     permissions.to_s +
                                     ISM::Default::CommandLine::ErrorSetPermissionsText2 +
