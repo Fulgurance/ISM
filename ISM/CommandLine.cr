@@ -151,6 +151,16 @@ module ISM
 
         end
 
+        def softwareAnyVersionInstalled(softwareName : String) : Bool
+            @installedSoftwares.each do |installedSoftware|
+                if softwareName == installedSoftware.name && !installedSoftware.passEnabled
+                    return true
+                end
+            end
+
+            return false
+        end
+
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
             @installedSoftwares.each do |installedSoftware|
                 if software.name == installedSoftware.name && software.version == installedSoftware.version

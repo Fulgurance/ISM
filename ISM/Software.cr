@@ -1005,7 +1005,7 @@ module ISM
         end
 
         def softwareIsInstalled(softwareName : String) : Bool
-            return Ism.softwareIsInstalled(Ism.getSoftwareInformation(softwareName))
+            return Ism.softwareAnyVersionInstalled(softwareName)
         end
 
         def architecture(architecture : String) : Bool
