@@ -893,6 +893,28 @@ module ISM
             end
         end
 
+        def runGtkQueryImmodules3Command(arguments = Array(String).new)
+            requestedCommands = ["gtk-query-immodules-3.0"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def runGLibCompileSchemasCommand(arguments = Array(String).new)
+            requestedCommands = ["glib-compile-schemas"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def sourceFile(arguments = Array(String).new)
             requestedCommands = ["source"]+arguments
 
