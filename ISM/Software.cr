@@ -882,6 +882,17 @@ module ISM
             end
         end
 
+        def runGtkQueryImmodules2Command(arguments = Array(String).new)
+            requestedCommands = ["gtk-query-immodules-2.0"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def sourceFile(arguments = Array(String).new)
             requestedCommands = ["source"]+arguments
 
