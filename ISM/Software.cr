@@ -915,6 +915,17 @@ module ISM
             end
         end
 
+        def runGdkPixbufQueryLoadersCommand(arguments = Array(String).new)
+            requestedCommands = ["gdk-pixbuf-query-loaders"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def sourceFile(arguments = Array(String).new)
             requestedCommands = ["source"]+arguments
 
