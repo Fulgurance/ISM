@@ -926,6 +926,17 @@ module ISM
             end
         end
 
+        def runUpdateMimeDatabaseCommand(arguments = Array(String).new)
+            requestedCommands = ["update-mime-database"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def sourceFile(arguments = Array(String).new)
             requestedCommands = ["source"]+arguments
 
