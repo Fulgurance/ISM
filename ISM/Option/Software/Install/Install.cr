@@ -120,7 +120,7 @@ module ISM
                             #Multiple versions of single software requested
                             if dependencies[dependency.hiddenName].version != dependency.version
 
-                                Ism.exitProgram
+                                #Ism.exitProgram
                             end
                             #Versions are equal but options are differents
                             if dependencies[dependency.hiddenName].version == dependency.version
