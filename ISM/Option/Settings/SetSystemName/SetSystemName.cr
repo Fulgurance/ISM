@@ -16,9 +16,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemName(ARGV[2+Ism.debugLevel])
-                    puts    "#{"* ".colorize(:green)}" +
-                            ISM::Default::Option::SettingsSetSystemName::SetText +
-                            ARGV[2+Ism.debugLevel]
+                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemName::SetText+ARGV[2+Ism.debugLevel])
                 end
             end
 

@@ -296,7 +296,7 @@ module ISM
         end
 
         def printProcessNotification(message : String)
-            puts "#{"* ".colorize(:green)}#{message}"
+            puts "#{ISM::Default::CommandLine::ProcessNotificationCharacters.colorize(:green)} #{message}"
         end
 
         def printErrorNotification(message : String, error)

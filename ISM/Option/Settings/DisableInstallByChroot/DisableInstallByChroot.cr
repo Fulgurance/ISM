@@ -14,8 +14,7 @@ module ISM
             def start
                 if ARGV.size == 2+Ism.debugLevel
                     Ism.settings.setInstallByChroot(false)
-                    puts    "#{"* ".colorize(:green)}" +
-                            ISM::Default::Option::SettingsDisableInstallByChroot::SetText
+                    Ism.printProcessNotification(ISM::Default::Option::SettingsDisableInstallByChroot::SetText)
                 end
             end
 

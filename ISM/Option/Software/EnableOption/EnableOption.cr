@@ -55,16 +55,15 @@ module ISM
 
                             if match
                                 matchingSoftware.writeInformationFile(matchingSoftware.settingsFilePath)
-                                puts    "#{"* ".colorize(:green)}" +
-                                        ISM::Default::Option::SoftwareEnableOption::SetText1 +
-                                        matchingOption.name +
-                                        ISM::Default::Option::SoftwareEnableOption::SetText2 +
-                                        matchingSoftware.name
+                                Ism.printProcessNotification(   ISM::Default::Option::SoftwareEnableOption::SetText1 +
+                                                            matchingOption.name +
+                                                            ISM::Default::Option::SoftwareEnableOption::SetText2 +
+                                                            matchingSoftware.name)
                             else
-                                puts    ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound1 +
-                                        ARGV[3+Ism.debugLevel] +
-                                        ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound2 +
-                                        matchingSoftware.name
+                                Ism.printErrorNotification( ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound1 +
+                                                        ARGV[3+Ism.debugLevel] +
+                                                        ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound2 +
+                                                        matchingSoftware.name,nil)
                             end
                         else
                             showHelp

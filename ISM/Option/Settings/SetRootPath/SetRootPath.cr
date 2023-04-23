@@ -22,9 +22,7 @@ module ISM
                     end
 
                     Ism.settings.setRootPath(path)
-                    puts    "#{"* ".colorize(:green)}" +
-                            ISM::Default::Option::SettingsSetRootPath::SetText +
-                            path
+                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetRootPath::SetText+path)
                 end
             end
 

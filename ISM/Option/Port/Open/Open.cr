@@ -28,14 +28,9 @@ module ISM
                     port = convertUrlToPort(ARGV[2+Ism.debugLevel])
 
                     if port.open
-                        puts    "#{"* ".colorize(:green)}" +
-                            ISM::Default::Option::PortOpen::OpenText +
-                            port.name
+                        Ism.printProcessNotification(ISM::Default::Option::PortOpen::OpenText+port.name)
                     else
-                        puts    "#{"* ".colorize(:red)}" +
-                            ISM::Default::Option::PortOpen::OpenTextError1 +
-                            "#{port.name.colorize(:red)}" +
-                            ISM::Default::Option::PortOpen::OpenTextError2
+                        Ism.printErrorNotification(ISM::Default::Option::PortOpen::OpenTextError1+"#{port.name.colorize(:red)}"+ISM::Default::Option::PortOpen::OpenTextError2,nil)
                     end
                 end
             end

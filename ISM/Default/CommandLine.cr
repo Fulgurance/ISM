@@ -11,6 +11,7 @@ module ISM
             ErrorUnknowArgumentHelp1 = "Use "
             ErrorUnknowArgumentHelp2 = "ism --help "
             ErrorUnknowArgumentHelp3 = "to know how to use ISM"
+            ProcessNotificationCharacters = ">_"
             DownloadText = "Downloading "
             CheckText = "Checking "
             ExtractText = "Extracting "
