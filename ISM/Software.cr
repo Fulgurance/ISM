@@ -904,7 +904,7 @@ module ISM
             end
         end
 
-        def runGLibCompileSchemasCommand(arguments = Array(String).new)
+        def runGlibCompileSchemasCommand(arguments = Array(String).new)
             requestedCommands = ["glib-compile-schemas"]+arguments
 
             process = runSystemCommand(requestedCommands)
