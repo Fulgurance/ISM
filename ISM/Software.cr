@@ -948,6 +948,14 @@ module ISM
             end
         end
 
+        def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
+            servicesPath = "/etc/init.d/"
+
+            makeDirectory("#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}#{servicesPath}")
+            moveFile(filePath,"#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}#{servicesPath}#{serviceName}")
+            runChmodCommand(["+x",serviceName],"#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}#{servicesPath}")
+        end
+
         def configure
             Ism.notifyOfConfigure(@information)
         end
