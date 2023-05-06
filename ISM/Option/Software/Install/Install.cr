@@ -122,12 +122,6 @@ module ISM
                                 dependencies[dependency.versionName] = dependency
                                 nextDependencies += dependency.dependencies
                             end
-
-                            #Versions are equal but options are differents
-                            if dependencies[dependency.hiddenName].version == dependency.version
-                                dependencies[dependency.hiddenName].options = dependency.options | dependencies[dependency.hiddenName].options
-                                nextDependencies += dependencies[dependency.hiddenName].dependencies
-                            end
                         else
                             dependencies[dependency.hiddenName] = dependency
                             nextDependencies += dependency.dependencies
