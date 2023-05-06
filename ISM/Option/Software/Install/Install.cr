@@ -117,7 +117,11 @@ module ISM
                         if dependencies.has_key?(dependency.hiddenName)
                             #Versions are equal but options are differents
                             if dependencies[dependency.hiddenName].version == dependency.version
+                                newDependencyEntry = dependency.dup
+                                newDependencyEntry.options = dependency.options | dependencies[dependency.hiddenName].options
 
+                                dependencies[dependency.hiddenName] = newDependencyEntry
+                                nextDependencies += newDependencyEntry.dependencies
                             end
                         else
                             dependencies[dependency.hiddenName] = dependency
