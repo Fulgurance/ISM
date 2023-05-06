@@ -114,17 +114,9 @@ module ISM
                             Ism.exitProgram
                         end
 
-                        #Need multiple version or need to fusion options
                         if dependencies.has_key?(dependency.hiddenName)
-
-                            #Multiple versions of single software requested
-                            if dependencies[dependency.hiddenName].version != dependency.version
-                                dependencies[dependency.versionName] = dependency
-                                nextDependencies += dependency.dependencies
-                            end
                             #Versions are equal but options are differents
                             if dependencies[dependency.hiddenName].version == dependency.version
-
 
                             end
                         else
