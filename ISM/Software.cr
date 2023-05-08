@@ -948,6 +948,17 @@ module ISM
             end
         end
 
+        def runCargoCommand(arguments : Array(String), path = String.new)
+            requestedCommands = ["cargo"]+arguments
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
+            end
+        end
+
         def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
             servicesPath = "/etc/init.d/"
 
