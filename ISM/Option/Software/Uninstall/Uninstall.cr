@@ -2,12 +2,12 @@ module ISM
 
     module Option
 
-        class SoftwareInstall < ISM::CommandLineOption
+        class SoftwareUninstall < ISM::CommandLineOption
 
             def initialize
-                super(  ISM::Default::Option::SoftwareInstall::ShortText,
-                        ISM::Default::Option::SoftwareInstall::LongText,
-                        ISM::Default::Option::SoftwareInstall::Description,
+                super(  ISM::Default::Option::SoftwareUninstall::ShortText,
+                        ISM::Default::Option::SoftwareUninstall::LongText,
+                        ISM::Default::Option::SoftwareUninstall::Description,
                         Array(ISM::CommandLineOption).new)
             end
 
