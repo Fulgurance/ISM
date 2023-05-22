@@ -92,15 +92,19 @@ module ISM
             CalculationDoneText = "Done !"
             InstallSummaryText = " new softwares will be install"
             InstallQuestion = "Would you like to install these softwares ?"
+            UninstallSummaryText = " softwares will be uninstall included unneeded dependencies"
+            UninstallQuestion = "Would you like to uninstall these softwares ?"
             YesReplyOption = "y"
             NoReplyOption = "n"
             InstallingText = "Installing"
+            UninstallingText = "Uninstalling"
             DoesntExistText = "Some requested softwares doesn't exist. Task cancelled."
             NoMatchFound = "No match found with the database for "
             NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
             NoVersionAvailable = "Some requested versions are not available: "
             NoVersionAvailableAdvice = "Maybe it's needed of refresh the database?"
             InstalledText = "is installed"
+            UninstalledText = "is uninstalled"
 
             Options = [ ISM::Option::Help.new,
                         ISM::Option::Version.new,

@@ -57,17 +57,16 @@ module ISM
 
                     Ism.showCalculationTitleMessage
 
-                    dependenciesTable = Ism.getDependenciesTable(Ism.requestedSoftwares)
-                    neededSoftwares = Ism.getSortedDependencies(dependenciesTable)
+                    unneededSoftwares = Ism.getUnneededSoftwares
 
                     Ism.showCalculationDoneMessage
-                    Ism.showNeededSoftwares(neededSoftwares)
-                    Ism.showInstallationQuestion(neededSoftwares.size)
+                    Ism.showSoftwares(unneededSoftwares)
+                    Ism.showUninstallationQuestion(unneededSoftwares.size)
 
                     userAgreement = Ism.getUserAgreement
 
                     if userAgreement
-                        Ism.startInstallationProcess(neededSoftwares)
+                        Ism.startUninstallationProcess(unneededSoftwares)
                     end
                 end
             end

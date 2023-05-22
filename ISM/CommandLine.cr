@@ -153,7 +153,8 @@ module ISM
         end
 
         def removeInstalledSoftware(installedSoftware : ISM::SoftwareInformation)
-
+            #Need to manage uninstallation of a pass
+            FileUtils.rm(installedSoftware.installedFilePath)
         end
 
         def softwareAnyVersionInstalled(softwareName : String) : Bool
@@ -747,7 +748,7 @@ module ISM
             print "#{ISM::Default::CommandLine::CalculationTitle}"
         end
 
-        def showNeededSoftwares(neededSoftwares : Array(ISM::SoftwareDependency))
+        def showSoftwares(neededSoftwares : Array(ISM::SoftwareDependency))
             puts "\n"
 
             neededSoftwares.each do |software|
@@ -783,6 +784,16 @@ module ISM
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
         end
 
+        def showUninstallationQuestion(softwareNumber : Int32)
+            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UninstallSummaryText + "\n"
+
+            puts "#{summaryText.colorize(:green)}"
+
+            print   "#{ISM::Default::CommandLine::UninstallQuestion.colorize.mode(:underline)}" +
+                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
+                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
+        end
+
         def getUserAgreement : Bool
             userInput = ""
             userAgreement = false
@@ -803,6 +814,10 @@ module ISM
             setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} #{name} /#{version}/")
         end
 
+        def updateUninstallationTerminalTitle(index : Int32, limit : Int32, name : String, version : String)
+            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::UninstallingText} #{name} /#{version}/")
+        end
+
         def cleanBuildingDirectory(path : String)
             if Dir.exists?(path)
                 FileUtils.rm_r(path)
@@ -815,6 +830,16 @@ module ISM
             puts
             puts    "#{name.colorize(:green)}" +
                     " #{ISM::Default::CommandLine::InstalledText} " +
+                    "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                    " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
+                    "#{">>".colorize(:light_magenta)}" +
+                    "\n\n"
+        end
+
+        def showEndSoftwareUninstallingMessage(index : Int32, limit : Int32, name : String, version : String)
+            puts
+            puts    "#{name.colorize(:green)}" +
+                    " #{ISM::Default::CommandLine::UninstalledText} " +
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
                     "#{">>".colorize(:light_magenta)}" +
@@ -876,11 +901,38 @@ module ISM
             end
         end
 
+        def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareDependency))
+            puts "\n"
+
+            unneededSoftwares.each_with_index do |software, index|
+                limit = unneededSoftwares.size
+                name = software.name
+                version = software.version
+
+                updateUninstallationTerminalTitle(index, limit, name, version)
+
+                showStartSoftwareUninstallingMessage(index, limit, name, version)
+
+                runUninstallationProcess(software)
+
+                showEndSoftwareUninstallingMessage(index, limit, name, version)
+            end
+        end
+
         def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
             puts    "#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
                     "] #{ISM::Default::CommandLine::InstallingText} " +
+                    "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
+                    "\n\n"
+        end
+
+        def showStartSoftwareUninstallingMessage(index : Int32, limit : Int32, name : String, version : String)
+            puts    "#{"<<".colorize(:light_magenta)}" +
+                    " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
+                    " / #{limit.to_s.colorize(:light_red)}" +
+                    "] #{ISM::Default::CommandLine::UninstallingText} " +
                     "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
         end
@@ -959,7 +1011,7 @@ module ISM
             return dependencies.values
         end
 
-        def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation)) : Hash(String,Array(ISM::SoftwareDependency))
+        def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation), mode = :installation) : Hash(String,Array(ISM::SoftwareDependency))
             dependenciesTable = Hash(String,Array(ISM::SoftwareDependency)).new
 
             softwareList.each do |software|
@@ -974,9 +1026,15 @@ module ISM
 
                     dependencyInformation = dependency.information
 
-                    if !softwareIsInstalled(dependencyInformation)
+                    case mode
+                    when :installation
+                        if !softwareIsInstalled(dependencyInformation)
+                            dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependencyInformation)
+                        end
+                    when :uninstallation
                         dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependencyInformation)
                     end
+
                 end
             end
 
@@ -1018,7 +1076,7 @@ module ISM
             cleanBuildingDirectory(@settings.rootPath+software.builtSoftwareDirectoryPath)
 
             tasks = generateInstallTasks(software)
-            generateInstallTasksFile(tasks)
+            generateTasksFile(tasks)
 
             makeLogDirectory("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}")
             logFile = File.open("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}/#{software.versionName}.log","w")
@@ -1047,6 +1105,31 @@ module ISM
             end
 
             cleanBuildingDirectory(@settings.rootPath+software.builtSoftwareDirectoryPath)
+        end
+
+        def runUninstallationProcess(software : ISM::SoftwareDependency)
+            tasks = generateUninstallTasks(software)
+            generateTasksFile(tasks)
+
+            process = Process.run("crystal",args: [ "build",
+                                                    "#{ISM::Default::Filename::Task}.cr",
+                                                    "-o",
+                                                    "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
+                                            output: :inherit,
+                                            error: :inherit,
+                                            chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+            if !process.success?
+                exitProgram
+            end
+
+            process = Process.run("./#{ISM::Default::Filename::Task}",  output: :inherit,
+                                                                        error: :inherit,
+                                                                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+            if !process.success?
+                exitProgram
+            end
         end
 
         def generateInstallTasks(software : ISM::SoftwareDependency) : String
@@ -1079,8 +1162,72 @@ module ISM
             return tasks
         end
 
-        def generateInstallTasksFile(tasks : String)
+        def generateUninstallTasks(software : ISM::SoftwareDependency) : String
+            tasks = <<-CODE
+                    #{getRequiredLibraries}
+                    Ism = ISM::CommandLine.new
+                    Ism.loadSoftwareDatabase
+                    Ism.loadSettingsFiles
+                    {{ read_file("#{software.requireFilePath}").id }}
+                    target = Target.new("#{software.filePath}")
+                    #{getEnabledOptions(software)}
+                    begin
+                        target.uninstall
+                    rescue
+                        Ism.exitProgram
+                    end
+
+                    CODE
+
+            return tasks
+        end
+
+        def generateTasksFile(tasks : String)
             File.write("#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
+        end
+
+        def getNeededSoftwares : Array(ISM::SoftwareDependency)
+            dependenciesTable = getDependenciesTable(@requestedSoftwares)
+            return getSortedDependencies(dependenciesTable)
+        end
+
+        def softwareIsNeeded(software : ISM::SoftwareDependency) : Bool
+
+            @installedSoftwares.each do |installedSoftware|
+                installedSoftwareDependency = installedSoftware.toSoftwareDependency
+
+                if software.hiddenName != installedSoftwareDependency.hiddenName
+                    dependencies = getRequiredDependencies(installedSoftware)
+
+                    if dependencies.includes?(software)
+                        return true
+                    end
+                end
+            end
+
+            return false
+        end
+
+        def getUnneededSoftwares : Array(ISM::SoftwareDependency)
+            unneededSoftwares =  Array(ISM::SoftwareDependency).new
+
+            @requestedSoftwares.each do |software|
+                softwareDependency = software.toSoftwareDependency
+
+                if !softwareIsNeeded(softwareDependency)
+                    unneededSoftwares.push(softwareDependency)
+                end
+
+                currentDependencies = getRequiredDependencies(softwareDependency.information)
+
+                currentDependencies.each do |dependency|
+                    if !softwareIsNeeded(dependency)
+                        unneededSoftwares.push(dependency)
+                    end
+                end
+            end
+
+            return unneededSoftwares
         end
 
     end

@@ -57,11 +57,10 @@ module ISM
 
                     Ism.showCalculationTitleMessage
 
-                    dependenciesTable = Ism.getDependenciesTable(Ism.requestedSoftwares)
-                    neededSoftwares = Ism.getSortedDependencies(dependenciesTable)
+                    neededSoftwares = Ism.getNeededSoftwares
 
                     Ism.showCalculationDoneMessage
-                    Ism.showNeededSoftwares(neededSoftwares)
+                    Ism.showSoftwares(neededSoftwares)
                     Ism.showInstallationQuestion(neededSoftwares.size)
 
                     userAgreement = Ism.getUserAgreement
