@@ -971,22 +971,58 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
+        ####################################################################
+        #TEMPORARY FIX FOR A STRANGE ERROR WITH THE NEW WAY TO EXECUTE TASK#
+        ####################################################################
         def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
             if @buildDirectory
-                configureCommand = "../#{configureDirectory}/configure"
+                configureCommand = "../#{configureDirectory}/configure "
             else
-                configureCommand = "./#{configureDirectory}/configure"
+                configureCommand = "./#{configureDirectory}/configure "
             end
 
-            requestedCommands = [configureCommand]+arguments
+            configureCommand += arguments.join(" ")
+            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            if Ism.settings.installByChroot
+                chrootConfigureCommand = <<-CODE
+                #!/bin/bash
+                cd #{path} && #{environmentCommand} #{configureCommand}
+                CODE
+
+                process = runChrootTasks(chrootConfigureCommand)
+            else
+                process = Process.run(  configureCommand,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: path,
+                                        env: environment)
+            end
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError([configureCommand], path, environment)
                 Ism.exitProgram
             end
         end
+
+        #DON'T WORK PROPERLY ACTUALLY
+        #def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
+            #if @buildDirectory
+                #configureCommand = "../#{configureDirectory}/configure"
+            #else
+                #configureCommand = "./#{configureDirectory}/configure"
+            #end
+
+            #requestedCommands = [configureCommand]+arguments
+
+            #process = runSystemCommand(requestedCommands, path, environment)
+
+            #if !process.success?
+                #Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                #Ism.exitProgram
+            #end
+        #end
         
         def build
             Ism.notifyOfBuild(@information)
