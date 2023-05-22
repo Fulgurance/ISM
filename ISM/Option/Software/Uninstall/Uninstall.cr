@@ -55,6 +55,18 @@ module ISM
                         Ism.exitProgram
                     end
 
+                    #Software not installed
+                    Ism.requestedSoftwares.each do |software|
+                        wrongArguments = Array(String).new
+
+                        if !Ism.softwareIsInstalled(software)
+                            wrongArguments.push(software.name)
+                        end
+
+                        Ism.showSoftwareNotInstalledMessage(wrongArguments)
+                        Ism.exitProgram
+                    end
+
                     Ism.showCalculationTitleMessage
 
                     unneededSoftwares = Ism.getUnneededSoftwares

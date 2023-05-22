@@ -663,6 +663,12 @@ module ISM
             puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
         end
 
+        def showSoftwareNotInstalledMessage(wrongArguments : Array(String))
+            puts ISM::Default::CommandLine::SoftwareNotInstalled + "#{wrongArguments.join(", ").colorize(:green)}"
+            puts
+            puts "#{ISM::Default::CommandLine::NotInstalledText.colorize(:green)}"
+        end
+
         def showNoVersionAvailableMessage(wrongArguments : Array(String))
             puts ISM::Default::CommandLine::NoVersionAvailable + "#{wrongArguments.join(", ").colorize(:green)}"
             puts ISM::Default::CommandLine::NoVersionAvailableAdvice

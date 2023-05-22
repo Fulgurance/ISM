@@ -101,6 +101,8 @@ module ISM
             DoesntExistText = "Some requested softwares doesn't exist. Task cancelled."
             NoMatchFound = "No match found with the database for "
             NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+            SoftwareNotInstalled = "The following requested softwares are not installed yet: "
+            NotInstalledText = "Some requested softwares are not installed. Task cancelled."
             NoVersionAvailable = "Some requested versions are not available: "
             NoVersionAvailableAdvice = "Maybe it's needed of refresh the database?"
             InstalledText = "is installed"
