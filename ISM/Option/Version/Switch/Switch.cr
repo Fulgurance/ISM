@@ -35,7 +35,7 @@ module ISM
                                                 chdir: "/"+ISM::Default::Path::LibraryDirectory)
                     end
 
-                    process = Process.run(  "crystal build Main.cr -o #{Ism.settings.rootPath+ISM::Default::Path::BinaryDirectory+ISM::Default::Filename::IsmBinar}",
+                    process = Process.run(  "crystal build Main.cr -o #{Ism.settings.rootPath+ISM::Default::Path::BinaryDirectory+ISM::Default::Filename::IsmBinary}",
                                             shell: true,
                                             chdir: "/"+ISM::Default::Path::LibraryDirectory)
 

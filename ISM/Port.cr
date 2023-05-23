@@ -57,16 +57,16 @@ module ISM
         def open : Bool
             Dir.mkdir_p(directoryPath)
 
-            Process.run("git",  args: ["init"],
-                                chdir: directoryPath)
-            Process.run("git",  args: [ "remote",
-                                        "add",
-                                        "origin",
-                                        @url],
-                                chdir: directoryPath)
+            Process.run("git init",
+                        shell: true,
+                        chdir: directoryPath)
+            Process.run("git remote add origin #{@url}",
+                        shell: true,
+                        chdir: directoryPath)
 
-            process = Process.new("git",args: [ "ls-remote"],
-                                        chdir: directoryPath)
+            process = Process.new(  "git ls-remote",
+                                    shell: true,
+                                    chdir: directoryPath)
             result = process.wait
 
             if result.success?
@@ -79,8 +79,9 @@ module ISM
         end
 
         def synchronize : Process
-            return Process.new("git",   args: ["pull","origin",Ism.portsSettings.targetVersion],
-                                        chdir: directoryPath)
+            return Process.new( "git pull origin #{Ism.portsSettings.targetVersion}",
+                                shell: true,
+                                chdir: directoryPath)
         end
 
     end

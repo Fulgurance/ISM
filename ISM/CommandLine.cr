@@ -1088,21 +1088,21 @@ module ISM
             logFile = File.open("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}/#{software.versionName}.log","w")
             logWriter = IO::MultiWriter.new(STDOUT,logFile)
 
-            process = Process.run("crystal",args: [ "build",
-                                                    "#{ISM::Default::Filename::Task}.cr",
-                                                    "-o",
-                                                    "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
-                                            output: logWriter,
-                                            error: logWriter,
-                                            chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                    output: logWriter,
+                                    error: logWriter,
+                                    shell: true,
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
             if !process.success?
                 exitProgram
             end
 
-            process = Process.run("./#{ISM::Default::Filename::Task}",  output: logWriter,
-                                                                        error: logWriter,
-                                                                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+            process = Process.run(  "./#{ISM::Default::Filename::Task}",
+                                    output: logWriter,
+                                    error: logWriter,
+                                    shell: true,
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
             logFile.close
 
@@ -1117,21 +1117,21 @@ module ISM
             tasks = generateUninstallTasks(software)
             generateTasksFile(tasks)
 
-            process = Process.run("crystal",args: [ "build",
-                                                    "#{ISM::Default::Filename::Task}.cr",
-                                                    "-o",
-                                                    "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"],
-                                            output: :inherit,
-                                            error: :inherit,
-                                            chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
             if !process.success?
                 exitProgram
             end
 
-            process = Process.run("./#{ISM::Default::Filename::Task}",  output: :inherit,
-                                                                        error: :inherit,
-                                                                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+            process = Process.run(  "./#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
             if !process.success?
                 exitProgram
