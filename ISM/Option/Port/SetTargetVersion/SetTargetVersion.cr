@@ -27,8 +27,9 @@ module ISM
                         text = ISM::Default::Option::PortSetTargetVersion::SetWaitingText
 
                         Ism.ports.each do |port|
-                            process = Process.new("git",args: ["switch","--detach",targetVersion],
-                                                        chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
+                            process = Process.new(  "git switch --detach #{targetVersion}",
+                                                    shell: true,
+                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
                             until process.terminated?
                                 calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(setStartingTime, frameIndex, reverseAnimation, text)
