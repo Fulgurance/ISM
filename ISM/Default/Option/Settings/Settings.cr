@@ -22,7 +22,8 @@ module ISM
                             ISM::Option::SettingsSetChrootBuildOptions.new,
                             ISM::Option::SettingsSetChrootMakeOptions.new,
                             ISM::Option::SettingsSetChrootSystemName.new,
-                            ISM::Option::SettingsSetChrootTargetName.new]
+                            ISM::Option::SettingsSetChrootTargetName.new,
+                            ISM::Option::SettingsSetDefaultMirror.new]
 
             end
         end

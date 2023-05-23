@@ -18,6 +18,7 @@ module ISM
             ChrootTarget = "#{Target}"
             ChrootMakeOptions = "#{MakeOptions}"
             ChrootBuildOptions = "#{BuildOptions}"
+            DefaultMirror = "Uk"
             SettingsFilePath = "#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::Settings}"
 
 

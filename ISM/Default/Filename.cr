@@ -11,6 +11,7 @@ module ISM
             SystemSettings = "SystemSettings.json"
             SoftwareSettings = "Settings.json"
             PortsSettings = "PortsSettings.json"
+            MirrorsSettings = "MirrorsSettings.json"
             Task = ".ISM.task"
 
         end

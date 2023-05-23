@@ -11,6 +11,7 @@ module ISM
         property installedSoftwares : Array(ISM::SoftwareInformation)
         property ports : Array(ISM::Port)
         property portsSettings : ISM::CommandLinePortsSettings
+        property mirrors : Array(ISM::Mirror)
 
         def initialize
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
@@ -26,6 +27,7 @@ module ISM
             @installedSoftwares = Array(ISM::SoftwareInformation).new
             @ports = Array(ISM::Port).new
             @portsSettings = ISM::CommandLinePortsSettings.new
+            @mirrors = Array(ISM::Mirror).new
             @terminalTitleSaved = false
         end
 
@@ -34,6 +36,7 @@ module ISM
             loadSoftwareDatabase
             loadInstalledSoftwareDatabase
             loadPortsDatabase
+            loadMirrorsDatabase
             checkEnteredArguments
         end
 
@@ -102,6 +105,26 @@ module ISM
                 port = ISM::Port.new(portFile[0..-6])
                 port.loadPortFile
                 @ports << port
+            end
+        end
+
+        def loadMirrorsDatabase
+            if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory)
+                Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory)
+            end
+
+            mirrorsFiles = Dir.children(Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory)
+
+            if mirrorsFiles.size == 0
+                mirror = ISM::Mirror.new
+                mirror.loadMirrorFile
+                @mirrors << mirror
+            else
+                mirrorsFiles.each do |mirrorFile|
+                    mirror = ISM::Mirror.new(mirrorFile[0..-6])
+                    mirror.loadMirrorFile
+                    @mirrors << mirror
+                end
             end
         end
 

@@ -16,7 +16,8 @@ module ISM
             chrootArchitecture : String,
             chrootTarget : String,
             chrootMakeOptions : String,
-            chrootBuildOptions : String do
+            chrootBuildOptions : String,
+            defaultMirror : String do
             include JSON::Serializable
         end
 
@@ -28,6 +29,7 @@ module ISM
         property    chrootTarget : String
         property    chrootMakeOptions : String
         property    chrootBuildOptions : String
+        property    defaultMirror : String
 
         def initialize( @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @systemName = ISM::Default::CommandLineSettings::SystemName,
@@ -42,7 +44,8 @@ module ISM
                         @chrootArchitecture = ISM::Default::CommandLineSettings::ChrootArchitecture,
                         @chrootTarget = ISM::Default::CommandLineSettings::ChrootTarget,
                         @chrootMakeOptions = ISM::Default::CommandLineSettings::ChrootMakeOptions,
-                        @chrootBuildOptions = ISM::Default::CommandLineSettings::ChrootBuildOptions)
+                        @chrootBuildOptions = ISM::Default::CommandLineSettings::ChrootBuildOptions,
+                        @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror)
         end
 
         def loadSettingsFile
@@ -66,6 +69,7 @@ module ISM
             @chrootTarget = information.chrootTarget
             @chrootMakeOptions = information.chrootMakeOptions
             @chrootBuildOptions = information.chrootBuildOptions
+            @defaultMirror = information.defaultMirror
         end
 
         def writeSettings(  filePath : String,
@@ -82,7 +86,8 @@ module ISM
                             chrootArchitecture : String,
                             chrootTarget : String,
                             chrootMakeOptions : String,
-                            chrootBuildOptions : String)
+                            chrootBuildOptions : String,
+                            defaultMirror : String)
 
             path = filePath.chomp(filePath[filePath.rindex("/")..-1])
 
@@ -103,7 +108,8 @@ module ISM
                                     chrootArchitecture,
                                     chrootTarget,
                                     chrootMakeOptions,
-                                    chrootBuildOptions)
+                                    chrootBuildOptions,
+                                    defaultMirror)
 
             file = File.open(filePath,"w")
             settings.to_json(file)
@@ -125,7 +131,8 @@ module ISM
                             ISM::Default::CommandLineSettings::Architecture,
                             ISM::Default::CommandLineSettings::Target,
                             ISM::Default::CommandLineSettings::MakeOptions,
-                            ISM::Default::CommandLineSettings::BuildOptions)
+                            ISM::Default::CommandLineSettings::BuildOptions,
+                            @defaultMirror)
         end
 
         def writeSettingsFile
@@ -143,7 +150,8 @@ module ISM
                             @chrootArchitecture,
                             @chrootTarget,
                             @chrootMakeOptions,
-                            @chrootBuildOptions)
+                            @chrootBuildOptions,
+                            @defaultMirror)
 
             if @rootPath != "/"
                 writeChrootSettingsFile
@@ -257,6 +265,9 @@ module ISM
             writeSettingsFile
         end
 
+        def setDefaultMirror(@defaultMirror)
+            writeSettingsFile
+        end
 
         def temporaryPath
             return "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
