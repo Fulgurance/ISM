@@ -15,22 +15,7 @@ module ISM
         end
 
         def getMainSourceDirectoryName
-            result = String.new
-
-            if !@information.downloadLinks.empty?
-                result = @information.downloadLinks[0]
-                result = result.lchop(result[0..result.rindex("/")])
-                if result[-4..-1] == ".tgz" || result[-4..-1] == ".zip"
-                    result = result[0..-5]+"/"
-                end
-                if result[-7..-1] == ".tar.gz" || result[-7..-1] == ".tar.xz"
-                    result = result[0..-8]+"/"
-                end
-                if result.size > 7 && result[-8..-1] == ".tar.bz2"
-                    result = result[0..-9]+"/"
-                end
-            end
-            return result
+            return @information.versionName+"/"
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
@@ -218,14 +203,15 @@ module ISM
                 makeDirectory("#{workDirectoryPath(false)}/#{extractedDirectory}")
                 moveFile("#{workDirectoryPath(false)}/#{archive}","#{workDirectoryPath(false)}/#{extractedDirectory}/#{archive}")
 
-                process = Process.run("unzip",args: [archive],
-                                            error: :inherit,
-                                            chdir: workDirectoryPath(false)+"/"+extractedDirectory)
+                process = Process.run(  "unzip #{archive}",
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: workDirectoryPath(false)+"/"+extractedDirectory)
             else
-                process = Process.run("tar",args: [ "-xf",
-                                                    archive],
-                                            error: :inherit,
-                                            chdir: workDirectoryPath(false))
+                process = Process.run(  "tar -xf #{archive}",
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: workDirectoryPath(false))
             end
             if !process.success?
                 Ism.notifyOfExtractError(archive)
@@ -246,9 +232,10 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            process = Process.run("patch",  args: ["-Np1","-i","#{workDirectoryPath(false)}/#{patch}"],
-                                            error: :inherit,
-                                            chdir: mainWorkDirectoryPath(false))
+            process = Process.run(  "patch -Np1 -i #{workDirectoryPath(false)}/#{patch}",
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: mainWorkDirectoryPath(false))
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 Ism.exitProgram
@@ -593,17 +580,15 @@ module ISM
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
-            process = Process.run("chmod",  args: [ "+x",
-                                                    "#{Ism.settings.rootPath}#{ISM::Default::Filename::Task}"],
-                                            output: :inherit,
-                                            error: :inherit,
-                                            shell: true)
+            process = Process.run(  "chmod +x #{Ism.settings.rootPath} #{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true)
 
-            process = Process.run("chroot",   args: [ Ism.settings.rootPath,
-                                                    "./#{ISM::Default::Filename::Task}"],
-                                            output: :inherit,
-                                            error: :inherit,
-                                            shell: true)
+            process = Process.run(  "chroot #{Ism.settings.rootPath} ./#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true)
 
             File.delete(Ism.settings.rootPath+ISM::Default::Filename::Task)
 
@@ -612,19 +597,19 @@ module ISM
 
         def runSystemCommand(arguments = Array(String).new, path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new) : Process::Status
             environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            command = arguments.join(" ")
 
             if Ism.settings.installByChroot
                 chrootCommand = <<-CODE
                 #!/bin/bash
-                cd #{path} && #{environmentCommand} #{arguments.join(" ")}
+                cd #{path} && #{environmentCommand} #{command}
                 CODE
 
                 process = runChrootTasks(chrootCommand)
             else
-                process = Process.run(  arguments[0],
-                                        args: arguments[1..arguments.size-1],
-                                        output: Process::Redirect::Inherit,
-                                        error: Process::Redirect::Inherit,
+                process = Process.run(  command,
+                                        output: :inherit,
+                                        error: :inherit,
                                         shell: true,
                                         chdir: path,
                                         env: environment)
@@ -971,58 +956,22 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
-        ####################################################################
-        #TEMPORARY FIX FOR A STRANGE ERROR WITH THE NEW WAY TO EXECUTE TASK#
-        ####################################################################
         def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
             if @buildDirectory
-                configureCommand = "../#{configureDirectory}/configure "
+                configureCommand = "../#{configureDirectory}/configure"
             else
-                configureCommand = "./#{configureDirectory}/configure "
+                configureCommand = "./#{configureDirectory}/configure"
             end
 
-            configureCommand += arguments.join(" ")
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            requestedCommands = [configureCommand]+arguments
 
-            if Ism.settings.installByChroot
-                chrootConfigureCommand = <<-CODE
-                #!/bin/bash
-                cd #{path} && #{environmentCommand} #{configureCommand}
-                CODE
-
-                process = runChrootTasks(chrootConfigureCommand)
-            else
-                process = Process.run(  configureCommand,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: path,
-                                        env: environment)
-            end
+            process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError([configureCommand], path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
-
-        #DON'T WORK PROPERLY ACTUALLY
-        #def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
-            #if @buildDirectory
-                #configureCommand = "../#{configureDirectory}/configure"
-            #else
-                #configureCommand = "./#{configureDirectory}/configure"
-            #end
-
-            #requestedCommands = [configureCommand]+arguments
-
-            #process = runSystemCommand(requestedCommands, path, environment)
-
-            #if !process.success?
-                #Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
-                #Ism.exitProgram
-            #end
-        #end
         
         def build
             Ism.notifyOfBuild(@information)
