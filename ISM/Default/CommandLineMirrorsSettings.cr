@@ -5,7 +5,7 @@ module ISM
         module CommandLineMirrorsSettings
 
             DefaultMirror = "Uk"
-            MirrorsSettingsFilePath = "#{ISM::Default::Path::MirrorsSettingsDirectory}#{ISM::Default::Filename::MirrorsSettings}"
+            MirrorsSettingsFilePath = "#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::MirrorsSettings}"
 
         end
 
