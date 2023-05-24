@@ -7,7 +7,7 @@ module ISM
             include JSON::Serializable
         end
 
-        property targetVersion : String
+        property defaultMirror : String
 
         def initialize(@defaultMirror = ISM::Default::CommandLineMirrorsSettings::DefaultMirror)
         end
@@ -26,7 +26,7 @@ module ISM
         end
 
         def writeMirrorsSettingsFile
-            mirrorsSettings = MirrorsSettings.new(@mirrorsSettings)
+            mirrorsSettings = MirrorsSettings.new(@defaultMirror)
 
             file = File.open(filePath,"w")
             mirrorsSettings.to_json(file)
@@ -35,6 +35,18 @@ module ISM
 
         def setDefaultMirror(@defaultMirror)
             writeMirrorsSettingsFile
+        end
+
+        def sourcesLink : String
+            mirror = Mirror.new(@defaultMirror)
+            mirror.loadMirrorFile
+            return mirror.sourcesLink
+        end
+
+        def patchesLink : String
+            mirror = Mirror.new(@defaultMirror)
+            mirror.loadMirrorFile
+            return mirror.patchesLink
         end
 
     end

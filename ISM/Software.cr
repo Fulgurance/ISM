@@ -36,30 +36,34 @@ module ISM
 
         def download
             Ism.notifyOfDownload(@information)
-
-            if Dir.exists?(workDirectoryPath(false))
-                deleteDirectoryRecursively(workDirectoryPath(false))
-            end
-            makeDirectory(workDirectoryPath(false))
-
-            @information.downloadLinks.each do |link|
-                downloadSource(link)
-            end
-
-            @information.patchesLinks.each do |link|
-                downloadSource(link)
-            end
-
-            @information.options.each do |option|
-                if option.active
-                    option.downloadLinks.each do |link|
-                        downloadSource(link)
-                    end
-                end
-            end
+            cleanWorkDirectoryPath
+            downloadSources
+            downloadSourcesMd5sum
+            downloadPatches
+            downloadPatchesMd5sum
         end
 
-        def downloadSource(link : String)
+        def downloadSources
+            downloadFile(@information.sourcesLink)
+            moveFile(workDirectoryPath(false)+"/"+@information.archiveName,workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName)
+        end
+
+        def downloadSourcesMd5sum
+            downloadFile(@information.sourcesMd5sumLink)
+            moveFile(workDirectoryPath(false)+"/"+@information.archiveMd5sumName,workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesMd5sumArchiveName)
+        end
+
+        def downloadPatches
+            downloadFile(@information.patchesLink)
+            moveFile(workDirectoryPath(false)+"/"+@information.archiveName,workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName)
+        end
+
+        def downloadPatchesMd5sum
+            downloadFile(@information.patchesMd5sumLink)
+            moveFile(workDirectoryPath(false)+"/"+@information.archiveMd5sumName,workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
+        end
+
+        def downloadFile(link : String)
             originalLink = link
             downloaded = false
             error = String.new
@@ -78,14 +82,8 @@ module ISM
                         break
                     end
 
-                    originalUri = URI.parse(originalLink)
-                    originalFileFullName = File.basename(originalUri.path)
-
-                    uri = URI.parse(link)
-                    fileExtension = File.extname(uri.path)
-                    fileBaseName = File.basename(uri.path,fileExtension)
-                    filePath = "#{workDirectoryPath(false)}/#{originalFileFullName}"
-                    colorizedFileFullName = "#{fileBaseName}#{fileExtension.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                    filePath = "#{workDirectoryPath(false)}/#{@information.archiveName}"
+                    colorizedFileFullName = "#{@information.archiveBaseName}#{@information.archiveExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
                     colorizedLink = "#{link.colorize(:magenta)}"
 
                     lastSpeedUpdate = Time.monotonic
@@ -137,21 +135,21 @@ module ISM
         
         def check
             Ism.notifyOfCheck(@information)
-
-            @information.downloadLinks.each_with_index do |source, index|
-                checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),@information.md5sums[index])
-            end
-
-            @information.options.each do |option|
-                if option.active
-                    option.downloadLinks.each_with_index do |source, index|
-                        checkSource(workDirectoryPath(false)+"/"+source.lchop(source[0..source.rindex("/")]),option.md5sums[index])
-                    end
-                end
-            end
+            checkSourcesMd5sum
+            checkPatchesMd5sum
         end
 
-        def checkSource(archive : String, md5sum : String)
+        def checkSourcesMd5sum
+            checkFile(  workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName,
+                        getFileContent(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesMd5sumArchiveName))
+        end
+
+        def checkPatchesMd5sum
+            checkFile(  workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName,
+                        getFileContent(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesMd5sumArchiveName))
+        end
+
+        def checkFile(archive : String, md5sum : String)
             digest = Digest::MD5.new
             digest.file(archive)
             archiveMd5sum = digest.hexfinal
@@ -161,58 +159,29 @@ module ISM
                 Ism.exitProgram
             end
         end
-        
+
         def extract
             Ism.notifyOfExtract(@information)
-
-            @information.downloadLinks.each do |source|
-                sourceName = source.lchop(source[0..source.rindex("/")])
-
-                if  sourceName[-4..-1] == ".tgz" ||
-                    sourceName[-4..-1] == ".zip" ||
-                    sourceName[-7..-1] == ".tar.gz" ||
-                    sourceName[-7..-1] == ".tar.xz" ||
-                    sourceName.size > 7 && sourceName[-8..-1] == ".tar.bz2"
-
-                    extractSource(source.lchop(source[0..source.rindex("/")]))
-                end
-            end
-
-            @information.options.each do |option|
-                if option.active
-                    option.downloadLinks.each do |source|
-                        sourceName = source.lchop(source[0..source.rindex("/")])
-
-                        if  sourceName[-4..-1] == ".tgz" ||
-                            sourceName[-4..-1] == ".zip" ||
-                            sourceName[-7..-1] == ".tar.gz" ||
-                            sourceName[-7..-1] == ".tar.xz" ||
-                            sourceName.size > 7 && sourceName[-8..-1] == ".tar.bz2"
-
-                            extractSource(source.lchop(source[0..source.rindex("/")]))
-                        end
-                    end
-                end
-            end
+            extractSources
+            extractPatches
         end
 
-        def extractSource(archive : String)
-            if archive[-4..-1] == ".zip"
-                extractedDirectory = archive[0..-5]
+        def extractSources
+            extractArchive(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName)
+            moveFile(workDirectoryPath(false)+"/"+@information.versionName,workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesDirectoryName)
+        end
 
-                makeDirectory("#{workDirectoryPath(false)}/#{extractedDirectory}")
-                moveFile("#{workDirectoryPath(false)}/#{archive}","#{workDirectoryPath(false)}/#{extractedDirectory}/#{archive}")
+        def extractPatches
+            extractArchive(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName)
+            moveFile(workDirectoryPath(false)+"/"+@information.versionName,workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName)
+        end
 
-                process = Process.run(  "unzip #{archive}",
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: workDirectoryPath(false)+"/"+extractedDirectory)
-            else
-                process = Process.run(  "tar -xf #{archive}",
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: workDirectoryPath(false))
-            end
+        def extractArchive(archive : String)
+
+            process = Process.run(  "tar -xf #{archive}",
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: workDirectoryPath(false))
             if !process.success?
                 Ism.notifyOfExtractError(archive)
                 Ism.exitProgram
@@ -221,18 +190,13 @@ module ISM
         
         def patch
             Ism.notifyOfPatch(@information)
-            @information.patchesLinks.each do |patch|
-                patchFileName = patch.lchop(patch[0..patch.rindex("/")])
-                if patchFileName[-6..-1] != ".patch"
-                    moveFile("#{workDirectoryPath(false)}/#{patchFileName}","#{workDirectoryPath(false)}/#{patchFileName}.patch")
-                    patchFileName = "#{patchFileName}.patch"
-                end
-                applyPatch(patchFileName)
+            Dir.glob("#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/*") do |patch|
+                applyPatch(patch)
             end
         end
         
         def applyPatch(patch : String)
-            process = Process.run(  "patch -Np1 -i #{workDirectoryPath(false)}/#{patch}",
+            process = Process.run(  "patch -Np1 -i #{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/#{patch}",
                                     error: :inherit,
                                     shell: true,
                                     chdir: mainWorkDirectoryPath(false))
@@ -1046,7 +1010,14 @@ module ISM
         
         def clean
             Ism.notifyOfClean(@information)
-            deleteDirectoryRecursively(workDirectoryPath(false))
+            cleanWorkDirectoryPath
+        end
+
+        def cleanWorkDirectoryPath
+            if Dir.exists?(workDirectoryPath(false))
+                deleteDirectoryRecursively(workDirectoryPath(false))
+            end
+            makeDirectory(workDirectoryPath(false))
         end
 
         def showInformations

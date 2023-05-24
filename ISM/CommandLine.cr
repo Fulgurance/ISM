@@ -12,6 +12,7 @@ module ISM
         property ports : Array(ISM::Port)
         property portsSettings : ISM::CommandLinePortsSettings
         property mirrors : Array(ISM::Mirror)
+        property mirrorsSettings : ISM::CommandLineMirrorsSettings
 
         def initialize
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
@@ -28,6 +29,7 @@ module ISM
             @ports = Array(ISM::Port).new
             @portsSettings = ISM::CommandLinePortsSettings.new
             @mirrors = Array(ISM::Mirror).new
+            @mirrorsSettings = ISM::CommandLineMirrorsSettings.new
             @terminalTitleSaved = false
         end
 
@@ -132,6 +134,7 @@ module ISM
             @settings.loadSettingsFile
             @systemSettings.loadSystemSettingsFile
             @portsSettings.loadPortsSettingsFile
+            @mirrorsSettings.loadMirrorsSettingsFile
         end
 
         def loadInstalledSoftwareDatabase

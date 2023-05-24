@@ -8,9 +8,7 @@ module ISM
         name : String,
         description : String,
         active : Bool,
-        dependencies : Array(Dependency),
-        downloadLinks : Array(String),
-        md5sums : Array(String) do
+        dependencies : Array(Dependency) do
         include JSON::Serializable
     end
     
@@ -28,9 +26,6 @@ module ISM
         architectures : Array(String),
         description : String,
         website : String,
-        downloadLinks : Array(String),
-        md5sums : Array(String),
-        patchesLinks : Array(String),
         installedFiles : Array(String),
         dependencies : Array(Dependency),
         options : Array(Option) do
@@ -43,9 +38,6 @@ module ISM
     property architectures : Array(String)
     property description : String
     property website : String
-    property downloadLinks : Array(String)
-    property md5sums : Array(String)
-    property patchesLinks : Array(String)
     setter options : Array(ISM::SoftwareOption)
     property installedFiles : Array(String)
     setter dependencies : Array(ISM::SoftwareDependency)
@@ -58,9 +50,6 @@ module ISM
         @architectures = Array(String).new
         @description = String.new
         @website = String.new
-        @downloadLinks = Array(String).new
-        @md5sums = Array(String).new
-        @patchesLinks = Array(String).new
         @installedFiles = Array(String).new
         @dependencies = Array(ISM::SoftwareDependency).new
         @options = Array(ISM::SoftwareOption).new
@@ -93,9 +82,6 @@ module ISM
         @architectures = information.architectures
         @description = information.description
         @website = information.website
-        @downloadLinks = information.downloadLinks
-        @md5sums = information.md5sums
-        @patchesLinks = information.patchesLinks
         @installedFiles = information.installedFiles
 
         information.dependencies.each do |data|
@@ -121,8 +107,6 @@ module ISM
             option.description = data.description
             option.active = data.active
             option.dependencies = dependenciesArray
-            option.downloadLinks = data.downloadLinks
-            option.md5sums = data.md5sums
             @options << option
         end
 
@@ -149,7 +133,7 @@ module ISM
                 optionsDependenciesArray << dependency
             end
 
-            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray,data.downloadLinks,data.md5sums)
+            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray)
         end
 
         information = Information.new(  @port,
@@ -158,9 +142,6 @@ module ISM
                                         @architectures,
                                         @description,
                                         @website,
-                                        @downloadLinks,
-                                        @md5sums,
-                                        @patchesLinks,
                                         @installedFiles,
                                         dependenciesArray,
                                         optionsArray)
@@ -287,6 +268,42 @@ module ISM
         end
 
         return @dependencies+dependenciesArray
+    end
+
+    def archiveName : String
+        return archiveBaseName+archiveExtensionName
+    end
+
+    def archiveMd5sum : String
+        return archiveName+archiveMd5sumExtensionName
+    end
+
+    def archiveBaseName : String
+        return versionName
+    end
+
+    def archiveExtensionName : String
+        return ISM::Default::SoftwareInformation::ArchiveExtensionName
+    end
+
+    def archiveMd5sumExtensionName : String
+        return ISM::Default::SoftwareInformation::ArchiveMd5sumExtensionName
+    end
+
+    def sourcesLink : String
+        return Ism.settings.mirrorsSettings.sourcesLink+archiveName
+    end
+
+    def sourcesMd5sumLink : String
+        return sourcesLink
+    end
+
+    def patchesLink : String
+        return Ism.settings.mirrorsSettings.patchesLink+archiveName
+    end
+
+    def patchesMd5sumLink : String
+        return patchesLink
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency

@@ -43,12 +43,16 @@ module ISM
             file.close
         end
 
+        def defaultUrl : String
+            return @urls[@mainUrl]
+        end
+
         def sourcesLink : String
-            return @mainUrl+ISM::Default::Mirror::SourcesLinkDirectory
+            return defaultUrl+ISM::Default::Mirror::SourcesLinkDirectory
         end
 
         def patchesLink : String
-            return @mainUrl+ISM::Default::Mirror::PatchesLinkDirectory
+            return defaultUrl+ISM::Default::Mirror::PatchesLinkDirectory
         end
 
     end
