@@ -295,7 +295,7 @@ module ISM
     end
 
     def sourcesMd5sumLink : String
-        return sourcesLink
+        return Ism.mirrorsSettings.sourcesLink+archiveMd5sumName
     end
 
     def patchesLink : String
@@ -303,7 +303,7 @@ module ISM
     end
 
     def patchesMd5sumLink : String
-        return patchesLink
+        return Ism.mirrorsSettings.patchesLink+archiveMd5sumName
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency
