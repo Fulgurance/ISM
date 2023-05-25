@@ -67,7 +67,7 @@ module ISM
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
-        def downloadFile(link : String, fileName : String, fileExtensionName : String)
+        def downloadFile(link : String, filename : String, fileExtensionName : String)
             originalLink = link
             downloaded = false
             error = String.new
