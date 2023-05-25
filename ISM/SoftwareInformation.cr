@@ -299,7 +299,7 @@ module ISM
     end
 
     def patchesLink : String
-        return Ism.settings.mirrorsSettings.patchesLink+archiveName
+        return Ism.mirrorsSettings.patchesLink+archiveName
     end
 
     def patchesMd5sumLink : String
