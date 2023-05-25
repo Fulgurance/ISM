@@ -274,7 +274,7 @@ module ISM
         return archiveBaseName+archiveExtensionName
     end
 
-    def archiveMd5sum : String
+    def archiveMd5sumName : String
         return archiveName+archiveMd5sumExtensionName
     end
 
