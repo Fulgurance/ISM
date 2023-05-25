@@ -9,13 +9,9 @@ module ISM
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.new
             @information.loadInformationFile(informationPath)
-            @mainSourceDirectoryName = getMainSourceDirectoryName
+            @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
             @buildDirectory = false
             @buildDirectoryName = "build"
-        end
-
-        def getMainSourceDirectoryName
-            return @information.versionName+"/"
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
@@ -200,7 +196,7 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            process = Process.run(  "patch -Np1 -i #{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/#{patch}",
+            process = Process.run(  "patch -Np1 -i #{patch}",
                                     error: :inherit,
                                     shell: true,
                                     chdir: mainWorkDirectoryPath(false))
