@@ -291,7 +291,7 @@ module ISM
     end
 
     def sourcesLink : String
-        return Ism.settings.mirrorsSettings.sourcesLink+archiveName
+        return Ism.mirrorsSettings.sourcesLink+archiveName
     end
 
     def sourcesMd5sumLink : String
