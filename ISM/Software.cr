@@ -54,10 +54,16 @@ module ISM
         end
 
         def downloadPatches : Bool
-            return downloadFile(@information.patchesLink,
+            begin
+                downloadFile(   @information.patchesLink,
                                 ISM::Default::Software::PatchesArchiveBaseName,
                                 ISM::Default::Software::ArchiveExtensionName,
                                 true)
+
+                return true
+            rescue
+                return false
+            end
         end
 
         def downloadPatchesMd5sum
@@ -66,7 +72,7 @@ module ISM
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
-        def downloadFile(link : String, filename : String, fileExtensionName : String, optional = false) : Bool
+        def downloadFile(link : String, filename : String, fileExtensionName : String, optional = false)
             originalLink = link
             downloaded = false
             error = String.new
@@ -136,8 +142,6 @@ module ISM
             end
 
             puts
-
-            return downloaded
         end
         
         def check
