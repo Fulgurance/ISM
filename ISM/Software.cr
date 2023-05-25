@@ -35,8 +35,10 @@ module ISM
             cleanWorkDirectoryPath
             downloadSources
             downloadSourcesMd5sum
-            downloadPatches
-            downloadPatchesMd5sum
+
+            if downloadPatches
+                downloadPatchesMd5sum
+            end
         end
 
         def downloadSources
@@ -51,10 +53,11 @@ module ISM
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
-        def downloadPatches
-            downloadFile(   @information.patchesLink,
-                            ISM::Default::Software::PatchesArchiveBaseName,
-                            ISM::Default::Software::ArchiveExtensionName)
+        def downloadPatches : Bool
+            return downloadFile(@information.patchesLink,
+                                ISM::Default::Software::PatchesArchiveBaseName,
+                                ISM::Default::Software::ArchiveExtensionName,
+                                true)
         end
 
         def downloadPatchesMd5sum
@@ -63,7 +66,7 @@ module ISM
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
-        def downloadFile(link : String, filename : String, fileExtensionName : String)
+        def downloadFile(link : String, filename : String, fileExtensionName : String, optional = false) : Bool
             originalLink = link
             downloaded = false
             error = String.new
@@ -122,15 +125,19 @@ module ISM
 
                         downloaded = true
                     else
-                        error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
+                        if !optional
+                            error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
 
-                        Ism.notifyOfDownloadError(link, error)
-                        Ism.exitProgram
+                            Ism.notifyOfDownloadError(link, error)
+                            Ism.exitProgram
+                        end
                     end
                 end
             end
 
             puts
+
+            return downloaded
         end
         
         def check
