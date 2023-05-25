@@ -50,19 +50,19 @@ module ISM
         end
 
         def downloadSourcesMd5sum
-            downloadFile(   @information.sourcesLink,
+            downloadFile(   @information.sourcesMd5sumLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
         def downloadPatches
-            downloadFile(   @information.sourcesLink,
+            downloadFile(   @information.patchesLink,
                             ISM::Default::Software::PatchesArchiveBaseName,
                             ISM::Default::Software::ArchiveExtensionName)
         end
 
         def downloadPatchesMd5sum
-            downloadFile(   @information.sourcesLink,
+            downloadFile(   @information.patchesMd5sumLink,
                             ISM::Default::Software::PatchesArchiveBaseName,
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
