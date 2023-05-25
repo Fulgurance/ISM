@@ -145,12 +145,12 @@ module ISM
 
         def checkSourcesMd5sum
             checkFile(  workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName,
-                        getFileContent(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesMd5sumArchiveName))
+                        getFileContent(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
         end
 
         def checkPatchesMd5sum
             checkFile(  workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName,
-                        getFileContent(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesMd5sumArchiveName))
+                        getFileContent(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesMd5sumArchiveName).strip)
         end
 
         def checkFile(archive : String, md5sum : String)
