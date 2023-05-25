@@ -44,26 +44,30 @@ module ISM
         end
 
         def downloadSources
-            downloadFile(@information.sourcesLink)
-            moveFile(workDirectoryPath(false)+"/"+@information.archiveName,workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName)
+            downloadFile(   @information.sourcesLink,
+                            ISM::Default::Software::SourcesArchiveBaseName,
+                            ISM::Default::Software::ArchiveExtensionName)
         end
 
         def downloadSourcesMd5sum
-            downloadFile(@information.sourcesMd5sumLink)
-            moveFile(workDirectoryPath(false)+"/"+@information.archiveMd5sumName,workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesMd5sumArchiveName)
+            downloadFile(   @information.sourcesLink,
+                            ISM::Default::Software::SourcesArchiveBaseName,
+                            ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
         def downloadPatches
-            downloadFile(@information.patchesLink)
-            moveFile(workDirectoryPath(false)+"/"+@information.archiveName,workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName)
+            downloadFile(   @information.sourcesLink,
+                            ISM::Default::Software::PatchesArchiveBaseName,
+                            ISM::Default::Software::ArchiveExtensionName)
         end
 
         def downloadPatchesMd5sum
-            downloadFile(@information.patchesMd5sumLink)
-            moveFile(workDirectoryPath(false)+"/"+@information.archiveMd5sumName,workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
+            downloadFile(   @information.sourcesLink,
+                            ISM::Default::Software::PatchesArchiveBaseName,
+                            ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
-        def downloadFile(link : String)
+        def downloadFile(link : String, fileName : String, fileExtensionName : String)
             originalLink = link
             downloaded = false
             error = String.new
@@ -82,8 +86,8 @@ module ISM
                         break
                     end
 
-                    filePath = "#{workDirectoryPath(false)}/#{@information.archiveName}"
-                    colorizedFileFullName = "#{@information.archiveBaseName}#{@information.archiveExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                    filePath = "#{workDirectoryPath(false)}/#{filename+fileExtensionName}"
+                    colorizedFileFullName = "#{fileName}#{fileExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
                     colorizedLink = "#{link.colorize(:magenta)}"
 
                     lastSpeedUpdate = Time.monotonic
