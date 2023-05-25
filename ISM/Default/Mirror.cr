@@ -7,8 +7,8 @@ module ISM
             CodeName = "Uk"
             Urls = ["ism-mirror.co.uk"]
             MainUrl = 0
-            SourcesLinkDirectory = "/sources"
-            PatchesLinkDirectory = "/patches"
+            SourcesLinkDirectory = "/sources/"
+            PatchesLinkDirectory = "/patches/"
 
         end
 
