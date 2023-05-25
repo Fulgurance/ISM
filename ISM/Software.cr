@@ -87,7 +87,7 @@ module ISM
                     end
 
                     filePath = "#{workDirectoryPath(false)}/#{filename+fileExtensionName}"
-                    colorizedFileFullName = "#{fileName}#{fileExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                    colorizedFileFullName = "#{filename}#{fileExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
                     colorizedLink = "#{link.colorize(:magenta)}"
 
                     lastSpeedUpdate = Time.monotonic
