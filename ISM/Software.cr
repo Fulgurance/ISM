@@ -32,11 +32,14 @@ module ISM
 
         def download
             Ism.notifyOfDownload(@information)
+
             cleanWorkDirectoryPath
+
             downloadSources
             downloadSourcesMd5sum
 
-            if downloadPatches
+            if remoteFileIsAvailable(@information.patchesLink)
+                downloadPatches
                 downloadPatchesMd5sum
             end
         end
@@ -53,17 +56,16 @@ module ISM
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
-        def downloadPatches : Bool
-            begin
-                downloadFile(   @information.patchesLink,
-                                ISM::Default::Software::PatchesArchiveBaseName,
-                                ISM::Default::Software::ArchiveExtensionName,
-                                true)
+        def remoteFileIsAvailable(fileUrl : String) : Bool
+            response = HTTP::Client.get(fileUrl)
 
-                return true
-            rescue
-                return false
-            end
+            return response.status == HTTP::Status::OK
+        end
+
+        def downloadPatches : Bool
+            downloadFile(   @information.patchesLink,
+                                ISM::Default::Software::PatchesArchiveBaseName,
+                                ISM::Default::Software::ArchiveExtensionName)
         end
 
         def downloadPatchesMd5sum
@@ -72,7 +74,7 @@ module ISM
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
-        def downloadFile(link : String, filename : String, fileExtensionName : String, optional = false)
+        def downloadFile(link : String, filename : String, fileExtensionName : String)
             originalLink = link
             downloaded = false
             error = String.new
@@ -131,12 +133,10 @@ module ISM
 
                         downloaded = true
                     else
-                        if !optional
-                            error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
+                        error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
 
-                            Ism.notifyOfDownloadError(link, error)
-                            Ism.exitProgram
-                        end
+                        Ism.notifyOfDownloadError(link, error)
+                        Ism.exitProgram
                     end
                 end
             end
