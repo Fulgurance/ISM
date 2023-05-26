@@ -147,7 +147,9 @@ module ISM
         def check
             Ism.notifyOfCheck(@information)
             checkSourcesMd5sum
-            checkPatchesMd5sum
+            if File.exists?(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesMd5sumArchiveName)
+                checkPatchesMd5sum
+            end
         end
 
         def checkSourcesMd5sum
@@ -174,7 +176,9 @@ module ISM
         def extract
             Ism.notifyOfExtract(@information)
             extractSources
-            extractPatches
+            if File.exists?(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesMd5sumArchiveName)
+                extractPatches
+            end
         end
 
         def extractSources
@@ -201,8 +205,10 @@ module ISM
         
         def patch
             Ism.notifyOfPatch(@information)
-            Dir.glob("#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/*") do |patch|
-                applyPatch(patch)
+            if Dir.exists?("#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}")
+                Dir.glob("#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/*") do |patch|
+                    applyPatch(patch)
+                end
             end
         end
         
