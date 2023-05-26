@@ -62,7 +62,7 @@ module ISM
             return response.status == HTTP::Status::OK
         end
 
-        def downloadPatches : Bool
+        def downloadPatches
             downloadFile(   @information.patchesLink,
                                 ISM::Default::Software::PatchesArchiveBaseName,
                                 ISM::Default::Software::ArchiveExtensionName)
