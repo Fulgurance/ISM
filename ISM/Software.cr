@@ -561,7 +561,7 @@ module ISM
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
-            process = Process.run(  "chmod +x #{Ism.settings.rootPath} #{ISM::Default::Filename::Task}",
+            process = Process.run(  "chmod +x #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}",
                                     output: :inherit,
                                     error: :inherit,
                                     shell: true)
