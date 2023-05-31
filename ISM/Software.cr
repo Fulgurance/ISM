@@ -925,6 +925,17 @@ module ISM
             end
         end
 
+        def runGccCommand(arguments = Array(String).new, path = String.new)
+            requestedCommands = ["gcc"]+arguments
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
+            end
+        end
+
         def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
             servicesPath = "/etc/init.d/"
 
