@@ -30,7 +30,7 @@ module ISM
             @portsSettings = ISM::CommandLinePortsSettings.new
             @mirrors = Array(ISM::Mirror).new
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.new
-            @terminalTitleSaved = false
+            @initialTerminalTitle = String.new
         end
 
         def start
@@ -666,15 +666,14 @@ module ISM
         end
 
         def setTerminalTitle(title : String)
-            if !@terminalTitleSaved
-                STDOUT << "\e[22t"
-                @terminalTitleSaved = true
+            if @initialTerminalTitle == ""
+                @initialTerminalTitle= "\e[22t"
             end
             STDOUT << "\e]0; #{title}\e\\"
         end
 
         def resetTerminalTitle
-            STDOUT << "\e[23t"
+            setTerminalTitle(@initialTerminalTitle)
         end
 
         def exitProgram
