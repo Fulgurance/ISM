@@ -667,7 +667,7 @@ module ISM
 
         def setTerminalTitle(title : String)
             if @initialTerminalTitle == ""
-                @initialTerminalTitle= "\e[22t"
+                @initialTerminalTitle= "\e"
             end
             STDOUT << "\e]0; #{title}\e\\"
         end
