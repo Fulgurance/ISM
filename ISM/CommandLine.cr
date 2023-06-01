@@ -241,6 +241,8 @@ module ISM
                         else
                             if software.passEnabled
                                 equalScore += 1
+                            elsif installedSoftware.option(option.name) && !option.active
+                                equalScore += 1
                             else
                                 return false
                             end
