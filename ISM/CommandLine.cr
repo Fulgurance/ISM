@@ -200,37 +200,52 @@ module ISM
 
                     software.options.each do |option|
 
-                        if installedSoftware.options.includes?(option)
+                        if installedSoftware.option(option.name) == option.active
                             equalScore += 1
-                        else
-                            installedOptionPass = installedSoftware.getEnabledPass
+                        elsif option.isPass
+                            softwarePassNumber = software.getEnabledPass.gsub("Pass","").to_i
 
-                            if option.isPass && installedOptionPass != ""
+                            installedSoftwareEnabledPass = installedSoftware.getEnabledPass
 
-                                enabledOptionPass = software.getEnabledPass
+                            if installedSoftwareEnabledPass != ""
+                                installedSoftwarePassNumber = installedSoftwareEnabledPass.gsub("Pass","").to_i
+                            else
+                                installedSoftwarePassNumber = 0
+                            end
 
-                                if enabledOptionPass != ""
-                                    optionEnabledPassNumber = software.getEnabledPass.gsub("Pass","").to_i
+                            if option.active
+                                if installedSoftwareEnabledPass == ""
+                                    equalScore += 1
                                 else
-                                    optionEnabledPassNumber = 0
-                                end
-
-                                optionPassNumber = option.name.gsub("Pass","").to_i
-                                installedOptionPassNumber = installedOptionPass.gsub("Pass","").to_i
-
-                                if installedOptionPassNumber > optionPassNumber || enabledOptionPass != "" && installedOptionPassNumber > optionEnabledPassNumber
-                                    if installedOptionPass != option.name && option.active || installedOptionPass == option.name && !option.active
-                                       equalScore += 1
+                                    if softwarePassNumber < installedSoftwarePassNumber
+                                        equalScore += 1
+                                    else
+                                        return false
                                     end
-                                else
-                                    return false
                                 end
-                            elsif installedOptionPass == "" && option.isPass && option.active
+                            end
+
+                            if installedSoftware.option(option.name)
+                                if installedSoftwareEnabledPass == ""
+                                    return false
+                                else
+                                    if softwarePassNumber < installedSoftwarePassNumber
+                                        equalScore += 1
+                                    else
+                                        return false
+                                    end
+                                end
+
+                            end
+
+                        else
+                            if software.passEnabled
                                 equalScore += 1
                             else
                                 return false
                             end
                         end
+
                     end
 
                     return (equalScore == software.options.size)
