@@ -6,7 +6,7 @@ enable specific options for each packages, change Linux variables and settings..
 
 ***Guide***: https://github.com/Fulgurance/ISM/wiki/Guide
 
-[![ISM-Example.png](https://i.postimg.cc/TPHfNz6x/ISM-Example.png)](https://postimg.cc/f3XGJgyq)
+[![ISM-Example.png](https://www.zupimages.net/up/23/22/wumo.png)]
 
 ## Usage
 
