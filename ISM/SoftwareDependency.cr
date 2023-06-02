@@ -40,11 +40,11 @@ module ISM
         end
 
         def greaterComparator : Bool
-            return @version[0] == ">" && @version[1] != "="
+            return @version[0] == '>' && @version[1] != '='
         end
 
         def lessComparator : Bool
-            return @version[0] == "<" && @version[1] != "="
+            return @version[0] == '<' && @version[1] != '='
         end
 
         def greaterOrEqualComparator : Bool
@@ -56,88 +56,29 @@ module ISM
         end
 
         def version
-            availableVersion = @version
 
             if includeComparators
-                if greaterComparator
-                    temporaryAvailableVersion = SemanticVersion.parse(@version.tr("><=",""))
+                currentSemanticVersion = SemanticVersion.parse(@version.tr("><=",""))
 
-                    Ism.softwares.each do |software|
-                        if @name == software.name
-                            temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
+                Ism.softwares.each do |software|
 
-                            software.versions.each do |versionInformation|
-                                temporarySoftwareVersion = SemanticVersion.parse(versionInformation.version.tr("><=",""))
-                                if temporaryVersion < temporarySoftwareVersion && temporaryAvailableVersion < temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion.to_s
-                                else
-                                    availableVersion = @version
-                                end
+                    if @name == software.name
+
+                        software.versions.each do |availableSoftware|
+
+                            availableSoftwareSemanticVersion = SemanticVersion.parse(availableSoftware.version.tr("><=",""))
+
+                            if greaterComparator && availableSoftwareSemanticVersion > currentSemanticVersion || lessComparator && availableSoftwareSemanticVersion < currentSemanticVersion || greaterOrEqualComparator && availableSoftwareSemanticVersion >= currentSemanticVersion || lessOrEqualComparator && availableSoftwareSemanticVersion <= currentSemanticVersion
+                                return availableSoftwareSemanticVersion.to_s
                             end
 
                         end
-                    end
-                end
 
-                if lessComparator
-                    temporaryAvailableVersion = SemanticVersion.parse(@version.tr("><=",""))
-
-                    Ism.softwares.each do |software|
-                        if @name == software.name
-                            temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
-
-                            software.versions.each do |versionInformation|
-                                temporarySoftwareVersion = SemanticVersion.parse(versionInformation.version.tr("><=",""))
-                                if temporaryVersion > temporarySoftwareVersion && temporaryAvailableVersion > temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion.to_s
-                                else
-                                    availableVersion = @version
-                                end
-                            end
-                        end
-                    end
-                end
-
-                if greaterOrEqualComparator
-                    temporaryAvailableVersion = SemanticVersion.parse(@version.tr("><=",""))
-
-                    Ism.softwares.each do |software|
-                        if @name == software.name
-                            temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
-
-                            software.versions.each do |versionInformation|
-                                temporarySoftwareVersion = SemanticVersion.parse(versionInformation.version.tr("><=",""))
-                                if temporaryVersion <= temporarySoftwareVersion && temporaryAvailableVersion <= temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion.to_s
-                                else
-                                    availableVersion = @version
-                                end
-                            end
-                        end
-                    end
-                end
-
-                if lessOrEqualComparator
-                    temporaryAvailableVersion = SemanticVersion.parse(@version.tr("><=",""))
-
-                    Ism.softwares.each do |software|
-                        if @name == software.name
-                            temporaryVersion = SemanticVersion.parse(@version.tr("><=",""))
-
-                            software.versions.each do |versionInformation|
-                                temporarySoftwareVersion = SemanticVersion.parse(versionInformation.version.tr("><=",""))
-                                if temporaryVersion >= temporarySoftwareVersion && temporaryAvailableVersion >= temporarySoftwareVersion
-                                    availableVersion = temporarySoftwareVersion.to_s
-                                else
-                                    availableVersion = @version
-                                end
-                            end
-                        end
                     end
                 end
             end
 
-            return availableVersion
+            return @version
         end
 
         def information : ISM::SoftwareInformation
