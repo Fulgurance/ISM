@@ -936,6 +936,17 @@ module ISM
             end
         end
 
+        def runRcUpdateCommand(arguments = Array(String).new, path = String.new)
+            requestedCommands = ["rc-update"]+arguments
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
+            end
+        end
+
         def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
             servicesPath = "/etc/init.d/"
 
