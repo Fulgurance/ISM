@@ -936,13 +936,13 @@ module ISM
             end
         end
 
-        def runRcUpdateCommand(arguments = Array(String).new, path = String.new)
+        def runRcUpdateCommand(arguments = Array(String).new)
             requestedCommands = ["rc-update"]+arguments
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
