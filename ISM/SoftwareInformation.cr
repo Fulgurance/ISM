@@ -186,6 +186,13 @@ module ISM
                 ISM::Default::Filename::SoftwareSettings
     end
 
+    def installedDirectoryPath : String
+        return Ism.settings.rootPath +
+               ISM::Default::Path::InstalledSoftwaresDirectory +
+               @port + "/" +
+               @name + "/"
+    end
+
     def installedFilePath : String
         return Ism.settings.rootPath +
                ISM::Default::Path::InstalledSoftwaresDirectory +

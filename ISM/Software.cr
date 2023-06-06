@@ -1064,7 +1064,7 @@ module ISM
 
         def uninstall
             Ism.notifyOfUninstall(@information)
-            removeInstalledSoftware(@information)
+            Ism.removeInstalledSoftware(@information)
         end
 
         def option(optionName : String) : Bool

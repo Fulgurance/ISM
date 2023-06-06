@@ -183,13 +183,13 @@ module ISM
             @installedSoftwares.each do |installedSoftware|
                 if software.toSoftwareDependency.hiddenName == installedSoftware.toSoftwareDependency.hiddenName
                     installedSoftware.installedFiles.each do |file|
-                        deleteFile(Ism.settings.rootPath+file)
+                        FileUtils.rm_r(Ism.settings.rootPath+file)
                     end
                     break
                 end
             end
 
-            FileUtils.rm(software.installedFilePath)
+            FileUtils.rm(software.installedDirectoryPath)
         end
 
         def softwareAnyVersionInstalled(softwareName : String) : Bool
