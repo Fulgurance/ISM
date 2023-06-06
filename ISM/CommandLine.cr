@@ -718,6 +718,12 @@ module ISM
             puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
         end
 
+        def showSoftwareNeededMessage(wrongArguments : Array(String))
+            puts ISM::Default::CommandLine::SoftwareNeeded + "#{wrongArguments.join(", ").colorize(:green)}"
+            puts
+            puts "#{ISM::Default::CommandLine::NeededText.colorize(:green)}"
+        end
+
         def showUnavailableDependencyMessage(dependency : ISM::SoftwareDependency)
             puts "#{ISM::Default::CommandLine::UnavailableText.colorize(:yellow)}"
             puts "\n"
@@ -1266,6 +1272,8 @@ module ISM
                 end
             end
 
+            wrongArguments = Array(String).new
+
             @requestedSoftwares.each do |requestedSoftware|
                 requestedDependency = requestedSoftware.toSoftwareDependency
 
@@ -1276,9 +1284,16 @@ module ISM
                     requestedSoftwaresHash.keys.each do |key|
                         if !requiredDependencies.has_key?(key)
                             uneededSoftwares[key] = requestedSoftwaresHash[key]
+                        else
+                            wrongArguments.push(requestedSoftwaresHash[key].name)
                         end
                     end
                 end
+            end
+
+            if wrongArguments.empty?
+                showSoftwareNeededMessage(wrongArguments)
+                exitProgram
             end
 
             return uneededSoftwares.values

@@ -105,6 +105,8 @@ module ISM
             NotInstalledText = "Some requested softwares are not installed. Task cancelled."
             NoVersionAvailable = "Some requested versions are not available: "
             NoVersionAvailableAdvice = "Maybe it's needed of refresh the database?"
+            SoftwareNeeded = "The following requested softwares are required for the system: "
+            NeededText = "Some requested softwares are actually needed. Task cancelled."
             InstalledText = "is installed"
             UninstalledText = "is uninstalled"
 
