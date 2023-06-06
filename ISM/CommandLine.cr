@@ -682,20 +682,6 @@ module ISM
             return softwaresList
         end
 
-        def getInstalledSoftwares(list : Array(ISM::SoftwareDependency)) : Array(ISM::SoftwareDependency)
-            softwaresList = Array(ISM::SoftwareDependency).new
-
-            list.each do |entry|
-                @installedSoftwares.each do |software|
-                    if software.name = entry.name
-                        softwaresList << software.toSoftwareDependency
-                    end
-                end
-            end
-
-            return softwaresList
-        end
-
         def setTerminalTitle(title : String)
             if @initialTerminalTitle == ""
                 @initialTerminalTitle= "\e"
@@ -1310,7 +1296,7 @@ module ISM
                 exitProgram
             end
 
-            return getInstalledSoftwares(uneededSoftwares.values)
+            return uneededSoftwares.values
         end
 
     end

@@ -91,6 +91,16 @@ module ISM
             return dependencyInformation
         end
 
+        def installedFiles
+            softwaresList = Array(ISM::SoftwareDependency).new
+
+            @installedSoftwares.each do |software|
+                if software.toSoftwareDependency.hiddenName == hiddenName
+                    return software.installedFiles
+                end
+            end
+        end
+
         def port : String
             return information.port
         end
