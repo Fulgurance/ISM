@@ -1226,6 +1226,7 @@ module ISM
                     #{getRequiredLibraries}
                     Ism = ISM::CommandLine.new
                     Ism.loadSoftwareDatabase
+                    Ism.loadInstalledSoftwareDatabase
                     Ism.loadSettingsFiles
                     {{ read_file("#{software.requireFilePath}").id }}
                     target = Target.new("#{software.filePath}")
