@@ -189,7 +189,7 @@ module ISM
                 end
             end
 
-            FileUtils.rm(software.installedDirectoryPath)
+            FileUtils.rm_r(software.installedDirectoryPath)
         end
 
         def softwareAnyVersionInstalled(softwareName : String) : Bool
