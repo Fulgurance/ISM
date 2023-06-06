@@ -1284,14 +1284,14 @@ module ISM
                     requestedSoftwaresHash.keys.each do |key|
                         if !requiredDependencies.has_key?(key)
                             uneededSoftwares[key] = requestedSoftwaresHash[key]
-                        else
-                            wrongArguments.push(requestedSoftwaresHash[key].name)
                         end
                     end
+                else
+                    wrongArguments.push(requestedDependency.name)
                 end
             end
 
-            if wrongArguments.empty?
+            if !wrongArguments.empty?
                 showSoftwareNeededMessage(wrongArguments)
                 exitProgram
             end
