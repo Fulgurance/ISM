@@ -55,12 +55,14 @@ module ISM
                         Ism.exitProgram
                     end
 
-                    #Software not installed
-                    Ism.requestedSoftwares.each do |software|
+                    #Software not installed yet
+                    if Ism.requestedSoftwares.any? {|software| !Ism.softwareIsInstalled(software)}
                         wrongArguments = Array(String).new
 
-                        if !Ism.softwareIsInstalled(software)
-                            wrongArguments.push(software.name)
+                        Ism.requestedSoftwares.each do |software|
+                            if !Ism.softwareIsInstalled(software)
+                                wrongArguments.push(software.name)
+                            end
                         end
 
                         Ism.showSoftwareNotInstalledMessage(wrongArguments)

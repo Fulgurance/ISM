@@ -1059,7 +1059,7 @@ module ISM
             return dependencies.values
         end
 
-        def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation), mode = :installation) : Hash(String,Array(ISM::SoftwareDependency))
+        def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation)) : Hash(String,Array(ISM::SoftwareDependency))
             dependenciesTable = Hash(String,Array(ISM::SoftwareDependency)).new
 
             softwareList.each do |software|
@@ -1074,16 +1074,12 @@ module ISM
 
                     dependencyInformation = dependency.information
 
-                    case mode
-                    when :installation
-                        if !softwareIsInstalled(dependencyInformation)
-                            dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependencyInformation)
-                        end
-                    when :uninstallation
+                    if !softwareIsInstalled(dependencyInformation)
                         dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependencyInformation)
                     end
 
                 end
+
             end
 
             return dependenciesTable
@@ -1235,47 +1231,57 @@ module ISM
         end
 
         def getNeededSoftwares : Array(ISM::SoftwareDependency)
-            dependenciesTable = getDependenciesTable(@requestedSoftwares)
-            return getSortedDependencies(dependenciesTable)
-        end
-
-        def softwareIsNeeded(software : ISM::SoftwareDependency) : Bool
-
-            @installedSoftwares.each do |installedSoftware|
-                installedSoftwareDependency = installedSoftware.toSoftwareDependency
-
-                if software.hiddenName != installedSoftwareDependency.hiddenName
-                    dependencies = getRequiredDependencies(installedSoftware)
-
-                    if dependencies.includes?(software)
-                        return true
-                    end
-                end
-            end
-
-            return false
+            dependencyTable = getDependenciesTable(@requestedSoftwares)
+            return getSortedDependencies(dependencyTable)
         end
 
         def getUnneededSoftwares : Array(ISM::SoftwareDependency)
-            unneededSoftwares =  Array(ISM::SoftwareDependency).new
+            requiredDependencies = Hash(String,ISM::SoftwareDependency).new
+            requestedSoftwaresHash = Hash(String,ISM::SoftwareDependency).new
+            uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
+
+            @installedSoftwares.each do |software|
+                softwareDependency = software.toSoftwareDependency
+
+                requiredDependencies[softwareDependency.hiddenName] = softwareDependency
+            end
 
             @requestedSoftwares.each do |software|
                 softwareDependency = software.toSoftwareDependency
 
-                if !softwareIsNeeded(softwareDependency)
-                    unneededSoftwares.push(softwareDependency)
+                requestedSoftwaresHash[softwareDependency.hiddenName] = softwareDependency
+
+                software.dependencies.each do |dependency|
+                    requestedSoftwaresHash[dependency.hiddenName] = dependency
                 end
+            end
 
-                currentDependencies = getRequiredDependencies(softwareDependency.information)
+            requestedSoftwaresHash.keys.each do |key|
+                requiredDependencies.delete(key)
+            end
 
-                currentDependencies.each do |dependency|
-                    if !softwareIsNeeded(dependency)
-                        unneededSoftwares.push(dependency)
+            requiredDependencies.values.each do |requiredSoftware|
+                requiredSoftware.dependencies.each do |dependency|
+                    requiredDependencies[dependency.hiddenName] = dependency
+                end
+            end
+
+            @requestedSoftwares.each do |requestedSoftware|
+                requestedDependency = requestedSoftware.toSoftwareDependency
+
+
+                if !requiredDependencies.has_key?(requestedDependency.hiddenName)
+                    uneededSoftwares[requestedDependency.hiddenName] = requestedDependency
+
+                    requestedSoftwaresHash.keys.each do |key|
+                        if !requiredDependencies.has_key?(key)
+                            uneededSoftwares[key] = requestedSoftwaresHash[key]
+                        end
                     end
                 end
             end
 
-            return unneededSoftwares
+            return uneededSoftwares.values
         end
 
     end
