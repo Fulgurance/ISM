@@ -178,9 +178,18 @@ module ISM
             softwareInformation.writeInformationFile(softwareInformation.installedFilePath)
         end
 
-        def removeInstalledSoftware(installedSoftware : ISM::SoftwareInformation)
+        def removeInstalledSoftware(software : ISM::SoftwareInformation)
             #Need to manage uninstallation of a pass
-            FileUtils.rm(installedSoftware.installedFilePath)
+            @installedSoftwares.each do |installedSoftware|
+                if software.toSoftwareDependency.hiddenName == installedSoftware.toSoftwareDependency.hiddenName
+                    installedSoftware.installedFiles.each do |file|
+                        deleteFile(Ism.settings.rootPath+file)
+                    end
+                    break
+                end
+            end
+
+            FileUtils.rm(software.installedFilePath)
         end
 
         def softwareAnyVersionInstalled(softwareName : String) : Bool

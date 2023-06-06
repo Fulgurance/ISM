@@ -1064,9 +1064,7 @@ module ISM
 
         def uninstall
             Ism.notifyOfUninstall(@information)
-            installedFiles.each do |file|
-                deleteFile(Ism.settings.rootPath+file)
-            end
+            removeInstalledSoftware(@information)
         end
 
         def option(optionName : String) : Bool
