@@ -1302,6 +1302,7 @@ module ISM
             end
 
             if !wrongArguments.empty?
+                showCalculationDoneMessage
                 showSoftwareNeededMessage(wrongArguments)
                 exitProgram
             end
