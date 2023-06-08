@@ -947,6 +947,17 @@ module ISM
             end
         end
 
+        def runAlsactlCommand(arguments = Array(String).new)
+            requestedCommands = ["alsactl"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
             servicesPath = "/etc/init.d/"
 
