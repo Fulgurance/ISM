@@ -212,18 +212,11 @@ module ISM
                         if installedSoftware.option(option.name) == option.active
                             equalScore += 1
                         elsif option.isPass
-                            softwarePassNumber = software.getEnabledPass.gsub("Pass","").to_i
-
-                            installedSoftwareEnabledPass = installedSoftware.getEnabledPass
-
-                            if installedSoftwareEnabledPass != ""
-                                installedSoftwarePassNumber = installedSoftwareEnabledPass.gsub("Pass","").to_i
-                            else
-                                installedSoftwarePassNumber = 0
-                            end
+                            softwarePassNumber = software.getEnabledPassNumber
+                            installedSoftwarePassNumber = installedSoftware.getEnabledPassNumber
 
                             if option.active
-                                if installedSoftwareEnabledPass == ""
+                                if !installedSoftware.passEnabled
                                     equalScore += 1
                                 else
                                     if softwarePassNumber < installedSoftwarePassNumber
@@ -235,7 +228,7 @@ module ISM
                             end
 
                             if installedSoftware.option(option.name)
-                                if installedSoftwareEnabledPass == ""
+                                if !installedSoftware.passEnabled
                                     return false
                                 else
                                     if softwarePassNumber < installedSoftwarePassNumber

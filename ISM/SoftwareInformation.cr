@@ -65,6 +65,11 @@ module ISM
         return String.new
     end
 
+    def getEnabledPassNumber : Int32
+        stringNumber = getEnabledPass
+        return stringNumber == "" ? 0 : stringNumber.gsub("Pass","").to_i
+    end
+
     def loadInformationFile(loadInformationFilePath : String)
         begin
             information = Information.from_json(File.read(loadInformationFilePath))
