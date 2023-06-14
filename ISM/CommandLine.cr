@@ -231,7 +231,7 @@ module ISM
                                 if !installedSoftware.passEnabled
                                     return false
                                 else
-                                    if softwarePassNumber < installedSoftwarePassNumber
+                                    if softwarePassNumber < installedSoftwarePassNumber && software.passEnabled
                                         equalScore += 1
                                     else
                                         return false
