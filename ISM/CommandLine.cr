@@ -1037,6 +1037,15 @@ module ISM
                             dependencies[dependency.versionName] = dependency
                             nextDependencies += dependency.dependencies
                         end
+
+                        #Different options requested
+                        if dependencies[dependency.hiddenName].options != dependency.options
+                            entry = dependency.dup
+                            entry.options = (dependencies[dependency.hiddenName].options+dependency.options).uniq
+
+                            dependencies[dependency.versionName] = entry
+                            nextDependencies += entry.dependencies
+                        end
                     else
                         dependencies[dependency.hiddenName] = dependency
                         nextDependencies += dependency.dependencies
