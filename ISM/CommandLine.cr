@@ -1084,6 +1084,7 @@ module ISM
 
             end
 
+            keys = dependenciesTable.keys
             #Inextricable dependencies problem
             keys.each do |key1|
                 @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
