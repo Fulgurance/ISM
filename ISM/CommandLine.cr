@@ -998,75 +998,60 @@ module ISM
             currentDependencies = [software.toSoftwareDependency]
             nextDependencies = Array(ISM::SoftwareDependency).new
 
-            dependenciesTree = [[software.toSoftwareDependency]]
-
             loop do
 
                 @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
-
-                currentLevelDependenciesTree = Array(ISM::SoftwareDependency).new
 
                 if currentDependencies.empty?
                     break
                 end
 
                 currentDependencies.each do |dependency|
-                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
 
-                    dependencyInformation = dependency.information
+                    if !Ism.softwareIsInstalled(dependency.information)
+                        @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
 
-                    #Software not available
-                    if dependencyInformation.name == ""
-                        showCalculationDoneMessage
-                        showUnavailableDependencyMessage(dependency)
-                        exitProgram
-                    end
+                        dependencyInformation = dependency.information
 
-                    #Version not available
-                    if dependencyInformation.version == ""
-                        showCalculationDoneMessage
-                        showUnavailableDependencyMessage(dependency)
-                        exitProgram
-                    end
+                        #Software not available
+                        if dependencyInformation.name == ""
+                            showCalculationDoneMessage
+                            showUnavailableDependencyMessage(dependency)
+                            exitProgram
+                        end
 
-                    #Need multiple version or need to fusion options
-                    if dependencies.has_key?(dependency.hiddenName)
+                        #Version not available
+                        if dependencyInformation.version == ""
+                            showCalculationDoneMessage
+                            showUnavailableDependencyMessage(dependency)
+                            exitProgram
+                        end
 
-                        #Multiple versions of single software requested
-                        if dependencies[dependency.hiddenName].version != dependency.version
-                            dependencies[dependency.versionName] = dependency
+                        #Need multiple version or need to fusion options
+                        if dependencies.has_key?(dependency.hiddenName)
+
+                            #Multiple versions of single software requested
+                            if dependencies[dependency.hiddenName].version != dependency.version
+                                dependencies[dependency.versionName] = dependency
+                                nextDependencies += dependency.dependencies
+                            end
+
+                            #Different options requested
+                            if dependencies[dependency.hiddenName].options != dependency.options
+                                entry = dependency.dup
+                                entry.options = (dependencies[dependency.hiddenName].options+dependency.options).uniq
+
+                                dependencies[dependency.versionName] = entry
+                                nextDependencies += entry.dependencies
+                            end
+                        else
+                            dependencies[dependency.hiddenName] = dependency
                             nextDependencies += dependency.dependencies
                         end
 
-                        #Different options requested
-                        if dependencies[dependency.hiddenName].options != dependency.options
-                            entry = dependency.dup
-                            entry.options = (dependencies[dependency.hiddenName].options+dependency.options).uniq
-
-                            dependencies[dependency.versionName] = entry
-                            nextDependencies += entry.dependencies
-                        end
-                    else
-                        dependencies[dependency.hiddenName] = dependency
-                        nextDependencies += dependency.dependencies
                     end
 
-                    currentLevelDependenciesTree = currentLevelDependenciesTree+dependency.dependencies
-
                 end
-
-                #Inextricable dependencies problem
-                dependenciesTree.each do |branch|
-                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
-
-                    if branch.size == currentLevelDependenciesTree.size && branch & currentLevelDependenciesTree == branch
-                        showCalculationDoneMessage
-                        showInextricableDependenciesMessage(currentLevelDependenciesTree)
-                        exitProgram
-                    end
-                end
-
-                dependenciesTree.push(currentLevelDependenciesTree.uniq)
 
                 currentDependencies = nextDependencies.dup
                 nextDependencies.clear
@@ -1097,6 +1082,21 @@ module ISM
 
                 end
 
+            end
+
+            #Inextricable dependencies problem
+            keys.each do |key1|
+                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
+                keys.each do |key2|
+                    if key1 != key2
+                        if dependenciesTable[key1].any?{|dependency| dependency.hiddenName == key2} && dependenciesTable[key2].any?{|dependency| dependency.hiddenName == key1}
+                            showCalculationDoneMessage
+                            showInextricableDependenciesMessage([dependenciesTable[key1][0],dependenciesTable[key2][0]])
+                            exitProgram
+                        end
+                    end
+                end
             end
 
             return dependenciesTable
