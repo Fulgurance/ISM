@@ -1109,17 +1109,17 @@ module ISM
             table = Hash(ISM::SoftwareDependency,Int32).new
 
             dependenciesTable.values.each do |dependencies|
-                table[dependencies[0]] = dependencies.size
+                #table[dependencies[0]] = dependencies.size
 
                 dependencies.each do |dependency|
                     if dependenciesTable.has_key?(dependency.hiddenName)
                         if dependenciesTable[dependency.hiddenName][0].dependencies.size != dependency.dependencies.size
-                            table[dependencies[0]] += (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
+                            table[dependencies[0]] = dependencies.size + (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
                         end
                     end
                     if dependenciesTable.has_key?(dependency.versionName)
                         if dependenciesTable[dependency.versionName][0].dependencies.size != dependency.dependencies.size
-                            table[dependencies[0]] += (dependenciesTable[dependency.versionName][0].dependencies.size - dependency.dependencies.size).abs
+                            table[dependencies[0]] = dependencies.size + (dependenciesTable[dependency.versionName][0].dependencies.size - dependency.dependencies.size).abs
                         end
                     end
                 end
