@@ -1117,15 +1117,11 @@ module ISM
                     @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
 
                     if dependenciesTable.has_key?(dependency.hiddenName)
-                        if dependenciesTable[dependency.hiddenName][0].dependencies.size >= dependency.dependencies.size
-                            table[dependencies[0]] = dependencies.size + (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
-                        end
+                        table[dependencies[0]] = dependencies.size + (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
                     end
 
                     if dependenciesTable.has_key?(dependency.versionName)
-                        if dependenciesTable[dependency.versionName][0].dependencies.size >= dependency.dependencies.size
-                            table[dependencies[0]] = dependencies.size + (dependenciesTable[dependency.versionName][0].dependencies.size - dependency.dependencies.size).abs
-                        end
+                        table[dependencies[0]] = dependencies.size + (dependenciesTable[dependency.versionName][0].dependencies.size - dependency.dependencies.size).abs
                     end
                 end
             end
