@@ -1090,6 +1090,8 @@ module ISM
                 @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
 
                 keys.each do |key2|
+                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                     if key1 != key2
                         if dependenciesTable[key1].any?{|dependency| dependency.hiddenName == key2} && dependenciesTable[key2].any?{|dependency| dependency.hiddenName == key1}
                             showCalculationDoneMessage
@@ -1109,15 +1111,22 @@ module ISM
             table = Hash(ISM::SoftwareDependency,Int32).new
 
             dependenciesTable.values.each do |dependencies|
+                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
 
                 dependencies.each do |dependency|
+                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                     if dependenciesTable.has_key?(dependency.hiddenName)
                         if dependenciesTable[dependency.hiddenName][0].dependencies.size != dependency.dependencies.size
                             table[dependencies[0]] = dependencies.size + (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
+                        else
+                            table[dependencies[0]] = dependencies.size
                         end
                     elsif dependenciesTable.has_key?(dependency.versionName)
                         if dependenciesTable[dependency.versionName][0].dependencies.size != dependency.dependencies.size
                             table[dependencies[0]] = dependencies.size + (dependenciesTable[dependency.versionName][0].dependencies.size - dependency.dependencies.size).abs
+                        else
+                            table[dependencies[0]] = dependencies.size
                         end
                     else
                         table[dependencies[0]] = dependencies.size
