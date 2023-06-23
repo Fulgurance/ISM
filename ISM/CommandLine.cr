@@ -1069,7 +1069,7 @@ module ISM
 
                 key = software.toSoftwareDependency.hiddenName
 
-                dependenciesTable[key] = getRequiredDependencies(software)
+                dependenciesTable[key] = getRequiredDependencies(software, true)
 
                 dependenciesTable[key].each do |dependency|
                     @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
