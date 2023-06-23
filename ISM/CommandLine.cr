@@ -993,7 +993,7 @@ module ISM
                     "\n\n"
         end
 
-        def getRequiredDependencies(software : ISM::SoftwareInformation) : Array(ISM::SoftwareDependency)
+        def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false) : Array(ISM::SoftwareDependency)
             dependencies = Hash(String,ISM::SoftwareDependency).new
             currentDependencies = [software.toSoftwareDependency]
             nextDependencies = Array(ISM::SoftwareDependency).new
@@ -1008,7 +1008,7 @@ module ISM
 
                 currentDependencies.each do |dependency|
 
-                    if !Ism.softwareIsInstalled(dependency.information)
+                    if !Ism.softwareIsInstalled(dependency.information) || Ism.softwareIsInstalled(dependency.information) && allowRebuild == true && dependency.information == software
                         @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
 
                         dependencyInformation = dependency.information
