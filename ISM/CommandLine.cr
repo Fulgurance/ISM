@@ -1118,11 +1118,11 @@ module ISM
                 dependencies.each do |dependency|
                     @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
 
-                    if dependenciesTable.has_key?(dependency.hiddenName)
+                    if dependenciesTable.has_key?(dependency.hiddenName) && dependency.dependencies.size < dependenciesTable[dependency.hiddenName][0].dependencies.size
                         table[dependencies[0]] += (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
                     end
 
-                    if dependenciesTable.has_key?(dependency.versionName)
+                    if dependenciesTable.has_key?(dependency.versionName) && dependency.dependencies.size < dependenciesTable[dependency.versionName][0].dependencies.size
                         table[dependencies[0]] += (dependenciesTable[dependency.versionName][0].dependencies.size - dependency.dependencies.size).abs
                     end
                 end
