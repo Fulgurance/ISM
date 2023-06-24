@@ -66,9 +66,26 @@ module ISM
                             Ism.installedSoftwares.each_with_index do |installed, index|
                                 if software.name == installed.name
                                     if index+1 < Ism.installedSoftwares.size && installedVersionText != ""
-                                        installedVersionText += " | "
+                                        installedVersionText += "\n\t| "
                                     end
+
                                     installedVersionText += "#{installed.version.colorize(:green)}"
+
+                                    installedVersionText += " { "
+
+                                    installed.options.each do |option|
+
+                                        if option.active
+                                            installedVersionText += "#{option.name.colorize(:red)}"
+                                        else
+                                            installedVersionText += "#{option.name.colorize(:blue)}"
+                                        end
+
+                                        installedVersionText += " "
+                                    end
+
+                                    installedVersionText += "}"
+
                                 end
 
                             end
