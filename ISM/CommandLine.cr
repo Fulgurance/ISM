@@ -813,6 +813,10 @@ module ISM
                 softwareText = "#{information.name.colorize(:green)}" + " /" + "#{information.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                 optionsText = "{ "
 
+                if information.options.empty?
+                    optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                end
+
                 information.options.each do |option|
                     if option.active
                         optionsText += "#{option.name.colorize(:red)}"
@@ -824,7 +828,13 @@ module ISM
 
                 optionsText += "}"
 
-                puts "\t" + softwareText + " " + optionsText + "\n"
+                additionalText = ""
+
+                additionalText += "("
+                additionalText += "#{softwareIsInstalled(software.information) ? "#{ISM::Default::CommandLine::RebuildText}".colorize(:yellow) : "#{ISM::Default::CommandLine::NewText}".colorize(:yellow)}"
+                additionalText += ")"
+
+                puts "\t" + softwareText + " " + optionsText + " " + additionalText + "\n"
             end
 
             puts "\n"
