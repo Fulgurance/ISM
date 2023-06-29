@@ -16,7 +16,7 @@ module ISM
                     showHelp
                 else
                     matchingSoftwaresArray = Array(ISM::AvailableSoftware).new
-    
+
                     Ism.softwares.each do |software|
                         if software.name.includes?(ARGV[2+Ism.debugLevel]) || software.name.downcase.includes?(ARGV[2+Ism.debugLevel])
                             matchingSoftwaresArray << software
@@ -29,13 +29,16 @@ module ISM
                     else
                         puts "\n"
 
-                        matchingSoftwaresArray.each do |software|
+                        matchingSoftwaresArray.each_with_index do |software, index|
+                            puts    ISM::Default::Option::SoftwareSearch::PortField +
+                                        "#{software.versions.last.port.colorize(:green)}"
+
                             puts    ISM::Default::Option::SoftwareSearch::NameField +
                                         "#{software.name.colorize(:green)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::DescriptionField +
                                         "#{software.versions.last.description.colorize(:green)}"
-                                
+
                             architecturesText = ""
                             software.versions.last.architectures.each_with_index do |architecture, index|
                                 architecturesText += "#{architecture.colorize(:green)}"
@@ -48,10 +51,10 @@ module ISM
                             end
                             puts    ISM::Default::Option::SoftwareSearch::AvailablesArchitecturesField +
                                         "#{architecturesText.colorize(:green)}"
-                                
+
                             puts    ISM::Default::Option::SoftwareSearch::WebsiteField +
                                         "#{software.versions.last.website.colorize(:green)}"
-                                
+
                             versionsText = ""
                             software.versions.each_with_index do |version, index|
                                 versionsText += "#{version.version.colorize(:green)}"
@@ -66,7 +69,7 @@ module ISM
                             Ism.installedSoftwares.each_with_index do |installed, index|
                                 if software.name == installed.name
                                     installedVersionText += "#{"\n\t| ".colorize(:green)}"
-                                    installedVersionText += "#{installed.version.colorize(:green)}"
+                                    installedVersionText += "#{installed.version.colorize(Colorize::ColorRGB.new(255,100,100))}"
 
                                     installedVersionText += " { "
 
@@ -100,16 +103,20 @@ module ISM
                                 puts "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
                             end
 
-                            puts "\n"
+                            if index < matchingSoftwaresArray.size-1
+                                puts "\n"
+                                puts "#{"____________".colorize(:green)}\n"
+                                puts "\n"
+                            end
                         end
 
                     end
-    
+
                 end
             end
 
         end
-        
+
     end
 
 end

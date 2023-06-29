@@ -1312,7 +1312,6 @@ module ISM
             @requestedSoftwares.each do |requestedSoftware|
                 requestedDependency = requestedSoftware.toSoftwareDependency
 
-
                 if !requiredDependencies.has_key?(requestedDependency.hiddenName)
                     uneededSoftwares[requestedDependency.hiddenName] = requestedDependency
 
