@@ -892,6 +892,12 @@ module ISM
             Dir.mkdir_p(path)
         end
 
+        def showSeparator
+            puts "\n"
+            puts "#{ISM::Default::CommandLine::Separator.colorize(:green)}\n"
+            puts "\n"
+        end
+
         def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
             puts
             puts    "#{name.colorize(:green)}" +
@@ -964,6 +970,10 @@ module ISM
                 runInstallationProcess(software)
 
                 showEndSoftwareInstallingMessage(index, limit, name, version)
+
+                if index < neededSoftwares.size-1
+                    showSeparator
+                end
             end
         end
 
@@ -982,6 +992,10 @@ module ISM
                 runUninstallationProcess(software)
 
                 showEndSoftwareUninstallingMessage(index, limit, name, version)
+
+                if index < unneededSoftwares.size-1
+                    showSeparator
+                end
             end
         end
 

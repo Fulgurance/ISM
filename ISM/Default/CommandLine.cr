@@ -90,6 +90,7 @@ module ISM
             CalculationTitle = "ISM start to calculate dependencies: "
             CalculationWaitingText = "Checking dependencies tree"
             CalculationDoneText = "Done !"
+            Separator = "____________"
             NoOptionText = "no option"
             RebuildText = "Rebuild"
             NewText = "New!"

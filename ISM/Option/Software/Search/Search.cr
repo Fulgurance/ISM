@@ -47,7 +47,7 @@ module ISM
                                 end
                             end
                             if architecturesText.empty?
-                                architecturesText = "None"
+                                architecturesText = ISM::Default::Option::SoftwareSearch::None
                             end
                             puts    ISM::Default::Option::SoftwareSearch::AvailablesArchitecturesField +
                                         "#{architecturesText.colorize(:green)}"
@@ -91,22 +91,20 @@ module ISM
                             end
 
                             if installedVersionText.empty?
-                                installedVersionText = "None"
+                                installedVersionText = ISM::Default::Option::SoftwareSearch::None
                             end
 
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
                                         "#{installedVersionText.colorize(:green)}"
 
-                            puts    "#{ISM::Default::Option::SoftwareSearch::OptionsField}#{software.versions.last.options.empty? ? "None".colorize(:green) : ""}"
+                            puts    "#{ISM::Default::Option::SoftwareSearch::OptionsField}#{software.versions.last.options.empty? ? ISM::Default::Option::SoftwareSearch::None.colorize(:green) : ""}"
 
                             software.versions.last.options.each do |option|
                                 puts "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
                             end
 
                             if index < matchingSoftwaresArray.size-1
-                                puts "\n"
-                                puts "#{"____________".colorize(:green)}\n"
-                                puts "\n"
+                                Ism.showSeparator
                             end
                         end
 
