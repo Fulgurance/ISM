@@ -1000,7 +1000,7 @@ module ISM
         end
 
         def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
-            puts    "#{"<<".colorize(:light_magenta)}" +
+            puts    "\n#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
                     "] #{ISM::Default::CommandLine::InstallingText} " +
@@ -1009,7 +1009,7 @@ module ISM
         end
 
         def showStartSoftwareUninstallingMessage(index : Int32, limit : Int32, name : String, version : String)
-            puts    "#{"<<".colorize(:light_magenta)}" +
+            puts    "\n#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
                     "] #{ISM::Default::CommandLine::UninstallingText} " +
