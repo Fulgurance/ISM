@@ -905,7 +905,7 @@ module ISM
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
                     "#{">>".colorize(:light_magenta)}" +
-                    "\n\n"
+                    "\n"
         end
 
         def showEndSoftwareUninstallingMessage(index : Int32, limit : Int32, name : String, version : String)
@@ -915,7 +915,7 @@ module ISM
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
                     "#{">>".colorize(:light_magenta)}" +
-                    "\n\n"
+                    "\n"
         end
 
         def getEnabledOptions(software : ISM::SoftwareDependency) : String
