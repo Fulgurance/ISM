@@ -1306,12 +1306,16 @@ module ISM
             uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
 
             @installedSoftwares.each do |software|
+                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                 softwareDependency = software.toSoftwareDependency
 
                 requiredDependencies[softwareDependency.hiddenName] = softwareDependency
             end
 
             @requestedSoftwares.each do |software|
+                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                 softwareDependency = software.toSoftwareDependency
 
                 requestedSoftwaresHash[softwareDependency.hiddenName] = softwareDependency
@@ -1322,11 +1326,18 @@ module ISM
             end
 
             requestedSoftwaresHash.keys.each do |key|
+                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                 requiredDependencies.delete(key)
             end
 
             requiredDependencies.values.each do |requiredSoftware|
+
+                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                 requiredSoftware.dependencies.each do |dependency|
+                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                     requiredDependencies[dependency.hiddenName] = dependency
                 end
             end
@@ -1334,19 +1345,39 @@ module ISM
             wrongArguments = Array(String).new
 
             @requestedSoftwares.each do |requestedSoftware|
+                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                 requestedDependency = requestedSoftware.toSoftwareDependency
 
                 if !requiredDependencies.has_key?(requestedDependency.hiddenName)
                     uneededSoftwares[requestedDependency.hiddenName] = requestedDependency
 
                     requestedSoftwaresHash.keys.each do |key|
+                        @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
                         if !requiredDependencies.has_key?(key)
                             uneededSoftwares[key] = requestedSoftwaresHash[key]
                         end
+
+                        requiredDependencies.keys.each do |requiredKey|
+                            @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
+                            requiredDependencies[requiredKey].dependencies.each do |dependency|
+                                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
+                                if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.name)
+                                    wrongArguments.push(requestedDependency.name)
+                                end
+                            end
+
+                        end
                     end
                 else
-                    wrongArguments.push(requestedDependency.name)
+                    if !wrongArguments.includes?(requestedDependency.name)
+                        wrongArguments.push(requestedDependency.name)
+                    end
                 end
+
             end
 
             if !wrongArguments.empty?
