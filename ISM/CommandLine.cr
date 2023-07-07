@@ -804,7 +804,7 @@ module ISM
             print "#{ISM::Default::CommandLine::CalculationTitle}"
         end
 
-        def showSoftwares(neededSoftwares : Array(ISM::SoftwareDependency))
+        def showSoftwares(neededSoftwares : Array(ISM::SoftwareDependency), mode = :installation)
             puts "\n"
 
             neededSoftwares.each do |software|
@@ -830,9 +830,11 @@ module ISM
 
                 additionalText = ""
 
-                additionalText += "("
-                additionalText += "#{softwareIsInstalled(software.information) ? "#{ISM::Default::CommandLine::RebuildText}".colorize(:yellow) : "#{ISM::Default::CommandLine::NewText}".colorize(:yellow)}"
-                additionalText += ")"
+                if mode == :installation
+                    additionalText += "("
+                    additionalText += "#{softwareIsInstalled(software.information) ? "#{ISM::Default::CommandLine::RebuildText}".colorize(:yellow) : "#{ISM::Default::CommandLine::NewText}".colorize(:yellow)}"
+                    additionalText += ")"
+                end
 
                 puts "\t" + softwareText + " " + optionsText + " " + additionalText + "\n"
             end

@@ -74,7 +74,7 @@ module ISM
                     unneededSoftwares = Ism.getUnneededSoftwares
 
                     Ism.showCalculationDoneMessage
-                    Ism.showSoftwares(unneededSoftwares)
+                    Ism.showSoftwares(unneededSoftwares, :uninstallation)
                     Ism.showUninstallationQuestion(unneededSoftwares.size)
 
                     userAgreement = Ism.getUserAgreement
