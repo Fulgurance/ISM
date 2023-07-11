@@ -862,6 +862,16 @@ module ISM
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
         end
 
+        def showUpdateQuestion(softwareNumber : Int32)
+            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UpdateSummaryText + "\n"
+
+            puts "#{summaryText.colorize(:green)}"
+
+            print   "#{ISM::Default::CommandLine::UpdateQuestion.colorize.mode(:underline)}" +
+                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
+                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
+        end
+
         def getUserAgreement : Bool
             userInput = ""
             userAgreement = false
@@ -996,6 +1006,28 @@ module ISM
                 showEndSoftwareUninstallingMessage(index, limit, name, version)
 
                 if index < unneededSoftwares.size-1
+                    showSeparator
+                end
+            end
+        end
+
+        def startUpdateProcess(neededSoftwares : Array(ISM::SoftwareDependency))
+            puts "\n"
+
+            neededSoftwares.each_with_index do |software, index|
+                limit = neededSoftwares.size
+                name = software.name
+                version = software.version
+
+                updateInstallationTerminalTitle(index, limit, name, version)
+
+                showStartSoftwareInstallingMessage(index, limit, name, version)
+
+                runInstallationProcess(software)
+
+                showEndSoftwareInstallingMessage(index, limit, name, version)
+
+                if index < neededSoftwares.size-1
                     showSeparator
                 end
             end
@@ -1389,6 +1421,10 @@ module ISM
             end
 
             return uneededSoftwares.values
+        end
+
+        def getSoftwaresToUpdate : Array(ISM::SoftwareDependency)
+
         end
 
     end

@@ -98,6 +98,8 @@ module ISM
             InstallQuestion = "Would you like to install these softwares ?"
             UninstallSummaryText = " softwares will be uninstall included unneeded dependencies"
             UninstallQuestion = "Would you like to uninstall these softwares ?"
+            UpdateSummaryText = " software updates are available"
+            UpdateQuestion = "Would you like to update these softwares ?"
             YesReplyOption = "y"
             NoReplyOption = "n"
             InstallingText = "Installing"

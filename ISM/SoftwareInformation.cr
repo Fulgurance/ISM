@@ -28,6 +28,7 @@ module ISM
         website : String,
         installedFiles : Array(String),
         dependencies : Array(Dependency),
+        kernelDependencies : Array(String),
         options : Array(Option) do
         include JSON::Serializable
     end
@@ -41,6 +42,7 @@ module ISM
     setter options : Array(ISM::SoftwareOption)
     property installedFiles : Array(String)
     setter dependencies : Array(ISM::SoftwareDependency)
+    property kernelDependencies : Array(String)
     property options : Array(ISM::SoftwareOption)
 
     def initialize
@@ -52,6 +54,7 @@ module ISM
         @website = String.new
         @installedFiles = Array(String).new
         @dependencies = Array(ISM::SoftwareDependency).new
+        @kernelDependencies = Array(String).new
         @options = Array(ISM::SoftwareOption).new
     end
 
@@ -88,6 +91,7 @@ module ISM
         @description = information.description
         @website = information.website
         @installedFiles = information.installedFiles
+        @kernelDependencies = information.kernelDependencies
 
         information.dependencies.each do |data|
             dependency = ISM::SoftwareDependency.new
@@ -149,6 +153,7 @@ module ISM
                                         @website,
                                         @installedFiles,
                                         dependenciesArray,
+                                        @kernelDependencies,
                                         optionsArray)
 
         file = File.open(writeInformationFilePath,"w")

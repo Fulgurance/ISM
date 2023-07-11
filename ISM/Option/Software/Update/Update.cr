@@ -12,10 +12,18 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel
-                    showHelp
-                else
+                Ism.showCalculationTitleMessage
 
+                softwaresToUpdate = Ism.getSoftwaresToUpdate
+
+                Ism.showCalculationDoneMessage
+                Ism.showSoftwares(softwaresToUpdate)
+                Ism.showUpdateQuestion(softwaresToUpdate.size)
+
+                userAgreement = Ism.getUserAgreement
+
+                if userAgreement
+                    Ism.startUpdateProcess(softwaresToUpdate)
                 end
             end
 

@@ -77,5 +77,6 @@ ISM is made to use all of the settings, for the compilation as well and pass all
 like GCC flags, number of parallels jobs, custom machine targets.
 
 ## About
-It's actually highly experimental. Now with the guide, it's actually possible to build the Cross-Toolchain and all of the Temporary Tools of the LFS book.
+It's actually highly experimental. Now with the guide, it's actually possible to build all of the Cross-Toolchain and install a full desktop environment.
+
 Don't use that in a production environment, only in a virtual machine, except if you assume you are totally crazy (this is possible).
