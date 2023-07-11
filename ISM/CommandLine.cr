@@ -3,6 +3,9 @@ module ISM
     class CommandLine
 
         property requestedSoftwares : Array(ISM::SoftwareInformation)
+        property softwaresNeedRebuild : Array(ISM::SoftwareInformation)
+        property neededKernelFeatures : Array(String)
+        property unneededKernelFeatures : Array(String)
         property debugLevel : Int32
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
@@ -16,6 +19,9 @@ module ISM
 
         def initialize
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
+            @softwaresNeedRebuild = Array(ISM::SoftwareInformation).new
+            @neededKernelFeatures = Array(String).new
+            @unneededKernelFeatures = Array(String).new
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0
             @reverseAnimation = false
@@ -74,7 +80,7 @@ module ISM
                                                                     softwareDirectory + "/" +
                                                                     versionDirectory + "/" +
                                                                     ISM::Default::Filename::SoftwareSettings)
-                            
+
                         else
                             softwareInformation.loadInformationFile(Ism.settings.rootPath +
                                                                     ISM::Default::Path::SoftwaresDirectory +
@@ -85,7 +91,7 @@ module ISM
                         end
 
                         softwaresInformations << softwareInformation
-        
+
                     end
 
                     @softwares << ISM::AvailableSoftware.new(softwareDirectory,softwaresInformations)
@@ -164,7 +170,7 @@ module ISM
                                                                 ISM::Default::Filename::Information)
 
                         @installedSoftwares << softwareInformation
-        
+
                     end
 
                 end
@@ -369,15 +375,15 @@ module ISM
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+softwareInformation.name)
         end
-        
+
         def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::CheckText+softwareInformation.name)
         end
-        
+
         def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::ExtractText+softwareInformation.name)
         end
-        
+
         def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::PatchText+softwareInformation.name)
         end
@@ -389,11 +395,11 @@ module ISM
         def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::ConfigureText+softwareInformation.name)
         end
-        
+
         def notifyOfBuild(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::BuildText+softwareInformation.name)
         end
-        
+
         def notifyOfPrepareInstallation(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+softwareInformation.name)
         end
@@ -413,7 +419,7 @@ module ISM
         def notifyOfRecordUnneededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+softwareInformation.name)
         end
-        
+
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::UninstallText+softwareInformation.name)
         end
@@ -622,7 +628,7 @@ module ISM
         def notifyOfGetFileContentError(filePath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
         end
-        
+
         def notifyOfFileWriteDataError(filePath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorFileWriteDataText+filePath, error)
         end
@@ -1436,6 +1442,35 @@ module ISM
         def getSoftwaresToUpdate : Array(ISM::SoftwareDependency)
 
             return Array(ISM::SoftwareDependency).new
+        end
+
+        #############################################
+        #GERER LE CAS OU LE NOYAU N'EST PAS INSTALLE#
+        #############################################
+        #COMMENT GERER SI UNE FEATURE AVAIT DES DEPENDANCES LORS DE LA DESINSTALLATION ?
+
+        def getKernelFeatureDependencies(feature : String) : Array(String)
+
+        end
+
+        def enableKernelFeature(feature : String)
+
+        end
+
+        def disableKernelFeature(feature : String)
+
+        end
+
+        def enableKernelFeatures(features : Array(String))
+            features.each do |feature|
+                enableKernelFeature(feature)
+            end
+        end
+
+        def disableKernelFeatures(features : Array(String))
+            features.each do |feature|
+                disableKernelFeature(feature)
+            end
         end
 
     end

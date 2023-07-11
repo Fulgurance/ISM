@@ -40,10 +40,9 @@ module ISM
     property architectures : Array(String)
     property description : String
     property website : String
-    setter options : Array(ISM::SoftwareOption)
     property installedFiles : Array(String)
     setter dependencies : Array(ISM::SoftwareDependency)
-    property kernelDependencies : Array(String)
+    setter kernelDependencies : Array(String)
     property options : Array(ISM::SoftwareOption)
 
     def initialize
@@ -287,6 +286,20 @@ module ISM
         end
 
         return @dependencies+dependenciesArray
+    end
+
+    def kernelDependencies : Array(String)
+        dependenciesArray = Array(ISM::SoftwareDependency).new
+
+        @options.each do |option|
+
+            if option.active
+                dependenciesArray += option.kernelDependencies
+            end
+
+        end
+
+        return @kernelDependencies+dependenciesArray
     end
 
     def archiveName : String

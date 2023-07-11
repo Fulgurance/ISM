@@ -1060,8 +1060,7 @@ module ISM
 
         def recordNeededKernelFeatures
             Ism.notifyOfRecordNeededKernelFeatures(@information)
-
-            #Kernel ou pas, créer un fichier qui stock la totalité des features necessaires
+            Ism.neededKernelFeatures += @information.kernelDependencies
         end
         
         def clean
@@ -1081,8 +1080,7 @@ module ISM
 
         def recordUnneededKernelFeatures
             Ism.notifyOfRecordUnneededKernelFeatures(@information)
-
-            #Kernel ou pas, créer un fichier qui stock la totalité des features inutiles
+            Ism.unneededKernelFeatures += @information.kernelDependencies
         end
 
         def uninstall
