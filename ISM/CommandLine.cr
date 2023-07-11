@@ -1425,6 +1425,7 @@ module ISM
 
         def getSoftwaresToUpdate : Array(ISM::SoftwareDependency)
 
+            return Array(ISM::SoftwareDependency).new
         end
 
     end

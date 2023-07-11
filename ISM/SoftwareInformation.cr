@@ -8,7 +8,8 @@ module ISM
         name : String,
         description : String,
         active : Bool,
-        dependencies : Array(Dependency) do
+        dependencies : Array(Dependency) ,
+        kernelDependencies : Array(String) do
         include JSON::Serializable
     end
     
@@ -116,6 +117,7 @@ module ISM
             option.description = data.description
             option.active = data.active
             option.dependencies = dependenciesArray
+            option.kernelDependencies = data.kernelDependencies
             @options << option
         end
 
@@ -142,7 +144,7 @@ module ISM
                 optionsDependenciesArray << dependency
             end
 
-            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray)
+            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray,data.kernelDependencies)
         end
 
         information = Information.new(  @port,
