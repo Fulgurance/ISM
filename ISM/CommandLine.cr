@@ -409,6 +409,10 @@ module ISM
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::CleanText+softwareInformation.name)
         end
+
+        def notifyOfRecordUnneededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
+            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+softwareInformation.name)
+        end
         
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::UninstallText+softwareInformation.name)
@@ -1297,6 +1301,7 @@ module ISM
                         target.build
                         target.prepareInstallation
                         target.install
+                        target.recordNeededKernelFeatures
                         target.clean
                         target.showInformations
                     rescue
@@ -1319,6 +1324,7 @@ module ISM
                     target = Target.new("#{software.filePath}")
                     #{getEnabledOptions(software)}
                     begin
+                        target.recordUnneededKernelFeatures
                         target.uninstall
                     rescue
                         Ism.exitProgram

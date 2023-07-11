@@ -1079,6 +1079,12 @@ module ISM
         def showInformations
         end
 
+        def recordUnneededKernelFeatures
+            Ism.notifyOfRecordUnneededKernelFeatures(@information)
+
+            #Kernel ou pas, créer un fichier qui stock la totalité des features inutiles
+        end
+
         def uninstall
             Ism.notifyOfUninstall(@information)
             Ism.removeInstalledSoftware(@information)

@@ -23,6 +23,7 @@ module ISM
             InstallText = "Installing "
             RecordNeededKernelFeaturesText = "Recording needed kernel features for "
             CleanText = "Cleaning "
+            RecordUnneededKernelFeaturesText = "Recording unneeded kernel features for "
             UninstallText = "Uninstalling "
             ErrorDownloadText = "Failed to download from "
             ErrorCheckText1 = "Failed check because the md5sum digest of "
