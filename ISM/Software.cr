@@ -1057,6 +1057,12 @@ module ISM
 
             Ism.addInstalledSoftware(@information, installedFiles)
         end
+
+        def enableNeededKernelFeatures
+            Ism.notifyOfEnableNeededKernelFeatures(@information)
+
+            #Kernel ou pas, créer un fichier qui stock la totalité des features necessaires
+        end
         
         def clean
             Ism.notifyOfClean(@information)

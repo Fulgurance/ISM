@@ -21,6 +21,7 @@ module ISM
             BuildText = "Building "
             PrepareInstallationText = "Preparing installation for "
             InstallText = "Installing "
+            EnableNeededKernelFeaturesText = "Enabling needed kernel features for "
             CleanText = "Cleaning "
             UninstallText = "Uninstalling "
             ErrorDownloadText = "Failed to download from "

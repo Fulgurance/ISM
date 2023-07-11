@@ -402,6 +402,10 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::InstallText+softwareInformation.name)
         end
 
+        def notifyOfEnableNeededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
+            printProcessNotification(ISM::Default::CommandLine::EnableNeededKernelFeaturesText+softwareInformation.name)
+        end
+
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::CleanText+softwareInformation.name)
         end
