@@ -23,6 +23,7 @@ module ISM
             InstallText = "Installing "
             RecordNeededKernelFeaturesText = "Recording needed kernel features for "
             CleanText = "Cleaning "
+            UpdateKernelOptionsDatabaseText = "Updating kernel options database for "
             RecordUnneededKernelFeaturesText = "Recording unneeded kernel features for "
             UninstallText = "Uninstalling "
             ErrorDownloadText = "Failed to download from "

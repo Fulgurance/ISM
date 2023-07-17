@@ -1058,6 +1058,30 @@ module ISM
             Ism.addInstalledSoftware(@information, installedFiles)
         end
 
+        def runningKernelName : String
+            return "linux-#{`uname -r`}"
+        end
+
+        def runningKernelSourcesPath : String
+            return "#{Ism.settings.rootPath}usr/src/#{runningKernelName}/"
+        end
+
+        def runningKernelConfigFilePath : String
+            return "#{Ism.settings.rootPath}usr/src/#{runningKernelName}/.config"
+        end
+
+        def getKconfigFilePaths : Array(String)
+            Dir.glob("#{runningKernelSourcesPath}**/Kconfig")
+        end
+
+        def updateKernelOptionsDatabase
+            Ism.notifyOfUpdateKernelOptionsDatabase(@information)
+
+            getKconfigFilePaths.each do |kconfigFile|
+                #generateFile(path)
+            end
+        end
+
         def recordNeededKernelFeatures
             Ism.notifyOfRecordNeededKernelFeatures(@information)
             Ism.neededKernelFeatures += @information.kernelDependencies

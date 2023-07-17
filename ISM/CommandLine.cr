@@ -408,6 +408,10 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::InstallText+softwareInformation.name)
         end
 
+        def notifyOfUpdateKernelOptionsDatabase(softwareInformation : ISM::SoftwareInformation)
+            printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+softwareInformation.name)
+        end
+
         def notifyOfRecordNeededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+softwareInformation.name)
         end
