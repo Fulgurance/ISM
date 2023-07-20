@@ -16,6 +16,7 @@ module ISM
             PortsDirectory = "#{RuntimeDataDirectory}ports/"
             SoftwaresDirectory = "#{RuntimeDataDirectory}softwares/"
             InstalledSoftwaresDirectory = "#{RuntimeDataDirectory}installedsoftwares/"
+            KernelOptionsDirectory = "#{RuntimeDataDirectory}kerneloptions/"
             SettingsSoftwaresDirectory = "#{SettingsDirectory}softwares/"
             BuiltSoftwaresDirectory = "#{TemporaryDirectory}builtsoftwares/"
             MirrorsDirectory = "#{RuntimeDataDirectory}mirrors/"

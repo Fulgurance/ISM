@@ -1058,27 +1058,113 @@ module ISM
             Ism.addInstalledSoftware(@information, installedFiles)
         end
 
-        def runningKernelName : String
-            return "linux-#{`uname -r`}"
+        def kernelName : String
+            return "#{@information.versionName.downcase}"
         end
 
-        def runningKernelSourcesPath : String
-            return "#{Ism.settings.rootPath}usr/src/#{runningKernelName}/"
+        def kernelSourcesPath : String
+            return "#{Ism.settings.rootPath}usr/src/#{kernelName}/"
         end
 
-        def runningKernelConfigFilePath : String
-            return "#{Ism.settings.rootPath}usr/src/#{runningKernelName}/.config"
+        def kernelKconfigFilePath : String
+            return "#{kernelSourcesPath}Kconfig"
         end
 
-        def getKconfigFilePaths : Array(String)
-            Dir.glob("#{runningKernelSourcesPath}**/Kconfig")
+        def kernelConfigFilePath : String
+            return "#{kernelSourcesPath}.config"
+        end
+
+        #Probably need an adjustement when switching between chroot and normal context use
+        def kernelOptionsDatabasePath : String
+            return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+kernelName
+        end
+
+        def getFullKernelKconfigFile : Array(String)
+            content = File.read_lines(kernelKconfigFilePath)
+            result = content
+            nextResult = result
+
+            loop do
+
+                if !result.map {|line| line.start_with?("source")}
+                    break
+                end
+
+                nextResult.clear
+
+                result.each do |line|
+                    if line.start_with?("source")
+                        path = kernelSourcesPath+line.gsub("source ","")
+
+                        temp = File.read_lines(path)
+                        nextResult += temp
+                    else
+                        nextResult.push(line)
+                    end
+                end
+
+                result = nextResult.dup
+
+            end
+
+            return result
+        end
+
+        def generateKernelOptionsFiles(kconfigContent : Array(String))
+            currentMenuConfigSection = String.new
+            currentConfigSection = String.new
+            currentConfigType = 0 #0: bool(y/n), 1: tristate(y/n/module)
+            ifSections = Array(String).new
+
+            optionsHash = Hash(String, Array(Array(String))).new
+
+            kconfigContent.each_with_index do |line, index|
+
+                if line.start_with?("menuconfig")
+                    currentMenuConfigSection = line.gsub("menuconfig ","")
+
+                end
+
+                if line.start_with?("config")
+                    currentMenuConfigSection = line.gsub("config ","")
+
+                end
+
+                if line.start_with?("if")
+                    ifSections.push(line.gsub("if ","").split(" "))
+
+                end
+
+                if line.start_with?("endif")
+                    ifSections.pop
+
+                end
+
+                if line.start_with?("bool")
+                    currentConfigType = 0
+
+                end
+
+                if line.start_with?("tristate")
+                    currentConfigType = 1
+
+                end
+
+                if line.start_with?("depends on")
+                    parsedLine = (line.gsub("depends on","").split(" "))
+
+                end
+
+            end
         end
 
         def updateKernelOptionsDatabase
             Ism.notifyOfUpdateKernelOptionsDatabase(@information)
 
-            getKconfigFilePaths.each do |kconfigFile|
-                #generateFile(path)
+            if !Dir.exists?(kernelOptionsDatabasePath)
+                makeDirectory(kernelOptionsDatabasePath)
+
+                generateKernelOptionsFiles(getFullKernelKconfigFile)
             end
         end
 
