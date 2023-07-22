@@ -10,6 +10,7 @@ module ISM
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
         property systemSettings : ISM::CommandLineSystemSettings
+        property kernelOptions : Array(ISM::KernelOption)
         property softwares : Array(ISM::AvailableSoftware)
         property installedSoftwares : Array(ISM::SoftwareInformation)
         property ports : Array(ISM::Port)
@@ -30,6 +31,7 @@ module ISM
             @options = ISM::Default::CommandLine::Options
             @settings = ISM::CommandLineSettings.new
             @systemSettings = ISM::CommandLineSystemSettings.new
+            @kernelOptions = Array(ISM::KernelOption).new
             @softwares = Array(ISM::AvailableSoftware).new
             @installedSoftwares = Array(ISM::SoftwareInformation).new
             @ports = Array(ISM::Port).new
@@ -41,11 +43,26 @@ module ISM
 
         def start
             loadSettingsFiles
+            loadKernelOptionDatabase
             loadSoftwareDatabase
             loadInstalledSoftwareDatabase
             loadPortsDatabase
             loadMirrorsDatabase
             checkEnteredArguments
+        end
+
+        def loadKernelOptionDatabase
+            if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+                Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+            end
+
+            kernelOptionFiles = Dir.children(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+
+            kernelOptionFiles.each do |kernelOptionFile|
+                kernelOption = ISM::KernelOption.new
+                kernelOption.loadInformationFile(kernelOptionFile)
+                @kernelOptions << kernelOption
+            end
         end
 
         def loadSoftwareDatabase

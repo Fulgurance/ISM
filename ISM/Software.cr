@@ -1086,7 +1086,7 @@ module ISM
 
             loop do
 
-                if !result.map {|line| line.start_with?("source")}
+                if !result.any? {|line| line.start_with?("source")}
                     break
                 end
 
@@ -1111,50 +1111,63 @@ module ISM
         end
 
         def generateKernelOptionsFiles(kconfigContent : Array(String))
-            currentMenuConfigSection = String.new
-            currentConfigSection = String.new
-            currentConfigType = 0 #0: bool(y/n), 1: tristate(y/n/module)
-            ifSections = Array(String).new
+            #parsedLine = (line.gsub("depends on ","").split(" "))
 
-            optionsHash = Hash(String, Array(Array(String))).new
+            #Pas besoin de stocker les sections, elles sont dans le kconfigContent
+            kernelOption = ISM::KernelOption.new
+            kernelOptions = Array(ISM::KernelOption).new
 
             kconfigContent.each_with_index do |line, index|
+                openedIfSections = Array(String).new
 
                 if line.start_with?("menuconfig")
-                    currentMenuConfigSection = line.gsub("menuconfig ","")
+                    #Checker les dépendances additionnelles liées aux IF
+                    kernelOptions.push(kernelOption.dup)
+                    kernelOption = ISM::KernelOption.new
 
+                    kernelOption.name = line.gsub("menuconfig ","")
                 end
 
                 if line.start_with?("config")
-                    currentMenuConfigSection = line.gsub("config ","")
+                    #Checker les dépendances additionnelles liées aux IF
+                    kernelOptions.push(kernelOption.dup)
+                    kernelOption = ISM::KernelOption.new
 
+                    kernelOption.name = line.gsub("config ","")
                 end
 
                 if line.start_with?("if")
-                    ifSections.push(line.gsub("if ","").split(" "))
+                    #Checker les dépendances additionnelles liées aux IF
+                    kernelOptions.push(kernelOption.dup)
+                    kernelOption = ISM::KernelOption.new
 
+                    openedIfSections.push(line.gsub("if ",""))
                 end
 
                 if line.start_with?("endif")
-                    ifSections.pop
+                    #Checker les dépendances additionnelles liées aux IF
+                    kernelOptions.push(kernelOption.dup)
+                    kernelOption = ISM::KernelOption.new
 
+                    openedIfSections.pop
                 end
 
                 if line.start_with?("bool")
-                    currentConfigType = 0
-
+                    kernelOption.tristate = false
                 end
 
                 if line.start_with?("tristate")
-                    currentConfigType = 1
-
+                    kernelOption.tristate = true
                 end
 
                 if line.start_with?("depends on")
-                    parsedLine = (line.gsub("depends on","").split(" "))
 
                 end
 
+            end
+
+            kernelOptions.each do |option|
+                option.writeInformationFile(ISM::Default::Path::KernelOptionsDirectory+option.name+".json")
             end
         end
 
