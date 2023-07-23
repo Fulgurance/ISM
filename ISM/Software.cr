@@ -1111,45 +1111,29 @@ module ISM
         end
 
         def generateKernelOptionsFiles(kconfigContent : Array(String))
-            #parsedLine = (line.gsub("depends on ","").split(" "))
-
-            #Pas besoin de stocker les sections, elles sont dans le kconfigContent
             kernelOption = ISM::KernelOption.new
             kernelOptions = Array(ISM::KernelOption).new
 
             kconfigContent.each_with_index do |line, index|
-                openedIfSections = Array(String).new
 
-                if line.start_with?("menuconfig")
+                #Save current item and reset it
+                if line.start_with?("menuconfig") || line.start_with?("config") || line.start_with?("if") || line.start_with?("endif")
                     #Checker les dépendances additionnelles liées aux IF
+                    #Récupérer le last IF et le last MENUCONFIG
+                    lastIfIndex =
+                    lastEndIfIndex =
+                    lastMenuconfigIndex =
+
                     kernelOptions.push(kernelOption.dup)
                     kernelOption = ISM::KernelOption.new
+                end
 
+                if line.start_with?("menuconfig")
                     kernelOption.name = line.gsub("menuconfig ","")
                 end
 
                 if line.start_with?("config")
-                    #Checker les dépendances additionnelles liées aux IF
-                    kernelOptions.push(kernelOption.dup)
-                    kernelOption = ISM::KernelOption.new
-
                     kernelOption.name = line.gsub("config ","")
-                end
-
-                if line.start_with?("if")
-                    #Checker les dépendances additionnelles liées aux IF
-                    kernelOptions.push(kernelOption.dup)
-                    kernelOption = ISM::KernelOption.new
-
-                    openedIfSections.push(line.gsub("if ",""))
-                end
-
-                if line.start_with?("endif")
-                    #Checker les dépendances additionnelles liées aux IF
-                    kernelOptions.push(kernelOption.dup)
-                    kernelOption = ISM::KernelOption.new
-
-                    openedIfSections.pop
                 end
 
                 if line.start_with?("bool")
@@ -1162,6 +1146,10 @@ module ISM
 
                 if line.start_with?("depends on")
 
+                end
+
+                if line.start_with?("select")
+                    kernelOption.dependencies = kernelOption.dependencies+line.gsub("select ","")
                 end
 
             end
