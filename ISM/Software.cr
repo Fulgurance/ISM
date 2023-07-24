@@ -1114,22 +1114,46 @@ module ISM
             kernelOption = ISM::KernelOption.new
             kernelOptions = Array(ISM::KernelOption).new
 
+            lastIfIndex = 0
+            lastEndIfIndex = 0
+            lastMenuConfigIndex =  0
+            lastIfContent = String.new
+            lastMenuConfigContent = String.new
+
             kconfigContent.each_with_index do |line, index|
 
                 #Save current item and reset it
                 if line.start_with?("menuconfig") || line.start_with?("config") || line.start_with?("if") || line.start_with?("endif")
-                    #Checker les dépendances additionnelles liées aux IF
-                    #Récupérer le last IF et le last MENUCONFIG
-                    lastIfIndex =
-                    lastEndIfIndex =
-                    lastMenuconfigIndex =
 
-                    kernelOptions.push(kernelOption.dup)
+                    if index > 0
+
+                        #IF LAST DEPENDENCY IS A MENUCONFIG
+                        if lastIfIndex < lastEndIfIndex || lastIfIndex > lastEndIfIndex && lastMenuConfigIndex > lastIfIndex
+                            kernelOption.dependencies = kernelOption.dependencies+[lastMenuConfigContent]
+                        end
+
+                        #IF LAST DEPENDENCY IS A IF
+                        if lastIfIndex > lastEndIfIndex && lastIfIndex > lastMenuConfigIndex
+                            #TO DO
+                            #Parse IF conditions
+                            #Cases:
+                            #if  DMA_CMA
+                            #if (ARCH_MXC && ARM64) || COMPILE_TEST
+                            #if (SND_SOC_SOF_COMETLAKE && SND_SOC_SOF_HDA_LINK)
+                            #if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE && !TRUSTED_KEYS_CAAM
+                            kernelOption.dependencies = kernelOption.dependencies+[lastIfContent]
+                        end
+
+                        kernelOptions.push(kernelOption.dup)
+
+                    end
+
                     kernelOption = ISM::KernelOption.new
                 end
 
                 if line.start_with?("menuconfig")
-                    kernelOption.name = line.gsub("menuconfig ","")
+                    lastMenuConfigIndex = index
+                    lastMenuConfigContent,kernelOption.name = line.gsub("menuconfig ","")
                 end
 
                 if line.start_with?("config")
@@ -1149,7 +1173,12 @@ module ISM
                 end
 
                 if line.start_with?("select")
-                    kernelOption.dependencies = kernelOption.dependencies+line.gsub("select ","")
+                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub("select ","")]
+                end
+
+                if line.start_with?("if")
+                    lastIfIndex = index
+                    lastIfContent = line.gsub("if ","")
                 end
 
             end
