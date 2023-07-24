@@ -289,7 +289,7 @@ module ISM
     end
 
     def kernelDependencies : Array(String)
-        dependenciesArray = Array(ISM::SoftwareDependency).new
+        dependenciesArray = Array(String).new
 
         @options.each do |option|
 
