@@ -1086,14 +1086,14 @@ module ISM
 
             loop do
 
-                if !result.any? {|line| line.start_with?("source")}
+                if !result.any? {|line| line.starts_with?("source")}
                     break
                 end
 
                 nextResult.clear
 
                 result.each do |line|
-                    if line.start_with?("source")
+                    if line.starts_with?("source")
                         path = kernelSourcesPath+line.gsub("source ","")
 
                         temp = File.read_lines(path)
@@ -1123,7 +1123,7 @@ module ISM
             kconfigContent.each_with_index do |line, index|
 
                 #Save current item and reset it
-                if line.start_with?("menuconfig") || line.start_with?("config") || line.start_with?("if") || line.start_with?("endif")
+                if line.starts_with?("menuconfig") || line.starts_with?("config") || line.starts_with?("if") || line.starts_with?("endif")
 
                     if index > 0
 
@@ -1151,32 +1151,32 @@ module ISM
                     kernelOption = ISM::KernelOption.new
                 end
 
-                if line.start_with?("menuconfig")
+                if line.starts_with?("menuconfig")
                     lastMenuConfigIndex = index
                     lastMenuConfigContent,kernelOption.name = line.gsub("menuconfig ","")
                 end
 
-                if line.start_with?("config")
+                if line.starts_with?("config")
                     kernelOption.name = line.gsub("config ","")
                 end
 
-                if line.start_with?("bool")
+                if line.starts_with?("bool")
                     kernelOption.tristate = false
                 end
 
-                if line.start_with?("tristate")
+                if line.starts_with?("tristate")
                     kernelOption.tristate = true
                 end
 
-                if line.start_with?("depends on")
+                if line.starts_with?("depends on")
 
                 end
 
-                if line.start_with?("select")
+                if line.starts_with?("select")
                     kernelOption.dependencies = kernelOption.dependencies+[line.gsub("select ","")]
                 end
 
-                if line.start_with?("if")
+                if line.starts_with?("if")
                     lastIfIndex = index
                     lastIfContent = line.gsub("if ","")
                 end
