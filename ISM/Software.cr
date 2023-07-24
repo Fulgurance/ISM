@@ -1153,7 +1153,8 @@ module ISM
 
                 if line.starts_with?("menuconfig")
                     lastMenuConfigIndex = index
-                    lastMenuConfigContent,kernelOption.name = line.gsub("menuconfig ","")
+                    lastMenuConfigContent = line.gsub("menuconfig ","")
+                    kernelOption.name = line.gsub("menuconfig ","")
                 end
 
                 if line.starts_with?("config")
