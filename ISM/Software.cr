@@ -1093,11 +1093,21 @@ module ISM
                 nextResult.clear
 
                 result.each do |line|
-                    if line.starts_with?("source") && !line.includes?("scripts/Kconfig.include")
-                        path = kernelSourcesPath+line.gsub("source ","")
+                    #TEMPORARY FIX: AVOID READING NOT UNDERSTANDABLE FILES
+                    if line.starts_with?("source") && !line.includes?("Kconfig.include")
+                        #Filter: remove " characters
+                        path = kernelSourcesPath+line.gsub("source ","").gsub("\"","")
 
-                        temp = File.read_lines(path)
-                        nextResult += temp
+                        #TEMPORARY FIX: IF FILE NOT LOADABLE, REMOVE THE LINE
+                        begin
+                            temp = File.read_lines(path)
+                            nextResult += temp
+                        rescue
+                            nextResult += Array(String).new
+                        end
+                    #TEMPORARY FIX: REMOVE LINE IF CONTAIN KCONFIG INCLUDE LINE
+                    elsif
+                        nextResult += Array(String).new
                     else
                         nextResult.push(line)
                     end
@@ -1178,7 +1188,7 @@ module ISM
             end
 
             kernelOptions.each do |option|
-                option.writeInformationFile(ISM::Default::Path::KernelOptionsDirectory+option.name+".json")
+                option.writeInformationFile(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelName+"/"+option.name+".json")
             end
         end
 
