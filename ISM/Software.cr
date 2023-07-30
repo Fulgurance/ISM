@@ -1093,7 +1093,7 @@ module ISM
                 nextResult.clear
 
                 result.each do |line|
-                    if line.starts_with?("source")
+                    if line.starts_with?("source") && !line.includes?("scripts/Kconfig.include")
                         path = kernelSourcesPath+line.gsub("source ","")
 
                         temp = File.read_lines(path)
@@ -1134,13 +1134,6 @@ module ISM
 
                         #IF LAST DEPENDENCY IS A IF
                         if lastIfIndex > lastEndIfIndex && lastIfIndex > lastMenuConfigIndex
-                            #TO DO
-                            #Parse IF conditions
-                            #Cases:
-                            #if  DMA_CMA
-                            #if (ARCH_MXC && ARM64) || COMPILE_TEST
-                            #if (SND_SOC_SOF_COMETLAKE && SND_SOC_SOF_HDA_LINK)
-                            #if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE && !TRUSTED_KEYS_CAAM
                             kernelOption.dependencies = kernelOption.dependencies+[lastIfContent]
                         end
 
@@ -1170,7 +1163,7 @@ module ISM
                 end
 
                 if line.starts_with?("depends on")
-
+                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub("depends on ","")]
                 end
 
                 if line.starts_with?("select")
