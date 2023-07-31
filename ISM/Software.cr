@@ -1066,8 +1066,16 @@ module ISM
             return "#{Ism.settings.rootPath}usr/src/#{kernelName}/"
         end
 
+        def kernelSourcesArchitecturePath : String
+            return "#{kernelSourcesPath}arch/"
+        end
+
         def kernelKconfigFilePath : String
             return "#{kernelSourcesPath}Kconfig"
+        end
+
+        def kernelArchitectureKconfigFilePath : String
+            return "#{kernelSourcesArchitecturePath}Kconfig"
         end
 
         def kernelConfigFilePath : String
@@ -1079,7 +1087,7 @@ module ISM
             return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+kernelName
         end
 
-        def getFullKernelKconfigFile : Array(String)
+        def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
             content = File.read_lines(kernelKconfigFilePath)
             result = content
             nextResult = result
@@ -1093,20 +1101,23 @@ module ISM
                 nextResult.clear
 
                 result.each do |line|
-                    #TEMPORARY FIX: AVOID READING NOT UNDERSTANDABLE FILES
-                    if line.starts_with?("source") && !line.includes?("Kconfig.include")
-                        #Filter: remove " characters
-                        path = kernelSourcesPath+line.gsub("source ","").gsub("\"","")
 
-                        #TEMPORARY FIX: IF FILE NOT LOADABLE, REMOVE THE LINE
+                    if line.starts_with?("source") && !line.includes?("Kconfig.include")
+
+                        path = kernelSourcesPath+line
+                        path = path.gsub("source ","")
+                        path = path.gsub("\"","")
+                        path = path.gsub("$(SRCARCH)","#{}")#Mettre l'architecture sans sub-arch
+                        path = path.gsub("$(HEADER_ARCH)","#{}")#Mettre l'architecture sans sub-arch
+
                         begin
                             temp = File.read_lines(path)
                             nextResult += temp
                         rescue
                             nextResult += Array(String).new
                         end
-                    #TEMPORARY FIX: REMOVE LINE IF CONTAIN KCONFIG INCLUDE LINE
-                    elsif
+
+                    elsif line.starts_with?("source") && line.includes?("Kconfig.include")
                         nextResult += Array(String).new
                     else
                         nextResult.push(line)
@@ -1132,7 +1143,6 @@ module ISM
 
             kconfigContent.each_with_index do |line, index|
 
-                #Save current item and reset it
                 if line.starts_with?("menuconfig") || line.starts_with?("config") || line.starts_with?("if") || line.starts_with?("endif")
 
                     if index > 0
@@ -1198,7 +1208,8 @@ module ISM
             if !Dir.exists?(kernelOptionsDatabasePath)
                 makeDirectory(kernelOptionsDatabasePath)
 
-                generateKernelOptionsFiles(getFullKernelKconfigFile)
+                generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
+                generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
             end
         end
 
