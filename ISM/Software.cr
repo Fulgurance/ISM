@@ -1088,7 +1088,6 @@ module ISM
 
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
             content = File.read_lines(kernelKconfigFilePath)
-            content = content.map { |line| line.gsub(/(?!\s)\[a-z]+/, "").strip }
 
             result = content.dup
             nextResult = result.dup
@@ -1179,20 +1178,20 @@ module ISM
                     kernelOption.name = line.gsub("config ","")
                 end
 
-                if line.starts_with?("bool")
+                if line.starts_with?("\tbool")
                     kernelOption.tristate = false
                 end
 
-                if line.starts_with?("tristate")
+                if line.starts_with?("\ttristate")
                     kernelOption.tristate = true
                 end
 
-                if line.starts_with?("depends on")
-                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub("depends on ","")]
+                if line.starts_with?("\tdepends on")
+                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub("\tdepends on ","")]
                 end
 
-                if line.starts_with?("select")
-                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub("select ","")]
+                if line.starts_with?("\tselect")
+                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub("\tselect ","")]
                 end
 
                 if line.starts_with?("if")
