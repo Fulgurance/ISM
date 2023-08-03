@@ -1088,7 +1088,7 @@ module ISM
 
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
             content = File.read_lines(kernelKconfigFilePath)
-            content = content.map { |line| line.gsub(/(?!\s)\s+/, "") }
+            content = content.map { |line| line.gsub(/(?!\s)\[a-z]+/, "").strip }
 
             result = content.dup
             nextResult = result.dup
@@ -1115,7 +1115,7 @@ module ISM
 
                         begin
                             temp = File.read_lines(path)
-                            temp = temp.map { |line| line.gsub(/(?!\s)\s+/, "") }
+                            temp = temp.map { |line| line.gsub(/(?!\s)\[a-z]+/, "").strip }
 
                             nextResult += temp
                         rescue
