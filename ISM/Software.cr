@@ -1082,13 +1082,14 @@ module ISM
             return "#{kernelSourcesPath}.config"
         end
 
-        #Probably need an adjustement when switching between chroot and normal context use
         def kernelOptionsDatabasePath : String
             return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+kernelName
         end
 
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
             content = File.read_lines(kernelKconfigFilePath)
+            content.map { |line| line.gsub(/\s+/, "") }
+
             result = content
             nextResult = result
 
@@ -1104,14 +1105,18 @@ module ISM
 
                     if line.starts_with?("source") && !line.includes?("Kconfig.include")
 
+                        mainArchitecture = (Ism.settings.installByChroot ? Ism.settings.chrootArchitecture : Ism.settings.architecture).gsub(/_.*/,"")
+
                         path = kernelSourcesPath+line
                         path = path.gsub("source ","")
                         path = path.gsub("\"","")
-                        path = path.gsub("$(SRCARCH)","#{}")#Mettre l'architecture sans sub-arch
-                        path = path.gsub("$(HEADER_ARCH)","#{}")#Mettre l'architecture sans sub-arch
+                        path = path.gsub("$(SRCARCH)","#{mainArchitecture}")
+                        path = path.gsub("$(HEADER_ARCH)","#{mainArchitecture}")
 
                         begin
                             temp = File.read_lines(path)
+                            temp.map { |line| line.gsub(/\s+/, "") }
+
                             nextResult += temp
                         rescue
                             nextResult += Array(String).new
