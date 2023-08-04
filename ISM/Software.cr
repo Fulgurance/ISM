@@ -1114,8 +1114,6 @@ module ISM
 
                         begin
                             temp = File.read_lines(path)
-                            temp = temp.map { |line| line.gsub(/(?!\s)\[a-z]+/, "").strip }
-
                             nextResult += temp
                         rescue
                             nextResult += Array(String).new
