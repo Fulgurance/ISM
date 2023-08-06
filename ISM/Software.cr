@@ -1086,6 +1086,23 @@ module ISM
             return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+kernelName
         end
 
+        def setKernelOption(symbol : String, state : Symbol, value = String.new)
+            case state
+            when :enable
+                arguments = ["-e","#{symbol}"]
+            when :disable
+                arguments = ["-d","#{symbol}"]
+            when :module
+                arguments = ["-m","#{symbol}"]
+            when :string
+                arguments = ["--set-str","#{symbol}",value]
+            when :value
+                arguments = ["--set-val","#{symbol}",value]
+            end
+
+            runScript("#{kernelSourcesPath}config",arguments,"#{kernelSourcesPath}scripts")
+        end
+
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
             content = File.read_lines(kernelKconfigFilePath)
 
