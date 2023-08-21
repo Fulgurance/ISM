@@ -1103,6 +1103,32 @@ module ISM
             runScript("#{kernelSourcesPath}config",arguments,"#{kernelSourcesPath}scripts")
         end
 
+        def parseKconfigConditions(conditions : String)
+            dependencies = Array(String).new
+            singleChoiceDependencies = Array(Array(String)).new
+            specialDependencies = Array(String).new
+            blockers = Array(String).new
+
+            conditionsArray = conditions.split(" ")
+            #Créer un pré traitement qui remplace les parenthèses par les conditions
+
+            conditionsArray.each do |word|
+
+                if word == "&&"
+
+                elsif word == "||"
+
+                elsif word.starts_with?("!")
+
+                else
+
+                end
+
+            end
+
+            return dependencies,singleChoiceDependencies,specialDependencies,blockers
+        end
+
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
             content = File.read_lines(kernelKconfigFilePath)
 
@@ -1246,10 +1272,8 @@ module ISM
             if Dir.exists?(workDirectoryPath(false))
                 deleteDirectoryRecursively(workDirectoryPath(false))
             end
-            makeDirectory(workDirectoryPath(false))
-        end
 
-        def showInformations
+            makeDirectory(workDirectoryPath(false))
         end
 
         def recordUnneededKernelFeatures

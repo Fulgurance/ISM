@@ -3,36 +3,8 @@ module ISM
   class SoftwareInformation
 
     def_clone
-
-    record Option,
-        name : String,
-        description : String,
-        active : Bool,
-        dependencies : Array(Dependency) ,
-        kernelDependencies : Array(String) do
-        include JSON::Serializable
-    end
     
-    record Dependency,
-        name : String,
-        version : String,
-        options : Array(String) do
-        include JSON::Serializable
-    end
-    
-    record Information,
-        port : String,
-        name : String,
-        version : String,
-        architectures : Array(String),
-        description : String,
-        website : String,
-        installedFiles : Array(String),
-        dependencies : Array(Dependency),
-        kernelDependencies : Array(String),
-        options : Array(Option) do
-        include JSON::Serializable
-    end
+    include JSON::Serializable
 
     property port : String
     property name : String
@@ -45,17 +17,16 @@ module ISM
     setter kernelDependencies : Array(String)
     property options : Array(ISM::SoftwareOption)
 
-    def initialize
-        @port = String.new
-        @name = String.new
-        @version = String.new
-        @architectures = Array(String).new
-        @description = String.new
-        @website = String.new
-        @installedFiles = Array(String).new
-        @dependencies = Array(ISM::SoftwareDependency).new
-        @kernelDependencies = Array(String).new
-        @options = Array(ISM::SoftwareOption).new
+    def initialize( @port = String.new,
+                    @name = String.new,
+                    @version = String.new,
+                    @architectures = Array(String).new,
+                    @description = String.new,
+                    @website = String.new,
+                    @installedFiles = Array(String).new,
+                    @dependencies = Array(ISM::SoftwareDependency).new,
+                    @kernelDependencies = Array(String).new,
+                    @options = Array(ISM::SoftwareOption).new)
     end
 
     def getEnabledPass : String
@@ -75,7 +46,7 @@ module ISM
 
     def loadInformationFile(loadInformationFilePath : String)
         begin
-            information = Information.from_json(File.read(loadInformationFilePath))
+            information = SoftwareInformation.from_json(File.read(loadInformationFilePath))
         rescue error : JSON::ParseException
             puts    "#{ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
                     loadInformationFilePath +
@@ -91,35 +62,9 @@ module ISM
         @description = information.description
         @website = information.website
         @installedFiles = information.installedFiles
+        @dependencies = information.dependencies
         @kernelDependencies = information.kernelDependencies
-
-        information.dependencies.each do |data|
-            dependency = ISM::SoftwareDependency.new
-            dependency.name = data.name
-            dependency.version = data.version
-            dependency.options = data.options
-            @dependencies << dependency
-        end
-
-        information.options.each do |data|
-            dependenciesArray = Array(ISM::SoftwareDependency).new
-            data.dependencies.each do |dependency|
-                temporary = ISM::SoftwareDependency.new
-                temporary.name = dependency.name
-                temporary.version = dependency.version
-                temporary.options = dependency.options
-                dependenciesArray << temporary
-            end
-
-            option = ISM::SoftwareOption.new
-            option.name = data.name
-            option.description = data.description
-            option.active = data.active
-            option.dependencies = dependenciesArray
-            option.kernelDependencies = data.kernelDependencies
-            @options << option
-        end
-
+        @options = information.options
     end
 
     def writeInformationFile(writeInformationFilePath : String)
@@ -129,33 +74,16 @@ module ISM
             Dir.mkdir_p(path)
         end
 
-
-        dependenciesArray = Array(Dependency).new
-        @dependencies.each do |data|
-            dependenciesArray << Dependency.new(data.name,data.version,data.options)
-        end
-
-        optionsArray = Array(Option).new
-        @options.each do |data|
-            optionsDependenciesArray = Array(Dependency).new
-            data.dependencies.each do |dependencyData|
-                dependency = Dependency.new(dependencyData.name,dependencyData.version,dependencyData.options)
-                optionsDependenciesArray << dependency
-            end
-
-            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray,data.kernelDependencies)
-        end
-
-        information = Information.new(  @port,
-                                        @name,
-                                        @version,
-                                        @architectures,
-                                        @description,
-                                        @website,
-                                        @installedFiles,
-                                        dependenciesArray,
-                                        @kernelDependencies,
-                                        optionsArray)
+        information = SoftwareInformation.new(  @port,
+                                                @name,
+                                                @version,
+                                                @architectures,
+                                                @description,
+                                                @website,
+                                                @installedFiles,
+                                                @dependencies,
+                                                @kernelDependencies,
+                                                @options)
 
         file = File.open(writeInformationFilePath,"w")
         information.to_json(file)

@@ -2,11 +2,7 @@ module ISM
 
     class Port
 
-        record Port,
-            name : String,
-            url : String do
-            include JSON::Serializable
-        end
+        include JSON::Serializable
 
         property name : String
         property url : String

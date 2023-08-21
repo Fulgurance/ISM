@@ -1022,6 +1022,12 @@ module ISM
                     showSeparator
                 end
             end
+
+            neededSoftwares.each_with_index do |software, index|
+                runShowInformationProcess(software)
+            end
+
+            #Enable or disable needed kernel features
         end
 
         def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareDependency))
@@ -1249,6 +1255,31 @@ module ISM
             return result
         end
 
+        def runShowInformationProcess(software : ISM::SoftwareDependency)
+            tasks = generateInstallTasks(software)
+            generateTasksFile(tasks)
+
+            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+            if !process.success?
+                exitProgram
+            end
+
+            process = Process.run(  "./#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+            if !process.success?
+                exitProgram
+            end
+        end
+
         def runInstallationProcess(software : ISM::SoftwareDependency)
             cleanBuildingDirectory(@settings.rootPath+software.builtSoftwareDirectoryPath)
 
@@ -1330,6 +1361,26 @@ module ISM
                         target.install
                         target.recordNeededKernelFeatures
                         target.clean
+                        target.showInformations
+                    rescue
+                        Ism.exitProgram
+                    end
+
+                    CODE
+
+            return tasks
+        end
+
+        def generateShowInformationTasks(software : ISM::SoftwareDependency) : String
+            tasks = <<-CODE
+                    #{getRequiredLibraries}
+                    Ism = ISM::CommandLine.new
+                    Ism.loadSoftwareDatabase
+                    Ism.loadSettingsFiles
+                    {{ read_file("#{software.requireFilePath}").id }}
+                    target = Target.new("#{software.filePath}")
+                    #{getEnabledOptions(software)}
+                    begin
                         target.showInformations
                     rescue
                         Ism.exitProgram
@@ -1461,6 +1512,7 @@ module ISM
         end
 
         def getSoftwaresToUpdate : Array(ISM::SoftwareDependency)
+            #TO DO
 
             return Array(ISM::SoftwareDependency).new
         end

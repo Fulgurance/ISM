@@ -2,12 +2,7 @@ module ISM
 
     class Mirror
 
-        record Mirror,
-            codeName : String,
-            urls : Array(String),
-            mainUrl : Int32 do
-            include JSON::Serializable
-        end
+        include JSON::Serializable
 
         property codeName : String
         property urls : Array(String)

@@ -4,13 +4,14 @@ module ISM
 
         def_clone
 
+        include JSON::Serializable
+
         property name : String
         property options : Array(String)
 
-        def initialize
-            @name = String.new
-            @version = String.new
-            @options = Array(String).new
+        def initialize( @name = String.new,
+                        @version = String.new,
+                        @options = Array(String).new)
         end
 
         def getEnabledPass : String

@@ -2,21 +2,23 @@ module ISM
 
   class KernelOption
     
-    record KernelOption,
-        name : String,
-        tristate : Bool,
-        dependencies : Array(String) do
-        include JSON::Serializable
-    end
+    include JSON::Serializable
 
     property name : String
     property tristate : Bool
     property dependencies : Array(String)
+    property singleChoiceDependencies : Array(Array(String))
+    property conditionalKernelDependencies : Array(ISM::ConditionalKernelDependency)
+    property specialDependencies : Array(String)
+    property blockers : Array(String)
 
-    def initialize
-        @name = String.new
-        @tristate = false
-        @dependencies = Array(String).new
+    def initialize( @name = String.new,
+                    @tristate = false,
+                    @dependencies = Array(String).new,
+                    @singleChoiceDependencies = Array(Array(String)).new,
+                    @conditionalKernelDependencies = Array(ISM::ConditionalKernelDependency).new,
+                    @specialDependencies = Array(String).new,
+                    @blockers = Array(String).new)
     end
 
     def loadInformationFile(loadInformationFilePath : String)
@@ -33,6 +35,10 @@ module ISM
         @name = information.name
         @tristate = information.tristate
         @dependencies = information.dependencies
+        @singleChoiceDependencies = information.singleChoiceDependencies
+        @conditionalKernelDependencies = information.conditionalKernelDependencies
+        @specialDependencies = information.specialDependencies
+        @blockers = information.blockers
     end
 
     def writeInformationFile(writeInformationFilePath : String)
@@ -42,7 +48,13 @@ module ISM
             Dir.mkdir_p(path)
         end
 
-        information = KernelOption.new(@name,@tristate,@dependencies)
+        information = KernelOption.new( @name,
+                                        @tristate,
+                                        @dependencies,
+                                        @singleChoiceDependencies,
+                                        @conditionalKernelDependencies,
+                                        @specialDependencies,
+                                        @blockers)
 
         file = File.open(writeInformationFilePath,"w")
         information.to_json(file)
