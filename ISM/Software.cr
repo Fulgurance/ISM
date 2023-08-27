@@ -1110,7 +1110,6 @@ module ISM
             blockers = Array(String).new
 
             conditionsArray = conditions.split(" ")
-            #Créer un pré traitement qui remplace les parenthèses par les conditions
 
             conditionsArray.each do |word|
 

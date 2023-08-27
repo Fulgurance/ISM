@@ -12,19 +12,30 @@ module ISM
             end
 
             def start
+                Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
+
+                #No update
+                if Ism.requestedSoftwares.empty?
+                    Ism.showNoUpdateMessage
+                    Ism.exitProgram
+                end
+
                 Ism.showCalculationTitleMessage
 
-                softwaresToUpdate = Ism.getSoftwaresToUpdate
+                neededSoftwares = Ism.getNeededSoftwares
 
                 Ism.showCalculationDoneMessage
-                Ism.showSoftwares(softwaresToUpdate)
-                Ism.showUpdateQuestion(softwaresToUpdate.size)
+                Ism.showSoftwares(neededSoftwares)
+                Ism.showUpdateQuestion(neededSoftwares.size)
 
                 userAgreement = Ism.getUserAgreement
 
                 if userAgreement
-                    Ism.startUpdateProcess(softwaresToUpdate)
+                    Ism.startInstallationProcess(neededSoftwares)
                 end
+
+                #ADD CLEANING PROCESS FOR OLD VERSION REMOVAL
+
             end
 
         end

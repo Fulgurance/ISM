@@ -290,7 +290,7 @@ module ISM
                 if entry.name.downcase == versionName.downcase
                     result.name = entry.name
                     if !entry.versions.empty?
-                        temporary = entry.versions.last.clone
+                        temporary = entry.greatestVersion.clone
                         settingsFilePath = temporary.settingsFilePath
 
                         if File.exists?(settingsFilePath)
@@ -755,6 +755,13 @@ module ISM
             puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
         end
 
+
+        def showNoUpdateMessage
+            puts ISM::Default::CommandLine::NoUpdate
+        end
+
+
+
         def showSoftwareNeededMessage(wrongArguments : Array(String))
             puts ISM::Default::CommandLine::SoftwareNeeded + "#{wrongArguments.join(", ").colorize(:green)}"
             puts
@@ -883,6 +890,16 @@ module ISM
             puts "#{summaryText.colorize(:green)}"
 
             print   "#{ISM::Default::CommandLine::InstallQuestion.colorize.mode(:underline)}" +
+                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
+                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
+        end
+
+        def showUpdateQuestion(softwareNumber : Int32)
+            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UpdateSummaryText + "\n"
+
+            puts "#{summaryText.colorize(:green)}"
+
+            print   "#{ISM::Default::CommandLine::UpdateQuestion.colorize.mode(:underline)}" +
                     "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
         end
@@ -1047,28 +1064,6 @@ module ISM
                 showEndSoftwareUninstallingMessage(index, limit, name, version)
 
                 if index < unneededSoftwares.size-1
-                    showSeparator
-                end
-            end
-        end
-
-        def startUpdateProcess(neededSoftwares : Array(ISM::SoftwareDependency))
-            puts "\n"
-
-            neededSoftwares.each_with_index do |software, index|
-                limit = neededSoftwares.size
-                name = software.name
-                version = software.version
-
-                updateInstallationTerminalTitle(index, limit, name, version)
-
-                showStartSoftwareInstallingMessage(index, limit, name, version)
-
-                runInstallationProcess(software)
-
-                showEndSoftwareInstallingMessage(index, limit, name, version)
-
-                if index < neededSoftwares.size-1
                     showSeparator
                 end
             end
@@ -1511,10 +1506,37 @@ module ISM
             return uneededSoftwares.values
         end
 
-        def getSoftwaresToUpdate : Array(ISM::SoftwareDependency)
-            #TO DO
+        def getSoftwaresToUpdate : Array(ISM::SoftwareInformation)
+            softwareToUpdate = Array(String).new
 
-            return Array(ISM::SoftwareDependency).new
+            #JUSTE PASSER EN ARGUMENT A LA FONCTION D'INSTALLATION LES LOGICIELS A METTRE A JOUR ?
+            #ENSUITE GERER LE NETTOYAGE DES VERSIONS INFERIEURES
+
+            @installedSoftwares.each do |installedSoftware|
+
+                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
+                @softwares.each do |availableSoftware|
+
+                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+
+                    currentVersion = SemanticVersion.parse(installedSoftware.version)
+                    greatestVersion = SemanticVersion.parse(availableSoftware.greatestVersion.version)
+
+                    #Faire en sorte de renvoyer directement la dernière version avec les options nécessaires ?
+                    if installedSoftware.name == availableSoftware.name
+                        if currentVersion < greatestVersion
+                            softwareToUpdate.push(installedSoftware.name)
+                        else
+                            #Ajouter les logiciels à jour mais nécessitant une mise à jour des options
+                        end
+                    end
+
+                end
+
+            end
+
+            return getRequestedSoftwares(softwareToUpdate)
         end
 
         #############################################
