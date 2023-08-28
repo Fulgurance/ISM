@@ -534,7 +534,7 @@ module ISM
 
         def deleteAllHiddenFiles(path : String)
             begin
-                Dir.glob("#{path}/.*", match_hidden: true) do |file_path|
+                Dir.glob("#{path}/.*", File::MatchOptions::DotFiles) do |file_path|
                     if File.file?(file_path)
                         deleteFile(file_path)
                     end
@@ -547,7 +547,7 @@ module ISM
 
         def deleteAllHiddenFilesRecursively(path : String)
             begin
-                Dir.glob("#{path}/**/.*", match_hidden: true) do |file_path|
+                Dir.glob("#{path}/**/.*", File::MatchOptions::DotFiles) do |file_path|
                     if File.file?(file_path)
                         deleteFile(file_path)
                     end
@@ -1038,7 +1038,7 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            filesList = Dir.glob("#{builtSoftwareDirectoryPath(false)}/**/*", match_hidden: true)
+            filesList = Dir.glob("#{builtSoftwareDirectoryPath(false)}/**/*", File::MatchOptions::DotFiles)
             installedFiles = Array(String).new
 
             filesList.each do |entry|
