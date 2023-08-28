@@ -1280,6 +1280,9 @@ module ISM
             Ism.unneededKernelFeatures += @information.kernelDependencies
         end
 
+        def showInformations
+        end
+
         def uninstall
             Ism.notifyOfUninstall(@information)
             Ism.removeInstalledSoftware(@information)
