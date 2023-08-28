@@ -1251,7 +1251,7 @@ module ISM
         end
 
         def runShowInformationProcess(software : ISM::SoftwareDependency)
-            tasks = generateInstallTasks(software)
+            tasks = generateShowInformationTasks(software)
             generateTasksFile(tasks)
 
             process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
