@@ -1509,9 +1509,6 @@ module ISM
         def getSoftwaresToUpdate : Array(ISM::SoftwareInformation)
             softwareToUpdate = Array(String).new
 
-            #JUSTE PASSER EN ARGUMENT A LA FONCTION D'INSTALLATION LES LOGICIELS A METTRE A JOUR ?
-            #ENSUITE GERER LE NETTOYAGE DES VERSIONS INFERIEURES
-
             @installedSoftwares.each do |installedSoftware|
 
                 @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)

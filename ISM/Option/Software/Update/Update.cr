@@ -34,7 +34,22 @@ module ISM
                     Ism.startInstallationProcess(neededSoftwares)
                 end
 
-                #ADD CLEANING PROCESS FOR OLD VERSION REMOVAL
+                Ism.requestedSoftwares.clear
+
+                #Clean the system and remove unneeded softwares
+                Ism.showCalculationTitleMessage
+
+                unneededSoftwares = Ism.getUnneededSoftwares
+
+                Ism.showCalculationDoneMessage
+                Ism.showSoftwares(unneededSoftwares, :uninstallation)
+                Ism.showUninstallationQuestion(unneededSoftwares.size)
+
+                userAgreement = Ism.getUserAgreement
+
+                if userAgreement
+                    Ism.startUninstallationProcess(unneededSoftwares)
+                end
 
             end
 
