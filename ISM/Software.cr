@@ -206,7 +206,7 @@ module ISM
         def patch
             Ism.notifyOfPatch(@information)
             if Dir.exists?("#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}")
-                Dir.glob("#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/*") do |patch|
+                Dir.glob(Dir["#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/*"]) do |patch|
                     applyPatch(patch)
                 end
             end
@@ -297,7 +297,7 @@ module ISM
 
         def setPermissionsRecursively(path : String, permissions : Int)
             begin
-                Dir.glob("#{path}/**/*") do |file_path|
+                Dir.glob(Dir["#{path}/**/*"]) do |file_path|
                     setPermissions(path, permissions)
                 end
             rescue error
@@ -308,7 +308,7 @@ module ISM
 
         def setOwnerRecursively(path : String, uid : Int | String, gid : Int | String)
             begin
-                Dir.glob("#{path}/**/*") do |file_path|
+                Dir.glob(Dir["#{path}/**/*"]) do |file_path|
                     setOwner(path, uid, gid)
                 end
             rescue error
@@ -482,7 +482,7 @@ module ISM
 
         def replaceTextAllFilesNamed(path : String, filename : String, text : String, newText : String)
             begin
-                Dir.glob("#{path}/*") do |file_path|
+                Dir.glob(Dir["#{path}/*"]) do |file_path|
                     if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
                         fileReplaceText(file_path, text, newText)
                     end
@@ -495,7 +495,7 @@ module ISM
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
             begin
-                Dir.glob("#{path}/**/*") do |file_path|
+                Dir.glob(Dir["#{path}/**/*"]) do |file_path|
                     if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
                         fileReplaceText(file_path, text, newText)
                     end
@@ -508,7 +508,7 @@ module ISM
 
         def deleteAllFilesFinishing(path : String, text : String)
             begin
-                Dir.glob("#{path}/*") do |file_path|
+                Dir.glob(Dir["#{path}/*"]) do |file_path|
                     if File.file?(file_path) && file_path[-text.size..-1] == text
                         deleteFile(file_path)
                     end
@@ -521,7 +521,7 @@ module ISM
 
         def deleteAllFilesRecursivelyFinishing(path : String, text : String)
             begin
-                Dir.glob("#{path}/**/*") do |file_path|
+                Dir.glob(Dir["#{path}/**/*"]) do |file_path|
                     if File.file?(file_path) && file_path[-text.size..-1] == text
                         deleteFile(file_path)
                     end
@@ -534,7 +534,7 @@ module ISM
 
         def deleteAllHiddenFiles(path : String)
             begin
-                Dir.glob("#{path}/.*", File::MatchOptions::DotFiles) do |file_path|
+                Dir.glob(Dir["#{path}/.*"], File::MatchOptions::DotFiles) do |file_path|
                     if File.file?(file_path)
                         deleteFile(file_path)
                     end
@@ -547,7 +547,7 @@ module ISM
 
         def deleteAllHiddenFilesRecursively(path : String)
             begin
-                Dir.glob("#{path}/**/.*", File::MatchOptions::DotFiles) do |file_path|
+                Dir.glob(Dir["#{path}/**/.*"], File::MatchOptions::DotFiles) do |file_path|
                     if File.file?(file_path)
                         deleteFile(file_path)
                     end
@@ -1038,7 +1038,7 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            filesList = Dir.glob("#{builtSoftwareDirectoryPath(false)}/**/*", File::MatchOptions::DotFiles)
+            filesList = Dir.glob(Dir["#{builtSoftwareDirectoryPath(false)}/**/*"], File::MatchOptions::DotFiles)
             installedFiles = Array(String).new
 
             filesList.each do |entry|
