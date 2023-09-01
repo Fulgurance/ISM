@@ -12,25 +12,11 @@ module ISM
             end
 
             def start
-                synchronizationStartingTime = Time.monotonic
-                frameIndex = 0
-                reverseAnimation = false
-                
                 print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
                 text = ISM::Default::Option::SoftwareSynchronize::SynchronizationWaitingText
 
-                Ism.ports.each do |port|
+                Ism.synchronizePorts
 
-                    synchronization = port.synchronize
-
-                    until synchronization.terminated?
-                        synchronizationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(synchronizationStartingTime, frameIndex, reverseAnimation, text)
-                        sleep 0
-                    end
-
-                end
-
-                Ism.cleanCalculationAnimation(frameIndex)
                 print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
                 puts ISM::Default::Option::SoftwareSynchronize::SynchronizedText
                     

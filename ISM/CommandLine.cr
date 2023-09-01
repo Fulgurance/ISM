@@ -693,13 +693,13 @@ module ISM
             return calculationStartingTime, frameIndex, reverseAnimation
         end
 
-        def cleanCalculationAnimation(frameIndex)
+        def cleanCalculationAnimation
             loop do
-                if frameIndex > 0
+                if @frameIndex > 0
                     print "\033[1D"
                     print " "
                     print "\033[1D"
-                    frameIndex -= 1
+                    @frameIndex -= 1
                 else
                     break
                 end
@@ -840,7 +840,7 @@ module ISM
         end
 
         def showCalculationDoneMessage
-            cleanCalculationAnimation(@frameIndex)
+            cleanCalculationAnimation
             print "#{ISM::Default::CommandLine::CalculationDoneText.colorize(:green)}\n"
         end
 
@@ -1087,6 +1087,21 @@ module ISM
                     "] #{ISM::Default::CommandLine::UninstallingText} " +
                     "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
+        end
+
+        def synchronizePorts
+            @ports.each do |port|
+
+                synchronization = port.synchronize
+
+                until synchronization.terminated?
+                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                    sleep 0
+                end
+
+            end
+
+            cleanCalculationAnimation
         end
 
         def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false) : Array(ISM::SoftwareDependency)
