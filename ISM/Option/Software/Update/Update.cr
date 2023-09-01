@@ -40,8 +40,9 @@ module ISM
 
                     unneededSoftwares = Ism.getUnneededSoftwares
 
+                    Ism.showCalculationDoneMessage
+
                     if unneededSoftwares.size > 0
-                        Ism.showCalculationDoneMessage
                         Ism.showSoftwares(unneededSoftwares, :uninstallation)
                         Ism.showUninstallationQuestion(unneededSoftwares.size)
 
