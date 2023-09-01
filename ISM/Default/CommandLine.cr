@@ -91,6 +91,7 @@ module ISM
             DependenciesAtUpperLevelText = "ISM stopped because some required dependencies are at upper level than the requested softwares:"
             UnavailableText = "ISM stopped due to some missing dependencies for the requested softwares:"
             NoUpdate = "System up to date."
+            NoCleaningRequiredMessage = "No cleaning required. Task complete."
             CalculationTitle = "ISM start to calculate dependencies: "
             CalculationWaitingText = "Checking dependencies tree"
             CalculationDoneText = "Done !"

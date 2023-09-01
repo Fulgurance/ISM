@@ -757,10 +757,12 @@ module ISM
 
 
         def showNoUpdateMessage
-            puts ISM::Default::CommandLine::NoUpdate
+            puts "#{ISM::Default::CommandLine::NoUpdate.colorize(:green)}"
         end
 
-
+        def showNoCleaningRequiredMessage
+            puts "#{ISM::Default::CommandLine::NoCleaningRequiredMessage.colorize(:green)}"
+        end
 
         def showSoftwareNeededMessage(wrongArguments : Array(String))
             puts ISM::Default::CommandLine::SoftwareNeeded + "#{wrongArguments.join(", ").colorize(:green)}"
