@@ -1520,11 +1520,12 @@ module ISM
                     @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
 
                     currentVersion = SemanticVersion.parse(installedSoftware.version)
-                    greatestVersion = SemanticVersion.parse(availableSoftware.greatestVersion.version)
+                    greatestSoftware = availableSoftware.greatestVersion
+                    greatestVersion = SemanticVersion.parse(greatestSoftware.version)
 
                     #Faire en sorte de renvoyer directement la dernière version avec les options nécessaires ?
                     if installedSoftware.name == availableSoftware.name
-                        if currentVersion < greatestVersion
+                        if currentVersion < greatestVersion && !softwareIsInstalled(greatestSoftware)
                             softwareToUpdate.push(installedSoftware.name)
                         else
                             #Ajouter les logiciels à jour mais nécessitant une mise à jour des options
