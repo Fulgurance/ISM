@@ -195,6 +195,26 @@ module ISM
             end
         end
 
+        def userInputMatchWithFilter(input : String, filter : Regex | Array(Regex))
+            if filter.is_a?(Array(Regex))
+                userInput = input.split(" ")
+
+                userInput.each do |value|
+
+                    if !filter.any? {|rule| rule.match(value) != nil}
+                        return false,value
+                    end
+
+                end
+            else
+                if filter.match(input) == nil
+                    return false,input
+                end
+            end
+
+            return true,String.new
+        end
+
         def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
             softwareInformation.installedFiles = installedFiles
 

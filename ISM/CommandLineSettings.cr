@@ -230,7 +230,15 @@ module ISM
         end
 
         def setMakeOptions(@makeOptions)
-            writeSettingsFile
+            match,invalidValue = Ism.userInputMatchWithFilter(@makeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
+
+            if match
+                writeSettingsFile
+            else
+                puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
+                puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
+                Ism.exitProgram
+            end
         end
 
         def setBuildOptions(@buildOptions)
