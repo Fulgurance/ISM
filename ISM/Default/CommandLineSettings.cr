@@ -21,8 +21,9 @@ module ISM
             ChrootBuildOptions = "#{BuildOptions}"
             DefaultMirror = "Uk"
             SettingsFilePath = "#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::Settings}"
-            ErrorMakeOptionsInvalidValueText = "Invalid value detected: "
+            ErrorInvalidValueText = "Invalid value detected: "
             ErrorMakeOptionsInvalidValueAdviceText = "The input value must be of the form -jX where X is the number of jobs to run simultaneously"
+            ErrorChrootMakeOptionsInvalidValueAdviceText = "The input value must be of the form -jX where X is the number of jobs to run simultaneously"
 
         end
 

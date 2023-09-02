@@ -235,7 +235,7 @@ module ISM
             if match
                 writeSettingsFile
             else
-                puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
+                puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
                 Ism.exitProgram
             end
@@ -266,7 +266,15 @@ module ISM
         end
 
         def setChrootMakeOptions(@chrootMakeOptions)
-            writeSettingsFile
+            match,invalidValue = Ism.userInputMatchWithFilter(@chrootMakeOptions,ISM::Default::CommandLineSettings::ChrootMakeOptionsFilter)
+
+            if match
+                writeSettingsFile
+            else
+                puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
+                puts "#{ISM::Default::CommandLineSettings::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
+                Ism.exitProgram
+            end
         end
 
         def setChrootBuildOptions(@chrootBuildOptions)
