@@ -19,10 +19,6 @@ module ISM
                     validVersion = false
 
                     if !Ism.ports.empty?
-                        setStartingTime = Time.monotonic
-                        frameIndex = 0
-                        reverseAnimation = false
-
                         print ISM::Default::Option::PortSetTargetVersion::SetTitle
                         text = ISM::Default::Option::PortSetTargetVersion::SetWaitingText
 
@@ -32,7 +28,7 @@ module ISM
                                                     chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
                             until process.terminated?
-                                calculationStartingTime, frameIndex, reverseAnimation = Ism.playCalculationAnimation(setStartingTime, frameIndex, reverseAnimation, text)
+                                Ism.playCalculationAnimation(text: text)
                                 sleep 0
                             end
 

@@ -682,35 +682,38 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorFileUpdateContentText+filePath, error)
         end
 
+        def resetCalculationAnimation
+            @calculationStartingTime = Time.monotonic
+            @frameIndex = 0
+            @reverseAnimation = false
+        end
 
-        def playCalculationAnimation(calculationStartingTime, frameIndex, reverseAnimation, text)
+        def playCalculationAnimation(@text = ISM::Default::CommandLine::CalculationWaitingText)
             currentTime = Time.monotonic
 
-            if (currentTime - calculationStartingTime).milliseconds > 40
-                if frameIndex == text.size && !reverseAnimation
-                    reverseAnimation = true
+            if (currentTime - @calculationStartingTime).milliseconds > 40
+                if @frameIndex == @text.size && !@reverseAnimation
+                    @reverseAnimation = true
                 end
 
-                if frameIndex < 1
-                    reverseAnimation = false
+                if @frameIndex < 1
+                    @reverseAnimation = false
                 end
 
-                if reverseAnimation
+                if @reverseAnimation
                     print "\033[1D"
                     print " "
                     print "\033[1D"
-                    frameIndex -= 1
+                    @frameIndex -= 1
                 end
 
-                if !reverseAnimation
-                    print "#{text[frameIndex].colorize(:green)}"
-                    frameIndex += 1
+                if !@reverseAnimation
+                    print "#{@text[@frameIndex].colorize(:green)}"
+                    @frameIndex += 1
                 end
 
-                calculationStartingTime = Time.monotonic
+                @calculationStartingTime = Time.monotonic
             end
-
-            return calculationStartingTime, frameIndex, reverseAnimation
         end
 
         def cleanCalculationAnimation
@@ -1115,7 +1118,7 @@ module ISM
                 synchronization = port.synchronize
 
                 until synchronization.terminated?
-                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                    playCalculationAnimation
                     sleep 0
                 end
 
@@ -1131,7 +1134,7 @@ module ISM
 
             loop do
 
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 if currentDependencies.empty?
                     break
@@ -1140,7 +1143,7 @@ module ISM
                 currentDependencies.each do |dependency|
 
                     if !Ism.softwareIsInstalled(dependency.information) || Ism.softwareIsInstalled(dependency.information) && allowRebuild == true && dependency.information == software
-                        @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                        playCalculationAnimation
 
                         dependencyInformation = dependency.information
 
@@ -1196,14 +1199,14 @@ module ISM
             dependenciesTable = Hash(String,Array(ISM::SoftwareDependency)).new
 
             softwareList.each do |software|
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 key = software.toSoftwareDependency.hiddenName
 
                 dependenciesTable[key] = getRequiredDependencies(software, true)
 
                 dependenciesTable[key].each do |dependency|
-                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                    playCalculationAnimation
 
                     dependencyInformation = dependency.information
 
@@ -1218,10 +1221,10 @@ module ISM
             keys = dependenciesTable.keys
             #Inextricable dependencies problem
             keys.each do |key1|
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 keys.each do |key2|
-                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                    playCalculationAnimation
 
                     if key1 != key2
                         if dependenciesTable[key1].any?{|dependency| dependency.hiddenName == key2} && dependenciesTable[key2].any?{|dependency| dependency.hiddenName == key1}
@@ -1242,12 +1245,12 @@ module ISM
             table = Hash(ISM::SoftwareDependency,Int32).new
 
             dependenciesTable.values.each do |dependencies|
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 table[dependencies[0]] = dependencies.size
 
                 dependencies.each do |dependency|
-                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                    playCalculationAnimation
 
                     if dependenciesTable.has_key?(dependency.hiddenName) && dependency.dependencies.size < dependenciesTable[dependency.hiddenName][0].dependencies.size
                         table[dependencies[0]] += (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
@@ -1260,7 +1263,7 @@ module ISM
             end
 
             table.to_a.sort_by { |k, v| v }.each do |item|
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 result << item[0]
             end
@@ -1460,7 +1463,7 @@ module ISM
             uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
 
             @installedSoftwares.each do |software|
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 softwareDependency = software.toSoftwareDependency
 
@@ -1468,7 +1471,7 @@ module ISM
             end
 
             @requestedSoftwares.each do |software|
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 softwareDependency = software.toSoftwareDependency
 
@@ -1480,17 +1483,17 @@ module ISM
             end
 
             requestedSoftwaresHash.keys.each do |key|
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 requiredDependencies.delete(key)
             end
 
             requiredDependencies.values.each do |requiredSoftware|
 
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 requiredSoftware.dependencies.each do |dependency|
-                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                    playCalculationAnimation
 
                     requiredDependencies[dependency.hiddenName] = dependency
                 end
@@ -1499,7 +1502,7 @@ module ISM
             wrongArguments = Array(String).new
 
             @requestedSoftwares.each do |requestedSoftware|
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 requestedDependency = requestedSoftware.toSoftwareDependency
 
@@ -1507,17 +1510,17 @@ module ISM
                     uneededSoftwares[requestedDependency.hiddenName] = requestedDependency
 
                     requestedSoftwaresHash.keys.each do |key|
-                        @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                        playCalculationAnimation
 
                         if !requiredDependencies.has_key?(key)
                             uneededSoftwares[key] = requestedSoftwaresHash[key]
                         end
 
                         requiredDependencies.keys.each do |requiredKey|
-                            @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                            playCalculationAnimation
 
                             requiredDependencies[requiredKey].dependencies.each do |dependency|
-                                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                                playCalculationAnimation
 
                                 if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.name)
                                     wrongArguments.push(requestedDependency.name)
@@ -1548,11 +1551,11 @@ module ISM
 
             @installedSoftwares.each do |installedSoftware|
 
-                @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                playCalculationAnimation
 
                 @softwares.each do |availableSoftware|
 
-                    @calculationStartingTime, @frameIndex, @reverseAnimation = playCalculationAnimation(@calculationStartingTime, @frameIndex, @reverseAnimation, @text)
+                    playCalculationAnimation
 
                     currentVersion = SemanticVersion.parse(installedSoftware.version)
                     greatestSoftware = availableSoftware.greatestVersion

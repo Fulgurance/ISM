@@ -9,6 +9,7 @@ module ISM
             TargetName = "unknow"
             Architecture = "x86_64"
             Target = "#{Architecture}-#{TargetName}-linux-gnu"
+            MakeOptionsFilter = /-j[0-9]/
             MakeOptions = "-j1"
             BuildOptions = "-march=native -O2 -pipe"
             InstallByChroot = false
@@ -16,7 +17,7 @@ module ISM
             ChrootTargetName = "#{TargetName}"
             ChrootArchitecture = "#{Architecture}"
             ChrootTarget = "#{Target}"
-            MakeOptionsFilter = /-j[0-9]/
+            ChrootMakeOptionsFilter = /-j[0-9]/
             ChrootMakeOptions = "#{MakeOptions}"
             ChrootBuildOptions = "#{BuildOptions}"
             DefaultMirror = "Uk"
