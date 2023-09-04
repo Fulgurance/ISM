@@ -1541,7 +1541,7 @@ module ISM
                     end
 
                     if !needed
-                        requiredDependencies.delete(version.hiddenName)
+                        uneededSoftwares[version.hiddenName] = version
                     end
 
                 end
