@@ -1462,6 +1462,11 @@ module ISM
             requestedSoftwaresHash = Hash(String,ISM::SoftwareDependency).new
             uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
 
+            ################################MAKE HASH OF MULTIPLE VERSIONS###############################
+            multipleVersionSoftwaresHash = Hash(String,Array(ISM::SoftwareDependency)).new
+            #############################################################################################
+
+            #Make hash of the installed softwares
             @installedSoftwares.each do |software|
                 playCalculationAnimation
 
@@ -1470,6 +1475,7 @@ module ISM
                 requiredDependencies[softwareDependency.hiddenName] = softwareDependency
             end
 
+            #Make hash of the requested softwares for uninstallation (with dependencies)
             @requestedSoftwares.each do |software|
                 playCalculationAnimation
 
@@ -1482,12 +1488,14 @@ module ISM
                 end
             end
 
+            #Remove requested softwares for removal from the required dependencies
             requestedSoftwaresHash.keys.each do |key|
                 playCalculationAnimation
 
                 requiredDependencies.delete(key)
             end
 
+            #Double check if we are not gonna remove needed dependencies for the system
             requiredDependencies.values.each do |requiredSoftware|
 
                 playCalculationAnimation
@@ -1498,6 +1506,49 @@ module ISM
                     requiredDependencies[dependency.hiddenName] = dependency
                 end
             end
+
+            #########################GENERATE LIST OF MULTIPLE VERSIONS#########################
+            requiredDependencies.values.each do |requiredDependency|
+                playCalculationAnimation
+
+                if !multipleVersionSoftwaresHash.has_key?(requiredDependency.name)
+                    multipleVersionSoftwaresHash[requiredDependency.name] = [requiredDependency]
+                else
+                    multipleVersionSoftwaresHash[requiredDependency.name].push(requiredDependency)
+                end
+            end
+            ####################################################################################
+
+            #Need to check if same software with differents versions are all needed
+
+            multipleVersionSoftwaresHash.values.each do |versions|
+                playCalculationAnimation
+
+                versions.each do |version|
+                    playCalculationAnimation
+
+                    needed = false
+
+                    requiredDependencies.values.each do |requiredDependency|
+
+                        requiredDependency.dependencies.each do |dependency|
+                            if version.hiddenName == dependency.hiddenName
+                                needed = true
+                                break
+                            end
+                        end
+
+                    end
+
+                    if !needed
+                        requiredDependencies.delete(version.hiddenName)
+                    end
+
+                end
+
+            end
+
+            #########################
 
             wrongArguments = Array(String).new
 
