@@ -1500,6 +1500,14 @@ module ISM
 
                 playCalculationAnimation
 
+                #Generate as well the multiple versions hash
+                if !multipleVersionSoftwaresHash.has_key?(requiredSoftware.name)
+                    multipleVersionSoftwaresHash[requiredSoftware.name] = [requiredSoftware]
+                else
+                    multipleVersionSoftwaresHash[requiredSoftware.name].push(requiredSoftware)
+                end
+                ############################################
+
                 requiredSoftware.dependencies.each do |dependency|
                     playCalculationAnimation
 
@@ -1507,20 +1515,7 @@ module ISM
                 end
             end
 
-            #########################GENERATE LIST OF MULTIPLE VERSIONS#########################
-            requiredDependencies.values.each do |requiredDependency|
-                playCalculationAnimation
-
-                if !multipleVersionSoftwaresHash.has_key?(requiredDependency.name)
-                    multipleVersionSoftwaresHash[requiredDependency.name] = [requiredDependency]
-                else
-                    multipleVersionSoftwaresHash[requiredDependency.name].push(requiredDependency)
-                end
-            end
-            ####################################################################################
-
-            #Need to check if same software with differents versions are all needed
-
+            #Check if same software with differents versions are all needed
             multipleVersionSoftwaresHash.values.each do |versions|
                 playCalculationAnimation
 
@@ -1542,6 +1537,7 @@ module ISM
 
                     if !needed
                         uneededSoftwares[version.hiddenName] = version
+                        requiredDependencies.delete(version.hiddenName)
                     end
 
                 end
@@ -1573,16 +1569,16 @@ module ISM
                             requiredDependencies[requiredKey].dependencies.each do |dependency|
                                 playCalculationAnimation
 
-                                if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.name)
-                                    wrongArguments.push(requestedDependency.name)
+                                if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.hiddenName)
+                                    wrongArguments.push(requestedDependency.hiddenName)
                                 end
                             end
 
                         end
                     end
                 else
-                    if !wrongArguments.includes?(requestedDependency.name)
-                        wrongArguments.push(requestedDependency.name)
+                    if !wrongArguments.includes?(requestedDependency.hiddenName)
+                        wrongArguments.push(requestedDependency.hiddenName)
                     end
                 end
 
