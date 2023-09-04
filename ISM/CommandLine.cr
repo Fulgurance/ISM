@@ -1461,10 +1461,7 @@ module ISM
             requiredDependencies = Hash(String,ISM::SoftwareDependency).new
             requestedSoftwaresHash = Hash(String,ISM::SoftwareDependency).new
             uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
-
-            ################################MAKE HASH OF MULTIPLE VERSIONS###############################
             multipleVersionSoftwaresHash = Hash(String,Array(ISM::SoftwareDependency)).new
-            #############################################################################################
 
             #Make hash of the installed softwares
             @installedSoftwares.each do |software|
@@ -1506,7 +1503,6 @@ module ISM
                 else
                     multipleVersionSoftwaresHash[requiredSoftware.name].push(requiredSoftware)
                 end
-                ############################################
 
                 requiredSoftware.dependencies.each do |dependency|
                     playCalculationAnimation
@@ -1544,8 +1540,6 @@ module ISM
 
             end
 
-            #########################
-
             wrongArguments = Array(String).new
 
             @requestedSoftwares.each do |requestedSoftware|
@@ -1576,11 +1570,13 @@ module ISM
 
                         end
                     end
-                else
-                    if !wrongArguments.includes?(requestedDependency.hiddenName)
-                        wrongArguments.push(requestedDependency.hiddenName)
-                    end
                 end
+                #???
+                #else
+                    #if !wrongArguments.includes?(requestedDependency.hiddenName)
+                        #wrongArguments.push(requestedDependency.hiddenName)
+                    #end
+                #end
 
             end
 
