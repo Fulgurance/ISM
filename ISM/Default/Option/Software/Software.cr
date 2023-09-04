@@ -13,6 +13,7 @@ module ISM
                             ISM::Option::SoftwareEnableOption.new,
                             ISM::Option::SoftwareInstall.new,
                             ISM::Option::SoftwareUninstall.new,
+                            ISM::Option::SoftwareClean.new,
                             ISM::Option::SoftwareSearch.new,
                             ISM::Option::SoftwareSynchronize.new,
                             ISM::Option::SoftwareUpdate.new]
