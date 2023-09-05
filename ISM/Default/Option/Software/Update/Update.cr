@@ -9,7 +9,7 @@ module ISM
                 ShortText = "-u"
                 LongText = "update"
                 Description = "Update specified software(s)"
-                UpdateTitle = "Checking avaible updates"
+                UpdateTitle = "Checking avaible updates: "
 
             end
             
