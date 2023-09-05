@@ -12,7 +12,11 @@ module ISM
             end
 
             def start
+                print ISM::Default::Option::SoftwareUpdate::UpdateTitle
+
                 Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
+
+                Ism.showCalculationDoneMessage
 
                 #No update
                 if Ism.requestedSoftwares.empty?

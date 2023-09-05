@@ -13,7 +13,6 @@ module ISM
 
             def start
                 print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
-                text = ISM::Default::Option::SoftwareSynchronize::SynchronizationWaitingText
 
                 Ism.synchronizePorts
 
