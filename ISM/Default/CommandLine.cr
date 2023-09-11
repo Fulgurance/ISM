@@ -125,6 +125,7 @@ module ISM
                         ISM::Option::Version.new,
                         ISM::Option::Software.new,
                         ISM::Option::Port.new,
+                        ISM::Option::Alternative.new,
                         ISM::Option::System.new,
                         ISM::Option::Settings.new,
                         ISM::Option::Debug.new]
