@@ -16,6 +16,7 @@ module ISM
     setter dependencies : Array(ISM::SoftwareDependency)
     setter kernelDependencies : Array(String)
     property options : Array(ISM::SoftwareOption)
+    property uniqueOptions : Array(Array(String))
 
     def initialize( @port = String.new,
                     @name = String.new,
@@ -26,7 +27,8 @@ module ISM
                     @installedFiles = Array(String).new,
                     @dependencies = Array(ISM::SoftwareDependency).new,
                     @kernelDependencies = Array(String).new,
-                    @options = Array(ISM::SoftwareOption).new)
+                    @options = Array(ISM::SoftwareOption).new,
+                    @uniqueOptions = Array(Array(String)).new)
     end
 
     def getEnabledPass : String
@@ -65,6 +67,7 @@ module ISM
         @dependencies = information.dependencies
         @kernelDependencies = information.kernelDependencies
         @options = information.options
+        @uniqueOptions = information.uniqueOptions
     end
 
     def writeInformationFile(writeInformationFilePath : String)
@@ -83,7 +86,8 @@ module ISM
                                                 @installedFiles,
                                                 @dependencies,
                                                 @kernelDependencies,
-                                                @options)
+                                                @options,
+                                                @uniqueOptions)
 
         file = File.open(writeInformationFilePath,"w")
         information.to_json(file)
@@ -164,6 +168,16 @@ module ISM
                 end
 
                 @options[index].active = true
+
+                @uniqueOptions.each do |uniqueArray|
+                    if uniqueArray.includes?(optionName)
+                        uniqueArray.each do |option|
+                            if option != optionName
+                                disableOption(option)
+                            end
+                        end
+                    end
+                end
             end
         end
     end
