@@ -793,11 +793,11 @@ module ISM
             puts "#{ISM::Default::CommandLine::NeededText.colorize(:green)}"
         end
 
-        def showUnavailableDependencyMessage(dependency : ISM::SoftwareDependency)
-            puts "#{ISM::Default::CommandLine::UnavailableText.colorize(:yellow)}"
+        def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareDependency)
+            puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
             puts "\n"
 
-            softwareText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+            dependencyText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
             optionsText = "{ "
 
             dependency.information.options.each do |option|
@@ -809,7 +809,12 @@ module ISM
                 optionsText += " "
             end
             optionsText += "}"
-            puts "\t" + softwareText + " " + optionsText + "\n"
+
+            missingDependencyText = "#{ISM::Default::CommandLine::UnavailableText2.colorize(:red)}"
+
+            softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/"
+
+            puts "\t" + dependencyText + " " + optionsText + missingDependencyText + softwareText + "\n"
 
             puts "\n"
         end
@@ -1150,14 +1155,14 @@ module ISM
                         #Software not available
                         if dependencyInformation.name == ""
                             showCalculationDoneMessage
-                            showUnavailableDependencyMessage(dependency)
+                            showUnavailableDependencyMessage(software,dependency)
                             exitProgram
                         end
 
                         #Version not available
                         if dependencyInformation.version == ""
                             showCalculationDoneMessage
-                            showUnavailableDependencyMessage(dependency)
+                            showUnavailableDependencyMessage(software,dependency)
                             exitProgram
                         end
 
