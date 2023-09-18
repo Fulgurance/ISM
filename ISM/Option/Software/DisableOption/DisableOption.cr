@@ -15,30 +15,10 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel || ARGV.size == 3+Ism.debugLevel
                     showHelp
                 else
-                    matching = false
-                    badEntry = ""
-                    matchingSoftware = ISM::SoftwareInformation.new
+                    matchingSoftware = Ism.getSoftwareInformation(ARGV[1+Ism.debugLevel].downcase)
 
-                    Ism.softwares.each_with_index do |software, index|
-                        if ARGV[1+Ism.debugLevel] == software.name || ARGV[1+Ism.debugLevel] == software.name.downcase
-                            matchingSoftware = software.versions.last
-                            matching = true
-                            break
-                        else
-                            software.versions.each do |version|
-                                if ARGV[1+Ism.debugLevel] == version.versionName || ARGV[1+Ism.debugLevel] == version.versionName.downcase
-                                    matchingSoftware = version
-                                    matching = true
-                                    break
-                                else
-                                    badEntry = ARGV[1]
-                                end
-                            end
-                        end
-                    end
-
-                    if !matching
-                        puts ISM::Default::Option::SoftwareDisableOption::NoMatchFound + "#{badEntry.colorize(:green)}"
+                    if matchingSoftware == ""
+                        puts ISM::Default::Option::SoftwareDisableOption::NoMatchFound + "#{ARGV[1+Ism.debugLevel].colorize(:green)}"
                         puts ISM::Default::Option::SoftwareDisableOption::NoMatchFoundAdvice
                     else
                         if ARGV[2+Ism.debugLevel] == @shortText || ARGV[2+Ism.debugLevel] == @longText
