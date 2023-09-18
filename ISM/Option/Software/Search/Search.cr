@@ -31,18 +31,18 @@ module ISM
 
                         matchingSoftwaresArray.each_with_index do |software, index|
                             puts    ISM::Default::Option::SoftwareSearch::PortField +
-                                        "#{software.versions.last.port.colorize(:green)}"
+                                        "#{software.greatestVersion.port.colorize(:green)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::NameField +
                                         "#{software.name.colorize(:green)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::DescriptionField +
-                                        "#{software.versions.last.description.colorize(:green)}"
+                                        "#{software.greatestVersion.description.colorize(:green)}"
 
                             architecturesText = ""
-                            software.versions.last.architectures.each_with_index do |architecture, index|
+                            software.greatestVersion.architectures.each_with_index do |architecture, index|
                                 architecturesText += "#{architecture.colorize(:green)}"
-                                if index+1 < software.versions.last.architectures.size
+                                if index+1 < software.greatestVersion.architectures.size
                                     architecturesText += " | "
                                 end
                             end
@@ -53,7 +53,7 @@ module ISM
                                         "#{architecturesText.colorize(:green)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::WebsiteField +
-                                        "#{software.versions.last.website.colorize(:green)}"
+                                        "#{software.greatestVersion.website.colorize(:green)}"
 
                             versionsText = ""
                             software.versions.each_with_index do |version, index|
@@ -97,9 +97,9 @@ module ISM
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
                                         "#{installedVersionText.colorize(:green)}"
 
-                            puts    "#{ISM::Default::Option::SoftwareSearch::OptionsField}#{software.versions.last.options.empty? ? ISM::Default::Option::SoftwareSearch::None.colorize(:green) : ""}"
+                            puts    "#{ISM::Default::Option::SoftwareSearch::OptionsField}#{software.greatestVersion.options.empty? ? ISM::Default::Option::SoftwareSearch::None.colorize(:green) : ""}"
 
-                            software.versions.last.options.each do |option|
+                            software.greatestVersion.options.each do |option|
                                 puts "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
                             end
 
