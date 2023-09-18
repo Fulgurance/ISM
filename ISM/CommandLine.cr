@@ -798,7 +798,12 @@ module ISM
             puts "\n"
 
             dependencyText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+
             optionsText = "{ "
+
+            if dependency.information.options.empty?
+                optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+            end
 
             dependency.information.options.each do |option|
                 if option.active
