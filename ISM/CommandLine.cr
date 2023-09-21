@@ -1075,7 +1075,7 @@ module ISM
                 end
             end
 
-            neededSoftwares.each_with_index do |software, index|
+            neededSoftwares.each do |software|
                 runShowInformationProcess(software)
             end
 

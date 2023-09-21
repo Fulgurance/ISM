@@ -577,13 +577,18 @@ module ISM
         end
 
         def runSystemCommand(arguments = Array(String).new, path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new) : Process::Status
-            environmentCommand = (environment.map { |key| key.join("=") }).join(" ")
+            environmentCommand = String.new
+
+            environment.keys.each do |key|
+                environmentCommand += "#{key}=\"#{environment[key]}\""
+            end
+
             command = arguments.join(" ")
 
             if Ism.settings.installByChroot
                 chrootCommand = <<-CODE
                 #!/bin/bash
-                cd #{path} && #{environmentCommand} #{command}
+                cd #{path} && "#{environmentCommand}" #{command}
                 CODE
 
                 process = runChrootTasks(chrootCommand)
