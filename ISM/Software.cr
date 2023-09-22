@@ -968,7 +968,7 @@ module ISM
 
             makeDirectory("#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}#{servicesPath}")
             moveFile(filePath,"#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}#{servicesPath}#{serviceName}")
-            runChmodCommand(["+x",serviceName],"#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}#{servicesPath}")
+            runChmodCommand(["+x",serviceName],"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
         end
 
         def configure
