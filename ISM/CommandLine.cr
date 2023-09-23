@@ -302,6 +302,16 @@ module ISM
             return false
         end
 
+        def getAvailableSoftware(softwareName : String) : ISM::AvailableSoftware
+            @softwares.each do |software|
+                if softwareName == software.name
+                    return software
+                end
+            end
+
+            return ISM::AvailableSoftware.new
+        end
+
         def getSoftwareInformation(versionName : String) : ISM::SoftwareInformation
             result = ISM::SoftwareInformation.new
 

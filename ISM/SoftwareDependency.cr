@@ -36,50 +36,8 @@ module ISM
             return @name+"-"+version
         end
 
-        def includeComparators : Bool
-            return @version.includes?("<") || @version.includes?(">")
-        end
-
-        def greaterComparator : Bool
-            return @version[0] == '>' && @version[1] != '='
-        end
-
-        def lessComparator : Bool
-            return @version[0] == '<' && @version[1] != '='
-        end
-
-        def greaterOrEqualComparator : Bool
-            return @version[0..1] == ">="
-        end
-
-        def lessOrEqualComparator : Bool
-            return @version[0..1] == "<="
-        end
-
         def version
-
-            if includeComparators
-                currentSemanticVersion = SemanticVersion.parse(@version.tr("><=",""))
-
-                Ism.softwares.each do |software|
-
-                    if @name == software.name
-
-                        software.versions.each do |availableSoftware|
-
-                            availableSoftwareSemanticVersion = SemanticVersion.parse(availableSoftware.version.tr("><=",""))
-
-                            if greaterComparator && availableSoftwareSemanticVersion > currentSemanticVersion || lessComparator && availableSoftwareSemanticVersion < currentSemanticVersion || greaterOrEqualComparator && availableSoftwareSemanticVersion >= currentSemanticVersion || lessOrEqualComparator && availableSoftwareSemanticVersion <= currentSemanticVersion
-                                return availableSoftwareSemanticVersion.to_s
-                            end
-
-                        end
-
-                    end
-                end
-            end
-
-            return @version
+            return Ism.getAvailableSoftware(@name).greatestVersion(@version).version
         end
 
         def information : ISM::SoftwareInformation
