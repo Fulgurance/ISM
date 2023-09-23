@@ -588,7 +588,7 @@ module ISM
             if Ism.settings.installByChroot
                 chrootCommand = <<-CODE
                 #!/bin/bash
-                cd #{path} && "#{environmentCommand}" #{command}
+                cd #{path} && #{environmentCommand} #{command}
                 CODE
 
                 process = runChrootTasks(chrootCommand)
