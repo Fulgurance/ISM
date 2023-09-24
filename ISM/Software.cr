@@ -580,7 +580,7 @@ module ISM
             environmentCommand = String.new
 
             environment.keys.each do |key|
-                environmentCommand += "#{key}=\"#{environment[key]}\""
+                environmentCommand += " #{key}=\"#{environment[key]}\""
             end
 
             command = arguments.join(" ")
