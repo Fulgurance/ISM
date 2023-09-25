@@ -1640,6 +1640,35 @@ module ISM
             return getRequestedSoftwares(softwareToUpdate)
         end
 
+        def addPatch(path : String, softwareVersionName : String) : Bool
+            if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}")
+                Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}")
+            end
+
+            patchFileName = path.lchop(path[0..path.rindex("/")])
+
+            begin
+                FileUtils.cp(   path,
+                                Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}/#{patchFileName}")
+            rescue
+                return false
+            end
+
+            return true
+        end
+
+        def deletePatch(patchName : String, softwareVersionName : String) : Bool
+            path = Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}/#{patchName}"
+
+            begin
+                FileUtils.rm(path)
+            rescue
+                return false
+            end
+
+            return true
+        end
+
         #############################################
         #GERER LE CAS OU LE NOYAU N'EST PAS INSTALLE#
         #############################################

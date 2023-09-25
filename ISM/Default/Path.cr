@@ -20,6 +20,7 @@ module ISM
             SettingsSoftwaresDirectory = "#{SettingsDirectory}softwares/"
             BuiltSoftwaresDirectory = "#{TemporaryDirectory}builtsoftwares/"
             MirrorsDirectory = "#{RuntimeDataDirectory}mirrors/"
+            PatchesDirectory = "#{RuntimeDataDirectory}patches/"
 
         end
 
