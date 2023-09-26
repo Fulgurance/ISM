@@ -403,6 +403,10 @@ module ISM
             puts "#{ISM::Default::CommandLine::ProcessNotificationCharacters.colorize(:green)} #{message}"
         end
 
+        def printSubProcessNotification(message : String)
+            puts "\t| #{message}"
+        end
+
         def printErrorNotification(message : String, error)
             puts "[#{"!".colorize(:red)}] #{message}"
             if typeof(error) == Exception
@@ -433,6 +437,10 @@ module ISM
 
         def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::PatchText+softwareInformation.name)
+        end
+
+        def notifyOfLocalPatch(patchName : String)
+            printSubProcessNotification(ISM::Default::CommandLine::LocalPatchText+"#{patchName.colorize(:yellow)}")
         end
 
         def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
@@ -1641,15 +1649,15 @@ module ISM
         end
 
         def addPatch(path : String, softwareVersionName : String) : Bool
-            if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}")
-                Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}")
+            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}")
+                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}")
             end
 
             patchFileName = path.lchop(path[0..path.rindex("/")])
 
             begin
                 FileUtils.cp(   path,
-                                Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}/#{patchFileName}")
+                                @settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}/#{patchFileName}")
             rescue
                 return false
             end
@@ -1658,7 +1666,7 @@ module ISM
         end
 
         def deletePatch(patchName : String, softwareVersionName : String) : Bool
-            path = Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}/#{patchName}"
+            path = @settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}/#{patchName}"
 
             begin
                 FileUtils.rm(path)

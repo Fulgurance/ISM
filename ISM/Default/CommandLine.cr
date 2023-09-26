@@ -16,6 +16,7 @@ module ISM
             CheckText = "Checking "
             ExtractText = "Extracting "
             PatchText = "Patching "
+            LocalPatchText = "Applying local patch added by the user "
             PrepareText =  "Preparing " 
             ConfigureText = "Configuring "
             BuildText = "Building "
