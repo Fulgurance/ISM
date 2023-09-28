@@ -20,6 +20,7 @@ module ISM
                 AvailablesVersionsField = "Available(s) Version(s): "
                 InstalledVersionField = "Installed Version(s): "
                 OptionsField = "Current options setted: "
+                LocalPatchesField = "Current local patches: "
             end
             
         end

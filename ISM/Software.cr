@@ -215,7 +215,7 @@ module ISM
             if Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}")
                 Dir.glob(Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}/*"]) do |patch|
                     patchName = patch.lchop(patch[0..patch.rindex("/")])
-                    notifyOfLocalPatch(patchName)
+                    Ism.notifyOfLocalPatch(patchName)
                     applyPatch(patch)
                 end
             end
