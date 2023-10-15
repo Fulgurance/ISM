@@ -104,11 +104,12 @@ module ISM
                             end
 
                             localPatchesText = ""
-                            Dir.glob(Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{software.versionName}/*"]) do |patch|
-                                patchName = patch.lchop(patch[0..patch.rindex("/")])
+                            #temporary comment
+                            #Dir.glob(Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{software.versionName}/*"]) do |patch|
+                                #patchName = patch.lchop(patch[0..patch.rindex("/")])
 
-                                localPatchesText += "#{"\n\t| ".colorize(:green)}#{patchName.colorize(:yellow)}"
-                            end
+                                #localPatchesText += "#{"\n\t| ".colorize(:green)}#{patchName.colorize(:yellow)}"
+                            #end
 
                             if installedVersionText.empty?
                                 installedVersionText = ISM::Default::Option::SoftwareSearch::None

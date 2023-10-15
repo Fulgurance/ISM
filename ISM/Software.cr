@@ -1056,7 +1056,7 @@ module ISM
             installedFiles = Array(String).new
 
             filesList.each do |entry|
-                finalDestination = entry.delete_at(1,builtSoftwareDirectoryPath(false).size+Ism.settings.rootPath.size-2)
+                finalDestination = entry.sub(Ism.settings.rootPath)
 
                 if File.directory?(entry)
                     if !Dir.exists?(Ism.settings.rootPath+finalDestination)
