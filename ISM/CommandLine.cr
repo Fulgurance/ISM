@@ -1407,8 +1407,8 @@ module ISM
             tasks = <<-CODE
                     #{getRequiredLibraries}
                     Ism = ISM::CommandLine.new
-                    Ism.loadSoftwareDatabase
                     Ism.loadSettingsFiles
+                    Ism.loadSoftwareDatabase
                     {{ read_file("#{software.requireFilePath}").id }}
                     target = Target.new("#{software.filePath}")
                     #{getEnabledOptions(software)}
@@ -1438,8 +1438,8 @@ module ISM
             tasks = <<-CODE
                     #{getRequiredLibraries}
                     Ism = ISM::CommandLine.new
-                    Ism.loadSoftwareDatabase
                     Ism.loadSettingsFiles
+                    Ism.loadSoftwareDatabase
                     {{ read_file("#{software.requireFilePath}").id }}
                     target = Target.new("#{software.filePath}")
                     #{getEnabledOptions(software)}
@@ -1458,9 +1458,9 @@ module ISM
             tasks = <<-CODE
                     #{getRequiredLibraries}
                     Ism = ISM::CommandLine.new
+                    Ism.loadSettingsFiles
                     Ism.loadSoftwareDatabase
                     Ism.loadInstalledSoftwareDatabase
-                    Ism.loadSettingsFiles
                     {{ read_file("#{software.requireFilePath}").id }}
                     target = Target.new("#{software.filePath}")
                     #{getEnabledOptions(software)}
