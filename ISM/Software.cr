@@ -1056,14 +1056,14 @@ module ISM
             installedFiles = Array(String).new
 
             filesList.each do |entry|
-                finalDestination = entry.sub(Ism.settings.rootPath)
+                finalDestination = "#{Ism.settings.rootPath}/#{entry.sub(builtSoftwareDirectoryPath(false),"")}"
 
                 if File.directory?(entry)
-                    if !Dir.exists?(Ism.settings.rootPath+finalDestination)
-                        makeDirectory(Ism.settings.rootPath+finalDestination)
+                    if !Dir.exists?(finalDestination)
+                        makeDirectory(finalDestination)
                     end
                 else
-                    moveFile(entry,Ism.settings.rootPath+finalDestination)
+                    moveFile(entry,finalDestination)
                     installedFiles << finalDestination
                 end
 
