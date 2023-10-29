@@ -1056,7 +1056,8 @@ module ISM
             installedFiles = Array(String).new
 
             filesList.each do |entry|
-                finalDestination = "#{Ism.settings.rootPath}/#{entry.sub(builtSoftwareDirectoryPath(false),"")}"
+
+                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath(false),"")}"
 
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
