@@ -815,7 +815,7 @@ module ISM
             puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
             puts "\n"
 
-            dependencyText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+            dependencyText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.requiredVersion.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
 
             optionsText = "{ "
 

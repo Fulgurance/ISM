@@ -40,6 +40,10 @@ module ISM
             return Ism.getAvailableSoftware(@name).greatestVersion(@version).version
         end
 
+        def requiredVersion : String
+            return @version
+        end
+
         def information : ISM::SoftwareInformation
             dependencyInformation = Ism.getSoftwareInformation(versionName)
 
