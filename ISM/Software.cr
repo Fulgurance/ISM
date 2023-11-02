@@ -606,7 +606,7 @@ module ISM
                                         output: :inherit,
                                         error: :inherit,
                                         shell: true,
-                                        chdir: path,
+                                        chdir: (path == "" ? nil : path),
                                         env: environment)
             end
 
