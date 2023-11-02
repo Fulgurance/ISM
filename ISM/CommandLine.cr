@@ -1146,7 +1146,7 @@ module ISM
                 synchronization = port.synchronize
 
                 until synchronization.terminated?
-                    playCalculationAnimation
+                    playCalculationAnimation(ISM::Default::CommandLine::SynchronizationWaitingText)
                     sleep 0
                 end
 

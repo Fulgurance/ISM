@@ -96,6 +96,7 @@ module ISM
             NoCleaningRequiredMessage = "No cleaning required. Task complete."
             CalculationTitle = "ISM start to calculate dependencies: "
             CalculationWaitingText = "Checking dependencies tree"
+            SynchronizationWaitingText = "Synchronization with the online database"
             CalculationDoneText = "Done !"
             Separator = "____________"
             NoOptionText = "no option"
