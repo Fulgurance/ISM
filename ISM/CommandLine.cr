@@ -1524,7 +1524,6 @@ module ISM
 
             #Double check if we are not gonna remove needed dependencies for the system
             requiredDependencies.values.each do |requiredSoftware|
-
                 playCalculationAnimation
 
                 #Generate as well the multiple versions hash
@@ -1551,8 +1550,11 @@ module ISM
                     needed = false
 
                     requiredDependencies.values.each do |requiredDependency|
+                        playCalculationAnimation
 
                         requiredDependency.dependencies.each do |dependency|
+                            playCalculationAnimation
+
                             if version.hiddenName == dependency.hiddenName
                                 needed = true
                                 break
@@ -1601,13 +1603,6 @@ module ISM
                         end
                     end
                 end
-                #???
-                #else
-                    #if !wrongArguments.includes?(requestedDependency.hiddenName)
-                        #wrongArguments.push(requestedDependency.hiddenName)
-                    #end
-                #end
-
             end
 
             if !wrongArguments.empty?
