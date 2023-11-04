@@ -1509,6 +1509,8 @@ module ISM
                 requestedSoftwaresHash[softwareDependency.hiddenName] = softwareDependency
 
                 software.dependencies.each do |dependency|
+                    playCalculationAnimation
+
                     requestedSoftwaresHash[dependency.hiddenName] = dependency
                 end
             end
