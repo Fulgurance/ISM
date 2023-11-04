@@ -142,7 +142,7 @@ module ISM
         @options.each do |data|
             optionsDependenciesArray = Array(Dependency).new
             data.dependencies.each do |dependencyData|
-                dependency = Dependency.new(dependencyData.name,dependencyData.version,dependencyData.options)
+                dependency = Dependency.new(dependencyData.name,dependencyData.requiredVversion,dependencyData.options)
                 optionsDependenciesArray << dependency
             end
 
