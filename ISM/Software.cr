@@ -1065,7 +1065,7 @@ module ISM
                     end
                 else
                     moveFile(entry,finalDestination)
-                    installedFiles << finalDestination
+                    installedFiles << finalDestination.sub(Ism.settings.rootPath,"")
                 end
 
             end
