@@ -21,6 +21,7 @@ module ISM
             BuiltSoftwaresDirectory = "#{TemporaryDirectory}builtsoftwares/"
             MirrorsDirectory = "#{RuntimeDataDirectory}mirrors/"
             PatchesDirectory = "#{RuntimeDataDirectory}patches/"
+            FavouriteGroupsDirectory = "#{RuntimeDataDirectory}favouritegroups/"
 
         end
 

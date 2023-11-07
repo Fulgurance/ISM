@@ -17,6 +17,7 @@ module ISM
         property portsSettings : ISM::CommandLinePortsSettings
         property mirrors : Array(ISM::Mirror)
         property mirrorsSettings : ISM::CommandLineMirrorsSettings
+        property favouriteGroups : Array(ISM::FavouriteGroup)
 
         def initialize
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
@@ -38,6 +39,7 @@ module ISM
             @portsSettings = ISM::CommandLinePortsSettings.new
             @mirrors = Array(ISM::Mirror).new
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.new
+            @favouriteGroups = Array(ISM::FavouriteGroup).new
             @initialTerminalTitle = String.new
         end
 
@@ -48,6 +50,7 @@ module ISM
             loadInstalledSoftwareDatabase
             loadPortsDatabase
             loadMirrorsDatabase
+            loadFavouriteGroupsDatabase
             checkEnteredArguments
         end
 
@@ -149,6 +152,26 @@ module ISM
                     mirror = ISM::Mirror.new(mirrorFile[0..-6])
                     mirror.loadMirrorFile
                     @mirrors << mirror
+                end
+            end
+        end
+
+        def loadFavouriteGroupsDatabase
+            if !Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory)
+                Dir.mkdir_p(Ism.settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory)
+            end
+
+            favouriteGroupsFiles = Dir.children(Ism.settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory)
+
+            if favouriteGroupsFiles.size == 0
+                favouriteGroup = ISM::FavouriteGroup.new
+                favouriteGroup.loadFavouriteGroupFile
+                @favouriteGroups << favouriteGroup
+            else
+                favouriteGroupsFiles.each do |favouriteGroupFile|
+                    favouriteGroup = ISM::FavouriteGroup.new(favouriteGroupFile[0..-6])
+                    favouriteGroup.loadFavouriteGroupFile
+                    @favouriteGroups << favouriteGroup
                 end
             end
         end
