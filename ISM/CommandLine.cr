@@ -244,6 +244,21 @@ module ISM
             softwareInformation.writeInformationFile(softwareInformation.installedFilePath)
         end
 
+        def addSoftwareToFavouriteGroup(versionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
+            favouriteGroup = ISM::FavouriteGroup.new(favouriteGroupName)
+            favouriteGroup.loadFavouriteGroupFile
+            favouriteGroup.softwares = favouriteGroup.softwares | [versionName]
+            favouriteGroup.writeFavouriteGroupFile
+        end
+
+        def removeSoftwareToFavouriteGroup(versionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
+            #Ne pas créer si groupe n'existe pas
+            favouriteGroup = ISM::FavouriteGroup.new(favouriteGroupName)
+            favouriteGroup.loadFavouriteGroupFile
+            favouriteGroup.softwares.delete(versionName)
+            favouriteGroup.writeFavouriteGroupFile
+        end
+
         def removeInstalledSoftware(software : ISM::SoftwareInformation)
             #Need to manage uninstallation of a pass
             @installedSoftwares.each do |installedSoftware|
@@ -1109,6 +1124,10 @@ module ISM
 
                 runInstallationProcess(software)
 
+                if @requestedSoftwares.includes?(software.versionName)
+                    addSoftwareToFavouriteGroup(software.versionName)
+                end
+
                 showEndSoftwareInstallingMessage(index, limit, name, version)
 
                 if index < neededSoftwares.size-1
@@ -1586,7 +1605,7 @@ module ISM
 
                     end
 
-                    if !needed
+                    if !needed && (!@favouriteGroups[0].softwares.includes?(version.versionName) || @favouriteGroups[0].softwares.includes?(version.versionName) && @requestedSoftwares.includes?(version.versionName))
                         uneededSoftwares[version.hiddenName] = version
                         requiredDependencies.delete(version.hiddenName)
                     end
@@ -1602,13 +1621,13 @@ module ISM
 
                 requestedDependency = requestedSoftware.toSoftwareDependency
 
-                if !requiredDependencies.has_key?(requestedDependency.hiddenName)
+                if !requiredDependencies.has_key?(requestedDependency.hiddenName) && (!@favouriteGroups[0].softwares.includes?(requestedDependency.versionName) || @favouriteGroups[0].softwares.includes?(requestedDependency.versionName) && @requestedSoftwares.includes?(requestedDependency.versionName))
                     uneededSoftwares[requestedDependency.hiddenName] = requestedDependency
 
                     requestedSoftwaresHash.keys.each do |key|
                         playCalculationAnimation
 
-                        if !requiredDependencies.has_key?(key)
+                        if !requiredDependencies.has_key?(key) && (!@favouriteGroups[0].softwares.includes?(requestedSoftwaresHash[key].versionName) || @favouriteGroups[0].softwares.includes?(requestedSoftwaresHash[key].versionName) && @requestedSoftwares.includes?(requestedSoftwaresHash[key].versionName))
                             uneededSoftwares[key] = requestedSoftwaresHash[key]
                         end
 
