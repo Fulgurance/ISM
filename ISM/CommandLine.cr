@@ -1531,13 +1531,14 @@ module ISM
             result = Array(ISM::SoftwareInformation).new
 
             @favouriteGroups.each do |group|
-                result = (result + Ism.getRequestedSoftwares(group.softwares))
+                result = (result + getRequestedSoftwares(group.softwares))
             end
 
             return result
         end
 
         def getUnneededSoftwares : Array(ISM::SoftwareDependency)
+            wrongArguments = Array(String).new
             requiredDependencies = Hash(String,ISM::SoftwareDependency).new
             requestedSoftwaresHash = Hash(String,ISM::SoftwareDependency).new
             uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
@@ -1616,7 +1617,7 @@ module ISM
 
                     end
 
-                    if !needed
+                    if !needed && !favouriteSoftwares.any? { |entry| entry.versionName == version.versionName}
                         uneededSoftwares[version.hiddenName] = version
                         requiredDependencies.delete(version.hiddenName)
                     end
@@ -1625,20 +1626,18 @@ module ISM
 
             end
 
-            wrongArguments = Array(String).new
-
             @requestedSoftwares.each do |requestedSoftware|
                 playCalculationAnimation
 
                 requestedDependency = requestedSoftware.toSoftwareDependency
 
-                if !requiredDependencies.has_key?(requestedDependency.hiddenName)
+                if !requiredDependencies.has_key?(requestedDependency.hiddenName) && !favouriteSoftwares.any? { |entry| entry.versionName == requestedDependency.versionName}
                     uneededSoftwares[requestedDependency.hiddenName] = requestedDependency
 
                     requestedSoftwaresHash.keys.each do |key|
                         playCalculationAnimation
 
-                        if !requiredDependencies.has_key?(key)
+                        if !requiredDependencies.has_key?(key) && !favouriteSoftwares.any? { |entry| entry.versionName == requestedSoftwaresHash[key].versionName}
                             uneededSoftwares[key] = requestedSoftwaresHash[key]
                         end
 
