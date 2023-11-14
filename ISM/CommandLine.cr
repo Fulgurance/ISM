@@ -1124,7 +1124,7 @@ module ISM
 
                 runInstallationProcess(software)
 
-                if @requestedSoftwares.includes?(software.versionName)
+                if @requestedSoftwares.any? { |entry| entry.versionName == software.versionName}
                     addSoftwareToFavouriteGroup(software.versionName)
                 end
 
@@ -1532,6 +1532,12 @@ module ISM
             requestedSoftwaresHash = Hash(String,ISM::SoftwareDependency).new
             uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
             multipleVersionSoftwaresHash = Hash(String,Array(ISM::SoftwareDependency)).new
+            favouriteSoftwares = Array(String).new
+
+            #Make an array of all recorded favourite softwares
+            @favouriteGroups.each do |group|
+                favouriteSoftwares = (favouriteSoftwares + group.softwares).uniq
+            end
 
             #Make hash of the installed softwares
             @installedSoftwares.each do |software|
@@ -1553,7 +1559,10 @@ module ISM
                 software.dependencies.each do |dependency|
                     playCalculationAnimation
 
-                    requestedSoftwaresHash[dependency.hiddenName] = dependency
+                    if !favouriteSoftwares.includes?(dependency.versionName) || favouriteSoftwares.includes?(dependency.versionName) && @requestedSoftwares.any? { |entry| entry.versionName == dependency.versionName }
+                        requestedSoftwaresHash[dependency.hiddenName] = dependency
+                    end
+
                 end
             end
 
@@ -1605,7 +1614,7 @@ module ISM
 
                     end
 
-                    if !needed && (!@favouriteGroups[0].softwares.includes?(version.versionName) || @favouriteGroups[0].softwares.includes?(version.versionName) && @requestedSoftwares.includes?(version.versionName))
+                    if !needed
                         uneededSoftwares[version.hiddenName] = version
                         requiredDependencies.delete(version.hiddenName)
                     end
@@ -1621,13 +1630,13 @@ module ISM
 
                 requestedDependency = requestedSoftware.toSoftwareDependency
 
-                if !requiredDependencies.has_key?(requestedDependency.hiddenName) && (!@favouriteGroups[0].softwares.includes?(requestedDependency.versionName) || @favouriteGroups[0].softwares.includes?(requestedDependency.versionName) && @requestedSoftwares.includes?(requestedDependency.versionName))
+                if !requiredDependencies.has_key?(requestedDependency.hiddenName)
                     uneededSoftwares[requestedDependency.hiddenName] = requestedDependency
 
                     requestedSoftwaresHash.keys.each do |key|
                         playCalculationAnimation
 
-                        if !requiredDependencies.has_key?(key) && (!@favouriteGroups[0].softwares.includes?(requestedSoftwaresHash[key].versionName) || @favouriteGroups[0].softwares.includes?(requestedSoftwaresHash[key].versionName) && @requestedSoftwares.includes?(requestedSoftwaresHash[key].versionName))
+                        if !requiredDependencies.has_key?(key)
                             uneededSoftwares[key] = requestedSoftwaresHash[key]
                         end
 
