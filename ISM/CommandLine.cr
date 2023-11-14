@@ -1534,6 +1534,8 @@ module ISM
             multipleVersionSoftwaresHash = Hash(String,Array(ISM::SoftwareDependency)).new
             favouriteSoftwares = Array(String).new
 
+            # if !favouriteSoftwares.includes?(dependency.versionName) || favouriteSoftwares.includes?(dependency.versionName) && @requestedSoftwares.any? { |entry| entry.versionName == dependency.versionName }
+
             #Make an array of all recorded favourite softwares
             @favouriteGroups.each do |group|
                 favouriteSoftwares = (favouriteSoftwares + group.softwares).uniq
@@ -1559,12 +1561,7 @@ module ISM
                 software.dependencies.each do |dependency|
                     playCalculationAnimation
 
-                    if !favouriteSoftwares.includes?(dependency.versionName) || favouriteSoftwares.includes?(dependency.versionName) && @requestedSoftwares.any? { |entry| entry.versionName == dependency.versionName }
-                        requestedSoftwaresHash[dependency.hiddenName] = dependency
-                    else
-                        requestedSoftwaresHash.delete(dependency.hiddenName)
-                    end
-
+                    requestedSoftwaresHash[dependency.hiddenName] = dependency
                 end
             end
 
@@ -1572,7 +1569,15 @@ module ISM
             requestedSoftwaresHash.keys.each do |key|
                 playCalculationAnimation
 
-                requiredDependencies.delete(key)
+                #####
+                software = requiredDependencies[key].versionName
+                #####
+
+                #####CHECKING IF NOT MEMBER OF FAVOURITES
+                if !favouriteSoftwares.includes?(software) || favouriteSoftwares.includes?(software) && @requestedSoftwares.any? { |entry| software == dependency.versionName }
+                #####
+                    requiredDependencies.delete(key)
+                end
             end
 
             #Double check if we are not gonna remove needed dependencies for the system
