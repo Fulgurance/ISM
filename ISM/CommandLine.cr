@@ -1527,22 +1527,25 @@ module ISM
             return getSortedDependencies(dependencyTable)
         end
 
+        def getFavouriteSoftwares : Array(ISM::SoftwareInformation)
+            result = Array(ISM::SoftwareInformation).new
+
+            @favouriteGroups.each do |group|
+                result = (result + Ism.getRequestedSoftwares(group.softwares))
+            end
+
+            return result
+        end
+
         def getUnneededSoftwares : Array(ISM::SoftwareDependency)
             requiredDependencies = Hash(String,ISM::SoftwareDependency).new
             requestedSoftwaresHash = Hash(String,ISM::SoftwareDependency).new
             uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
             multipleVersionSoftwaresHash = Hash(String,Array(ISM::SoftwareDependency)).new
-            favouriteSoftwares = Array(String).new
+            favouriteSoftwares = getFavouriteSoftwares
 
-            # if !favouriteSoftwares.includes?(dependency.versionName) || favouriteSoftwares.includes?(dependency.versionName) && @requestedSoftwares.any? { |entry| entry.versionName == dependency.versionName }
-
-            #Make an array of all recorded favourite softwares
-            @favouriteGroups.each do |group|
-                favouriteSoftwares = (favouriteSoftwares + group.softwares).uniq
-            end
-
-            #Make hash of the installed softwares
-            @installedSoftwares.each do |software|
+            #Make hash of the required dependencies
+            favouriteSoftwares.each do |software|
                 playCalculationAnimation
 
                 softwareDependency = software.toSoftwareDependency
@@ -1569,15 +1572,7 @@ module ISM
             requestedSoftwaresHash.keys.each do |key|
                 playCalculationAnimation
 
-                #####
-                software = requiredDependencies[key].versionName
-                #####
-
-                #####CHECKING IF NOT MEMBER OF FAVOURITES
-                if !favouriteSoftwares.includes?(software) || favouriteSoftwares.includes?(software) && @requestedSoftwares.any? { |entry| software == entry.versionName }
-                #####
-                    requiredDependencies.delete(key)
-                end
+                requiredDependencies.delete(key)
             end
 
             #Double check if we are not gonna remove needed dependencies for the system
@@ -1653,7 +1648,7 @@ module ISM
                             requiredDependencies[requiredKey].dependencies.each do |dependency|
                                 playCalculationAnimation
 
-                                if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.hiddenName) || favouriteSoftwares.includes?(dependency.versionName)
+                                if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.hiddenName)
                                     wrongArguments.push(requestedDependency.hiddenName)
                                 end
                             end
