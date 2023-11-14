@@ -1561,6 +1561,8 @@ module ISM
 
                     if !favouriteSoftwares.includes?(dependency.versionName) || favouriteSoftwares.includes?(dependency.versionName) && @requestedSoftwares.any? { |entry| entry.versionName == dependency.versionName }
                         requestedSoftwaresHash[dependency.hiddenName] = dependency
+                    else
+                        requestedSoftwaresHash.delete(dependency.hiddenName)
                     end
 
                 end
