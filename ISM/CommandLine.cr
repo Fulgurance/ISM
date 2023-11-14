@@ -1574,7 +1574,7 @@ module ISM
                 #####
 
                 #####CHECKING IF NOT MEMBER OF FAVOURITES
-                if !favouriteSoftwares.includes?(software) || favouriteSoftwares.includes?(software) && @requestedSoftwares.any? { |entry| software == dependency.versionName }
+                if !favouriteSoftwares.includes?(software) || favouriteSoftwares.includes?(software) && @requestedSoftwares.any? { |entry| software == entry.versionName }
                 #####
                     requiredDependencies.delete(key)
                 end
@@ -1653,7 +1653,7 @@ module ISM
                             requiredDependencies[requiredKey].dependencies.each do |dependency|
                                 playCalculationAnimation
 
-                                if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.hiddenName)
+                                if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.hiddenName) || favouriteSoftwares.includes?(dependency.versionName)
                                     wrongArguments.push(requestedDependency.hiddenName)
                                 end
                             end
