@@ -1589,7 +1589,7 @@ module ISM
         end
 
         def getSoftwaresToUpdate : Array(ISM::SoftwareInformation)
-            softwareToUpdate = Array(String).new
+            softwareToUpdate = Array(ISM::SoftwareInformation).new
 
             @installedSoftwares.each do |installedSoftware|
 
@@ -1606,7 +1606,7 @@ module ISM
                     #Faire en sorte de renvoyer directement la dernière version avec les options nécessaires ?
                     if installedSoftware.name == availableSoftware.name
                         if currentVersion < greatestVersion && !softwareIsInstalled(greatestSoftware)
-                            softwareToUpdate.push(installedSoftware.name)
+                            softwareToUpdate.push(installedSoftware)
                         else
                             #Ajouter les logiciels à jour mais nécessitant une mise à jour des options
                         end
@@ -1616,7 +1616,7 @@ module ISM
 
             end
 
-            return getRequestedSoftwares(softwareToUpdate)
+            return softwareToUpdate
         end
 
         def addPatch(path : String, softwareVersionName : String) : Bool
