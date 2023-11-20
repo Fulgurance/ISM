@@ -1558,6 +1558,16 @@ module ISM
 
             end
 
+            #CHECK IF ONE OF THE REQUESTED SOFTWARE IS NOT REQUIRED
+            @requestedSoftwares.each do |software|
+
+                #If it's require, add to wrong arguments
+                if requiredSoftwares.has_key?(software.versionName)
+                    wrongArguments.push(software.versionName)
+                end
+
+            end
+
             #CHECK FOR ALL INSTALLED SOFTWARES IF THERE ARE ANY USELESS SOFTWARES
             @installedSoftwares.each do |software|
                 playCalculationAnimation
@@ -1565,12 +1575,6 @@ module ISM
                 #If it's not require, add to unneeded softwares
                 if !requiredSoftwares.has_key?(software.versionName)
                     unneededSoftwares.push(software.toSoftwareDependency)
-                else
-                    #Check when the software is require if it's a user request for removal
-                    if @requestedSoftwares.any? {|entry| entry.versionName == software.versionName}
-                        unneededSoftwares.push(software.toSoftwareDependency)
-                    end
-
                 end
 
             end
