@@ -1197,7 +1197,7 @@ module ISM
             cleanCalculationAnimation
         end
 
-        def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false) : Array(ISM::SoftwareDependency)
+        def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false, allowDeepSearch = false) : Array(ISM::SoftwareDependency)
             dependencies = Hash(String,ISM::SoftwareDependency).new
             currentDependencies = [software.toSoftwareDependency]
             nextDependencies = Array(ISM::SoftwareDependency).new
@@ -1212,7 +1212,7 @@ module ISM
 
                 currentDependencies.each do |dependency|
 
-                    if !Ism.softwareIsInstalled(dependency.information) || Ism.softwareIsInstalled(dependency.information) && allowRebuild == true && dependency.information == software
+                    if !Ism.softwareIsInstalled(dependency.information) || Ism.softwareIsInstalled(dependency.information) && allowRebuild == true && dependency.information == software || allowDeepSearch == true
                         playCalculationAnimation
 
                         dependencyInformation = dependency.information
@@ -1527,134 +1527,52 @@ module ISM
             return getSortedDependencies(dependencyTable)
         end
 
-        def getFavouriteSoftwares : Array(ISM::SoftwareInformation)
-            result = Array(ISM::SoftwareInformation).new
-
-            @favouriteGroups.each do |group|
-                result = (result + getRequestedSoftwares(group.softwares))
-            end
-
-            return result
-        end
-
         def getUnneededSoftwares : Array(ISM::SoftwareDependency)
             wrongArguments = Array(String).new
-            requiredDependencies = Hash(String,ISM::SoftwareDependency).new
-            requestedSoftwaresHash = Hash(String,ISM::SoftwareDependency).new
-            uneededSoftwares = Hash(String,ISM::SoftwareDependency).new
-            multipleVersionSoftwaresHash = Hash(String,Array(ISM::SoftwareDependency)).new
-            favouriteSoftwares = getFavouriteSoftwares
+            requiredSoftwares = Hash(String,ISM::SoftwareDependency).new
+            unneededSoftwares = Array(ISM::SoftwareDependency).new
 
-            #Make hash of the required dependencies
-            favouriteSoftwares.each do |software|
+            #GET ALL REQUIRED SOFTWARES
+            @favouriteGroups.each do |group|
                 playCalculationAnimation
 
-                softwareDependency = software.toSoftwareDependency
-
-                requiredDependencies[softwareDependency.hiddenName] = softwareDependency
-            end
-
-            #Make hash of the requested softwares for uninstallation (with dependencies)
-            @requestedSoftwares.each do |software|
-                playCalculationAnimation
-
-                softwareDependency = software.toSoftwareDependency
-
-                requestedSoftwaresHash[softwareDependency.hiddenName] = softwareDependency
-
-                software.dependencies.each do |dependency|
+                #For each software in favourites: add entry in requiredSoftwares
+                getRequestedSoftwares(group.softwares).each do |software|
                     playCalculationAnimation
 
-                    requestedSoftwaresHash[dependency.hiddenName] = dependency
+                    #If software in favourite is not requested for removal, it is require, else no
+                    if !@requestedSoftwares.any? {|entry| entry.versionName == software.versionName}
+
+                        requiredSoftwares[software.versionName] = software.toSoftwareDependency
+
+                        #For each dependency of favourites: add entry in requiredSoftwares
+                        getRequiredDependencies(software, allowDeepSearch: true).each do |dependency|
+                            playCalculationAnimation
+
+                            requiredSoftwares[dependency.versionName] = dependency
+                        end
+
+                    end
+
                 end
+
             end
 
-            #Remove requested softwares for removal from the required dependencies
-            requestedSoftwaresHash.keys.each do |key|
+            #CHECK FOR ALL INSTALLED SOFTWARES IF THERE ARE ANY USELESS SOFTWARES
+            @installedSoftwares.each do |software|
                 playCalculationAnimation
 
-                requiredDependencies.delete(key)
-            end
-
-            #Double check if we are not gonna remove needed dependencies for the system
-            requiredDependencies.values.each do |requiredSoftware|
-                playCalculationAnimation
-
-                #Generate as well the multiple versions hash
-                if !multipleVersionSoftwaresHash.has_key?(requiredSoftware.name)
-                    multipleVersionSoftwaresHash[requiredSoftware.name] = [requiredSoftware]
+                #If it's not require, add to unneeded softwares
+                if !requiredSoftwares.has_key?(software.versionName)
+                    unneededSoftwares.push(software.toSoftwareDependency)
                 else
-                    multipleVersionSoftwaresHash[requiredSoftware.name].push(requiredSoftware)
-                end
-
-                requiredSoftware.dependencies.each do |dependency|
-                    playCalculationAnimation
-
-                    requiredDependencies[dependency.hiddenName] = dependency
-                end
-            end
-
-            #Check if same software with differents versions are all needed
-            multipleVersionSoftwaresHash.values.each do |versions|
-                playCalculationAnimation
-
-                versions.each do |version|
-                    playCalculationAnimation
-
-                    needed = false
-
-                    requiredDependencies.values.each do |requiredDependency|
-                        playCalculationAnimation
-
-                        requiredDependency.dependencies.each do |dependency|
-                            playCalculationAnimation
-
-                            if version.hiddenName == dependency.hiddenName
-                                needed = true
-                                break
-                            end
-                        end
-
-                    end
-
-                    if !needed && !favouriteSoftwares.any? { |entry| entry.versionName == version.versionName}
-                        uneededSoftwares[version.hiddenName] = version
-                        requiredDependencies.delete(version.hiddenName)
+                    #Check when the software is require if it's a user request for removal
+                    if @requestedSoftwares.any? {|entry| entry.versionName == software.versionName}
+                        unneededSoftwares.push(software.toSoftwareDependency)
                     end
 
                 end
 
-            end
-
-            @requestedSoftwares.each do |requestedSoftware|
-                playCalculationAnimation
-
-                requestedDependency = requestedSoftware.toSoftwareDependency
-
-                if !requiredDependencies.has_key?(requestedDependency.hiddenName) && !favouriteSoftwares.any? { |entry| entry.versionName == requestedDependency.versionName}
-                    uneededSoftwares[requestedDependency.hiddenName] = requestedDependency
-
-                    requestedSoftwaresHash.keys.each do |key|
-                        playCalculationAnimation
-
-                        if !requiredDependencies.has_key?(key) && !favouriteSoftwares.any? { |entry| entry.versionName == requestedSoftwaresHash[key].versionName}
-                            uneededSoftwares[key] = requestedSoftwaresHash[key]
-                        end
-
-                        requiredDependencies.keys.each do |requiredKey|
-                            playCalculationAnimation
-
-                            requiredDependencies[requiredKey].dependencies.each do |dependency|
-                                playCalculationAnimation
-
-                                if dependency.hiddenName == requestedDependency.hiddenName && !wrongArguments.includes?(requestedDependency.hiddenName)
-                                    wrongArguments.push(requestedDependency.hiddenName)
-                                end
-                            end
-
-                        end
-                    end
-                end
             end
 
             if !wrongArguments.empty?
@@ -1663,7 +1581,7 @@ module ISM
                 exitProgram
             end
 
-            return uneededSoftwares.values
+            return unneededSoftwares
         end
 
         def getSoftwaresToUpdate : Array(ISM::SoftwareInformation)
