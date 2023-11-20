@@ -1606,7 +1606,7 @@ module ISM
                     #Faire en sorte de renvoyer directement la dernière version avec les options nécessaires ?
                     if installedSoftware.name == availableSoftware.name
                         if currentVersion < greatestVersion && !softwareIsInstalled(greatestSoftware)
-                            softwareToUpdate.push(installedSoftware)
+                            softwareToUpdate.push(greatestSoftware)
                         else
                             #Ajouter les logiciels à jour mais nécessitant une mise à jour des options
                         end
