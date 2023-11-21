@@ -1644,6 +1644,8 @@ module ISM
 
             end
 
+            puts
+
             return softwareToUpdate
         end
 
