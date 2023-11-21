@@ -41,6 +41,7 @@ module ISM
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.new
             @favouriteGroups = Array(ISM::FavouriteGroup).new
             @initialTerminalTitle = String.new
+            @unavailableDependencySignals = Array(Array(ISM::SoftwareDependency)).new
         end
 
         def start
@@ -849,7 +850,12 @@ module ISM
             puts "#{ISM::Default::CommandLine::NeededText.colorize(:green)}"
         end
 
-        def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareDependency)
+        def showSkippedUpdatesMessage
+            puts "#{ISM::Default::CommandLine::SkippedUpdatesText.colorize(:yellow)}"
+            puts
+        end
+
+        def showUnavailableDependencyMessage(software : ISM::SoftwareDependency, dependency : ISM::SoftwareDependency)
             puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
             puts "\n"
 
@@ -1197,7 +1203,7 @@ module ISM
             cleanCalculationAnimation
         end
 
-        def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false, allowDeepSearch = false) : Array(ISM::SoftwareDependency)
+        def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareDependency)
             dependencies = Hash(String,ISM::SoftwareDependency).new
             currentDependencies = [software.toSoftwareDependency]
             nextDependencies = Array(ISM::SoftwareDependency).new
@@ -1211,24 +1217,21 @@ module ISM
                 end
 
                 currentDependencies.each do |dependency|
+                    dependencyInformation = dependency.information
 
-                    if !Ism.softwareIsInstalled(dependency.information) || Ism.softwareIsInstalled(dependency.information) && allowRebuild == true && dependency.information == software || allowDeepSearch == true
+                    if !Ism.softwareIsInstalled(dependencyInformation) || Ism.softwareIsInstalled(dependencyInformation) && allowRebuild == true && dependencyInformation == software || allowDeepSearch == true
                         playCalculationAnimation
 
-                        dependencyInformation = dependency.information
-
-                        #Software not available
-                        if dependencyInformation.name == ""
-                            showCalculationDoneMessage
-                            showUnavailableDependencyMessage(software,dependency)
-                            exitProgram
-                        end
-
-                        #Version not available
-                        if dependencyInformation.version == ""
-                            showCalculationDoneMessage
-                            showUnavailableDependencyMessage(software,dependency)
-                            exitProgram
+                        #Software or version not available
+                        if dependencyInformation.name == "" || dependencyInformation.version == ""
+                            if allowSkipUnavailable == true
+                                @unavailableDependencySignals.push([software.toSoftwareDependency,dependency])
+                                return dependencies.values
+                            else
+                                showCalculationDoneMessage
+                                showUnavailableDependencyMessage(software.toSoftwareDependency,dependency)
+                                exitProgram
+                            end
                         end
 
                         #Need multiple version or need to fusion options
@@ -1590,11 +1593,14 @@ module ISM
 
         def getSoftwaresToUpdate : Array(ISM::SoftwareInformation)
             softwareToUpdate = Array(ISM::SoftwareInformation).new
+            skippedUpdates = false
 
+            #FOR EACH INSTALLED SOFTWARE, WE CHECK IF THERE IS ANY BETTER VERSION
             @installedSoftwares.each do |installedSoftware|
 
                 playCalculationAnimation
 
+                #We check all available softwares in the database
                 @softwares.each do |availableSoftware|
 
                     playCalculationAnimation
@@ -1603,15 +1609,33 @@ module ISM
                     greatestSoftware = availableSoftware.greatestVersion
                     greatestVersion = SemanticVersion.parse(greatestSoftware.version)
 
-                    #Faire en sorte de renvoyer directement la dernière version avec les options nécessaires ?
                     if installedSoftware.name == availableSoftware.name
                         if currentVersion < greatestVersion && !softwareIsInstalled(greatestSoftware)
-                            softwareToUpdate.push(greatestSoftware)
-                        else
-                            #Ajouter les logiciels à jour mais nécessitant une mise à jour des options
+                            #We test first if the software is installable
+                            installable = !(getRequiredDependencies(greatestSoftware,allowSkipUnavailable: false)).empty?
+
+                            if !installable
+                                skippedUpdates = true
+                            else
+                                #Missing options check from the previous version
+                                softwareToUpdate.push(greatestSoftware)
+                            end
+
                         end
                     end
 
+                end
+
+            end
+
+            showCalculationDoneMessage
+
+            #IF THERE IS ANY SKIPPED UPDATES, WE NOTICE THE USER
+            if skippedUpdates
+                showSkippedUpdatesMessage
+
+                @unavailableDependencySignals.each do |signal|
+                    showUnavailableDependencyMessage(signal[0],signal[1])
                 end
 
             end
