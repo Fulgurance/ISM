@@ -855,9 +855,11 @@ module ISM
             puts
         end
 
-        def showUnavailableDependencyMessage(software : ISM::SoftwareDependency, dependency : ISM::SoftwareDependency)
-            puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
-            puts "\n"
+        def showUnavailableDependencyMessage(software : ISM::SoftwareDependency, dependency : ISM::SoftwareDependency, allowTitle = true)
+            if allowTitle
+                puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
+                puts "\n"
+            end
 
             dependencyText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.requiredVersion.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
 
@@ -883,7 +885,9 @@ module ISM
 
             puts "\t" + dependencyText + " " + optionsText + missingDependencyText + softwareText + "\n"
 
-            puts "\n"
+            if allowTitle
+                puts "\n"
+            end
         end
 
         def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareDependency))
@@ -1226,7 +1230,7 @@ module ISM
                         if dependencyInformation.name == "" || dependencyInformation.version == ""
                             if allowSkipUnavailable == true
                                 @unavailableDependencySignals.push([software.toSoftwareDependency,dependency])
-                                return dependencies.values
+                                return Array(ISM::SoftwareDependency).new
                             else
                                 showCalculationDoneMessage
                                 showUnavailableDependencyMessage(software.toSoftwareDependency,dependency)
@@ -1612,7 +1616,7 @@ module ISM
                     if installedSoftware.name == availableSoftware.name
                         if currentVersion < greatestVersion && !softwareIsInstalled(greatestSoftware)
                             #We test first if the software is installable
-                            installable = !(getRequiredDependencies(greatestSoftware,allowSkipUnavailable: false)).empty?
+                            installable = !(getRequiredDependencies(greatestSoftware,allowSkipUnavailable: true)).empty?
 
                             if !installable
                                 skippedUpdates = true
@@ -1635,7 +1639,7 @@ module ISM
                 showSkippedUpdatesMessage
 
                 @unavailableDependencySignals.each do |signal|
-                    showUnavailableDependencyMessage(signal[0],signal[1])
+                    showUnavailableDependencyMessage(signal[0], signal[1], allowTitle: false)
                 end
 
             end

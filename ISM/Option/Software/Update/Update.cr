@@ -16,8 +16,6 @@ module ISM
 
                 Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
 
-                Ism.showCalculationDoneMessage
-
                 #No update
                 if Ism.requestedSoftwares.empty?
                     Ism.showNoUpdateMessage
