@@ -1638,6 +1638,10 @@ module ISM
             if skippedUpdates
                 showSkippedUpdatesMessage
 
+                #Remove duplicate skipped updates
+                @unavailableDependencySignals.uniq! { |entry| [entry[0].versionName,entry[1].versionName]}
+
+                #Show all skipped updates
                 @unavailableDependencySignals.each do |signal|
                     showUnavailableDependencyMessage(signal[0], signal[1], allowTitle: false)
                 end
