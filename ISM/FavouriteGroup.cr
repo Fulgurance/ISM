@@ -9,7 +9,7 @@ module ISM
         property name : String
         property softwares : Array(String)
 
-        def initialize(@name = String.new, @softwares = Array(String).new)
+        def initialize(@name = ISM::Default::FavouriteGroup::Name, @softwares = Array(String).new)
         end
 
         def filePath : String
