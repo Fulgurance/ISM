@@ -972,6 +972,28 @@ module ISM
             end
         end
 
+        def runGtkUpdateIconCacheCommand(arguments = Array(String).new)
+            requestedCommands = ["gtk-update-icon-cache"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def runUpdateDesktopDatabaseCommand(arguments = Array(String).new)
+            requestedCommands = ["update-desktop-database"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
             servicesPath = "/etc/init.d/"
 
