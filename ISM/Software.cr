@@ -785,6 +785,17 @@ module ISM
             end
         end
 
+        def runAutoconfCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+            requestedCommands = ["autoconf"]+arguments
+
+            process = runSystemCommand(requestedCommands, path, environment)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.exitProgram
+            end
+        end
+
         def runAutoreconfCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
             requestedCommands = ["autoreconf"]+arguments
 
