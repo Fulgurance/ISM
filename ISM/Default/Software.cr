@@ -5,7 +5,7 @@ module ISM
         module Software
 
             SourcesArchiveBaseName = "Sources"
-            MainBuildDirectoryEntry = :mainBuild
+            MainBuildDirectoryEntry = "MainBuild"
             BuildDirectoryNames = { MainBuildDirectoryEntry => "mainBuild" }
             PatchesArchiveBaseName = "Patches"
             ArchiveExtensionName = ".tar.xz"
