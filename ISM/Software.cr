@@ -11,7 +11,7 @@ module ISM
             @information.loadInformationFile(informationPath)
             @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
             @buildDirectory = false
-            @buildDirectoryName = "build"
+            @buildDirectoryNames = ISM::Default::Software::BuildDirectoryNames
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
@@ -22,8 +22,8 @@ module ISM
             return workDirectoryPath(relatedToChroot)+"/"+@mainSourceDirectoryName
         end
 
-        def buildDirectoryPath(relatedToChroot = true) : String
-            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? @buildDirectoryName : ""}"
+        def buildDirectoryPath(relatedToChroot = true, directoryEntry = ISM::Default::Software::MainBuildDirectoryEntry) : String
+            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? @buildDirectoryNames[directoryEntry] : ""}"
         end
 
         def builtSoftwareDirectoryPath(relatedToChroot = true) : String
@@ -234,8 +234,13 @@ module ISM
 
         def prepare
             Ism.notifyOfPrepare(@information)
-            if !Dir.exists?(buildDirectoryPath(false))
-                makeDirectory(buildDirectoryPath(false))
+
+            #Generate all build directories
+
+            @buildDirectoryNames.keys.each do |key|
+                if !Dir.exists?(buildDirectoryPath(false), key)
+                    makeDirectory(buildDirectoryPath(false), key)
+                end
             end
         end
 

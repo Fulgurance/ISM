@@ -230,6 +230,8 @@ module ISM
     def enableOption(optionName : String)
         @options.each_with_index do |option, index|
             if optionName == option.name
+
+                #Disable other passes if we are enabling a pass
                 if option.isPass
                     currentEnabledPass = getEnabledPass
 
@@ -241,6 +243,7 @@ module ISM
 
                 @options[index].active = true
 
+                #Check if the requested option is suppose to be unique
                 @uniqueOptions.each do |uniqueArray|
                     if uniqueArray.includes?(optionName)
                         uniqueArray.each do |option|
