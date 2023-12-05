@@ -558,6 +558,24 @@ module ISM
                                    targetPath, error)
         end
 
+        def notifyOfCopyAllFilesFinishingError(path : String, destination : String,text : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorCopyAllFilesFinishingText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorCopyAllFilesFinishingText2 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorCopyAllFilesFinishingText3 +
+                                    destination, error)
+        end
+
+        def notifyOfCopyAllFilesRecursivelyFinishingError(path : String, destination : String,text : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorCopyAllFilesRecursivelyFinishingText1 +
+                                    text +
+                                    ISM::Default::CommandLine::ErrorCopyAllFilesRecursivelyFinishingText2 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorCopyAllFilesRecursivelyFinishingText3 +
+                                    destination, error)
+        end
+
         def notifyOfCopyDirectoryError(path : String, targetPath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorCopyDirectoryText1 +
                                    path +

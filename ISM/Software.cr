@@ -236,7 +236,6 @@ module ISM
             Ism.notifyOfPrepare(@information)
 
             #Generate all build directories
-
             @buildDirectoryNames.keys.each do |key|
                 if !Dir.exists?(buildDirectoryPath(false), key)
                     makeDirectory(buildDirectoryPath(false), key)
@@ -472,6 +471,38 @@ module ISM
                 FileUtils.cp(path, targetPath)
             rescue error
                 Ism.notifyOfCopyFileError(path, targetPath, error)
+                Ism.exitProgram
+            end
+        end
+
+        def copyAllFilesFinishing(path : String, destination : String, text : String)
+            begin
+                Dir.glob(Dir["#{path}/*"]) do |filePath|
+                    filename = filePath.lchop(filePath[0..filePath.rindex("/")])
+                    destinationPath = "#{destination}/#{filename}"
+
+                    if File.file?(filePath) && filePath[-text.size..-1] == text
+                        copyFile(filePath,destinationPath)
+                    end
+                end
+            rescue error
+                Ism.notifyOfCopyAllFilesFinishingError(path, destination, text, error)
+                Ism.exitProgram
+            end
+        end
+
+        def copyAllFilesRecursivelyFinishing(path : String, destination : String, text : String)
+            begin
+                Dir.glob(Dir["#{path}/**/*"]) do |filePath|
+                    filename = filePath.lchop(filePath[0..filePath.rindex("/")])
+                    destinationPath = "#{destination}/#{filename}"
+
+                    if File.file?(filePath) && filePath[-text.size..-1] == text
+                        copyFile(filePath,destinationPath)
+                    end
+                end
+            rescue error
+                Ism.notifyOfCopyAllFilesRecursivelyFinishingError(path, destination, text, error)
                 Ism.exitProgram
             end
         end
