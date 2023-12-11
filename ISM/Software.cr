@@ -238,8 +238,8 @@ module ISM
 
             #Generate all build directories
             @buildDirectoryNames.keys.each do |key|
-                if !Dir.exists?(buildDirectoryPath(false), key)
-                    makeDirectory(buildDirectoryPath(false), key)
+                if !Dir.exists?(buildDirectoryPath(false, key))
+                    makeDirectory(buildDirectoryPath(false, key))
                 end
             end
         end
