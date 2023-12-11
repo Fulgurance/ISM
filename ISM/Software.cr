@@ -5,6 +5,7 @@ module ISM
         property information : ISM::SoftwareInformation
         property mainSourceDirectoryName : String
         property buildDirectory : Bool
+        property buildDirectoryNames : Hash(String,String)
 
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.new
