@@ -10,6 +10,7 @@ module ISM
             target : String,
             makeOptions : String,
             buildOptions : String,
+            secureMode : Bool,
             installByChroot : Bool,
             chrootSystemName : String,
             chrootTargetName : String,
@@ -22,6 +23,7 @@ module ISM
         end
 
         property    rootPath : String
+        property    secureMode : Bool
         property    installByChroot : Bool
         property    chrootSystemName : String
         property    chrootTargetName : String
@@ -38,6 +40,7 @@ module ISM
                         @target = ISM::Default::CommandLineSettings::Target,
                         @makeOptions = ISM::Default::CommandLineSettings::MakeOptions,
                         @buildOptions = ISM::Default::CommandLineSettings::BuildOptions,
+                        @secureMode = ISM::Default::CommandLineSettings::SecureMode,
                         @installByChroot = ISM::Default::CommandLineSettings::InstallByChroot,
                         @chrootSystemName = ISM::Default::CommandLineSettings::ChrootSystemName,
                         @chrootTargetName = ISM::Default::CommandLineSettings::ChrootTargetName,
@@ -62,6 +65,7 @@ module ISM
             @target = information.target
             @makeOptions = information.makeOptions
             @buildOptions = information.buildOptions
+            @secureMode = information.secureMode
             @installByChroot = information.installByChroot
             @chrootSystemName = information.chrootSystemName
             @chrootTargetName = information.chrootTargetName
@@ -80,6 +84,7 @@ module ISM
                             target : String,
                             makeOptions : String,
                             buildOptions : String,
+                            secureMode : Bool,
                             installByChroot : Bool,
                             chrootSystemName : String,
                             chrootTargetName : String,
@@ -102,6 +107,7 @@ module ISM
                                     target,
                                     makeOptions,
                                     buildOptions,
+                                    secureMode,
                                     installByChroot,
                                     chrootSystemName,
                                     chrootTargetName,
@@ -125,6 +131,7 @@ module ISM
                             @chrootTarget,
                             @chrootMakeOptions,
                             @chrootBuildOptions,
+                            ISM::Default::CommandLineSettings::SecureMode,
                             ISM::Default::CommandLineSettings::InstallByChroot,
                             ISM::Default::CommandLineSettings::SystemName,
                             ISM::Default::CommandLineSettings::TargetName,
@@ -144,6 +151,7 @@ module ISM
                             @target,
                             @makeOptions,
                             @buildOptions,
+                            @secureMode,
                             @installByChroot,
                             @chrootSystemName,
                             @chrootTargetName,
@@ -242,6 +250,10 @@ module ISM
         end
 
         def setBuildOptions(@buildOptions)
+            writeSettingsFile
+        end
+
+        def setSecureMode(@secureMode)
             writeSettingsFile
         end
 

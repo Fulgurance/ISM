@@ -15,31 +15,34 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel || ARGV.size == 3+Ism.debugLevel
                     showHelp
                 else
-                    matchingSoftware = Ism.getSoftwareInformation(ARGV[1+Ism.debugLevel].downcase)
-
-                    if matchingSoftware.name == ""
-                        puts ISM::Default::Option::SoftwareAddPatch::NoMatchFound + "#{ARGV[1+Ism.debugLevel].colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareAddPatch::NoMatchFoundAdvice
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
                     else
-                        if ARGV[2+Ism.debugLevel] == @shortText || ARGV[2+Ism.debugLevel] == @longText
-                            patchPath = ARGV[3+Ism.debugLevel]
+                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1+Ism.debugLevel].downcase)
 
-                            if Ism.addPatch(patchPath,matchingSoftware.versionName)
-                                Ism.printProcessNotification(   ISM::Default::Option::SoftwareAddPatch::Text1 +
-                                                            patchPath +
-                                                            ISM::Default::Option::SoftwareAddPatch::Text2 +
-                                                            matchingSoftware.name)
-                            else
-                                Ism.printErrorNotification( ISM::Default::Option::SoftwareAddPatch::NoFileFound1 +
-                                                        patchPath +
-                                                        ISM::Default::Option::SoftwareAddPatch::NoFileFound2 +
-                                                        matchingSoftware.name,nil)
-                            end
+                        if matchingSoftware.name == ""
+                            puts ISM::Default::Option::SoftwareAddPatch::NoMatchFound + "#{ARGV[1+Ism.debugLevel].colorize(:green)}"
+                            puts ISM::Default::Option::SoftwareAddPatch::NoMatchFoundAdvice
                         else
-                            showHelp
-                        end
-                    end    
+                            if ARGV[2+Ism.debugLevel] == @shortText || ARGV[2+Ism.debugLevel] == @longText
+                                patchPath = ARGV[3+Ism.debugLevel]
 
+                                if Ism.addPatch(patchPath,matchingSoftware.versionName)
+                                    Ism.printProcessNotification(   ISM::Default::Option::SoftwareAddPatch::Text1 +
+                                                                patchPath +
+                                                                ISM::Default::Option::SoftwareAddPatch::Text2 +
+                                                                matchingSoftware.name)
+                                else
+                                    Ism.printErrorNotification( ISM::Default::Option::SoftwareAddPatch::NoFileFound1 +
+                                                            patchPath +
+                                                            ISM::Default::Option::SoftwareAddPatch::NoFileFound2 +
+                                                            matchingSoftware.name,nil)
+                                end
+                            else
+                                showHelp
+                            end
+                        end
+                    end
                 end
 
             end

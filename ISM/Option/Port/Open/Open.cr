@@ -25,12 +25,16 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    port = convertUrlToPort(ARGV[2+Ism.debugLevel])
-
-                    if port.open
-                        Ism.printProcessNotification(ISM::Default::Option::PortOpen::OpenText+port.name)
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
                     else
-                        Ism.printErrorNotification(ISM::Default::Option::PortOpen::OpenTextError1+"#{port.name.colorize(:red)}"+ISM::Default::Option::PortOpen::OpenTextError2,nil)
+                        port = convertUrlToPort(ARGV[2+Ism.debugLevel])
+
+                        if port.open
+                            Ism.printProcessNotification(ISM::Default::Option::PortOpen::OpenText+port.name)
+                        else
+                            Ism.printErrorNotification(ISM::Default::Option::PortOpen::OpenTextError1+"#{port.name.colorize(:red)}"+ISM::Default::Option::PortOpen::OpenTextError2,nil)
+                        end
                     end
                 end
             end

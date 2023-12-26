@@ -15,58 +15,62 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    userRequest = ARGV[2+Ism.debugLevel..-1].uniq
-                    Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest)
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        userRequest = ARGV[2+Ism.debugLevel..-1].uniq
+                        Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest)
 
-                    #No match found
-                    if userRequest.size != Ism.requestedSoftwares.size
-                        wrongArguments = Array(String).new
+                        #No match found
+                        if userRequest.size != Ism.requestedSoftwares.size
+                            wrongArguments = Array(String).new
 
-                        userRequest.each do |request|
-                            exist = false
+                            userRequest.each do |request|
+                                exist = false
 
-                            Ism.requestedSoftwares.each do |software|
-                                if request == software.versionName
-                                    exist = true
-                                    break
+                                Ism.requestedSoftwares.each do |software|
+                                    if request == software.versionName
+                                        exist = true
+                                        break
+                                    end
+                                end
+
+                                if !exist
+                                    wrongArguments.push(request)
                                 end
                             end
 
-                            if !exist
-                                wrongArguments.push(request)
-                            end
+                            Ism.showNoMatchFoundMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        Ism.showNoMatchFoundMessage(wrongArguments)
-                        Ism.exitProgram
-                    end
+                        #No available version found
+                        if Ism.requestedSoftwares.any? {|software| software.version == ""}
+                            wrongArguments = Array(String).new
 
-                    #No available version found
-                    if Ism.requestedSoftwares.any? {|software| software.version == ""}
-                        wrongArguments = Array(String).new
-
-                        Ism.requestedSoftwares.each do |software|
-                            if software.version == ""
-                                wrongArguments.push(software.versionName)
+                            Ism.requestedSoftwares.each do |software|
+                                if software.version == ""
+                                    wrongArguments.push(software.versionName)
+                                end
                             end
+
+                            Ism.showNoVersionAvailableMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        Ism.showNoVersionAvailableMessage(wrongArguments)
-                        Ism.exitProgram
-                    end
+                        Ism.showCalculationTitleMessage
 
-                    Ism.showCalculationTitleMessage
+                        neededSoftwares = Ism.getNeededSoftwares
 
-                    neededSoftwares = Ism.getNeededSoftwares
+                        Ism.showCalculationDoneMessage
+                        Ism.showSoftwares(neededSoftwares)
+                        Ism.showInstallationQuestion(neededSoftwares.size)
 
-                    Ism.showCalculationDoneMessage
-                    Ism.showSoftwares(neededSoftwares)
-                    Ism.showInstallationQuestion(neededSoftwares.size)
+                        userAgreement = Ism.getUserAgreement
 
-                    userAgreement = Ism.getUserAgreement
-
-                    if userAgreement
-                        Ism.startInstallationProcess(neededSoftwares)
+                        if userAgreement
+                            Ism.startInstallationProcess(neededSoftwares)
+                        end
                     end
                 end
             end

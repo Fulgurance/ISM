@@ -15,8 +15,12 @@ module ISM
                 if ARGV.size == 2+Ism.debugLevel
                     showHelp
                 else
-                    Ism.settings.setBuildOptions(ARGV[2+Ism.debugLevel])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetBuildOptions::SetText+ARGV[2+Ism.debugLevel])
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        Ism.settings.setBuildOptions(ARGV[2+Ism.debugLevel])
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetBuildOptions::SetText+ARGV[2+Ism.debugLevel])
+                    end
                 end
             end
 

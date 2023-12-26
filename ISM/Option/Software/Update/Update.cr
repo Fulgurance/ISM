@@ -12,52 +12,55 @@ module ISM
             end
 
             def start
-                print ISM::Default::Option::SoftwareUpdate::UpdateTitle
+                if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                    Ism.printNeedSuperUserAccessNotification
+                else
+                    print ISM::Default::Option::SoftwareUpdate::UpdateTitle
 
-                Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
+                    Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
 
-                #No update
-                if Ism.requestedSoftwares.empty?
-                    Ism.showNoUpdateMessage
-                    Ism.exitProgram
-                end
+                    #No update
+                    if Ism.requestedSoftwares.empty?
+                        Ism.showNoUpdateMessage
+                        Ism.exitProgram
+                    end
 
-                Ism.showCalculationTitleMessage
-
-                neededSoftwares = Ism.getNeededSoftwares
-
-                Ism.showCalculationDoneMessage
-                Ism.showSoftwares(neededSoftwares)
-                Ism.showUpdateQuestion(neededSoftwares.size)
-
-                userAgreement = Ism.getUserAgreement
-
-                if userAgreement
-                    Ism.startInstallationProcess(neededSoftwares)
-
-                    Ism.requestedSoftwares.clear
-
-                    #Clean the system and remove unneeded softwares
                     Ism.showCalculationTitleMessage
 
-                    unneededSoftwares = Ism.getUnneededSoftwares
+                    neededSoftwares = Ism.getNeededSoftwares
 
                     Ism.showCalculationDoneMessage
+                    Ism.showSoftwares(neededSoftwares)
+                    Ism.showUpdateQuestion(neededSoftwares.size)
 
-                    if unneededSoftwares.size > 0
-                        Ism.showSoftwares(unneededSoftwares, :uninstallation)
-                        Ism.showUninstallationQuestion(unneededSoftwares.size)
+                    userAgreement = Ism.getUserAgreement
 
-                        userAgreement = Ism.getUserAgreement
+                    if userAgreement
+                        Ism.startInstallationProcess(neededSoftwares)
 
-                        if userAgreement
-                            Ism.startUninstallationProcess(unneededSoftwares)
+                        Ism.requestedSoftwares.clear
+
+                        #Clean the system and remove unneeded softwares
+                        Ism.showCalculationTitleMessage
+
+                        unneededSoftwares = Ism.getUnneededSoftwares
+
+                        Ism.showCalculationDoneMessage
+
+                        if unneededSoftwares.size > 0
+                            Ism.showSoftwares(unneededSoftwares, :uninstallation)
+                            Ism.showUninstallationQuestion(unneededSoftwares.size)
+
+                            userAgreement = Ism.getUserAgreement
+
+                            if userAgreement
+                                Ism.startUninstallationProcess(unneededSoftwares)
+                            end
+                        else
+                            Ism.showNoCleaningRequiredMessage
                         end
-                    else
-                        Ism.showNoCleaningRequiredMessage
                     end
                 end
-
             end
 
         end

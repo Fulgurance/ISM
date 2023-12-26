@@ -12,13 +12,16 @@ module ISM
             end
 
             def start
-                print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
+                if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                    Ism.printNeedSuperUserAccessNotification
+                else
+                    print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
 
-                Ism.synchronizePorts
+                    Ism.synchronizePorts
 
-                print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
-                puts ISM::Default::Option::SoftwareSynchronize::SynchronizedText
-                    
+                    print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
+                    puts ISM::Default::Option::SoftwareSynchronize::SynchronizedText
+                end
             end
 
         end

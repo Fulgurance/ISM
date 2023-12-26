@@ -12,6 +12,7 @@ module ISM
             MakeOptionsFilter = /-j[0-9]/
             MakeOptions = "-j1"
             BuildOptions = "-march=native -O2 -pipe"
+            SecureMode = true
             InstallByChroot = false
             ChrootSystemName = "#{SystemName}"
             ChrootTargetName = "#{TargetName}"

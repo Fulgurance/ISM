@@ -48,6 +48,10 @@ module ISM
             return (LibC.getuid == 0)
         end
 
+        def secureModeEnabled
+            return @settings.secureMode
+        end
+
         def start
             loadSettingsFiles
             loadKernelOptionDatabase
@@ -433,6 +437,10 @@ module ISM
             if !matchingOption
                 showErrorUnknowArgument
             end
+        end
+
+        def printNeedSuperUserAccessNotification
+            puts "#{ISM::Default::CommandLine::NeedSuperUserAccessText.colorize(:yellow)}"
         end
 
         def showErrorUnknowArgument
