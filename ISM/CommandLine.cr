@@ -44,6 +44,10 @@ module ISM
             @unavailableDependencySignals = Array(Array(ISM::SoftwareDependency)).new
         end
 
+        def ranAsSuperUser : Bool
+            return (LibC.getuid == 0)
+        end
+
         def start
             loadSettingsFiles
             loadKernelOptionDatabase
