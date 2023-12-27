@@ -5,7 +5,7 @@ module ISM
         class SettingsDisableSecureMode < ISM::CommandLineOption
 
             def initialize
-                super(  ISM::Default::Option::SettingsDisableInstallByChroot::ShortText,
+                super(  ISM::Default::Option::SettingsDisableSecureMode::ShortText,
                         ISM::Default::Option::SettingsDisableSecureMode::LongText,
                         ISM::Default::Option::SettingsDisableSecureMode::Description,
                         Array(ISM::CommandLineOption).new)
