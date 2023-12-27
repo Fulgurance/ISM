@@ -6,7 +6,7 @@ module ISM
 
             module SettingsDisableSecureMode
 
-                ShortText = "-esm"
+                ShortText = "-dsm"
                 LongText = "disablesecuremode"
                 Description = "Disable the secure mode which requires superuser rights"
                 SetText = "Disabling secure mode"
