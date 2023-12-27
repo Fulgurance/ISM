@@ -16,7 +16,7 @@ module ISM
                     if !Ism.ranAsSuperUser
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        Ism.settings.setSeccureMode(true)
+                        Ism.settings.setSecureMode(true)
                         Ism.printProcessNotification(ISM::Default::Option::SettingsEnableSecureMode::SetText)
                     end
                 end
