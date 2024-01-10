@@ -553,10 +553,24 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName, error)
         end
 
-        def notifyOfMakeSymbolicLinkError(path : String, targetPath : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorMakeSymbolicLinkText1 +
+        def notifyOfSystemGroupGenerationError
+            printErrorNotification(ISM::Default::CommandLine::ErrorSystemGroupGenerationText, error: nil)
+        end
+
+        def notifyOfUpdateGroupFileError(name : String, id : Int32, isUserGroup : Bool, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorSystemGroupGenerationText1 +
+                                    name +
+                                    ISM::Default::CommandLine::ErrorSystemGroupGenerationText2 +
+                                    id +
+                                    ISM::Default::CommandLine::ErrorSystemGroupGenerationText3 +
+                                    isUserGroup,
+                                    error)
+        end
+
+        def notifyOfMakeLinkError(path : String, targetPath : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkText1 +
                                     path +
-                                    ISM::Default::CommandLine::ErrorMakeSymbolicLinkText2 +
+                                    ISM::Default::CommandLine::ErrorMakeLinkText2 +
                                     targetPath, error)
         end
 

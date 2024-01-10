@@ -447,6 +447,43 @@ module ISM
             end
         end
 
+        def updateGroupFile(name : String, id : Int32, isUserGroup : Bool)
+            rootBase = "#{Ism.settings.installByChroot ? Ism.settings.rootPath : "/"}"
+            filePath = "#{rootBase}etc/group"
+            destinationBase = "#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}etc/"
+            destinationPath = "#{destinationBase}group"
+            groupExist = false
+
+            if File.exists?(filePath)
+                makeDirectory("#{destinationBase}")
+                copyFile(filePath,destinationPath)
+            end
+
+            begin
+
+                content = File.read_lines(filePath)
+
+                File.open(filePath,"w") do |file|
+                    content.each_with_index do |line, index|
+                        groupExist = line.starts_with?("#{name.downcase}")
+
+                        if groupExist
+                            break
+                        end
+                    end
+                end
+
+                if !groupExist
+                    fileAppendData(filePath,"#{name.downcase}:x:#{id}:#{isUserGroup ? name.downcase : ""}"+"\n")
+                end
+
+            rescue error
+
+                Ism.notifyOfUpdateGroupFileError(name, id, isUserGroup, error)
+                Ism.exitProgram
+            end
+        end
+
         def makeLink(path : String, targetPath : String, linkType : Symbol)
             begin
                 case linkType
@@ -462,7 +499,7 @@ module ISM
             rescue File::AlreadyExistsError
 
             rescue error
-                Ism.notifyOfMakeSymbolicLinkError(path, targetPath, error)
+                Ism.notifyOfMakeLinkError(path, targetPath, error)
                 Ism.exitProgram
             end
         end
