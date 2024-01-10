@@ -474,7 +474,7 @@ module ISM
                 end
 
                 if !groupExist
-                    fileAppendData(filePath,"#{name.downcase}:x:#{id}:#{defaultUserName}"+"\n")
+                    fileAppendData(filePath,"#{name.downcase}:x:#{id}:#{defaultUserName.downcase}"+"\n")
                 end
 
             rescue error
