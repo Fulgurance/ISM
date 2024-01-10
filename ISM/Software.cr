@@ -447,7 +447,7 @@ module ISM
             end
         end
 
-        def updateGroupFile(name : String, id : Int32, isUserGroup : Bool)
+        def updateGroupFile(name : String, id : Int32, defaultUserName = String.new)
             rootBase = "#{Ism.settings.installByChroot ? Ism.settings.rootPath : "/"}"
             filePath = "#{rootBase}etc/group"
             destinationBase = "#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}etc/"
@@ -474,12 +474,12 @@ module ISM
                 end
 
                 if !groupExist
-                    fileAppendData(filePath,"#{name.downcase}:x:#{id}:#{isUserGroup ? name.downcase : ""}"+"\n")
+                    fileAppendData(filePath,"#{name.downcase}:x:#{id}:#{defaultUserName}"+"\n")
                 end
 
             rescue error
 
-                Ism.notifyOfUpdateGroupFileError(name, id, isUserGroup, error)
+                Ism.notifyOfUpdateGroupFileError(name, id, defaultUserName, error)
                 Ism.exitProgram
             end
         end

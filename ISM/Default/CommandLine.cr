@@ -36,7 +36,7 @@ module ISM
             ErrorSystemGroupGenerationText = "Failed to setup the system group. Probably the initializeGroup function is not set or the group name is empty"
             ErrorSystemGroupGenerationText1 = "Failed to update the group file with the new group named "
             ErrorSystemGroupGenerationText2 = " with the id "
-            ErrorSystemGroupGenerationText3 = " and isUserGroup = "
+            ErrorSystemGroupGenerationText3 = " and with the default username "
             ErrorMakeLinkText1 = "Failed to make symbolic link from "
             ErrorMakeLinkText2 = " to "
             ErrorCopyFileText1 = "Failed to copy the file from "

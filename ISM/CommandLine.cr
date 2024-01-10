@@ -557,13 +557,13 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorSystemGroupGenerationText, error: nil)
         end
 
-        def notifyOfUpdateGroupFileError(name : String, id : Int32, isUserGroup : Bool, error = nil)
+        def notifyOfUpdateGroupFileError(name : String, id : Int32, defaultUserName : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorSystemGroupGenerationText1 +
                                     name +
                                     ISM::Default::CommandLine::ErrorSystemGroupGenerationText2 +
                                     id +
                                     ISM::Default::CommandLine::ErrorSystemGroupGenerationText3 +
-                                    isUserGroup,
+                                    defaultUserName,
                                     error)
         end
 

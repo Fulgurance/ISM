@@ -4,17 +4,17 @@ module ISM
 
         property name : String
         property id : Int32
-        property isUserGroup : Bool
+        property defaultUserName : String
 
         def initialize
             super
 
             @name = String.new
             @id = Int32.new
-            @isUserGroup = false
+            @defaultUserName = String.new
         end
 
-        def initializeGroup(@name,@id)
+        def initializeGroup(@name,@id,@defaultUserName)
         end
 
         def download
@@ -48,7 +48,7 @@ module ISM
 
             cleanWorkDirectoryPath
 
-            updateGroupFile(@name,@id,@isUserGroup)
+            updateGroupFile(@name,@id,@defaultUserName)
         end
 
         def install
