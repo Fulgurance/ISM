@@ -672,8 +672,30 @@ module ISM
             end
         end
 
+        def runUserDelCommand(arguments : Array(String))
+            requestedCommands = ["userdel"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success? && process.exit_code != 9
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def runGroupAddCommand(arguments : Array(String))
             requestedCommands = ["groupadd"]+arguments
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success? && process.exit_code != 9
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def runGroupDelCommand(arguments : Array(String))
+            requestedCommands = ["groupdel"]+arguments
 
             process = runSystemCommand(requestedCommands)
 
