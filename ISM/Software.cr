@@ -447,6 +447,45 @@ module ISM
             end
         end
 
+        def updateGroupFile(data : String)
+            groupName = data.split(":")[0]
+
+            rootBase = "#{Ism.settings.installByChroot ? Ism.settings.rootPath : "/"}"
+            filePath = "#{rootBase}etc/group"
+            destinationBase = "#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}etc/"
+            destinationPath = "#{destinationBase}group"
+            groupExist = false
+
+            if File.exists?(filePath)
+                makeDirectory("#{destinationBase}")
+                copyFile(filePath,destinationPath)
+            end
+
+            begin
+
+                content = File.read_lines(filePath)
+
+                File.open(filePath,"w") do |file|
+                    content.each_with_index do |line, index|
+                        groupExist = line.starts_with?(groupName)
+
+                        if groupExist
+                            break
+                        end
+                    end
+                end
+
+                if !groupExist
+                    fileAppendData(filePath,data+"\n")
+                end
+
+            rescue error
+
+                Ism.notifyOfUpdateGroupFileError(data, error)
+                Ism.exitProgram
+            end
+        end
+
         def makeLink(path : String, targetPath : String, linkType : Symbol)
             begin
                 case linkType
