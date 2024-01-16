@@ -312,7 +312,7 @@ module ISM
         def setPermissionsRecursively(path : String, permissions : Int)
             begin
                 Dir.glob(Dir["#{path}/**/*"]) do |file_path|
-                    setPermissions(path, permissions)
+                    setPermissions(file_path, permissions)
                 end
             rescue error
                 Ism.notifyOfSetPermissionsRecursivelyError(path, permissions, error)
@@ -323,7 +323,7 @@ module ISM
         def setOwnerRecursively(path : String, uid : Int | String, gid : Int | String)
             begin
                 Dir.glob(Dir["#{path}/**/*"]) do |file_path|
-                    setOwner(path, uid, gid)
+                    setOwner(file_path, uid, gid)
                 end
             rescue error
                 Ism.notifyOfSetOwnerRecursivelyError(path, uid, gid, error)
