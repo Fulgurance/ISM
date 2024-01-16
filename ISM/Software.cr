@@ -208,13 +208,13 @@ module ISM
             Ism.notifyOfPatch(@information)
 
             if Dir.exists?("#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}")
-                Dir["#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/*"] do |patch|
+                Dir["#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/*"].each do |patch|
                     applyPatch(patch)
                 end
             end
 
             if Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}")
-                Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}/*"] do |patch|
+                Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}/*"].each do |patch|
                     patchName = patch.lchop(patch[0..patch.rindex("/")])
                     Ism.notifyOfLocalPatch(patchName)
                     applyPatch(patch)
@@ -311,7 +311,7 @@ module ISM
 
         def setPermissionsRecursively(path : String, permissions : Int)
             begin
-                Dir["#{path}/**/*"] do |file_path|
+                Dir["#{path}/**/*"].each do |file_path|
                     setPermissions(file_path, permissions)
                 end
             rescue error
@@ -322,7 +322,7 @@ module ISM
 
         def setOwnerRecursively(path : String, uid : Int | String, gid : Int | String)
             begin
-                Dir["#{path}/**/*"] do |file_path|
+                Dir["#{path}/**/*"].each do |file_path|
                     setOwner(file_path, uid, gid)
                 end
             rescue error
@@ -478,7 +478,7 @@ module ISM
 
         def copyAllFilesFinishing(path : String, destination : String, text : String)
             begin
-                Dir["#{path}/*"] do |filePath|
+                Dir["#{path}/*"].each do |filePath|
                     filename = filePath.lchop(filePath[0..filePath.rindex("/")])
                     destinationPath = "#{destination}/#{filename}"
 
@@ -494,7 +494,7 @@ module ISM
 
         def copyAllFilesRecursivelyFinishing(path : String, destination : String, text : String)
             begin
-                Dir["#{path}/**/*"] do |filePath|
+                Dir["#{path}/**/*"].each do |filePath|
                     filename = filePath.lchop(filePath[0..filePath.rindex("/")])
                     destinationPath = "#{destination}/#{filename}"
 
@@ -528,7 +528,7 @@ module ISM
 
         def replaceTextAllFilesNamed(path : String, filename : String, text : String, newText : String)
             begin
-                Dir["#{path}/*"] do |file_path|
+                Dir["#{path}/*"].each do |file_path|
                     if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
                         fileReplaceText(file_path, text, newText)
                     end
@@ -541,7 +541,7 @@ module ISM
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
             begin
-                Dir["#{path}/**/*"] do |file_path|
+                Dir["#{path}/**/*"].each do |file_path|
                     if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
                         fileReplaceText(file_path, text, newText)
                     end
@@ -554,7 +554,7 @@ module ISM
 
         def deleteAllFilesFinishing(path : String, text : String)
             begin
-                Dir["#{path}/*"] do |file_path|
+                Dir["#{path}/*"].each do |file_path|
                     if File.file?(file_path) && file_path[-text.size..-1] == text
                         deleteFile(file_path)
                     end
@@ -567,7 +567,7 @@ module ISM
 
         def deleteAllFilesRecursivelyFinishing(path : String, text : String)
             begin
-                Dir["#{path}/**/*"] do |file_path|
+                Dir["#{path}/**/*"].each do |file_path|
                     if File.file?(file_path) && file_path[-text.size..-1] == text
                         deleteFile(file_path)
                     end
