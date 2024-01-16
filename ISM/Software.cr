@@ -447,22 +447,43 @@ module ISM
             end
         end
 
-        def updateGroupFile(data : String)
-            groupName = data.split(":")[0]
-
+        def updateUserFile(data : String)
+            userName = data.split(":")[0]
             rootBase = "#{Ism.settings.installByChroot ? Ism.settings.rootPath : "/"}"
-            filePath = "#{rootBase}etc/group"
-            destinationBase = "#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}etc/"
-            destinationPath = "#{destinationBase}group"
-            groupExist = false
-
-            if File.exists?(filePath)
-                makeDirectory("#{destinationBase}")
-                copyFile(filePath,destinationPath)
-            end
+            filePath = "#{rootBase}etc/passwd"
+            userExist = false
 
             begin
+                content = File.read_lines(filePath)
 
+                File.open(filePath,"w") do |file|
+                    content.each_with_index do |line, index|
+                        userExist = line.starts_with?(userName)
+
+                        if groupExist
+                            break
+                        end
+                    end
+                end
+
+                if !groupExist
+                    fileAppendData(filePath,data+"\n")
+                end
+
+            rescue error
+
+                Ism.notifyOfUpdateUserFileError(data, error)
+                Ism.exitProgram
+            end
+        end
+
+        def updateGroupFile(data : String)
+            groupName = data.split(":")[0]
+            rootBase = "#{Ism.settings.installByChroot ? Ism.settings.rootPath : "/"}"
+            filePath = "#{rootBase}etc/group"
+            groupExist = false
+
+            begin
                 content = File.read_lines(filePath)
 
                 File.open(filePath,"w") do |file|

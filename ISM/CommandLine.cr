@@ -553,8 +553,12 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName, error)
         end
 
+        def notifyOfUpdateUserFileError(data : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorUpdateUserFileText+data, error)
+        end
+
         def notifyOfUpdateGroupFileError(data : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorSystemGroupGenerationText+data, error)
+            printErrorNotification(ISM::Default::CommandLine::ErrorUpdateGroupFileText+data, error)
         end
 
         def notifyOfMakeLinkError(path : String, targetPath : String, error = nil)
