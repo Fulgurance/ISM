@@ -150,24 +150,28 @@ module ISM
         end
 
         information = Information.new(  @port,
-                                                @name,
-                                                @version,
-                                                @architectures,
-                                                @description,
-                                                @website,
-                                                @installedFiles,
-                                                dependenciesArray,
-                                                @kernelDependencies,
-                                                optionsArray,
-                                                @uniqueOptions)
+                                        @name,
+                                        @version,
+                                        @architectures,
+                                        @description,
+                                        @website,
+                                        @installedFiles,
+                                        dependenciesArray,
+                                        @kernelDependencies,
+                                        optionsArray,
+                                        @uniqueOptions)
 
         file = File.open(writeInformationFilePath,"w")
         information.to_json(file)
         file.close
     end
 
+    def fullName
+        return "@#{@port}:#{versionName}"
+    end
+
     def versionName
-        return @name+"-"+@version
+        return "#{@name}-#{@version}"
     end
 
     def builtSoftwareDirectoryPath

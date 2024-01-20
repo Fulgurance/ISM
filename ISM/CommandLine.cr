@@ -359,12 +359,12 @@ module ISM
             return ISM::AvailableSoftware.new
         end
 
-        def getSoftwareInformation(versionName : String) : ISM::SoftwareInformation
+        def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
             result = ISM::SoftwareInformation.new
 
             @softwares.each do |entry|
 
-                if entry.name.downcase == versionName.downcase
+                if entry.name.downcase == userEntry.downcase
                     result.name = entry.name
                     if !entry.versions.empty?
                         temporary = entry.greatestVersion.clone
@@ -379,7 +379,7 @@ module ISM
                     end
                 else
                     entry.versions.each do |software|
-                        if software.versionName.downcase == versionName.downcase
+                        if software.versionName.downcase == userEntry.downcase || software.fullName.downcase == userEntry.downcase
                             temporary = software.clone
                             settingsFilePath = temporary.settingsFilePath
 
