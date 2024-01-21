@@ -466,7 +466,7 @@ module ISM
                     end
                 end
 
-                if !groupExist
+                if !userExist
                     fileAppendData(filePath,data+"\n")
                 end
 
