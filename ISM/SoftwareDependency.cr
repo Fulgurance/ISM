@@ -26,10 +26,16 @@ module ISM
         def name=(@name)
         end
 
-        def name : String
-            match,wrongValue = Ism.inputMatchWithFilter(@name,/@[A-Za-z0-9\-]+:/)
+        def specifiedPort : Bool
+            return (/@[A-Za-z0-9\-]+:/.match(@name) != nil)
+        end
 
-            return match ? @name.lchop(@name[0..@name.rindex(":")]) : @name
+        def name : String
+            return specifiedPort ? @name.lchop(@name[0..@name.rindex(":")]) : @name
+        end
+
+        def fullName : String
+            return specifiedPort ? @name : versionName
         end
 
         def hiddenName : String
@@ -53,7 +59,7 @@ module ISM
         end
 
         def information : ISM::SoftwareInformation
-            dependencyInformation = Ism.getSoftwareInformation(versionName)
+            dependencyInformation = Ism.getSoftwareInformation(fullName)
 
             @options.each do |option|
                 dependencyInformation.enableOption(option)
