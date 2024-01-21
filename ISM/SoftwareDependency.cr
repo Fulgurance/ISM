@@ -6,7 +6,6 @@ module ISM
 
         include JSON::Serializable
 
-        property name : String
         property options : Array(String)
 
         def initialize( @name = String.new,
@@ -24,6 +23,15 @@ module ISM
             return String.new
         end
 
+        def name=(@name)
+        end
+
+        def name : String
+            match,wrongValue = Ism.inputMatchWithFilter(@name,/@[A-Za-z0-9\-]+:/)
+
+            return match ? @name.lchop(@name[0..@name.rindex(":")]) : @name
+        end
+
         def hiddenName : String
             passName = getEnabledPass
             return (passName == "" ? versionName : versionName+"-"+passName)
@@ -33,11 +41,11 @@ module ISM
         end
 
         def versionName
-            return @name+"-"+version
+            return name+"-"+version
         end
 
         def version
-            return Ism.getAvailableSoftware(@name).greatestVersion(@version).version
+            return Ism.getAvailableSoftware(name).greatestVersion(@version).version
         end
 
         def requiredVersion : String

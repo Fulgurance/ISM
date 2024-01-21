@@ -238,7 +238,7 @@ module ISM
         end
 
         def setMakeOptions(@makeOptions)
-            match,invalidValue = Ism.userInputMatchWithFilter(@makeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
+            match,invalidValue = Ism.inputMatchWithFilter(@makeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
 
             if match
                 writeSettingsFile
@@ -278,7 +278,7 @@ module ISM
         end
 
         def setChrootMakeOptions(@chrootMakeOptions)
-            match,invalidValue = Ism.userInputMatchWithFilter(@chrootMakeOptions,ISM::Default::CommandLineSettings::ChrootMakeOptionsFilter)
+            match,invalidValue = Ism.inputMatchWithFilter(@chrootMakeOptions,ISM::Default::CommandLineSettings::ChrootMakeOptionsFilter)
 
             if match
                 writeSettingsFile

@@ -227,7 +227,7 @@ module ISM
             end
         end
 
-        def userInputMatchWithFilter(input : String, filter : Regex | Array(Regex))
+        def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
             if filter.is_a?(Array(Regex))
                 userInput = input.split(" ")
 
