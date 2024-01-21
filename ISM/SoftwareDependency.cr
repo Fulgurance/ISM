@@ -47,6 +47,11 @@ module ISM
             return (passName == "" ? versionName : versionName+"-"+passName)
         end
 
+        def fullHiddenName : String
+            passName = getEnabledPass
+            return (passName == "" ? fullVersionName : fullName+"-"+passName)
+        end
+
         def version=(@version)
         end
 
