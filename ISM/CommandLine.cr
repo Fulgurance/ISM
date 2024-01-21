@@ -364,7 +364,7 @@ module ISM
 
             @softwares.each do |entry|
 
-                if entry.name.downcase == userEntry.downcase
+                if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
                     result.name = entry.name
                     if !entry.versions.empty?
                         temporary = entry.greatestVersion.clone
@@ -379,7 +379,7 @@ module ISM
                     end
                 else
                     entry.versions.each do |software|
-                        if software.versionName.downcase == userEntry.downcase || software.fullName.downcase == userEntry.downcase
+                        if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
                             temporary = software.clone
                             settingsFilePath = temporary.settingsFilePath
 

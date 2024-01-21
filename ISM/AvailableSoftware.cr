@@ -28,6 +28,10 @@ module ISM
             return request[0..1] == "<="
         end
 
+        def fullName
+            return "@#{versions[0].port}:#{name}"
+        end
+
         def greatestVersion(condition=String.new) : ISM::SoftwareInformation
             if condition == "" || condition == ">=0.0.0"
                 return @versions.max_by {|entry| SemanticVersion.parse(entry.version)}

@@ -38,6 +38,10 @@ module ISM
             return specifiedPort ? @name : versionName
         end
 
+        def fullVersionName : String
+            return specifiedPort ? "#{@name}-#{version}" : versionName
+        end
+
         def hiddenName : String
             passName = getEnabledPass
             return (passName == "" ? versionName : versionName+"-"+passName)
@@ -59,7 +63,7 @@ module ISM
         end
 
         def information : ISM::SoftwareInformation
-            dependencyInformation = Ism.getSoftwareInformation(fullName)
+            dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
 
             @options.each do |option|
                 dependencyInformation.enableOption(option)

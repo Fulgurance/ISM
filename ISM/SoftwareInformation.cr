@@ -174,6 +174,10 @@ module ISM
         return "#{@name}-#{@version}"
     end
 
+    def fullVersionName
+        return "#{fullName}-#{@version}"
+    end
+
     def builtSoftwareDirectoryPath
         return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
     end
