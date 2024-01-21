@@ -167,7 +167,7 @@ module ISM
     end
 
     def fullName
-        return "@#{@port}:#{versionName}"
+        return "@#{@port}:#{@name}"
     end
 
     def versionName
