@@ -460,7 +460,7 @@ module ISM
                     content.each_with_index do |line, index|
                         userExist = line.starts_with?(userName)
 
-                        if groupExist
+                        if userExist
                             break
                         end
                     end
