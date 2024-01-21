@@ -271,7 +271,7 @@ module ISM
         def removeInstalledSoftware(software : ISM::SoftwareInformation)
             #Need to manage uninstallation of a pass
             @installedSoftwares.each do |installedSoftware|
-                if software.toSoftwareDependency.fullHiddenName == installedSoftware.toSoftwareDependency.fullHiddenName
+                if software.toSoftwareDependency.hiddenName == installedSoftware.toSoftwareDependency.hiddenName
                     installedSoftware.installedFiles.each do |file|
                         FileUtils.rm_r(Ism.settings.rootPath+file)
                     end
@@ -1277,24 +1277,24 @@ module ISM
                         end
 
                         #Need multiple version or need to fusion options
-                        if dependencies.has_key?(dependency.fullHiddenName)
+                        if dependencies.has_key?(dependency.hiddenName)
 
                             #Multiple versions of single software requested
-                            if dependencies[dependency.fullHiddenName].version != dependency.version
+                            if dependencies[dependency.hiddenName].version != dependency.version
                                 dependencies[dependency.versionName] = dependency
                                 nextDependencies += dependency.dependencies
                             end
 
                             #Different options requested
-                            if dependencies[dependency.fullHiddenName].options != dependency.options
+                            if dependencies[dependency.hiddenName].options != dependency.options
                                 entry = dependency.dup
-                                entry.options = (dependencies[dependency.fullHiddenName].options+dependency.options).uniq
+                                entry.options = (dependencies[dependency.hiddenName].options+dependency.options).uniq
 
                                 dependencies[dependency.versionName] = entry
                                 nextDependencies += entry.dependencies
                             end
                         else
-                            dependencies[dependency.fullHiddenName] = dependency
+                            dependencies[dependency.hiddenName] = dependency
                             nextDependencies += dependency.dependencies
                         end
 
@@ -1316,7 +1316,7 @@ module ISM
             softwareList.each do |software|
                 playCalculationAnimation
 
-                key = software.toSoftwareDependency.fullHiddenName
+                key = software.toSoftwareDependency.hiddenName
 
                 dependenciesTable[key] = getRequiredDependencies(software, true)
 
@@ -1326,7 +1326,7 @@ module ISM
                     dependencyInformation = dependency.information
 
                     if !softwareIsInstalled(dependencyInformation)
-                        dependenciesTable[dependency.fullHiddenName] = getRequiredDependencies(dependencyInformation)
+                        dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependencyInformation)
                     end
 
                 end
@@ -1342,7 +1342,7 @@ module ISM
                     playCalculationAnimation
 
                     if key1 != key2
-                        if dependenciesTable[key1].any?{|dependency| dependency.fullHiddenName == key2} && dependenciesTable[key2].any?{|dependency| dependency.fullHiddenName == key1}
+                        if dependenciesTable[key1].any?{|dependency| dependency.hiddenName == key2} && dependenciesTable[key2].any?{|dependency| dependency.hiddenName == key1}
                             showCalculationDoneMessage
                             showInextricableDependenciesMessage([dependenciesTable[key1][0],dependenciesTable[key2][0]])
                             exitProgram
@@ -1367,8 +1367,8 @@ module ISM
                 dependencies.each do |dependency|
                     playCalculationAnimation
 
-                    if dependenciesTable.has_key?(dependency.fullHiddenName) && dependency.dependencies.size < dependenciesTable[dependency.fullHiddenName][0].dependencies.size
-                        table[dependencies[0]] += (dependenciesTable[dependency.fullHiddenName][0].dependencies.size - dependency.dependencies.size).abs
+                    if dependenciesTable.has_key?(dependency.hiddenName) && dependency.dependencies.size < dependenciesTable[dependency.hiddenName][0].dependencies.size
+                        table[dependencies[0]] += (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
                     end
 
                     if dependenciesTable.has_key?(dependency.versionName) && dependency.dependencies.size < dependenciesTable[dependency.versionName][0].dependencies.size
