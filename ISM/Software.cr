@@ -456,13 +456,11 @@ module ISM
             begin
                 content = File.read_lines(filePath)
 
-                File.open(filePath,"w") do |file|
-                    content.each_with_index do |line, index|
-                        userExist = line.starts_with?(userName)
+                content.each_with_index do |line, index|
+                    userExist = line.starts_with?(userName)
 
-                        if userExist
-                            break
-                        end
+                    if userExist
+                        break
                     end
                 end
 
@@ -486,13 +484,11 @@ module ISM
             begin
                 content = File.read_lines(filePath)
 
-                File.open(filePath,"w") do |file|
-                    content.each_with_index do |line, index|
-                        groupExist = line.starts_with?(groupName)
+                content.each_with_index do |line, index|
+                    groupExist = line.starts_with?(groupName)
 
-                        if groupExist
-                            break
-                        end
+                    if groupExist
+                        break
                     end
                 end
 
