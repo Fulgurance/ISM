@@ -166,15 +166,15 @@ module ISM
         file.close
     end
 
-    def fullName
+    def fullName : String
         return "@#{@port}:#{@name}"
     end
 
-    def versionName
+    def versionName : String
         return "#{@name}-#{@version}"
     end
 
-    def fullVersionName
+    def fullVersionName : String
         return "#{fullName}-#{@version}"
     end
 

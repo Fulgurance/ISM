@@ -34,22 +34,13 @@ module ISM
             return specifiedPort ? @name.lchop(@name[0..@name.rindex(":")]) : @name
         end
 
-        def fullName : String
-            return specifiedPort ? @name : versionName
-        end
-
         def fullVersionName : String
-            return specifiedPort ? "#{@name}-#{version}" : versionName
+            return specifiedPort ? "#{@name}-#{version}" : "@#{information.port}:#{versionName}"
         end
 
         def hiddenName : String
             passName = getEnabledPass
-            return (passName == "" ? versionName : versionName+"-"+passName)
-        end
-
-        def fullHiddenName : String
-            passName = getEnabledPass
-            return (passName == "" ? fullVersionName : fullName+"-"+passName)
+            return (passName == "" ? fullVersionName : fullVersionName+"-"+passName)
         end
 
         def version=(@version)
