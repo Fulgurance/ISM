@@ -452,6 +452,10 @@ module ISM
             filePath = "#{Ism.settings.rootPath}etc/passwd"
             userExist = false
 
+            if !File.exists?(filePath)
+                generateEmptyFile(filePath)
+            end
+
             begin
                 content = File.read_lines(filePath)
 
@@ -478,6 +482,10 @@ module ISM
             groupName = data.split(":")[0]
             filePath = "#{Ism.settings.rootPath}etc/group"
             groupExist = false
+
+            if !File.exists?(filePath)
+                generateEmptyFile(filePath)
+            end
 
             begin
                 content = File.read_lines(filePath)
