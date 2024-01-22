@@ -31,16 +31,16 @@ module ISM
         end
 
         def name : String
-            return specifiedPort ? @name.lchop(@name[0..@name.rindex(":")]) : @name
+            return specifiedPort ? @name[@name.index(":")..-1][1..-1] : @name
         end
 
         def fullVersionName : String
-            return specifiedPort ? "#{@name}-#{version}" : "@#{information.port}:#{versionName}"
+            return specifiedPort ? "#{@name}-#{version}" : versionName
         end
 
         def hiddenName : String
             passName = getEnabledPass
-            return (passName == "" ? fullVersionName : fullVersionName+"-"+passName)
+            return "@#{port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
         end
 
         def version=(@version)
@@ -79,7 +79,7 @@ module ISM
         end
 
         def port : String
-            return information.port
+            return specifiedPort ? @name[1..@name.index(":")][0..-2] : information.port
         end
 
         def dependencies : Array(ISM::SoftwareDependency)
