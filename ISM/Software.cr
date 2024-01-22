@@ -449,8 +449,7 @@ module ISM
 
         def updateUserFile(data : String)
             userName = data.split(":")[0]
-            rootBase = "#{Ism.settings.installByChroot ? Ism.settings.rootPath : "/"}"
-            filePath = "#{rootBase}etc/passwd"
+            filePath = "#{Ism.settings.rootPath}etc/passwd"
             userExist = false
 
             begin
@@ -477,8 +476,7 @@ module ISM
 
         def updateGroupFile(data : String)
             groupName = data.split(":")[0]
-            rootBase = "#{Ism.settings.installByChroot ? Ism.settings.rootPath : "/"}"
-            filePath = "#{rootBase}etc/group"
+            filePath = "#{Ism.settings.rootPath}etc/group"
             groupExist = false
 
             begin
