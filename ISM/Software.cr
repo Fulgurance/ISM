@@ -1126,6 +1126,17 @@ module ISM
             end
         end
 
+        def runZicCommand(arguments : Array(String), path = String.new)
+            requestedCommands = ["zic"]+arguments
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
+            end
+        end
+
         def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
             servicesPath = "/etc/init.d/"
 
