@@ -183,23 +183,23 @@ module ISM
         end
 
         def extractSources
-            extractArchive(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName)
+            extractArchive(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPath(false))
             moveFile(workDirectoryPath(false)+"/"+@information.versionName,workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesDirectoryName)
         end
 
         def extractPatches
-            extractArchive(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName)
+            extractArchive(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPath(false))
             moveFile(workDirectoryPath(false)+"/"+@information.versionName,workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
-        def extractArchive(archive : String)
+        def extractArchive(archivePath : String, destinationPath : String)
 
-            process = Process.run(  "tar -xf #{archive}",
+            process = Process.run(  "tar -xf #{archivePath}",
                                     error: :inherit,
                                     shell: true,
-                                    chdir: workDirectoryPath(false))
+                                    chdir: destinationPath)
             if !process.success?
-                Ism.notifyOfExtractError(archive)
+                Ism.notifyOfExtractError(archivePath, destinationPath)
                 Ism.exitProgram
             end
         end

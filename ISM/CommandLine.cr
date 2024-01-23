@@ -545,8 +545,12 @@ module ISM
                                     md5sum, error)
         end
 
-        def notifyOfExtractError(archiveName : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorExtractText+archiveName, error)
+        def notifyOfExtractError(archivePath : String, destinationPath : String ,error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorExtractText1 +
+                                    archivePath +
+                                    ISM::Default::CommandLine::ErrorExtractText2 +
+                                    destinationPath,
+                                    error)
         end
 
         def notifyOfApplyPatchError(patchName : String, error = nil)
