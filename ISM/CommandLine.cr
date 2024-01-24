@@ -1240,6 +1240,10 @@ module ISM
                 requiredTargetClassResult += "\n"
             end
 
+            if indexResult == "targetsAdditionalInformationIndex = []"
+                indexResult == "targetsAdditionalInformationIndex = Array(Int32).new"
+            end
+
             return  requiredTargetClassResult +
                     requiredTargetArrayResult +
                     requiredTargetOptionsResult +
