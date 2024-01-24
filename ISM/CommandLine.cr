@@ -1273,7 +1273,7 @@ module ISM
 
                         Ism.showStartSoftwareInstallingMessage(index, limit, name, version)
 
-                        cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
+                        Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
                         begin
                             target.download
@@ -1291,16 +1291,16 @@ module ISM
                             Ism.exitProgram
                         end
 
-                        cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
+                        Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
                         if requestedSoftwareVersionNames.any? { |entry| entry == versionName}
-                            addSoftwareToFavouriteGroup(versionName)
+                            Ism.addSoftwareToFavouriteGroup(versionName)
                         end
 
-                        showEndSoftwareInstallingMessage(index, limit, name, version)
+                        Ism.showEndSoftwareInstallingMessage(index, limit, name, version)
 
                         if index < limit-1
-                            showSeparator
+                            Ism.showSeparator
                         end
 
                     end
@@ -1379,10 +1379,10 @@ module ISM
                             Ism.exitProgram
                         end
 
-                        showEndSoftwareInstallingMessage(index, limit, name, version)
+                        Ism.showEndSoftwareInstallingMessage(index, limit, name, version)
 
                         if index < limit-1
-                            showSeparator
+                            Ism.showSeparator
                         end
 
                     end
