@@ -55,8 +55,8 @@ module ISM
         def start
             loadSettingsFiles
             loadKernelOptionDatabase
-            loadInstalledSoftwareDatabase
             loadSoftwareDatabase
+            loadInstalledSoftwareDatabase
             loadPortsDatabase
             loadMirrorsDatabase
             loadFavouriteGroupsDatabase
@@ -290,6 +290,10 @@ module ISM
             end
 
             return false
+        end
+
+        def softwareIsRequestedSoftware(software : ISM::SoftwareInformation) : Bool
+            return @requestedSoftwares.any? { |entry| entry.versionName == software.versionName}
         end
 
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
@@ -1308,7 +1312,8 @@ module ISM
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
-                        if requestedSoftwareVersionNames.any? { |entry| entry == versionName}
+
+                        if Ism.softwareIsRequestedSoftware(target.information)
                             Ism.addSoftwareToFavouriteGroup(versionName)
                         end
 
@@ -1582,24 +1587,24 @@ module ISM
                 result << item[0]
             end
 
-            resultedSoftwareNames = result.map { |dependency| dependency.name }
-            requestedSoftwareNames = @requestedSoftwares.map { |software| software.name }
+            #resultedSoftwareNames = result.map { |dependency| dependency.name }
+            #requestedSoftwareNames = @requestedSoftwares.map { |software| software.name }
 
-            if !requestedSoftwareNames.includes?(requestedSoftwareNames[-1])
-                dependenciesAtUpperLevelList = Array(ISM::SoftwareDependency).new
+            #if !requestedSoftwareNames.includes?(requestedSoftwareNames[-1])
+                #dependenciesAtUpperLevelList = Array(ISM::SoftwareDependency).new
 
-                result.reverse.each do |dependency|
-                    if requestedSoftwareNames.includes?(dependency.name)
-                        break
-                    else
-                        dependenciesAtUpperLevelList.push(dependency)
-                    end
-                end
+                #result.reverse.each do |dependency|
+                    #if requestedSoftwareNames.includes?(dependency.name)
+                        #break
+                    #else
+                        #dependenciesAtUpperLevelList.push(dependency)
+                    #end
+                #end
 
-                showCalculationDoneMessage
-                showDependenciesAtUpperLevelMessage(dependenciesAtUpperLevelList)
-                exitProgram
-            end
+                #showCalculationDoneMessage
+                #showDependenciesAtUpperLevelMessage(dependenciesAtUpperLevelList)
+                #exitProgram
+            #end
 
             return result
         end
@@ -1627,7 +1632,7 @@ module ISM
                     playCalculationAnimation
 
                     #If software in favourite is not requested for removal, it is require, else no
-                    if !@requestedSoftwares.any? {|entry| entry.versionName == software.versionName}
+                    if !softwareIsRequestedSoftware(software)
 
                         requiredSoftwares[software.versionName] = software.toSoftwareDependency
 
