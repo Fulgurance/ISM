@@ -1174,9 +1174,9 @@ module ISM
                 fileContent.each_with_index do |line, lineIndex|
 
                     if lineIndex == 0
-                        result += line.gsub("Target","Target#{index}")
+                        result += "\n#{line.gsub("Target","Target#{index}")}"
                     else
-                        result += line
+                        result += "\n#{line}"
                     end
                 end
 
