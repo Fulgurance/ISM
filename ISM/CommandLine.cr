@@ -1145,7 +1145,7 @@ module ISM
                     elsif index != @requestedSoftwares.size-1
                         result += "\t\t\t\t\t\t\t\t\t\"#{software.versionName}\",\n"
                     else
-                        result += "\t\t\t\t\t\t\t\t\t#{software.versionName}]\n"
+                        result += "\t\t\t\t\t\t\t\t\t\"#{software.versionName}\"]\n"
                     end
                 end
 
