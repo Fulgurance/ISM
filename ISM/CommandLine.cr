@@ -1037,16 +1037,6 @@ module ISM
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
         end
 
-        def showUpdateQuestion(softwareNumber : Int32)
-            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UpdateSummaryText + "\n"
-
-            puts "#{summaryText.colorize(:green)}"
-
-            print   "#{ISM::Default::CommandLine::UpdateQuestion.colorize.mode(:underline)}" +
-                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
-                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
-        end
-
         def showUninstallationQuestion(softwareNumber : Int32)
             summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UninstallSummaryText + "\n"
 
@@ -1305,7 +1295,7 @@ module ISM
 
                     end
 
-                    targets.each_with_index do |target|
+                    targets.each do |target|
                         target.showInformations
                     end
 
