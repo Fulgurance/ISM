@@ -166,6 +166,11 @@ module ISM
         file.close
     end
 
+    def hiddenName : String
+        passName = getEnabledPass
+        return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
+    end
+
     def fullName : String
         return "@#{@port}:#{@name}"
     end

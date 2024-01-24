@@ -41,7 +41,7 @@ module ISM
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.new
             @favouriteGroups = Array(ISM::FavouriteGroup).new
             @initialTerminalTitle = String.new
-            @unavailableDependencySignals = Array(Array(ISM::SoftwareDependency)).new
+            @unavailableDependencySignals = Array(Array(ISM::SoftwareInformation)).new
         end
 
         def ranAsSuperUser : Bool
@@ -297,60 +297,62 @@ module ISM
         end
 
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
-            @installedSoftwares.each do |installedSoftware|
-                if software.name == installedSoftware.name && software.version == installedSoftware.version
-                    equalScore = 0
 
-                    software.options.each do |option|
+            if File.exists?(software.installedFilePath)
+                installedSoftware = ISM::SoftwareInformation.new
+                installedSoftware.loadInformationFile(software.installedFilePath)
 
-                        if installedSoftware.option(option.name) == option.active
-                            equalScore += 1
-                        elsif option.isPass
-                            softwarePassNumber = software.getEnabledPassNumber
-                            installedSoftwarePassNumber = installedSoftware.getEnabledPassNumber
+                equalScore = 0
 
-                            if option.active
-                                if !installedSoftware.passEnabled
-                                    equalScore += 1
-                                else
-                                    if softwarePassNumber < installedSoftwarePassNumber
-                                        equalScore += 1
-                                    else
-                                        return false
-                                    end
-                                end
-                            end
+                software.options.each do |option|
 
-                            if installedSoftware.option(option.name)
-                                if !installedSoftware.passEnabled
-                                    return false
-                                else
-                                    if softwarePassNumber < installedSoftwarePassNumber && software.passEnabled
-                                        equalScore += 1
-                                    else
-                                        return false
-                                    end
-                                end
+                    if installedSoftware.option(option.name) == option.active
+                        equalScore += 1
+                    elsif option.isPass
+                        softwarePassNumber = software.getEnabledPassNumber
+                        installedSoftwarePassNumber = installedSoftware.getEnabledPassNumber
 
-                            end
-
-                        else
-                            if software.passEnabled
-                                equalScore += 1
-                            elsif installedSoftware.option(option.name) && !option.active
+                        if option.active
+                            if !installedSoftware.passEnabled
                                 equalScore += 1
                             else
-                                return false
+                                if softwarePassNumber < installedSoftwarePassNumber
+                                    equalScore += 1
+                                else
+                                    return false
+                                end
                             end
                         end
 
+                        if installedSoftware.option(option.name)
+                            if !installedSoftware.passEnabled
+                                return false
+                            else
+                                if softwarePassNumber < installedSoftwarePassNumber && software.passEnabled
+                                    equalScore += 1
+                                else
+                                    return false
+                                end
+                            end
+
+                        end
+
+                    else
+                        if software.passEnabled
+                            equalScore += 1
+                        elsif installedSoftware.option(option.name) && !option.active
+                            equalScore += 1
+                        else
+                            return false
+                        end
                     end
 
-                    return (equalScore == software.options.size)
                 end
-            end
 
-            return false
+                return (equalScore == software.options.size)
+            else
+                return false
+            end
         end
 
         def getAvailableSoftware(softwareName : String) : ISM::AvailableSoftware
@@ -363,6 +365,7 @@ module ISM
             return ISM::AvailableSoftware.new
         end
 
+        #TO OPTIMIZE WITH FILE.EXISTS
         def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
             result = ISM::SoftwareInformation.new
 
@@ -918,21 +921,21 @@ module ISM
             puts
         end
 
-        def showUnavailableDependencyMessage(software : ISM::SoftwareDependency, dependency : ISM::SoftwareDependency, allowTitle = true)
+        def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareInformation, allowTitle = true)
             if allowTitle
                 puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
                 puts "\n"
             end
 
-            dependencyText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.requiredVersion.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+            dependencyText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
 
             optionsText = "{ "
 
-            if dependency.information.options.empty?
+            if dependency.options.empty?
                 optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
             end
 
-            dependency.information.options.each do |option|
+            dependency.options.each do |option|
                 if option.active
                     optionsText += "#{option.name.colorize(:red)}"
                 else
@@ -953,7 +956,7 @@ module ISM
             end
         end
 
-        def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareDependency))
+        def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
             puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
             puts "\n"
 
@@ -961,7 +964,7 @@ module ISM
                 softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                 optionsText = "{ "
 
-                software.information.options.each do |option|
+                software.options.each do |option|
                     if option.active
                         optionsText += "#{option.name.colorize(:red)}"
                     else
@@ -977,7 +980,7 @@ module ISM
             puts "\n"
         end
 
-        def showDependenciesAtUpperLevelMessage(dependencies : Array(ISM::SoftwareDependency))
+        def showDependenciesAtUpperLevelMessage(dependencies : Array(ISM::SoftwareInformation))
             puts "#{ISM::Default::CommandLine::DependenciesAtUpperLevelText.colorize(:yellow)}"
             puts "\n"
 
@@ -985,7 +988,7 @@ module ISM
                 softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                 optionsText = "{ "
 
-                software.information.options.each do |option|
+                software.options.each do |option|
                     if option.active
                         optionsText += "#{option.name.colorize(:red)}"
                     else
@@ -1010,20 +1013,18 @@ module ISM
             print "#{ISM::Default::CommandLine::CalculationTitle}"
         end
 
-        def showSoftwares(neededSoftwares : Array(ISM::SoftwareDependency), mode = :installation)
+        def showSoftwares(neededSoftwares : Array(ISM::SoftwareInformation), mode = :installation)
             puts "\n"
 
             neededSoftwares.each do |software|
-                information = software.information
-
-                softwareText = "#{information.name.colorize(:green)}" + " /" + "#{information.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                 optionsText = "{ "
 
-                if information.options.empty?
+                if software.options.empty?
                     optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
                 end
 
-                information.options.each do |option|
+                software.options.each do |option|
                     if option.active
                         optionsText += "#{option.name.colorize(:red)}"
                     else
@@ -1038,7 +1039,7 @@ module ISM
 
                 if mode == :installation
                     additionalText += "("
-                    additionalText += "#{softwareIsInstalled(software.information) ? "#{ISM::Default::CommandLine::RebuildText}".colorize(:yellow) : "#{ISM::Default::CommandLine::NewText}".colorize(:yellow)}"
+                    additionalText += "#{softwareIsInstalled(software) ? "#{ISM::Default::CommandLine::RebuildText}".colorize(:yellow) : "#{ISM::Default::CommandLine::NewText}".colorize(:yellow)}"
                     additionalText += ")"
                 end
 
@@ -1175,7 +1176,7 @@ module ISM
             return result
         end
 
-        def getRequiredTargets(neededSoftwares : Array(ISM::SoftwareDependency)) : String
+        def getRequiredTargets(neededSoftwares : Array(ISM::SoftwareInformation)) : String
             requiredTargetArrayResult = "targets = ["
             requiredTargetOptionsResult = "\n"
             requiredTargetClassResult = String.new
@@ -1199,7 +1200,7 @@ module ISM
                 end
 
                 #GENERATE TARGET OPTION ARRAY
-                software.information.options.each do |option|
+                software.options.each do |option|
                     if option.active
                         requiredTargetOptionsResult += "targets[#{index}].information.enableOption(\"#{option.name}\")\n"
                     else
@@ -1260,7 +1261,7 @@ module ISM
             end
         end
 
-        def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareDependency))
+        def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
                     puts
 
@@ -1362,7 +1363,7 @@ module ISM
             end
         end
 
-        def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareDependency))
+        def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
                     puts "\n"
 
@@ -1449,8 +1450,8 @@ module ISM
             cleanCalculationAnimation
         end
 
-        def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareDependency)
-            dependencies = Hash(String,ISM::SoftwareDependency).new
+        def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareInformation)
+            dependencies = Hash(String,ISM::SoftwareInformation).new
             currentDependencies = [software.toSoftwareDependency]
             nextDependencies = Array(ISM::SoftwareDependency).new
 
@@ -1471,11 +1472,11 @@ module ISM
                         #Software or version not available
                         if dependencyInformation.name == "" || dependencyInformation.version == ""
                             if allowSkipUnavailable == true
-                                @unavailableDependencySignals.push([software.toSoftwareDependency,dependency])
-                                return Array(ISM::SoftwareDependency).new
+                                @unavailableDependencySignals.push([software,dependencyInformation])
+                                return Array(ISM::SoftwareInformation).new
                             else
                                 showCalculationDoneMessage
-                                showUnavailableDependencyMessage(software.toSoftwareDependency,dependency)
+                                showUnavailableDependencyMessage(software,dependencyInformation)
                                 exitProgram
                             end
                         end
@@ -1485,20 +1486,20 @@ module ISM
 
                             #Multiple versions of single software requested
                             if dependencies[dependency.hiddenName].version != dependency.version
-                                dependencies[dependency.versionName] = dependency
+                                dependencies[dependency.versionName] = dependencyInformation
                                 nextDependencies += dependency.dependencies
                             end
 
                             #Different options requested
                             if dependencies[dependency.hiddenName].options != dependency.options
                                 entry = dependency.dup
-                                entry.options = (dependencies[dependency.hiddenName].options+dependency.options).uniq
+                                entry.options = (dependencies[dependency.hiddenName].toSoftwareDependency.options+dependency.options).uniq
 
-                                dependencies[dependency.versionName] = entry
+                                dependencies[dependency.versionName] = entry.information
                                 nextDependencies += entry.dependencies
                             end
                         else
-                            dependencies[dependency.hiddenName] = dependency
+                            dependencies[dependency.hiddenName] = dependencyInformation
                             nextDependencies += dependency.dependencies
                         end
 
@@ -1514,23 +1515,21 @@ module ISM
             return dependencies.values
         end
 
-        def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation)) : Hash(String,Array(ISM::SoftwareDependency))
-            dependenciesTable = Hash(String,Array(ISM::SoftwareDependency)).new
+        def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation)) : Hash(String,Array(ISM::SoftwareInformation))
+            dependenciesTable = Hash(String,Array(ISM::SoftwareInformation)).new
 
             softwareList.each do |software|
                 playCalculationAnimation
 
-                key = software.toSoftwareDependency.hiddenName
+                key = software.hiddenName
 
                 dependenciesTable[key] = getRequiredDependencies(software, true)
 
                 dependenciesTable[key].each do |dependency|
                     playCalculationAnimation
 
-                    dependencyInformation = dependency.information
-
-                    if !softwareIsInstalled(dependencyInformation)
-                        dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependencyInformation)
+                    if !softwareIsInstalled(dependency)
+                        dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependency)
                     end
 
                 end
@@ -1558,10 +1557,10 @@ module ISM
             return dependenciesTable
         end
 
-        def getSortedDependencies(dependenciesTable : Hash(String,Array(ISM::SoftwareDependency))) : Array(ISM::SoftwareDependency)
-            result = Array(ISM::SoftwareDependency).new
+        def getSortedDependencies(dependenciesTable : Hash(String,Array(ISM::SoftwareInformation))) : Array(ISM::SoftwareInformation)
+            result = Array(ISM::SoftwareInformation).new
 
-            table = Hash(ISM::SoftwareDependency,Int32).new
+            table = Hash(ISM::SoftwareInformation,Int32).new
 
             dependenciesTable.values.each do |dependencies|
                 playCalculationAnimation
@@ -1587,24 +1586,24 @@ module ISM
                 result << item[0]
             end
 
-            #resultedSoftwareNames = result.map { |dependency| dependency.name }
-            #requestedSoftwareNames = @requestedSoftwares.map { |software| software.name }
+            resultedSoftwareNames = result.map { |dependency| dependency.name }
+            requestedSoftwareNames = @requestedSoftwares.map { |software| software.name }
 
-            #if !requestedSoftwareNames.includes?(requestedSoftwareNames[-1])
-                #dependenciesAtUpperLevelList = Array(ISM::SoftwareDependency).new
+            if !requestedSoftwareNames.includes?(requestedSoftwareNames[-1])
+                dependenciesAtUpperLevelList = Array(ISM::SoftwareInformation).new
 
-                #result.reverse.each do |dependency|
-                    #if requestedSoftwareNames.includes?(dependency.name)
-                        #break
-                    #else
-                        #dependenciesAtUpperLevelList.push(dependency)
-                    #end
-                #end
+                result.reverse.each do |dependency|
+                    if requestedSoftwareNames.includes?(dependency.name)
+                        break
+                    else
+                        dependenciesAtUpperLevelList.push(dependency)
+                    end
+                end
 
-                #showCalculationDoneMessage
-                #showDependenciesAtUpperLevelMessage(dependenciesAtUpperLevelList)
-                #exitProgram
-            #end
+                showCalculationDoneMessage
+                showDependenciesAtUpperLevelMessage(dependenciesAtUpperLevelList)
+                exitProgram
+            end
 
             return result
         end
@@ -1613,15 +1612,15 @@ module ISM
             File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
         end
 
-        def getNeededSoftwares : Array(ISM::SoftwareDependency)
+        def getNeededSoftwares : Array(ISM::SoftwareInformation)
             dependencyTable = getDependenciesTable(@requestedSoftwares)
             return getSortedDependencies(dependencyTable)
         end
 
-        def getUnneededSoftwares : Array(ISM::SoftwareDependency)
+        def getUnneededSoftwares : Array(ISM::SoftwareInformation)
             wrongArguments = Array(String).new
-            requiredSoftwares = Hash(String,ISM::SoftwareDependency).new
-            unneededSoftwares = Array(ISM::SoftwareDependency).new
+            requiredSoftwares = Hash(String,ISM::SoftwareInformation).new
+            unneededSoftwares = Array(ISM::SoftwareInformation).new
 
             #GET ALL REQUIRED SOFTWARES
             @favouriteGroups.each do |group|
@@ -1634,7 +1633,7 @@ module ISM
                     #If software in favourite is not requested for removal, it is require, else no
                     if !softwareIsRequestedSoftware(software)
 
-                        requiredSoftwares[software.versionName] = software.toSoftwareDependency
+                        requiredSoftwares[software.versionName] = software
 
                         #For each dependency of favourites: add entry in requiredSoftwares
                         getRequiredDependencies(software, allowDeepSearch: true).each do |dependency|
@@ -1665,7 +1664,7 @@ module ISM
 
                 #If it's not require, add to unneeded softwares
                 if !requiredSoftwares.has_key?(software.versionName)
-                    unneededSoftwares.push(software.toSoftwareDependency)
+                    unneededSoftwares.push(software)
                 end
 
             end
