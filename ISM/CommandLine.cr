@@ -1296,7 +1296,9 @@ module ISM
                     end
 
                     targets.each do |target|
+                        puts "#\{target.name.colorize(:green)} /#\{target.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
                         target.showInformations
+                        puts
                     end
 
                     CODE
