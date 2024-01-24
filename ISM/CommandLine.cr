@@ -466,6 +466,22 @@ module ISM
             end
         end
 
+        def printInformationNotificationTitle(name : String, version : String)
+            text = "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
+
+            separatorText = String.new
+
+            (0..text.size-1).each do |index|
+                separatorText += "-"
+            end
+
+            separatorText = "#{separatorText.colorize(:green)}"
+
+            puts separatorText
+            puts text
+            puts separatorText
+        end
+
         def printInformationNotification(message : String)
             puts "[#{"Info".colorize(:green)}] #{message}"
         end

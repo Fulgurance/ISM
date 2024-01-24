@@ -1461,6 +1461,8 @@ module ISM
         end
 
         def showInformations
+            puts
+            Ism.printInformationNotificationTitle(@information.name,@information.version)
         end
 
         def uninstall
