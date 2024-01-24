@@ -1323,7 +1323,7 @@ module ISM
                     puts
 
                     targetsAdditionalInformationIndex.each do |index|
-                        target[index].showInformations
+                        targets[index].showInformations
                     end
 
                     CODE
