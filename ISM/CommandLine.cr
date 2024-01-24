@@ -467,11 +467,12 @@ module ISM
         end
 
         def printInformationNotificationTitle(name : String, version : String)
+            limit = name.size+version.size+2
             text = "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
 
             separatorText = String.new
 
-            (0..text.size-1).each do |index|
+            (0..limit).each do |index|
                 separatorText += "-"
             end
 
@@ -1170,75 +1171,78 @@ module ISM
             return result
         end
 
-        def getRequiredTargetClass(neededSoftwares : Array(ISM::SoftwareDependency)) : String
-            result = String.new
+        def getRequiredTargets(neededSoftwares : Array(ISM::SoftwareDependency)) : String
+            requiredTargetArrayResult = "targets = ["
+            requiredTargetOptionsResult = "\n"
+            requiredTargetClassResult = String.new
+
+            additionalInformationNumber = 0
+            indexResult = "targetsAdditionalInformationIndex = ["
 
             neededSoftwares.each_with_index do |software, index|
 
+                #GENERATE TARGET ARRAY
+                if neededSoftwares.size == 1
+                    requiredTargetArrayResult = "targets = [Target#{index}.new(\"#{software.filePath}\")]"
+                else
+                    if index == 0
+                        requiredTargetArrayResult += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
+                    elsif index != neededSoftwares.size-1
+                        requiredTargetArrayResult += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\"),\n"
+                    else
+                        requiredTargetArrayResult += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\")]\n"
+                    end
+                end
+
+                #GENERATE TARGET OPTION ARRAY
+                software.information.options.each do |option|
+                    if option.active
+                        requiredTargetOptionsResult += "targets[#{index}].information.enableOption(\"#{option.name}\")\n"
+                    else
+                        requiredTargetOptionsResult += "targets[#{index}].information.disableOption(\"#{option.name}\")\n"
+                    end
+                end
+
+                #ITERATE ALL CLASS FILES
                 fileContent = File.read_lines(software.requireFilePath)
 
                 fileContent.each_with_index do |line, lineIndex|
 
+                    #GENERATE TARGET CLASS BY INDEX
                     if lineIndex == 0
-                        result += "\n#{line.gsub("Target","Target#{index}")}"
+                        requiredTargetClassResult += "\n#{line.gsub("Target","Target#{index}")}"
                     else
-                        result += "\n#{line}"
+                        requiredTargetClassResult += "\n#{line}"
                     end
+
+                    #GENERATE ADDITIONAL INFORMATION INDEX ARRAY
+                    if line.includes?("def showInformations")
+
+                        if additionalInformationNumber >= 1
+                            indexResult += ",\n"
+                        end
+
+                        if additionalInformationNumber == 0
+                            indexResult += "\t#{index}"
+                        elsif index != neededSoftwares.size-1
+                            indexResult += "\t\t\t\t\t\t\t\t\t#{index}"
+                        else
+                            indexResult += "\t\t\t\t\t\t\t\t\t#{index}"
+                        end
+
+                        additionalInformationNumber += 1
+                    end
+
+                    indexResult += "]\n\n"
+
                 end
 
-                result += "\n"
+                requiredTargetClassResult += "\n"
             end
 
-            return result
-        end
-
-        def getRequiredTargetArray(neededSoftwares : Array(ISM::SoftwareDependency)) : String
-            result = "targets = ["
-
-            neededSoftwares.each_with_index do |software, index|
-
-                if neededSoftwares.size == 1
-                    result = "targets = [Target#{index}.new(\"#{software.filePath}\")]"
-                else
-                    if index == 0
-                        result += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
-                    elsif index != neededSoftwares.size-1
-                        result += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\"),\n"
-                    else
-                        result += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\")]\n"
-                    end
-                end
-
-            end
-
-            return result
-        end
-
-        def getRequiredTargetOptions(neededSoftwares : Array(ISM::SoftwareDependency)) : String
-            result = "\n"
-
-            neededSoftwares.each_with_index do |software, index|
-
-                software.information.options.each do |option|
-                    if option.active
-                        result += "targets[#{index}].information.enableOption(\"#{option.name}\")\n"
-                    else
-                        result += "targets[#{index}].information.disableOption(\"#{option.name}\")\n"
-                    end
-                end
-
-            end
-
-            return result
-        end
-
-        def getRequiredTargets(neededSoftwares : Array(ISM::SoftwareDependency)) : String
-
-            result =    getRequiredTargetClass(neededSoftwares) +
-                        getRequiredTargetArray(neededSoftwares) +
-                        getRequiredTargetOptions(neededSoftwares)
-
-            return result
+            return  requiredTargetClassResult +
+                    requiredTargetArrayResult +
+                    requiredTargetOptionsResult
         end
 
         def makeLogDirectory(path : String)
@@ -1257,7 +1261,7 @@ module ISM
                     #LOADING REQUESTED SOFTWARE VERSION NAMES
                     #{getRequestedSoftwareVersionNames}
 
-                    #LOADING TARGETS
+                    #LOADING TARGETS, ADDITIONAL INFORMATION INDEX AND NEEDED OPTIONS
                     #{getRequiredTargets(neededSoftwares)}
 
                     #LOADING DATABASE
@@ -1313,8 +1317,8 @@ module ISM
 
                     puts
 
-                    targets.each do |target|
-                        target.showInformations
+                    targetsAdditionalInformationIndex.each do |index|
+                        target[index].showInformations
                     end
 
                     CODE
