@@ -1242,7 +1242,8 @@ module ISM
 
             return  requiredTargetClassResult +
                     requiredTargetArrayResult +
-                    requiredTargetOptionsResult
+                    requiredTargetOptionsResult +
+                    indexResult
         end
 
         def makeLogDirectory(path : String)
