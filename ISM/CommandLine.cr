@@ -1147,12 +1147,16 @@ module ISM
 
             @requestedSoftwares.each_with_index do |software, index|
 
-                if index == 0
-                    result += "\t\"#{software.versionName}\",\n"
-                elsif index != @requestedSoftwares.size-1
-                    result += "\t\t\t\t\t\t\t\t\t\"#{software.versionName}\",\n"
+                if @requestedSoftwares.size == 1
+                    result = "requestedSoftwareVersionNames = [\"#{software.versionName}\"]"
                 else
-                    result += "\t\t\t\t\t\t\t\t\t#{software.versionName}]\n"
+                    if index == 0
+                        result += "\t\"#{software.versionName}\",\n"
+                    elsif index != @requestedSoftwares.size-1
+                        result += "\t\t\t\t\t\t\t\t\t\"#{software.versionName}\",\n"
+                    else
+                        result += "\t\t\t\t\t\t\t\t\t#{software.versionName}]\n"
+                    end
                 end
 
             end
@@ -1187,12 +1191,16 @@ module ISM
 
             neededSoftwares.each_with_index do |software, index|
 
-                if index == 0
-                    result += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
-                elsif index != neededSoftwares.size-1
-                    result += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\"),\n"
+                if neededSoftwares.size == 1
+                    result = "requiredTargets = [Target#{index}.new(\"#{software.filePath}\")]"
                 else
-                    result += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\")]\n"
+                    if index == 0
+                        result += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
+                    elsif index != neededSoftwares.size-1
+                        result += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\"),\n"
+                    else
+                        result += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\")]\n"
+                    end
                 end
 
             end
