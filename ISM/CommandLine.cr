@@ -1233,10 +1233,9 @@ module ISM
                         additionalInformationNumber += 1
                     end
 
-                    indexResult += "]\n\n"
-
                 end
 
+                indexResult += "]\n\n"
                 requiredTargetClassResult += "\n"
             end
 
