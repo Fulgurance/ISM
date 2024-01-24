@@ -9,7 +9,7 @@ module ISM
         property name : String
         property description : String
         property active : Bool
-        property dependencies : Array(ISM::SoftwareDependency)
+        setter dependencies : Array(ISM::SoftwareDependency)
         property kernelDependencies : Array(String)
 
         def initialize( @name = String.new,
@@ -25,6 +25,18 @@ module ISM
 
         def isPass : Bool
             return @name.starts_with?(/Pass[0-9]/)
+        end
+
+        def dependencies : Array(ISM::SoftwareDependency)
+            result = Array(ISM::SoftwareDependency).new
+
+            @dependencies.each do |dependency|
+                if !Ism.softwareIsInstalled(dependency.information)
+                    result.push(dependency)
+                end
+            end
+
+            return result
         end
 
     end

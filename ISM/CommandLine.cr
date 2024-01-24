@@ -55,8 +55,8 @@ module ISM
         def start
             loadSettingsFiles
             loadKernelOptionDatabase
-            loadSoftwareDatabase
             loadInstalledSoftwareDatabase
+            loadSoftwareDatabase
             loadPortsDatabase
             loadMirrorsDatabase
             loadFavouriteGroupsDatabase

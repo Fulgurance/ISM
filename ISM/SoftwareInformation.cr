@@ -310,7 +310,7 @@ module ISM
 
         end
 
-        return @dependencies+dependenciesArray
+        return @dependencies.reject {|entry| Ism.softwareIsInstalled(entry.information)}+dependenciesArray
     end
 
     def kernelDependencies : Array(String)
