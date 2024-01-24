@@ -1148,9 +1148,9 @@ module ISM
             @requestedSoftwares.each_with_index do |software, index|
 
                 if index == 0
-                    result += "\t#{software.versionName},\n"
+                    result += "\t\"#{software.versionName}\",\n"
                 elsif index != @requestedSoftwares.size-1
-                    result += "\t\t\t\t\t\t\t\t\t#{software.versionName},\n"
+                    result += "\t\t\t\t\t\t\t\t\t\"#{software.versionName}\",\n"
                 else
                     result += "\t\t\t\t\t\t\t\t\t#{software.versionName}]\n"
                 end
