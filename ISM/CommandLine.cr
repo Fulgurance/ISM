@@ -1233,7 +1233,7 @@ module ISM
 
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareDependency))
             tasks = <<-CODE
-                    puts "\n"
+                    puts
 
                     #LOADING LIBRARIES
                     #{getRequiredLibraries}
@@ -1295,10 +1295,10 @@ module ISM
 
                     end
 
+                    puts
+
                     targets.each do |target|
-                        puts "#\{target.information.name.colorize(:green)} /#\{target.information.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
                         target.showInformations
-                        puts
                     end
 
                     CODE
