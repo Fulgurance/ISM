@@ -1240,8 +1240,8 @@ module ISM
 
             indexResult += "]\n"
 
-            if indexResult == "targetsAdditionalInformationIndex = []"
-                indexResult == "targetsAdditionalInformationIndex = Array(Int32).new"
+            if indexResult.includes?("targetsAdditionalInformationIndex = []")
+                indexResult == "targetsAdditionalInformationIndex = Array(Int32).new\n"
             end
 
             return  requiredTargetClassResult +
