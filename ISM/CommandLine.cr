@@ -1125,20 +1125,6 @@ module ISM
                     "\n"
         end
 
-        def getEnabledOptions(software : ISM::SoftwareDependency) : String
-            requiredOptions = String.new
-
-            software.information.options.each do |option|
-                if option.active
-                    requiredOptions += "target.information.enableOption(\"#{option.name}\")\n"
-                else
-                    requiredOptions += "target.information.disableOption(\"#{option.name}\")\n"
-                end
-            end
-
-            return requiredOptions
-        end
-
         def getRequiredLibraries : String
             requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{ISM::Default::Filename::RequiredLibraries}")
             requiredLibraries = String.new
@@ -1156,6 +1142,91 @@ module ISM
             return requiredLibraries
         end
 
+        def getRequestedSoftwareVersionNames
+            result = "requestedSoftwareVersionNames = ["
+
+            @requestedSoftwares.each_with_index do |software, index|
+
+                if index == 0
+                    result += "\t#{software.versionName},\n"
+                elsif index != @requestedSoftwares.size-1
+                    result += "\t\t\t\t\t\t\t\t\t#{software.versionName},\n"
+                else
+                    result += "\t\t\t\t\t\t\t\t\t#{software.versionName}]\n"
+                end
+
+            end
+
+            return result
+        end
+
+        def getRequiredTargetClass(neededSoftwares : Array(ISM::SoftwareDependency)) : String
+            result = String.new
+
+            neededSoftwares.each_with_index do |software, index|
+
+                fileContent = File.read_lines(software.requireFilePath)
+
+                fileContent.each_with_index do |line, lineIndex|
+
+                    if lineIndex == 0
+                        result += line.gsub("Target","Target#{index}")
+                    else
+                        result += line
+                    end
+                end
+
+                result += "\n"
+            end
+
+            return result
+        end
+
+        def getRequiredTargetArray(neededSoftwares : Array(ISM::SoftwareDependency)) : String
+            result = "requiredTargets = ["
+
+            neededSoftwares.each_with_index do |software, index|
+
+                if index == 0
+                    result += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
+                elsif index != neededSoftwares.size-1
+                    result += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\"),\n"
+                else
+                    result += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\")]\n"
+                end
+
+            end
+
+            return result
+        end
+
+        def getRequiredTargetOptions(neededSoftwares : Array(ISM::SoftwareDependency)) : String
+            result = String.new
+
+            neededSoftwares.each_with_index do |software, index|
+
+                software.information.options.each do |option|
+                    if option.active
+                        result += "requiredTargets[#{index}].information.enableOption(\"#{option.name}\")\n"
+                    else
+                        result += "requiredTargets[#{index}].information.disableOption(\"#{option.name}\")\n"
+                    end
+                end
+
+            end
+
+            return result
+        end
+
+        def getRequiredTargets(neededSoftwares : Array(ISM::SoftwareDependency)) : String
+
+            result =    getRequiredTargetClass(neededSoftwares) +
+                        getRequiredTargetArray(neededSoftwares) +
+                        getRequiredTargetOptions(neededSoftwares)
+
+            return result
+        end
+
         def makeLogDirectory(path : String)
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -1163,57 +1234,156 @@ module ISM
         end
 
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareDependency))
-            puts "\n"
+            tasks = <<-CODE
+                    puts "\n"
 
-            neededSoftwares.each_with_index do |software, index|
-                limit = neededSoftwares.size
-                name = software.name
-                version = software.version
+                    #LOADING LIBRARIES
+                    #{getRequiredLibraries}
 
-                updateInstallationTerminalTitle(index, limit, name, version)
+                    #LOADING REQUESTED SOFTWARE VERSION NAMES
+                    #{getRequestedSoftwareVersionNames}
 
-                showStartSoftwareInstallingMessage(index, limit, name, version)
+                    #LOADING TARGETS
+                    #{getRequiredTargets(neededSoftwares)}
 
-                runInstallationProcess(software)
+                    #LOADING DATABASE
+                    Ism = ISM::CommandLine.new
+                    Ism.loadSettingsFiles
+                    Ism.loadSoftwareDatabase
 
-                if @requestedSoftwares.any? { |entry| entry.versionName == software.versionName}
-                    addSoftwareToFavouriteGroup(software.versionName)
-                end
+                    limit = targets.size
 
-                showEndSoftwareInstallingMessage(index, limit, name, version)
+                    targets.each_with_index do |target, index|
 
-                if index < neededSoftwares.size-1
-                    showSeparator
-                end
+                        name = target.information.name
+                        version = target.information.version
+                        versionName = target.information.versionName
+
+                        #START INSTALLATION PROCESS
+
+                        Ism.updateInstallationTerminalTitle(index, limit, name, version)
+
+                        Ism.showStartSoftwareInstallingMessage(index, limit, name, version)
+
+                        cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
+
+                        begin
+                            target.download
+                            target.check
+                            target.extract
+                            target.patch
+                            target.prepare
+                            target.configure
+                            target.build
+                            target.prepareInstallation
+                            target.install
+                            target.recordNeededKernelFeatures
+                            target.clean
+                        rescue
+                            Ism.exitProgram
+                        end
+
+                        cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
+
+                        if requestedSoftwareVersionNames.any? { |entry| entry == versionName}
+                            addSoftwareToFavouriteGroup(versionName)
+                        end
+
+                        showEndSoftwareInstallingMessage(index, limit, name, version)
+
+                        if index < limit-1
+                            showSeparator
+                        end
+
+                    end
+
+                    targets.each_with_index do |target|
+                        target.showInformations
+                    end
+
+                    CODE
+
+            generateTasksFile(tasks)
+            buildTasksFile
+            runTasksFile
+        end
+
+        def buildTasksFile
+            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+            if !process.success?
+                exitProgram
             end
+        end
 
-            neededSoftwares.each do |software|
-                runShowInformationProcess(software)
+        def runTasksFile
+            process = Process.run(  "./#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+            if !process.success?
+                exitProgram
             end
-
-            #Enable or disable needed kernel features
         end
 
         def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareDependency))
-            puts "\n"
+            tasks = <<-CODE
+                    puts "\n"
 
-            unneededSoftwares.each_with_index do |software, index|
-                limit = unneededSoftwares.size
-                name = software.name
-                version = software.version
+                    #LOADING LIBRARIES
+                    #{getRequiredLibraries}
 
-                updateUninstallationTerminalTitle(index, limit, name, version)
+                    #LOADING REQUESTED SOFTWARE VERSION NAMES
+                    #{getRequestedSoftwareVersionNames}
 
-                showStartSoftwareUninstallingMessage(index, limit, name, version)
+                    #LOADING TARGETS
+                    #{getRequiredTargets(unneededSoftwares)}
 
-                runUninstallationProcess(software)
+                    #LOADING DATABASE
+                    Ism = ISM::CommandLine.new
+                    Ism.loadSettingsFiles
+                    Ism.loadSoftwareDatabase
 
-                showEndSoftwareUninstallingMessage(index, limit, name, version)
+                    limit = targets.size
 
-                if index < unneededSoftwares.size-1
-                    showSeparator
-                end
-            end
+                    targets.each_with_index do |target, index|
+
+                        name = target.information.name
+                        version = target.information.version
+                        versionName = target.information.versionName
+
+                        #START UNINSTALLATION PROCESS
+
+                        Ism.updateUninstallationTerminalTitle(index, limit, name, version)
+
+                        Ism.showStartSoftwareUninstallingMessage(index, limit, name, version)
+
+                        begin
+                            target.recordUnneededKernelFeatures
+                            target.uninstall
+                        rescue
+                            Ism.exitProgram
+                        end
+
+                        showEndSoftwareInstallingMessage(index, limit, name, version)
+
+                        if index < limit-1
+                            showSeparator
+                        end
+
+                    end
+
+                    CODE
+
+            generateTasksFile(tasks)
+            buildTasksFile
+            runTasksFile
         end
 
         def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
@@ -1407,164 +1577,6 @@ module ISM
             end
 
             return result
-        end
-
-        def runShowInformationProcess(software : ISM::SoftwareDependency)
-            tasks = generateShowInformationTasks(software)
-            generateTasksFile(tasks)
-
-            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
-                                    shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
-
-            if !process.success?
-                exitProgram
-            end
-
-            process = Process.run(  "./#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
-                                    shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
-
-            if !process.success?
-                exitProgram
-            end
-        end
-
-        def runInstallationProcess(software : ISM::SoftwareDependency)
-            cleanBuildingDirectory(@settings.rootPath+software.builtSoftwareDirectoryPath)
-
-            tasks = generateInstallTasks(software)
-            generateTasksFile(tasks)
-
-            makeLogDirectory("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}")
-            logFile = File.open("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{software.port}/#{software.versionName}.log","w")
-            logWriter = IO::MultiWriter.new(STDOUT,logFile)
-
-            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                    output: logWriter,
-                                    error: logWriter,
-                                    shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
-
-            if !process.success?
-                exitProgram
-            end
-
-            process = Process.run(  "./#{ISM::Default::Filename::Task}",
-                                    output: logWriter,
-                                    error: logWriter,
-                                    shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
-
-            logFile.close
-
-            if !process.success?
-                exitProgram
-            end
-
-            cleanBuildingDirectory(@settings.rootPath+software.builtSoftwareDirectoryPath)
-        end
-
-        def runUninstallationProcess(software : ISM::SoftwareDependency)
-            tasks = generateUninstallTasks(software)
-            generateTasksFile(tasks)
-
-            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
-                                    shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
-
-            if !process.success?
-                exitProgram
-            end
-
-            process = Process.run(  "./#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
-                                    shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
-
-            if !process.success?
-                exitProgram
-            end
-        end
-
-        def generateInstallTasks(software : ISM::SoftwareDependency) : String
-            tasks = <<-CODE
-                    #{getRequiredLibraries}
-                    Ism = ISM::CommandLine.new
-                    Ism.loadSettingsFiles
-                    Ism.loadSoftwareDatabase
-                    {{ read_file("#{software.requireFilePath}").id }}
-                    target = Target.new("#{software.filePath}")
-                    #{getEnabledOptions(software)}
-                    begin
-                        target.download
-                        target.check
-                        target.extract
-                        target.patch
-                        target.prepare
-                        target.configure
-                        target.build
-                        target.prepareInstallation
-                        target.install
-                        target.recordNeededKernelFeatures
-                        target.clean
-                        target.showInformations
-                    rescue
-                        Ism.exitProgram
-                    end
-
-                    CODE
-
-            return tasks
-        end
-
-        def generateShowInformationTasks(software : ISM::SoftwareDependency) : String
-            tasks = <<-CODE
-                    #{getRequiredLibraries}
-                    Ism = ISM::CommandLine.new
-                    Ism.loadSettingsFiles
-                    Ism.loadSoftwareDatabase
-                    {{ read_file("#{software.requireFilePath}").id }}
-                    target = Target.new("#{software.filePath}")
-                    #{getEnabledOptions(software)}
-                    begin
-                        target.showInformations
-                    rescue
-                        Ism.exitProgram
-                    end
-
-                    CODE
-
-            return tasks
-        end
-
-        def generateUninstallTasks(software : ISM::SoftwareDependency) : String
-            tasks = <<-CODE
-                    #{getRequiredLibraries}
-                    Ism = ISM::CommandLine.new
-                    Ism.loadSettingsFiles
-                    Ism.loadSoftwareDatabase
-                    Ism.loadInstalledSoftwareDatabase
-                    {{ read_file("#{software.requireFilePath}").id }}
-                    target = Target.new("#{software.filePath}")
-                    #{getEnabledOptions(software)}
-                    begin
-                        target.recordUnneededKernelFeatures
-                        target.uninstall
-                    rescue
-                        Ism.exitProgram
-                    end
-
-                    CODE
-
-            return tasks
         end
 
         def generateTasksFile(tasks : String)
