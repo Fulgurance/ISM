@@ -1187,12 +1187,12 @@ module ISM
         end
 
         def getRequiredTargetArray(neededSoftwares : Array(ISM::SoftwareDependency)) : String
-            result = "requiredTargets = ["
+            result = "targets = ["
 
             neededSoftwares.each_with_index do |software, index|
 
                 if neededSoftwares.size == 1
-                    result = "requiredTargets = [Target#{index}.new(\"#{software.filePath}\")]"
+                    result = "targets = [Target#{index}.new(\"#{software.filePath}\")]"
                 else
                     if index == 0
                         result += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
@@ -1215,9 +1215,9 @@ module ISM
 
                 software.information.options.each do |option|
                     if option.active
-                        result += "requiredTargets[#{index}].information.enableOption(\"#{option.name}\")\n"
+                        result += "targets[#{index}].information.enableOption(\"#{option.name}\")\n"
                     else
-                        result += "requiredTargets[#{index}].information.disableOption(\"#{option.name}\")\n"
+                        result += "targets[#{index}].information.disableOption(\"#{option.name}\")\n"
                     end
                 end
 
