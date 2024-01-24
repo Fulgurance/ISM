@@ -1209,7 +1209,7 @@ module ISM
         end
 
         def getRequiredTargetOptions(neededSoftwares : Array(ISM::SoftwareDependency)) : String
-            result = String.new
+            result = "\n"
 
             neededSoftwares.each_with_index do |software, index|
 
