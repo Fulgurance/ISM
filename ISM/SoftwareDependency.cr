@@ -59,7 +59,19 @@ module ISM
         end
 
         def information : ISM::SoftwareInformation
-            dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
+
+            if specifiedPort
+                portName = @name[1..@name.index(":")][0..-2]
+                dependencyInformation = ISM::SoftwareInformation.new
+                dependencyInformation.loadInformationFile(  Ism.settings.rootPath +
+                                                            ISM::Default::Path::SoftwaresDirectory +
+                                                            portName + "/" +
+                                                            name + "/" +
+                                                            version + "/" +
+                                                            ISM::Default::Filename::Information)
+            else
+                dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
+            end
 
             @options.each do |option|
                 dependencyInformation.enableOption(option)
@@ -79,7 +91,7 @@ module ISM
         end
 
         def port : String
-            return specifiedPort ? @name[1..@name.index(":")][0..-2] : information.port
+            return information.port
         end
 
         def dependencies : Array(ISM::SoftwareDependency)
