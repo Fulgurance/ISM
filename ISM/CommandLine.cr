@@ -368,28 +368,40 @@ module ISM
         def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
             result = ISM::SoftwareInformation.new
 
-            if /@[A-Za-z0-9\-]+:[A-Za-z]+/.match(userEntry) != nil
 
-                path =  Ism.settings.rootPath +
-                        ISM::Default::Path::InstalledSoftwaresDirectory +
-                        userEntry.gsub(/[\@\-\:]+/,"/")
+            path =  Ism.settings.rootPath +
+                    ISM::Default::Path::InstalledSoftwaresDirectory +
+                    userEntry.gsub(/[\@\-\:]+/,"/")
 
-                if File.exists?(path+ISM::Default::Filename::Information)
+            if /@[A-Za-z0-9\-]+:[A-Za-z]+/.match(userEntry) != nil && File.exists?(path+ISM::Default::Filename::Information)
 
-                    if File.exists?(path+ISM::Default::Filename::SoftwareSettings)
-                        result.loadInformationFile(path+ISM::Default::Filename::SoftwareSettings)
-                    else
-                        result.loadInformationFile(path+ISM::Default::Filename::Information)
-                    end
-
+                if File.exists?(path+ISM::Default::Filename::SoftwareSettings)
+                    result.loadInformationFile(path+ISM::Default::Filename::SoftwareSettings)
                 else
+                    result.loadInformationFile(path+ISM::Default::Filename::Information)
+                end
 
-                    @softwares.each do |entry|
+            else
 
-                        if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
-                            result.name = entry.name
-                            if !entry.versions.empty?
-                                temporary = entry.greatestVersion.clone
+                @softwares.each do |entry|
+
+                    if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
+                        result.name = entry.name
+                        if !entry.versions.empty?
+                            temporary = entry.greatestVersion.clone
+                            settingsFilePath = temporary.settingsFilePath
+
+                            if File.exists?(settingsFilePath)
+                                result.loadInformationFile(settingsFilePath)
+                            else
+                                result = temporary
+                            end
+                            break
+                        end
+                    else
+                        entry.versions.each do |software|
+                            if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
+                                temporary = software.clone
                                 settingsFilePath = temporary.settingsFilePath
 
                                 if File.exists?(settingsFilePath)
@@ -399,25 +411,11 @@ module ISM
                                 end
                                 break
                             end
-                        else
-                            entry.versions.each do |software|
-                                if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
-                                    temporary = software.clone
-                                    settingsFilePath = temporary.settingsFilePath
-
-                                    if File.exists?(settingsFilePath)
-                                        result.loadInformationFile(settingsFilePath)
-                                    else
-                                        result = temporary
-                                    end
-                                    break
-                                end
-                            end
                         end
-
                     end
 
                 end
+
             end
 
             return result
