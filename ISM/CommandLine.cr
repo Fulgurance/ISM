@@ -365,9 +365,28 @@ module ISM
             return ISM::AvailableSoftware.new
         end
 
-        #TO OPTIMIZE WITH FILE.EXISTS
         def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
             result = ISM::SoftwareInformation.new
+
+            ###
+            if /@[A-Za-z0-9\-]+:[A-Za-z]+/.match(userEntry) != nil
+
+                path =  Ism.settings.rootPath +
+                        ISM::Default::Path::InstalledSoftwaresDirectory +
+                        userEntry.gsub(/[\@\-\:]+/,"/")
+
+                if File.exists?(path+ISM::Default::Filename::Information)
+
+                    if File.exists?(path+ISM::Default::Filename::SoftwareSettings)
+                        result.loadInformationFile(path+ISM::Default::Filename::SoftwareSettings)
+                    else
+                        result.loadInformationFile(path+ISM::Default::Filename::Information)
+                    end
+
+                end
+
+            end
+            ###
 
             @softwares.each do |entry|
 
