@@ -382,29 +382,14 @@ module ISM
                         result.loadInformationFile(path+ISM::Default::Filename::Information)
                     end
 
-                end
+                else
 
-            else
+                    @softwares.each do |entry|
 
-                @softwares.each do |entry|
-
-                    if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
-                        result.name = entry.name
-                        if !entry.versions.empty?
-                            temporary = entry.greatestVersion.clone
-                            settingsFilePath = temporary.settingsFilePath
-
-                            if File.exists?(settingsFilePath)
-                                result.loadInformationFile(settingsFilePath)
-                            else
-                                result = temporary
-                            end
-                            break
-                        end
-                    else
-                        entry.versions.each do |software|
-                            if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
-                                temporary = software.clone
+                        if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
+                            result.name = entry.name
+                            if !entry.versions.empty?
+                                temporary = entry.greatestVersion.clone
                                 settingsFilePath = temporary.settingsFilePath
 
                                 if File.exists?(settingsFilePath)
@@ -414,11 +399,25 @@ module ISM
                                 end
                                 break
                             end
+                        else
+                            entry.versions.each do |software|
+                                if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
+                                    temporary = software.clone
+                                    settingsFilePath = temporary.settingsFilePath
+
+                                    if File.exists?(settingsFilePath)
+                                        result.loadInformationFile(settingsFilePath)
+                                    else
+                                        result = temporary
+                                    end
+                                    break
+                                end
+                            end
                         end
+
                     end
 
                 end
-
             end
 
             return result
