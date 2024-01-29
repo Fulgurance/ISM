@@ -1465,8 +1465,9 @@ module ISM
 
                 currentDependencies.each do |dependency|
                     dependencyInformation = dependency.information
+                    installed = softwareIsInstalled(dependencyInformation)
 
-                    if !softwareIsInstalled(dependencyInformation) || softwareIsInstalled(dependencyInformation) && allowRebuild == true && dependencyInformation == software && softwareIsRequestedSoftware(dependencyInformation) || allowDeepSearch == true
+                    if !installed || installed && allowRebuild == true && dependencyInformation == software && softwareIsRequestedSoftware(dependencyInformation) || allowDeepSearch == true
                         playCalculationAnimation
 
                         #Software or version not available
