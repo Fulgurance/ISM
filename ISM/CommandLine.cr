@@ -996,30 +996,6 @@ module ISM
             puts "\n"
         end
 
-        def showDependenciesAtUpperLevelMessage(dependencies : Array(ISM::SoftwareInformation))
-            puts "#{ISM::Default::CommandLine::DependenciesAtUpperLevelText.colorize(:yellow)}"
-            puts "\n"
-
-            dependencies.each do |software|
-                softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
-                optionsText = "{ "
-
-                software.options.each do |option|
-                    if option.active
-                        optionsText += "#{option.name.colorize(:red)}"
-                    else
-                        optionsText += "#{option.name.colorize(:blue)}"
-                    end
-                    optionsText += " "
-                end
-                optionsText += "}"
-
-                puts "\t" + softwareText + " " + optionsText + "\n"
-            end
-
-            puts "\n"
-        end
-
         def showCalculationDoneMessage
             cleanCalculationAnimation
             print "#{ISM::Default::CommandLine::CalculationDoneText.colorize(:green)}\n"
@@ -1033,7 +1009,7 @@ module ISM
             puts "\n"
 
             neededSoftwares.each do |software|
-                softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                 optionsText = "{ "
 
                 if software.options.empty?
@@ -1052,6 +1028,8 @@ module ISM
                 optionsText += "}"
 
                 additionalText = ""
+
+                #A CHANGER, RENVOYER D'ABORD UN TABLEAU NEEDEDSOFTWARES, AVEC LE SOFTWARE + LETAT
 
                 if mode == :installation
                     additionalText += "("
@@ -1545,15 +1523,13 @@ module ISM
                 dependenciesTable[key].each do |dependency|
                     playCalculationAnimation
 
-                    if !softwareIsInstalled(dependency)
-                        dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependency)
-                    end
-
+                    dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependency)
                 end
 
             end
 
             keys = dependenciesTable.keys
+
             #Inextricable dependencies problem
             keys.each do |key1|
                 playCalculationAnimation
@@ -1601,25 +1577,6 @@ module ISM
                 playCalculationAnimation
 
                 result << item[0]
-            end
-
-            resultedSoftwareNames = result.map { |dependency| dependency.name }
-            requestedSoftwareNames = @requestedSoftwares.map { |software| software.name }
-
-            if !requestedSoftwareNames.includes?(requestedSoftwareNames[-1])
-                dependenciesAtUpperLevelList = Array(ISM::SoftwareInformation).new
-
-                result.reverse.each do |dependency|
-                    if requestedSoftwareNames.includes?(dependency.name)
-                        break
-                    else
-                        dependenciesAtUpperLevelList.push(dependency)
-                    end
-                end
-
-                showCalculationDoneMessage
-                showDependenciesAtUpperLevelMessage(dependenciesAtUpperLevelList)
-                exitProgram
             end
 
             return result

@@ -13,6 +13,7 @@ module ISM
 
             def start
                 puts "#{ISM::Default::Option::SettingsShow::TitleText}:".colorize(:yellow)
+                puts "\t#{ISM::Default::Option::SettingsShow::DefaultMirrorText}: #{Ism.settings.defaultMirror.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::SecureModeText}: #{Ism.settings.secureMode.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::InstallByChrootText}: #{Ism.settings.installByChroot.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::RootPathText}: #{Ism.settings.rootPath.colorize(:green)}"
@@ -22,7 +23,7 @@ module ISM
                 puts "\t#{ISM::Default::Option::SettingsShow::TargetText}: #{Ism.settings.target(false).colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::MakeOptionsText}: #{Ism.settings.makeOptions(false).colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::BuildOptionsText}: #{Ism.settings.buildOptions(false).colorize(:green)}"
-                puts "\t-------------------------".colorize(:green)
+                puts "\t=========================".colorize(:green)
                 puts "\t#{ISM::Default::Option::SettingsShow::ChrootSystemNameText}: #{Ism.settings.chrootSystemName.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::ChrootTargetNameText}: #{Ism.settings.chrootTargetName.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::ChrootArchitectureText}: #{Ism.settings.chrootArchitecture.colorize(:green)}"
