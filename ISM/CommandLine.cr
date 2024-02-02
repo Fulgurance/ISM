@@ -77,6 +77,33 @@ module ISM
             end
         end
 
+        def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
+            software = ISM::SoftwareInformation.new
+
+            if File.exists?(@settings.rootPath +
+                            ISM::Default::Path::SettingsSoftwaresDirectory +
+                            port + "/" +
+                            name + "/" +
+                            version + "/" +
+                            ISM::Default::Filename::SoftwareSettings)
+                software.loadInformationFile(   @settings.rootPath +
+                                                ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                port + "/" +
+                                                name + "/" +
+                                                version + "/" +
+                                                ISM::Default::Filename::SoftwareSettings)
+            else
+                software.loadInformationFile(   @settings.rootPath +
+                                                ISM::Default::Path::SoftwaresDirectory +
+                                                port + "/" +
+                                                name + "/" +
+                                                version + "/" +
+                                                ISM::Default::Filename::Information)
+            end
+
+            return software
+        end
+
         def loadSoftwareDatabase
             if !Dir.exists?(@settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
                 Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
@@ -95,31 +122,7 @@ module ISM
 
                     versionDirectories.each do |versionDirectory|
 
-                        softwareInformation = ISM::SoftwareInformation.new
-
-                        if File.exists?(@settings.rootPath +
-                                        ISM::Default::Path::SettingsSoftwaresDirectory +
-                                        portDirectory+ "/" +
-                                        softwareDirectory + "/" +
-                                        versionDirectory + "/" +
-                                        ISM::Default::Filename::SoftwareSettings)
-                            softwareInformation.loadInformationFile(@settings.rootPath +
-                                                                    ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                                    portDirectory+ "/" +
-                                                                    softwareDirectory + "/" +
-                                                                    versionDirectory + "/" +
-                                                                    ISM::Default::Filename::SoftwareSettings)
-
-                        else
-                            softwareInformation.loadInformationFile(@settings.rootPath +
-                                                                    ISM::Default::Path::SoftwaresDirectory +
-                                                                    portDirectory+ "/" +
-                                                                    softwareDirectory + "/" +
-                                                                    versionDirectory + "/" +
-                                                                    ISM::Default::Filename::Information)
-                        end
-
-                        softwaresInformations << softwareInformation
+                        softwaresInformations << loadSoftware(portDirectory,softwareDirectory,versionDirectory)
 
                     end
 
@@ -192,6 +195,22 @@ module ISM
             @mirrorsSettings.loadMirrorsSettingsFile
         end
 
+        def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
+            installedSoftware = ISM::SoftwareInformation.new
+
+            begin
+                installedSoftware.loadInformationFile(  @settings.rootPath +
+                                                        ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                        port + "/" +
+                                                        name + "/" +
+                                                        version + "/" +
+                                                        ISM::Default::Filename::Information)
+            rescue
+            end
+
+            return installedSoftware
+        end
+
         def loadInstalledSoftwareDatabase
             if !Dir.exists?(@settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
                 Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
@@ -209,16 +228,7 @@ module ISM
 
                     versionDirectories.each do |versionDirectory|
 
-                        softwareInformation = ISM::SoftwareInformation.new
-
-                        softwareInformation.loadInformationFile(@settings.rootPath +
-                                                                ISM::Default::Path::InstalledSoftwaresDirectory +
-                                                                portDirectory+ "/" +
-                                                                softwareDirectory + "/" +
-                                                                versionDirectory + "/" +
-                                                                ISM::Default::Filename::Information)
-
-                        @installedSoftwares << softwareInformation
+                        @installedSoftwares << loadInstalledSoftware(portDirectory, softwareDirectory, versionDirectory)
 
                     end
 
@@ -352,6 +362,28 @@ module ISM
                 return (equalScore == software.options.size)
             else
                 return false
+            end
+        end
+
+        def getSoftwareStatus(software : ISM::SoftwareInformation) : Symbol
+            if !softwareIsInstalled(software)
+                if !softwareAnyVersionInstalled(software.name)
+                    return :new
+                else
+                    return :update
+                end
+            else
+                if software.passEnabled
+                    return :buildingPhase
+                else
+                    installedSoftware = loadInstalledSoftware(software.port,software.name,software.version)
+
+                    if software.options != installedSoftware.options
+                        return :optionUpdate
+                    else
+                        return :rebuild
+                    end
+                end
             end
         end
 
@@ -1029,11 +1061,24 @@ module ISM
 
                 additionalText = ""
 
-                #A CHANGER, RENVOYER D'ABORD UN TABLEAU NEEDEDSOFTWARES, AVEC LE SOFTWARE + LETAT
-
                 if mode == :installation
                     additionalText += "("
-                    additionalText += "#{softwareIsInstalled(software) ? "#{ISM::Default::CommandLine::RebuildText}".colorize(:yellow) : "#{ISM::Default::CommandLine::NewText}".colorize(:yellow)}"
+
+                    status = getSoftwareStatus(software)
+
+                    case status
+                    when :new
+                        additionalText += "#{ISM::Default::CommandLine::NewText.colorize(:yellow)}"
+                    when :update
+                        additionalText += "#{ISM::Default::CommandLine::UpdateText.colorize(:yellow)}"
+                    when :buildingPhase
+                        additionalText += "#{ISM::Default::CommandLine::BuildingPhaseText.colorize(:yellow)}"
+                    when :optionUpdate
+                        additionalText += "#{ISM::Default::CommandLine::OptionUpdateText.colorize(:yellow)}"
+                    when :rebuild
+                        additionalText += "#{ISM::Default::CommandLine::RebuildText.colorize(:yellow)}"
+                    end
+
                     additionalText += ")"
                 end
 
