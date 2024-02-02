@@ -366,18 +366,22 @@ module ISM
         end
 
         def getSoftwareStatus(software : ISM::SoftwareInformation) : Symbol
+            installedSoftware = loadInstalledSoftware(software.port,software.name,software.version)
+
             if !softwareIsInstalled(software)
                 if !softwareAnyVersionInstalled(software.name)
                     return :new
                 else
-                    return :update
+                    if software.version != installedSoftware.version
+                        return :update
+                    else
+                        return :optionUpdate
+                    end
                 end
             else
                 if software.passEnabled
                     return :buildingPhase
                 else
-                    installedSoftware = loadInstalledSoftware(software.port,software.name,software.version)
-
                     if software.options != installedSoftware.options
                         return :optionUpdate
                     else
