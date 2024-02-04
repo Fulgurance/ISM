@@ -1607,7 +1607,9 @@ module ISM
             dependenciesTable.values.each do |dependencies|
                 playCalculationAnimation
 
-                table[dependencies[0]] = dependencies.size
+                if dependencies.size > 0
+                    table[dependencies[0]] = dependencies.size
+                end
 
                 dependencies.each do |dependency|
                     playCalculationAnimation
