@@ -1567,7 +1567,7 @@ module ISM
 
                 key = software.hiddenName
 
-                dependenciesTable[key] = getRequiredDependencies(software, true)
+                dependenciesTable[key] = getRequiredDependencies(software, allowRebuild: true)
 
                 dependenciesTable[key].each do |dependency|
                     playCalculationAnimation
@@ -1607,9 +1607,7 @@ module ISM
             dependenciesTable.values.each do |dependencies|
                 playCalculationAnimation
 
-                if dependencies.size > 0
-                    table[dependencies[0]] = dependencies.size
-                end
+                table[dependencies[0]] = dependencies.size
 
                 dependencies.each do |dependency|
                     playCalculationAnimation
