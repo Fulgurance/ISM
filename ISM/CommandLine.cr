@@ -374,9 +374,6 @@ module ISM
                 else
                     if software.passEnabled
                         return :buildingPhase
-                    #PROBABLY USELESS
-                    #elsif !software.passEnabled
-                        #return :new
                     else
                         if software.version != installedSoftware.version
                             return :update
