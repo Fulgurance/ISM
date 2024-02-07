@@ -381,6 +381,8 @@ module ISM
             else
                 if software.passEnabled
                     return :buildingPhase
+                elsif !software.passEnabled && installedSoftware.passEnabled
+                    return :new
                 else
                     if software.options != installedSoftware.options
                         return :optionUpdate
@@ -1510,7 +1512,7 @@ module ISM
                     dependencyInformation = dependency.information
                     installed = softwareIsInstalled(dependencyInformation)
 
-                    if !installed || installed && allowRebuild == true && dependencyInformation == software && softwareIsRequestedSoftware(dependencyInformation) || allowDeepSearch == true
+                    if !installed || installed && allowRebuild == true && softwareIsRequestedSoftware(dependencyInformation) || allowDeepSearch == true
                         playCalculationAnimation
 
                         #Software or version not available
