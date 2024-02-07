@@ -98,6 +98,7 @@ module ISM
             ErrorFileWriteDataText = "Failed to write data to "
             ErrorFileAppendDataText = "Failed to write data to "
             ErrorFileUpdateContentText = "Failed to update file content in "
+            ErrorUpdateKernelOptionsDatabaseText = "Failed to update the option database for the kernel "
             InextricableText = "ISM stopped due to an inextricable problem of dependencies with these softwares:"
             SkippedUpdatesText = "ISM will skip some updates due to missing dependencies:"
             UnavailableText1 = "ISM stopped due to some missing dependencies for the requested softwares:"

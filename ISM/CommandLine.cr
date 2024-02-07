@@ -863,6 +863,10 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorFileUpdateContentText+filePath, error)
         end
 
+        def notifyOfUpdateKernelOptionsDatabaseError(software : ISM::SoftwareInformation, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorUpdateKernelOptionsDatabaseText+software.versionName, error)
+        end
+
         def resetCalculationAnimation
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0

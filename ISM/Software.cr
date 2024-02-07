@@ -1432,8 +1432,15 @@ module ISM
             if !Dir.exists?(kernelOptionsDatabasePath)
                 makeDirectory(kernelOptionsDatabasePath)
 
-                generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
-                generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
+                begin
+                    generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
+                    generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
+                rescue error
+                    deleteDirectory(kernelOptionsDatabasePath)
+
+                    Ism.notifyOfUpdateKernelOptionsDatabaseError(@information, error)
+                    Ism.exitProgram
+                end
             end
         end
 
