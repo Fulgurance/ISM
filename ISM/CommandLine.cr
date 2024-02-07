@@ -1342,7 +1342,7 @@ module ISM
 
                         Ism.showStartSoftwareInstallingMessage(index, limit, name, version)
 
-                        Ism.cleanBuildingDirectory(@settings.rootPath+target.information.builtSoftwareDirectoryPath)
+                        Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
                         begin
                             target.download
@@ -1360,7 +1360,7 @@ module ISM
                             Ism.exitProgram
                         end
 
-                        Ism.cleanBuildingDirectory(@settings.rootPath+target.information.builtSoftwareDirectoryPath)
+                        Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
 
                         if Ism.softwareIsRequestedSoftware(target.information)
