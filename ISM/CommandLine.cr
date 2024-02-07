@@ -372,10 +372,17 @@ module ISM
                 if !softwareAnyVersionInstalled(software.name)
                     return :new
                 else
-                    if software.version != installedSoftware.version
-                        return :update
+                    if software.passEnabled
+                        return :buildingPhase
+                    #PROBABLY USELESS
+                    #elsif !software.passEnabled
+                        #return :new
                     else
-                        return :optionUpdate
+                        if software.version != installedSoftware.version
+                            return :update
+                        else
+                            return :optionUpdate
+                        end
                     end
                 end
             else
