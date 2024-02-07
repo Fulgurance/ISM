@@ -1085,7 +1085,7 @@ module ISM
                     when :update
                         additionalText += "#{ISM::Default::CommandLine::UpdateText.colorize(:yellow)}"
                     when :buildingPhase
-                        additionalText += "#{ISM::Default::CommandLine::BuildingPhaseText.colorize(:yellow)} #{software.getEnabledPassNumber}"
+                        additionalText += "#{ISM::Default::CommandLine::BuildingPhaseText.colorize(:yellow)} #{software.getEnabledPassNumber.colorize(:yellow)}"
                     when :optionUpdate
                         additionalText += "#{ISM::Default::CommandLine::OptionUpdateText.colorize(:yellow)}"
                     when :rebuild
