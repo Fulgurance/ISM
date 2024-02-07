@@ -1512,7 +1512,7 @@ module ISM
                     dependencyInformation = dependency.information
                     installed = softwareIsInstalled(dependencyInformation)
 
-                    if !installed || installed && allowRebuild == true && softwareIsRequestedSoftware(dependencyInformation) || allowDeepSearch == true
+                    if !installed || installed && allowRebuild == true && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch == true
                         playCalculationAnimation
 
                         #Software or version not available
@@ -1574,7 +1574,7 @@ module ISM
                 dependenciesTable[key].each do |dependency|
                     playCalculationAnimation
 
-                    dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependency)
+                    dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependency, allowRebuild: true)
                 end
 
             end
