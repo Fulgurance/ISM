@@ -105,7 +105,7 @@ module ISM
                                 options.each_with_index do |option,index|
                                     uniqueOptionsText += "#{option}"
                                     if index+1 < options.size
-                                        versionsText += " | "
+                                        uniqueOptionsText += " | "
                                     end
                                 end
 
