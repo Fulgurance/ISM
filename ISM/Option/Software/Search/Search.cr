@@ -97,16 +97,21 @@ module ISM
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
                                         "#{installedVersionText.colorize(:green)}"
 
-                            uniqueOptionsText = String.new
+                            optionsText = String.new
 
                             software.greatestVersion.options.each do |option|
 
-                                software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
+                                if software.greatestVersion.uniqueOptions.empty?
+                                    optionsText += "\n[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
+                                else
 
-                                    if !uniqueOptionGroup.includes?(option.name)
-                                        puts "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
+                                    software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
+
+                                        if !uniqueOptionGroup.includes?(option.name)
+                                            optionsText += "\n[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
+                                        end
+
                                     end
-
                                 end
                             end
 
@@ -140,7 +145,7 @@ module ISM
                                 uniqueGroupText = ISM::Default::Option::SoftwareSearch::None
                             end
 
-                            puts    ISM::Default::Option::SoftwareSearch::OptionsField + uniqueGroupText
+                            puts    ISM::Default::Option::SoftwareSearch::OptionsField + optionsText + uniqueGroupText
 
                             localPatchesText = ""
                             #temporary comment
