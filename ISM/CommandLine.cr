@@ -105,7 +105,7 @@ module ISM
                 softwareSettings.options.each do |option|
 
                     if software.optionExist(option.name)
-                        case software.option(option.name)
+                        case option.active
                         when true
                             software.enableOption(option.name)
                         when false
