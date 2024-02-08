@@ -94,35 +94,52 @@ module ISM
                                 installedVersionText = ISM::Default::Option::SoftwareSearch::None
                             end
 
-                            puts    "#{ISM::Default::Option::SoftwareSearch::UniqueOptionsField}#{software.greatestVersion.uniqueOptions.empty? ? ISM::Default::Option::SoftwareSearch::None.colorize(:green) : ""}"
-
-                            uniqueOptionsText = String.new
-
-                            software.greatestVersion.uniqueOptions.each do |options|
-
-                                uniqueOptionsText += "["
-
-                                options.each_with_index do |option,index|
-                                    uniqueOptionsText += "#{option}"
-                                    if index+1 < options.size
-                                        uniqueOptionsText += " | "
-                                    end
-                                end
-
-                                uniqueOptionsText += "]\n"
-
-                            end
-
-                            puts uniqueOptionsText
-
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
                                         "#{installedVersionText.colorize(:green)}"
 
                             puts    "#{ISM::Default::Option::SoftwareSearch::OptionsField}#{software.greatestVersion.options.empty? ? ISM::Default::Option::SoftwareSearch::None.colorize(:green) : ""}"
 
+                            ######################################################
+                            uniqueOptionsText = String.new
+
                             software.greatestVersion.options.each do |option|
-                                puts "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
+
+                                software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
+
+                                    if !uniqueOptionGroup.includes?(option.name)
+                                        puts "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
+                                    end
+
+                                end
                             end
+
+                            uniqueGroupText = String.new
+
+                            software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
+
+                                uniqueOptionGroup.each do |uniqueOption|
+                                    uniqueGroupText += "#{uniqueOption.colorize(:green)}"
+
+                                    if index+1 < uniqueOptionGroup.size
+                                        uniqueGroupText += " | "
+                                    else
+                                        uniqueGroupText += "\n"
+                                    end
+                                end
+
+                                software.greatestVersion.options.each_with_index do |option, index|
+
+                                    if uniqueOptionGroup.includes?(option.name)
+                                        uniqueGroupText += "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
+                                    end
+
+                                end
+
+                            end
+
+                            puts uniqueGroupText
+
+                            ######################################################
 
                             localPatchesText = ""
                             #temporary comment
