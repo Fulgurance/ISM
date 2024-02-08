@@ -97,9 +97,6 @@ module ISM
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
                                         "#{installedVersionText.colorize(:green)}"
 
-                            puts    "#{ISM::Default::Option::SoftwareSearch::OptionsField}#{software.greatestVersion.options.empty? ? ISM::Default::Option::SoftwareSearch::None.colorize(:green) : ""}"
-
-                            ######################################################
                             uniqueOptionsText = String.new
 
                             software.greatestVersion.options.each do |option|
@@ -137,9 +134,11 @@ module ISM
 
                             end
 
-                            puts uniqueGroupText
+                            if uniqueGroupText.empty?
+                                uniqueGroupText = ISM::Default::Option::SoftwareSearch::None
+                            end
 
-                            ######################################################
+                            puts    ISM::Default::Option::SoftwareSearch::OptionsField + uniqueGroupText
 
                             localPatchesText = ""
                             #temporary comment
