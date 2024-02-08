@@ -117,7 +117,7 @@ module ISM
 
                             software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
 
-                                uniqueOptionGroup.each do |uniqueOption|
+                                uniqueOptionGroup.each_with_index do |uniqueOption|
                                     uniqueGroupText += "#{uniqueOption.colorize(:green)}"
 
                                     if index+1 < uniqueOptionGroup.size
@@ -127,10 +127,10 @@ module ISM
                                     end
                                 end
 
-                                software.greatestVersion.options.each_with_index do |option, index|
+                                software.greatestVersion.options do |option|
 
                                     if uniqueOptionGroup.includes?(option.name)
-                                        uniqueGroupText += "[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
+                                        uniqueGroupText += "\t[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}\n"
                                     end
 
                                 end
