@@ -230,6 +230,16 @@ module ISM
                ISM::Default::Filename::Information
     end
 
+    def optionExist(optionName : String) : Bool
+        @options.each do |option|
+            if optionName == option.name
+                return true
+            end
+        end
+
+        return false
+    end
+
     def option(optionName : String) : Bool
         @options.each do |option|
             if optionName == option.name

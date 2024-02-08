@@ -80,25 +80,41 @@ module ISM
         def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
             software = ISM::SoftwareInformation.new
 
+            software.loadInformationFile(   @settings.rootPath +
+                                            ISM::Default::Path::SoftwaresDirectory +
+                                            port + "/" +
+                                            name + "/" +
+                                            version + "/" +
+                                            ISM::Default::Filename::Information)
+
             if File.exists?(@settings.rootPath +
                             ISM::Default::Path::SettingsSoftwaresDirectory +
                             port + "/" +
                             name + "/" +
                             version + "/" +
                             ISM::Default::Filename::SoftwareSettings)
-                software.loadInformationFile(   @settings.rootPath +
-                                                ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                port + "/" +
-                                                name + "/" +
-                                                version + "/" +
-                                                ISM::Default::Filename::SoftwareSettings)
-            else
-                software.loadInformationFile(   @settings.rootPath +
-                                                ISM::Default::Path::SoftwaresDirectory +
-                                                port + "/" +
-                                                name + "/" +
-                                                version + "/" +
-                                                ISM::Default::Filename::Information)
+
+                softwareSettings = ISM::SoftwareInformation.new
+                softwareSettings.loadInformationFile(   @settings.rootPath +
+                                                        ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                        port + "/" +
+                                                        name + "/" +
+                                                        version + "/" +
+                                                        ISM::Default::Filename::SoftwareSettings)
+
+                softwareSettings.options.each do |option|
+
+                    if software.optionExist(option.name)
+                        case software.option(option.name)
+                        when true
+                            software.enableOption(option.name)
+                        when false
+                            software.disableOption(option.name)
+                        end
+                    end
+
+                end
+
             end
 
             return software
