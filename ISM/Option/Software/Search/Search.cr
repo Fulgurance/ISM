@@ -91,7 +91,7 @@ module ISM
                             end
 
                             if installedVersionText.empty?
-                                installedVersionText = ISM::Default::Option::SoftwareSearch::None
+                                installedVersionText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}}"
                             end
 
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
@@ -113,6 +113,8 @@ module ISM
                             uniqueGroupText = String.new
 
                             software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
+
+                                uniqueGroupText += "\n"
 
                                 uniqueOptionGroup.each_with_index do |uniqueOption, index|
                                     uniqueGroupText += "#{uniqueOption.colorize(:green)}"
