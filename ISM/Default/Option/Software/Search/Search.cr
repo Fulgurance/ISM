@@ -19,6 +19,7 @@ module ISM
                 WebsiteField = "Website: "
                 AvailablesVersionsField = "Available(s) Version(s): "
                 InstalledVersionField = "Installed Version(s): "
+                UniqueOptionsField = "Unique options: "
                 OptionsField = "Current options setted: "
                 LocalPatchesField = "Current local patches: "
             end

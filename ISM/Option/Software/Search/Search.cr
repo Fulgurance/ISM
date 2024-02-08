@@ -94,6 +94,27 @@ module ISM
                                 installedVersionText = ISM::Default::Option::SoftwareSearch::None
                             end
 
+                            puts    "#{ISM::Default::Option::SoftwareSearch::UniqueOptionsField}#{software.greatestVersion.uniqueOptions.empty? ? ISM::Default::Option::SoftwareSearch::None.colorize(:green) : ""}"
+
+                            uniqueOptionsText = String.new
+
+                            software.greatestVersion.uniqueOptions.each do |options|
+
+                                uniqueOptionsText += "["
+
+                                options.each_with_index do |option,index|
+                                    uniqueOptionsText += "#{option}"
+                                    if index+1 < options.size
+                                        versionsText += " | "
+                                    end
+                                end
+
+                                uniqueOptionsText += "]\n"
+
+                            end
+
+                            puts uniqueOptionsText
+
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
                                         "#{installedVersionText.colorize(:green)}"
 
