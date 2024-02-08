@@ -114,7 +114,7 @@ module ISM
 
                             software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
 
-                                uniqueGroupText += "\n[#{ISM::Default::Option::SoftwareSearch::OptionSelectorField.colorize(Colorize::ColorRGB.new(255,100,100))}]"
+                                uniqueGroupText += "\n[#{ISM::Default::Option::SoftwareSearch::OptionSelectorField.colorize(Colorize::ColorRGB.new(255,100,100))}] ("
 
                                 uniqueOptionGroup.each_with_index do |uniqueOption, index|
                                     uniqueGroupText += "#{uniqueOption.colorize(:green)}"
@@ -122,7 +122,7 @@ module ISM
                                     if index+1 < uniqueOptionGroup.size
                                         uniqueGroupText += " | "
                                     else
-                                        uniqueGroupText += "\n"
+                                        uniqueGroupText += ")\n"
                                     end
                                 end
 
