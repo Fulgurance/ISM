@@ -40,13 +40,13 @@ module ISM
                     if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareAddPatch::ShortText ||
                         !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareAddPatch::LongText
                         matchingOption = true
-                        @options[0].start
+                        @options[-1].start
                     end
 
                     if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareDeletePatch::ShortText ||
                         !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareDeletePatch::LongText
                         matchingOption = true
-                        @options[0].start
+                        @options[-2].start
                     end
 
                     if !matchingOption
