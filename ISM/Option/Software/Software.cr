@@ -37,6 +37,18 @@ module ISM
                         @options[0].start
                     end
 
+                    if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareAddPatch::ShortText ||
+                        !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareAddPatch::LongText
+                        matchingOption = true
+                        @options[0].start
+                    end
+
+                    if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareDeletePatch::ShortText ||
+                        !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareDeletePatch::LongText
+                        matchingOption = true
+                        @options[0].start
+                    end
+
                     if !matchingOption
                         puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[1+Ism.debugLevel].colorize(:white)}"
                         puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
