@@ -141,10 +141,6 @@ module ISM
 
                             end
 
-                            if uniqueGroupText.empty?
-                                uniqueGroupText = ISM::Default::Option::SoftwareSearch::None
-                            end
-
                             puts    ISM::Default::Option::SoftwareSearch::OptionsField + optionsText + uniqueGroupText
 
                             localPatchesText = ""
