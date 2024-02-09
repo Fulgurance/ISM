@@ -143,16 +143,16 @@ module ISM
 
                             puts    ISM::Default::Option::SoftwareSearch::OptionsField + optionsText + uniqueGroupText
 
-                            localPatchesText = ""
-                            #temporary comment
-                            #Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{software.versionName}/*"] do |patch|
-                                #patchName = patch.lchop(patch[0..patch.rindex("/")])
+                            localPatchesText = String.new
 
-                                #localPatchesText += "#{"\n\t| ".colorize(:green)}#{patchName.colorize(:yellow)}"
-                            #end
+                            Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{software.versionName}/*"] do |patch|
+                                patchName = patch.lchop(patch[0..patch.rindex("/")])
 
-                            if installedVersionText.empty?
-                                installedVersionText = ISM::Default::Option::SoftwareSearch::None
+                                localPatchesText += "#{"\n\t| ".colorize(:green)}#{patchName.colorize(:yellow)}"
+                            end
+
+                            if localPatchesText.empty?
+                                localPatchesText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}}"
                             end
 
                             puts    ISM::Default::Option::SoftwareSearch::LocalPatchesField + localPatchesText
