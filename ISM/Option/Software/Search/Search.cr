@@ -30,19 +30,21 @@ module ISM
                         puts "\n"
 
                         matchingSoftwaresArray.each_with_index do |software, index|
+                            greatestVersion = software.greatestVersion
+
                             puts    ISM::Default::Option::SoftwareSearch::PortField +
-                                        "#{software.greatestVersion.port.colorize(:green)}"
+                                        "#{greatestVersion.port.colorize(:green)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::NameField +
                                         "#{software.name.colorize(:green)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::DescriptionField +
-                                        "#{software.greatestVersion.description.colorize(:green)}"
+                                        "#{greatestVersion.description.colorize(:green)}"
 
                             architecturesText = ""
-                            software.greatestVersion.architectures.each_with_index do |architecture, index|
+                            greatestVersion.architectures.each_with_index do |architecture, index|
                                 architecturesText += "#{architecture.colorize(:green)}"
-                                if index+1 < software.greatestVersion.architectures.size
+                                if index+1 < greatestVersion.architectures.size
                                     architecturesText += " | "
                                 end
                             end
@@ -53,7 +55,7 @@ module ISM
                                         "#{architecturesText.colorize(:green)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::WebsiteField +
-                                        "#{software.greatestVersion.website.colorize(:green)}"
+                                        "#{greatestVersion.website.colorize(:green)}"
 
                             versionsText = ""
                             software.versions.each_with_index do |version, index|
@@ -99,13 +101,13 @@ module ISM
 
                             optionsText = String.new
 
-                            software.greatestVersion.options.each do |option|
+                            greatestVersion.options.each do |option|
 
-                                if software.greatestVersion.uniqueOptions.empty?
+                                if greatestVersion.uniqueOptions.empty?
                                     optionsText += "\n[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
                                 else
 
-                                    software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
+                                    greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
 
                                         if !uniqueOptionGroup.includes?(option.name)
                                             optionsText += "\n[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}"
@@ -117,7 +119,7 @@ module ISM
 
                             uniqueGroupText = String.new
 
-                            software.greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
+                            greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
 
                                 uniqueGroupText += "\n[#{ISM::Default::Option::SoftwareSearch::OptionSelectorField.colorize(Colorize::ColorRGB.new(255,100,100))}] ("
 
@@ -131,7 +133,7 @@ module ISM
                                     end
                                 end
 
-                                software.greatestVersion.options.each do |option|
+                                greatestVersion.options.each do |option|
 
                                     if uniqueOptionGroup.includes?(option.name)
                                         uniqueGroupText += "\t[#{option.active ? "*".colorize(:green) : " "}] #{option.name.colorize(:green)}: #{option.description}\n"
@@ -145,14 +147,14 @@ module ISM
 
                             localPatchesText = String.new
 
-                            Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{software.greatestVersion.versionName}/*"].each do |patch|
+                            Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{greatestVersion.versionName}/*"].each do |patch|
                                 patchName = patch.lchop(patch[0..patch.rindex("/")])
 
                                 localPatchesText += "#{"\n\t| ".colorize(:green)}#{patchName.colorize(:yellow)}"
                             end
 
                             if localPatchesText.empty?
-                                localPatchesText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}}"
+                                localPatchesText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}"
                             end
 
                             puts    ISM::Default::Option::SoftwareSearch::LocalPatchesField + localPatchesText
