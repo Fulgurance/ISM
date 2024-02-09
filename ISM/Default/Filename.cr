@@ -8,7 +8,6 @@ module ISM
             RequiredLibraries = "RequiredLibraries.cr"
             Information = "Information.json"
             Settings = "Settings.json"
-            SystemSettings = "SystemSettings.json"
             SoftwareSettings = "Settings.json"
             PortsSettings = "PortsSettings.json"
             MirrorsSettings = "MirrorsSettings.json"

@@ -9,7 +9,6 @@ module ISM
         property debugLevel : Int32
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
-        property systemSettings : ISM::CommandLineSystemSettings
         property kernelOptions : Array(ISM::KernelOption)
         property softwares : Array(ISM::AvailableSoftware)
         property installedSoftwares : Array(ISM::SoftwareInformation)
@@ -31,7 +30,6 @@ module ISM
             @debugLevel = ISM::Default::CommandLine::DebugLevel
             @options = ISM::Default::CommandLine::Options
             @settings = ISM::CommandLineSettings.new
-            @systemSettings = ISM::CommandLineSystemSettings.new
             @kernelOptions = Array(ISM::KernelOption).new
             @softwares = Array(ISM::AvailableSoftware).new
             @installedSoftwares = Array(ISM::SoftwareInformation).new
@@ -206,7 +204,6 @@ module ISM
 
         def loadSettingsFiles
             @settings.loadSettingsFile
-            @systemSettings.loadSystemSettingsFile
             @portsSettings.loadPortsSettingsFile
             @mirrorsSettings.loadMirrorsSettingsFile
         end
