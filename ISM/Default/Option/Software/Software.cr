@@ -16,7 +16,9 @@ module ISM
                             ISM::Option::SoftwareClean.new,
                             ISM::Option::SoftwareSearch.new,
                             ISM::Option::SoftwareSynchronize.new,
-                            ISM::Option::SoftwareUpdate.new]
+                            ISM::Option::SoftwareUpdate.new,
+                            ISM::Option::SoftwareAddPatch.new,
+                            ISM::Option::SoftwareDeletePatch.new]
                 
             end
             
