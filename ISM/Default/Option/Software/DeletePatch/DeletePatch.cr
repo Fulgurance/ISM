@@ -6,7 +6,7 @@ module ISM
 
             module SoftwareDeletePatch
 
-                ShortText = "-rp"
+                ShortText = "-dp"
                 LongText = "deletepatch"
                 Description = "Delete a local patch for a specific software\n\t\t\t\tNeed to be use like this:\n\t\t\t\tism software [softwarename-softwareversion] deletepatch [patchpath]"
                 ShowHelpDescription = "Delete a local patch for a specific software"
