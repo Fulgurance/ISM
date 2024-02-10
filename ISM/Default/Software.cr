@@ -19,7 +19,7 @@ module ISM
             DownloadSourceRedirectionErrorText1 = "Got status "
             DownloadSourceRedirectionErrorText2 = " but no location was sent"
             DownloadSourceCodeErrorText = "Received HTTP status code "
-            KconfigKeywords = { :config => /\s*config\s+/,
+            KconfigKeywords = { :config => /^config\s+/,
                                 :bool => /\s*bool\s+/,
                                 :dependsOn => /\s*depends\s+on\s+/,
                                 :endif => /\s*endif\s+/,
