@@ -143,7 +143,13 @@ module ISM
 
                             end
 
-                            puts    ISM::Default::Option::SoftwareSearch::OptionsField + optionsText + uniqueGroupText
+                            if optionsText.empty?
+                                optionSettedText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}"
+                            else
+                                optionSettedText = optionsText + uniqueGroupText
+                            end
+
+                            puts    ISM::Default::Option::SoftwareSearch::OptionsField + optionSettedText
 
                             localPatchesText = String.new
 
