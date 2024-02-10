@@ -1316,7 +1316,7 @@ module ISM
 
             loop do
 
-                if !result.any? {|line| line.starts_with?("source")}
+                if !result.any? {|line| line.starts_with?(ISM::Default::Software::KconfigKeywords[:source])}
                     break
                 end
 
@@ -1324,12 +1324,12 @@ module ISM
 
                 result.each do |line|
 
-                    if line.starts_with?("source") && !line.includes?("Kconfig.include")
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && !line.includes?("Kconfig.include")
 
                         mainArchitecture = (Ism.settings.installByChroot ? Ism.settings.chrootArchitecture : Ism.settings.architecture).gsub(/_.*/,"")
 
                         path = kernelSourcesPath+line
-                        path = path.gsub("source ","")
+                        path = path.gsub(ISM::Default::Software::KconfigKeywords[:source],"")
                         path = path.gsub("\"","")
                         path = path.gsub("$(SRCARCH)","#{mainArchitecture}")
                         path = path.gsub("$(HEADER_ARCH)","#{mainArchitecture}")
@@ -1341,7 +1341,7 @@ module ISM
                             nextResult += Array(String).new
                         end
 
-                    elsif line.starts_with?("source") && line.includes?("Kconfig.include")
+                    elsif line.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && line.includes?("Kconfig.include")
                         nextResult += Array(String).new
                     else
                         nextResult.push(line)
@@ -1367,7 +1367,7 @@ module ISM
 
             kconfigContent.each_with_index do |line, index|
 
-                if line.starts_with?("menuconfig") || line.starts_with?("config") || line.starts_with?("if") || line.starts_with?("endif")
+                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:config]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:if]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:endif])
 
                     if index > 0
 
@@ -1388,41 +1388,43 @@ module ISM
                     kernelOption = ISM::KernelOption.new
                 end
 
-                if line.starts_with?("menuconfig")
+                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
                     lastMenuConfigIndex = index
-                    lastMenuConfigContent = line.gsub("menuconfig ","")
-                    kernelOption.name = line.gsub("menuconfig ","")
+                    lastMenuConfigContent = line.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
+                    kernelOption.name = line.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
                 end
 
-                if line.starts_with?("config")
-                    kernelOption.name = line.gsub("config ","")
+                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
+                    kernelOption.name = line.gsub(ISM::Default::Software::KconfigKeywords[:config],"")
                 end
 
-                if line.starts_with?("\tbool")
+                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
                     kernelOption.tristate = false
                 end
 
-                if line.starts_with?("\ttristate")
+                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
                     kernelOption.tristate = true
                 end
 
-                if line.starts_with?("\tdepends on")
-                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub("\tdepends on ","")]
+                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
+                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],"")]
                 end
 
-                if line.starts_with?("\tselect")
-                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub("\tselect ","")]
+                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
+                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub(ISM::Default::Software::KconfigKeywords[:select],"")]
                 end
 
-                if line.starts_with?("if")
+                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
                     lastIfIndex = index
-                    lastIfContent = line.gsub("if ","")
+                    lastIfContent = line.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
                 end
 
             end
 
             kernelOptions.each do |option|
-                option.writeInformationFile(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelName+"/"+option.name+".json")
+                if !option.name.empty?
+                    option.writeInformationFile(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelName+"/"+option.name+".json")
+                end
             end
         end
 
