@@ -93,7 +93,7 @@ module ISM
                             end
 
                             if installedVersionText.empty?
-                                installedVersionText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}}"
+                                installedVersionText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}"
                             end
 
                             puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
