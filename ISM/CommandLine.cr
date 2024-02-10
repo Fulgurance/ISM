@@ -1154,8 +1154,9 @@ module ISM
 
                 if userInput == ISM::Default::CommandLine::YesReplyOption
                     return true
-                end
-                if userInput == ISM::Default::CommandLine::NoReplyOption
+                elsif userInput == ISM::Default::CommandLine::NoReplyOption
+                    return false
+                else
                     return false
                 end
             end
