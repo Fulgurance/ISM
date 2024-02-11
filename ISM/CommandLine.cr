@@ -1415,7 +1415,7 @@ module ISM
 
             generateTasksFile(tasks)
             buildTasksFile
-            runTasksFile
+            runTasksFile(logEnabled: true)
         end
 
         def buildTasksFile
