@@ -1328,6 +1328,16 @@ module ISM
             end
         end
 
+        def splitLogFile(destinationPath : String)
+            makeLogDirectory(destinationPath[0..destinationPath.rindex("/")])
+
+            logData = File.read("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{ISM::Default::Filename::MainLog}")
+
+            File.write(destinationPath, logData)
+
+            File.truncate("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{ISM::Default::Filename::MainLog}", 0)
+        end
+
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
                     puts
@@ -1391,6 +1401,8 @@ module ISM
                             Ism.showSeparator
                         end
 
+                        splitLogFile(\"#\{Ism.settings.rootPath}\#\{ISM::Default::Path::LogsDirectory}\#\{target.port}/\#\{target.versionName}.log\")
+
                     end
 
                     puts
@@ -1418,12 +1430,24 @@ module ISM
             end
         end
 
-        def runTasksFile
+        def runTasksFile(logEnabled = false)
+
+            makeLogDirectory("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}")
+            logFile = File.open("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{ISM::Default::Filename::MainLog}","w")
+
+            if logEnabled
+                logWriter = IO::MultiWriter.new(STDOUT,logFile)
+            else
+                logWriter = Process::Redirect::Inherit
+            end
+
             process = Process.run(  "./#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
+                                    output: logWriter,
+                                    error: logWriter,
                                     shell: true,
                                     chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+
+            logFile.close
 
             if !process.success?
                 exitProgram

@@ -1291,7 +1291,7 @@ module ISM
 
             conditionsArray = conditions.split(" ")
 
-            conditionsArray.each do |word|
+            conditionsArray.each_with_index do |word, index|
 
                 if word == "&&"
 
