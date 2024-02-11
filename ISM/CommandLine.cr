@@ -1335,7 +1335,7 @@ module ISM
 
             File.write(destinationPath, logData)
 
-            File.truncate("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{ISM::Default::Filename::MainLog}", 0)
+            File.write("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{ISM::Default::Filename::MainLog}", "")
         end
 
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
