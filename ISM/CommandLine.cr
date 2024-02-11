@@ -1401,7 +1401,7 @@ module ISM
                             Ism.showSeparator
                         end
 
-                        splitLogFile(\"#\{Ism.settings.rootPath}\#\{ISM::Default::Path::LogsDirectory}\#\{target.port}/\#\{target.versionName}.log\")
+                        splitLogFile(\"#\{Ism.settings.rootPath}\#\{ISM::Default::Path::LogsDirectory}\#\{target.information.port}/\#\{target.information.versionName}.log\")
 
                     end
 
