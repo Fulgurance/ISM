@@ -1328,16 +1328,6 @@ module ISM
             end
         end
 
-        def splitLogFile(destinationPath : String)
-            makeLogDirectory(destinationPath[0..destinationPath.rindex("/")])
-
-            logData = File.read("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{ISM::Default::Filename::MainLog}")
-
-            File.write(destinationPath, logData)
-
-            File.write("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{ISM::Default::Filename::MainLog}", "")
-        end
-
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
                     puts
@@ -1401,8 +1391,6 @@ module ISM
                             Ism.showSeparator
                         end
 
-                        Ism.splitLogFile(\"#\{Ism.settings.rootPath}\#\{ISM::Default::Path::LogsDirectory}\#\{target.information.port}/\#\{target.information.versionName}.log\")
-
                     end
 
                     puts
@@ -1415,7 +1403,7 @@ module ISM
 
             generateTasksFile(tasks)
             buildTasksFile
-            runTasksFile(logEnabled: true)
+            runTasksFile(logEnabled: true, softwareList: neededSoftwares)
         end
 
         def buildTasksFile
@@ -1430,16 +1418,11 @@ module ISM
             end
         end
 
-        def runTasksFile(logEnabled = false)
+        def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
 
-            makeLogDirectory("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}")
-            logFile = File.open("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{ISM::Default::Filename::MainLog}","w")
+            logIOMemory = IO::Memory.new
 
-            if logEnabled
-                logWriter = IO::MultiWriter.new(STDOUT,logFile)
-            else
-                logWriter = Process::Redirect::Inherit
-            end
+            logWriter = logEnabled ? IO::MultiWriter.new(STDOUT,logIOMemory) : Process::Redirect::Inherit
 
             process = Process.run(  "./#{ISM::Default::Filename::Task}",
                                     output: logWriter,
@@ -1447,7 +1430,17 @@ module ISM
                                     shell: true,
                                     chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
-            logFile.close
+            if logEnabled
+
+                logs = logIOMemory.to_s.split("#{ISM::Default::CommandLine::Separator.colorize(:green)}\n")
+
+                logs.each_with_index do |log, index|
+
+                    makeLogDirectory("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{softwareList[index].port}")
+                    File.write("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{softwareList[index].port}/#{softwareList[index].versionName}.log", log)
+
+                end
+            end
 
             if !process.success?
                 exitProgram
