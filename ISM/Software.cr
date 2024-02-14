@@ -1297,7 +1297,13 @@ module ISM
 
                 elsif word == "||"
 
-                elsif word.starts_with?("!")
+                elsif word.starts_with?("!") && word[1] != "("
+
+                elsif word.starts_with?("!(")
+
+                elsif word.starts_with?("(")
+
+                elsif word.ends_with?(")")
 
                 else
 
@@ -1407,11 +1413,23 @@ module ISM
                 end
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
-                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],"")]
+
+                    #newDependencies,newSingleChoiceDependencies,newSpecialDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
+
+                    kernelOption.dependencies = kernelOption.dependencies + [line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],"")] # + newDependencies
+                    #kernelOption.singleChoiceDependencies = kernelOption.singleChoiceDependencies + newSingleChoiceDependencies
+                    #kernelOptions.specialDependencies = kernelOption.specialDependencies + newSpecialDependencies
+                    #kernelOptions.blockers = kernelOption.blockers + newBlockers
                 end
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
-                    kernelOption.dependencies = kernelOption.dependencies+[line.gsub(ISM::Default::Software::KconfigKeywords[:select],"")]
+
+                    #newDependencies,newSingleChoiceDependencies,newSpecialDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:select],""))
+
+                    kernelOption.dependencies = kernelOption.dependencies + [line.gsub(ISM::Default::Software::KconfigKeywords[:select],"")]# + newDependencies
+                    #kernelOption.singleChoiceDependencies = kernelOption.singleChoiceDependencies + newSingleChoiceDependencies
+                    #kernelOptions.specialDependencies = kernelOption.specialDependencies + newSpecialDependencies
+                    #kernelOptions.blockers = kernelOption.blockers + newBlockers
                 end
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
