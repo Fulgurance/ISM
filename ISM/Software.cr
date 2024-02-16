@@ -1230,7 +1230,7 @@ module ISM
                     end
                 else
                     moveFile(entry,finalDestination)
-                    installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}"
+                    installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                 end
 
             end

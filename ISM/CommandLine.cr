@@ -292,20 +292,44 @@ module ISM
         end
 
         def removeInstalledSoftware(software : ISM::SoftwareInformation)
-            #Need to manage uninstallation of a pass
+
+            requestedVersion = ISM::SoftwareInformation.new
+            otherVersions = Array(ISM::SoftwareInformation).new
+            protectedFiles = Array(String).new
+            filesForRemoval = Array(String).new
+
+
             @installedSoftwares.each do |installedSoftware|
-                if software.toSoftwareDependency.hiddenName == installedSoftware.toSoftwareDependency.hiddenName
-                    installedSoftware.installedFiles.each do |file|
-                        FileUtils.rm_r(@settings.rootPath+file)
+                if software.hiddenName == installedSoftware.hiddenName
+                    requestedVersion = installedSoftware
+                else
+                    if software.name == installedSoftware.name
+                        otherVersions.push(installedSoftware)
                     end
-                    break
                 end
             end
 
-            FileUtils.rm_r(software.installedDirectoryPath)
+            if requestedVersion.name != ""
+
+                protectedFiles = otherVersions.map {|version| version.installedFiles }.flatten.uniq
+
+                protectedFiles.each do |file|
+
+                    if !requestedVersion.installedFiles.includes?(file)
+                        filesForRemoval.push(file)
+                    end
+                end
+
+                filesForRemoval.each do |file|
+                    FileUtils.rm_r(@settings.rootPath+file)
+                end
+
+                FileUtils.rm_r(software.installedDirectoryPath)
+            end
         end
 
         def softwareAnyVersionInstalled(softwareName : String) : Bool
+
             @installedSoftwares.each do |installedSoftware|
                 if softwareName == installedSoftware.name && !installedSoftware.passEnabled
                     return true
@@ -1375,6 +1399,11 @@ module ISM
                             target.recordNeededKernelFeatures
                             target.clean
                         rescue
+                            if File.exists?(target.information.installedFilePath)
+                                target.recordUnneededKernelFeatures
+                                target.uninstall
+                            end
+
                             Ism.exitProgram
                         end
 
