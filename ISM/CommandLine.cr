@@ -1400,15 +1400,13 @@ module ISM
                             target.clean
                         rescue
                             if File.exists?(target.information.installedFilePath)
-                                target.recordUnneededKernelFeatures
-                                target.uninstall
+                                Ism.removeInstalledSoftware(target.information)
                             end
 
                             Ism.exitProgram
                         end
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
-
 
                         if Ism.softwareIsRequestedSoftware(target.information)
                             Ism.addSoftwareToFavouriteGroup(versionName)
