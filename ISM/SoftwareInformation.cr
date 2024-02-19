@@ -435,6 +435,8 @@ module ISM
             @selectedDependencies.each do |selection|
                 if !selected
                     selected = uniqueGroup.includes?(selection)
+                else
+                    break
                 end
             end
 
