@@ -452,7 +452,9 @@ module ISM
         @uniqueDependencies.each do |uniqueGroup|
             if !selected
                 selected = uniqueGroup.includes?(dependency)
-            else
+            end
+
+            if selected
                 #REMOVE OTHER SELECTION
                 uniqueGroup.each do |item|
                     if item != dependency
