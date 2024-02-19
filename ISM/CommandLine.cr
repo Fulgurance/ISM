@@ -1079,6 +1079,19 @@ module ISM
             puts "\n"
         end
 
+        def showMissingSelectedDependenciesMessage(name : String, version : String, dependencySelection : Array(Array(String)))
+            puts "#{ISM::Default::CommandLine::MissingSelectedDependenciesText.colorize(:yellow)}"
+            puts "\n"
+
+            puts "#{name.colorize(:magenta)}" + " /" + "#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+
+            dependencySelection.each do |selection|
+                puts "\t#{ISM::Default::CommandLine::MissingSelectionText.colorize(:magenta)} #{selection.join(" | ")[0..-3].colorize(:magenta)}"
+            end
+
+            puts "\n"
+        end
+
         def showCalculationDoneMessage
             cleanCalculationAnimation
             print "#{ISM::Default::CommandLine::CalculationDoneText.colorize(:green)}\n"

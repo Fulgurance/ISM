@@ -100,6 +100,8 @@ module ISM
             ErrorFileUpdateContentText = "Failed to update file content in "
             ErrorUpdateKernelOptionsDatabaseText = "Failed to update the option database for the kernel "
             InextricableText = "ISM stopped due to an inextricable problem of dependencies with these softwares:"
+            MissingSelectedDependenciesText = "ISM stopped due to missing unique dependencies not selected yet:"
+            MissingSelectionText = "One of these unique dependencies need to be selected:"
             SkippedUpdatesText = "ISM will skip some updates due to missing dependencies:"
             UnavailableText1 = "ISM stopped due to some missing dependencies for the requested softwares:"
             UnavailableText2 = " is missing for "

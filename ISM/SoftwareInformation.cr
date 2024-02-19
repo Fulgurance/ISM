@@ -31,7 +31,9 @@ module ISM
         dependencies : Array(Dependency),
         kernelDependencies : Array(String),
         options : Array(Option),
-        uniqueOptions : Array(Array(String)) do
+        uniqueDependencies : Array(Array(String)),
+        uniqueOptions : Array(Array(String)),
+        selectedDependencies : Array(String) do
         include JSON::Serializable
     end
 
@@ -47,7 +49,9 @@ module ISM
     setter dependencies : Array(ISM::SoftwareDependency)
     setter kernelDependencies : Array(String)
     property options : Array(ISM::SoftwareOption)
+    property uniqueDependencies : Array(Array(String))
     property uniqueOptions : Array(Array(String))
+    property selectedDependencies : Array(String)
 
     def initialize( @port = String.new,
                     @name = String.new,
@@ -59,7 +63,9 @@ module ISM
                     @dependencies = Array(ISM::SoftwareDependency).new,
                     @kernelDependencies = Array(String).new,
                     @options = Array(ISM::SoftwareOption).new,
-                    @uniqueOptions = Array(Array(String)).new)
+                    @uniqueDependencies = Array(Array(String)).new,
+                    @uniqueOptions = Array(Array(String)).new,
+                    @selectedDependencies = Array(String).new)
     end
 
     def getEnabledPass : String
@@ -96,7 +102,9 @@ module ISM
         @website = information.website
         @installedFiles = information.installedFiles
         @kernelDependencies = information.kernelDependencies
+        @uniqueDependencies = information.uniqueDependencies
         @uniqueOptions = information.uniqueOptions
+        @selectedDependencies = information.selectedDependencies
 
         information.dependencies.each do |data|
             dependency = ISM::SoftwareDependency.new
@@ -159,7 +167,9 @@ module ISM
                                         dependenciesArray,
                                         @kernelDependencies,
                                         optionsArray,
-                                        @uniqueOptions)
+                                        @uniqueDependencies,
+                                        @uniqueOptions,
+                                        @selectedDependencies)
 
         file = File.open(writeInformationFilePath,"w")
         information.to_json(file)
@@ -301,6 +311,8 @@ module ISM
     def dependencies : Array(ISM::SoftwareDependency)
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
+        #CHECKER SI LES UNIQUE DEPENDENCIES SONT DEJA SELECTIONNEES, SINON EXIT WITH MESSAGE TO SELECT THE MISSING ONES
+
         @options.each do |option|
 
             if passEnabled
@@ -325,7 +337,17 @@ module ISM
 
         end
 
-        return @dependencies.reject {|entry| Ism.softwareIsInstalled(entry.information)}+dependenciesArray
+        #CHECK IF THERE IS ANY UNIQUE DEPENDENCIES NOT SELECTIONED
+        missingSelectedDependencies = getMissingSelectedDependencies
+
+        if !getMissingSelectedDependencies.empty?
+            Ism.showCalculationDoneMessage
+            Ism.showMissingSelectedDependenciesMessage(@name, @version, missingSelectedDependencies)
+            Ism.exitProgram
+        end
+
+        #REJECT INSTALLED DEPENDENCIES AND UNIQUE DEPENDENCIES NOT SELECTIONED
+        return @dependencies.reject {|entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.name) && !@selectedDependencies.includes?(entry.name)}+dependenciesArray
     end
 
     def kernelDependencies : Array(String)
@@ -397,6 +419,54 @@ module ISM
         return @name == other.name &&
             @version == other.version &&
             @options == other.options
+    end
+
+    def dependencyIsUnique(dependency : String) : Bool
+        return @uniqueDependencies.map {|entry| entry.includes?(dependency)}.includes?(true)
+    end
+
+    def getMissingSelectedDependencies : Array(Array(String))
+        result = Array(Array(String)).new
+
+        @uniqueDependencies.each do |uniqueGroup|
+
+            selected = false
+
+            @selectedDependencies.each do |selection|
+                if !selected
+                    selected = uniqueGroup.includes?(selection)
+                end
+            end
+
+            if !selected
+                result.push(uniqueGroup)
+            end
+        end
+
+        return result
+    end
+
+    def selectUniqueDependency(dependency : String) : Bool
+        selected = false
+
+        @uniqueDependencies.each do |uniqueGroup|
+            if !selected
+                selected = uniqueGroup.includes?(dependency)
+            else
+                #REMOVE OTHER SELECTION
+                uniqueGroup.each do |item|
+                    if item != dependency
+                        @selectedDependencies.delete(item)
+                    end
+                end
+
+                #ADD SELECTION IF NOT PRESENT
+                @selectedDependencies = (@selectedDependencies | [dependency])
+                break
+            end
+        end
+
+        return selected
     end
 
   end
