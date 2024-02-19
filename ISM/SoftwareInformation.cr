@@ -340,7 +340,7 @@ module ISM
         #CHECK IF THERE IS ANY UNIQUE DEPENDENCIES NOT SELECTIONED
         missingSelectedDependencies = getMissingSelectedDependencies
 
-        if !getMissingSelectedDependencies.empty?
+        if !missingSelectedDependencies.empty?
             Ism.showCalculationDoneMessage
             Ism.showMissingSelectedDependenciesMessage(@name, @version, missingSelectedDependencies)
             Ism.exitProgram
