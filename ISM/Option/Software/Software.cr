@@ -28,11 +28,17 @@ module ISM
                     if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareEnableOption::ShortText ||
                         !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareEnableOption::LongText
                         matchingOption = true
-                        @options[1].start
+                        @options[2].start
                     end
 
                     if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareDisableOption::ShortText ||
                         !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareDisableOption::LongText
+                        matchingOption = true
+                        @options[1].start
+                    end
+
+                    if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareSelectDependency::ShortText ||
+                        !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareSelectDependency::LongText
                         matchingOption = true
                         @options[0].start
                     end
