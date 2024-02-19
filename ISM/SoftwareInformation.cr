@@ -433,10 +433,8 @@ module ISM
             selected = false
 
             @selectedDependencies.each do |selection|
-                if !selected
-                    selected = uniqueGroup.includes?(selection)
-                else
-                    break
+                if uniqueGroup.includes?(selection)
+                    selected = true
                 end
             end
 
