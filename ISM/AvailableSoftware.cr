@@ -32,9 +32,14 @@ module ISM
             #EXEMPLE: "{>=5.0.0 ~ <6.0.0}"
             brackets = (request[0] == "{" && request[0] == "}")
             separator = request.includes?(" ~ ")
-            startCondition = request.split(" ~ ")[0][1..-1]
-            endCondition = request.split(" ~ ")[1][0..-2]
-            comparators = ( (greaterComparator(startCondition) || greaterOrEqualComparator(startCondition)) && (lessComparator(endCondition) || lessOrEqualComparator(endCondition)) )
+
+            if request.size > 17
+                startCondition = request.split(" ~ ")[0][1..-1]
+                endCondition = request.split(" ~ ")[1][0..-2]
+                comparators = ( (greaterComparator(startCondition) || greaterOrEqualComparator(startCondition)) && (lessComparator(endCondition) || lessOrEqualComparator(endCondition)) )
+            else
+                return false
+            end
 
             return (brackets && separator && comparators)
         end
