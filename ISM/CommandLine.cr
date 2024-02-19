@@ -1086,7 +1086,7 @@ module ISM
             puts "#{name.colorize(:magenta)}" + " /" + "#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
 
             dependencySelection.each do |selection|
-                puts "\t#{ISM::Default::CommandLine::MissingSelectionText.colorize(:magenta)} #{selection.join(" | ")[0..-3].colorize(:magenta)}"
+                puts "\t#{ISM::Default::CommandLine::MissingSelectionText.colorize(:magenta)} #{selection.join(" | ").colorize(:magenta)}"
             end
 
             puts "\n"
