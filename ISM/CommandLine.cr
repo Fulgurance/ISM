@@ -113,6 +113,10 @@ module ISM
 
                 end
 
+                software.uniqueDependencies = softwareSettings.uniqueDependencies
+                software.uniqueOptions = softwareSettings.uniqueOptions
+                software.selectedDependencies = softwareSettings.selectedDependencies
+
             end
 
             return software
