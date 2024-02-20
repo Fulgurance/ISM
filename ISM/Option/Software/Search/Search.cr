@@ -164,10 +164,10 @@ module ISM
 
                             end
 
-                            if optionsText.empty?
+                            if uniqueGroupText.empty?
                                 optionSettedText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}"
                             else
-                                optionSettedText = optionsText + uniqueGroupText
+                                optionSettedText = uniqueGroupText
                             end
 
                             puts    ISM::Default::Option::SoftwareSearch::OptionsField + optionSettedText
