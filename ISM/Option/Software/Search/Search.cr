@@ -117,6 +117,31 @@ module ISM
                                 end
                             end
 
+                            ##########################################
+
+                            uniqueDependenciesSettedText = String.new
+
+                            greatestVersion.uniqueDependencies.each do |uniqueGroup|
+
+                                uniqueDependenciesSettedText += "\n\t"
+
+                                uniqueGroup.each_with_index do |dependency, index|
+
+                                    uniqueDependenciesSettedText += "#{dependency.colorize(greatestVersion.uniqueDependencyIsEnabled(dependency) ? :green : :dark_gray)}"
+
+                                    if index+1 < uniqueGroup.size
+                                        uniqueDependenciesSettedText += " | "
+                                    end
+
+                                end
+
+                            end
+
+                            puts    ISM::Default::Option::SoftwareSearch::UniqueDependenciesField +
+                                    (uniqueDependenciesSettedText.empty? ? "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}" : uniqueDependenciesSettedText)
+
+                            ##########################################
+
                             uniqueGroupText = String.new
 
                             greatestVersion.uniqueOptions.each do |uniqueOptionGroup|

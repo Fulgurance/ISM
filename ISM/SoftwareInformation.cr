@@ -471,6 +471,10 @@ module ISM
         return selected
     end
 
+    def uniqueDependencyIsEnabled(dependency : String) : Bool
+        return @selectedDependencies.includes?(dependency)
+    end
+
   end
 
 end
