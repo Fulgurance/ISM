@@ -111,7 +111,7 @@ module ISM
             CalculationWaitingText = "Checking dependencies tree"
             SynchronizationWaitingText = "Synchronization with the online database"
             CalculationDoneText = "Done !"
-            Separator = "____________"
+            Separator = "============"
             NoOptionText = "no option"
             NewText = "New!"
             UpdateText = "Update"
