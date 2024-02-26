@@ -406,6 +406,10 @@ module ISM
             end
         end
 
+        def softwaresAreCodependent(software1 : ISM::SoftwareInformation, software2 : ISM::SoftwareInformation) : Bool
+            return software1.allowCodependencies.includes?(software2.hiddenName) && software2.allowCodependencies.includes?(software1.hiddenName) && !software1.passEnabled && !software2.passEnabled
+        end
+
         def getSoftwareStatus(software : ISM::SoftwareInformation) : Symbol
             installedSoftware = loadInstalledSoftware(software.port,software.name,software.version)
 
@@ -1664,7 +1668,6 @@ module ISM
 
             keys = dependenciesTable.keys
 
-            #Inextricable dependencies problem
             keys.each do |key1|
                 playCalculationAnimation
 
@@ -1672,11 +1675,64 @@ module ISM
                     playCalculationAnimation
 
                     if key1 != key2
+
                         if dependenciesTable[key1].any?{|dependency| dependency.hiddenName == key2} && dependenciesTable[key2].any?{|dependency| dependency.hiddenName == key1}
-                            showCalculationDoneMessage
-                            showInextricableDependenciesMessage([dependenciesTable[key1][0],dependenciesTable[key2][0]])
-                            exitProgram
+
+                            #Codependency case
+                            if softwaresAreCodependent(dependenciesTable[key1][0], dependenciesTable[key2][0])
+                                #Pour les 2 entrées:
+                                #-------------------
+                                #Cloner et supprimer les codépendances de la liste des clones avec nom différent (ex: name-codependency) (désactiver les options si cela est relatif à une option)
+                                if !key1.includes?("-Codependency") && !key2.includes?("-Codependency") && !dependenciesTable.has_key?(key1+"-Codependency") && !dependenciesTable.has_key?(key2+"-Codependency")
+
+                                    dependenciesTable[key1+"-Codependency"] = dependenciesTable[key1].clone
+                                    dependenciesTable[key2+"-Codependency"] = dependenciesTable[key2].clone
+
+                                    #--------------------------------------------------------------------
+
+                                    dependenciesTable[key1+"-Codependency"].each do |dependency|
+                                        if dependency.hiddenName == key2
+                                            dependenciesTable[key1].delete(dependency)
+                                        end
+                                    end
+
+                                    dependenciesTable[key1+"-Codependency"][0].options.each do |option|
+                                        option.dependencies.each do |dependency|
+                                            if dependency.hiddenName == key2
+                                                dependenciesTable[key1][0].disableOption(option.name)
+                                            end
+                                        end
+                                    end
+
+                                    #--------------------------------------------------------------------
+
+                                    dependenciesTable[key2+"-Codependency"].each do |dependency|
+                                        if dependency.hiddenName == key1
+                                            dependenciesTable[key2].delete(dependency)
+                                        end
+                                    end
+
+                                    dependenciesTable[key2+"-Codependency"][0].options.each do |option|
+                                        option.dependencies.each do |dependency|
+                                            if dependency.hiddenName == key1
+                                                dependenciesTable[key2][0].disableOption(option.name)
+                                            end
+                                        end
+                                    end
+
+                                    #--------------------------------------------------------------------
+
+                                end
+
+                            #Inextricable dependency case
+                            else
+                                showCalculationDoneMessage
+                                showInextricableDependenciesMessage([dependenciesTable[key1][0],dependenciesTable[key2][0]])
+                                exitProgram
+                            end
+
                         end
+
                     end
                 end
             end

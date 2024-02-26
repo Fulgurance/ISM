@@ -33,7 +33,8 @@ module ISM
         options : Array(Option),
         uniqueDependencies : Array(Array(String)),
         uniqueOptions : Array(Array(String)),
-        selectedDependencies : Array(String) do
+        selectedDependencies : Array(String),
+        allowCodependencies : Array(String) do
         include JSON::Serializable
     end
 
@@ -52,6 +53,7 @@ module ISM
     property uniqueDependencies : Array(Array(String))
     property uniqueOptions : Array(Array(String))
     property selectedDependencies : Array(String)
+    property allowCodependencies : Array(String)
 
     def initialize( @port = String.new,
                     @name = String.new,
@@ -65,7 +67,8 @@ module ISM
                     @options = Array(ISM::SoftwareOption).new,
                     @uniqueDependencies = Array(Array(String)).new,
                     @uniqueOptions = Array(Array(String)).new,
-                    @selectedDependencies = Array(String).new)
+                    @selectedDependencies = Array(String).new,
+                    @allowCodependencies = Array(String).new)
     end
 
     def getEnabledPass : String
@@ -105,6 +108,7 @@ module ISM
         @uniqueDependencies = information.uniqueDependencies
         @uniqueOptions = information.uniqueOptions
         @selectedDependencies = information.selectedDependencies
+        @allowCodependencies = information.allowCodependencies
 
         information.dependencies.each do |data|
             dependency = ISM::SoftwareDependency.new
@@ -169,7 +173,8 @@ module ISM
                                         optionsArray,
                                         @uniqueDependencies,
                                         @uniqueOptions,
-                                        @selectedDependencies)
+                                        @selectedDependencies,
+                                        @allowCodependencies)
 
         file = File.open(writeInformationFilePath,"w")
         information.to_json(file)
