@@ -1680,9 +1680,10 @@ module ISM
 
                             #Codependency case
                             if softwaresAreCodependent(dependenciesTable[key1][0], dependenciesTable[key2][0])
-                                #Pour les 2 entrées:
+
+                                #For both entry:
                                 #-------------------
-                                #Cloner et supprimer les codépendances de la liste des clones avec nom différent (ex: name-codependency) (désactiver les options si cela est relatif à une option)
+                                #Clone and delete codependencies from their dependencies and name their key with codependency attribute (disable options relative to the codependencies)
                                 if !key1.includes?("-Codependency") && !key2.includes?("-Codependency") && !dependenciesTable.has_key?(key1+"-Codependency") && !dependenciesTable.has_key?(key2+"-Codependency")
 
                                     dependenciesTable[key1+"-Codependency"] = dependenciesTable[key1].clone
