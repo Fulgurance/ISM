@@ -1582,10 +1582,13 @@ module ISM
             cleanCalculationAnimation
         end
 
-        def getRequiredDependencies(software : ISM::SoftwareInformation, allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareInformation)
+        def getRequiredDependencies(softwares : ISM::SoftwareInformation | Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareInformation)
             dependencies = Hash(String,ISM::SoftwareInformation).new
-            currentDependencies = [software.toSoftwareDependency]
+            currentDependencies = (typeof(softwares) == ISM::SoftwareInformation ? [softwares.toSoftwareDependency] : softwares)
             nextDependencies = Array(ISM::SoftwareDependency).new
+
+            firstLoopChecker = Hash(String,ISM::SoftwareInformation).new
+            secondLoopChecker = Hash(String,ISM::SoftwareInformation).new
 
             loop do
 
@@ -1614,24 +1617,45 @@ module ISM
                             end
                         end
 
-                        #Need multiple version or need to fusion options
+                        #Need to fusion options
                         if dependencies.has_key?(dependency.hiddenName)
 
-                            #Multiple versions of single software requested
-                            if dependencies[dependency.hiddenName].version != dependency.version
-                                dependencies[dependency.versionName] = dependencyInformation
-                                nextDependencies += dependency.dependencies
-                            end
-
                             #Different options requested
-                            if dependencies[dependency.hiddenName].options != dependency.options
+                            if !(dependencies[dependency.hiddenName].options & dependency.options == dependency.options)
                                 entry = dependency.dup
                                 entry.options = (dependencies[dependency.hiddenName].toSoftwareDependency.options+dependency.options).uniq
 
-                                dependencies[dependency.versionName] = entry.information
+                                dependencies[dependency.hiddenName] = entry.information
                                 nextDependencies += entry.dependencies
+
+                            #If not, then we can check if there is an inextricable dependency problem
+                            else
+                                if !firstLoopChecker.empty? && firstLoopChecker.size == secondLoopChecker.size
+
+                                    #If size and keys are equal, this mean the same patern is repeated, then there is inextricable problem
+                                    if firstLoopChecker.keys == secondLoopChecker.keys
+                                        showCalculationDoneMessage
+                                        showInextricableDependenciesMessage(firstLoopChecker.values)
+                                        exitProgram
+
+                                    #If not, we just reset all checkers
+                                    else
+                                        firstLoopChecker.clear
+                                        secondLoopChecker.clear
+                                    end
+
+                                else
+
+                                    if !firstLoopChecker.has_key?(dependency.hiddenName)
+                                        firstLoopChecker[dependency.hiddenName] = dependencyInformation
+                                    else
+                                        secondLoopChecker[dependency.hiddenName] = dependencyInformation
+                                    end
+                                end
                             end
+
                         else
+                            #Gérer à ce moment les coodépendences
                             dependencies[dependency.hiddenName] = dependencyInformation
                             nextDependencies += dependency.dependencies
                         end
@@ -1648,138 +1672,12 @@ module ISM
             return dependencies.values
         end
 
-        def getDependenciesTable(softwareList : Array(ISM::SoftwareInformation)) : Hash(String,Array(ISM::SoftwareInformation))
-            dependenciesTable = Hash(String,Array(ISM::SoftwareInformation)).new
-
-            softwareList.each do |software|
-                playCalculationAnimation
-
-                key = software.hiddenName
-
-                dependenciesTable[key] = getRequiredDependencies(software, allowRebuild: true)
-
-                dependenciesTable[key].each do |dependency|
-                    playCalculationAnimation
-
-                    dependenciesTable[dependency.hiddenName] = getRequiredDependencies(dependency, allowRebuild: true)
-                end
-
-            end
-
-            keys = dependenciesTable.keys
-
-            keys.each do |key1|
-                playCalculationAnimation
-
-                keys.each do |key2|
-                    playCalculationAnimation
-
-                    if key1 != key2
-
-                        if dependenciesTable[key1].any?{|dependency| dependency.hiddenName == key2} && dependenciesTable[key2].any?{|dependency| dependency.hiddenName == key1}
-
-                            #Codependency case
-                            if softwaresAreCodependent(dependenciesTable[key1][0], dependenciesTable[key2][0])
-
-                                #For both entry:
-                                #-------------------
-                                #Clone and delete codependencies from their dependencies and name their key with codependency attribute (disable options relative to the codependencies)
-                                if !key1.includes?("-Codependency") && !key2.includes?("-Codependency") && !dependenciesTable.has_key?(key1+"-Codependency") && !dependenciesTable.has_key?(key2+"-Codependency")
-
-                                    dependenciesTable[key1+"-Codependency"] = dependenciesTable[key1].clone
-                                    dependenciesTable[key2+"-Codependency"] = dependenciesTable[key2].clone
-
-                                    #--------------------------------------------------------------------
-
-                                    dependenciesTable[key1+"-Codependency"].each do |dependency|
-                                        if dependency.hiddenName == key2
-                                            dependenciesTable[key1].delete(dependency)
-                                        end
-                                    end
-
-                                    dependenciesTable[key1+"-Codependency"][0].options.each do |option|
-                                        option.dependencies.each do |dependency|
-                                            if dependency.hiddenName == key2
-                                                dependenciesTable[key1][0].disableOption(option.name)
-                                            end
-                                        end
-                                    end
-
-                                    #--------------------------------------------------------------------
-
-                                    dependenciesTable[key2+"-Codependency"].each do |dependency|
-                                        if dependency.hiddenName == key1
-                                            dependenciesTable[key2].delete(dependency)
-                                        end
-                                    end
-
-                                    dependenciesTable[key2+"-Codependency"][0].options.each do |option|
-                                        option.dependencies.each do |dependency|
-                                            if dependency.hiddenName == key1
-                                                dependenciesTable[key2][0].disableOption(option.name)
-                                            end
-                                        end
-                                    end
-
-                                    #--------------------------------------------------------------------
-
-                                end
-
-                            #Inextricable dependency case
-                            else
-                                showCalculationDoneMessage
-                                showInextricableDependenciesMessage([dependenciesTable[key1][0],dependenciesTable[key2][0]])
-                                exitProgram
-                            end
-
-                        end
-
-                    end
-                end
-            end
-
-            return dependenciesTable
-        end
-
-        def getSortedDependencies(dependenciesTable : Hash(String,Array(ISM::SoftwareInformation))) : Array(ISM::SoftwareInformation)
-            result = Array(ISM::SoftwareInformation).new
-
-            table = Hash(ISM::SoftwareInformation,Int32).new
-
-            dependenciesTable.values.each do |dependencies|
-                playCalculationAnimation
-
-                table[dependencies[0]] = dependencies.size
-
-                dependencies.each do |dependency|
-                    playCalculationAnimation
-
-                    if dependenciesTable.has_key?(dependency.hiddenName) && dependency.dependencies.size < dependenciesTable[dependency.hiddenName][0].dependencies.size
-                        table[dependencies[0]] += (dependenciesTable[dependency.hiddenName][0].dependencies.size - dependency.dependencies.size).abs
-                    end
-
-                    if dependenciesTable.has_key?(dependency.versionName) && dependency.dependencies.size < dependenciesTable[dependency.versionName][0].dependencies.size
-                        table[dependencies[0]] += (dependenciesTable[dependency.versionName][0].dependencies.size - dependency.dependencies.size).abs
-                    end
-                end
-            end
-
-            table.to_a.sort_by { |k, v| v }.each do |item|
-                playCalculationAnimation
-
-                result << item[0]
-            end
-
-            return result
-        end
-
         def generateTasksFile(tasks : String)
             File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
         end
 
         def getNeededSoftwares : Array(ISM::SoftwareInformation)
-            dependencyTable = getDependenciesTable(@requestedSoftwares)
-            return getSortedDependencies(dependencyTable)
+            return getRequiredDependencies(@requestedSoftwares)
         end
 
         def getUnneededSoftwares : Array(ISM::SoftwareInformation)
