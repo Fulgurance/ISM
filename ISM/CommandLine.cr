@@ -1582,9 +1582,9 @@ module ISM
             cleanCalculationAnimation
         end
 
-        def getRequiredDependencies(softwares : ISM::SoftwareInformation | Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareInformation)
+        def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareInformation)
             dependencies = Hash(String,ISM::SoftwareInformation).new
-            currentDependencies = (typeof(softwares) == ISM::SoftwareInformation ? [softwares.toSoftwareDependency] : softwares)
+            currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
 
             firstLoopChecker = Hash(String,ISM::SoftwareInformation).new
@@ -1699,7 +1699,7 @@ module ISM
                         requiredSoftwares[software.versionName] = software
 
                         #For each dependency of favourites: add entry in requiredSoftwares
-                        getRequiredDependencies(software, allowDeepSearch: true).each do |dependency|
+                        getRequiredDependencies([software], allowDeepSearch: true).each do |dependency|
                             playCalculationAnimation
 
                             requiredSoftwares[dependency.versionName] = dependency
@@ -1762,7 +1762,7 @@ module ISM
                     if installedSoftware.name == availableSoftware.name
                         if currentVersion < greatestVersion && !softwareIsInstalled(greatestSoftware)
                             #We test first if the software is installable
-                            installable = !(getRequiredDependencies(greatestSoftware,allowSkipUnavailable: true)).empty?
+                            installable = !(getRequiredDependencies([greatestSoftware],allowSkipUnavailable: true)).empty?
 
                             if !installable
                                 skippedUpdates = true
