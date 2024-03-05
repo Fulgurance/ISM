@@ -1584,6 +1584,7 @@ module ISM
 
         def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareInformation)
             dependencies = Hash(String,ISM::SoftwareInformation).new
+            dependencyPriorityLevels = Hash(String,Array(Int32)).new
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
 
@@ -1625,24 +1626,10 @@ module ISM
                                 entry = dependency.dup
                                 entry.options = (dependencies[dependency.hiddenName].toSoftwareDependency.options+dependency.options).uniq
 
-
-                                keys = dependencies.keys
-                                keyIndex = keys.index(dependency.hiddenName)
-                                temporaryData = Hash(String,ISM::SoftwareInformation).new
-
-                                keys[index..-1].each do |key|
-                                    temporaryData[key] = dependencies[key].dup
-                                    dependencies.delete(key)
-                                end
-
+                                dependencyPriorityLevels[dependency.hiddenName] += dependencies[dependency.hiddenName].toSoftwareDependency.size - dependency.dependencies.size
 
                                 dependencies[dependency.hiddenName] = entry.information
                                 nextDependencies += entry.dependencies
-
-                                #Dup ou pas dup ?
-                                temporaryData.keys.each do |key|
-                                    dependencies[key] = temporaryData[key].dup
-                                end
 
                             #If not, then we can check if there is an inextricable dependency problem
                             else
@@ -1673,6 +1660,7 @@ module ISM
                         else
                             #Gérer à ce moment les coodépendences
                             dependencies[dependency.hiddenName] = dependencyInformation
+                            dependencyPriorityLevels[dependency.hiddenName] = 0
                             nextDependencies += dependency.dependencies
                         end
 
