@@ -1,4 +1,4 @@
-[!(https://github.com/Fulgurance/ISM/blob/master/.github/workflows/crystal.yml)]
+[!(https://img.shields.io/badge/License-GPL_3.0-blue)]
 
 # ISM
 
