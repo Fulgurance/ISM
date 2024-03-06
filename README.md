@@ -1,3 +1,5 @@
+![example workflow]([https://github.com/github/docs/actions/workflows/main.yml/badge.svg](https://github.com/Fulgurance/ISM/blob/master/.github/workflows/crystal.yml))
+
 # ISM
 
 ISM or Ingenius System Manager is an extremely advanced tool to build and manage a Linux system from scratch.
