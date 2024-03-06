@@ -1,6 +1,6 @@
-[!(https://img.shields.io/badge/License-GPL_3.0-blue)]
-https://img.shields.io/badge/License-GPL_3.0-blue
-(https://img.shields.io/badge/License-GPL_3.0-blue)
+[https://img.shields.io/badge/License-GPL_3.0-blue
+(https://img.shields.io/badge/License-GPL_3.0-blue)](https://img.shields.io/badge/License-GPL_3.0-blue
+)
 # ISM
 
 ISM or Ingenius System Manager is an extremely advanced tool to build and manage a Linux system from scratch.
