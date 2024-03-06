@@ -1,4 +1,4 @@
-https://img.shields.io/badge/License-GPL_3.0-blue
+![Static Badge](https://img.shields.io/badge/License-GPL_3.0-blue)
 
 # ISM
 
