@@ -1,4 +1,4 @@
-[!https://github.com/Fulgurance/ISM/blob/master/.github/workflows/crystal.yml]
+[!(https://github.com/Fulgurance/ISM/blob/master/.github/workflows/crystal.yml)]
 
 # ISM
 
