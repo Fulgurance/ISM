@@ -1583,8 +1583,8 @@ module ISM
         end
 
         def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareInformation)
+
             dependencies = Hash(String,ISM::SoftwareInformation).new
-            dependencyPriorityLevels = Hash(String,Array(Int32)).new
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
 
@@ -1608,64 +1608,81 @@ module ISM
 
                         #Software or version not available
                         if dependencyInformation.name == "" || dependencyInformation.version == ""
+
                             if allowSkipUnavailable == true
+
                                 @unavailableDependencySignals.push([software,dependencyInformation])
                                 return Array(ISM::SoftwareInformation).new
+
                             else
+
                                 showCalculationDoneMessage
                                 showUnavailableDependencyMessage(software,dependencyInformation)
                                 exitProgram
+
                             end
                         end
 
                         #Need to fusion options
                         if dependencies.has_key?(dependency.hiddenName)
 
+                            entry = dependency.dup
+
                             #Different options requested
                             if !(dependencies[dependency.hiddenName].options & dependency.options == dependency.options)
-                                entry = dependency.dup
+
                                 entry.options = (dependencies[dependency.hiddenName].toSoftwareDependency.options+dependency.options).uniq
 
-                                dependencyPriorityLevels[dependency.hiddenName] += dependencies[dependency.hiddenName].toSoftwareDependency.size - dependency.dependencies.size
-
-                                dependencies[dependency.hiddenName] = entry.information
-                                nextDependencies += entry.dependencies
-
-                            #If not, then we can check if there is an inextricable dependency problem
+                            #If not, then we can check if there is an inextricable dependency problem or just if calculation is finish
                             else
                                 if !firstLoopChecker.empty? && firstLoopChecker.size == secondLoopChecker.size
 
                                     #If size and keys are equal, this mean the same patern is repeated, then there is inextricable problem
                                     if firstLoopChecker.keys == secondLoopChecker.keys
+
                                         showCalculationDoneMessage
                                         showInextricableDependenciesMessage(firstLoopChecker.values)
                                         exitProgram
 
                                     #If not, we just reset all checkers
                                     else
+
                                         firstLoopChecker.clear
                                         secondLoopChecker.clear
+
                                     end
 
                                 else
 
                                     if !firstLoopChecker.has_key?(dependency.hiddenName)
+
                                         firstLoopChecker[dependency.hiddenName] = dependencyInformation
+
                                     else
+
                                         secondLoopChecker[dependency.hiddenName] = dependencyInformation
+
                                     end
+
                                 end
                             end
+
+                            dependencies[dependency.hiddenName] = entry.information
+                            nextDependencies += entry.dependencies
 
                         else
                             #Gérer à ce moment les coodépendences
                             dependencies[dependency.hiddenName] = dependencyInformation
-                            dependencyPriorityLevels[dependency.hiddenName] = 0
                             nextDependencies += dependency.dependencies
+
                         end
 
                     end
 
+                end
+
+                if currentDependencies.map { |entry| entry.hiddenName}.uniq == nextDependencies.map { |entry| entry.hiddenName}.uniq
+                    break
                 end
 
                 currentDependencies = nextDependencies.dup
