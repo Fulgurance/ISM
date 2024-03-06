@@ -1,4 +1,4 @@
-![example workflow]([https://github.com/github/docs/actions/workflows/main.yml/badge.svg](https://github.com/Fulgurance/ISM/blob/master/.github/workflows/crystal.yml))
+![license]([[https://github.com/github/docs/actions/workflows/main.yml/badge.svg](https://img.shields.io/badge/License-GPL_3.0-blue)](https://github.com/Fulgurance/ISM/blob/master/.github/workflows/crystal.yml))
 
 # ISM
 
