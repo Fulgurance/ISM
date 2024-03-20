@@ -1608,41 +1608,71 @@ module ISM
 
                             if allowSkipUnavailable == true
 
-                                @unavailableDependencySignals.push([software,dependencyInformation])
+                                #@unavailableDependencySignals.push([software,dependencyInformation])
                                 return Array(ISM::SoftwareInformation).new
 
                             else
 
                                 showCalculationDoneMessage
-                                showUnavailableDependencyMessage(software,dependencyInformation)
+                                #showUnavailableDependencyMessage(software,dependencyInformation)
                                 exitProgram
 
                             end
                         end
 
-                        #Need to fusion options
-                        if dependencies.has_key?(dependency.hiddenName)
+                        key = dependency.hiddenName
+                        temporaryInformation = dependencyInformation
+                        temporaryDependencies = dependency.dependencies
 
+                        if dependencies.has_key?(key)
+
+                            differentOptions = !(dependencies[key].options & dependency.options == dependency.options)
                             entry = dependency.dup
 
-                            #Different options requested
-                            if !(dependencies[dependency.hiddenName].options & dependency.options == dependency.options)
-
-                                entry.options = (dependencies[dependency.hiddenName].toSoftwareDependency.options+dependency.options).uniq
-
+                            if differentOptions
+                                entry.options = (dependencies[key].toSoftwareDependency.options+dependency.options).uniq
                             end
 
-                            dependencies.delete(dependency.hiddenName)
+                            temporaryInformation = entry.information
+                            temporaryDependencies = entry.dependencies
 
-                            dependencies[dependency.hiddenName] = entry.information
-                            nextDependencies += entry.dependencies
+                            dependencies.delete(key)
 
-                        else
-                            #Gérer à ce moment les coodépendences
-                            dependencies[dependency.hiddenName] = dependencyInformation
-                            nextDependencies += dependency.dependencies
+                            dependencies[key] = temporaryInformation
+
+                            if differentOptions
+                                nextDependencies = dependencies[key].dependencies
+                                break
+                            end
 
                         end
+
+                        dependencies[key] = temporaryInformation
+                        nextDependencies += temporaryDependencies
+
+                        #Need to fusion options
+                        # if dependencies.has_key?(dependency.hiddenName)
+                        #
+                        #     entry = dependency.dup
+                        #
+                        #     #Different options requested
+                        #     if !(dependencies[dependency.hiddenName].options & dependency.options == dependency.options)
+                        #
+                        #         entry.options = (dependencies[dependency.hiddenName].toSoftwareDependency.options+dependency.options).uniq
+                        #
+                        #     end
+                        #
+                        #     dependencies.delete(dependency.hiddenName)
+                        #
+                        #     dependencies[dependency.hiddenName] = entry.information
+                        #     nextDependencies += entry.dependencies
+                        #
+                        # else
+                        #     #Gérer à ce moment les coodépendences
+                        #     dependencies[dependency.hiddenName] = dependencyInformation
+                        #     nextDependencies += dependency.dependencies
+                        #
+                        # end
 
                     end
 
