@@ -1588,6 +1588,10 @@ module ISM
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
 
+            priorityHash = Hash(String,Int32).new
+
+            currentPriorityLevel = 0
+
             loop do
 
                 playCalculationAnimation
@@ -1625,30 +1629,47 @@ module ISM
                         temporaryDependencies = dependency.dependencies
 
                         if dependencies.has_key?(key)
+                            priorityHash[key] += (dependencies[key].dependencies.size - dependency.dependencies.size).abs
 
-                            differentOptions = !(dependencies[key].options & dependency.options == dependency.options)
-                            entry = dependency.dup
-
-                            if differentOptions
-                                entry.options = (dependencies[key].toSoftwareDependency.options+dependency.options).uniq
+                            dependency.options.each do |option|
+                                dependencies[key].enableOption(option)
                             end
-
-                            temporaryInformation = entry.information
-                            temporaryDependencies = entry.dependencies
-
-                            dependencies.delete(key)
-
+                        else
+                            priorityHash[key] = currentPriorityLevel
                             dependencies[key] = temporaryInformation
-
-                            if differentOptions
-                                nextDependencies = dependencies[key].dependencies
-                                break
-                            end
-
                         end
 
-                        dependencies[key] = temporaryInformation
-                        nextDependencies += temporaryDependencies
+                        # key = dependency.hiddenName
+                        # temporaryInformation = dependencyInformation
+                        # temporaryDependencies = dependency.dependencies
+                        #
+                        # if dependencies.has_key?(key)
+                        #
+                        #     differentOptions = !(dependencies[key].options & dependency.options == dependency.options)
+                        #     entry = dependency.dup
+                        #
+                        #     if differentOptions
+                        #         entry.options = (dependencies[key].toSoftwareDependency.options+dependency.options).uniq
+                        #     end
+                        #
+                        #     temporaryInformation = entry.information
+                        #     temporaryDependencies = entry.dependencies
+                        #
+                        #     dependencies.delete(key)
+                        #
+                        #     dependencies[key] = temporaryInformation
+                        #
+                        #     if differentOptions
+                        #         nextDependencies = dependencies[key].dependencies
+                        #         break
+                        #     end
+                        #
+                        # end
+                        #
+                        # dependencies[key] = temporaryInformation
+                        # nextDependencies += temporaryDependencies
+
+                        ##################################################
 
                         #Need to fusion options
                         # if dependencies.has_key?(dependency.hiddenName)
@@ -1681,9 +1702,19 @@ module ISM
                 currentDependencies = nextDependencies.dup
                 nextDependencies.clear
 
+                currentPriorityLevel += 1
+
             end
 
-            return dependencies.values
+            result = Array(ISM::SoftwareInformation).new
+
+            priorityHash.to_a.sort_by { |k, v| v }.each do |entry|
+                playCalculationAnimation
+
+                result << dependencies[entry]
+            end
+
+            return result
         end
 
         def generateTasksFile(tasks : String)
