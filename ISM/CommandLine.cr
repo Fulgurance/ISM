@@ -1582,15 +1582,11 @@ module ISM
             cleanCalculationAnimation
         end
 
-        def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Array(ISM::SoftwareInformation)
+        def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Hash(String, ISM::SoftwareInformation)
 
-            dependencies = Hash(String,ISM::SoftwareInformation).new
+            dependencies = Hash(String, ISM::SoftwareInformation).new
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
-
-            priorityHash = Hash(String,Int32).new
-
-            currentPriorityLevel = 0
 
             loop do
 
@@ -1613,7 +1609,7 @@ module ISM
                             if allowSkipUnavailable == true
 
                                 #@unavailableDependencySignals.push([software,dependencyInformation])
-                                return Array(ISM::SoftwareInformation).new
+                                #return Array(ISM::SoftwareInformation).new
 
                             else
 
@@ -1625,75 +1621,24 @@ module ISM
                         end
 
                         key = dependency.hiddenName
-                        temporaryInformation = dependencyInformation
-                        temporaryDependencies = dependency.dependencies
 
                         if dependencies.has_key?(key)
-                            priorityHash[key] += (dependencies[key].dependencies.size - dependency.dependencies.size).abs
 
-                            dependency.options.each do |option|
-                                dependencies[key].enableOption(option)
+                            differentOptions = (dependencies[key].dependencies.size - dependency.dependencies.size).abs > 0
+
+                            if differentOptions
+                                dependency.options.each do |option|
+                                    dependencies[key].enableOption(option)
+                                end
+
+                                nextDependencies += dependencies[key].dependencies
                             end
+
                         else
-                            priorityHash[key] = currentPriorityLevel
-                            dependencies[key] = temporaryInformation
+                            dependencies[key] = dependencyInformation
+
+                            nextDependencies += dependencies[key].dependencies
                         end
-
-                        # key = dependency.hiddenName
-                        # temporaryInformation = dependencyInformation
-                        # temporaryDependencies = dependency.dependencies
-                        #
-                        # if dependencies.has_key?(key)
-                        #
-                        #     differentOptions = !(dependencies[key].options & dependency.options == dependency.options)
-                        #     entry = dependency.dup
-                        #
-                        #     if differentOptions
-                        #         entry.options = (dependencies[key].toSoftwareDependency.options+dependency.options).uniq
-                        #     end
-                        #
-                        #     temporaryInformation = entry.information
-                        #     temporaryDependencies = entry.dependencies
-                        #
-                        #     dependencies.delete(key)
-                        #
-                        #     dependencies[key] = temporaryInformation
-                        #
-                        #     if differentOptions
-                        #         nextDependencies = dependencies[key].dependencies
-                        #         break
-                        #     end
-                        #
-                        # end
-                        #
-                        # dependencies[key] = temporaryInformation
-                        # nextDependencies += temporaryDependencies
-
-                        ##################################################
-
-                        #Need to fusion options
-                        # if dependencies.has_key?(dependency.hiddenName)
-                        #
-                        #     entry = dependency.dup
-                        #
-                        #     #Different options requested
-                        #     if !(dependencies[dependency.hiddenName].options & dependency.options == dependency.options)
-                        #
-                        #         entry.options = (dependencies[dependency.hiddenName].toSoftwareDependency.options+dependency.options).uniq
-                        #
-                        #     end
-                        #
-                        #     dependencies.delete(dependency.hiddenName)
-                        #
-                        #     dependencies[dependency.hiddenName] = entry.information
-                        #     nextDependencies += entry.dependencies
-                        #
-                        # else
-                        #     #Gérer à ce moment les coodépendences
-                        #     dependencies[dependency.hiddenName] = dependencyInformation
-                        #     nextDependencies += dependency.dependencies
-                        #
-                        # end
 
                     end
 
@@ -1702,19 +1647,81 @@ module ISM
                 currentDependencies = nextDependencies.dup
                 nextDependencies.clear
 
-                currentPriorityLevel += 1
+            end
+
+            return dependencies
+        end
+
+        def getDependencyTree(software : ISM::SoftwareInformation, softwareList : Hash(String, ISM::SoftwareInformation), calculatedDependencies = Hash(String, Array(ISM::SoftwareInformation)).new) : Array(ISM::SoftwareInformation)
+
+            dependencies = Hash(String,ISM::SoftwareInformation).new
+
+            calculatedDependencies.values.each do |array|
+
+                array.each do |software|
+                    dependencies[software.hiddenName] = software
+                end
 
             end
 
-            result = Array(ISM::SoftwareInformation).new
+            currentDependencies = [software.toSoftwareDependency]
+            nextDependencies = Array(ISM::SoftwareDependency).new
 
-            priorityHash.to_a.sort_by { |k, v| v }.each do |entry|
+            loop do
+
                 playCalculationAnimation
 
-                result << dependencies[entry]
+                if currentDependencies.empty?
+                    break
+                end
+
+                currentDependencies.each do |dependency|
+
+                    key = dependency.hiddenName
+
+                    if !dependencies.has_key?(key)
+                        dependencies[key] = softwareList[key]
+                        nextDependencies += dependencies[key].dependencies
+                    end
+
+                end
+
+                currentDependencies = nextDependencies.dup
+                nextDependencies.clear
+
             end
 
-            return result
+            return dependencies.values
+        end
+
+        def getDependencyTable(softwareList : Hash(String, ISM::SoftwareInformation)) : Hash(String, Array(ISM::SoftwareInformation))
+
+            calculatedDependencies = Hash(String, Array(ISM::SoftwareInformation)).new
+
+            softwareList.values.each do |software|
+                playCalculationAnimation
+
+                calculatedDependencies[software.hiddenName] = getDependencyTree(software, softwareList, calculatedDependencies)
+
+                software.dependencies.each do |dependency|
+                    playCalculationAnimation
+
+                    calculatedDependencies[dependency.hiddenName] = getDependencyTree(software, softwareList, calculatedDependencies)
+                end
+            end
+
+            #Then check codependence here
+
+            #
+
+            return calculatedDependencies
+        end
+
+        def getSortedDependencies(dependencyTable : Hash(String, Array(ISM::SoftwareInformation))) : Array(ISM::SoftwareInformation)
+
+            result = dependencyTable.to_a.sort_by { |k, v| v.size }
+
+            return result.map { |entry| entry[1][0]}
         end
 
         def generateTasksFile(tasks : String)
@@ -1722,7 +1729,8 @@ module ISM
         end
 
         def getNeededSoftwares : Array(ISM::SoftwareInformation)
-            return getRequiredDependencies(@requestedSoftwares)
+            dependencyTable = getDependencyTable(getRequiredDependencies(@requestedSoftwares))
+            return getSortedDependencies(dependencyTable)
         end
 
         def getUnneededSoftwares : Array(ISM::SoftwareInformation)
@@ -1744,7 +1752,7 @@ module ISM
                         requiredSoftwares[software.versionName] = software
 
                         #For each dependency of favourites: add entry in requiredSoftwares
-                        getRequiredDependencies([software], allowDeepSearch: true).each do |dependency|
+                        getRequiredDependencies([software], allowDeepSearch: true).values.each do |dependency|
                             playCalculationAnimation
 
                             requiredSoftwares[dependency.versionName] = dependency
