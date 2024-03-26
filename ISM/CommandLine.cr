@@ -1654,15 +1654,7 @@ module ISM
 
         def getDependencyTree(software : ISM::SoftwareInformation, softwareList : Hash(String, ISM::SoftwareInformation), calculatedDependencies = Hash(String, Array(ISM::SoftwareInformation)).new) : Array(ISM::SoftwareInformation)
 
-            dependencies = Hash(String,ISM::SoftwareInformation).new
-
-            calculatedDependencies.values.each do |array|
-
-                array.each do |software|
-                    dependencies[software.hiddenName] = software
-                end
-
-            end
+            dependencies = {software.hiddenName => software}
 
             currentDependencies = [software.toSoftwareDependency]
             nextDependencies = Array(ISM::SoftwareDependency).new
@@ -1680,7 +1672,13 @@ module ISM
                     key = dependency.hiddenName
 
                     if !dependencies.has_key?(key)
-                        dependencies[key] = softwareList[key]
+
+                        if calculatedDependencies.has_key?(key)
+                            dependencies[key] = calculatedDependencies[key]
+                        else
+                            dependencies[key] = softwareList[key]
+                        end
+
                         nextDependencies += dependencies[key].dependencies
                     end
 
@@ -1706,7 +1704,7 @@ module ISM
                 software.dependencies.each do |dependency|
                     playCalculationAnimation
 
-                    calculatedDependencies[dependency.hiddenName] = getDependencyTree(software, softwareList, calculatedDependencies)
+                    calculatedDependencies[dependency.hiddenName] = getDependencyTree(dependency.information, softwareList, calculatedDependencies)
                 end
             end
 
