@@ -1714,9 +1714,76 @@ module ISM
                 end
             end
 
-            #Then check codependence here
+            keys = calculatedDependencies.keys
 
-            #
+            keys.each do |key1|
+                playCalculationAnimation
+
+                keys.each do |key2|
+                    playCalculationAnimation
+
+                    if key1 != key2
+
+                        if calculatedDependencies[key1].any?{|dependency| dependency.hiddenName == key2} && calculatedDependencies[key2].any?{|dependency| dependency.hiddenName == key1}
+
+                            #Codependency case
+                            if softwaresAreCodependent(calculatedDependencies[key1][0], calculatedDependencies[key2][0])
+                                #For both entry:
+                                #-------------------
+                                #Clone and delete codependencies from clone list with different name (ex: name-codependency) (disable options if it relative to the options)
+                                if !key1.includes?("-Codependency") && !key2.includes?("-Codependency") && !calculatedDependencies.has_key?(key1+"-Codependency") && !calculatedDependencies.has_key?(key2+"-Codependency")
+
+                                    calculatedDependencies[key1+"-Codependency"] = calculatedDependencies[key1].clone
+                                    calculatedDependencies[key2+"-Codependency"] = calculatedDependencies[key2].clone
+
+                                    #--------------------------------------------------------------------
+
+                                    calculatedDependencies[key1+"-Codependency"].each do |dependency|
+                                        if dependency.hiddenName == key2
+                                            calculatedDependencies[key1].delete(dependency)
+                                        end
+                                    end
+
+                                    calculatedDependencies[key1+"-Codependency"][0].options.each do |option|
+                                        option.dependencies.each do |dependency|
+                                            if dependency.hiddenName == key2
+                                                calculatedDependencies[key1][0].disableOption(option.name)
+                                            end
+                                        end
+                                    end
+
+                                    #--------------------------------------------------------------------
+
+                                    calculatedDependencies[key2+"-Codependency"].each do |dependency|
+                                        if dependency.hiddenName == key1
+                                            calculatedDependencies[key2].delete(dependency)
+                                        end
+                                    end
+
+                                    calculatedDependencies[key2+"-Codependency"][0].options.each do |option|
+                                        option.dependencies.each do |dependency|
+                                            if dependency.hiddenName == key1
+                                                calculatedDependencies[key2][0].disableOption(option.name)
+                                            end
+                                        end
+                                    end
+
+                                    #--------------------------------------------------------------------
+
+                                end
+
+                            #Inextricable dependency case
+                            else
+                                showCalculationDoneMessage
+                                showInextricableDependenciesMessage([calculatedDependencies[key1][0],calculatedDependencies[key2][0]])
+                                exitProgram
+                            end
+
+                        end
+
+                    end
+                end
+            end
 
             return calculatedDependencies
         end
