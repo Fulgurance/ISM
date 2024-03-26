@@ -1628,6 +1628,8 @@ module ISM
 
                             if differentOptions
                                 dependency.options.each do |option|
+                                    playCalculationAnimation
+
                                     dependencies[key].enableOption(option)
                                 end
 
@@ -1675,6 +1677,8 @@ module ISM
 
                         if calculatedDependencies.has_key?(key)
                             calculatedDependencies[key].each do |software|
+                                playCalculationAnimation
+
                                 dependencies[software.hiddenName] = software
                             end
                         else
