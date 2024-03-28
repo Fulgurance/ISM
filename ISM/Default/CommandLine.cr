@@ -110,6 +110,7 @@ module ISM
             CalculationTitle = "ISM start to calculate dependencies: "
             CalculationWaitingText = "Checking dependencies tree"
             SynchronizationWaitingText = "Synchronization with the online database"
+            CodependencyExtensionText = "Codependency"
             CalculationDoneText = "Done !"
             Separator = "============"
             NoOptionText = "no option"
