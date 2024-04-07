@@ -1304,7 +1304,7 @@ module ISM
             singleChoiceDependencies = Array(Array(String)).new
             blockers = Array(String).new
 
-            conditionsArray.each_with_index do |word, index|
+            conditionArray.each_with_index do |word, index|
 
                 parenthesis = word.includes?("(")
 
