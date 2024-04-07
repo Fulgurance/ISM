@@ -1428,9 +1428,9 @@ module ISM
 
                     newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
 
-                    kernelOption.dependencies += kernelOption.dependencies + newDependencies
-                    kernelOption.singleChoiceDependencies += kernelOption.singleChoiceDependencies + newSingleChoiceDependencies
-                    kernelOptions.blockers += kernelOption.blockers + newBlockers
+                    kernelOption.dependencies += newDependencies
+                    kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
+                    kernelOptions.blockers += newBlockers
                 end
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
