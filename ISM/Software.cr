@@ -1283,35 +1283,47 @@ module ISM
             runScript("#{kernelSourcesPath}config",arguments,"#{kernelSourcesPath}scripts")
         end
 
+        #Return an array splitted, except when there are conditions between parenthesis
+        def getConditionArray(conditions : String) : Array(String)
+            parenthesisArray = conditions.scan(/(!?\(.*?\))/)
+
+            parenthesisArray.each do |old|
+                new = old.to_s.gsub(" && ","&&")
+                new = new.gsub(" || ","||")
+
+                conditions = conditions.gsub(old.to_s,new)
+            end
+
+            return conditions.split(" && ")
+        end
+
         def parseKconfigConditions(conditions : String)
+            conditionArray = getConditionArray(conditions)
+
             dependencies = Array(String).new
             singleChoiceDependencies = Array(Array(String)).new
-            specialDependencies = Array(String).new
             blockers = Array(String).new
-
-            conditionsArray = conditions.split(" ")
 
             conditionsArray.each_with_index do |word, index|
 
-                if word == "&&"
+                parenthesis = word.includes?("(")
 
-                elsif word == "||"
+                if parenthesis
 
-                elsif word.starts_with?("!") && word[1] != "("
+                    reverseCondition = word.starts_with?("!")
 
-                elsif word.starts_with?("!(")
-
-                elsif word.starts_with?("(")
-
-                elsif word.ends_with?(")")
 
                 else
-
+                    if word.starts_with?("!")
+                        blockers.push(word)
+                    else
+                        dependencies.push(word)
+                    end
                 end
 
             end
 
-            return dependencies,singleChoiceDependencies,specialDependencies,blockers
+            return dependencies,singleChoiceDependencies,blockers
         end
 
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
@@ -1414,21 +1426,19 @@ module ISM
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
 
-                    #newDependencies,newSingleChoiceDependencies,newSpecialDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
+                    #newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
 
                     kernelOption.dependencies = kernelOption.dependencies + [line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],"")] # + newDependencies
                     #kernelOption.singleChoiceDependencies = kernelOption.singleChoiceDependencies + newSingleChoiceDependencies
-                    #kernelOptions.specialDependencies = kernelOption.specialDependencies + newSpecialDependencies
                     #kernelOptions.blockers = kernelOption.blockers + newBlockers
                 end
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
 
-                    #newDependencies,newSingleChoiceDependencies,newSpecialDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:select],""))
+                    #newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:select],""))
 
                     kernelOption.dependencies = kernelOption.dependencies + [line.gsub(ISM::Default::Software::KconfigKeywords[:select],"")]# + newDependencies
                     #kernelOption.singleChoiceDependencies = kernelOption.singleChoiceDependencies + newSingleChoiceDependencies
-                    #kernelOptions.specialDependencies = kernelOption.specialDependencies + newSpecialDependencies
                     #kernelOptions.blockers = kernelOption.blockers + newBlockers
                 end
 

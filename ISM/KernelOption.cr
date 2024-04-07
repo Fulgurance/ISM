@@ -8,16 +8,12 @@ module ISM
     property tristate : Bool
     property dependencies : Array(String)
     property singleChoiceDependencies : Array(Array(String))
-    property conditionalKernelDependencies : Array(ISM::ConditionalKernelDependency)
-    property specialDependencies : Array(String)
     property blockers : Array(String)
 
     def initialize( @name = String.new,
                     @tristate = false,
                     @dependencies = Array(String).new,
                     @singleChoiceDependencies = Array(Array(String)).new,
-                    @conditionalKernelDependencies = Array(ISM::ConditionalKernelDependency).new,
-                    @specialDependencies = Array(String).new,
                     @blockers = Array(String).new)
     end
 
@@ -36,8 +32,6 @@ module ISM
         @tristate = information.tristate
         @dependencies = information.dependencies
         @singleChoiceDependencies = information.singleChoiceDependencies
-        @conditionalKernelDependencies = information.conditionalKernelDependencies
-        @specialDependencies = information.specialDependencies
         @blockers = information.blockers
     end
 
@@ -52,8 +46,6 @@ module ISM
                                         @tristate,
                                         @dependencies,
                                         @singleChoiceDependencies,
-                                        @conditionalKernelDependencies,
-                                        @specialDependencies,
                                         @blockers)
 
         file = File.open(writeInformationFilePath,"w")
