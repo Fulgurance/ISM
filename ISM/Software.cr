@@ -1430,7 +1430,7 @@ module ISM
 
                     kernelOption.dependencies += newDependencies
                     kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
-                    kernelOptions.blockers += newBlockers
+                    kernelOption.blockers += newBlockers
                 end
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
@@ -1439,7 +1439,7 @@ module ISM
 
                     kernelOption.dependencies += newDependencies
                     kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
-                    kernelOptions.blockers += newBlockers
+                    kernelOption.blockers += newBlockers
                 end
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
