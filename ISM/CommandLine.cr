@@ -1800,7 +1800,14 @@ module ISM
         end
 
         def getNeededSoftwares : Array(ISM::SoftwareInformation)
-            dependencyTable = getDependencyTable(getRequiredDependencies(@requestedSoftwares))
+            softwareHash = Hash(String,ISM::SoftwareInformation).new
+
+            @requestedSoftwares.each do |software|
+                softwareHash[software.hiddenName] = software
+            end
+
+            dependencyTable = getDependencyTable(softwareHash)
+
             return getSortedDependencies(dependencyTable)
         end
 
