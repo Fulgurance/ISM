@@ -1682,7 +1682,11 @@ module ISM
                                 dependencies[software.hiddenName] = software
                             end
                         else
-                            dependencies[key] = softwareList[key]
+                            if softwareList.has_key?(key)
+                                dependencies[key] = softwareList[key]
+                            else
+                                dependencies[key] = software
+                            end
                         end
 
                         nextDependencies += dependencies[key].dependencies
