@@ -1714,7 +1714,10 @@ module ISM
                 software.dependencies.each do |dependency|
                     playCalculationAnimation
 
-                    calculatedDependencies[dependency.hiddenName] = getDependencyTree(dependency.information, softwareList, calculatedDependencies)
+                    dependencyInformation = dependency.information
+
+                    if !softwareIsInstalled(dependencyInformation)
+                    calculatedDependencies[dependency.hiddenName] = getDependencyTree(dependencyInformation, softwareList, calculatedDependencies)
                 end
             end
 
