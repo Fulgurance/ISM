@@ -1808,11 +1808,7 @@ module ISM
         end
 
         def getNeededSoftwares : Array(ISM::SoftwareInformation)
-            softwareHash = Hash(String,ISM::SoftwareInformation).new
-
-            @requestedSoftwares.each do |software|
-                softwareHash[software.hiddenName] = software
-            end
+            softwareHash = getRequiredDependencies(@requestedSoftwares)
 
             dependencyTable = getDependencyTable(softwareHash)
 
