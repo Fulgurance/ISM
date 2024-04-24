@@ -192,7 +192,7 @@ module ISM
             moveFile(workDirectoryPath(false)+"/"+@information.versionName,workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
-        def extractArchive(archivePath : String, destinationPath : String)
+        def extractArchive(archivePath : String, destinationPath = workDirectoryPath(false))
 
             process = Process.run(  "tar -xf #{archivePath}",
                                     error: :inherit,
