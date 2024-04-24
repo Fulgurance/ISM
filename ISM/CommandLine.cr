@@ -1808,7 +1808,7 @@ module ISM
         end
 
         def getNeededSoftwares : Array(ISM::SoftwareInformation)
-            softwareHash = getRequiredDependencies(@requestedSoftwares)
+            softwareHash = getRequiredDependencies(@requestedSoftwares, allowRebuild: true)
 
             dependencyTable = getDependencyTable(softwareHash)
 
