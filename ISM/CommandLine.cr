@@ -1716,9 +1716,10 @@ module ISM
 
                     dependencyInformation = dependency.information
 
-                    if !softwareIsInstalled(dependencyInformation)
+                    #EXPERIMENTAL DELETION (PROBABLY USELESS)
+                    #if !softwareIsInstalled(dependencyInformation)
                         calculatedDependencies[dependency.hiddenName] = getDependencyTree(dependencyInformation, softwareList, calculatedDependencies)
-                    end
+                    #end
                 end
             end
 
