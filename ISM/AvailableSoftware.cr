@@ -69,35 +69,38 @@ module ISM
         end
 
         def greatestVersion(condition=String.new) : ISM::SoftwareInformation
-            if condition == "" || condition == ">=0.0.0"
-                return @versions.max_by {|entry| SemanticVersion.parse(entry.version)}
-            elsif !includeComparators(condition) && condition != ""
-                @versions.each do |software|
-                    if software.version == condition
-                        return software
+            if @versions.size > 0
+                if condition == "" || condition == ">=0.0.0"
+                    return @versions.max_by {|entry| SemanticVersion.parse(entry.version)}
+                elsif !includeComparators(condition) && condition != ""
+                    @versions.each do |software|
+                        if software.version == condition
+                            return software
+                        end
                     end
+                elsif intervalComparator(condition)
+                    startCondition = condition.split(" ~ ")[0][1..-1]
+                    endCondition = condition.split(" ~ ")[1][0..-2]
+
+                    startVersion = startCondition.tr("><=","")
+                    endVersion = endCondition.tr("><=","")
+
+                    startSemanticVersion = SemanticVersion.parse(startVersion)
+                    endSemanticVersion = SemanticVersion.parse(endVersion)
+
+                    intervalStart = getVersionByCondition(condition: startCondition, returnMaximum: false)
+                    intervalEnd = getVersionByCondition(condition: endCondition, returnMaximum: true)
+
+                    temp = @versions.select {|entry| SemanticVersion.parse(entry.version) >= startSemanticVersion && SemanticVersion.parse(entry.version) <= endSemanticVersion}
+
+                    return temp.max_by {|entry| SemanticVersion.parse(entry.version)}
+                else
+                    return getVersionByCondition(condition: condition, returnMaximum: true)
                 end
-            elsif intervalComparator(condition)
-                startCondition = condition.split(" ~ ")[0][1..-1]
-                endCondition = condition.split(" ~ ")[1][0..-2]
-
-                startVersion = startCondition.tr("><=","")
-                endVersion = endCondition.tr("><=","")
-
-                startSemanticVersion = SemanticVersion.parse(startVersion)
-                endSemanticVersion = SemanticVersion.parse(endVersion)
-
-                intervalStart = getVersionByCondition(condition: startCondition, returnMaximum: false)
-                intervalEnd = getVersionByCondition(condition: endCondition, returnMaximum: true)
-
-                temp = @versions.select {|entry| SemanticVersion.parse(entry.version) >= startSemanticVersion && SemanticVersion.parse(entry.version) <= endSemanticVersion}
-
-                return temp.max_by {|entry| SemanticVersion.parse(entry.version)}
+                return ISM::SoftwareInformation.new
             else
-                return getVersionByCondition(condition: condition, returnMaximum: true)
+                return ISM::SoftwareInformation.new
             end
-
-            return ISM::SoftwareInformation.new
         end
 
     end
