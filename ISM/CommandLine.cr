@@ -65,7 +65,7 @@ module ISM
             if !Dir.exists?(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
                 Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
             end
-            #########################
+
             availableKernels = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
 
             availableKernels.each do |kernelDirectory|
@@ -84,18 +84,6 @@ module ISM
                 @kernels << availableKernel
 
             end
-            #########################
-
-            #kernelOptionFiles = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
-
-            #NEED TO GET FIRST THE CURRENT KERNEL FOR THE SYSTEM, AND THEN WE CAN GET THE RIGHT PATH
-            #OR CREATE A NEW VARIABLE TO STORE ALL KERNEL OPTIONS BY VERSION
-
-            #kernelOptionFiles.each do |kernelOptionFile|
-                #kernelOption = ISM::KernelOption.new
-                #kernelOption.loadInformationFile(kernelOptionFile)
-                #@kernelOptions << kernelOption
-            #end
         end
 
         def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
