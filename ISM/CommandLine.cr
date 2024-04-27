@@ -76,7 +76,7 @@ module ISM
 
                 kernelOptionFiles.each do |kernelOptionFile|
                     kernelOption = ISM::KernelOption.new
-                    kernelOption.loadInformationFile(kernelOptionFile)
+                    kernelOption.loadInformationFile(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelDirectory+"/"+kernelOptionFile)
 
                     availableKernel.options << kernelOption
                 end
