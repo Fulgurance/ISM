@@ -9,7 +9,7 @@ module ISM
         property debugLevel : Int32
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
-        property kernelOptions : Array(ISM::KernelOption)
+        property kernels : Array(ISM::AvailableKernel)
         property softwares : Array(ISM::AvailableSoftware)
         property installedSoftwares : Array(ISM::SoftwareInformation)
         property ports : Array(ISM::Port)
@@ -30,7 +30,7 @@ module ISM
             @debugLevel = ISM::Default::CommandLine::DebugLevel
             @options = ISM::Default::CommandLine::Options
             @settings = ISM::CommandLineSettings.new
-            @kernelOptions = Array(ISM::KernelOption).new
+            @kernels = Array(ISM::AvailableKernel).new
             @softwares = Array(ISM::AvailableSoftware).new
             @installedSoftwares = Array(ISM::SoftwareInformation).new
             @ports = Array(ISM::Port).new
@@ -65,14 +65,37 @@ module ISM
             if !Dir.exists?(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
                 Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
             end
+            #########################
+            availableKernels = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
 
-            kernelOptionFiles = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+            availableKernels.each do |kernelDirectory|
 
-            kernelOptionFiles.each do |kernelOptionFile|
-                kernelOption = ISM::KernelOption.new
-                kernelOption.loadInformationFile(kernelOptionFile)
-                @kernelOptions << kernelOption
+                kernelOptionFiles = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelDirectory)
+
+                availableKernel = ISM::AvailableKernel.new(kernelDirectory)
+
+                kernelOptionFiles.each do |kernelOptionFile|
+                    kernelOption = ISM::KernelOption.new
+                    kernelOption.loadInformationFile(kernelOptionFile)
+
+                    availableKernel.options << kernelOption
+                end
+
+                @kernels << availableKernel
+
             end
+            #########################
+
+            #kernelOptionFiles = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+
+            #NEED TO GET FIRST THE CURRENT KERNEL FOR THE SYSTEM, AND THEN WE CAN GET THE RIGHT PATH
+            #OR CREATE A NEW VARIABLE TO STORE ALL KERNEL OPTIONS BY VERSION
+
+            #kernelOptionFiles.each do |kernelOptionFile|
+                #kernelOption = ISM::KernelOption.new
+                #kernelOption.loadInformationFile(kernelOptionFile)
+                #@kernelOptions << kernelOption
+            #end
         end
 
         def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
