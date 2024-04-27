@@ -1738,54 +1738,56 @@ module ISM
                             if softwaresAreCodependent(calculatedDependencies[key1][0], calculatedDependencies[key2][0])
                                 #For both entry:
                                 #-------------------
-                                #Clone and delete codependencies from clone list with different name (ex: name-codependency) (disable options if it relative to the options)
+                                #If it's related to an optional codependency:
+                                #   Clone and delete codependencies from clone list with different name (ex: name-codependency) (disable options if it relative to the options)
                                 if !key1.includes?("-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !key2.includes?("-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !calculatedDependencies.has_key?(key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !calculatedDependencies.has_key?(key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}")
 
-                                    calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key1].clone
-                                    calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key2].clone
-
-                                    #RELATED TO OPTIONS OR DIRECT DEPENDENCIES ?
+                                    #RELATED TO OPTION OR DIRECT DEPENDENCY ?
                                     key1HaveOptionalCodependency = calculatedDependencies[key1][0].options.map { |entry| entry.name ==  calculatedDependencies[key2][0].name }
                                     key2HaveOptionalCodependency = calculatedDependencies[key2][0].options.map { |entry| entry.name ==  calculatedDependencies[key1][0].name }
 
+                                    #--------------------------------------------------------------------
                                     if key1HaveOptionalCodependency
-                                    #--------------------------------------------------------------------
+                                        calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key1].clone
 
-                                    calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
-                                        if dependency.hiddenName == key2
-                                            calculatedDependencies[key1].delete(dependency)
-                                        end
-                                    end
-
-                                    calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"][0].options.each do |option|
-                                        option.dependencies.each do |dependency|
+                                        calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
                                             if dependency.hiddenName == key2
-                                                calculatedDependencies[key1][0].disableOption(option.name)
+                                                calculatedDependencies[key1].delete(dependency)
                                             end
                                         end
+
+                                        calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"][0].options.each do |option|
+                                            option.dependencies.each do |dependency|
+                                                if dependency.hiddenName == key2
+                                                    calculatedDependencies[key1][0].disableOption(option.name)
+                                                end
+                                            end
+                                        end
+
                                     end
+                                    #--------------------------------------------------------------------
 
                                     #--------------------------------------------------------------------
-                                    end
-
                                     if key2HaveOptionalCodependency
-                                    #--------------------------------------------------------------------
-                                    calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
-                                        if dependency.hiddenName == key1
-                                            calculatedDependencies[key2].delete(dependency)
-                                        end
-                                    end
 
-                                    calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"][0].options.each do |option|
-                                        option.dependencies.each do |dependency|
+                                        calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key2].clone
+
+                                        calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
                                             if dependency.hiddenName == key1
-                                                calculatedDependencies[key2][0].disableOption(option.name)
+                                                calculatedDependencies[key2].delete(dependency)
                                             end
                                         end
-                                    end
 
-                                    #--------------------------------------------------------------------
+                                        calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"][0].options.each do |option|
+                                            option.dependencies.each do |dependency|
+                                                if dependency.hiddenName == key1
+                                                    calculatedDependencies[key2][0].disableOption(option.name)
+                                                end
+                                            end
+                                        end
+
                                     end
+                                    #--------------------------------------------------------------------
 
                                 end
 
