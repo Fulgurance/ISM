@@ -1744,6 +1744,11 @@ module ISM
                                     calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key1].clone
                                     calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key2].clone
 
+                                    #RELATED TO OPTIONS OR DIRECT DEPENDENCIES ?
+                                    key1HaveOptionalCodependency = calculatedDependencies[key1][0].options.map { |entry| entry.name ==  calculatedDependencies[key2][0].name }
+                                    key2HaveOptionalCodependency = calculatedDependencies[key2][0].options.map { |entry| entry.name ==  calculatedDependencies[key1][0].name }
+
+                                    if key1HaveOptionalCodependency
                                     #--------------------------------------------------------------------
 
                                     calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
@@ -1761,7 +1766,10 @@ module ISM
                                     end
 
                                     #--------------------------------------------------------------------
+                                    end
 
+                                    if key2HaveOptionalCodependency
+                                    #--------------------------------------------------------------------
                                     calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
                                         if dependency.hiddenName == key1
                                             calculatedDependencies[key2].delete(dependency)
@@ -1777,6 +1785,7 @@ module ISM
                                     end
 
                                     #--------------------------------------------------------------------
+                                    end
 
                                 end
 
