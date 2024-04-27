@@ -1743,8 +1743,8 @@ module ISM
                                 if !key1.includes?("-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !key2.includes?("-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !calculatedDependencies.has_key?(key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !calculatedDependencies.has_key?(key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}")
 
                                     #RELATED TO OPTION OR DIRECT DEPENDENCY ?
-                                    key1HaveOptionalCodependency = calculatedDependencies[key1][0].options.map { |entry| entry.name ==  calculatedDependencies[key2][0].name }
-                                    key2HaveOptionalCodependency = calculatedDependencies[key2][0].options.map { |entry| entry.name ==  calculatedDependencies[key1][0].name }
+                                    key1HaveOptionalCodependency = calculatedDependencies[key1][0].option(calculatedDependencies[key2][0].name)
+                                    key2HaveOptionalCodependency = calculatedDependencies[key2][0].option(calculatedDependencies[key1][0].name)
 
                                     #--------------------------------------------------------------------
                                     if key1HaveOptionalCodependency
