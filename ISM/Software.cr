@@ -512,22 +512,22 @@ module ISM
         def makeLink(path : String, targetPath : String, linkType : Symbol)
             if File.exists?(targetPath) && File.symlink?(targetPath)
                 deleteFile(targetPath)
-            else
-                begin
-                    case linkType
-                    when :hardLink
-                        FileUtils.ln(path, targetPath)
-                    when :symbolicLink
-                        FileUtils.ln_s(path, targetPath)
-                    when :symbolicLinkByOverwrite
-                        FileUtils.ln_sf(path, targetPath)
-                    else
-                        Ism.exitProgram
-                    end
-                rescue error
-                    Ism.notifyOfMakeLinkError(path, targetPath, error)
+            end
+
+            begin
+                case linkType
+                when :hardLink
+                    FileUtils.ln(path, targetPath)
+                when :symbolicLink
+                    FileUtils.ln_s(path, targetPath)
+                when :symbolicLinkByOverwrite
+                    FileUtils.ln_sf(path, targetPath)
+                else
                     Ism.exitProgram
                 end
+            rescue error
+                Ism.notifyOfMakeLinkError(path, targetPath, error)
+                Ism.exitProgram
             end
         end
 
