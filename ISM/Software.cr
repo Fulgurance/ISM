@@ -510,22 +510,24 @@ module ISM
         end
 
         def makeLink(path : String, targetPath : String, linkType : Symbol)
-            begin
-                case linkType
-                when :hardLink
-                    FileUtils.ln(path, targetPath)
-                when :symbolicLink
-                    FileUtils.ln_s(path, targetPath)
-                when :symbolicLinkByOverwrite
-                    FileUtils.ln_sf(path, targetPath)
-                else
+            if File.exists?(targetPath) && File.symlink?(targetPath)
+                deleteFile(targetPath)
+            else
+                begin
+                    case linkType
+                    when :hardLink
+                        FileUtils.ln(path, targetPath)
+                    when :symbolicLink
+                        FileUtils.ln_s(path, targetPath)
+                    when :symbolicLinkByOverwrite
+                        FileUtils.ln_sf(path, targetPath)
+                    else
+                        Ism.exitProgram
+                    end
+                rescue error
+                    Ism.notifyOfMakeLinkError(path, targetPath, error)
                     Ism.exitProgram
                 end
-            rescue File::AlreadyExistsError
-
-            rescue error
-                Ism.notifyOfMakeLinkError(path, targetPath, error)
-                Ism.exitProgram
             end
         end
 
