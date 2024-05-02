@@ -1608,11 +1608,12 @@ module ISM
                 end
 
                 currentDependencies.each do |dependency|
+                    playCalculationAnimation
+
                     dependencyInformation = dependency.information
                     installed = softwareIsInstalled(dependencyInformation)
 
                     if !installed || installed && allowRebuild == true && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch == true
-                        playCalculationAnimation
 
                         #Software or version not available
                         if dependencyInformation.name == "" || dependencyInformation.version == ""
@@ -1681,6 +1682,7 @@ module ISM
                 end
 
                 currentDependencies.each do |dependency|
+                    playCalculationAnimation
 
                     key = dependency.hiddenName
 
@@ -1762,12 +1764,16 @@ module ISM
                                         calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key1].clone
 
                                         calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
+                                            playCalculationAnimation
+
                                             if dependency.hiddenName == key2
                                                 calculatedDependencies[key1].delete(dependency)
                                             end
                                         end
 
                                         calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"][0].options.each do |option|
+                                            playCalculationAnimation
+
                                             option.dependencies.each do |dependency|
                                                 if dependency.hiddenName == key2
                                                     calculatedDependencies[key1][0].disableOption(option.name)
@@ -1784,12 +1790,16 @@ module ISM
                                         calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key2].clone
 
                                         calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
+                                            playCalculationAnimation
+
                                             if dependency.hiddenName == key1
                                                 calculatedDependencies[key2].delete(dependency)
                                             end
                                         end
 
                                         calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"][0].options.each do |option|
+                                            playCalculationAnimation
+
                                             option.dependencies.each do |dependency|
                                                 if dependency.hiddenName == key1
                                                     calculatedDependencies[key2][0].disableOption(option.name)
@@ -1870,6 +1880,7 @@ module ISM
 
             #CHECK IF ONE OF THE REQUESTED SOFTWARE IS NOT REQUIRED
             @requestedSoftwares.each do |software|
+                playCalculationAnimation
 
                 #If it's require, add to wrong arguments
                 if requiredSoftwares.has_key?(software.versionName)
