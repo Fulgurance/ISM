@@ -676,10 +676,11 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link, error)
         end
 
-        def notifyOfConnexionError(link : String,)
+        def notifyOfConnexionError(link : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorConnexionText1 +
                                     link +
-                                    ISM::Default::CommandLine::ErrorConnexionText2)
+                                    ISM::Default::CommandLine::ErrorConnexionText2,
+                                    error)
         end
 
         def notifyOfCheckError(archive : String, md5sum : String, error = nil)
