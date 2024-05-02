@@ -29,6 +29,8 @@ module ISM
             RecordUnneededKernelFeaturesText = "Recording unneeded kernel features for "
             UninstallText = "Uninstalling "
             ErrorDownloadText = "Failed to download from "
+            ErrorConnexionText1 = "Failed to connect to "
+            ErrorConnexionText2 = ". The connexion is unaivalable"
             ErrorCheckText1 = "Failed check because the md5sum digest of "
             ErrorCheckText2 = " doesn't match with the given md5sum value "
             ErrorExtractText1 = "Failed to extract the archive located at "

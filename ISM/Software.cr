@@ -81,54 +81,58 @@ module ISM
             error = String.new
 
             until downloaded
-                HTTP::Client.get(link) do |response|
-                    if response.status.redirection?
-                        begin
-                            link = response.headers["location"]
-                        rescue
-                            error = "#{ISM::Default::Software::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::Software::DownloadSourceRedirectionErrorText2}"
+                begin
+                    HTTP::Client.get(link) do |response|
+                        if response.status.redirection?
+                            begin
+                                link = response.headers["location"]
+                            rescue
+                                error = "#{ISM::Default::Software::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::Software::DownloadSourceRedirectionErrorText2}"
 
-                            Ism.notifyOfDownloadError(link, error)
-                            Ism.exitProgram
+                                Ism.notifyOfDownloadError(link, error)
+                                Ism.exitProgram
+                            end
+                            break
                         end
-                        break
-                    end
 
-                    filePath = "#{workDirectoryPath(false)}/#{filename+fileExtensionName}"
-                    colorizedFileFullName = "#{filename}#{fileExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
-                    colorizedLink = "#{link.colorize(:magenta)}"
+                        filePath = "#{workDirectoryPath(false)}/#{filename+fileExtensionName}"
+                        colorizedFileFullName = "#{filename}#{fileExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                        colorizedLink = "#{link.colorize(:magenta)}"
 
-                    lastSpeedUpdate = Time.monotonic
-                    average = 0
-                    bytesLastPeriod = 0
+                        lastSpeedUpdate = Time.monotonic
+                        average = 0
+                        bytesLastPeriod = 0
 
-                    if response.status_code == 200
-                        buffer = Bytes.new(65536)
-                        totalRead = Int64.new(0)
-                        lenght = response.headers["Content-Length"]? ? response.headers["Content-Length"].to_i32 : Int64.new(0)
+                        if response.status_code == 200
+                            buffer = Bytes.new(65536)
+                            totalRead = Int64.new(0)
+                            lenght = response.headers["Content-Length"]? ? response.headers["Content-Length"].to_i32 : Int64.new(0)
 
-                        File.open(filePath, "wb") do |data|
-                            while (pos = response.body_io.read(buffer)) > 0
-                                lapsed = Time.monotonic - lastSpeedUpdate
+                            File.open(filePath, "wb") do |data|
+                                while (pos = response.body_io.read(buffer)) > 0
+                                    lapsed = Time.monotonic - lastSpeedUpdate
 
-                                if lapsed.total_seconds >= 1
-                                    div = lapsed.total_nanoseconds / 1_000_000_000
-                                    average = (bytesLastPeriod / div).to_i32!
-                                    bytesLastPeriod = 0
-                                    lastSpeedUpdate = Time.monotonic
+                                    if lapsed.total_seconds >= 1
+                                        div = lapsed.total_nanoseconds / 1_000_000_000
+                                        average = (bytesLastPeriod / div).to_i32!
+                                        bytesLastPeriod = 0
+                                        lastSpeedUpdate = Time.monotonic
+                                    end
+
+                                    data.write(buffer[0...pos])
+                                    bytesLastPeriod += pos
+                                    totalRead += pos
+
+                                    if lenght > 0
+                                        text = "\t#{"| ".colorize(:green)} #{colorizedFileFullName} [#{(Int64.new(totalRead*100/lenght).to_s+"%").colorize(:green)}] #{"{".colorize(:green)}#{average.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
+                                    else
+                                        text = "\t#{"| ".colorize(:green)} #{colorizedFileFullName} [#{"0%".colorize(:green)}] #{"{".colorize(:green)}#{average.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
+                                    end
+
+                                    print text+"\r"
                                 end
+                            rescue
 
-                                data.write(buffer[0...pos])
-                                bytesLastPeriod += pos
-                                totalRead += pos
-
-                                if lenght > 0
-                                    text = "\t#{"| ".colorize(:green)} #{colorizedFileFullName} [#{(Int64.new(totalRead*100/lenght).to_s+"%").colorize(:green)}] #{"{".colorize(:green)}#{average.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
-                                else
-                                    text = "\t#{"| ".colorize(:green)} #{colorizedFileFullName} [#{"0%".colorize(:green)}] #{"{".colorize(:green)}#{average.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
-                                end
-
-                                print text+"\r"
                             end
                         end
 
@@ -139,6 +143,10 @@ module ISM
                         Ism.notifyOfDownloadError(link, error)
                         Ism.exitProgram
                     end
+                end
+                rescue
+                    Ism.notifyOfConnexionError(link)
+                    Ism.exitProgram
                 end
             end
 
