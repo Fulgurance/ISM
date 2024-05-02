@@ -131,19 +131,16 @@ module ISM
 
                                     print text+"\r"
                                 end
-                            rescue
-
                             end
+
+                            downloaded = true
+                        else
+                            error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
+
+                            Ism.notifyOfDownloadError(link, error)
+                            Ism.exitProgram
                         end
-
-                        downloaded = true
-                    else
-                        error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
-
-                        Ism.notifyOfDownloadError(link, error)
-                        Ism.exitProgram
                     end
-                end
                 rescue
                     Ism.notifyOfConnexionError(link)
                     Ism.exitProgram
