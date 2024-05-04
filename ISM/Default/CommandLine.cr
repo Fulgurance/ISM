@@ -117,6 +117,7 @@ module ISM
             Separator = "============"
             NoOptionText = "no option"
             NewText = "New!"
+            AdditionalVersionText = "Additional Version"
             UpdateText = "Update"
             BuildingPhaseText = "Building Phase"
             OptionUpdateText = "Option Update"

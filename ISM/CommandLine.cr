@@ -343,29 +343,14 @@ module ISM
             end
         end
 
-        def softwareAnyVersionInstalled(softwareName : String, options = Array(String).new) : Bool
+        def softwareAnyVersionInstalled(softwareName : String) : Bool
 
             @installedSoftwares.each do |installedSoftware|
 
-                optionNames = installedSoftware.options.map { |option| option.name}
-                sameOptions = ((optionNames & options) == optionNames)
-                includeOptions = (optionNames & options).any?
-
-                if  softwareName == installedSoftware.name
-                    if options.empty?
-                        if !installedSoftware.passEnabled
-                            return true
-                        end
-                    else
-                        if sameOptions
-                            return true
-                        else
-                            if includeOptions
-                                return true
-                            end
-                        end
-                    end
+                if softwareName == installedSoftware.name && !installedSoftware.passEnabled
+                    return true
                 end
+
             end
 
             return false
@@ -442,31 +427,31 @@ module ISM
             installedSoftware = loadInstalledSoftware(software.port,software.name,software.version)
 
             if !softwareIsInstalled(software)
-                if !softwareAnyVersionInstalled(software.name)
-                    return :new
-                else
-                    if software.passEnabled
-                        return :buildingPhase
-                    else
-                        if software.version != installedSoftware.version
-                            return :update
-                        else
-                            return :optionUpdate
-                        end
-                    end
-                end
-            else
-                if software.passEnabled
+
+                #Pass case
+                if software.version == installedSoftware.version && software.passEnabled
                     return :buildingPhase
-                elsif !software.passEnabled && installedSoftware.passEnabled
-                    return :new
-                else
-                    if software.options != installedSoftware.options
-                        return :optionUpdate
-                    else
-                        return :rebuild
-                    end
                 end
+
+                #Additional version case
+                if software.version < installedSoftware.version
+                    :additionalVersion
+                end
+
+                #Update case
+                if software.version > installedSoftware.version
+                    return :update
+                end
+
+                return :new
+            else
+
+                #Option updates case (!check if it's the right condition)
+                if software.options != installedSoftware.options
+                    return :optionUpdate
+                end
+
+                return :rebuild
             end
         end
 
@@ -1176,6 +1161,8 @@ module ISM
                     case status
                     when :new
                         additionalText += "#{ISM::Default::CommandLine::NewText.colorize(:yellow)}"
+                    when :additionalVersion
+                        additionalText += "#{ISM::Default::CommandLine::AdditionalVersionText.colorize(:yellow)}"
                     when :update
                         additionalText += "#{ISM::Default::CommandLine::UpdateText.colorize(:yellow)}"
                     when :buildingPhase
