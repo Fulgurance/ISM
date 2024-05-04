@@ -343,11 +343,28 @@ module ISM
             end
         end
 
-        def softwareAnyVersionInstalled(softwareName : String) : Bool
+        def softwareAnyVersionInstalled(softwareName : String, options = Array(String).new) : Bool
 
             @installedSoftwares.each do |installedSoftware|
-                if softwareName == installedSoftware.name && !installedSoftware.passEnabled
-                    return true
+
+                optionNames = installedSoftware.options.map { |option| option.name}
+                sameOptions = ((optionNames & options) == optionNames)
+                includeOptions = (optionNames & options).any?
+
+                if  softwareName == installedSoftware.name
+                    if options.empty?
+                        if !installedSoftware.passEnabled
+                            return true
+                        end
+                    else
+                        if sameOptions
+                            return true
+                        else
+                            if includeOptions
+                                return true
+                            end
+                        end
+                    end
                 end
             end
 
