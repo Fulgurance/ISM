@@ -523,7 +523,7 @@ module ISM
                 Ism.exitProgram
             end
 
-            if File.exists?(targetPath) && File.symlink?(targetPath)
+            if File.symlink?(targetPath) && File.symlink?(targetPath)
                 deleteFile(targetPath)
             end
 
