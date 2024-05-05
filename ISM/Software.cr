@@ -1243,6 +1243,7 @@ module ISM
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
                         makeDirectory(finalDestination)
+                        installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                     end
                 else
                     moveFile(entry,finalDestination)
