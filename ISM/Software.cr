@@ -518,6 +518,11 @@ module ISM
         end
 
         def makeLink(path : String, targetPath : String, linkType : Symbol)
+            if File.exists?(targetPath)
+                Ism.notifyOfMakeLinkFileExistError(path, targetPath)
+                Ism.exitProgram
+            end
+
             if File.exists?(targetPath) && File.symlink?(targetPath)
                 deleteFile(targetPath)
             end
@@ -531,6 +536,7 @@ module ISM
                 when :symbolicLinkByOverwrite
                     FileUtils.ln_sf(path, targetPath)
                 else
+                    Ism.notifyOfMakeLinkUnknowTypeError(path, targetPath, linkType)
                     Ism.exitProgram
                 end
             rescue error

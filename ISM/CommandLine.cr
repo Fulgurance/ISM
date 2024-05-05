@@ -719,6 +719,23 @@ module ISM
                                     targetPath, error)
         end
 
+        def notifyOfMakeLinkFileExistError(path : String, targetPath : String, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkFileExistText1 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorMakeLinkFileExistText2 +
+                                    targetPath +
+                                    ISM::Default::CommandLine::ErrorMakeLinkFileExistText3, error)
+        end
+
+        def notifyOfMakeLinkUnknowTypeError(path : String, targetPath : String, linkType : Symbol, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText1 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText2 +
+                                    targetPath +
+                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText3 +
+                                    linkType.to_s, error)
+        end
+
         def notifyOfCopyFileError(path : String | Enumerable(String), targetPath : String, error = nil)
             if path.is_a?(Enumerable(String))
                 path = path.join(",")
