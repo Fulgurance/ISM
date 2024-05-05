@@ -429,7 +429,7 @@ module ISM
             if !softwareIsInstalled(software)
 
                 #Pass case
-                if software.version == installedSoftware.version && software.passEnabled
+                if software.passEnabled
                     return :buildingPhase
                 end
 
