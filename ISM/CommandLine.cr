@@ -439,7 +439,7 @@ module ISM
                 end
 
                 #Update case
-                if software.version > installedSoftware.version || installedSoftware.name != ""
+                if software.version > installedSoftware.version && installedSoftware.name != ""
                     return :update
                 end
 
