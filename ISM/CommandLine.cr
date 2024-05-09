@@ -1270,7 +1270,7 @@ module ISM
 
         def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
             puts
-            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" +
+            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     " #{ISM::Default::CommandLine::InstalledText} " +
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
@@ -1280,7 +1280,7 @@ module ISM
 
         def showEndSoftwareUninstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
             puts
-            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" +
+            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     " #{ISM::Default::CommandLine::UninstalledText} " +
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
@@ -1597,7 +1597,7 @@ module ISM
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
                     "] #{ISM::Default::CommandLine::InstallingText} " +
-                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" +
+                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
         end
 
@@ -1606,7 +1606,7 @@ module ISM
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
                     "] #{ISM::Default::CommandLine::UninstallingText} " +
-                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" +
+                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
         end
 
