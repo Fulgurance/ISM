@@ -1150,7 +1150,7 @@ module ISM
             puts "\n"
 
             neededSoftwares.each do |software|
-                softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
                 optionsText = "{ "
 
                 if software.options.empty?
@@ -1246,12 +1246,12 @@ module ISM
             end
         end
 
-        def updateInstallationTerminalTitle(index : Int32, limit : Int32, name : String, version : String)
-            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} #{name} /#{version}/")
+        def updateInstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String)
+            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} @#{port}:#{name} /#{version}/")
         end
 
-        def updateUninstallationTerminalTitle(index : Int32, limit : Int32, name : String, version : String)
-            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::UninstallingText} #{name} /#{version}/")
+        def updateUninstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String)
+            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::UninstallingText} @#{port}:#{name} /#{version}/")
         end
 
         def cleanBuildingDirectory(path : String)
@@ -1268,9 +1268,9 @@ module ISM
             puts "\n"
         end
 
-        def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
+        def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
             puts
-            puts    "#{name.colorize(:green)}" +
+            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" +
                     " #{ISM::Default::CommandLine::InstalledText} " +
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
@@ -1278,9 +1278,9 @@ module ISM
                     "\n"
         end
 
-        def showEndSoftwareUninstallingMessage(index : Int32, limit : Int32, name : String, version : String)
+        def showEndSoftwareUninstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
             puts
-            puts    "#{name.colorize(:green)}" +
+            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" +
                     " #{ISM::Default::CommandLine::UninstalledText} " +
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
@@ -1434,15 +1434,17 @@ module ISM
 
                     targets.each_with_index do |target, index|
 
-                        name = target.information.name
-                        version = target.information.version
-                        versionName = target.information.versionName
+                        information = target.information
+                        port = information.port
+                        name = information.name
+                        version = information.version
+                        versionName = information.versionName
 
                         #START INSTALLATION PROCESS
 
-                        Ism.updateInstallationTerminalTitle(index, limit, name, version)
+                        Ism.updateInstallationTerminalTitle(index, limit, port, name, version)
 
-                        Ism.showStartSoftwareInstallingMessage(index, limit, name, version)
+                        Ism.showStartSoftwareInstallingMessage(index, limit, port, name, version)
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
@@ -1472,7 +1474,7 @@ module ISM
                             Ism.addSoftwareToFavouriteGroup(versionName)
                         end
 
-                        Ism.showEndSoftwareInstallingMessage(index, limit, name, version)
+                        Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version)
 
                         if index < limit-1
                             Ism.showSeparator
@@ -1556,15 +1558,17 @@ module ISM
 
                     targets.each_with_index do |target, index|
 
-                        name = target.information.name
-                        version = target.information.version
-                        versionName = target.information.versionName
+                        information = target.information
+                        port = information.port
+                        name = information.name
+                        version = information.version
+                        versionName = information.versionName
 
                         #START UNINSTALLATION PROCESS
 
-                        Ism.updateUninstallationTerminalTitle(index, limit, name, version)
+                        Ism.updateUninstallationTerminalTitle(index, limit, port, name, version)
 
-                        Ism.showStartSoftwareUninstallingMessage(index, limit, name, version)
+                        Ism.showStartSoftwareUninstallingMessage(index, limit, port, name, version)
 
                         begin
                             target.recordUnneededKernelFeatures
@@ -1573,7 +1577,7 @@ module ISM
                             Ism.exitProgram
                         end
 
-                        Ism.showEndSoftwareInstallingMessage(index, limit, name, version)
+                        Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version)
 
                         if index < limit-1
                             Ism.showSeparator
@@ -1588,7 +1592,7 @@ module ISM
             runTasksFile
         end
 
-        def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, name : String, version : String)
+        def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
             puts    "\n#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
@@ -1597,7 +1601,7 @@ module ISM
                     "\n\n"
         end
 
-        def showStartSoftwareUninstallingMessage(index : Int32, limit : Int32, name : String, version : String)
+        def showStartSoftwareUninstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
             puts    "\n#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
