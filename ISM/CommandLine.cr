@@ -1597,7 +1597,7 @@ module ISM
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
                     "] #{ISM::Default::CommandLine::InstallingText} " +
-                    "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
+                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" +
                     "\n\n"
         end
 
@@ -1606,7 +1606,7 @@ module ISM
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
                     "] #{ISM::Default::CommandLine::UninstallingText} " +
-                    "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
+                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" +
                     "\n\n"
         end
 
