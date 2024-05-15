@@ -1717,6 +1717,7 @@ module ISM
                 else
 
                     @unavailableDependencySignals.each do |softwares|
+                        showCalculationDoneMessage
                         showUnavailableDependencyMessage(softwares[0],softwares[1])
                         exitProgram
                     end
