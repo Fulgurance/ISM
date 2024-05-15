@@ -1647,8 +1647,12 @@ module ISM
                     playCalculationAnimation
 
                     #EXPERIMENTAL
-                    dependencyTree[dependency.hiddenName] += (dependency.dependencies.map { |entry| entry.hiddenName})
-                    dependencyTree[dependency.hiddenName] = dependencyTree[dependency.hiddenName].uniq
+                    if dependencyTree[dependency.hiddenName].empty?
+                        dependencyTree[dependency.hiddenName]
+                    else
+                        dependencyTree[dependency.hiddenName] += (dependency.dependencies.map { |entry| entry.hiddenName})
+                        dependencyTree[dependency.hiddenName] = dependencyTree[dependency.hiddenName].uniq
+                    end
                     #############
 
                     dependencyInformation = dependency.information
