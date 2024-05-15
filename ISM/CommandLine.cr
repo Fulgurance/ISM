@@ -1663,7 +1663,7 @@ module ISM
 
                         if !dependencyInformation.isValid
 
-                            invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.name, version: dependency.version))
+                            invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.name, version: dependency.versionString))
                             #if allowSkipUnavailable == true
 
                                 ###

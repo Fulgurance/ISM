@@ -46,6 +46,10 @@ module ISM
         def version=(@version)
         end
 
+        def versionString : String
+            return @version
+        end
+
         def versionName
             return name+"-"+version
         end
