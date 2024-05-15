@@ -1647,8 +1647,8 @@ module ISM
                     playCalculationAnimation
 
                     #EXPERIMENTAL
-                    if dependencyTree[dependency.hiddenName].empty?
-                        dependencyTree[dependency.hiddenName]
+                    if !dependencyTree.has_key?(dependency.hiddenName)
+                        dependencyTree[dependency.hiddenName] = dependencyTree[dependency.hiddenName]
                     else
                         dependencyTree[dependency.hiddenName] += (dependency.dependencies.map { |entry| entry.hiddenName})
                         dependencyTree[dependency.hiddenName] = dependencyTree[dependency.hiddenName].uniq
