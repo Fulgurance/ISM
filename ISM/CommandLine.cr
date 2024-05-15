@@ -1658,7 +1658,7 @@ module ISM
 
                         if !dependencyInformation.isValid
 
-                            if allowSkipUnavailable == true
+                            #if allowSkipUnavailable == true
 
                                 ###
                                 dependencyTree.keys.each do |key|
@@ -1671,27 +1671,27 @@ module ISM
                                 ###
 
                                 #return Array(ISM::SoftwareInformation).new
-                                return Hash(String, ISM::SoftwareInformation).new
+                                #return Hash(String, ISM::SoftwareInformation).new
 
-                            else
+                            #else
 
-                                showCalculationDoneMessage
+                                #showCalculationDoneMessage
 
                                 ###
-                                dependencyTree.keys.each do |key|
+                                #dependencyTree.keys.each do |key|
 
-                                    if dependencyTree[key].includes?(dependencyInformation.hiddenName)
-                                        showUnavailableDependencyMessage(dependencies[key],dependencyInformation)
-                                        exitProgram
-                                    end
+                                    #if dependencyTree[key].includes?(dependencyInformation.hiddenName)
+                                        #showUnavailableDependencyMessage(dependencies[key],dependencyInformation)
+                                        #exitProgram
+                                    #end
 
-                                end
+                                #end
                                 ###
 
                                 #showUnavailableDependencyMessage(softwares,dependencyInformation)
                                 #exitProgram
 
-                            end
+                            #end
                         end
 
                         key = dependency.hiddenName
@@ -1724,6 +1724,22 @@ module ISM
                 nextDependencies.clear
 
             end
+
+                        if !@unavailableDependencySignals.empty?
+
+                            if allowSkipUnavailable == true
+
+                                return Hash(String, ISM::SoftwareInformation).new
+
+                            else
+
+                                @unavailableDependencySignals.each do |softwares|
+                                    showUnavailableDependencyMessage(softwares[0],softwares[1])
+                                    exitProgram
+                                end
+
+                            end
+                        end
 
             return dependencies
         end
