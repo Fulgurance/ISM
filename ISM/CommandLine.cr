@@ -1631,10 +1631,8 @@ module ISM
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
 
-            #TRACE DEPENDENCY TREE FOR EACH REQUESTED SOFTWARE
             dependencyTree = Hash(String, Array(String)).new
             invalidDependencies = Array(ISM::SoftwareInformation).new
-            ##################################################
 
             loop do
 
@@ -1647,14 +1645,12 @@ module ISM
                 currentDependencies.each do |dependency|
                     playCalculationAnimation
 
-                    #EXPERIMENTAL
                     if !dependencyTree.has_key?(dependency.hiddenName)
                         dependencyTree[dependency.hiddenName] = (dependency.dependencies.map { |entry| entry.hiddenName})
                     else
                         dependencyTree[dependency.hiddenName] += (dependency.dependencies.map { |entry| entry.hiddenName})
                         dependencyTree[dependency.hiddenName] = dependencyTree[dependency.hiddenName].uniq
                     end
-                    #############
 
                     dependencyInformation = dependency.information
                     installed = softwareIsInstalled(dependencyInformation)
@@ -1664,40 +1660,7 @@ module ISM
                         if !dependencyInformation.isValid
 
                             invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.name, version: dependency.version))
-                            #if allowSkipUnavailable == true
 
-                                ###
-                                #dependencyTree.keys.each do |key|
-
-                                    #if dependencyTree[key].includes?(dependencyInformation.hiddenName)
-                                    #    @unavailableDependencySignals.push([dependencies[key],dependencyInformation])
-                                    #end
-
-                                #end
-                                ###
-
-                                #return Array(ISM::SoftwareInformation).new
-                                #return Hash(String, ISM::SoftwareInformation).new
-
-                            #else
-
-                                #showCalculationDoneMessage
-
-                                ###
-                                #dependencyTree.keys.each do |key|
-
-                                    #if dependencyTree[key].includes?(dependencyInformation.hiddenName)
-                                        #showUnavailableDependencyMessage(dependencies[key],dependencyInformation)
-                                        #exitProgram
-                                    #end
-
-                                #end
-                                ###
-
-                                #showUnavailableDependencyMessage(softwares,dependencyInformation)
-                                #exitProgram
-
-                            #end
                         end
 
                         key = dependency.hiddenName
@@ -1731,7 +1694,6 @@ module ISM
 
             end
 
-            #NEED TO PUSH NOW THE SOFTWARE COUPLE
             if !invalidDependencies.empty?
 
                 invalidDependencies.each do |dependency|
@@ -1747,8 +1709,6 @@ module ISM
                     end
 
                 end
-
-            #####################################
 
                 if allowSkipUnavailable == true
 
