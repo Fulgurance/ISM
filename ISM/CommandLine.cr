@@ -1633,6 +1633,7 @@ module ISM
 
             #TRACE DEPENDENCY TREE FOR EACH REQUESTED SOFTWARE
             dependencyTree = Hash(String, Array(String)).new
+            invalidDependencies = Array(ISM::SoftwareInformation).new
             ##################################################
 
             loop do
@@ -1662,16 +1663,17 @@ module ISM
 
                         if !dependencyInformation.isValid
 
+                            invalidDependencies.push(dependencyInformation)
                             #if allowSkipUnavailable == true
 
                                 ###
-                                dependencyTree.keys.each do |key|
+                                #dependencyTree.keys.each do |key|
 
-                                    if dependencyTree[key].includes?(dependencyInformation.hiddenName)
-                                        @unavailableDependencySignals.push([dependencies[key],dependencyInformation])
-                                    end
+                                    #if dependencyTree[key].includes?(dependencyInformation.hiddenName)
+                                    #    @unavailableDependencySignals.push([dependencies[key],dependencyInformation])
+                                    #end
 
-                                end
+                                #end
                                 ###
 
                                 #return Array(ISM::SoftwareInformation).new
@@ -1729,21 +1731,40 @@ module ISM
 
             end
 
-                        if !@unavailableDependencySignals.empty?
+            #NEED TO PUSH NOW THE SOFTWARE COUPLE
+            if !invalidDependencies.empty?
 
-                            if allowSkipUnavailable == true
+                invalidDependencies.each do |dependency|
 
-                                return Hash(String, ISM::SoftwareInformation).new
+                    name = dependency.hiddenName
 
-                            else
+                    dependencyTree.keys.each do |key|
 
-                                @unavailableDependencySignals.each do |softwares|
-                                    showUnavailableDependencyMessage(softwares[0],softwares[1])
-                                    exitProgram
-                                end
-
-                            end
+                        if dependencyTree[key].includes?(name)
+                            @unavailableDependencySignals.push([dependencies[key],
+                                                                ISM::SoftwareInformation.new()])
                         end
+
+                    end
+
+                end
+
+            #####################################
+
+                if allowSkipUnavailable == true
+
+                    return Hash(String, ISM::SoftwareInformation).new
+
+                else
+
+                    @unavailableDependencySignals.each do |softwares|
+                        showUnavailableDependencyMessage(softwares[0],softwares[1])
+                        exitProgram
+                    end
+
+                end
+
+            end
 
             return dependencies
         end
