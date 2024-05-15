@@ -356,8 +356,12 @@ module ISM
             return false
         end
 
-        def softwareIsRequestedSoftware(software : ISM::SoftwareInformation) : Bool
-            return @requestedSoftwares.any? { |entry| entry.versionName == software.versionName}
+        def softwareIsRequestedSoftware(software : ISM::SoftwareInformation, requestedSoftwareVersionNames : Array(String).new) : Bool
+            if requestedSoftwareVersionNames.empty?
+                return @requestedSoftwares.any? { |entry| entry.versionName == software.versionName}
+            else
+                return requestedSoftwareVersionNames.any? { |entry| entry == software.versionName}
+            end
         end
 
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
@@ -1470,7 +1474,7 @@ module ISM
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
-                        if Ism.softwareIsRequestedSoftware(target.information)
+                        if Ism.softwareIsRequestedSoftware(target.information, requestedSoftwareVersionNames)
                             Ism.addSoftwareToFavouriteGroup(versionName)
                         end
 
@@ -1577,7 +1581,7 @@ module ISM
                             Ism.exitProgram
                         end
 
-                        Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version)
+                        Ism.showEndSoftwareUninstallingMessage(index, limit, port, name, version)
 
                         if index < limit-1
                             Ism.showSeparator
