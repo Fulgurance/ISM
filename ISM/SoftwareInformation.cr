@@ -71,6 +71,10 @@ module ISM
                     @allowCodependencies = Array(String).new)
     end
 
+    def isValid : Bool
+        return (@port != "" && @name != "" && @version != "")
+    end
+
     def getEnabledPass : String
         @options.each do |option|
             if option.isPass && option.active

@@ -1631,6 +1631,10 @@ module ISM
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
 
+            #TRACE DEPENDENCY TREE FOR EACH REQUESTED SOFTWARE
+            dependencyTree = Hash(String, Array(String)).new
+            ##################################################
+
             loop do
 
                 playCalculationAnimation
@@ -1642,24 +1646,50 @@ module ISM
                 currentDependencies.each do |dependency|
                     playCalculationAnimation
 
+                    #EXPERIMENTAL
+                    dependencyTree[dependency.hiddenName] += (dependency.dependencies.map { |entry| entry.hiddenName})
+                    dependencyTree[dependency.hiddenName] = dependencyTree[dependency.hiddenName].uniq
+                    #############
+
                     dependencyInformation = dependency.information
                     installed = softwareIsInstalled(dependencyInformation)
 
                     if !installed || installed && allowRebuild == true && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch == true
 
-                        #Software or version not available
-                        if dependencyInformation.name == "" || dependencyInformation.version == ""
+                        if !dependencyInformation.isValid
 
                             if allowSkipUnavailable == true
 
-                                #@unavailableDependencySignals.push([software,dependencyInformation])
+                                ###
+                                dependencyTree.keys.each do |key|
+
+                                    if dependencyTree[key].includes?(dependencyInformation.hiddenName)
+                                        @unavailableDependencySignals.push([dependencies[key],dependencyInformation])
+                                    end
+
+                                end
+                                ###
+
                                 #return Array(ISM::SoftwareInformation).new
+                                return Hash(String, ISM::SoftwareInformation).new
 
                             else
 
                                 showCalculationDoneMessage
-                                #showUnavailableDependencyMessage(software,dependencyInformation)
-                                exitProgram
+
+                                ###
+                                dependencyTree.keys.each do |key|
+
+                                    if dependencyTree[key].includes?(dependencyInformation.hiddenName)
+                                        showUnavailableDependencyMessage(dependencies[key],dependencyInformation)
+                                        exitProgram
+                                    end
+
+                                end
+                                ###
+
+                                #showUnavailableDependencyMessage(softwares,dependencyInformation)
+                                #exitProgram
 
                             end
                         end
