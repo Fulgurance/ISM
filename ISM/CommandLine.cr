@@ -1663,7 +1663,7 @@ module ISM
 
                         if !dependencyInformation.isValid
 
-                            invalidDependencies.push(dependencyInformation)
+                            invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.name, version: dependency.version))
                             #if allowSkipUnavailable == true
 
                                 ###
@@ -1741,8 +1741,7 @@ module ISM
                     dependencyTree.keys.each do |key|
 
                         if dependencyTree[key].includes?(name)
-                            @unavailableDependencySignals.push([dependencies[key],
-                                                                ISM::SoftwareInformation.new()])
+                            @unavailableDependencySignals.push([dependencies[key],dependency])
                         end
 
                     end
