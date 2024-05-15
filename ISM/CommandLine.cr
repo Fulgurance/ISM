@@ -1645,11 +1645,11 @@ module ISM
                 currentDependencies.each do |dependency|
                     playCalculationAnimation
 
-                    if !dependencyTree.has_key?(dependency.hiddenName)
-                        dependencyTree[dependency.hiddenName] = (dependency.dependencies.map { |entry| entry.hiddenName})
+                    if !dependencyTree.has_key?(dependency.rawVersionName)
+                        dependencyTree[dependency.rawVersionName] = (dependency.dependencies.map { |entry| entry.rawVersionName})
                     else
-                        dependencyTree[dependency.hiddenName] += (dependency.dependencies.map { |entry| entry.hiddenName})
-                        dependencyTree[dependency.hiddenName] = dependencyTree[dependency.hiddenName].uniq
+                        dependencyTree[dependency.rawVersionName] += (dependency.dependencies.map { |entry| entry.rawVersionName})
+                        dependencyTree[dependency.rawVersionName] = dependencyTree[dependency.rawVersionName].uniq
                     end
 
                     dependencyInformation = dependency.information
@@ -1659,7 +1659,7 @@ module ISM
 
                         if !dependencyInformation.isValid
 
-                            invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.name, version: dependency.version))
+                            invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.rawName, version: dependency.rawVersion))
 
                         end
 
@@ -1698,7 +1698,7 @@ module ISM
 
                 invalidDependencies.each do |dependency|
 
-                    name = dependency.hiddenName
+                    name = dependency.versionName
 
                     dependencyTree.keys.each do |key|
 

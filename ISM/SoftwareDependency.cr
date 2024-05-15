@@ -34,6 +34,10 @@ module ISM
             return specifiedPort ? @name[@name.index(":")..-1][1..-1] : @name
         end
 
+        def rawName : String
+            return @name
+        end
+
         def fullVersionName : String
             return specifiedPort ? "#{@name}-#{version}" : versionName
         end
@@ -44,6 +48,14 @@ module ISM
         end
 
         def version=(@version)
+        end
+
+        def rawVersion : String
+            return @version
+        end
+
+        def rawVersionName : String
+            return rawName+"-"+rawVersion
         end
 
         def versionName
