@@ -118,8 +118,8 @@ module ISM
             return information.port
         end
 
-        def dependencies : Array(ISM::SoftwareDependency)
-            return information.dependencies
+        def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
+            return information.dependencies(allowDeepSearch)
         end
 
         def builtSoftwareDirectoryPath : String

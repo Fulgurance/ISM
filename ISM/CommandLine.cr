@@ -1650,9 +1650,9 @@ module ISM
                     playCalculationAnimation
 
                     if !dependencyTree.has_key?(dependency.rawVersionName)
-                        dependencyTree[dependency.rawVersionName] = (dependency.dependencies.map { |entry| entry.rawVersionName})
+                        dependencyTree[dependency.rawVersionName] = (dependency.dependencies(allowDeepSearch).map { |entry| entry.rawVersionName})
                     else
-                        dependencyTree[dependency.rawVersionName] += (dependency.dependencies.map { |entry| entry.rawVersionName})
+                        dependencyTree[dependency.rawVersionName] += (dependency.dependencies(allowDeepSearch).map { |entry| entry.rawVersionName})
                         dependencyTree[dependency.rawVersionName] = dependencyTree[dependency.rawVersionName].uniq
                     end
 
@@ -1671,7 +1671,7 @@ module ISM
 
                         if dependencies.has_key?(key)
 
-                            differentOptions = (dependencies[key].dependencies.size - dependency.dependencies.size).abs > 0
+                            differentOptions = (dependencies[key].dependencies(allowDeepSearch).size - dependency.dependencies(allowDeepSearch).size).abs > 0
 
                             if differentOptions
                                 dependency.options.each do |option|
@@ -1680,13 +1680,13 @@ module ISM
                                     dependencies[key].enableOption(option)
                                 end
 
-                                nextDependencies += dependencies[key].dependencies
+                                nextDependencies += dependencies[key].dependencies(allowDeepSearch)
                             end
 
                         else
                             dependencies[key] = dependencyInformation
 
-                            nextDependencies += dependencies[key].dependencies
+                            nextDependencies += dependencies[key].dependencies(allowDeepSearch)
                         end
 
                     end
@@ -1918,45 +1918,45 @@ module ISM
             wrongArguments = Array(String).new
             requiredSoftwares = Hash(String,ISM::SoftwareInformation).new
             unneededSoftwares = Array(ISM::SoftwareInformation).new
+            softwareList = Array(String).new
+            softwareInformationList = Array(ISM::SoftwareInformation).new
 
-            #GET ALL REQUIRED SOFTWARES
+            #Generate a list of all favourite softwares
             @favouriteGroups.each do |group|
                 playCalculationAnimation
 
-                #For each software in favourites: add entry in requiredSoftwares
-                getRequestedSoftwares(group.softwares).each do |software|
-                    playCalculationAnimation
-
-                    #If software in favourite is not requested for removal, it is require, else no
-                    if !softwareIsRequestedSoftware(software)
-
-                        requiredSoftwares[software.versionName] = software
-
-                        #For each dependency of favourites: add entry in requiredSoftwares
-                        getRequiredDependencies([software], allowDeepSearch: true).values.each do |dependency|
-                            playCalculationAnimation
-
-                            requiredSoftwares[dependency.versionName] = dependency
-                        end
-
-                    end
-
-                end
-
+                softwareList += group.softwares
             end
 
-            #CHECK IF ONE OF THE REQUESTED SOFTWARE IS NOT REQUIRED
-            @requestedSoftwares.each do |software|
+            #Remove from that list requested softwares for removal
+            softwareInformationList.each do |software|
+                playCalculationAnimation
+
+                softwareList.delete(software.versionName)
+            end
+
+            #Generate a software information array of the left favourites
+            softwareInformationList = getRequestedSoftwares(softwareList)
+
+            #Then we check the needed dependencies for that list
+            getRequiredDependencies(softwareList, allowDeepSearch: true).each do |software|
+                playCalculationAnimation
+
+                #Ignore ones with pass ?
+                requiredSoftwares[software.versionName] = software
+            end
+
+            #Checking if the requested softwares for removal are not require
+            getRequestedSoftwares(@requestedSoftwares).values.each do |software|
                 playCalculationAnimation
 
                 #If it's require, add to wrong arguments
                 if requiredSoftwares.has_key?(software.versionName)
                     wrongArguments.push(software.versionName)
                 end
-
             end
 
-            #CHECK FOR ALL INSTALLED SOFTWARES IF THERE ARE ANY USELESS SOFTWARES
+            #Then check if some installed softwares are useless
             @installedSoftwares.each do |software|
                 playCalculationAnimation
 

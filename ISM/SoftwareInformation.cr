@@ -317,7 +317,7 @@ module ISM
         return false
     end
 
-    def dependencies : Array(ISM::SoftwareDependency)
+    def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
         #CHECKER SI LES UNIQUE DEPENDENCIES SONT DEJA SELECTIONNEES, SINON EXIT WITH MESSAGE TO SELECT THE MISSING ONES
@@ -355,8 +355,12 @@ module ISM
             Ism.exitProgram
         end
 
-        #REJECT INSTALLED DEPENDENCIES AND UNIQUE DEPENDENCIES NOT SELECTIONED
-        return @dependencies.reject {|entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.name) && !@selectedDependencies.includes?(entry.name)}+dependenciesArray
+        if allowDeepSearch
+            return @dependencies + dependenciesArray
+        else
+            #REJECT INSTALLED DEPENDENCIES AND UNIQUE DEPENDENCIES NOT SELECTIONED
+            return @dependencies.reject {|entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.name) && !@selectedDependencies.includes?(entry.name)}+dependenciesArray
+        end
     end
 
     def kernelDependencies : Array(String)
