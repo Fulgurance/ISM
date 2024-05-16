@@ -356,7 +356,7 @@ module ISM
             return false
         end
 
-        def softwareIsRequestedSoftware(software : ISM::SoftwareInformation, requestedSoftwareVersionNames : Array(String).new) : Bool
+        def softwareIsRequestedSoftware(software : ISM::SoftwareInformation, requestedSoftwareVersionNames = Array(String).new) : Bool
             if requestedSoftwareVersionNames.empty?
                 return @requestedSoftwares.any? { |entry| entry.versionName == software.versionName}
             else
@@ -1939,7 +1939,7 @@ module ISM
             softwareInformationList = getRequestedSoftwares(softwareList)
 
             #Then we check the needed dependencies for that list
-            getRequiredDependencies(softwareList, allowDeepSearch: true).each do |software|
+            getRequiredDependencies(softwareInformationList, allowDeepSearch: true).values.each do |software|
                 playCalculationAnimation
 
                 #Ignore ones with pass ?
@@ -1947,7 +1947,7 @@ module ISM
             end
 
             #Checking if the requested softwares for removal are not require
-            getRequestedSoftwares(@requestedSoftwares).values.each do |software|
+            @requestedSoftwares.each do |software|
                 playCalculationAnimation
 
                 #If it's require, add to wrong arguments
