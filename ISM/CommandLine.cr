@@ -1943,7 +1943,9 @@ module ISM
                 playCalculationAnimation
 
                 #Ignore ones with pass ?
-                requiredSoftwares[software.versionName] = software
+                if !software.passEnabled
+                    requiredSoftwares[software.versionName] = software
+                end
             end
 
             #Checking if the requested softwares for removal are not require
