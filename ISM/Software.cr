@@ -1236,7 +1236,7 @@ module ISM
             filesList = Dir.glob(["#{builtSoftwareDirectoryPath(false)}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
-            directoryNumber, symlinkNumber, fileNumber, totalSize = Uint128.new(0)
+            directoryNumber, symlinkNumber, fileNumber, totalSize = UInt128.new(0)
 
             filesList.each do |entry|
 
