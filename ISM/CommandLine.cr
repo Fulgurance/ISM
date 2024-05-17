@@ -1631,11 +1631,11 @@ module ISM
 
         def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Hash(String, ISM::SoftwareInformation)
 
-            dependencies = Hash(String, ISM::SoftwareInformation).new
+            dependencyHash = Hash(String, ISM::SoftwareInformation).new
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
 
-            dependencyTree = Hash(String, Array(String)).new
+            dependencyTreeHash = Hash(String, Array(String)).new
             invalidDependencies = Array(ISM::SoftwareInformation).new
 
             loop do
@@ -1649,15 +1649,21 @@ module ISM
                 currentDependencies.each do |dependency|
                     playCalculationAnimation
 
-                    if !dependencyTree.has_key?(dependency.rawVersionName)
-                        dependencyTree[dependency.rawVersionName] = (dependency.dependencies(allowDeepSearch).map { |entry| entry.rawVersionName})
-                    else
-                        dependencyTree[dependency.rawVersionName] += (dependency.dependencies(allowDeepSearch).map { |entry| entry.rawVersionName})
-                        dependencyTree[dependency.rawVersionName] = dependencyTree[dependency.rawVersionName].uniq
-                    end
+                    key = dependency.hiddenName
+                    rawKey = dependency.rawVersionName
 
+                    dependencies = dependency.dependencies(allowDeepSearch)
+                    dependencyVersionNames = dependencies.map { |entry| entry.rawVersionName}
                     dependencyInformation = dependency.information
+
                     installed = softwareIsInstalled(dependencyInformation)
+
+                    if !dependencyTreeHash.has_key?(rawKey)
+                        dependencyTreeHash[rawKey] = dependencyVersionNames
+                    else
+                        dependencyTreeHash[rawKey] += dependencyVersionNames
+                        dependencyTreeHash[rawKey] = dependencyTreeHash[rawKey].uniq
+                    end
 
                     if !installed || installed && allowRebuild == true && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch == true
 
@@ -1667,26 +1673,24 @@ module ISM
 
                         end
 
-                        key = dependency.hiddenName
+                        if dependencyHash.has_key?(key)
 
-                        if dependencies.has_key?(key)
-
-                            differentOptions = (dependencies[key].dependencies(allowDeepSearch).size - dependency.dependencies(allowDeepSearch).size).abs > 0
+                            differentOptions = (dependencyHash[key].dependencies(allowDeepSearch).size - dependencies.size).abs > 0
 
                             if differentOptions
                                 dependency.options.each do |option|
                                     playCalculationAnimation
 
-                                    dependencies[key].enableOption(option)
+                                    dependencyHash[key].enableOption(option)
                                 end
 
-                                nextDependencies += dependencies[key].dependencies(allowDeepSearch)
+                                nextDependencies += dependencyHash[key].dependencies(allowDeepSearch)
                             end
 
                         else
-                            dependencies[key] = dependencyInformation
+                            dependencyHash[key] = dependencyInformation
 
-                            nextDependencies += dependencies[key].dependencies(allowDeepSearch)
+                            nextDependencies += dependencyHash[key].dependencies(allowDeepSearch)
                         end
 
                     end
@@ -1704,10 +1708,10 @@ module ISM
 
                     name = dependency.versionName
 
-                    dependencyTree.keys.each do |key|
+                    dependencyTreeHash.keys.each do |key|
 
-                        if dependencyTree[key].includes?(name)
-                            @unavailableDependencySignals.push([dependencies[key],dependency])
+                        if dependencyTreeHash[key].includes?(name)
+                            @unavailableDependencySignals.push([dependencyHash[key],dependency])
                         end
 
                     end
@@ -1730,7 +1734,7 @@ module ISM
 
             end
 
-            return dependencies
+            return dependencyHash
         end
 
         def getDependencyTree(software : ISM::SoftwareInformation, softwareList : Hash(String, ISM::SoftwareInformation), calculatedDependencies = Hash(String, Array(ISM::SoftwareInformation)).new) : Array(ISM::SoftwareInformation)
