@@ -1300,7 +1300,7 @@ module ISM
                     "\n"
         end
 
-        def showInstallationDetailsMessage(softwareNumber : Uint32)
+        def showInstallationDetailsMessage(softwareNumber : UInt32)
             puts
             puts    "#{ISM::Default::CommandLine::InstallationDetailsText.colorize(:green)}" +
                     "#{ISM::Default::CommandLine::NewSoftwareNumberDetailText.colorize(:green)}: #{softwareNumber.colorize(:light_red)}" +
