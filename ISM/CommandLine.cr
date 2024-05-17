@@ -1310,7 +1310,7 @@ module ISM
                     "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(:light_red)}"
         end
 
-        def recordInstallationDetails(directoryNumber : Uint128, symlinkNumber : Uint128, fileNumber : Uint128, totalSize : Uint128)
+        def recordInstallationDetails(directoryNumber : UInt128, symlinkNumber : UInt128, fileNumber : UInt128, totalSize : UInt128)
             @totalInstalledDirectoryNumber += directoryNumber
             @totalInstalledSymlinkNumber += symlinkNumber
             @totalInstalledFileNumber += fileNumber
