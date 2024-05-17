@@ -1932,6 +1932,11 @@ module ISM
                 softwareList += group.softwares
             end
 
+            #Get software information from the favourites
+            softwareList.each do |software|
+                softwareInformationList.push(getSoftwareInformation(software))
+            end
+
             #Remove from that list requested softwares for removal
             softwareInformationList.each do |software|
                 playCalculationAnimation
