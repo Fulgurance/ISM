@@ -1941,29 +1941,22 @@ module ISM
             softwareInformationList.each do |software|
                 playCalculationAnimation
 
-                softwareList.delete(software.versionName)
+                softwareList.delete(software.hiddenName)
             end
 
             #Generate a software information array of the left favourites
             softwareInformationList = getRequestedSoftwares(softwareList)
 
             #Then we check the needed dependencies for that list
-            getRequiredDependencies(softwareInformationList, allowDeepSearch: true).values.each do |software|
-                playCalculationAnimation
-
-                #Ignore ones with pass ?
-                if !software.passEnabled
-                    requiredSoftwares[software.versionName] = software
-                end
-            end
+            requiredSoftwares = getRequiredDependencies(softwareInformationList, allowDeepSearch: true)
 
             #Checking if the requested softwares for removal are not require
             @requestedSoftwares.each do |software|
                 playCalculationAnimation
 
                 #If it's require, add to wrong arguments
-                if requiredSoftwares.has_key?(software.versionName)
-                    wrongArguments.push(software.versionName)
+                if requiredSoftwares.has_key?(software.hiddenName)
+                    wrongArguments.push(software.hiddenName)
                 end
             end
 
@@ -1972,7 +1965,7 @@ module ISM
                 playCalculationAnimation
 
                 #If it's not require, add to unneeded softwares
-                if !requiredSoftwares.has_key?(software.versionName)
+                if !requiredSoftwares.has_key?(software.hiddenName)
                     unneededSoftwares.push(software)
                 end
 

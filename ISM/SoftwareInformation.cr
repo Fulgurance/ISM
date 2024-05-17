@@ -327,14 +327,14 @@ module ISM
             if passEnabled
                 if option.active
                     if option.isPass
-                        return option.dependencies
+                        return option.dependencies(allowDeepSearch)
                     else
-                        dependenciesArray += option.dependencies
+                        dependenciesArray += option.dependencies(allowDeepSearch)
                     end
                 end
             else
                 if option.active || option.isPass
-                    dependenciesArray += option.dependencies
+                    dependenciesArray += option.dependencies(allowDeepSearch)
                 end
 
                 if !option.active && option.isPass

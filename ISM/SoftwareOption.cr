@@ -27,11 +27,11 @@ module ISM
             return @name.starts_with?(/Pass[0-9]/)
         end
 
-        def dependencies : Array(ISM::SoftwareDependency)
+        def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
             result = Array(ISM::SoftwareDependency).new
 
             @dependencies.each do |dependency|
-                if !Ism.softwareIsInstalled(dependency.information)
+                if allowDeepSearch || !Ism.softwareIsInstalled(dependency.information)
                     result.push(dependency)
                 end
             end
