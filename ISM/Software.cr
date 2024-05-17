@@ -1236,16 +1236,27 @@ module ISM
             filesList = Dir.glob(["#{builtSoftwareDirectoryPath(false)}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
+            directoryNumber, symlinkNumber, fileNumber, totalSize = Uint128.new(0)
+
             filesList.each do |entry|
 
                 finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath(false),"")}"
 
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
+                        directoryNumber += 1
+
                         makeDirectory(finalDestination)
                         installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                     end
                 else
+                    if File.symlink?(entry)
+                        symlinkNumber += 1
+                    else
+                        fileNumber += 1
+                        totalSize += File.size(entry)
+                    end
+
                     moveFile(entry,finalDestination)
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                 end
@@ -1253,6 +1264,7 @@ module ISM
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
+            return directoryNumber, symlinkNumber, fileNumber, totalSize
         end
 
         def kernelName : String

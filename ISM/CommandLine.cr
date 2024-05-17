@@ -17,6 +17,10 @@ module ISM
         property mirrors : Array(ISM::Mirror)
         property mirrorsSettings : ISM::CommandLineMirrorsSettings
         property favouriteGroups : Array(ISM::FavouriteGroup)
+        property totalInstalledDirectoryNumber : UInt128
+        property totalInstalledSymlinkNumber : UInt128
+        property totalInstalledFileNumber : UInt128
+        property totalInstalledSize : UInt128
 
         def initialize
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
@@ -40,6 +44,10 @@ module ISM
             @favouriteGroups = Array(ISM::FavouriteGroup).new
             @initialTerminalTitle = String.new
             @unavailableDependencySignals = Array(Array(ISM::SoftwareInformation)).new
+            @totalInstalledDirectoryNumber = UInt128.new(0)
+            @totalInstalledSymlinkNumber = UInt128.new(0)
+            @totalInstalledFileNumber = UInt128.new(0)
+            @totalInstalledSize = UInt128.new(0)
         end
 
         def ranAsSuperUser : Bool
@@ -1292,6 +1300,23 @@ module ISM
                     "\n"
         end
 
+        def showInstallationDetailsMessage(softwareNumber : Uint32)
+            puts
+            puts    "#{ISM::Default::CommandLine::InstallationDetailsText.colorize(:green)}" +
+                    "#{ISM::Default::CommandLine::NewSoftwareNumberDetailText.colorize(:green)}: #{softwareNumber.colorize(:light_red)}" +
+                    "#{ISM::Default::CommandLine::NewDirectoryNumberDetailText.colorize(:green)}: #{@totalInstalledDirectoryNumber.colorize(:light_red)}" +
+                    "#{ISM::Default::CommandLine::NewSymlinkNumberDetailText.colorize(:green)}: #{@totalInstalledSymlinkNumber.colorize(:light_red)}" +
+                    "#{ISM::Default::CommandLine::NewFileNumberDetailText.colorize(:green)}: #{@totalInstalledFileNumber.colorize(:light_red)}" +
+                    "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(:light_red)}"
+        end
+
+        def recordInstallationDetails(directoryNumber : Uint128, symlinkNumber : Uint128, fileNumber : Uint128, totalSize : Uint128)
+            @totalInstalledDirectoryNumber += directoryNumber
+            @totalInstalledSymlinkNumber += symlinkNumber
+            @totalInstalledFileNumber += fileNumber
+            @totalInstalledSize += totalSize
+        end
+
         def getRequiredLibraries : String
             requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{ISM::Default::Filename::RequiredLibraries}")
             requiredLibraries = String.new
@@ -1461,7 +1486,10 @@ module ISM
                             target.configure
                             target.build
                             target.prepareInstallation
-                            target.install
+
+                            directoryNumber, symlinkNumber, fileNumber, totalSize = target.install
+                            Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
+
                             target.recordNeededKernelFeatures
                             target.clean
                         rescue
@@ -1491,6 +1519,8 @@ module ISM
                     targetsAdditionalInformationIndex.each do |index|
                         targets[index].showInformations
                     end
+
+                    Ism.showInstallationDetailsMessage(limit)
 
                     CODE
 
