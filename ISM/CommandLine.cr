@@ -1520,7 +1520,7 @@ module ISM
                         targets[index].showInformations
                     end
 
-                    Ism.showInstallationDetailsMessage(limit)
+                    Ism.showInstallationDetailsMessage(limit.to_u32)
 
                     CODE
 
