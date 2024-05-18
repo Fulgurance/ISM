@@ -1230,7 +1230,7 @@ module ISM
             Ism.notifyOfPrepareInstallation(@information)
         end
 
-        def install
+        def install : Tuple(UInt128, UInt128, UInt128, UInt128)
             Ism.notifyOfInstall(@information)
 
             filesList = Dir.glob(["#{builtSoftwareDirectoryPath(false)}/**/*"], match: :dot_files)
