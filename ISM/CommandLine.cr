@@ -1470,6 +1470,11 @@ module ISM
                         version = information.version
                         versionName = information.versionName
 
+                        directoryNumber = UInt128.new
+                        symlinkNumber = UInt128.new
+                        fileNumber = UInt128.new
+                        totalSize = UInt128.new
+
                         #START INSTALLATION PROCESS
 
                         Ism.updateInstallationTerminalTitle(index, limit, port, name, version)
