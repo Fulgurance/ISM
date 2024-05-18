@@ -1488,7 +1488,13 @@ module ISM
                             target.build
                             target.prepareInstallation
 
-                            directoryNumber, symlinkNumber, fileNumber, totalSize = target.install
+                            details = target.install
+
+                            directoryNumber = details[0]
+                            symlinkNumber = details[1]
+                            fileNumber = details[2]
+                            totalSize = details[3]
+
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
 
                             target.recordNeededKernelFeatures
