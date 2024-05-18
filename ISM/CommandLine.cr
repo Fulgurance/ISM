@@ -1301,7 +1301,7 @@ module ISM
         end
 
         def showInstallationDetailsMessage(softwareNumber : UInt32)
-            title = ISM::Default::CommandLine::InstallationDetailsText}
+            title = ISM::Default::CommandLine::InstallationDetailsText
             limit = title.size
 
             separatorText = String.new
