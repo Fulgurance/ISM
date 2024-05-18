@@ -2,13 +2,16 @@
 
 # ISM
 
-ISM or Ingenius System Manager is an extremely advanced tool to build and manage a Linux system from scratch.
-ISM is not only a tool to manage and update software. It facilitates the way to configure the system,
-enable specific options for each packages, change Linux variables and settings... etc
+ISM (Ingenius System Manager) is an extremely advanced tool to build and manage a Linux system completely from scratch.
+It manage the full build process of the cross toolchain, and can provide fine-grained configuration for each software.
+
+It is possible to do any installation with or without chroot in a targeted system. As well, to configure compiler flags, number of parallel jobs, custom machine target ... etc
+
+The software handle too the calculation of Linux kernel dependencies. That mean all of the require needed kernel features for all packages will be automatically enabled and it will reconfigure properly the kernel. It make definitely easier to configure the kernel and optimize it.
 
 ***Guide***: https://github.com/Fulgurance/ISM/wiki/Guide
 
-![ISM-Example.png](https://www.zupimages.net/up/23/22/wumo.png)
+![ISM-Example.png](https://www.zupimages.net/up/24/20/2mn6.png)
 
 ## Usage
 
@@ -75,10 +78,7 @@ Configure ISM settings
         -sdm    setdefaultmirror        Set the default mirror for ISM
 ```
 
-ISM is made to use all of the settings, for the compilation as well and pass all wanted arguments,
-like GCC flags, number of parallels jobs, custom machine targets.
-
 ## About
-It's actually highly experimental. Now with the guide, it's actually possible to build all of the Cross-Toolchain and install a full desktop environment.
+The project is still experimental, most of the functionnalities are already almost implemented. It is actually possible to install a full desktop environment with the provided ports .
 
-Don't use that in a production environment, only in a virtual machine, except if you assume you are totally crazy (this is possible).
+That is not ready at the moment for a production environment. It is actually only for test purpose.
