@@ -1488,12 +1488,7 @@ module ISM
                             target.build
                             target.prepareInstallation
 
-                            details = target.install
-
-                            directoryNumber = details[0]
-                            symlinkNumber = details[1]
-                            fileNumber = details[2]
-                            totalSize = details[3]
+                            directoryNumber, symlinkNumber, fileNumber, totalSize = target.install
 
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
 
