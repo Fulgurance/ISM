@@ -1301,7 +1301,7 @@ module ISM
         end
 
         def showInstallationDetailsMessage(softwareNumber : UInt32)
-            title = "#{ISM::Default::CommandLine::InstallationDetailsText.colorize(:green)}\n"
+            title = ISM::Default::CommandLine::InstallationDetailsText}
             limit = title.size
 
             separatorText = String.new
@@ -1314,7 +1314,7 @@ module ISM
 
             puts
             puts    separatorText +
-                    "#{title}" +
+                    "#{title.colorize(:green)}\n" +
                     separatorText +
                     "#{ISM::Default::CommandLine::NewSoftwareNumberDetailText.colorize(:green)}: #{softwareNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
                     "#{ISM::Default::CommandLine::NewDirectoryNumberDetailText.colorize(:green)}: #{@totalInstalledDirectoryNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
