@@ -79,6 +79,6 @@ Configure ISM settings
 ```
 
 ## About
-The project is still experimental, most of the functionnalities are already almost implemented. It is actually possible to install a full desktop environment with the provided ports .
+The project is still experimental, most of the functionnalities are already implemented. It is actually possible to install a full desktop environment with the provided ports .
 
 That is not ready at the moment for a production environment. It is actually only for test purpose.
