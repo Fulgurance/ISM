@@ -1231,11 +1231,13 @@ module ISM
             Ism.notifyOfPrepareInstallation(@information)
         end
 
-        def install : Tuple(UInt128, UInt128, UInt128, UInt128)
-            Ism.notifyOfInstall(@information)
+        def recordInstallationInformation : Tuple(UInt128, UInt128, UInt128, UInt128)
+            directoryNumber = UInt128.new(0)
+            symlinkNumber = UInt128.new(0)
+            fileNumber = UInt128.new(0)
+            totalSize = UInt128.new(0)
 
             filesList = Dir.glob(["#{builtSoftwareDirectoryPath(false)}/**/*"], match: :dot_files)
-            installedFiles = Array(String).new
 
             directoryNumber = UInt128.new(0)
             symlinkNumber = UInt128.new(0)
@@ -1249,9 +1251,6 @@ module ISM
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
                         directoryNumber += 1
-
-                        makeDirectory(finalDestination)
-                        installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                     end
                 else
                     if File.symlink?(entry)
@@ -1260,7 +1259,29 @@ module ISM
                         fileNumber += 1
                         totalSize += File.size(entry)
                     end
+                end
 
+            end
+
+            return directoryNumber, symlinkNumber, fileNumber, totalSize
+        end
+
+        def install
+            Ism.notifyOfInstall(@information)
+
+            filesList = Dir.glob(["#{builtSoftwareDirectoryPath(false)}/**/*"], match: :dot_files)
+            installedFiles = Array(String).new
+
+            filesList.each do |entry|
+
+                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath(false),"")}"
+
+                if File.directory?(entry)
+                    if !Dir.exists?(finalDestination)
+                        makeDirectory(finalDestination)
+                        installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
+                    end
+                else
                     moveFile(entry,finalDestination)
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                 end
@@ -1268,7 +1289,6 @@ module ISM
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
-            return directoryNumber, symlinkNumber, fileNumber, totalSize
         end
 
         def kernelName : String

@@ -1501,10 +1501,10 @@ module ISM
                             target.build
                             target.prepareInstallation
 
-                            directoryNumber, symlinkNumber, fileNumber, totalSize = target.install
-
+                            directoryNumber, symlinkNumber, fileNumber, totalSize = target.recordInstallationInformation
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
 
+                            target.install
                             target.recordNeededKernelFeatures
                             target.clean
                         rescue

@@ -26,9 +26,8 @@ module ISM
         def prepareInstallation
         end
 
-        def install : Tuple(UInt128,UInt128,UInt128,UInt128)
+        def install
             Ism.addInstalledSoftware(@information)
-            return UInt128.new(0),UInt128.new(0),UInt128.new(0),UInt128.new(0)
         end
 
         def clean
