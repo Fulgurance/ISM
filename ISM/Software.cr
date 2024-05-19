@@ -80,13 +80,14 @@ module ISM
             downloaded = false
             error = String.new
 
+            #ACTUALLY BRING DOWNLOAD FAILING
             #Checking if connexion is available
-            begin
-                TCPSocket.new(link, port: 80, connect_timeout: 500.milliseconds).close
-            rescue ex : IO::Error
-                Ism.notifyOfConnexionError(link)
-                Ism.exitProgram
-            end
+            # begin
+            #     TCPSocket.new(link, port: 80, connect_timeout: 500.milliseconds).close
+            # rescue ex : IO::Error
+            #     Ism.notifyOfConnexionError(link)
+            #     Ism.exitProgram
+            # end
 
             until downloaded
                 HTTP::Client.get(link) do |response|
