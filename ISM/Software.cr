@@ -1282,6 +1282,11 @@ module ISM
                         installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                     end
                 else
+                    #Delete existing file instead of overriding it to avoid any crash
+                    if File.exists?(finalDestination)
+                        deleteFile(finalDestination)
+                    end
+
                     moveFile(entry,finalDestination)
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                 end
