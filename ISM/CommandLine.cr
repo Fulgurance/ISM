@@ -279,13 +279,13 @@ module ISM
 
                 userInput.each do |value|
 
-                    if !filter.any? {|rule| rule.match(value) != nil}
+                    if !filter.any? {|rule| rule.matches?(value)}
                         return false,value
                     end
 
                 end
             else
-                if filter.match(input) == nil
+                if !filter.matches?(input)
                     return false,input
                 end
             end
@@ -485,7 +485,7 @@ module ISM
                     ISM::Default::Path::InstalledSoftwaresDirectory +
                     userEntry.gsub(/[\@\-\:]+/,"/")
 
-            if /@[A-Za-z0-9\-]+:[A-Za-z]+/.match(userEntry) != nil && File.exists?(path+ISM::Default::Filename::Information)
+            if /@[A-Za-z0-9\-]+:[A-Za-z]+/.matches?(userEntry) && File.exists?(path+ISM::Default::Filename::Information)
 
                 if File.exists?(path+ISM::Default::Filename::SoftwareSettings)
                     result.loadInformationFile(path+ISM::Default::Filename::SoftwareSettings)

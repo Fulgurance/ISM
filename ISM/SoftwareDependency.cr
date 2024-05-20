@@ -27,7 +27,7 @@ module ISM
         end
 
         def specifiedPort : Bool
-            return (/@[A-Za-z0-9\-]+:/.match(@name) != nil)
+            return (/@[A-Za-z0-9\-]+:/.matches?(@name))
         end
 
         def name : String
