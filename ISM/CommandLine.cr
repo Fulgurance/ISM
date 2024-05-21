@@ -478,6 +478,7 @@ module ISM
         end
 
         def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
+            result = ISM::SoftwareInformation.new
 
             @softwares.each do |entry|
 
