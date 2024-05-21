@@ -14,6 +14,7 @@ module ISM
     end
 
     record Dependency,
+        port : String,
         name : String,
         version : String,
         options : Array(String) do
@@ -116,6 +117,7 @@ module ISM
 
         information.dependencies.each do |data|
             dependency = ISM::SoftwareDependency.new
+            dependency.port = data.port
             dependency.name = data.name
             dependency.version = data.version
             dependency.options = data.options
@@ -126,6 +128,7 @@ module ISM
             dependenciesArray = Array(ISM::SoftwareDependency).new
             data.dependencies.each do |dependency|
                 temporary = ISM::SoftwareDependency.new
+                temporary.port = dependency.port
                 temporary.name = dependency.name
                 temporary.version = dependency.version
                 temporary.options = dependency.options
@@ -151,14 +154,14 @@ module ISM
 
         dependenciesArray = Array(Dependency).new
         @dependencies.each do |data|
-            dependenciesArray << Dependency.new(data.name,data.version,data.options)
+            dependenciesArray << Dependency.new(data.port,data.name,data.version,data.options)
         end
 
         optionsArray = Array(Option).new
         @options.each do |data|
             optionsDependenciesArray = Array(Dependency).new
             data.dependencies.each do |dependencyData|
-                dependency = Dependency.new(dependencyData.name,dependencyData.requiredVersion,dependencyData.options)
+                dependency = Dependency.new(dependencyData.port,dependencyData.name,dependencyData.requiredVersion,dependencyData.options)
                 optionsDependenciesArray << dependency
             end
 

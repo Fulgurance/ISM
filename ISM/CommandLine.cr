@@ -1678,10 +1678,10 @@ module ISM
                     playCalculationAnimation
 
                     key = dependency.hiddenName
-                    rawKey = dependency.rawVersionName
+                    rawKey = dependency.versionName
 
                     dependencies = dependency.dependencies(allowDeepSearch)
-                    dependencyVersionNames = dependencies.map { |entry| entry.rawVersionName}
+                    dependencyVersionNames = dependencies.map { |entry| entry.versionName}
                     dependencyInformation = dependency.information
 
                     installed = softwareIsInstalled(dependencyInformation)
@@ -1697,7 +1697,7 @@ module ISM
 
                         if !dependencyInformation.isValid
 
-                            invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.rawName, version: dependency.rawVersion))
+                            invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.name, version: dependency.requiredVersion))
 
                         end
 

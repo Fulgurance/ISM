@@ -6,9 +6,12 @@ module ISM
 
         include JSON::Serializable
 
+        property port : String
+        property name : String
         property options : Array(String)
 
-        def initialize( @name = String.new,
+        def initialize( @port = String.new,
+                        @name = String.new,
                         @version = String.new,
                         @options = Array(String).new)
         end
@@ -23,39 +26,16 @@ module ISM
             return String.new
         end
 
-        def name=(@name)
-        end
-
-        def specifiedPort : Bool
-            return (/@[A-Za-z0-9\-]+:/.matches?(@name))
-        end
-
-        def name : String
-            return specifiedPort ? @name[@name.index(":")..-1][1..-1] : @name
-        end
-
-        def rawName : String
-            return @name
-        end
-
         def fullVersionName : String
-            return specifiedPort ? "#{@name}-#{version}" : versionName
+            return "@#{@port}:#{versionName}"
         end
 
         def hiddenName : String
             passName = getEnabledPass
-            return "@#{port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
+            return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
         end
 
         def version=(@version)
-        end
-
-        def rawVersion : String
-            return @version
-        end
-
-        def rawVersionName : String
-            return rawName+"-"+rawVersion
         end
 
         def versionName
@@ -89,10 +69,6 @@ module ISM
                     return software.installedFiles
                 end
             end
-        end
-
-        def port : String
-            return information.port
         end
 
         def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
