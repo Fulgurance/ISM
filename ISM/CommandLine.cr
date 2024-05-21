@@ -478,29 +478,26 @@ module ISM
         end
 
         def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
-            result = ISM::SoftwareInformation.new
 
+            @softwares.each do |entry|
 
-            path =  Ism.settings.rootPath +
-                    ISM::Default::Path::InstalledSoftwaresDirectory +
-                    userEntry.gsub(/[\@\-\:]+/,"/")
+                if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
+                    result.name = entry.name
+                    if !entry.versions.empty?
+                        temporary = entry.greatestVersion.clone
+                        settingsFilePath = temporary.settingsFilePath
 
-            if /@[A-Za-z0-9\-]+:[A-Za-z]+/.matches?(userEntry) && File.exists?(path+ISM::Default::Filename::Information)
-
-                if File.exists?(path+ISM::Default::Filename::SoftwareSettings)
-                    result.loadInformationFile(path+ISM::Default::Filename::SoftwareSettings)
+                        if File.exists?(settingsFilePath)
+                            result.loadInformationFile(settingsFilePath)
+                        else
+                            result = temporary
+                        end
+                        break
+                    end
                 else
-                    result.loadInformationFile(path+ISM::Default::Filename::Information)
-                end
-
-            else
-
-                @softwares.each do |entry|
-
-                    if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
-                        result.name = entry.name
-                        if !entry.versions.empty?
-                            temporary = entry.greatestVersion.clone
+                    entry.versions.each do |software|
+                        if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
+                            temporary = software.clone
                             settingsFilePath = temporary.settingsFilePath
 
                             if File.exists?(settingsFilePath)
@@ -510,22 +507,7 @@ module ISM
                             end
                             break
                         end
-                    else
-                        entry.versions.each do |software|
-                            if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
-                                temporary = software.clone
-                                settingsFilePath = temporary.settingsFilePath
-
-                                if File.exists?(settingsFilePath)
-                                    result.loadInformationFile(settingsFilePath)
-                                else
-                                    result = temporary
-                                end
-                                break
-                            end
-                        end
                     end
-
                 end
 
             end
