@@ -52,7 +52,7 @@ module ISM
 
         def information : ISM::SoftwareInformation
 
-            dependencyInformation = Ism.getSoftwareInformation(@name)
+            dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
 
             @options.each do |option|
                 dependencyInformation.enableOption(option)

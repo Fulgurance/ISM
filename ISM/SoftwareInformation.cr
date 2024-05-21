@@ -419,7 +419,8 @@ module ISM
     def toSoftwareDependency : ISM::SoftwareDependency
         softwareDependency = ISM::SoftwareDependency.new
 
-        softwareDependency.name = fullName
+        softwareDependency.port = @port
+        softwareDependency.name = @name
         softwareDependency.version = @version
 
         @options.each do |option|
