@@ -72,30 +72,7 @@ module ISM
 
         def information : ISM::SoftwareInformation
 
-            if specifiedPort
-                portName = @name[1..@name.index(":")][0..-2]
-                dependencyInformation = ISM::SoftwareInformation.new
-
-                path =  Ism.settings.rootPath +
-                        ISM::Default::Path::SettingsSoftwaresDirectory +
-                        portName + "/" +
-                        name + "/" +
-                        version + "/" +
-                        ISM::Default::Filename::SoftwareSettings
-
-                if !File.exists?(path)
-                    path =  Ism.settings.rootPath +
-                            ISM::Default::Path::SoftwaresDirectory +
-                            portName + "/" +
-                            name + "/" +
-                            version + "/" +
-                            ISM::Default::Filename::Information
-                end
-
-                dependencyInformation.loadInformationFile(path)
-            else
-                dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
-            end
+            dependencyInformation = Ism.getSoftwareInformation(@name)
 
             @options.each do |option|
                 dependencyInformation.enableOption(option)
