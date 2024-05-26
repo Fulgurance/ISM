@@ -1662,8 +1662,6 @@ module ISM
             dependencyHash = Hash(String, ISM::SoftwareInformation).new
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
-
-            dependencyTreeHash = Hash(String, Array(String)).new
             invalidDependencies = Array(ISM::SoftwareInformation).new
 
             loop do
@@ -1678,24 +1676,12 @@ module ISM
                     playCalculationAnimation
 
                     key = dependency.hiddenName
-                    rawKey = dependency.fullName
-
-                    dependencies = dependency.dependencies(allowDeepSearch)
-                    dependencyVersionNames = dependencies.map { |entry| entry.fullName}
                     dependencyInformation = dependency.information
-
+                    dependencies = dependency.dependencies(allowDeepSearch)
                     installed = softwareIsInstalled(dependencyInformation)
-
-                    if !dependencyTreeHash.has_key?(rawKey)
-                        dependencyTreeHash[rawKey] = dependencyVersionNames
-                    else
-                        dependencyTreeHash[rawKey] += dependencyVersionNames
-                        dependencyTreeHash[rawKey] = dependencyTreeHash[rawKey].uniq
-                    end
 
                     if !installed || installed && allowRebuild  && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch
 
-                        #Not completely sure about that check now
                         if !dependencyInformation.isValid
 
                             invalidDependencies.push(ISM::SoftwareInformation.new(port: dependency.port, name: dependency.name, version: dependency.requiredVersion))
@@ -1735,11 +1721,11 @@ module ISM
 
                 invalidDependencies.each do |dependency|
 
-                    name = dependency.fullName
+                    name = dependency.hiddenName
 
-                    dependencyTreeHash.keys.each do |key|
+                    dependencyHash.keys.each do |key|
 
-                        if dependencyTreeHash[key].includes?(name)
+                        if dependencyHash[key].dependencies(allowDeepSearch).any? { |entry| entry == name }
                             @unavailableDependencySignals.push([dependencyHash[key],dependency])
                         end
 
