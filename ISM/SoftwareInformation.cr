@@ -73,7 +73,7 @@ module ISM
     end
 
     def isValid : Bool
-        return (@port != "" && @name != "" && @version != "")
+        return (@port != "" && @name != "" && @version != "") && File.exists?(filePath)
     end
 
     def getEnabledPass : String
