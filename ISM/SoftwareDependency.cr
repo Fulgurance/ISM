@@ -43,7 +43,7 @@ module ISM
         end
 
         def versionName
-            return name+"-"+version
+            return @name+"-"+version
         end
 
         def version
