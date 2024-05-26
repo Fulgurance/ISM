@@ -299,18 +299,18 @@ module ISM
             softwareInformation.writeInformationFile(softwareInformation.installedFilePath)
         end
 
-        def addSoftwareToFavouriteGroup(versionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
+        def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
             favouriteGroup = ISM::FavouriteGroup.new(favouriteGroupName)
             favouriteGroup.loadFavouriteGroupFile
-            favouriteGroup.softwares = favouriteGroup.softwares | [versionName]
+            favouriteGroup.softwares = favouriteGroup.softwares | [fullVersionName]
             favouriteGroup.writeFavouriteGroupFile
         end
 
-        def removeSoftwareToFavouriteGroup(versionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
+        def removeSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
             #Ne pas créer si groupe n'existe pas
             favouriteGroup = ISM::FavouriteGroup.new(favouriteGroupName)
             favouriteGroup.loadFavouriteGroupFile
-            favouriteGroup.softwares.delete(versionName)
+            favouriteGroup.softwares.delete(fullVersionName)
             favouriteGroup.writeFavouriteGroupFile
         end
 
@@ -326,7 +326,7 @@ module ISM
                 if software.hiddenName == installedSoftware.hiddenName
                     requestedVersion = installedSoftware
                 else
-                    if software.name == installedSoftware.name
+                    if software.fullName == installedSoftware.fullName
                         otherVersions.push(installedSoftware)
                     end
                 end
@@ -351,11 +351,11 @@ module ISM
             end
         end
 
-        def softwareAnyVersionInstalled(softwareName : String) : Bool
+        def softwareAnyVersionInstalled(fullName : String) : Bool
 
             @installedSoftwares.each do |installedSoftware|
 
-                if softwareName == installedSoftware.name && !installedSoftware.passEnabled
+                if fullName == installedSoftware.fullName && !installedSoftware.passEnabled
                     return true
                 end
 
@@ -366,9 +366,9 @@ module ISM
 
         def softwareIsRequestedSoftware(software : ISM::SoftwareInformation, requestedSoftwareVersionNames = Array(String).new) : Bool
             if requestedSoftwareVersionNames.empty?
-                return @requestedSoftwares.any? { |entry| entry.versionName == software.versionName}
+                return @requestedSoftwares.any? { |entry| entry.fullVersionName == software.fullVersionName}
             else
-                return requestedSoftwareVersionNames.any? { |entry| entry == software.versionName}
+                return requestedSoftwareVersionNames.any? { |entry| entry == software.fullVersionName}
             end
         end
 
@@ -467,9 +467,9 @@ module ISM
             end
         end
 
-        def getAvailableSoftware(softwareName : String) : ISM::AvailableSoftware
+        def getAvailableSoftware(fullName : String) : ISM::AvailableSoftware
             @softwares.each do |software|
-                if softwareName == software.name
+                if fullName == software.fullName
                     return software
                 end
             end
@@ -480,25 +480,31 @@ module ISM
         def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
             result = ISM::SoftwareInformation.new
 
-            @softwares.each do |entry|
+            if /@[A-Za-z0-9\-]+:[A-Za-z]+/.matches?(userEntry)
 
-                if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
-                    result.name = entry.name
-                    if !entry.versions.empty?
-                        temporary = entry.greatestVersion.clone
-                        settingsFilePath = temporary.settingsFilePath
+                slicedEntry = userEntry.split(/[\:]+/)
 
-                        if File.exists?(settingsFilePath)
-                            result.loadInformationFile(settingsFilePath)
-                        else
-                            result = temporary
-                        end
-                        break
+                result.port = slicedEntry[0][1..-1]
+                result.name = slicedEntry[1].gsub(/\-[0-9\.]+/,"")
+                result.version = slicedEntry[1].gsub(/[a-zA-Z0-9]+-/,"")
+
+                if File.exists?(result.filePath)
+                    if !File.exists?(result.settingsFilePath)
+                        result.loadInformationFile(result.filePath)
+                    else
+                        result.loadInformationFile(result.settingsFilePath)
                     end
                 else
-                    entry.versions.each do |software|
-                        if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
-                            temporary = software.clone
+                    return ISM::SoftwareInformation.new
+                end
+            else
+
+                @softwares.each do |entry|
+
+                    if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
+                        result.name = entry.name
+                        if !entry.versions.empty?
+                            temporary = entry.greatestVersion.clone
                             settingsFilePath = temporary.settingsFilePath
 
                             if File.exists?(settingsFilePath)
@@ -508,7 +514,22 @@ module ISM
                             end
                             break
                         end
+                    else
+                        entry.versions.each do |software|
+                            if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
+                                temporary = software.clone
+                                settingsFilePath = temporary.settingsFilePath
+
+                                if File.exists?(settingsFilePath)
+                                    result.loadInformationFile(settingsFilePath)
+                                else
+                                    result = temporary
+                                end
+                                break
+                            end
+                        end
                     end
+
                 end
 
             end
@@ -996,7 +1017,7 @@ module ISM
 
             list.each do |entry|
                 software = getSoftwareInformation(entry)
-                if software.name != ""
+                if software.isValid
                     softwaresList << software
                 end
             end
@@ -1066,7 +1087,7 @@ module ISM
                 puts "\n"
             end
 
-            dependencyText = "#{dependency.name.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+            dependencyText = "#{dependency.fullName.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
 
             optionsText = "{ "
 
@@ -1086,7 +1107,7 @@ module ISM
 
             missingDependencyText = "#{ISM::Default::CommandLine::UnavailableText2.colorize(:red)}"
 
-            softwareText = "#{software.name.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/"
+            softwareText = "#{software.fullName.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/"
 
             puts "\t" + dependencyText + " " + optionsText + missingDependencyText + softwareText + "\n"
 
@@ -1100,7 +1121,7 @@ module ISM
             puts "\n"
 
             dependencies.each do |software|
-                softwareText = "#{software.name.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+                softwareText = "#{software.fullName.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                 optionsText = "{ "
 
                 software.options.each do |option|
@@ -1119,11 +1140,11 @@ module ISM
             puts "\n"
         end
 
-        def showMissingSelectedDependenciesMessage(name : String, version : String, dependencySelection : Array(Array(String)))
+        def showMissingSelectedDependenciesMessage(fullName : String, version : String, dependencySelection : Array(Array(String)))
             puts "#{ISM::Default::CommandLine::MissingSelectedDependenciesText.colorize(:yellow)}"
             puts "\n"
 
-            puts "#{name.colorize(:magenta)}" + " /" + "#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
+            puts "#{fullName.colorize(:magenta)}" + " /" + "#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
 
             dependencySelection.each do |selection|
                 puts "\t#{ISM::Default::CommandLine::MissingSelectionText.colorize(:magenta)} #{selection.join(" | ").colorize(:magenta)}"
@@ -1331,20 +1352,20 @@ module ISM
             return requiredLibraries
         end
 
-        def getRequestedSoftwareVersionNames
-            result = "requestedSoftwareVersionNames = ["
+        def getRequestedSoftwareFullVersionNames
+            result = "requestedSoftwareFullVersionNames = ["
 
             @requestedSoftwares.each_with_index do |software, index|
 
                 if @requestedSoftwares.size == 1
-                    result = "requestedSoftwareVersionNames = [\"#{software.versionName}\"]"
+                    result = "requestedSoftwareFullVersionNames = [\"#{software.fullVersionName}\"]"
                 else
                     if index == 0
-                        result += "\t\"#{software.versionName}\",\n"
+                        result += "\t\"#{software.fullVersionName}\",\n"
                     elsif index != @requestedSoftwares.size-1
-                        result += "\t\t\t\t\t\t\t\t\t\"#{software.versionName}\",\n"
+                        result += "\t\t\t\t\t\t\t\t\t\"#{software.fullVersionName}\",\n"
                     else
-                        result += "\t\t\t\t\t\t\t\t\t\"#{software.versionName}\"]\n"
+                        result += "\t\t\t\t\t\t\t\t\t\"#{software.fullVersionName}\"]\n"
                     end
                 end
 
@@ -1446,7 +1467,7 @@ module ISM
                     #{getRequiredLibraries}
 
                     #LOADING REQUESTED SOFTWARE VERSION NAMES
-                    #{getRequestedSoftwareVersionNames}
+                    #{getRequestedSoftwareFullVersionNames}
 
                     #LOADING TARGETS, ADDITIONAL INFORMATION INDEX AND NEEDED OPTIONS
                     #{getRequiredTargets(neededSoftwares)}
@@ -1576,7 +1597,7 @@ module ISM
                     #{getRequiredLibraries}
 
                     #LOADING REQUESTED SOFTWARE VERSION NAMES
-                    #{getRequestedSoftwareVersionNames}
+                    #{getRequestedSoftwareFullVersionNames}
 
                     #LOADING TARGETS
                     #{getRequiredTargets(unneededSoftwares)}
@@ -1678,7 +1699,7 @@ module ISM
                     playCalculationAnimation
 
                     key = dependency.hiddenName
-                    rawKey = dependency.versionName
+                    rawKey = dependency.fullVersionName
 
                     dependencies = dependency.dependencies(allowDeepSearch)
                     dependencyVersionNames = dependencies.map { |entry| entry.versionName}
@@ -1695,6 +1716,7 @@ module ISM
 
                     if !installed || installed && allowRebuild == true && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch == true
 
+                        #Not completely sure about that check now
                         if !dependencyInformation.isValid
 
                             invalidDependencies.push(ISM::SoftwareInformation.new(name: dependency.name, version: dependency.requiredVersion))
@@ -1734,7 +1756,7 @@ module ISM
 
                 invalidDependencies.each do |dependency|
 
-                    name = dependency.versionName
+                    name = dependency.fullVersionName
 
                     dependencyTreeHash.keys.each do |key|
 
@@ -2052,7 +2074,7 @@ module ISM
                 showSkippedUpdatesMessage
 
                 #Remove duplicate skipped updates
-                @unavailableDependencySignals.uniq! { |entry| [entry[0].versionName,entry[1].versionName]}
+                @unavailableDependencySignals.uniq! { |entry| [entry[0].fullVersionName,entry[1].fullVersionName]}
 
                 #Show all skipped updates
                 @unavailableDependencySignals.each do |signal|

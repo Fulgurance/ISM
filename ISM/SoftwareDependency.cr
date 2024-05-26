@@ -26,6 +26,10 @@ module ISM
             return String.new
         end
 
+        def fullName : String
+            return "@#{@port}:#{@name}"
+        end
+
         def fullVersionName : String
             return "@#{@port}:#{versionName}"
         end

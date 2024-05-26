@@ -354,7 +354,7 @@ module ISM
 
         if !missingSelectedDependencies.empty?
             Ism.showCalculationDoneMessage
-            Ism.showMissingSelectedDependenciesMessage(@name, @version, missingSelectedDependencies)
+            Ism.showMissingSelectedDependenciesMessage(fullName, @version, missingSelectedDependencies)
             Ism.exitProgram
         end
 
