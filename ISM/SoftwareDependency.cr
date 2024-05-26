@@ -31,7 +31,7 @@ module ISM
         end
 
         def fullVersionName : String
-            return "@#{@port}:#{versionName}"
+            return "#{fullName}-#{version}"
         end
 
         def hiddenName : String
