@@ -1698,7 +1698,7 @@ module ISM
                         #Not completely sure about that check now
                         if !dependencyInformation.isValid
 
-                            invalidDependencies.push(ISM::SoftwareInformation.new(port: dependency.port name: dependency.name, version: dependency.requiredVersion))
+                            invalidDependencies.push(ISM::SoftwareInformation.new(port: dependency.port, name: dependency.name, version: dependency.requiredVersion))
 
                         end
 
