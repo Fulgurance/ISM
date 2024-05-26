@@ -1735,7 +1735,7 @@ module ISM
 
                 invalidDependencies.each do |dependency|
 
-                    name = dependency.rawFullVersionName
+                    name = dependency.fullVersionName
 
                     dependencyTreeHash.keys.each do |key|
 
