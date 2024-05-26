@@ -1725,9 +1725,7 @@ module ISM
 
                     dependencyHash.keys.each do |key|
 
-                        if dependencyHash[key].dependencies(allowDeepSearch).any? { |entry| entry == name }
-                            @unavailableDependencySignals.push([dependencyHash[key],dependency])
-                        end
+                        @unavailableDependencySignals.push([dependencyHash[key],dependency])
 
                     end
 
