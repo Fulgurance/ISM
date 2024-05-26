@@ -1681,7 +1681,7 @@ module ISM
                     rawKey = dependency.rawFullVersionName
 
                     dependencies = dependency.dependencies(allowDeepSearch)
-                    dependencyVersionNames = dependencies.map { |entry| entry.rawFullRawVersionName}
+                    dependencyVersionNames = dependencies.map { |entry| entry.rawFullVersionName}
                     dependencyInformation = dependency.information
 
                     installed = softwareIsInstalled(dependencyInformation)
