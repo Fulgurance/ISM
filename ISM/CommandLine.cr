@@ -1681,7 +1681,7 @@ module ISM
                     rawKey = dependency.fullVersionName
 
                     dependencies = dependency.dependencies(allowDeepSearch)
-                    dependencyVersionNames = dependencies.map { |entry| entry.versionName}
+                    dependencyVersionNames = dependencies.map { |entry| entry.fullVersionName}
                     dependencyInformation = dependency.information
 
                     installed = softwareIsInstalled(dependencyInformation)
@@ -1693,7 +1693,7 @@ module ISM
                         dependencyTreeHash[rawKey] = dependencyTreeHash[rawKey].uniq
                     end
 
-                    if !installed || installed && allowRebuild == true && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch == true
+                    if !installed || installed && allowRebuild  && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch
 
                         #Not completely sure about that check now
                         if !dependencyInformation.isValid
@@ -1747,7 +1747,7 @@ module ISM
 
                 end
 
-                if allowSkipUnavailable == true
+                if allowSkipUnavailable
 
                     return Hash(String, ISM::SoftwareInformation).new
 
