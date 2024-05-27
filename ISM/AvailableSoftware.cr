@@ -53,7 +53,7 @@ module ISM
             version = condition.tr("><=","")
             semanticVersion = SemanticVersion.parse(version)
 
-            if greaterComparator(condition)
+            if greaterComparator(condition) && !@versions.empty?
                 temp = @versions.select {|entry| SemanticVersion.parse(entry.version) > semanticVersion}
             elsif lessComparator(condition)
                 temp = @versions.select {|entry| SemanticVersion.parse(entry.version) < semanticVersion}
@@ -65,7 +65,7 @@ module ISM
                 return ISM::SoftwareInformation.new
             end
 
-            return returnMaximum ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)}
+            return temp.empty? ? ISM::SoftwareInformation.new : (returnMaximum ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
         end
 
         def greatestVersion(condition=String.new) : ISM::SoftwareInformation
