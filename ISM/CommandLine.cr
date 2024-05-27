@@ -1500,7 +1500,7 @@ module ISM
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
-                        if Ism.softwareIsRequestedSoftware(target.information, requestedSoftwareVersionNames)
+                        if Ism.softwareIsRequestedSoftware(target.information, requestedSoftwareFullVersionNames)
                             Ism.addSoftwareToFavouriteGroup(versionName)
                         end
 
