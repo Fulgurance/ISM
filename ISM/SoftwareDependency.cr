@@ -58,8 +58,14 @@ module ISM
 
             dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
 
-            @options.each do |option|
-                dependencyInformation.enableOption(option)
+            if dependencyInformation.isValid
+
+                @options.each do |option|
+                    dependencyInformation.enableOption(option)
+                end
+
+            else
+                dependencyInformation = ISM::SoftwareInformation.new(port: @port, name: @name, version: @version)
             end
 
             return dependencyInformation
