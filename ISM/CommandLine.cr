@@ -293,6 +293,10 @@ module ISM
             return true,String.new
         end
 
+        def reportMissingDependency(missingDependency : ISM::SoftwareInformation, relatedSoftware : ISM::SoftwareInformation)
+            @unavailableDependencySignals.push([relatedSoftware, missingDependency])
+        end
+
         def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
             softwareInformation.installedFiles = installedFiles
 
@@ -1719,13 +1723,17 @@ module ISM
 
             if !invalidDependencies.empty?
 
-                invalidDependencies.each do |dependency|
+                invalidDependencies.each do |invalidDependency|
 
-                    name = dependency.hiddenName
+                    dependencyHash.values.each do |neededSoftware|
 
-                    dependencyHash.keys.each do |key|
+                        neededSoftware.dependencies.each do |dependency|
 
-                        @unavailableDependencySignals.push([dependencyHash[key],dependency])
+                            if dependency.fullVersionName == invalidDependency.fullVersionName
+                                reportMissingDependency(missingDependency: invalidDependency, relatedSoftware: neededSoftware)
+                            end
+
+                        end
 
                     end
 
