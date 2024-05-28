@@ -1724,10 +1724,13 @@ module ISM
             if !invalidDependencies.empty?
 
                 invalidDependencies.each do |invalidDependency|
+                    playCalculationAnimation
 
                     dependencyHash.values.each do |neededSoftware|
+                        playCalculationAnimation
 
                         neededSoftware.dependencies.each do |dependency|
+                            playCalculationAnimation
 
                             if dependency.fullVersionName == invalidDependency.fullVersionName
                                 reportMissingDependency(missingDependency: invalidDependency, relatedSoftware: neededSoftware)
