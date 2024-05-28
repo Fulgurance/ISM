@@ -1732,7 +1732,9 @@ module ISM
                         neededSoftware.dependencies(allowDeepSearch: true).each do |dependency|
                             playCalculationAnimation
 
-                            if dependency.fullVersionName == invalidDependency.fullVersionName
+                            information = dependency.information
+
+                            if information.fullVersionName == invalidDependency.fullVersionName
                                 reportMissingDependency(missingDependency: invalidDependency, relatedSoftware: neededSoftware)
                             end
 
