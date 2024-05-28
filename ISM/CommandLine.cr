@@ -1107,6 +1107,10 @@ module ISM
                 softwareText = "#{software.fullName.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
                 optionsText = "{ "
 
+                if software.options.empty?
+                    optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                end
+
                 software.options.each do |option|
                     if option.active
                         optionsText += "#{option.name.colorize(:red)}"
