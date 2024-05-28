@@ -1729,7 +1729,7 @@ module ISM
                     dependencyHash.values.each do |neededSoftware|
                         playCalculationAnimation
 
-                        neededSoftware.dependencies.each do |dependency|
+                        neededSoftware.dependencies(allowDeepSearch: true).each do |dependency|
                             playCalculationAnimation
 
                             if dependency.fullVersionName == invalidDependency.fullVersionName
