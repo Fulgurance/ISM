@@ -581,9 +581,9 @@ module ISM
         end
 
         def printErrorNotification(message : String, error)
-            puts "[#{"!".colorize(:red)}] #{message}"
+            puts "[#{"!".colorize(:red)}] #{message.colorize(Colorize::ColorRGB.new(255,100,100))}"
             if typeof(error) == Exception
-                puts "[#{"!".colorize(:red)}] "
+                puts "[#{"!".colorize(Colorize::ColorRGB.new(255,100,100))}] "
                 pp error
             end
         end
