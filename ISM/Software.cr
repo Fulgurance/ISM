@@ -1167,7 +1167,7 @@ module ISM
         end
 
         def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
-            if @buildDirectory
+            if @buildDirectory && configureDirectory != ""
                 configureCommand = "../#{configureDirectory}/configure"
             else
                 configureCommand = "./#{configureDirectory}/configure"
