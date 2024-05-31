@@ -12,7 +12,7 @@ module ISM
             @information.loadInformationFile(informationPath)
             @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
             @buildDirectory = false
-            @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "" }
+            @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
@@ -1167,7 +1167,7 @@ module ISM
         end
 
         def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
-            if @buildDirectory
+            if @buildDirectory && configureDirectory != ""
                 configureCommand = "../#{configureDirectory}/configure"
             else
                 configureCommand = "./#{configureDirectory}/configure"
