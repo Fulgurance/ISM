@@ -12,7 +12,7 @@ module ISM
             @information.loadInformationFile(informationPath)
             @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
             @buildDirectory = false
-            @buildDirectoryNames = ISM::Default::Software::BuildDirectoryNames
+            @buildDirectoryNames = { MainBuildDirectoryEntry => "mainBuild" }
         end
 
         def workDirectoryPath(relatedToChroot = true) : String
