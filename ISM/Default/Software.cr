@@ -6,6 +6,7 @@ module ISM
 
             SourcesArchiveBaseName = "Sources"
             PatchesArchiveBaseName = "Patches"
+            MainBuildDirectoryEntry = "MainBuild"
             ArchiveExtensionName = ".tar.xz"
             ArchiveMd5sumExtensionName = "#{ArchiveExtensionName}.md5sum"
             SourcesArchiveName = "#{SourcesArchiveBaseName}#{ArchiveExtensionName}"
