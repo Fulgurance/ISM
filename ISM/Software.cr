@@ -24,7 +24,7 @@ module ISM
         end
 
         def buildDirectoryPath(relatedToChroot = true, entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
-            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectoryNames[entry]}"
+            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
         end
 
         def builtSoftwareDirectoryPath(relatedToChroot = true) : String
