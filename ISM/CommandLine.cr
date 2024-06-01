@@ -1971,7 +1971,7 @@ module ISM
             softwareInformationList.each do |software|
                 playCalculationAnimation
 
-                softwareList.delete(software.hiddenName)
+                softwareList.delete(software.fullVersionName)
             end
 
             #Generate a software information array of the left favourites
