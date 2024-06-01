@@ -1,62 +1,54 @@
 module ISM
+  module Option
+    class SoftwareSelectDependency < ISM::CommandLineOption
+      def initialize
+        super(ISM::Default::Option::SoftwareSelectDependency::ShortText,
+          ISM::Default::Option::SoftwareSelectDependency::LongText,
+          ISM::Default::Option::SoftwareSelectDependency::Description,
+          Array(ISM::CommandLineOption).new)
+      end
 
-    module Option
+      def start
+        if ARGV.size == 2 + Ism.debugLevel || ARGV.size == 3 + Ism.debugLevel
+          showHelp
+        else
+          if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+            Ism.printNeedSuperUserAccessNotification
+          else
+            matchingSoftware = Ism.getSoftwareInformation(ARGV[1 + Ism.debugLevel].downcase)
 
-        class SoftwareSelectDependency < ISM::CommandLineOption
+            if matchingSoftware.name == ""
+              puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFound + "#{ARGV[1 + Ism.debugLevel].colorize(:green)}"
+              puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFoundAdvice
+            else
+              if ARGV[2 + Ism.debugLevel] == @shortText || ARGV[2 + Ism.debugLevel] == @longText
+                dependency = ARGV[3 + Ism.debugLevel].downcase.capitalize
 
-            def initialize
-                super(  ISM::Default::Option::SoftwareSelectDependency::ShortText,
-                        ISM::Default::Option::SoftwareSelectDependency::LongText,
-                        ISM::Default::Option::SoftwareSelectDependency::Description,
-                        Array(ISM::CommandLineOption).new)
-            end
-
-            def start
-                if ARGV.size == 2+Ism.debugLevel || ARGV.size == 3+Ism.debugLevel
-                    showHelp
+                if matchingSoftware.selectUniqueDependency(dependency)
+                  matchingSoftware.writeInformationFile(matchingSoftware.settingsFilePath)
+                  Ism.printProcessNotification(ISM::Default::Option::SoftwareSelectDependency::SetText1 +
+                                               dependency +
+                                               ISM::Default::Option::SoftwareSelectDependency::SetText2 +
+                                               matchingSoftware.name)
                 else
-                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
-                        Ism.printNeedSuperUserAccessNotification
-                    else
-                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1+Ism.debugLevel].downcase)
-
-                        if matchingSoftware.name == ""
-                            puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFound + "#{ARGV[1+Ism.debugLevel].colorize(:green)}"
-                            puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFoundAdvice
-                        else
-                            if ARGV[2+Ism.debugLevel] == @shortText || ARGV[2+Ism.debugLevel] == @longText
-
-                                dependency = ARGV[3+Ism.debugLevel].downcase.capitalize
-
-                                if matchingSoftware.selectUniqueDependency(dependency)
-                                    matchingSoftware.writeInformationFile(matchingSoftware.settingsFilePath)
-                                    Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
-                                                                dependency +
-                                                                ISM::Default::Option::SoftwareSelectDependency::SetText2 +
-                                                                matchingSoftware.name)
-                                else
-                                    Ism.printErrorNotification( ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
-                                                            dependency +
-                                                            ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound2 +
-                                                            matchingSoftware.name,nil)
-                                end
-                            else
-                                showHelp
-                            end
-                        end
-                    end
+                  Ism.printErrorNotification(ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
+                                             dependency +
+                                             ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound2 +
+                                             matchingSoftware.name, nil)
                 end
-
+              else
+                showHelp
+              end
             end
-
-            def showHelp
-                puts    ISM::Default::Option::SoftwareSelectDependency::ShowHelpDescription +
-                        "\n\n\t" + ISM::Default::Option::SoftwareSelectDependency::ShowHelpExampleText1 +
-                        "\n\t" + "#{ISM::Default::Option::SoftwareSelectDependency::ShowHelpExampleText2.colorize(:green)}"
-            end
-
+          end
         end
-        
-    end
+      end
 
+      def showHelp
+        puts ISM::Default::Option::SoftwareSelectDependency::ShowHelpDescription +
+             "\n\n\t" + ISM::Default::Option::SoftwareSelectDependency::ShowHelpExampleText1 +
+             "\n\t" + "#{ISM::Default::Option::SoftwareSelectDependency::ShowHelpExampleText2.colorize(:green)}"
+      end
+    end
+  end
 end
