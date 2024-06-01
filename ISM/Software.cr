@@ -1166,12 +1166,8 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
-        def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new)
-            if @buildDirectory && (configureDirectory != "" && path.squeeze("/") != mainWorkDirectoryPath.squeeze("/"))
-                configureCommand = "../#{configureDirectory}/configure"
-            else
-                configureCommand = "./#{configureDirectory}/configure"
-            end
+        def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, relatedToMainBuild = true)
+            configureCommand = "#{@buildDirectory && relatedToMainBuild ? ".." : "."}/#{configureDirectory}/configure"
 
             requestedCommands = [configureCommand]+arguments
 
