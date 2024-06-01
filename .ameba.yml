@@ -147,11 +147,3 @@ Style/ParenthesesAroundCondition:
   Enabled: true
   Severity: Convention
 
-# Problems found: 27
-# Run `ameba --only Style/RedundantBegin` for details
-Style/RedundantBegin:
-  Description: Disallows redundant begin blocks
-  Excluded:
-  - ISM/Software.cr
-  Enabled: true
-  Severity: Convention
