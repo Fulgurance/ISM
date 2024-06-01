@@ -11,7 +11,7 @@ module ISM
     end
 
     def filePath : String
-      return Ism.settings.rootPath + ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath
+      Ism.settings.rootPath + ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath
     end
 
     def loadPortsSettingsFile

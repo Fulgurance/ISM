@@ -11,7 +11,7 @@ module ISM
     end
 
     def filePath : String
-      return Ism.settings.rootPath + ISM::Default::CommandLineMirrorsSettings::MirrorsSettingsFilePath
+      Ism.settings.rootPath + ISM::Default::CommandLineMirrorsSettings::MirrorsSettingsFilePath
     end
 
     def loadMirrorsSettingsFile
@@ -38,13 +38,13 @@ module ISM
     def sourcesLink : String
       mirror = Mirror.new(@defaultMirror)
       mirror.loadMirrorFile
-      return mirror.sourcesLink
+      mirror.sourcesLink
     end
 
     def patchesLink : String
       mirror = Mirror.new(@defaultMirror)
       mirror.loadMirrorFile
-      return mirror.patchesLink
+      mirror.patchesLink
     end
   end
 end

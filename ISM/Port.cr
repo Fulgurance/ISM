@@ -9,15 +9,15 @@ module ISM
     end
 
     def self.filePathPrefix : String
-      return Ism.settings.rootPath + ISM::Default::Path::PortsDirectory
+      Ism.settings.rootPath + ISM::Default::Path::PortsDirectory
     end
 
     def self.directoryPathPrefix : String
-      return Ism.settings.rootPath + ISM::Default::Path::SoftwaresDirectory
+      Ism.settings.rootPath + ISM::Default::Path::SoftwaresDirectory
     end
 
     def self.exists(name : String) : Bool
-      return File.exists?(self.filePathPrefix + name + ".json")
+      File.exists?(self.filePathPrefix + name + ".json")
     end
 
     def self.delete(name : String)
@@ -26,11 +26,11 @@ module ISM
     end
 
     def filePath : String
-      return self.class.filePathPrefix + @name + ".json"
+      self.class.filePathPrefix + @name + ".json"
     end
 
     def directoryPath : String
-      return self.class.directoryPathPrefix + @name
+      self.class.directoryPathPrefix + @name
     end
 
     def loadPortFile
@@ -69,11 +69,11 @@ module ISM
         FileUtils.rm_r(directoryPath)
       end
 
-      return result.success?
+      result.success?
     end
 
     def synchronize : Process
-      return Process.new("git pull origin #{Ism.portsSettings.targetVersion}",
+      Process.new("git pull origin #{Ism.portsSettings.targetVersion}",
         shell: true,
         chdir: directoryPath)
     end

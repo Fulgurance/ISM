@@ -71,7 +71,7 @@ module ISM
     end
 
     def isValid : Bool
-      return (@port != "" && @name != "" && @version != "") && File.exists?(filePath)
+      (@port != "" && @name != "" && @version != "") && File.exists?(filePath)
     end
 
     def getEnabledPass : String
@@ -81,12 +81,12 @@ module ISM
         end
       end
 
-      return String.new
+      String.new
     end
 
     def getEnabledPassNumber : Int32
       stringNumber = getEnabledPass
-      return stringNumber == "" ? 0 : stringNumber.gsub("Pass", "").to_i
+      stringNumber == "" ? 0 : stringNumber.gsub("Pass", "").to_i
     end
 
     def loadInformationFile(loadInformationFilePath : String)
@@ -188,27 +188,27 @@ module ISM
 
     def hiddenName : String
       passName = getEnabledPass
-      return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
+      "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
     end
 
     def fullName : String
-      return "@#{@port}:#{@name}"
+      "@#{@port}:#{@name}"
     end
 
     def versionName : String
-      return "#{@name}-#{@version}"
+      "#{@name}-#{@version}"
     end
 
     def fullVersionName : String
-      return "#{fullName}-#{@version}"
+      "#{fullName}-#{@version}"
     end
 
     def builtSoftwareDirectoryPath
-      return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
+      "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
     end
 
     def filePath : String
-      return Ism.settings.rootPath +
+      Ism.settings.rootPath +
         ISM::Default::Path::SoftwaresDirectory +
         @port + "/" +
         @name + "/" +
@@ -217,7 +217,7 @@ module ISM
     end
 
     def requireFilePath : String
-      return Ism.settings.rootPath +
+      Ism.settings.rootPath +
         ISM::Default::Path::SoftwaresDirectory +
         @port + "/" +
         @name + "/" +
@@ -226,7 +226,7 @@ module ISM
     end
 
     def settingsFilePath : String
-      return Ism.settings.rootPath +
+      Ism.settings.rootPath +
         ISM::Default::Path::SettingsSoftwaresDirectory +
         @port + "/" +
         @name + "/" +
@@ -235,14 +235,14 @@ module ISM
     end
 
     def installedDirectoryPath : String
-      return Ism.settings.rootPath +
+      Ism.settings.rootPath +
         ISM::Default::Path::InstalledSoftwaresDirectory +
         @port + "/" +
         @name + "/"
     end
 
     def installedFilePath : String
-      return Ism.settings.rootPath +
+      Ism.settings.rootPath +
         ISM::Default::Path::InstalledSoftwaresDirectory +
         @port + "/" +
         @name + "/" +
@@ -257,7 +257,7 @@ module ISM
         end
       end
 
-      return false
+      false
     end
 
     def option(optionName : String) : Bool
@@ -267,7 +267,7 @@ module ISM
         end
       end
 
-      return false
+      false
     end
 
     def enableOption(optionName : String)
@@ -313,7 +313,7 @@ module ISM
         end
       end
 
-      return false
+      false
     end
 
     def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
@@ -353,10 +353,10 @@ module ISM
       end
 
       if allowDeepSearch
-        return @dependencies + dependenciesArray
+        @dependencies + dependenciesArray
       else
         # REJECT INSTALLED DEPENDENCIES AND UNIQUE DEPENDENCIES NOT SELECTIONED
-        return @dependencies.reject { |entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.name) && !@selectedDependencies.includes?(entry.name) } + dependenciesArray
+        @dependencies.reject { |entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.name) && !@selectedDependencies.includes?(entry.name) } + dependenciesArray
       end
     end
 
@@ -369,43 +369,43 @@ module ISM
         end
       end
 
-      return @kernelDependencies + dependenciesArray
+      @kernelDependencies + dependenciesArray
     end
 
     def archiveName : String
-      return archiveBaseName + archiveExtensionName
+      archiveBaseName + archiveExtensionName
     end
 
     def archiveMd5sumName : String
-      return archiveName + archiveMd5sumExtensionName
+      archiveName + archiveMd5sumExtensionName
     end
 
     def archiveBaseName : String
-      return versionName
+      versionName
     end
 
     def archiveExtensionName : String
-      return ISM::Default::SoftwareInformation::ArchiveExtensionName
+      ISM::Default::SoftwareInformation::ArchiveExtensionName
     end
 
     def archiveMd5sumExtensionName : String
-      return ISM::Default::SoftwareInformation::ArchiveMd5sumExtensionName
+      ISM::Default::SoftwareInformation::ArchiveMd5sumExtensionName
     end
 
     def sourcesLink : String
-      return Ism.mirrorsSettings.sourcesLink + archiveName
+      Ism.mirrorsSettings.sourcesLink + archiveName
     end
 
     def sourcesMd5sumLink : String
-      return Ism.mirrorsSettings.sourcesLink + archiveMd5sumName
+      Ism.mirrorsSettings.sourcesLink + archiveMd5sumName
     end
 
     def patchesLink : String
-      return Ism.mirrorsSettings.patchesLink + archiveName
+      Ism.mirrorsSettings.patchesLink + archiveName
     end
 
     def patchesMd5sumLink : String
-      return Ism.mirrorsSettings.patchesLink + archiveMd5sumName
+      Ism.mirrorsSettings.patchesLink + archiveMd5sumName
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency
@@ -421,17 +421,17 @@ module ISM
         end
       end
 
-      return softwareDependency
+      softwareDependency
     end
 
     def ==(other : ISM::SoftwareInformation) : Bool
-      return @name == other.name &&
+      @name == other.name &&
         @version == other.version &&
         @options == other.options
     end
 
     def dependencyIsUnique(dependency : String) : Bool
-      return @uniqueDependencies.map { |entry| entry.includes?(dependency) }.includes?(true)
+      @uniqueDependencies.map { |entry| entry.includes?(dependency) }.includes?(true)
     end
 
     def getMissingSelectedDependencies : Array(Array(String))
@@ -451,7 +451,7 @@ module ISM
         end
       end
 
-      return result
+      result
     end
 
     def selectUniqueDependency(dependency : String) : Bool
@@ -476,11 +476,11 @@ module ISM
         end
       end
 
-      return selected
+      selected
     end
 
     def uniqueDependencyIsEnabled(dependency : String) : Bool
-      return @selectedDependencies.includes?(dependency)
+      @selectedDependencies.includes?(dependency)
     end
   end
 end

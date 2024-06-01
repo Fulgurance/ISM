@@ -21,35 +21,35 @@ module ISM
         end
       end
 
-      return String.new
+      String.new
     end
 
     def fullName : String
-      return "@#{@port}:#{@name}"
+      "@#{@port}:#{@name}"
     end
 
     def fullVersionName : String
-      return "#{fullName}-#{version}"
+      "#{fullName}-#{version}"
     end
 
     def hiddenName : String
       passName = getEnabledPass
-      return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
+      "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
     end
 
     def version=(@version)
     end
 
     def versionName
-      return @name + "-" + version
+      @name + "-" + version
     end
 
     def version
-      return Ism.getAvailableSoftware(fullName).greatestVersion(@version).version
+      Ism.getAvailableSoftware(fullName).greatestVersion(@version).version
     end
 
     def requiredVersion : String
-      return @version
+      @version
     end
 
     def information : ISM::SoftwareInformation
@@ -63,7 +63,7 @@ module ISM
         dependencyInformation = ISM::SoftwareInformation.new(port: @port, name: @name, version: @version)
       end
 
-      return dependencyInformation
+      dependencyInformation
     end
 
     def installedFiles
@@ -77,23 +77,23 @@ module ISM
     end
 
     def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
-      return information.dependencies(allowDeepSearch)
+      information.dependencies(allowDeepSearch)
     end
 
     def builtSoftwareDirectoryPath : String
-      return information.builtSoftwareDirectoryPath
+      information.builtSoftwareDirectoryPath
     end
 
     def requireFilePath : String
-      return information.requireFilePath
+      information.requireFilePath
     end
 
     def filePath : String
-      return information.filePath
+      information.filePath
     end
 
     def ==(other : ISM::SoftwareDependency) : Bool
-      return hiddenName == other.hiddenName &&
+      hiddenName == other.hiddenName &&
         version == other.version &&
         @options == other.options
     end

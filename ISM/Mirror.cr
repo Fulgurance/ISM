@@ -12,7 +12,7 @@ module ISM
     end
 
     def filePath : String
-      return Ism.settings.rootPath + ISM::Default::Path::MirrorsDirectory + @codeName + ".json"
+      Ism.settings.rootPath + ISM::Default::Path::MirrorsDirectory + @codeName + ".json"
     end
 
     def loadMirrorFile
@@ -37,15 +37,15 @@ module ISM
     end
 
     def defaultUrl : String
-      return @urls[@mainUrl]
+      @urls[@mainUrl]
     end
 
     def sourcesLink : String
-      return defaultUrl + ISM::Default::Mirror::SourcesLinkDirectory
+      defaultUrl + ISM::Default::Mirror::SourcesLinkDirectory
     end
 
     def patchesLink : String
-      return defaultUrl + ISM::Default::Mirror::PatchesLinkDirectory
+      defaultUrl + ISM::Default::Mirror::PatchesLinkDirectory
     end
   end
 end

@@ -18,11 +18,11 @@ module ISM
     end
 
     def ==(other : ISM::SoftwareOption) : Bool
-      return @name == other.name && @active == other.active
+      @name == other.name && @active == other.active
     end
 
     def isPass : Bool
-      return @name.starts_with?(/Pass[0-9]/)
+      @name.starts_with?(/Pass[0-9]/)
     end
 
     def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
@@ -34,7 +34,7 @@ module ISM
         end
       end
 
-      return result
+      result
     end
   end
 end

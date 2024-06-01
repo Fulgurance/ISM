@@ -11,7 +11,7 @@ module ISM
     end
 
     def filePath : String
-      return Ism.settings.rootPath + ISM::Default::Path::FavouriteGroupsDirectory + @name + ".json"
+      Ism.settings.rootPath + ISM::Default::Path::FavouriteGroupsDirectory + @name + ".json"
     end
 
     def loadFavouriteGroupFile

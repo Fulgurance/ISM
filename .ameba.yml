@@ -12,29 +12,6 @@ Naming/MethodNames:
 Naming/VariableNames:
   Enabled: false
 
-# Problems found: 139
-# Run `ameba --only Style/RedundantReturn` for details
-Style/RedundantReturn:
-  Description: Reports redundant return expressions
-  AllowMultiReturn: true
-  AllowEmptyReturn: true
-  Excluded:
-  - ISM/Option/Port/Open/Open.cr
-  - ISM/CommandLineMirrorsSettings.cr
-  - ISM/CommandLinePortsSettings.cr
-  - ISM/CommandLineSettings.cr
-  - ISM/FavouriteGroup.cr
-  - ISM/Mirror.cr
-  - ISM/Port.cr
-  - ISM/SoftwareOption.cr
-  - ISM/AvailableSoftware.cr
-  - ISM/CommandLine.cr
-  - ISM/Software.cr
-  - ISM/SoftwareDependency.cr
-  - ISM/SoftwareInformation.cr
-  Enabled: true
-  Severity: Convention
-
 # Problems found: 12
 # Run `ameba --only Metrics/CyclomaticComplexity` for details
 Metrics/CyclomaticComplexity:

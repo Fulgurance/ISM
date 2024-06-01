@@ -15,7 +15,7 @@ module ISM
           portName = portName[0..-5]
         end
 
-        return ISM::Port.new(portName, url)
+        ISM::Port.new(portName, url)
       end
 
       def start

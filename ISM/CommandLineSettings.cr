@@ -165,49 +165,49 @@ module ISM
 
     def systemName(relatedToChroot = true) : String
       if relatedToChroot
-        return (@rootPath != "/" ? @chrootSystemName : @systemName)
+        (@rootPath != "/" ? @chrootSystemName : @systemName)
       else
-        return @systemName
+        @systemName
       end
     end
 
     def targetName(relatedToChroot = true) : String
       if relatedToChroot
-        return (@rootPath != "/" ? @chrootTargetName : @targetName)
+        (@rootPath != "/" ? @chrootTargetName : @targetName)
       else
-        return @targetName
+        @targetName
       end
     end
 
     def architecture(relatedToChroot = true) : String
       if relatedToChroot
-        return (@rootPath != "/" ? @chrootArchitecture : @architecture)
+        (@rootPath != "/" ? @chrootArchitecture : @architecture)
       else
-        return @architecture
+        @architecture
       end
     end
 
     def target(relatedToChroot = true) : String
       if relatedToChroot
-        return (@rootPath != "/" ? @chrootTarget : @target)
+        (@rootPath != "/" ? @chrootTarget : @target)
       else
-        return @target
+        @target
       end
     end
 
     def makeOptions(relatedToChroot = true) : String
       if relatedToChroot
-        return (@rootPath != "/" ? @chrootMakeOptions : @makeOptions)
+        (@rootPath != "/" ? @chrootMakeOptions : @makeOptions)
       else
-        return @makeOptions
+        @makeOptions
       end
     end
 
     def buildOptions(relatedToChroot = true) : String
       if relatedToChroot
-        return (@rootPath != "/" ? @chrootBuildOptions : @buildOptions)
+        (@rootPath != "/" ? @chrootBuildOptions : @buildOptions)
       else
-        return @buildOptions
+        @buildOptions
       end
     end
 
@@ -295,15 +295,15 @@ module ISM
     end
 
     def temporaryPath
-      return "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
+      "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
     end
 
     def sourcesPath
-      return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
+      "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
     end
 
     def toolsPath
-      return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
+      "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
     end
   end
 end
