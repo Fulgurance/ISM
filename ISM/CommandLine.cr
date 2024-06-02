@@ -1985,8 +1985,8 @@ module ISM
                 playCalculationAnimation
 
                 #If it's require, add to wrong arguments
-                if requiredSoftwares.has_key?(software.hiddenName)
-                    wrongArguments.push(software.hiddenName)
+                if requiredSoftwares.has_key?(software.fullVersionName)
+                    wrongArguments.push(software.fullVersionName)
                 end
             end
 
@@ -1995,7 +1995,7 @@ module ISM
                 playCalculationAnimation
 
                 #If it's not require, add to unneeded softwares
-                if !requiredSoftwares.has_key?(software.hiddenName)
+                if !requiredSoftwares.has_key?(software.fullVersionName)
                     unneededSoftwares.push(software)
                 end
 
