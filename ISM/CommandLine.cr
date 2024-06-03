@@ -1005,11 +1005,11 @@ module ISM
             end
         end
 
-        def getRequestedSoftwares(list : Array(String)) : Array(ISM::SoftwareInformation)
+        def getRequestedSoftwares(list : Array(String), getInstalledOnesOnly = false) : Array(ISM::SoftwareInformation)
             softwaresList = Array(ISM::SoftwareInformation).new
 
             list.each do |entry|
-                software = getSoftwareInformation(entry)
+                getInstalledOnesOnly ? (software = getInstalledSoftwareInformation(entry)) : (software = getSoftwareInformation(entry))
                 if software.isValid
                     softwaresList << software
                 end
@@ -1972,11 +1972,6 @@ module ISM
                 softwareList += group.softwares
             end
 
-            #Get software information from the favourites
-            softwareList.each do |software|
-                softwareInformationList.push(getSoftwareInformation(software))
-            end
-
             #Remove from that list requested softwares for removal
             @requestedSoftwares.each do |software|
                 playCalculationAnimation
@@ -1987,7 +1982,7 @@ module ISM
             end
 
             #Generate a software information array of the left favourites
-            softwareInformationList = getRequestedSoftwares(softwareList)
+            softwareInformationList = getRequestedSoftwares(softwareList, getInstalledOnesOnly: true)
 
             #Then we check the needed dependencies for that list
             requiredSoftwares = getRequiredDependencies(softwareInformationList, allowDeepSearch: true)
