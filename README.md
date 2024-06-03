@@ -23,14 +23,23 @@ Ingenius System Manager
         -v      version Show and manage the ISM version
         -so     software        Install, configure and remove softwares
         -p      port    Manage ISM ports
-        -sy     system  Configure the system settings
         -se     settings        Configure ISM settings
         -d      debug   Enable debug mode to track any error
 ```
 
 ```
+user $ ism version
+Show and manage the ISM version
+        -s      show    Show the current ISM version
+        -sw     switch  Switch ISM to an another version
+```
+
+```
 user $ ism software
 Install, configure and remove softwares
+        -sd     selectdependency        Select a dependency part of unique set
+                                Need to be use like this:
+                                ism software [softwarename] selectdependency [dependencyname]
         -do     disableoption   Disable a specific software option
                                 Need to be use like this:
                                 ism software [softwarename] disableoption [optionname]
@@ -39,9 +48,16 @@ Install, configure and remove softwares
                                 ism software [softwarename] enableoption [optionname]
         -i      install Install specific(s) software(s)
         -ui     uninstall       Uninstall specific(s) software(s)
+        -c      clean   Clean the system by remove unneeded softwares
         -se     search  Search specific(s) software(s)
         -sy     synchronize     Synchronize the software database
-        -u      update  Update specified software(s)
+        -u      update  Performs a software update
+        -ap     addpatch        Add a local patch for a specific software
+                                Need to be use like this:
+                                ism software [softwarename-softwareversion] addpatch [patchpath]
+        -dp     deletepatch     Delete a local patch for a specific software
+                                Need to be use like this:
+                                ism software [softwarename-softwareversion] deletepatch [patchpath]
 ```
 
 ```
@@ -53,15 +69,11 @@ Manage ISM ports
 ```
 
 ```
-user $ ism system
-Configure the system settings
-        -sla    setlcall        Set the LC_ALL variable to setup the localization of specific country
-```
-
-```
 user $ ism settings
 Configure ISM settings
         -s      show    Show the current settings
+        -esm    enablesecuremode        Enable the secure mode which requires superuser rights
+        -dsm    disablesecuremode       Disable the secure mode which requires superuser rights
         -eibc   enableinstallbychroot   Enable softwares install by chroot
         -dibc   disableinstallbychroot  Disable softwares install by chroot
         -srp    setrootpath     Set the default root path where to install softwares
