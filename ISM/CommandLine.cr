@@ -1968,10 +1968,12 @@ module ISM
             end
 
             #Remove from that list requested softwares for removal
-            softwareInformationList.each do |software|
+            @requestedSoftwares.each do |software|
                 playCalculationAnimation
 
-                softwareList.delete(software.fullVersionName)
+                if softwareList.includes?(software.fullVersionName)
+                    softwareList.delete(software.fullVersionName)
+                end
             end
 
             #Generate a software information array of the left favourites
