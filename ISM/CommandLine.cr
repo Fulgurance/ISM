@@ -1675,7 +1675,7 @@ module ISM
             cleanCalculationAnimation
         end
 
-        def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false, getInstalledOnesOnly = false) : Hash(String, ISM::SoftwareInformation)
+        def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Hash(String, ISM::SoftwareInformation)
 
             dependencyHash = Hash(String, ISM::SoftwareInformation).new
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
@@ -1694,7 +1694,7 @@ module ISM
                     playCalculationAnimation
 
                     key = dependency.hiddenName
-                    dependencyInformation = dependency.information(getInstalledOnesOnly)
+                    dependencyInformation = dependency.information
                     dependencies = dependency.dependencies(allowDeepSearch)
                     installed = softwareIsInstalled(dependencyInformation)
 
@@ -1985,7 +1985,7 @@ module ISM
             softwareInformationList = getRequestedSoftwares(softwareList, getInstalledOnesOnly: true)
 
             #Then we check the needed dependencies for that list
-            requiredSoftwares = getRequiredDependencies(softwareInformationList, allowDeepSearch: true, getInstalledOnesOnly: true)
+            requiredSoftwares = getRequiredDependencies(softwareInformationList, allowDeepSearch: true)
 
             #Checking if the requested softwares for removal are not require
             @requestedSoftwares.each do |software|

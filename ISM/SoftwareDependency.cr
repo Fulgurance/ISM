@@ -56,7 +56,7 @@ module ISM
 
         def information(getInstalledOneOnly = false) : ISM::SoftwareInformation
 
-            dependencyInformation = getInstalledOneOnly ? Ism.getInstalledSoftwareInformation(fullVersionName) : Ism.getSoftwareInformation(fullVersionName)
+            dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
 
             if dependencyInformation.isValid
 
