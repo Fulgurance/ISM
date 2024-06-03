@@ -519,16 +519,6 @@ module ISM
             return result
         end
 
-        def getInstalledSoftwareInformation(fullVersionName : String) : ISM::SoftwareInformation
-            @installedSoftwares.each do |software|
-                if software.fullVersionName == fullVersionName
-                    return software
-                end
-            end
-
-            return ISM::SoftwareInformation.new
-        end
-
         def checkEnteredArguments
             matchingOption = false
 
