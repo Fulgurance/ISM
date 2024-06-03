@@ -1005,11 +1005,12 @@ module ISM
             end
         end
 
-        def getRequestedSoftwares(list : Array(String), getInstalledOnesOnly = false) : Array(ISM::SoftwareInformation)
+        def getRequestedSoftwares(list : Array(String)) : Array(ISM::SoftwareInformation)
             softwaresList = Array(ISM::SoftwareInformation).new
 
             list.each do |entry|
-                getInstalledOnesOnly ? (software = getInstalledSoftwareInformation(entry)) : (software = getSoftwareInformation(entry))
+                software = getSoftwareInformation(entry)
+
                 if software.isValid
                     softwaresList << software
                 end
@@ -1982,7 +1983,7 @@ module ISM
             end
 
             #Generate a software information array of the left favourites
-            softwareInformationList = getRequestedSoftwares(softwareList, getInstalledOnesOnly: true)
+            softwareInformationList = softwareList.map { |entry| getInstalledSoftwareInformation(entry) }#getRequestedSoftwares(softwareList)
 
             #Then we check the needed dependencies for that list
             requiredSoftwares = getRequiredDependencies(softwareInformationList, allowDeepSearch: true)
