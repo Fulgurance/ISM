@@ -54,7 +54,7 @@ module ISM
             return @version
         end
 
-        def information(getInstalledOneOnly = false) : ISM::SoftwareInformation
+        def information : ISM::SoftwareInformation
 
             dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
 

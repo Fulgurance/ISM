@@ -163,7 +163,7 @@ module ISM
 
                     end
 
-                    @softwares << ISM::AvailableSoftware.new(softwareDirectory,softwaresInformations)
+                    @softwares << ISM::AvailableSoftware.new("@#{portDirectory}:#{softwareDirectory}",softwaresInformations)
 
                 end
 
@@ -486,33 +486,32 @@ module ISM
 
             @softwares.each do |entry|
 
-                if entry.name.downcase == userEntry.downcase || entry.fullName.downcase == userEntry.downcase
-                    result.name = entry.name
-                    if !entry.versions.empty?
-                        temporary = entry.greatestVersion.clone
-                        settingsFilePath = temporary.settingsFilePath
+                if userEntry.downcase.includes?(entry.fullName.downcase)
 
-                        if File.exists?(settingsFilePath)
-                            result.loadInformationFile(settingsFilePath)
-                        else
-                            result = temporary
-                        end
-                        break
-                    end
-                else
-                    entry.versions.each do |software|
-                        if software.versionName.downcase == userEntry.downcase || software.fullVersionName.downcase == userEntry.downcase
-                            temporary = software.clone
-                            settingsFilePath = temporary.settingsFilePath
+                    versions = entry.versions
 
-                            if File.exists?(settingsFilePath)
-                                result.loadInformationFile(settingsFilePath)
-                            else
-                                result = temporary
+                    if !versions.empty?
+                        versions.each do |software|
+                            if software.fullVersionName.downcase == userEntry.downcase
+
+                                settingsFilePath = software.settingsFilePath
+                                result = software
+
+                                if File.exists?(settingsFilePath)
+                                    result.loadInformationFile(settingsFilePath)
+                                end
+
+                                break
                             end
-                            break
                         end
+
+                        if !result.isValid
+                            return entry.greatestVersion
+                        end
+                    else
+                        return result
                     end
+
                 end
 
             end
@@ -1983,7 +1982,7 @@ module ISM
             end
 
             #Generate a software information array of the left favourites
-            softwareInformationList = softwareList.map { |entry| getInstalledSoftwareInformation(entry) }#getRequestedSoftwares(softwareList)
+            softwareInformationList = getRequestedSoftwares(softwareList)
 
             #Then we check the needed dependencies for that list
             requiredSoftwares = getRequiredDependencies(softwareInformationList, allowDeepSearch: true)

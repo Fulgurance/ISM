@@ -45,7 +45,7 @@ module ISM
         end
 
         def fullName
-            return "@#{versions[0].port}:#{name}"
+            return "#{versions[0].fullName}"
         end
 
         def getVersionByCondition(condition : String, returnMaximum = true) : ISM::SoftwareInformation
