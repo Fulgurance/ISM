@@ -80,7 +80,7 @@ module ISM
             downloaded = false
             error = String.new
 
-            #ACTUALLY BRING DOWNLOAD FAILING
+            #ACTUALLY BRING DOWNLOAD FAILURE
             #Checking if connexion is available
             # begin
             #     TCPSocket.new(link, port: 80, connect_timeout: 500.milliseconds).close
