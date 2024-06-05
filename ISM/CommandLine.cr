@@ -475,6 +475,12 @@ module ISM
             @softwares.each do |software|
                 if userEntry.downcase.includes?(software.name.downcase) && userEntry.size == software.name.size
                     return software
+                else
+                    software.versions.each do |version|
+                        if userEntry.downcase == version.fullName || userEntry.downcase == version.fullVersionName
+                            return software
+                        end
+                    end
                 end
             end
 
