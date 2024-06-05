@@ -473,7 +473,7 @@ module ISM
 
         def getAvailableSoftware(userEntry : String) : ISM::AvailableSoftware
             @softwares.each do |software|
-                if userEntry.downcase.includes?(software.fullName.downcase) && userEntry.size == software.fullName.size
+                if userEntry.downcase.includes?(software.name.downcase) && userEntry.size == software.name.size
                     return software
                 end
             end
@@ -492,13 +492,6 @@ module ISM
                 versions.each do |software|
                     if software.fullVersionName.downcase == userEntry.downcase
 
-                        # settingsFilePath = software.settingsFilePath
-                        # result = software
-                        #
-                        # if File.exists?(settingsFilePath)
-                        #     result.loadInformationFile(settingsFilePath)
-                        # end
-                        #New experimental correction to load properly setted options
                         result = loadSoftware(software.port, software.name, software.version)
 
                         break
@@ -508,8 +501,6 @@ module ISM
                 if !result.isValid
                     return availableSoftware.greatestVersion
                 end
-            else
-                return result
             end
 
             return result
