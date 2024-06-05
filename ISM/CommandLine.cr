@@ -471,9 +471,9 @@ module ISM
             end
         end
 
-        def getAvailableSoftware(fullName : String) : ISM::AvailableSoftware
+        def getAvailableSoftware(userEntry : String) : ISM::AvailableSoftware
             @softwares.each do |software|
-                if fullName == software.fullName
+                if userEntry.includes?(software.fullName) && userEntry.size == software.fullName.size
                     return software
                 end
             end
@@ -484,38 +484,32 @@ module ISM
         def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
             result = ISM::SoftwareInformation.new
 
-            @softwares.each do |entry|
+            availableSoftware = getAvailableSoftware(userEntry)
+            versions = availableSoftware.versions
 
-                if userEntry.downcase.includes?(entry.fullName.downcase)
+            if !versions.empty?
 
-                    versions = entry.versions
+                versions.each do |software|
+                    if software.fullVersionName.downcase == userEntry.downcase
 
-                    if !versions.empty?
-                        versions.each do |software|
-                            if software.fullVersionName.downcase == userEntry.downcase
+                        # settingsFilePath = software.settingsFilePath
+                        # result = software
+                        #
+                        # if File.exists?(settingsFilePath)
+                        #     result.loadInformationFile(settingsFilePath)
+                        # end
+                        #New experimental correction to load properly setted options
+                        result = loadSoftware(software.port, software.name, software.version)
 
-                                # settingsFilePath = software.settingsFilePath
-                                # result = software
-                                #
-                                # if File.exists?(settingsFilePath)
-                                #     result.loadInformationFile(settingsFilePath)
-                                # end
-                                #New experimental correction to load properly setted options
-                                software = loadSoftware(software.port, software.name, software.version)
-
-                                break
-                            end
-                        end
-
-                        if !result.isValid
-                            return entry.greatestVersion
-                        end
-                    else
-                        return result
+                        break
                     end
-
                 end
 
+                if !result.isValid
+                    return availableSoftware.greatestVersion
+                end
+            else
+                return result
             end
 
             return result
