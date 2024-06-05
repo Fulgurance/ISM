@@ -494,12 +494,14 @@ module ISM
                         versions.each do |software|
                             if software.fullVersionName.downcase == userEntry.downcase
 
-                                settingsFilePath = software.settingsFilePath
-                                result = software
-
-                                if File.exists?(settingsFilePath)
-                                    result.loadInformationFile(settingsFilePath)
-                                end
+                                # settingsFilePath = software.settingsFilePath
+                                # result = software
+                                #
+                                # if File.exists?(settingsFilePath)
+                                #     result.loadInformationFile(settingsFilePath)
+                                # end
+                                #New experimental correction to load properly setted options
+                                software = loadSoftware(software.port, software.name, software.version)
 
                                 break
                             end
