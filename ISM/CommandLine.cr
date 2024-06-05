@@ -477,7 +477,7 @@ module ISM
                     return software
                 else
                     software.versions.each do |version|
-                        if userEntry.downcase == version.fullName || userEntry.downcase == version.fullVersionName
+                        if userEntry.downcase == version.fullName.downcase || userEntry.downcase == version.fullVersionName.downcase
                             return software
                         end
                     end
