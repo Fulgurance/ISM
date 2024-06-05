@@ -473,7 +473,7 @@ module ISM
 
         def getAvailableSoftware(userEntry : String) : ISM::AvailableSoftware
             @softwares.each do |software|
-                if userEntry.includes?(software.fullName) && userEntry.size == software.fullName.size
+                if userEntry.downcase.includes?(software.fullName.downcase) && userEntry.size == software.fullName.size
                     return software
                 end
             end
