@@ -44,10 +44,6 @@ module ISM
             return (brackets && separator && comparators)
         end
 
-        def fullName
-            return "#{versions[0].fullName}"
-        end
-
         def getVersionByCondition(condition : String, returnMaximum = true) : ISM::SoftwareInformation
 
             version = condition.tr("><=","")
