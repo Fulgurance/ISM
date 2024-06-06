@@ -75,6 +75,10 @@ module ISM
 
                                     installedVersionText += " { "
 
+                                    if installed.options.empty?
+                                        installedVersionText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                                    end
+
                                     installed.options.each do |option|
 
                                         if option.active
