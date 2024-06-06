@@ -36,7 +36,7 @@ module ISM
                                         "#{("@"+greatestVersion.port).colorize(Colorize::ColorRGB.new(255,100,100))}"
 
                             puts    ISM::Default::Option::SoftwareSearch::NameField +
-                                        "#{software.name.colorize(:green)}"
+                                        "#{greatestVersion.name.colorize(:green)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::DescriptionField +
                                         "#{greatestVersion.description.colorize(:green)}"
