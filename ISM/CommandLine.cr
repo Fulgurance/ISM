@@ -378,61 +378,63 @@ module ISM
 
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
 
+            installedOne = ISM::SoftwareInformation.new
+
             if File.exists?(software.installedFilePath)
-                installedSoftware = ISM::SoftwareInformation.new
-                installedSoftware.loadInformationFile(software.installedFilePath)
+                installedOne.loadInformationFile(software.installedFilePath)
+            end
 
-                equalScore = 0
+            alreadyInstalled = installedOne.isValid
 
-                software.options.each do |option|
+            if !alreadyInstalled
+                return false
+            else
 
-                    if installedSoftware.option(option.name) == option.active
-                        equalScore += 1
-                    elsif option.isPass
-                        softwarePassNumber = software.getEnabledPassNumber
-                        installedSoftwarePassNumber = installedSoftware.getEnabledPassNumber
+                installedOneOptions = installedOne.options.map { |entry| entry.name}.sort
+                softwareOptions = software.options.map { |entry| entry.name}.sort
 
-                        if option.active
-                            if !installedSoftware.passEnabled
-                                equalScore += 1
-                            else
-                                if softwarePassNumber < installedSoftwarePassNumber
-                                    equalScore += 1
-                                else
-                                    return false
-                                end
-                            end
-                        end
+                #Case when requested software have an enabled pass
+                if software.passEnabled
 
-                        if installedSoftware.option(option.name)
-                            if !installedSoftware.passEnabled
-                                return false
-                            else
-                                if softwarePassNumber < installedSoftwarePassNumber && software.passEnabled
-                                    equalScore += 1
-                                else
-                                    return false
-                                end
-                            end
-
-                        end
-
+                    #If the installed one don't have enabled pass, that mean the software is already fully installed
+                    if !installedOne.passEnabled
+                        return true
                     else
-                        if software.passEnabled
-                            equalScore += 1
-                        elsif installedSoftware.option(option.name) && !option.active
-                            equalScore += 1
+                    #If not, we need to compare the pass numbers
+
+                        installedOnePassNumber = installedOne.getEnabledPassNumber
+                        softwarePassNumber = software.getEnabledPassNumber
+
+                        #If the requested one have a lower number or equal, that mean the software is already installed
+                        return softwarePassNumber <= installedOnePassNumber ? true : false
+                    end
+
+                else
+                #Case when requested software don't have enabled pass
+
+                    #If the installed one have an enabled pass, the requested software is not installed
+                    if installedOne.passEnabled
+                        return false
+                    else
+                    #If both don't have enabled pass, then we need to check both options to state what to do
+
+                        optionAlreadyInstalled = (installedOneOptions & softwareOptions == softwareOptions)
+
+                        #If the installed one have already the requested options or more, that mean it's already installed
+                        if installedOneOptions == softwareOptions || optionAlreadyInstalled
+                            return true
                         else
                             return false
                         end
+
                     end
 
                 end
 
-                return (equalScore == software.options.size)
-            else
-                return false
             end
+
+            #Just in case something go wrong
+            return false
         end
 
         def softwaresAreCodependent(software1 : ISM::SoftwareInformation, software2 : ISM::SoftwareInformation) : Bool
@@ -467,6 +469,7 @@ module ISM
                     return :optionUpdate
                 end
 
+                #Rebuild case
                 return :rebuild
             end
         end
@@ -1170,6 +1173,8 @@ module ISM
                     additionalText += "("
 
                     status = getSoftwareStatus(software)
+
+                    #Add a condition to check by a dictionnary if we request again the same software and version, if yes, indicate it's a rebuild due of a codependency
 
                     case status
                     when :new
