@@ -421,7 +421,7 @@ module ISM
                         optionAlreadyInstalled = (installedOneOptions & softwareOptions == softwareOptions)
 
                         #If the installed one have already the requested options or more, that mean it's already installed
-                        if installedOneOptions == softwareOptions || optionAlreadyInstalled
+                        if optionAlreadyInstalled
                             return true
                         else
                             return false
