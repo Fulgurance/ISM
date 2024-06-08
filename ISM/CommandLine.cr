@@ -390,8 +390,8 @@ module ISM
                 return false
             else
 
-                installedOneOptions = installedOne.options.map { |entry| entry.name}.sort
-                softwareOptions = software.options.map { |entry| entry.name}.sort
+                installedOneOptions = installedOne.options.map { |entry| entry.active ? entry.name : "" }.reject { |entry| entry.empty? }.sort
+                softwareOptions = software.options.map { |entry| entry.active ? entry.name : "" }.reject { |entry| entry.empty? }.sort
 
                 #Case when requested software have an enabled pass
                 if software.passEnabled
