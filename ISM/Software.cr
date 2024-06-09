@@ -1216,10 +1216,10 @@ module ISM
             end
         end
 
-        def runKmkCommand(arguments = Array(String).new)
+        def runKmkCommand(arguments = Array(String).new, path = String.new)
             requestedCommands = ["kmk"]+arguments
 
-            process = runSystemCommand(requestedCommands)
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(arguments)
