@@ -1470,7 +1470,7 @@ module ISM
                         port = information.port
                         name = information.name
                         version = information.version
-                        versionName = information.versionName
+                        fullVersionName = information.fullVersionName
 
                         #START INSTALLATION PROCESS
 
@@ -1507,7 +1507,7 @@ module ISM
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
                         if Ism.softwareIsRequestedSoftware(target.information, requestedSoftwareFullVersionNames)
-                            Ism.addSoftwareToFavouriteGroup(versionName)
+                            Ism.addSoftwareToFavouriteGroup(fullVersionName)
                         end
 
                         Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version)
