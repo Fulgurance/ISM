@@ -579,7 +579,7 @@ module ISM
             puts "[#{"!".colorize(:red)}] #{message.colorize(Colorize::ColorRGB.new(255,100,100))}"
             if typeof(error) == Exception
                 puts "[#{"!".colorize(:red)}] "
-                pp "#{error.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                puts "#{error.colorize(Colorize::ColorRGB.new(255,100,100))}"
             end
         end
 
