@@ -740,6 +740,17 @@ module ISM
             end
         end
 
+        def runChownCommand(arguments = Array(String).new, path = String.new)
+            requestedCommands = ["chown"]+arguments
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
+            end
+        end
+
         def runUserAddCommand(arguments : Array(String))
             requestedCommands = ["useradd"]+arguments
 
