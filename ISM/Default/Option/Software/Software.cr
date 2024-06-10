@@ -9,15 +9,15 @@ module ISM
                 ShortText = "-so"
                 LongText = "software"
                 Description = "Install, configure and remove softwares"
-                Options = [ ISM::Option::SoftwareSelectDependency.new,
-                            ISM::Option::SoftwareDisableOption.new,
-                            ISM::Option::SoftwareEnableOption.new,
+                Options = [ ISM::Option::SoftwareSearch.new,
+                            ISM::Option::SoftwareSynchronize.new,
+                            ISM::Option::SoftwareUpdate.new,
                             ISM::Option::SoftwareInstall.new,
                             ISM::Option::SoftwareUninstall.new,
                             ISM::Option::SoftwareClean.new,
-                            ISM::Option::SoftwareSearch.new,
-                            ISM::Option::SoftwareSynchronize.new,
-                            ISM::Option::SoftwareUpdate.new,
+                            ISM::Option::SoftwareSelectDependency.new,
+                            ISM::Option::SoftwareEnableOption.new,
+                            ISM::Option::SoftwareDisableOption.new,
                             ISM::Option::SoftwareAddPatch.new,
                             ISM::Option::SoftwareDeletePatch.new]
                 

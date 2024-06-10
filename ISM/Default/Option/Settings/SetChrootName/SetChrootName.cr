@@ -4,7 +4,7 @@ module ISM
 
         module Option
 
-            module SettingsSetChrootSystemName
+            module SettingsSetChrootName
 
                 ShortText = "-scn"
                 LongText = "setchrootname"
