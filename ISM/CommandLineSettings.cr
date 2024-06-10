@@ -660,12 +660,12 @@ module ISM
         #   Host
         def setSystemTargetName(@systemTargetName)
             writeSettingsFile
-            setTarget
+            setSystemTarget
         end
 
         def setSystemArchitecture(@systemArchitecture)
             writeSettingsFile
-            setTarget
+            setSystemTarget
         end
 
         def setSystemTarget
