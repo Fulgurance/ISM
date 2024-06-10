@@ -2,12 +2,12 @@ module ISM
 
     module Option
 
-        class SettingsSetSystemName < ISM::CommandLineOption
+        class SettingsSetName < ISM::CommandLineOption
 
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemName::ShortText,
-                        ISM::Default::Option::SettingsSetSystemName::LongText,
-                        ISM::Default::Option::SettingsSetSystemName::Description,
+                super(  ISM::Default::Option::SettingsSetName::ShortText,
+                        ISM::Default::Option::SettingsSetName::LongText,
+                        ISM::Default::Option::SettingsSetName::Description,
                         Array(ISM::CommandLineOption).new)
             end
 
@@ -18,8 +18,8 @@ module ISM
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        Ism.settings.setSystemName(ARGV[2+Ism.debugLevel])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemName::SetText+ARGV[2+Ism.debugLevel])
+                        Ism.settings.setName(ARGV[2+Ism.debugLevel])
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetName::SetText+ARGV[2+Ism.debugLevel])
                     end
                 end
             end
