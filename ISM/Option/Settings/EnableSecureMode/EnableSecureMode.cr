@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SettingsEnableSecureMode::ShortText,
                         ISM::Default::Option::SettingsEnableSecureMode::LongText,
-                        ISM::Default::Option::SettingsEnableSecureMode::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SettingsEnableSecureMode::Description)
             end
 
             def start

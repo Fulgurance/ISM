@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SoftwareSelectDependency::ShortText,
                         ISM::Default::Option::SoftwareSelectDependency::LongText,
-                        ISM::Default::Option::SoftwareSelectDependency::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SoftwareSelectDependency::Description)
             end
 
             def start

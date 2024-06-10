@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::VersionSwitch::ShortText,
                         ISM::Default::Option::VersionSwitch::LongText,
-                        ISM::Default::Option::VersionSwitch::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::VersionSwitch::Description)
             end
 
             def start

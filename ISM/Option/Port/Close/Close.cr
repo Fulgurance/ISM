@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::PortClose::ShortText,
                         ISM::Default::Option::PortClose::LongText,
-                        ISM::Default::Option::PortClose::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::PortClose::Description)
             end
 
             def start

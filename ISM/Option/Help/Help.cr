@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::Help::ShortText,
                         ISM::Default::Option::Help::LongText,
-                        ISM::Default::Option::Help::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::Help::Description)
             end
 
             def start

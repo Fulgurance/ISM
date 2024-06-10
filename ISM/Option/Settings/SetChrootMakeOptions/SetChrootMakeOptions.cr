@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SettingsSetChrootMakeOptions::ShortText,
                         ISM::Default::Option::SettingsSetChrootMakeOptions::LongText,
-                        ISM::Default::Option::SettingsSetChrootMakeOptions::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SettingsSetChrootMakeOptions::Description)
             end
 
             def start

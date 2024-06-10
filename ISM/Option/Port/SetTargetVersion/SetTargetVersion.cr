@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::PortSetTargetVersion::ShortText,
                         ISM::Default::Option::PortSetTargetVersion::LongText,
-                        ISM::Default::Option::PortSetTargetVersion::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::PortSetTargetVersion::Description)
             end
 
             def start

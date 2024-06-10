@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SettingsSetChrootArchitecture::ShortText,
                         ISM::Default::Option::SettingsSetChrootArchitecture::LongText,
-                        ISM::Default::Option::SettingsSetChrootArchitecture::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SettingsSetChrootArchitecture::Description)
             end
 
             def start
