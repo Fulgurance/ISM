@@ -455,6 +455,21 @@ module ISM
             end
         end
 
+        #Generic methods
+        def temporaryPath
+            return "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
+        end
+
+        def sourcesPath
+            return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
+        end
+
+        def toolsPath
+            return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
+        end
+
+        #Host/Chroot methods
+
         def name(relatedToChroot = true) : String
             if relatedToChroot
                 return (@rootPath != "/" ? @chrootName : @name)
@@ -503,14 +518,26 @@ module ISM
             end
         end
 
+        #Setter methods
+
+        #   Generic
+        def setSecureMode(@secureMode)
+            writeSettingsFile
+        end
+
+        def setInstallByChroot(@installByChroot)
+            writeSettingsFile
+        end
+
         def setRootPath(@rootPath)
             writeSettingsFile
         end
 
-        def setName(@name)
+        def setDefaultMirror(@defaultMirror)
             writeSettingsFile
         end
 
+        #   Host
         def setTargetName(@targetName)
             writeSettingsFile
             setTarget
@@ -542,18 +569,71 @@ module ISM
             writeSettingsFile
         end
 
-        def setSecureMode(@secureMode)
+        def setName(@name)
             writeSettingsFile
         end
 
-        def setInstallByChroot(@installByChroot)
+        def setFullName(@fullName)
             writeSettingsFile
         end
 
-        def setChrootName(@chrootName)
+        def setId(@id)
             writeSettingsFile
         end
 
+        def setRelease(@release)
+            writeSettingsFile
+        end
+
+        def setCodeName(@codeName)
+            writeSettingsFile
+        end
+
+        def setDescription(@description)
+            writeSettingsFile
+        end
+
+        def setVersion(@version)
+            writeSettingsFile
+        end
+
+        def setAnsiColor(@ansiColor)
+            writeSettingsFile
+        end
+
+        def setCpeName(@cpeName)
+            writeSettingsFile
+        end
+
+        def setHomeUrl(@homeUrl)
+            writeSettingsFile
+        end
+
+        def setSupportUrl(@supportUrl)
+            writeSettingsFile
+        end
+
+        def setBugReportUrl(@bugReportUrl)
+            writeSettingsFile
+        end
+
+        def setPrivacyPolicyUrl(@privacyPolicyUrl)
+            writeSettingsFile
+        end
+
+        def setBuildId(@buildId)
+            writeSettingsFile
+        end
+
+        def setVariant(@variant)
+            writeSettingsFile
+        end
+
+        def setVariantId(@variantId)
+            writeSettingsFile
+        end
+
+        #   Chroot
         def setChrootTargetName(@chrootTargetName)
             writeSettingsFile
         end
@@ -582,20 +662,69 @@ module ISM
             writeSettingsFile
         end
 
-        def setDefaultMirror(@defaultMirror)
+        def setChrootName(@chrootName)
             writeSettingsFile
         end
 
-        def temporaryPath
-            return "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
+
+        def setChrootFullName(@chrootFullName)
+            writeSettingsFile
         end
 
-        def sourcesPath
-            return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
+        def setChrootId(@chrootId)
+            writeSettingsFile
         end
 
-        def toolsPath
-            return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
+        def setChrootRelease(@chrootRelease)
+            writeSettingsFile
+        end
+
+        def setChrootCodeName(@chrootCodeName)
+            writeSettingsFile
+        end
+
+        def setChrootDescription(@chrootDescription)
+            writeSettingsFile
+        end
+
+        def setChrootVersion(@chrootVersion)
+            writeSettingsFile
+        end
+
+        def setChrootAnsiColor(@chrootAnsiColor)
+            writeSettingsFile
+        end
+
+        def setChrootCpeName(@chrootCpeName)
+            writeSettingsFile
+        end
+
+        def setChrootHomeUrl(@chrootHomeUrl)
+            writeSettingsFile
+        end
+
+        def setChrootSupportUrl(@chrootSupportUrl)
+            writeSettingsFile
+        end
+
+        def setChrootBugReportUrl(@chrootBugReportUrl)
+            writeSettingsFile
+        end
+
+        def setChrootPrivacyPolicyUrl(@chrootPrivacyPolicyUrl)
+            writeSettingsFile
+        end
+
+        def setChrootBuildId(@chrootBuildId)
+            writeSettingsFile
+        end
+
+        def setChrootVariant(@chrootVariant)
+            writeSettingsFile
+        end
+
+        def setChrootVariantId(@chrootVariantId)
+            writeSettingsFile
         end
 
     end
