@@ -10,27 +10,27 @@ module ISM
             defaultMirror : String,
 
             #Host related parameters
-            targetName : String,
-            architecture : String,
-            target : String,
-            makeOptions : String,
-            buildOptions : String,
-            name : String,
-            fullName : String,
-            id : String,
-            release : String,
-            codeName : String,
-            description : String,
-            version : String,
-            ansiColor : String,
-            cpeName : String,
-            homeUrl : String,
-            supportUrl : String,
-            bugReportUrl : String,
-            privacyPolicyUrl : String,
-            buildId : String,
-            variant : String,
-            variantId : String,
+            systemTargetName : String,
+            systemArchitecture : String,
+            systemTarget : String,
+            systemMakeOptions : String,
+            systemBuildOptions : String,
+            systemName : String,
+            systemFullName : String,
+            systemId : String,
+            systemRelease : String,
+            systemCodeName : String,
+            systemDescription : String,
+            systemVersion : String,
+            systemAnsiColor : String,
+            systemCpeName : String,
+            systemHomeUrl : String,
+            systemSupportUrl : String,
+            systemBugReportUrl : String,
+            systemPrivacyPolicyUrl : String,
+            systemBuildId : String,
+            systemVariant : String,
+            systemVariantId : String
 
             #Chroot related parameters
             chrootTargetName : String,
@@ -65,27 +65,27 @@ module ISM
         property    defaultMirror : String
 
         #Host related parameters
-        property    targetName : String
-        property    architecture : String
-        property    target : String
-        property    makeOptions : String
-        property    buildOptions : String
-        property    name : String
-        property    fullName : String
-        property    id : String
-        property    release : String
-        property    codeName : String
-        property    description : String
-        property    version : String
-        property    ansiColor : String
-        property    cpeName : String
-        property    homeUrl : String
-        property    supportUrl : String
-        property    bugReportUrl : String
-        property    privacyPolicyUrl : String
-        property    buildId : String
-        property    variant : String
-        property    variantId : String
+        property    systemTargetName : String
+        property    systemArchitecture : String
+        property    systemTarget : String
+        property    systemMakeOptions : String
+        property    systemBuildOptions : String
+        property    systemName : String
+        property    systemFullName : String
+        property    systemId : String
+        property    systemRelease : String
+        property    systemCodeName : String
+        property    systemDescription : String
+        property    systemVersion : String
+        property    systemAnsiColor : String
+        property    systemCpeName : String
+        property    systemHomeUrl : String
+        property    systemSupportUrl : String
+        property    systemBugReportUrl : String
+        property    systemPrivacyPolicyUrl : String
+        property    systemBuildId : String
+        property    systemVariant : String
+        property    systemVariantId : String
 
         #Chroot related parameters
         property    chrootTargetName : String
@@ -117,27 +117,27 @@ module ISM
                         @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
 
                         #Host related parameters
-                        @targetName = ISM::Default::CommandLineSettings::TargetName ,
-                        @architecture = ISM::Default::CommandLineSettings::Architecture,
-                        @target = ISM::Default::CommandLineSettings::Target,
-                        @makeOptions = ISM::Default::CommandLineSettings::MakeOptions,
-                        @buildOptions = ISM::Default::CommandLineSettings::BuildOptions,
-                        @name = ISM::Default::CommandLineSettings::Name,
-                        @fullName = ISM::Default::CommandLineSettings::FullName,
-                        @id = ISM::Default::CommandLineSettings::Id,
-                        @release = ISM::Default::CommandLineSettings::Release,
-                        @codeName = ISM::Default::CommandLineSettings::CodeName,
-                        @description = ISM::Default::CommandLineSettings::Description,
-                        @version = ISM::Default::CommandLineSettings::Version,
-                        @ansiColor = ISM::Default::CommandLineSettings::AnsiColor,
-                        @cpeName = ISM::Default::CommandLineSettings::CpeName,
-                        @homeUrl = ISM::Default::CommandLineSettings::HomeUrl,
-                        @supportUrl = ISM::Default::CommandLineSettings::SupportUrl,
-                        @bugReportUrl = ISM::Default::CommandLineSettings::BugReportUrl,
-                        @privacyPolicyUrl = ISM::Default::CommandLineSettings::PrivacyPolicyUrl,
-                        @buildId = ISM::Default::CommandLineSettings::BuildId,
-                        @variant = ISM::Default::CommandLineSettings::Variant,
-                        @variantId = ISM::Default::CommandLineSettings::VariantId,
+                        @systemTargetName = ISM::Default::CommandLineSettings::SystemTargetName,
+                        @systemArchitecture = ISM::Default::CommandLineSettings::SystemArchitecture,
+                        @systemTarget = ISM::Default::CommandLineSettings::SystemTarget,
+                        @systemMakeOptions = ISM::Default::CommandLineSettings::SystemMakeOptions,
+                        @systemBuildOptions = ISM::Default::CommandLineSettings::SystemBuildOptions,
+                        @systemName = ISM::Default::CommandLineSettings::SystemName,
+                        @systemFullName = ISM::Default::CommandLineSettings::SystemFullName,
+                        @systemId = ISM::Default::CommandLineSettings::SystemId,
+                        @systemRelease = ISM::Default::CommandLineSettings::SystemRelease,
+                        @systemCodeName = ISM::Default::CommandLineSettings::SystemCodeName,
+                        @systemDescription = ISM::Default::CommandLineSettings::SystemDescription,
+                        @systemVersion = ISM::Default::CommandLineSettings::SystemVersion,
+                        @systemAnsiColor = ISM::Default::CommandLineSettings::SystemAnsiColor,
+                        @systemCpeName = ISM::Default::CommandLineSettings::SystemCpeName,
+                        @systemHomeUrl = ISM::Default::CommandLineSettings::SystemHomeUrl,
+                        @systemSupportUrl = ISM::Default::CommandLineSettings::SystemSupportUrl,
+                        @systemBugReportUrl = ISM::Default::CommandLineSettings::SystemBugReportUrl,
+                        @systemPrivacyPolicyUrl = ISM::Default::CommandLineSettings::SystemPrivacyPolicyUrl,
+                        @systemBuildId = ISM::Default::CommandLineSettings::SystemBuildId,
+                        @systemVariant = ISM::Default::CommandLineSettings::SystemVariant,
+                        @systemVariantId = ISM::Default::CommandLineSettings::SystemVariantId)
 
                         #Chroot related parameters
                         @chrootTargetName = ISM::Default::CommandLineSettings::ChrootTargetName,
@@ -177,27 +177,27 @@ module ISM
             @defaultMirror = information.defaultMirror
 
             #Host related parameters
-            @targetName = information.targetName
-            @architecture = information.architecture
-            @target = information.target
-            @makeOptions = information.makeOptions
-            @buildOptions = information.buildOptions
-            @name = information.name
-            @fullName = information.fullName
-            @id = information.id
-            @release = information.release
-            @codeName = information.codeName
-            @description = information.description
-            @version = information.version
-            @ansiColor = information.ansiColor
-            @cpeName = information.cpeName
-            @homeUrl = information.homeUrl
-            @supportUrl = information.supportUrl
-            @bugReportUrl = information.bugReportUrl
-            @privacyPolicyUrl = information.privacyPolicyUrl
-            @buildId = information.buildId
-            @variant = information.variant
-            @variantId = information.variantId
+            @systemTargetName = information.systemTargetName
+            @systemArchitecture = information.systemArchitecture
+            @systemTarget = information.systemTarget
+            @systemMakeOptions = information.systemMakeOptions
+            @systemBuildOptions = information.systemBuildOptions
+            @systemName = information.systemName
+            @systemFullName = information.systemFullName
+            @systemId = information.systemId
+            @systemRelease = information.systemRelease
+            @systemCodeName = information.systemCodeName
+            @systemDescription = information.systemDescription
+            @systemVersion = information.systemVersion
+            @systemAnsiColor = information.systemAnsiColor
+            @systemCpeName = information.systemCpeName
+            @systemHomeUrl = information.systemHomeUrl
+            @systemSupportUrl = information.systemSupportUrl
+            @systemBugReportUrl = information.systemBugReportUrl
+            @systemPrivacyPolicyUrl = information.systemPrivacyPolicyUrl
+            @systemBuildId = information.systemBuildId
+            @systemVariant = information.systemVariant
+            @systemVariantId = information.systemVariantId
 
             #Chroot related parameters
             @chrootTargetName = information.chrootTargetName
@@ -230,27 +230,27 @@ module ISM
                             defaultMirror : String,
 
                             #Host related parameters
-                            targetName : String,
-                            architecture : String,
-                            target : String,
-                            makeOptions : String,
-                            buildOptions : String,
-                            name : String,
-                            fullName : String,
-                            id : String,
-                            release : String,
-                            codeName : String,
-                            description : String,
-                            version : String,
-                            ansiColor : String,
-                            cpeName : String,
-                            homeUrl : String,
-                            supportUrl : String,
-                            bugReportUrl : String,
-                            privacyPolicyUrl : String,
-                            buildId : String,
-                            variant : String,
-                            variantId : String,
+                            systemTargetName : String,
+                            systemArchitecture : String,
+                            systemTarget : String,
+                            systemMakeOptions : String,
+                            systemBuildOptions : String,
+                            systemName : String,
+                            systemFullName : String,
+                            systemId : String,
+                            systemRelease : String,
+                            systemCodeName : String,
+                            systemDescription : String,
+                            systemVersion : String,
+                            systemAnsiColor : String,
+                            systemCpeName : String,
+                            systemHomeUrl : String,
+                            systemSupportUrl : String,
+                            systemBugReportUrl : String,
+                            systemPrivacyPolicyUrl : String,
+                            systemBuildId : String,
+                            systemVariant : String,
+                            systemVariantId : String
 
                             #Chroot related parameters
                             chrootTargetName : String,
@@ -288,27 +288,27 @@ module ISM
                                     defaultMirror,
 
                                     #Host related parameters
-                                    targetName,
-                                    architecture,
-                                    target,
-                                    makeOptions,
-                                    buildOptions,
-                                    name,
-                                    fullName,
-                                    id,
-                                    release,
-                                    codeName,
-                                    description,
-                                    version,
-                                    ansiColor,
-                                    cpeName,
-                                    homeUrl,
-                                    supportUrl,
-                                    bugReportUrl,
-                                    privacyPolicyUrl,
-                                    buildId,
-                                    variant,
-                                    variantId,
+                                    systemTargetName,
+                                    systemArchitecture,
+                                    systemTarget,
+                                    systemMakeOptions,
+                                    systemBuildOptions,
+                                    systemName,
+                                    systemFullName,
+                                    systemId,
+                                    systemRelease,
+                                    systemCodeName,
+                                    systemDescription,
+                                    systemVersion,
+                                    systemAnsiColor,
+                                    systemCpeName,
+                                    systemHomeUrl,
+                                    systemSupportUrl,
+                                    systemBugReportUrl,
+                                    systemPrivacyPolicyUrl,
+                                    systemBuildId,
+                                    systemVariant,
+                                    systemVariantId
 
                                     #Chroot related parameters
                                     chrootTargetName,
@@ -372,27 +372,27 @@ module ISM
                             @chrootVariantId,
 
                             #Chroot related parameters
-                            ISM::Default::CommandLineSettings::TargetName ,
-                            ISM::Default::CommandLineSettings::Architecture,
-                            ISM::Default::CommandLineSettings::Target,
-                            ISM::Default::CommandLineSettings::MakeOptions,
-                            ISM::Default::CommandLineSettings::BuildOptions,
-                            ISM::Default::CommandLineSettings::Name,
-                            ISM::Default::CommandLineSettings::FullName,
-                            ISM::Default::CommandLineSettings::Id,
-                            ISM::Default::CommandLineSettings::Release,
-                            ISM::Default::CommandLineSettings::CodeName,
-                            ISM::Default::CommandLineSettings::Description,
-                            ISM::Default::CommandLineSettings::Version,
-                            ISM::Default::CommandLineSettings::AnsiColor,
-                            ISM::Default::CommandLineSettings::CpeName,
-                            ISM::Default::CommandLineSettings::HomeUrl,
-                            ISM::Default::CommandLineSettings::SupportUrl,
-                            ISM::Default::CommandLineSettings::BugReportUrl,
-                            ISM::Default::CommandLineSettings::PrivacyPolicyUrl,
-                            ISM::Default::CommandLineSettings::BuildId,
-                            ISM::Default::CommandLineSettings::Variant,
-                            ISM::Default::CommandLineSettings::VariantId)
+                            ISM::Default::CommandLineSettings::SystemTargetName ,
+                            ISM::Default::CommandLineSettings::SystemArchitecture,
+                            ISM::Default::CommandLineSettings::SystemTarget,
+                            ISM::Default::CommandLineSettings::SystemMakeOptions,
+                            ISM::Default::CommandLineSettings::SystemBuildOptions,
+                            ISM::Default::CommandLineSettings::SystemName,
+                            ISM::Default::CommandLineSettings::SystemFullName,
+                            ISM::Default::CommandLineSettings::SystemId,
+                            ISM::Default::CommandLineSettings::SystemRelease,
+                            ISM::Default::CommandLineSettings::SystemCodeName,
+                            ISM::Default::CommandLineSettings::SystemDescription,
+                            ISM::Default::CommandLineSettings::SystemVersion,
+                            ISM::Default::CommandLineSettings::SystemAnsiColor,
+                            ISM::Default::CommandLineSettings::SystemCpeName,
+                            ISM::Default::CommandLineSettings::SystemHomeUrl,
+                            ISM::Default::CommandLineSettings::SystemSupportUrl,
+                            ISM::Default::CommandLineSettings::SystemBugReportUrl,
+                            ISM::Default::CommandLineSettings::SystemPrivacyPolicyUrl,
+                            ISM::Default::CommandLineSettings::SystemBuildId,
+                            ISM::Default::CommandLineSettings::SystemVariant,
+                            ISM::Default::CommandLineSettings::SystemVariantId)
         end
 
         def writeSettingsFile
@@ -405,27 +405,27 @@ module ISM
                             @defaultMirror,
 
                             #Host related parameters
-                            @targetName,
-                            @architecture,
-                            @target,
-                            @makeOptions,
-                            @buildOptions,
-                            @name,
-                            @fullName,
-                            @id,
-                            @release,
-                            @codeName,
-                            @description,
-                            @version,
-                            @ansiColor,
-                            @cpeName,
-                            @homeUrl,
-                            @supportUrl,
-                            @bugReportUrl,
-                            @privacyPolicyUrl,
-                            @buildId,
-                            @variant,
-                            @variantId,
+                            @systemTargetName,
+                            @systemArchitecture,
+                            @systemTarget,
+                            @systemMakeOptions,
+                            @systemBuildOptions,
+                            @systemName,
+                            @systemFullName,
+                            @systemId,
+                            @systemRelease,
+                            @systemCodeName,
+                            @systemDescription,
+                            @systemVersion,
+                            @systemAnsiColor,
+                            @systemCpeName,
+                            @systemHomeUrl,
+                            @systemSupportUrl,
+                            @systemBugReportUrl,
+                            @systemPrivacyPolicyUrl,
+                            @systemBuildId,
+                            @systemVariant,
+                            @systemVariantId
 
                             #Chroot related parameters
                             @chrootTargetName,
@@ -470,171 +470,171 @@ module ISM
 
         #Host/Chroot methods
 
-        def targetName(relatedToChroot = true) : String
+        def systemTargetName(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootTargetName : @targetName)
+                return (@rootPath != "/" ? @chrootTargetName : @systemTargetName)
             else
-                return @targetName
+                return @systemTargetName
             end
         end
 
-        def architecture(relatedToChroot = true) : String
+        def systemArchitecture(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootArchitecture : @architecture)
+                return (@rootPath != "/" ? @chrootArchitecture : @systemArchitecture)
             else
-                return @architecture
+                return @systemArchitecture
             end
         end
 
-        def target(relatedToChroot = true) : String
+        def systemTarget(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootTarget : @target)
+                return (@rootPath != "/" ? @chrootTarget : @systemTarget)
             else
-                return @target
+                return @systemTarget
             end
         end
 
-        def makeOptions(relatedToChroot = true) : String
+        def systemMakeOptions(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootMakeOptions : @makeOptions)
+                return (@rootPath != "/" ? @chrootMakeOptions : @systemMakeOptions)
             else
-                return @makeOptions
+                return @systemMakeOptions
             end
         end
 
-        def buildOptions(relatedToChroot = true) : String
+        def systemBuildOptions(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootBuildOptions : @buildOptions)
+                return (@rootPath != "/" ? @chrootBuildOptions : @systemBuildOptions)
             else
-                return @buildOptions
+                return @systemBuildOptions
             end
         end
 
-        def name(relatedToChroot = true) : String
+        def systemName(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootName : @name)
+                return (@rootPath != "/" ? @chrootName : @systemName)
             else
-                return @name
+                return @systemName
             end
         end
 
-        def fullName(relatedToChroot = true) : String
+        def systemFullName(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootFullName : @fullName)
+                return (@rootPath != "/" ? @chrootFullName : @systemFullName)
             else
-                return @fullName
+                return @systemFullName
             end
         end
 
-        def id(relatedToChroot = true) : String
+        def systemId(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootId : @id)
+                return (@rootPath != "/" ? @chrootId : @systemId)
             else
-                return @id
+                return @systemId
             end
         end
 
-        def release(relatedToChroot = true) : String
+        def systemRelease(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootRelease : @release)
+                return (@rootPath != "/" ? @chrootRelease : @systemRelease)
             else
-                return @release
+                return @systemRelease
             end
         end
 
-        def codeName(relatedToChroot = true) : String
+        def systemCodeName(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootCodeName : @codeName)
+                return (@rootPath != "/" ? @chrootCodeName : @systemCodeName)
             else
-                return @codeName
+                return @systemCodeName
             end
         end
 
-        def description(relatedToChroot = true) : String
+        def systemDescription(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootDescription : @description)
+                return (@rootPath != "/" ? @chrootDescription : @systemDescription)
             else
-                return @description
+                return @systemDescription
             end
         end
 
-        def version(relatedToChroot = true) : String
+        def systemVersion(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootVersion : @version)
+                return (@rootPath != "/" ? @chrootVersion : @systemVersion)
             else
-                return @version
+                return @systemVersion
             end
         end
 
-        def ansiColor(relatedToChroot = true) : String
+        def systemAnsiColor(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootAnsiColor : @ansiColor)
+                return (@rootPath != "/" ? @chrootAnsiColor : @systemAnsiColor)
             else
-                return @ansiColor
+                return @systemAnsiColor
             end
         end
 
-        def cpeName(relatedToChroot = true) : String
+        def systemCpeName(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootCpeName : @cpeName)
+                return (@rootPath != "/" ? @chrootCpeName : @systemCpeName)
             else
-                return @cpeName
+                return @systemCpeName
             end
         end
 
-        def homeUrl(relatedToChroot = true) : String
+        def systemHomeUrl(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootHomeUrl : @homeUrl)
+                return (@rootPath != "/" ? @chrootHomeUrl : @systemHomeUrl)
             else
-                return @homeUrl
+                return @systemHomeUrl
             end
         end
 
-        def supportUrl(relatedToChroot = true) : String
+        def systemSupportUrl(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootSupportUrl : @supportUrl)
+                return (@rootPath != "/" ? @chrootSupportUrl : @systemSupportUrl)
             else
-                return @supportUrl
+                return @systemSupportUrl
             end
         end
 
-        def bugReportUrl(relatedToChroot = true) : String
+        def systemBugReportUrl(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootBugReportUrl : @bugReportUrl)
+                return (@rootPath != "/" ? @chrootBugReportUrl : @systemBugReportUrl)
             else
-                return @bugReportUrl
+                return @systemBugReportUrl
             end
         end
 
-        def privacyPolicyUrl(relatedToChroot = true) : String
+        def systemPrivacyPolicyUrl(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootPrivacyPolicyUrl : @privacyPolicyUrl)
+                return (@rootPath != "/" ? @chrootPrivacyPolicyUrl : @systemPrivacyPolicyUrl)
             else
-                return @privacyPolicyUrl
+                return @systemPrivacyPolicyUrl
             end
         end
 
-        def buildId(relatedToChroot = true) : String
+        def systemBuildId(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootBuildId : @buildId)
+                return (@rootPath != "/" ? @chrootBuildId : @systemBuildId)
             else
-                return @buildId
+                return @systemBuildId
             end
         end
 
-        def variant(relatedToChroot = true) : String
+        def systemVariant(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootVariant : @variant)
+                return (@rootPath != "/" ? @chrootVariant : @systemVariant)
             else
-                return @variant
+                return @systemVariant
             end
         end
 
-        def variantId(relatedToChroot = true) : String
+        def systemVariantId(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootVariantId : @variantId)
+                return (@rootPath != "/" ? @chrootVariantId : @systemVariantId)
             else
-                return @variantId
+                return @systemVariantId
             end
         end
 
@@ -658,23 +658,23 @@ module ISM
         end
 
         #   Host
-        def setTargetName(@targetName)
+        def setSystemTargetName(@systemTargetName)
             writeSettingsFile
             setTarget
         end
 
-        def setArchitecture(@architecture)
+        def setSystemArchitecture(@systemArchitecture)
             writeSettingsFile
             setTarget
         end
 
-        def setTarget
-            @target = @architecture + "-" + @targetName + "-" + "linux-gnu"
+        def setSystemTarget
+            @systemTarget = @systemArchitecture + "-" + @systemTargetName + "-" + "linux-gnu"
             writeSettingsFile
         end
 
-        def setMakeOptions(@makeOptions)
-            match,invalidValue = Ism.inputMatchWithFilter(@makeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
+        def setSystemMakeOptions(@systemMakeOptions)
+            match,invalidValue = Ism.inputMatchWithFilter(@systemMakeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
 
             if match
                 writeSettingsFile
@@ -685,84 +685,86 @@ module ISM
             end
         end
 
-        def setBuildOptions(@buildOptions)
+        def setSystemBuildOptions(@systemBuildOptions)
             writeSettingsFile
         end
 
-        def setName(@name)
+        def setSystemName(@systemName)
             writeSettingsFile
         end
 
-        def setFullName(@fullName)
+        def setSystemFullName(@systemFullName)
             writeSettingsFile
         end
 
-        def setId(@id)
+        def setSystemId(@systemId)
             writeSettingsFile
         end
 
-        def setRelease(@release)
+        def setSystemRelease(@systemRelease)
             writeSettingsFile
         end
 
-        def setCodeName(@codeName)
+        def setSystemCodeName(@systemCodeName)
             writeSettingsFile
         end
 
-        def setDescription(@description)
+        def setSystemDescription(@systemDescription)
             writeSettingsFile
         end
 
-        def setVersion(@version)
+        def setSystemVersion(@systemVersion)
             writeSettingsFile
         end
 
-        def setAnsiColor(@ansiColor)
+        def setSystemAnsiColor(@systemAnsiColor)
             writeSettingsFile
         end
 
-        def setCpeName(@cpeName)
+        def setSystemCpeName(@systemCpeName)
             writeSettingsFile
         end
 
-        def setHomeUrl(@homeUrl)
+        def setSystemHomeUrl(@systemHomeUrl)
             writeSettingsFile
         end
 
-        def setSupportUrl(@supportUrl)
+        def setSystemSupportUrl(@systemSupportUrl)
             writeSettingsFile
         end
 
-        def setBugReportUrl(@bugReportUrl)
+        def setSystemBugReportUrl(@systemBugReportUrl)
             writeSettingsFile
         end
 
-        def setPrivacyPolicyUrl(@privacyPolicyUrl)
+        def setSystemPrivacyPolicyUrl(@systemPrivacyPolicyUrl)
             writeSettingsFile
         end
 
-        def setBuildId(@buildId)
+        def setSystemBuildId(@systemBuildId)
             writeSettingsFile
         end
 
-        def setVariant(@variant)
+        def setSystemVariant(@systemVariant)
             writeSettingsFile
         end
 
-        def setVariantId(@variantId)
+        def setSystemVariantId(@systemVariantId)
             writeSettingsFile
         end
 
         #   Chroot
         def setChrootTargetName(@chrootTargetName)
             writeSettingsFile
+            setChrootTarget
         end
 
         def setChrootArchitecture(@chrootArchitecture)
             writeSettingsFile
         end
 
-        def setChrootTarget(@chrootTarget)
+        def setChrootTarget
+            @chrootTarget = @chootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
             writeSettingsFile
         end
 
