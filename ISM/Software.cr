@@ -1216,17 +1216,6 @@ module ISM
             end
         end
 
-        def runKmkCommand(arguments = Array(String).new, path = String.new)
-            requestedCommands = ["kmk"]+arguments
-
-            process = runSystemCommand(requestedCommands, path)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
-                Ism.exitProgram
-            end
-        end
-
         def makeSource(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
