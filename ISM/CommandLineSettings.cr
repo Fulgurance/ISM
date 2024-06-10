@@ -470,14 +470,6 @@ module ISM
 
         #Host/Chroot methods
 
-        def name(relatedToChroot = true) : String
-            if relatedToChroot
-                return (@rootPath != "/" ? @chrootName : @name)
-            else
-                return @name
-            end
-        end
-
         def targetName(relatedToChroot = true) : String
             if relatedToChroot
                 return (@rootPath != "/" ? @chrootTargetName : @targetName)
@@ -515,6 +507,134 @@ module ISM
                 return (@rootPath != "/" ? @chrootBuildOptions : @buildOptions)
             else
                 return @buildOptions
+            end
+        end
+
+        def name(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootName : @name)
+            else
+                return @name
+            end
+        end
+
+        def fullName(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootFullName : @fullName)
+            else
+                return @fullName
+            end
+        end
+
+        def id(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootId : @id)
+            else
+                return @id
+            end
+        end
+
+        def release(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootRelease : @release)
+            else
+                return @release
+            end
+        end
+
+        def codeName(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootCodeName : @codeName)
+            else
+                return @codeName
+            end
+        end
+
+        def description(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootDescription : @description)
+            else
+                return @description
+            end
+        end
+
+        def version(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootVersion : @version)
+            else
+                return @version
+            end
+        end
+
+        def ansiColor(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootAnsiColor : @ansiColor)
+            else
+                return @ansiColor
+            end
+        end
+
+        def cpeName(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootCpeName : @cpeName)
+            else
+                return @cpeName
+            end
+        end
+
+        def homeUrl(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootHomeUrl : @homeUrl)
+            else
+                return @homeUrl
+            end
+        end
+
+        def supportUrl(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootSupportUrl : @supportUrl)
+            else
+                return @supportUrl
+            end
+        end
+
+        def bugReportUrl(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootBugReportUrl : @bugReportUrl)
+            else
+                return @bugReportUrl
+            end
+        end
+
+        def privacyPolicyUrl(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootPrivacyPolicyUrl : @privacyPolicyUrl)
+            else
+                return @privacyPolicyUrl
+            end
+        end
+
+        def buildId(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootBuildId : @buildId)
+            else
+                return @buildId
+            end
+        end
+
+        def variant(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootVariant : @variant)
+            else
+                return @variant
+            end
+        end
+
+        def variantId(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootVariantId : @variantId)
+            else
+                return @variantId
             end
         end
 
