@@ -505,7 +505,7 @@ module ISM
             return process
         end
 
-        def deleteAllFilesRecursivelyFinishing(path : String, extensions : Array(String).new)
+        def deleteAllFilesRecursivelyFinishing(path : String, extensions = Array(String).new)
             commandPrefix = ["find", "doc", "("]
             extensionCommands = Array(String).new
             suffixCommand = [")" ,"-exec", "rm", "-v", "{}", ";"]
