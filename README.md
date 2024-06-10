@@ -37,21 +37,21 @@ Show and manage the ISM version
 ```
 user $ ism software
 Install, configure and remove softwares
-        -sd     selectdependency        Select a dependency part of unique set
-                                Need to be use like this:
-                                ism software [softwarename] selectdependency [dependencyname]
-        -do     disableoption   Disable a specific software option
-                                Need to be use like this:
-                                ism software [softwarename] disableoption [optionname]
-        -eo     enableoption    Enable a specific software option
-                                Need to be use like this:
-                                ism software [softwarename] enableoption [optionname]
-        -i      install Install specific(s) software(s)
-        -ui     uninstall       Uninstall specific(s) software(s)
-        -c      clean   Clean the system by remove unneeded softwares
         -se     search  Search specific(s) software(s)
         -sy     synchronize     Synchronize the software database
         -u      update  Performs a software update
+        -i      install Install specific(s) software(s)
+        -ui     uninstall       Uninstall specific(s) software(s)
+        -c      clean   Clean the system by remove unneeded softwares
+        -sd     selectdependency        Select a dependency part of unique set
+                                Need to be use like this:
+                                ism software [softwarename] selectdependency [dependencyname]
+        -eo     enableoption    Enable a specific software option
+                                Need to be use like this:
+                                ism software [softwarename] enableoption [optionname]
+        -do     disableoption   Disable a specific software option
+                                Need to be use like this:
+                                ism software [softwarename] disableoption [optionname]
         -ap     addpatch        Add a local patch for a specific software
                                 Need to be use like this:
                                 ism software [softwarename-softwareversion] addpatch [patchpath]
@@ -77,17 +77,47 @@ Configure ISM settings
         -eibc   enableinstallbychroot   Enable softwares install by chroot
         -dibc   disableinstallbychroot  Disable softwares install by chroot
         -srp    setrootpath     Set the default root path where to install softwares
-        -sa     setarchitecture Set the default target architecture for the compiler
-        -sbo    setbuildoptions Set the default CPU flags for the compiler
-        -smo    setmakeoptions  Set the default parallel make jobs number for the compiler
-        -ssn    setsystemname   Set the name of the future installed system
-        -stn    settargetname   Set the default machine target for the compiler
-        -sca    setchrootarchitecture   Set the default chroot target architecture for the compiler
-        -scbo   setchrootbuildoptions   Set the default chroot CPU flags for the compiler
-        -scmo   setchrootmakeoptions    Set the default chroot parallel make jobs number for the compiler
-        -scsn   setchrootsystemname     Set the name of the future chroot installed system
-        -sctn   setchroottargetname     Set the default chroot machine target for the compiler
         -sdm    setdefaultmirror        Set the default mirror for ISM
+        -sstn   setsystemtargetname     Set the default machine target for the compiler
+        -ssa    setsystemarchitecture   Set the default system architecture for the compiler
+        -ssmo   setsystemmakeoptions    Set the default parallel make jobs number for the compiler
+        -ssbo   setsystembuildoptions   Set the default CPU flags for the compiler
+        -ssn    setsystemname   Set the name of the future installed system
+        -ssfn   setsystemfullname       Set the full name of the future installed system
+        -ssi    setsystemid     Set the id of the future installed system
+        -ssr    setsystemrelease        Set the release of the future installed system
+        -sscn   setsystemcodename       Set the code name of the future installed system
+        -ssd    setsystemdescription    Set the description of the future installed system
+        -ssv    setsystemversion        Set the version of the future installed system
+        -ssac   setsystemansicolor      Set the ANSI color of the future installed system
+        -sscn   setsystemcpename        Set the CPE name of the future installed system
+        -sshu   setsystemhomeurl        Set the home url of the future installed system
+        -sssu   setsystemsupporturl     Set the support url of the future installed system
+        -ssbru  setsystembugreporturl   Set the bug report url of the future installed system
+        -ssppu  setsystemprivacypolicyurl       Set the privacy policy url of the future installed system
+        -ssbi   setsystembuildid        Set the build id of the future installed system
+        -ssv    setsystemvariant        Set the variant of the future installed system
+        -ssvi   setsystemvariantid      Set the variant id of the future installed system
+        -sctn   setchroottargetname     Set the default chroot machine target for the compiler
+        -sca    setchrootarchitecture   Set the default chroot target architecture for the compiler
+        -scmo   setchrootmakeoptions    Set the default chroot parallel make jobs number for the compiler
+        -scbo   setchrootbuildoptions   Set the default chroot CPU flags for the compiler
+        -scn    setchrootname   Set the name of the future chroot installed system
+        -scfn   setchrootfullname       Set the full name of the future chroot installed system
+        -sci    setchrootid     Set the id of the future chroot installed system
+        -scr    setchrootrelease        Set the release of the future chroot installed system
+        -sccn   setchrootcodename       Set the code name of the future chroot installed system
+        -scd    setchrootdescription    Set the description of the future chroot installed system
+        -scv    setchrootversion        Set the version of the future chroot installed system
+        -scac   setchrootansicolor      Set the ANSI color of the future chroot installed system
+        -sccn   setchrootcpename        Set the CPE name of the future chroot installed system
+        -schu   setchroothomeurl        Set the home url of the future chroot installed system
+        -scsu   setchrootsupporturl     Set the support url of the future chroot installed system
+        -scbru  setchrootbugreporturl   Set the bug report url of the future chroot installed system
+        -scppu  setchrootprivacypolicyurl       Set the privacy policy url of the future chroot installed system
+        -scbi   setchrootbuildid        Set the build id of the future chroot installed system
+        -scv    setchrootvariant        Set the variant of the future chroot installed system
+        -scvi   setchrootvariantid      Set the variant id of the future chroot installed system
 ```
 
 ## About
