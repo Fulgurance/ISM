@@ -8,7 +8,7 @@ module ISM
 
                 ShortText = "-sw"
                 LongText = "switch"
-                Description = "Switch ISM to an another version"
+                Description = "Switch ISM to another version"
 
             end
             

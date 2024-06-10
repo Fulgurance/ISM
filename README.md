@@ -31,7 +31,7 @@ Ingenius System Manager
 user $ ism version
 Show and manage the ISM version
         -s      show    Show the current ISM version
-        -sw     switch  Switch ISM to an another version
+        -sw     switch  Switch ISM to another version
 ```
 
 ```
