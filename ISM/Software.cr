@@ -15,20 +15,20 @@ module ISM
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
         end
 
-        def workDirectoryPath(relatedToChroot = true) : String
-            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
+        def workDirectoryPath : String
+            return Ism.settings.installByChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
         end
 
-        def mainWorkDirectoryPath(relatedToChroot = true) : String
-            return workDirectoryPath(relatedToChroot)+"/"+@mainSourceDirectoryName
+        def mainWorkDirectoryPath : String
+            return workDirectoryPath+"/"+@mainSourceDirectoryName
         end
 
-        def buildDirectoryPath(relatedToChroot = true, entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
-            return mainWorkDirectoryPath(relatedToChroot)+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
+        def buildDirectoryPath(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
+            return mainWorkDirectoryPath+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
         end
 
-        def builtSoftwareDirectoryPath(relatedToChroot = true) : String
-            return (relatedToChroot ? Ism.settings.installByChroot : false) ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
+        def builtSoftwareDirectoryPath : String
+            return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
         end
 
         def download
@@ -103,7 +103,7 @@ module ISM
                         break
                     end
 
-                    filePath = "#{workDirectoryPath(false)}/#{filename+fileExtensionName}"
+                    filePath = "#{workDirectoryPath}/#{filename+fileExtensionName}"
                     colorizedFileFullName = "#{filename}#{fileExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
                     colorizedLink = "#{link.colorize(:magenta)}"
 
@@ -157,19 +157,19 @@ module ISM
         def check
             Ism.notifyOfCheck(@information)
             checkSourcesMd5sum
-            if File.exists?(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
+            if File.exists?(workDirectoryPath+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
                 checkPatchesMd5sum
             end
         end
 
         def checkSourcesMd5sum
-            checkFile(  workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName,
-                        getFileContent(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
+            checkFile(  workDirectoryPath+"/"+ISM::Default::Software::SourcesArchiveName,
+                        getFileContent(workDirectoryPath+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
         end
 
         def checkPatchesMd5sum
-            checkFile(  workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName,
-                        getFileContent(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesMd5sumArchiveName).strip)
+            checkFile(  workDirectoryPath+"/"+ISM::Default::Software::PatchesArchiveName,
+                        getFileContent(workDirectoryPath+"/"+ISM::Default::Software::PatchesMd5sumArchiveName).strip)
         end
 
         def checkFile(archive : String, md5sum : String)
@@ -186,22 +186,22 @@ module ISM
         def extract
             Ism.notifyOfExtract(@information)
             extractSources
-            if File.exists?(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
+            if File.exists?(workDirectoryPath+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
                 extractPatches
             end
         end
 
         def extractSources
-            extractArchive(workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPath(false))
-            moveFile(workDirectoryPath(false)+"/"+@information.versionName,workDirectoryPath(false)+"/"+ISM::Default::Software::SourcesDirectoryName)
+            extractArchive(workDirectoryPath+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPath)
+            moveFile(workDirectoryPath+"/"+@information.versionName,workDirectoryPath+"/"+ISM::Default::Software::SourcesDirectoryName)
         end
 
         def extractPatches
-            extractArchive(workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPath(false))
-            moveFile(workDirectoryPath(false)+"/"+@information.versionName,workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName)
+            extractArchive(workDirectoryPath+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPath)
+            moveFile(workDirectoryPath+"/"+@information.versionName,workDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
-        def extractArchive(archivePath : String, destinationPath = workDirectoryPath(false))
+        def extractArchive(archivePath : String, destinationPath = workDirectoryPath)
 
             process = Process.run(  "tar -xf #{archivePath}",
                                     error: :inherit,
@@ -216,8 +216,8 @@ module ISM
         def patch
             Ism.notifyOfPatch(@information)
 
-            if Dir.exists?("#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}")
-                Dir["#{workDirectoryPath(false)+"/"+ISM::Default::Software::PatchesDirectoryName}/*"].each do |patch|
+            if Dir.exists?("#{workDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName}")
+                Dir["#{workDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName}/*"].each do |patch|
                     applyPatch(patch)
                 end
             end
@@ -235,7 +235,7 @@ module ISM
             process = Process.run(  "patch -Np1 -i #{patch}",
                                     error: :inherit,
                                     shell: true,
-                                    chdir: mainWorkDirectoryPath(false))
+                                    chdir: mainWorkDirectoryPath)
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 Ism.exitProgram
@@ -253,435 +253,211 @@ module ISM
             end
         end
 
-        def generateEmptyFile(path : String)
-            begin
-                FileUtils.touch(path)
-            rescue error
-                Ism.notifyOfGenerateEmptyFileError(path, error)
-                Ism.exitProgram
-            end
-        end
+        ###NEED CHANGES !
 
-        def moveFile(path : String | Enumerable(String), newPath : String)
-            begin
-                FileUtils.mv(path, newPath)
-            rescue error
-                Ism.notifyOfMoveFileError(path, newPath, error)
-                Ism.exitProgram
-            end
-        end
+        # def fileReplaceText(filePath : String | Enumerable, text : String, newText : String)
+        #     begin
+        #         content = File.read_lines(filePath)
+        #
+        #         File.open(filePath,"w") do |file|
+        #             content.each do |line|
+        #                 if line.includes?(text)
+        #                     file << line.gsub(text, newText)+"\n"
+        #                 else
+        #                     file << line+"\n"
+        #                 end
+        #             end
+        #         end
+        #     rescue error
+        #         Ism.notifyOfFileReplaceTextError(filePath, text, newText, error)
+        #         Ism.exitProgram
+        #     end
+        # end
 
-        def makeDirectory(directory : String)
-            begin
-                FileUtils.mkdir_p(directory)
-            rescue error
-                Ism.notifyOfMakeDirectoryError(directory, error)
-                Ism.exitProgram
-            end
-        end
+        # def fileReplaceLineContaining(filePath : String, text : String, newLine : String)
+        #     begin
+        #         content = File.read_lines(filePath)
+        #
+        #         File.open(filePath,"w") do |file|
+        #             content.each do |line|
+        #                 if line.includes?(text)
+        #                     file << newLine+"\n"
+        #                 else
+        #                     file << line+"\n"
+        #                 end
+        #             end
+        #         end
+        #     rescue error
+        #         Ism.notifyOfFileReplaceLineContainingError(filePath, text, newLine, error)
+        #         Ism.exitProgram
+        #     end
+        # end
 
-        def deleteDirectory(directory : String)
-            begin
-                Dir.delete(directory)
-            rescue error
-                Ism.notifyOfDeleteDirectoryError(directory, error)
-                Ism.exitProgram
-            end
-        end
+        # def fileReplaceTextAtLineNumber(filePath : String, text : String, newText : String,lineNumber : UInt64)
+        #     begin
+        #         content = File.read_lines(filePath)
+        #
+        #         File.open(filePath,"w") do |file|
+        #             content.each_with_index do |line, index|
+        #                 if !(index+1 == lineNumber)
+        #                     file << line+"\n"
+        #                 else
+        #                     file << line.gsub(text, newText)+"\n"
+        #                 end
+        #             end
+        #         end
+        #     rescue error
+        #         Ism.notifyOfReplaceTextAtLineNumberError(filePath, text, newText, lineNumber, error)
+        #         Ism.exitProgram
+        #     end
+        # end
+        #
+        # def fileDeleteLine(filePath : String, lineNumber : UInt64)
+        #     begin
+        #         content = File.read_lines(filePath)
+        #
+        #         File.open(filePath,"w") do |file|
+        #             content.each_with_index do |line, index|
+        #                 if !(index+1 == lineNumber)
+        #                     file << line+"\n"
+        #                 end
+        #             end
+        #         end
+        #     rescue error
+        #         Ism.notifyOfFileDeleteLineError(filePath, lineNumber, error)
+        #         Ism.exitProgram
+        #     end
+        # end
+        #
+        # def getFileContent(filePath : String) : String
+        #     begin
+        #         content = File.read(filePath)
+        #     rescue error
+        #         Ism.notifyOfGetFileContentError(filePath, error)
+        #         Ism.exitProgram
+        #     end
+        #     return content
+        # end
 
-        def deleteDirectoryRecursively(directory : String)
-            begin
-                FileUtils.rm_r(directory)
-            rescue error
-                Ism.notifyOfDeleteDirectoryRecursivelyError(directory, error)
-                Ism.exitProgram
-            end
-        end
+        # def fileWriteData(filePath : String, data : String)
+        #     begin
+        #         File.write(filePath, data)
+        #     rescue error
+        #         Ism.notifyOfFileWriteDataError(filePath, error)
+        #         Ism.exitProgram
+        #     end
+        # end
+        #
+        # def fileAppendData(filePath : String, data : String)
+        #     begin
+        #         File.open(filePath,"a") do |file|
+        #             file.puts(data)
+        #         end
+        #     rescue error
+        #         Ism.notifyOfFileAppendDataError(filePath, error)
+        #         Ism.exitProgram
+        #     end
+        # end
 
-        def setPermissions(path : String, permissions : Int)
-            begin
-                File.chmod(path,permissions)
-            rescue error
-                Ism.notifyOfSetPermissionsError(path, permissions, error)
-                Ism.exitProgram
-            end
-        end
+        # def fileUpdateContent(filePath : String, data : String)
+        #     begin
+        #         content = getFileContent(filePath)
+        #         if !content.includes?(data)
+        #             fileAppendData(filePath,"\n"+data)
+        #         end
+        #     rescue error
+        #         Ism.notifyOfFileUpdateContentError(filePath, error)
+        #         Ism.exitProgram
+        #     end
+        # end
 
-        def setOwner(path : String, uid : Int | String, gid : Int | String)
-            begin
-                File.chown( path,
-                            (uid.is_a?(String) ? System::Group.find_by(name: uid).id : uid).to_i,
-                            (gid.is_a?(String) ? System::Group.find_by(name: gid).id : gid).to_i)
-            rescue error
-                Ism.notifyOfSetOwnerError(path, uid, gid, error)
-                Ism.exitProgram
-            end
-        end
+        # def updateUserFile(data : String)
+        #     userName = data.split(":")[0]
+        #     filePath = "#{Ism.settings.rootPath}etc/passwd"
+        #     userExist = false
+        #
+        #     if !File.exists?(filePath)
+        #         generateEmptyFile(filePath)
+        #     end
+        #
+        #     begin
+        #         content = File.read_lines(filePath)
+        #
+        #         content.each_with_index do |line, index|
+        #             userExist = line.starts_with?(userName)
+        #
+        #             if userExist
+        #                 break
+        #             end
+        #         end
+        #
+        #         if !userExist
+        #             fileAppendData(filePath,data+"\n")
+        #         end
+        #
+        #     rescue error
+        #
+        #         Ism.notifyOfUpdateUserFileError(data, error)
+        #         Ism.exitProgram
+        #     end
+        # end
 
-        def setPermissionsRecursively(path : String, permissions : Int)
-            begin
-                Dir["#{path}/**/*"].each do |file_path|
-                    setPermissions(file_path, permissions)
-                end
-            rescue error
-                Ism.notifyOfSetPermissionsRecursivelyError(path, permissions, error)
-                Ism.exitProgram
-            end
-        end
+        # def updateGroupFile(data : String)
+        #     groupName = data.split(":")[0]
+        #     filePath = "#{Ism.settings.rootPath}etc/group"
+        #     groupExist = false
+        #
+        #     if !File.exists?(filePath)
+        #         generateEmptyFile(filePath)
+        #     end
+        #
+        #     begin
+        #         content = File.read_lines(filePath)
+        #
+        #         content.each_with_index do |line, index|
+        #             groupExist = line.starts_with?(groupName)
+        #
+        #             if groupExist
+        #                 break
+        #             end
+        #         end
+        #
+        #         if !groupExist
+        #             fileAppendData(filePath,data+"\n")
+        #         end
+        #
+        #     rescue error
+        #
+        #         Ism.notifyOfUpdateGroupFileError(data, error)
+        #         Ism.exitProgram
+        #     end
+        # end
 
-        def setOwnerRecursively(path : String, uid : Int | String, gid : Int | String)
-            begin
-                Dir["#{path}/**/*"].each do |file_path|
-                    setOwner(file_path, uid, gid)
-                end
-            rescue error
-                Ism.notifyOfSetOwnerRecursivelyError(path, uid, gid, error)
-                Ism.exitProgram
-            end
-        end
-
-        def fileReplaceText(filePath : String | Enumerable, text : String, newText : String)
-            begin
-                content = File.read_lines(filePath)
-
-                File.open(filePath,"w") do |file|
-                    content.each do |line|
-                        if line.includes?(text)
-                            file << line.gsub(text, newText)+"\n"
-                        else
-                            file << line+"\n"
-                        end
-                    end
-                end
-            rescue error
-                Ism.notifyOfFileReplaceTextError(filePath, text, newText, error)
-                Ism.exitProgram
-            end
-        end
-
-        def fileReplaceLineContaining(filePath : String, text : String, newLine : String)
-            begin
-                content = File.read_lines(filePath)
-
-                File.open(filePath,"w") do |file|
-                    content.each do |line|
-                        if line.includes?(text)
-                            file << newLine+"\n"
-                        else
-                            file << line+"\n"
-                        end
-                    end
-                end
-            rescue error
-                Ism.notifyOfFileReplaceLineContainingError(filePath, text, newLine, error)
-                Ism.exitProgram
-            end
-        end
-
-        def fileReplaceTextAtLineNumber(filePath : String, text : String, newText : String,lineNumber : UInt64)
-            begin
-                content = File.read_lines(filePath)
-
-                File.open(filePath,"w") do |file|
-                    content.each_with_index do |line, index|
-                        if !(index+1 == lineNumber)
-                            file << line+"\n"
-                        else
-                            file << line.gsub(text, newText)+"\n"
-                        end
-                    end
-                end
-            rescue error
-                Ism.notifyOfReplaceTextAtLineNumberError(filePath, text, newText, lineNumber, error)
-                Ism.exitProgram
-            end
-        end
-
-        def fileDeleteLine(filePath : String, lineNumber : UInt64)
-            begin
-                content = File.read_lines(filePath)
-
-                File.open(filePath,"w") do |file|
-                    content.each_with_index do |line, index|
-                        if !(index+1 == lineNumber)
-                            file << line+"\n"
-                        end
-                    end
-                end
-            rescue error
-                Ism.notifyOfFileDeleteLineError(filePath, lineNumber, error)
-                Ism.exitProgram
-            end
-        end
-
-        def getFileContent(filePath : String) : String
-            begin
-                content = File.read(filePath)
-            rescue error
-                Ism.notifyOfGetFileContentError(filePath, error)
-                Ism.exitProgram
-            end
-            return content
-        end
-
-        def fileWriteData(filePath : String, data : String)
-            begin
-                File.write(filePath, data)
-            rescue error
-                Ism.notifyOfFileWriteDataError(filePath, error)
-                Ism.exitProgram
-            end
-        end
-
-        def fileAppendData(filePath : String, data : String)
-            begin
-                File.open(filePath,"a") do |file|
-                    file.puts(data)
-                end
-            rescue error
-                Ism.notifyOfFileAppendDataError(filePath, error)
-                Ism.exitProgram
-            end
-        end 
-
-        def fileUpdateContent(filePath : String, data : String)
-            begin
-                content = getFileContent(filePath)
-                if !content.includes?(data)
-                    fileAppendData(filePath,"\n"+data)
-                end
-            rescue error
-                Ism.notifyOfFileUpdateContentError(filePath, error)
-                Ism.exitProgram
-            end
-        end
-
-        def updateUserFile(data : String)
-            userName = data.split(":")[0]
-            filePath = "#{Ism.settings.rootPath}etc/passwd"
-            userExist = false
-
-            if !File.exists?(filePath)
-                generateEmptyFile(filePath)
-            end
-
-            begin
-                content = File.read_lines(filePath)
-
-                content.each_with_index do |line, index|
-                    userExist = line.starts_with?(userName)
-
-                    if userExist
-                        break
-                    end
-                end
-
-                if !userExist
-                    fileAppendData(filePath,data+"\n")
-                end
-
-            rescue error
-
-                Ism.notifyOfUpdateUserFileError(data, error)
-                Ism.exitProgram
-            end
-        end
-
-        def updateGroupFile(data : String)
-            groupName = data.split(":")[0]
-            filePath = "#{Ism.settings.rootPath}etc/group"
-            groupExist = false
-
-            if !File.exists?(filePath)
-                generateEmptyFile(filePath)
-            end
-
-            begin
-                content = File.read_lines(filePath)
-
-                content.each_with_index do |line, index|
-                    groupExist = line.starts_with?(groupName)
-
-                    if groupExist
-                        break
-                    end
-                end
-
-                if !groupExist
-                    fileAppendData(filePath,data+"\n")
-                end
-
-            rescue error
-
-                Ism.notifyOfUpdateGroupFileError(data, error)
-                Ism.exitProgram
-            end
-        end
-
-        def makeLink(path : String, targetPath : String, linkType : Symbol)
-            if File.exists?(targetPath)
-                Ism.notifyOfMakeLinkFileExistError(path, targetPath)
-                Ism.exitProgram
-            end
-
-            if File.symlink?(targetPath) && File.symlink?(targetPath)
-                deleteFile(targetPath)
-            end
-
-            begin
-                case linkType
-                when :hardLink
-                    FileUtils.ln(path, targetPath)
-                when :symbolicLink
-                    FileUtils.ln_s(path, targetPath)
-                when :symbolicLinkByOverwrite
-                    FileUtils.ln_sf(path, targetPath)
-                else
-                    Ism.notifyOfMakeLinkUnknowTypeError(path, targetPath, linkType)
-                    Ism.exitProgram
-                end
-            rescue error
-                Ism.notifyOfMakeLinkError(path, targetPath, error)
-                Ism.exitProgram
-            end
-        end
-
-        def copyFile(path : String | Enumerable(String), targetPath : String)
-            begin
-                FileUtils.cp(path, targetPath)
-            rescue error
-                Ism.notifyOfCopyFileError(path, targetPath, error)
-                Ism.exitProgram
-            end
-        end
-
-        def copyAllFilesFinishing(path : String, destination : String, text : String)
-            begin
-                Dir["#{path}/*"].each do |filePath|
-                    filename = filePath.lchop(filePath[0..filePath.rindex("/")])
-                    destinationPath = "#{destination}/#{filename}"
-
-                    if File.file?(filePath) && filePath[-text.size..-1] == text
-                        copyFile(filePath,destinationPath)
-                    end
-                end
-            rescue error
-                Ism.notifyOfCopyAllFilesFinishingError(path, destination, text, error)
-                Ism.exitProgram
-            end
-        end
-
-        def copyAllFilesRecursivelyFinishing(path : String, destination : String, text : String)
-            begin
-                Dir["#{path}/**/*"].each do |filePath|
-                    filename = filePath.lchop(filePath[0..filePath.rindex("/")])
-                    destinationPath = "#{destination}/#{filename}"
-
-                    if File.file?(filePath) && filePath[-text.size..-1] == text
-                        copyFile(filePath,destinationPath)
-                    end
-                end
-            rescue error
-                Ism.notifyOfCopyAllFilesRecursivelyFinishingError(path, destination, text, error)
-                Ism.exitProgram
-            end
-        end
-
-        def copyDirectory(path : String, targetPath : String)
-            begin
-                FileUtils.cp_r(path, targetPath)
-            rescue error
-                Ism.notifyOfCopyDirectoryError(path, targetPath, error)
-                Ism.exitProgram
-            end
-        end
-
-        def deleteFile(path : String | Enumerable(String))
-            begin
-                FileUtils.rm(path)
-            rescue error
-                Ism.notifyOfDeleteFileError(path, error)
-                Ism.exitProgram
-            end
-        end
-
-        def replaceTextAllFilesNamed(path : String, filename : String, text : String, newText : String)
-            begin
-                Dir["#{path}/*"].each do |file_path|
-                    if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
-                        fileReplaceText(file_path, text, newText)
-                    end
-                end
-            rescue error
-                Ism.notifyOfReplaceTextAllFilesNamedError(path, filename, text, newText, error)
-                Ism.exitProgram
-            end
-        end
-
-        def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
-            begin
-                Dir["#{path}/**/*"].each do |file_path|
-                    if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
-                        fileReplaceText(file_path, text, newText)
-                    end
-                end
-            rescue error
-                Ism.notifyOfReplaceTextAllFilesRecursivelyNamedError(path, filename, text, newText, error)
-                Ism.exitProgram
-            end
-        end
-
-        def deleteAllFilesFinishing(path : String, text : String)
-            begin
-                Dir["#{path}/*"].each do |file_path|
-                    if File.file?(file_path) && file_path[-text.size..-1] == text
-                        deleteFile(file_path)
-                    end
-                end
-            rescue error
-                Ism.notifyOfDeleteAllFilesFinishingError(path, text, error)
-                Ism.exitProgram
-            end
-        end
-
-        def deleteAllFilesRecursivelyFinishing(path : String, text : String)
-            begin
-                Dir["#{path}/**/*"].each do |file_path|
-                    if File.file?(file_path) && file_path[-text.size..-1] == text
-                        deleteFile(file_path)
-                    end
-                end
-            rescue error
-                Ism.notifyOfDeleteAllFilesRecursivelyFinishingError(path, text, error)
-                Ism.exitProgram
-            end
-        end
-
-        def deleteAllHiddenFiles(path : String)
-            begin
-                Dir.glob(["#{path}/.*"], match: :dot_files) do |file_path|
-                    if File.file?(file_path)
-                        deleteFile(file_path)
-                    end
-                end
-            rescue error
-                Ism.notifyOfDeleteAllHiddenFilesError(path, error)
-                Ism.exitProgram
-            end
-        end
-
-        def deleteAllHiddenFilesRecursively(path : String)
-            begin
-                Dir.glob(["#{path}/**/.*"], match: :dot_files) do |file_path|
-                    if File.file?(file_path)
-                        deleteFile(file_path)
-                    end
-                end
-            rescue error
-                Ism.notifyOfDeleteAllHiddenFilesRecursivelyError(path, error)
-                Ism.exitProgram
-            end
-        end
+        # def replaceTextAllFilesNamed(path : String, filename : String, text : String, newText : String)
+        #     begin
+        #         Dir["#{path}/*"].each do |file_path|
+        #             if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
+        #                 fileReplaceText(file_path, text, newText)
+        #             end
+        #         end
+        #     rescue error
+        #         Ism.notifyOfReplaceTextAllFilesNamedError(path, filename, text, newText, error)
+        #         Ism.exitProgram
+        #     end
+        # end
+        #
+        # def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
+        #     begin
+        #         Dir["#{path}/**/*"].each do |file_path|
+        #             if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
+        #                 fileReplaceText(file_path, text, newText)
+        #             end
+        #         end
+        #     rescue error
+        #         Ism.notifyOfReplaceTextAllFilesRecursivelyNamedError(path, filename, text, newText, error)
+        #         Ism.exitProgram
+        #     end
+        # end
 
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
@@ -727,6 +503,129 @@ module ISM
             end
 
             return process
+        end
+
+        def deleteAllFilesRecursivelyFinishing(path : String, extensions : Array(String).new)
+            commandPrefix = ["find", "doc", "("]
+            extensionCommands = Array(String).new
+            suffixCommand = [")" ,"-exec", "rm", "-v", "{}", ";"]
+
+            extensions.each do |extension|
+                extensionCommands += "-o"
+                extensionCommands += "-name"
+                extensionCommands += "\\*.#{extension}"
+            end
+
+            requestedCommands = commandPrefix + extensionCommands + suffixCommand
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def makeLink(path : String, targetPath : String, linkType : Symbol)
+            command = String.new
+
+            case linkType
+            when :hardLink
+                command = ["ln"]
+            when :symbolicLink
+                command = ["ln","-s"]
+            when :symbolicLinkByOverwrite
+                command = ["ln","-sf"]
+            else
+                Ism.notifyOfMakeLinkUnknowTypeError(path, targetPath, linkType)
+                Ism.exitProgram
+            end
+
+            requestedCommands = command + [path, targetPath]
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def generateEmptyFile(path : String)
+            requestedCommands = ["touch", path]
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def copyFile(path : String, targetPath : String)
+            requestedCommands = ["cp", path, targetPath]
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def copyDirectory(path : String, targetPath : String)
+            requestedCommands = ["cp", "-r", path, targetPath]
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def moveFile(path : String | Enumerable(String), newPath : String)
+            requestedCommands = ["mv", path, newPath]
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def makeDirectory(path : String)
+            requestedCommands = ["mkdir", "-pv",path]
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def deleteDirectory(path : String)
+            requestedCommands = ["rm", "-r", path]
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def deleteFile(path : String)
+            requestedCommands = ["rm", path]
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
         end
 
         def runChmodCommand(arguments = Array(String).new, path = String.new)
@@ -1168,8 +1067,8 @@ module ISM
         def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
             servicesPath = "/etc/init.d/"
 
-            makeDirectory("#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}#{servicesPath}")
-            moveFile(filePath,"#{builtSoftwareDirectoryPath(false)}#{Ism.settings.rootPath}#{servicesPath}#{serviceName}")
+            makeDirectory("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
+            moveFile(filePath,"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{serviceName}")
             runChmodCommand(["+x",serviceName],"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
         end
 
@@ -1244,7 +1143,7 @@ module ISM
             fileNumber = UInt128.new(0)
             totalSize = UInt128.new(0)
 
-            filesList = Dir.glob(["#{builtSoftwareDirectoryPath(false)}/**/*"], match: :dot_files)
+            filesList = Dir.glob(["#{builtSoftwareDirectoryPath}/**/*"], match: :dot_files)
 
             directoryNumber = UInt128.new(0)
             symlinkNumber = UInt128.new(0)
@@ -1253,7 +1152,7 @@ module ISM
 
             filesList.each do |entry|
 
-                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath(false),"")}"
+                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath,"")}"
 
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
@@ -1276,12 +1175,12 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            filesList = Dir.glob(["#{builtSoftwareDirectoryPath(false)}/**/*"], match: :dot_files)
+            filesList = Dir.glob(["#{builtSoftwareDirectoryPath}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
             filesList.each do |entry|
 
-                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath(false),"")}"
+                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath,"")}"
 
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
@@ -1550,11 +1449,11 @@ module ISM
         end
 
         def cleanWorkDirectoryPath
-            if Dir.exists?(workDirectoryPath(false))
-                deleteDirectoryRecursively(workDirectoryPath(false))
+            if Dir.exists?(workDirectoryPath)
+                deleteDirectory(workDirectoryPath)
             end
 
-            makeDirectory(workDirectoryPath(false))
+            makeDirectory(workDirectoryPath)
         end
 
         def recordUnneededKernelFeatures

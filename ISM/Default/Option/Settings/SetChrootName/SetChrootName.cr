@@ -6,10 +6,10 @@ module ISM
 
             module SettingsSetChrootSystemName
 
-                ShortText = "-scsn"
-                LongText = "setchrootsystemname"
+                ShortText = "-scn"
+                LongText = "setchrootname"
                 Description = "Set the name of the future chroot installed system"
-                SetText = "Setting chroot systemName to the value "
+                SetText = "Setting chroot system name to the value "
 
             end
             
