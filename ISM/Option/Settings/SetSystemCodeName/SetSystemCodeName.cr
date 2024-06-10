@@ -1,0 +1,30 @@
+module ISM
+
+    module Option
+
+        class SettingsSetSystemCodeName < ISM::CommandLineOption
+
+            def initialize
+                super(  ISM::Default::Option::SettingsSetSystemCodeName::ShortText,
+                        ISM::Default::Option::SettingsSetSystemCodeName::LongText,
+                        ISM::Default::Option::SettingsSetSystemCodeName::Description)
+            end
+
+            def start
+                if ARGV.size == 2+Ism.debugLevel
+                    showHelp
+                else
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        Ism.settings.setSystemCodeName(ARGV[2+Ism.debugLevel])
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemCodeName::SetText+ARGV[2+Ism.debugLevel])
+                    end
+                end
+            end
+
+        end
+        
+    end
+
+end
