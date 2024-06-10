@@ -4,12 +4,12 @@ module ISM
 
         module Option
 
-            module SettingsSetSystemName
+            module SettingsSetName
 
-                ShortText = "-ssn"
-                LongText = "setsystemname"
+                ShortText = "-sn"
+                LongText = "setname"
                 Description = "Set the name of the future installed system"
-                SetText = "Setting systemName to the value "
+                SetText = "Setting system name to the value "
 
             end
             

@@ -18,12 +18,12 @@ module ISM
                             ISM::Option::SettingsSetArchitecture.new,
                             ISM::Option::SettingsSetBuildOptions.new,
                             ISM::Option::SettingsSetMakeOptions.new,
-                            ISM::Option::SettingsSetSystemName.new,
+                            ISM::Option::SettingsSetName.new,
                             ISM::Option::SettingsSetTargetName.new,
                             ISM::Option::SettingsSetChrootArchitecture.new,
                             ISM::Option::SettingsSetChrootBuildOptions.new,
                             ISM::Option::SettingsSetChrootMakeOptions.new,
-                            ISM::Option::SettingsSetChrootSystemName.new,
+                            ISM::Option::SettingsSetChrootName.new,
                             ISM::Option::SettingsSetChrootTargetName.new,
                             ISM::Option::SettingsSetDefaultMirror.new]
 
