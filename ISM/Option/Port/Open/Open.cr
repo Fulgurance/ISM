@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::PortOpen::ShortText,
                         ISM::Default::Option::PortOpen::LongText,
-                        ISM::Default::Option::PortOpen::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::PortOpen::Description)
             end
 
             def convertUrlToPort(url : String) : ISM::Port

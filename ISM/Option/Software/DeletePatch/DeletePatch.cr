@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SoftwareDeletePatch::ShortText,
                         ISM::Default::Option::SoftwareDeletePatch::LongText,
-                        ISM::Default::Option::SoftwareDeletePatch::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SoftwareDeletePatch::Description)
             end
 
             def start

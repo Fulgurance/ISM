@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SoftwareUpdate::ShortText,
                         ISM::Default::Option::SoftwareUpdate::LongText,
-                        ISM::Default::Option::SoftwareUpdate::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SoftwareUpdate::Description)
             end
 
             def start

@@ -7,7 +7,7 @@ module ISM
         property description : String
         property options : Array(ISM::CommandLineOption)
 
-        def initialize(@shortText, @longText, @description, @options)
+        def initialize(@shortText, @longText, @description, @options = Array(ISM::CommandLineOption).new)
         end
 
         def start

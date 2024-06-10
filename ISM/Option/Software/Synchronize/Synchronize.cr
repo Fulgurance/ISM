@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SoftwareSynchronize::ShortText,
                         ISM::Default::Option::SoftwareSynchronize::LongText,
-                        ISM::Default::Option::SoftwareSynchronize::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SoftwareSynchronize::Description)
             end
 
             def start

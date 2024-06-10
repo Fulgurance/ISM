@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SettingsSetDefaultMirror::ShortText,
                         ISM::Default::Option::SettingsSetDefaultMirror::LongText,
-                        ISM::Default::Option::SettingsSetDefaultMirror::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SettingsSetDefaultMirror::Description)
             end
 
             def start

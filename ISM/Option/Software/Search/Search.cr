@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SoftwareSearch::ShortText,
                         ISM::Default::Option::SoftwareSearch::LongText,
-                        ISM::Default::Option::SoftwareSearch::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SoftwareSearch::Description)
             end
 
             def start

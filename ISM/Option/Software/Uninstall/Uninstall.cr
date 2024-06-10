@@ -7,8 +7,7 @@ module ISM
             def initialize
                 super(  ISM::Default::Option::SoftwareUninstall::ShortText,
                         ISM::Default::Option::SoftwareUninstall::LongText,
-                        ISM::Default::Option::SoftwareUninstall::Description,
-                        Array(ISM::CommandLineOption).new)
+                        ISM::Default::Option::SoftwareUninstall::Description)
             end
 
             def start
