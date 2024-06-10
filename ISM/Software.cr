@@ -795,7 +795,7 @@ module ISM
             end
         end
 
-        def runScript(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
+        def runFile(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
             requestedCommands = ["./#{file}"]+arguments
 
             process = runSystemCommand(requestedCommands, path, environment)
