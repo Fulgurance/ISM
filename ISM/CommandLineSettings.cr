@@ -30,7 +30,7 @@ module ISM
             systemPrivacyPolicyUrl : String,
             systemBuildId : String,
             systemVariant : String,
-            systemVariantId : String
+            systemVariantId : String,
 
             #Chroot related parameters
             chrootTargetName : String,
@@ -137,7 +137,7 @@ module ISM
                         @systemPrivacyPolicyUrl = ISM::Default::CommandLineSettings::SystemPrivacyPolicyUrl,
                         @systemBuildId = ISM::Default::CommandLineSettings::SystemBuildId,
                         @systemVariant = ISM::Default::CommandLineSettings::SystemVariant,
-                        @systemVariantId = ISM::Default::CommandLineSettings::SystemVariantId)
+                        @systemVariantId = ISM::Default::CommandLineSettings::SystemVariantId,
 
                         #Chroot related parameters
                         @chrootTargetName = ISM::Default::CommandLineSettings::ChrootTargetName,
@@ -223,7 +223,8 @@ module ISM
             @chrootVariantId = information.chrootVariantId
         end
 
-        def writeSettings(  #Generic parameters
+        def writeSettings(  filePath : String,
+                            #Generic parameters
                             secureMode : Bool,
                             installByChroot : Bool,
                             rootPath : String,
@@ -250,7 +251,7 @@ module ISM
                             systemPrivacyPolicyUrl : String,
                             systemBuildId : String,
                             systemVariant : String,
-                            systemVariantId : String
+                            systemVariantId : String,
 
                             #Chroot related parameters
                             chrootTargetName : String,
@@ -308,7 +309,7 @@ module ISM
                                     systemPrivacyPolicyUrl,
                                     systemBuildId,
                                     systemVariant,
-                                    systemVariantId
+                                    systemVariantId,
 
                                     #Chroot related parameters
                                     chrootTargetName,
@@ -425,7 +426,7 @@ module ISM
                             @systemPrivacyPolicyUrl,
                             @systemBuildId,
                             @systemVariant,
-                            @systemVariantId
+                            @systemVariantId,
 
                             #Chroot related parameters
                             @chrootTargetName,
@@ -764,12 +765,12 @@ module ISM
         end
 
         def setChrootTarget
-            @chrootTarget = @chootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
+            @chrootTarget = @chrootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
             writeSettingsFile
         end
 
         def setChrootMakeOptions(@chrootMakeOptions)
-            match,invalidValue = Ism.inputMatchWithFilter(@chrootMakeOptions,ISM::Default::CommandLineSettings::ChrootMakeOptionsFilter)
+            match,invalidValue = Ism.inputMatchWithFilter(@chrootMakeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
 
             if match
                 writeSettingsFile

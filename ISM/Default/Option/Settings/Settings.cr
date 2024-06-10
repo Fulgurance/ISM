@@ -16,7 +16,7 @@ module ISM
                             ISM::Option::SettingsEnableInstallByChroot.new,
                             ISM::Option::SettingsDisableInstallByChroot.new,
                             ISM::Option::SettingsSetRootPath.new,
-                            ISM::Option::SettingsSetDefaultMirror.new
+                            ISM::Option::SettingsSetDefaultMirror.new,
                             #Host options
                             ISM::Option::SettingsSetSystemTargetName.new,
                             ISM::Option::SettingsSetSystemArchitecture.new,
