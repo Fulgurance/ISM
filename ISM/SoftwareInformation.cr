@@ -330,7 +330,7 @@ module ISM
             #Add the selected dependencies
             @dependencies.each do |dependency|
                 if @selectedDependencies.any? { |item| item.downcase == dependency.fullName.downcase}
-                    dependenciesArray += dependency.dependencies(allowDeepSearch)
+                    dependenciesArray += [dependency]+dependency.dependencies(allowDeepSearch)
                 end
             end
 
