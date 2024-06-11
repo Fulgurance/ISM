@@ -348,7 +348,7 @@ module ISM
                                     "'s/#{text}/#{newText}/g'",
                                     filePath]
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands, filePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -362,7 +362,7 @@ module ISM
                                     "'/#{text}/c\#{newText}'",
                                     filePath]
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands, filePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -376,7 +376,7 @@ module ISM
                                     "'#{lineNumber.to_s}s/#{text}/#{newText}'",
                                     filePath]
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands, filePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -407,7 +407,7 @@ module ISM
                                     data,
                                     "EOF"]
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands, filePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -422,7 +422,7 @@ module ISM
                                     filename,
                                     "#{filePath}"]
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands, filePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -436,7 +436,7 @@ module ISM
                                     ">>",
                                     filePath]
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands, filePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
