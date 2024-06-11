@@ -557,7 +557,7 @@ module ISM
         end
 
         def makeDirectory(path : String)
-            requestedCommands = ["mkdir", "-pv",path]
+            requestedCommands = ["mkdir", "-p",path]
 
             process = runSystemCommand(requestedCommands)
 
