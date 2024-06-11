@@ -407,8 +407,7 @@ module ISM
                                     filePath,
                                     "<<",
                                     "\"EOF\"",
-                                    data,
-                                    "EOF"]
+                                    data+"EOF"]
 
             process = runSystemCommand(requestedCommands, filePath)
 
