@@ -334,7 +334,7 @@ module ISM
 
         def fileReplaceText(filePath : String, text : String, newText : String)
             requestedCommands = [   "sed",
-                                    "-i"
+                                    "-i",
                                     "'s/#{text}/#{newText}/g'",
                                     filePath]
 
@@ -348,7 +348,7 @@ module ISM
 
         def fileReplaceLineContaining(filePath : String, text : String, newLine : String)
             requestedCommands = [   "sed",
-                                    "-i"
+                                    "-i",
                                     "'/#{text}/c\#{newText}'",
                                     filePath]
 
@@ -362,7 +362,7 @@ module ISM
 
         def fileReplaceTextAtLineNumber(filePath : String, text : String, newText : String,lineNumber : UInt64)
             requestedCommands = [   "sed",
-                                    "-i"
+                                    "-i",
                                     "'#{lineNumber.to_s}s/#{text}/#{newText}'",
                                     filePath]
 
@@ -376,7 +376,7 @@ module ISM
 
         def fileDeleteLine(filePath : String, lineNumber : UInt64)
             requestedCommands = [   "sed",
-                                    "-i"
+                                    "-i",
                                     "'#{lineNumber.to_s}d'",
                                     filePath]
 
@@ -390,7 +390,7 @@ module ISM
 
         def fileWriteData(filePath : String, data : String)
             requestedCommands = [   "cat",
-                                    ">"
+                                    ">",
                                     "#{filePath}",
                                     "<<",
                                     "\"EOF\"",
@@ -602,7 +602,7 @@ module ISM
         def runUserAddCommand(arguments : Array(String))
             prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
 
-            arguments = (prefix.empty? arguments : prefix+arguments)
+            arguments = (prefix.empty? ? arguments : prefix+arguments)
 
             requestedCommands = ["useradd"]+arguments
 
@@ -617,7 +617,7 @@ module ISM
         def runUserDelCommand(arguments : Array(String))
             prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
 
-            arguments = (prefix.empty? arguments : prefix+arguments)
+            arguments = (prefix.empty? ? arguments : prefix+arguments)
 
             requestedCommands = ["userdel"]+arguments
 
@@ -632,7 +632,7 @@ module ISM
         def runGroupAddCommand(arguments : Array(String))
             prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
 
-            arguments = (prefix.empty? arguments : prefix+arguments)
+            arguments = (prefix.empty? ? arguments : prefix+arguments)
 
             requestedCommands = ["groupadd"]+arguments
 
@@ -647,7 +647,7 @@ module ISM
         def runGroupDelCommand(arguments : Array(String))
             prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
 
-            arguments = (prefix.empty? arguments : prefix+arguments)
+            arguments = (prefix.empty? ? arguments : prefix+arguments)
 
             requestedCommands = ["groupdel"]+arguments
 
