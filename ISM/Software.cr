@@ -47,6 +47,11 @@ module ISM
             return String.new
         end
 
+        def prepareKernelSourcesInstallation
+            makeDirectory("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}usr/src/")
+            moveFile("#{workDirectoryPath}/Sources","#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
+        end
+
         def download
             Ism.notifyOfDownload(@information)
 
