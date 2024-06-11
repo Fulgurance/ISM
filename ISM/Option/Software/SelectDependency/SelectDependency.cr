@@ -19,25 +19,25 @@ module ISM
                     else
                         matchingSoftware = Ism.getSoftwareInformation(ARGV[1+Ism.debugLevel].downcase)
 
-                        if matchingSoftware.name == ""
+                        if matchingSoftware.fullName == ""
                             puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFound + "#{ARGV[1+Ism.debugLevel].colorize(:green)}"
                             puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFoundAdvice
                         else
                             if ARGV[2+Ism.debugLevel] == @shortText || ARGV[2+Ism.debugLevel] == @longText
 
-                                dependency = ARGV[3+Ism.debugLevel].downcase.capitalize
+                                dependency = ARGV[3+Ism.debugLevel].downcase
 
                                 if matchingSoftware.selectUniqueDependency(dependency)
                                     matchingSoftware.writeInformationFile(matchingSoftware.settingsFilePath)
                                     Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
                                                                 dependency +
                                                                 ISM::Default::Option::SoftwareSelectDependency::SetText2 +
-                                                                matchingSoftware.name)
+                                                                matchingSoftware.fullName)
                                 else
                                     Ism.printErrorNotification( ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
                                                             dependency +
                                                             ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound2 +
-                                                            matchingSoftware.name,nil)
+                                                            matchingSoftware.fullName,nil)
                                 end
                             else
                                 showHelp
