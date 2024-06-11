@@ -247,117 +247,11 @@ module ISM
 
             #Generate all build directories
             @buildDirectoryNames.keys.each do |key|
-                if !Dir.exists?(buildDirectoryPath(false, key))
-                    makeDirectory(buildDirectoryPath(false, key))
+                if !Dir.exists?(buildDirectoryPath(key))
+                    makeDirectory(buildDirectoryPath(key))
                 end
             end
         end
-
-        ###NEED CHANGES !
-
-        # def fileReplaceText(filePath : String | Enumerable, text : String, newText : String)
-        #     begin
-        #         content = File.read_lines(filePath)
-        #
-        #         File.open(filePath,"w") do |file|
-        #             content.each do |line|
-        #                 if line.includes?(text)
-        #                     file << line.gsub(text, newText)+"\n"
-        #                 else
-        #                     file << line+"\n"
-        #                 end
-        #             end
-        #         end
-        #     rescue error
-        #         Ism.notifyOfFileReplaceTextError(filePath, text, newText, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-
-        # def fileReplaceLineContaining(filePath : String, text : String, newLine : String)
-        #     begin
-        #         content = File.read_lines(filePath)
-        #
-        #         File.open(filePath,"w") do |file|
-        #             content.each do |line|
-        #                 if line.includes?(text)
-        #                     file << newLine+"\n"
-        #                 else
-        #                     file << line+"\n"
-        #                 end
-        #             end
-        #         end
-        #     rescue error
-        #         Ism.notifyOfFileReplaceLineContainingError(filePath, text, newLine, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-
-        # def fileReplaceTextAtLineNumber(filePath : String, text : String, newText : String,lineNumber : UInt64)
-        #     begin
-        #         content = File.read_lines(filePath)
-        #
-        #         File.open(filePath,"w") do |file|
-        #             content.each_with_index do |line, index|
-        #                 if !(index+1 == lineNumber)
-        #                     file << line+"\n"
-        #                 else
-        #                     file << line.gsub(text, newText)+"\n"
-        #                 end
-        #             end
-        #         end
-        #     rescue error
-        #         Ism.notifyOfReplaceTextAtLineNumberError(filePath, text, newText, lineNumber, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-        #
-        # def fileDeleteLine(filePath : String, lineNumber : UInt64)
-        #     begin
-        #         content = File.read_lines(filePath)
-        #
-        #         File.open(filePath,"w") do |file|
-        #             content.each_with_index do |line, index|
-        #                 if !(index+1 == lineNumber)
-        #                     file << line+"\n"
-        #                 end
-        #             end
-        #         end
-        #     rescue error
-        #         Ism.notifyOfFileDeleteLineError(filePath, lineNumber, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-        #
-        # def getFileContent(filePath : String) : String
-        #     begin
-        #         content = File.read(filePath)
-        #     rescue error
-        #         Ism.notifyOfGetFileContentError(filePath, error)
-        #         Ism.exitProgram
-        #     end
-        #     return content
-        # end
-
-        # def fileWriteData(filePath : String, data : String)
-        #     begin
-        #         File.write(filePath, data)
-        #     rescue error
-        #         Ism.notifyOfFileWriteDataError(filePath, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-        #
-        # def fileAppendData(filePath : String, data : String)
-        #     begin
-        #         File.open(filePath,"a") do |file|
-        #             file.puts(data)
-        #         end
-        #     rescue error
-        #         Ism.notifyOfFileAppendDataError(filePath, error)
-        #         Ism.exitProgram
-        #     end
-        # end
 
         # def fileUpdateContent(filePath : String, data : String)
         #     begin
@@ -367,94 +261,6 @@ module ISM
         #         end
         #     rescue error
         #         Ism.notifyOfFileUpdateContentError(filePath, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-
-        # def updateUserFile(data : String)
-        #     userName = data.split(":")[0]
-        #     filePath = "#{Ism.settings.rootPath}etc/passwd"
-        #     userExist = false
-        #
-        #     if !File.exists?(filePath)
-        #         generateEmptyFile(filePath)
-        #     end
-        #
-        #     begin
-        #         content = File.read_lines(filePath)
-        #
-        #         content.each_with_index do |line, index|
-        #             userExist = line.starts_with?(userName)
-        #
-        #             if userExist
-        #                 break
-        #             end
-        #         end
-        #
-        #         if !userExist
-        #             fileAppendData(filePath,data+"\n")
-        #         end
-        #
-        #     rescue error
-        #
-        #         Ism.notifyOfUpdateUserFileError(data, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-
-        # def updateGroupFile(data : String)
-        #     groupName = data.split(":")[0]
-        #     filePath = "#{Ism.settings.rootPath}etc/group"
-        #     groupExist = false
-        #
-        #     if !File.exists?(filePath)
-        #         generateEmptyFile(filePath)
-        #     end
-        #
-        #     begin
-        #         content = File.read_lines(filePath)
-        #
-        #         content.each_with_index do |line, index|
-        #             groupExist = line.starts_with?(groupName)
-        #
-        #             if groupExist
-        #                 break
-        #             end
-        #         end
-        #
-        #         if !groupExist
-        #             fileAppendData(filePath,data+"\n")
-        #         end
-        #
-        #     rescue error
-        #
-        #         Ism.notifyOfUpdateGroupFileError(data, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-
-        # def replaceTextAllFilesNamed(path : String, filename : String, text : String, newText : String)
-        #     begin
-        #         Dir["#{path}/*"].each do |file_path|
-        #             if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
-        #                 fileReplaceText(file_path, text, newText)
-        #             end
-        #         end
-        #     rescue error
-        #         Ism.notifyOfReplaceTextAllFilesNamedError(path, filename, text, newText, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-        #
-        # def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
-        #     begin
-        #         Dir["#{path}/**/*"].each do |file_path|
-        #             if File.file?(file_path) && file_path == "#{path}/#{filename}".squeeze("/")
-        #                 fileReplaceText(file_path, text, newText)
-        #             end
-        #         end
-        #     rescue error
-        #         Ism.notifyOfReplaceTextAllFilesRecursivelyNamedError(path, filename, text, newText, error)
         #         Ism.exitProgram
         #     end
         # end
@@ -503,6 +309,128 @@ module ISM
             end
 
             return process
+        end
+
+        def fileReplaceText(filePath : String, text : String, newText : String)
+            requestedCommands = [   "sed",
+                                    "-i"
+                                    "'s/#{text}/#{newText}/g'",
+                                    filePath]
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileReplaceLineContaining(filePath : String, text : String, newLine : String)
+            requestedCommands = [   "sed",
+                                    "-i"
+                                    "'/#{text}/c\#{newText}'",
+                                    filePath]
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileReplaceTextAtLineNumber(filePath : String, text : String, newText : String,lineNumber : UInt64)
+            requestedCommands = [   "sed",
+                                    "-i"
+                                    "'#{lineNumber.to_s}s/#{text}/#{newText}'",
+                                    filePath]
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileDeleteLine(filePath : String, lineNumber : UInt64)
+            requestedCommands = [   "sed",
+                                    "-i"
+                                    "'#{lineNumber.to_s}d'",
+                                    filePath]
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileWriteData(filePath : String, data : String)
+            requestedCommands = [   "cat",
+                                    ">"
+                                    "#{filePath}",
+                                    "<<",
+                                    "\"EOF\"",
+                                    data,
+                                    "EOF"]
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileAppendData(filePath : String, data : String)
+            requestedCommands = [   "echo",
+                                    "\"#{data}\"",
+                                    ">",
+                                    filename,
+                                    "#{filePath}"]
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileAppendDataFromFile(filePath : String, targetPath : String)
+            requestedCommands = [   "cat",
+                                    targetPath,
+                                    ">>",
+                                    filePath]
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
+            requestedCommands = [   "find",
+                                    "man",
+                                    "-name",
+                                    filename,
+                                    "-exec",
+                                    "sed",
+                                    "-i",
+                                    "'s/#{text}/#{newText}'",
+                                    "{}",
+                                    ";"]
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
         end
 
         def deleteAllFilesRecursivelyFinishing(path : String, extensions = Array(String).new)
@@ -584,7 +512,7 @@ module ISM
             end
         end
 
-        def moveFile(path : String | Enumerable(String), newPath : String)
+        def moveFile(path : String, newPath : String)
             requestedCommands = ["mv", path, newPath]
 
             process = runSystemCommand(requestedCommands)
