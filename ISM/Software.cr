@@ -31,6 +31,22 @@ module ISM
             return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
         end
 
+        def mainKernelName : String
+            @information.uniqueDependencies.each do |uniqueDependency|
+                if @information.uniqueDependencyIsEnabled(uniqueDependency)
+
+                    @information.dependencies(allowDeepSearch: true).each do |dependency|
+                        if dependency.fullName == uniqueDependency
+                            return dependency.versionName.downcase
+                        end
+                    end
+                end
+            end
+
+            #Exit and show a message that no kernel are selected ?
+            return String.new
+        end
+
         def download
             Ism.notifyOfDownload(@information)
 
