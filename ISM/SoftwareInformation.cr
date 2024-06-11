@@ -468,10 +468,8 @@ module ISM
 
         @uniqueDependencies.each do |uniqueGroup|
             if !selected
-                uniqueGroup.each do |item|
-                    if item.downcase == dependency.downcase
-                        selected = true
-                    end
+                if uniqueGroup.any? { |item| item.downcase == dependency.downcase}
+                    selected = true
                 end
             end
 
@@ -493,7 +491,7 @@ module ISM
     end
 
     def uniqueDependencyIsEnabled(dependency : String) : Bool
-        return @selectedDependencies.includes?(dependency)
+        return @selectedDependencies.any? { |item| item.downcase == dependency.downcase}
     end
 
   end
