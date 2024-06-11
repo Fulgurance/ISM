@@ -22,6 +22,7 @@ module ISM
             systemCodeName : String,
             systemDescription : String,
             systemVersion : String,
+            systemVersionId : String,
             systemAnsiColor : String,
             systemCpeName : String,
             systemHomeUrl : String,
@@ -45,6 +46,7 @@ module ISM
             chrootCodeName : String,
             chrootDescription : String,
             chrootVersion : String,
+            chrootVersionId : String,
             chrootAnsiColor : String,
             chrootCpeName : String,
             chrootHomeUrl : String,
@@ -77,6 +79,7 @@ module ISM
         property    systemCodeName : String
         property    systemDescription : String
         property    systemVersion : String
+        property    systemVersionId : String
         property    systemAnsiColor : String
         property    systemCpeName : String
         property    systemHomeUrl : String
@@ -100,6 +103,7 @@ module ISM
         property    chrootCodeName : String
         property    chrootDescription : String
         property    chrootVersion : String
+        property    chrootVersionId : String
         property    chrootAnsiColor : String
         property    chrootCpeName : String
         property    chrootHomeUrl : String
@@ -129,6 +133,7 @@ module ISM
                         @systemCodeName = ISM::Default::CommandLineSettings::SystemCodeName,
                         @systemDescription = ISM::Default::CommandLineSettings::SystemDescription,
                         @systemVersion = ISM::Default::CommandLineSettings::SystemVersion,
+                        @systemVersionId = ISM::Default::CommandLineSettings::SystemVersionId,
                         @systemAnsiColor = ISM::Default::CommandLineSettings::SystemAnsiColor,
                         @systemCpeName = ISM::Default::CommandLineSettings::SystemCpeName,
                         @systemHomeUrl = ISM::Default::CommandLineSettings::SystemHomeUrl,
@@ -152,6 +157,7 @@ module ISM
                         @chrootCodeName = ISM::Default::CommandLineSettings::ChrootCodeName,
                         @chrootDescription = ISM::Default::CommandLineSettings::ChrootDescription,
                         @chrootVersion = ISM::Default::CommandLineSettings::ChrootVersion,
+                        @chrootVersionId = ISM::Default::CommandLineSettings::ChrootVersionId,
                         @chrootAnsiColor = ISM::Default::CommandLineSettings::ChrootAnsiColor,
                         @chrootCpeName = ISM::Default::CommandLineSettings::ChrootCpeName,
                         @chrootHomeUrl = ISM::Default::CommandLineSettings::ChrootHomeUrl,
@@ -189,6 +195,7 @@ module ISM
             @systemCodeName = information.systemCodeName
             @systemDescription = information.systemDescription
             @systemVersion = information.systemVersion
+            @systemVersionId = information.systemVersionId
             @systemAnsiColor = information.systemAnsiColor
             @systemCpeName = information.systemCpeName
             @systemHomeUrl = information.systemHomeUrl
@@ -212,6 +219,7 @@ module ISM
             @chrootCodeName = information.chrootCodeName
             @chrootDescription = information.chrootDescription
             @chrootVersion = information.chrootVersion
+            @chrootVersionId = information.chrootVersionId
             @chrootAnsiColor = information.chrootAnsiColor
             @chrootCpeName = information.chrootCpeName
             @chrootHomeUrl = information.chrootHomeUrl
@@ -243,6 +251,7 @@ module ISM
                             systemCodeName : String,
                             systemDescription : String,
                             systemVersion : String,
+                            systemVersionId : String,
                             systemAnsiColor : String,
                             systemCpeName : String,
                             systemHomeUrl : String,
@@ -266,6 +275,7 @@ module ISM
                             chrootCodeName : String,
                             chrootDescription : String,
                             chrootVersion : String,
+                            chrootVersionId : String,
                             chrootAnsiColor : String,
                             chrootCpeName : String,
                             chrootHomeUrl : String,
@@ -301,6 +311,7 @@ module ISM
                                     systemCodeName,
                                     systemDescription,
                                     systemVersion,
+                                    systemVersionId,
                                     systemAnsiColor,
                                     systemCpeName,
                                     systemHomeUrl,
@@ -324,6 +335,7 @@ module ISM
                                     chrootCodeName,
                                     chrootDescription,
                                     chrootVersion,
+                                    chrootVersionId,
                                     chrootAnsiColor,
                                     chrootCpeName,
                                     chrootHomeUrl,
@@ -362,6 +374,7 @@ module ISM
                             @chrootCodeName,
                             @chrootDescription,
                             @chrootVersion,
+                            @chrootVersionId,
                             @chrootAnsiColor,
                             @chrootCpeName,
                             @chrootHomeUrl,
@@ -385,6 +398,7 @@ module ISM
                             ISM::Default::CommandLineSettings::SystemCodeName,
                             ISM::Default::CommandLineSettings::SystemDescription,
                             ISM::Default::CommandLineSettings::SystemVersion,
+                            ISM::Default::CommandLineSettings::SystemVersionId,
                             ISM::Default::CommandLineSettings::SystemAnsiColor,
                             ISM::Default::CommandLineSettings::SystemCpeName,
                             ISM::Default::CommandLineSettings::SystemHomeUrl,
@@ -418,6 +432,7 @@ module ISM
                             @systemCodeName,
                             @systemDescription,
                             @systemVersion,
+                            @systemVersionId,
                             @systemAnsiColor,
                             @systemCpeName,
                             @systemHomeUrl,
@@ -441,6 +456,7 @@ module ISM
                             @chrootCodeName,
                             @chrootDescription,
                             @chrootVersion,
+                            @chrootVersionId,
                             @chrootAnsiColor,
                             @chrootCpeName,
                             @chrootHomeUrl,
@@ -564,6 +580,14 @@ module ISM
                 return (@rootPath != "/" ? @chrootVersion : @systemVersion)
             else
                 return @systemVersion
+            end
+        end
+
+        def systemVersionId(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootVersionId : @systemVersionId)
+            else
+                return @systemVersionId
             end
         end
 
@@ -718,6 +742,10 @@ module ISM
             writeSettingsFile
         end
 
+        def setSystemVersionId(@systemVersionId)
+            writeSettingsFile
+        end
+
         def setSystemAnsiColor(@systemAnsiColor)
             writeSettingsFile
         end
@@ -811,6 +839,10 @@ module ISM
         end
 
         def setChrootVersion(@chrootVersion)
+            writeSettingsFile
+        end
+
+        def setChrootVersionId(@chrootVersionId)
             writeSettingsFile
         end
 
