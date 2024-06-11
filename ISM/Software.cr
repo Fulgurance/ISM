@@ -1095,7 +1095,7 @@ module ISM
             if Ism.settings.installByChroot
                 arguments.unshift(makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
             else
-                arguments.unshift(makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
+                arguments.unshift(makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions)
             end
 
             requestedCommands = ["make"]+arguments
