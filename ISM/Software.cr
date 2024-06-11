@@ -175,6 +175,16 @@ module ISM
             puts
         end
         
+        def getFileContent(filePath : String) : String
+            begin
+                content = File.read(filePath)
+            rescue error
+                Ism.notifyOfGetFileContentError(filePath, error)
+                Ism.exitProgram
+            end
+            return content
+        end
+
         def check
             Ism.notifyOfCheck(@information)
             checkSourcesMd5sum
