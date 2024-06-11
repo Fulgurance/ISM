@@ -33,11 +33,14 @@ module ISM
 
         def mainKernelName : String
             @information.uniqueDependencies.each do |uniqueDependency|
-                if @information.uniqueDependencyIsEnabled(uniqueDependency)
+                uniqueDependency.each do |entry|
 
-                    @information.dependencies(allowDeepSearch: true).each do |dependency|
-                        if dependency.fullName == uniqueDependency
-                            return dependency.versionName.downcase
+                    if @information.uniqueDependencyIsEnabled(entry)}
+
+                        @information.dependencies(allowDeepSearch: true).each do |dependency|
+                            if dependency.fullName.downcase == entry.downcase
+                                return dependency.versionName.downcase
+                            end
                         end
                     end
                 end
