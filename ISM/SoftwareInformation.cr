@@ -327,13 +327,6 @@ module ISM
         missingSelectedDependencies = getMissingSelectedDependencies
 
         if missingSelectedDependencies.empty?
-            #Add the selected dependencies
-            @dependencies.each do |dependency|
-                if @selectedDependencies.any? { |item| item.downcase == dependency.fullName.downcase}
-                    dependenciesArray += [dependency]+dependency.dependencies(allowDeepSearch)
-                end
-            end
-
             @options.each do |option|
 
                 if passEnabled
@@ -367,7 +360,7 @@ module ISM
             return @dependencies + dependenciesArray
         else
             #REJECT INSTALLED DEPENDENCIES AND UNIQUE DEPENDENCIES NOT SELECTIONED
-            return @dependencies.reject {|entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.name) && !@selectedDependencies.includes?(entry.name)}+dependenciesArray
+            return @dependencies.reject {|entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.name) && !uniqueDependencyIsEnabled(entry.fullName)}+dependenciesArray
         end
     end
 
