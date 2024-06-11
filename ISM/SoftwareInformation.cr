@@ -323,36 +323,41 @@ module ISM
     def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
-        #CHECKER SI LES UNIQUE DEPENDENCIES SONT DEJA SELECTIONNEES, SINON EXIT WITH MESSAGE TO SELECT THE MISSING ONES
-
-        @options.each do |option|
-
-            if passEnabled
-                if option.active
-                    if option.isPass
-                        return option.dependencies(allowDeepSearch)
-                    else
-                        dependenciesArray += option.dependencies(allowDeepSearch)
-                    end
-                end
-            else
-                if option.active || option.isPass
-                    dependenciesArray += option.dependencies(allowDeepSearch)
-                end
-
-                if !option.active && option.isPass
-                    requiredPassDependency = self.toSoftwareDependency
-                    requiredPassDependency.options.push(option.name)
-                    dependenciesArray.push(requiredPassDependency)
-                end
-            end
-
-        end
-
         #CHECK IF THERE IS ANY UNIQUE DEPENDENCIES NOT SELECTIONED
         missingSelectedDependencies = getMissingSelectedDependencies
 
-        if !missingSelectedDependencies.empty?
+        if missingSelectedDependencies.empty?
+            #Add the selected dependencies
+            @dependencies.each do |dependency|
+                if @selectedDependencies.any? { |item| item.downcase == dependency.fullName.downcase}
+                    dependenciesArray += dependency.dependencies(allowDeepSearch)
+                end
+            end
+
+            @options.each do |option|
+
+                if passEnabled
+                    if option.active
+                        if option.isPass
+                            return option.dependencies(allowDeepSearch)
+                        else
+                            dependenciesArray += option.dependencies(allowDeepSearch)
+                        end
+                    end
+                else
+                    if option.active || option.isPass
+                        dependenciesArray += option.dependencies(allowDeepSearch)
+                    end
+
+                    if !option.active && option.isPass
+                        requiredPassDependency = self.toSoftwareDependency
+                        requiredPassDependency.options.push(option.name)
+                        dependenciesArray.push(requiredPassDependency)
+                    end
+                end
+
+            end
+        else
             Ism.showCalculationDoneMessage
             Ism.showMissingSelectedDependenciesMessage(fullName, @version, missingSelectedDependencies)
             Ism.exitProgram
