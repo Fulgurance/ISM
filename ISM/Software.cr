@@ -1455,7 +1455,7 @@ module ISM
         end
 
         def architecture(architecture : String) : Bool
-            return Ism.settings.architecture == architecture
+            return Ism.settings.systemArchitecture == architecture
         end
 
         def showInfo(message : String)
