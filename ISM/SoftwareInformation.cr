@@ -450,7 +450,7 @@ module ISM
             selected = false
 
             @selectedDependencies.each do |selection|
-                if uniqueGroup.includes?(selection)
+                if uniqueGroup.any? { |item| item.downcase == selection.downcase}
                     selected = true
                 end
             end
