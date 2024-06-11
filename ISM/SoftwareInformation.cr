@@ -468,13 +468,17 @@ module ISM
 
         @uniqueDependencies.each do |uniqueGroup|
             if !selected
-                selected = uniqueGroup.includes?(dependency)
+                uniqueGroup.each do |item|
+                    if item.downcase == dependency.downcase
+                        selected = true
+                    end
+                end
             end
 
             if selected
                 #REMOVE OTHER SELECTION
                 uniqueGroup.each do |item|
-                    if item != dependency
+                    if item.downcase != dependency.downcase
                         @selectedDependencies.delete(item)
                     end
                 end
