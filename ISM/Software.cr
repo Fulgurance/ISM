@@ -579,6 +579,10 @@ module ISM
         end
 
         def runUserAddCommand(arguments : Array(String))
+            prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
+
+            arguments = (prefix.empty? arguments : prefix+arguments)
+
             requestedCommands = ["useradd"]+arguments
 
             process = runSystemCommand(requestedCommands)
@@ -590,6 +594,10 @@ module ISM
         end
 
         def runUserDelCommand(arguments : Array(String))
+            prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
+
+            arguments = (prefix.empty? arguments : prefix+arguments)
+
             requestedCommands = ["userdel"]+arguments
 
             process = runSystemCommand(requestedCommands)
@@ -601,6 +609,10 @@ module ISM
         end
 
         def runGroupAddCommand(arguments : Array(String))
+            prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
+
+            arguments = (prefix.empty? arguments : prefix+arguments)
+
             requestedCommands = ["groupadd"]+arguments
 
             process = runSystemCommand(requestedCommands)
@@ -612,6 +624,10 @@ module ISM
         end
 
         def runGroupDelCommand(arguments : Array(String))
+            prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
+
+            arguments = (prefix.empty? arguments : prefix+arguments)
+
             requestedCommands = ["groupdel"]+arguments
 
             process = runSystemCommand(requestedCommands)
