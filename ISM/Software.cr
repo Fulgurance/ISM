@@ -469,9 +469,9 @@ module ISM
             suffixCommand = [")" ,"-exec", "rm", "-v", "{}", ";"]
 
             extensions.each do |extension|
-                extensionCommands += "-o"
-                extensionCommands += "-name"
-                extensionCommands += "\\*.#{extension}"
+                extensionCommands.push("-o")
+                extensionCommands.push("-name")
+                extensionCommands.push("\\*.#{extension}")
             end
 
             requestedCommands = commandPrefix + extensionCommands + suffixCommand
