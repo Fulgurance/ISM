@@ -28,19 +28,19 @@ module ISM
                     if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareEnableOption::ShortText ||
                         !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareEnableOption::LongText
                         matchingOption = true
-                        @options[2].start
+                        @options[-4].start
                     end
 
                     if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareDisableOption::ShortText ||
                         !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareDisableOption::LongText
                         matchingOption = true
-                        @options[1].start
+                        @options[-3].start
                     end
 
                     if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareSelectDependency::ShortText ||
                         !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareSelectDependency::LongText
                         matchingOption = true
-                        @options[0].start
+                        @options[-5].start
                     end
 
                     if  !matchingOption && ARGV.size > 2+Ism.debugLevel && ARGV[2+Ism.debugLevel] == ISM::Default::Option::SoftwareAddPatch::ShortText ||
