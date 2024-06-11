@@ -404,7 +404,7 @@ module ISM
         def fileWriteData(filePath : String, data : String)
             requestedCommands = [   "cat",
                                     ">",
-                                    "#{filePath}",
+                                    filePath,
                                     "<<",
                                     "\"EOF\"",
                                     data,
