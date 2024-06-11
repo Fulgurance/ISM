@@ -419,7 +419,6 @@ module ISM
             requestedCommands = [   "echo",
                                     "\"#{data}\"",
                                     ">",
-                                    filename,
                                     "#{filePath}"]
 
             process = runSystemCommand(requestedCommands, filePath)
