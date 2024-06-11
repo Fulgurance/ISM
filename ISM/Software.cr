@@ -35,7 +35,7 @@ module ISM
             @information.uniqueDependencies.each do |uniqueDependency|
                 uniqueDependency.each do |entry|
 
-                    if @information.uniqueDependencyIsEnabled(entry)}
+                    if @information.uniqueDependencyIsEnabled(entry)
 
                         @information.dependencies(allowDeepSearch: true).each do |dependency|
                             if dependency.fullName.downcase == entry.downcase
