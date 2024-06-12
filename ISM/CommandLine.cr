@@ -816,9 +816,9 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, error)
         end
 
-        def notifyOfRunSystemCommandError(arguments : Array(String), path = String.new, environment = Hash(String, String).new, error = nil)
+        def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
-                                    arguments.join(" ") +
+                                    arguments +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
                                     path +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
