@@ -317,18 +317,11 @@ module ISM
             return process
         end
 
-        def runSystemCommand(arguments : String | Array(String), path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new) : Process::Status
+        def runSystemCommand(command : String, path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new) : Process::Status
             environmentCommand = String.new
 
             environment.keys.each do |key|
                 environmentCommand += " #{key}=\"#{environment[key]}\""
-            end
-
-            case typeof(arguments) == Array(String)
-            when true
-                command = arguments.join(" ")
-            when false
-                command = arguments
             end
 
             if Ism.settings.installByChroot
@@ -485,17 +478,17 @@ module ISM
 
             case linkType
             when :hardLink
-                command = ["ln"]
+                command = "ln"
             when :symbolicLink
-                command = ["ln","-s"]
+                command = "ln -s"
             when :symbolicLinkByOverwrite
-                command = ["ln","-sf"]
+                command = "ln -sf"
             else
                 Ism.notifyOfMakeLinkUnknowTypeError(path, targetPath, linkType)
                 Ism.exitProgram
             end
 
-            requestedCommands = command + [path, targetPath]
+            requestedCommands = "#{command} #{path} #{targetPath}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -506,7 +499,7 @@ module ISM
         end
 
         def generateEmptyFile(path : String)
-            requestedCommands = ["touch", path]
+            requestedCommands = "touch #{path}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -517,7 +510,7 @@ module ISM
         end
 
         def copyFile(path : String, targetPath : String)
-            requestedCommands = ["cp", path, targetPath]
+            requestedCommands = "cp #{path} #{targetPath}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -528,7 +521,7 @@ module ISM
         end
 
         def copyDirectory(path : String, targetPath : String)
-            requestedCommands = ["cp", "-r", path, targetPath]
+            requestedCommands = "cp -r #{path} #{targetPath}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -539,7 +532,7 @@ module ISM
         end
 
         def moveFile(path : String, newPath : String)
-            requestedCommands = ["mv", path, newPath]
+            requestedCommands = "mv #{path} #{newPath}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -550,7 +543,7 @@ module ISM
         end
 
         def makeDirectory(path : String)
-            requestedCommands = ["mkdir", "-p",path]
+            requestedCommands = "mkdir -p #{path}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -561,7 +554,7 @@ module ISM
         end
 
         def deleteDirectory(path : String)
-            requestedCommands = ["rm", "-r", path]
+            requestedCommands = "rm -r #{path}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -572,7 +565,7 @@ module ISM
         end
 
         def deleteFile(path : String)
-            requestedCommands = ["rm", path]
+            requestedCommands = "rm #{path}"
 
             process = runSystemCommand(requestedCommands)
 
