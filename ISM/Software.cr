@@ -317,14 +317,19 @@ module ISM
             return process
         end
 
-        def runSystemCommand(arguments = Array(String).new, path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new) : Process::Status
+        def runSystemCommand(arguments : String | Array(String), path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new) : Process::Status
             environmentCommand = String.new
 
             environment.keys.each do |key|
                 environmentCommand += " #{key}=\"#{environment[key]}\""
             end
 
-            command = arguments.join(" ")
+            case typeof(arguments) == Array(String)
+            when true
+                command = arguments.join(" ")
+            when false
+                command = arguments
+            end
 
             if Ism.settings.installByChroot
                 chrootCommand = <<-CODE
@@ -346,10 +351,10 @@ module ISM
         end
 
         def fileReplaceText(filePath : String, text : String, newText : String)
-            requestedCommands = [   "sed",
-                                    "-i",
-                                    "'s/#{text}/#{newText}/g'",
-                                    filePath]
+
+            requestedCommands = <<-CMD
+                                sed -i 's/#{text}/#{newText}/g' #{filePath}
+                                CMD
 
             process = runSystemCommand(requestedCommands, filePath)
 
@@ -360,10 +365,9 @@ module ISM
         end
 
         def fileReplaceLineContaining(filePath : String, text : String, newLine : String)
-            requestedCommands = [   "sed",
-                                    "-i",
-                                    "'/#{text}/c\#{newText}'",
-                                    filePath]
+            requestedCommands = <<-CMD
+                                sed -i '/#{text}/c\#{newText}' #{filePath}
+                                CMD
 
             process = runSystemCommand(requestedCommands, filePath)
 
@@ -374,10 +378,9 @@ module ISM
         end
 
         def fileReplaceTextAtLineNumber(filePath : String, text : String, newText : String,lineNumber : UInt64)
-            requestedCommands = [   "sed",
-                                    "-i",
-                                    "'#{lineNumber.to_s}s/#{text}/#{newText}'",
-                                    filePath]
+            requestedCommands = <<-CMD
+                                sed -i '#{lineNumber.to_s}s/#{text}/#{newText}' #{filePath}
+                                CMD
 
             process = runSystemCommand(requestedCommands, filePath)
 
@@ -388,10 +391,9 @@ module ISM
         end
 
         def fileDeleteLine(filePath : String, lineNumber : UInt64)
-            requestedCommands = [   "sed",
-                                    "-i",
-                                    "'#{lineNumber.to_s}d'",
-                                    filePath]
+            requestedCommands = <<-CMD
+                                sed -i '#{lineNumber.to_s}d' #{filePath}
+                                CMD
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -402,12 +404,11 @@ module ISM
         end
 
         def fileWriteData(filePath : String, data : String)
-            requestedCommands = [   "cat",
-                                    ">",
-                                    filePath,
-                                    "<<",
-                                    "\"EOF\"",
-                                    data+"EOF"]
+            requestedCommands = <<-CMD
+                                cat > #{filePath} <<EOF
+                                #{data}
+                                EOF
+                                CMD
 
             process = runSystemCommand(requestedCommands, filePath)
 
@@ -418,10 +419,9 @@ module ISM
         end
 
         def fileAppendData(filePath : String, data : String)
-            requestedCommands = [   "echo",
-                                    "\"#{data}\"",
-                                    ">",
-                                    "#{filePath}"]
+            requestedCommands = <<-CMD
+                                echo -i "#{data}" > "#{filePath}"
+                                CMD
 
             process = runSystemCommand(requestedCommands, filePath)
 
@@ -432,10 +432,11 @@ module ISM
         end
 
         def fileAppendDataFromFile(filePath : String, targetPath : String)
-            requestedCommands = [   "cat",
-                                    targetPath,
-                                    ">>",
-                                    filePath]
+            requestedCommands = <<-CMD
+                                cat #{targetPath} >> #{filePath}
+                                #{data}
+                                EOF
+                                CMD
 
             process = runSystemCommand(requestedCommands, filePath)
 
@@ -446,16 +447,9 @@ module ISM
         end
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
-            requestedCommands = [   "find",
-                                    "man",
-                                    "-name",
-                                    filename,
-                                    "-exec",
-                                    "sed",
-                                    "-i",
-                                    "'s/#{text}/#{newText}'",
-                                    "{}",
-                                    ";"]
+            requestedCommands = <<-CMD
+                                find man -name #{filename} -exec sed -i 's/#{text}/#{newText}/'   {} \;
+                                CMD
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -466,17 +460,17 @@ module ISM
         end
 
         def deleteAllFilesRecursivelyFinishing(path : String, extensions = Array(String).new)
-            commandPrefix = ["find", "doc", "("]
             extensionCommands = Array(String).new
-            suffixCommand = [")" ,"-exec", "rm", "-v", "{}", ";"]
 
             extensions.each do |extension|
                 extensionCommands.push("-o")
                 extensionCommands.push("-name")
-                extensionCommands.push("\\*.#{extension}")
+                extensionCommands.push("\\*.#{extension} \\")
             end
 
-            requestedCommands = commandPrefix + extensionCommands + suffixCommand
+            requestedCommands = <<-CMD
+                                find doc \( -name #{path} #{extensionCommands} ) -exec rm -v {} \;
+                                CMD
 
             process = runSystemCommand(requestedCommands, path)
 
