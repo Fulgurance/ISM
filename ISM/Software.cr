@@ -473,10 +473,10 @@ module ISM
             end
         end
 
-        def makeLink(path : String, targetPath : String, linkType : Symbol)
+        def makeLink(target : String, path : String, type : Symbol)
             command = String.new
 
-            case linkType
+            case type
             when :hardLink
                 command = "ln"
             when :symbolicLink
@@ -484,11 +484,11 @@ module ISM
             when :symbolicLinkByOverwrite
                 command = "ln -sf"
             else
-                Ism.notifyOfMakeLinkUnknowTypeError(path, targetPath, linkType)
+                Ism.notifyOfMakeLinkUnknowTypeError(target, path, type)
                 Ism.exitProgram
             end
 
-            requestedCommands = "#{command} #{path} #{targetPath}"
+            requestedCommands = "#{command} #{target} #{path}"
 
             process = runSystemCommand(requestedCommands)
 
