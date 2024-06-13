@@ -575,8 +575,8 @@ module ISM
             end
         end
 
-        def runChmodCommand(arguments = Array(String).new, path = String.new)
-            requestedCommands = ["chmod"]+arguments
+        def runChmodCommand(arguments = String.new, path = String.new)
+            requestedCommands = "chmod #{arguments}"
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -586,8 +586,8 @@ module ISM
             end
         end
 
-        def runChownCommand(arguments = Array(String).new, path = String.new)
-            requestedCommands = ["chown"]+arguments
+        def runChownCommand(arguments = String.new, path = String.new)
+            requestedCommands = "chown #{arguments}"
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -597,12 +597,10 @@ module ISM
             end
         end
 
-        def runUserAddCommand(arguments : Array(String))
-            prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
+        def runUserAddCommand(arguments : String)
+            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
 
-            arguments = (prefix.empty? ? arguments : prefix+arguments)
-
-            requestedCommands = ["useradd"]+arguments
+            requestedCommands = "useradd #{prefix.empty? ? arguments : prefix+arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -612,12 +610,10 @@ module ISM
             end
         end
 
-        def runUserDelCommand(arguments : Array(String))
-            prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
+        def runUserDelCommand(arguments : String)
+            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
 
-            arguments = (prefix.empty? ? arguments : prefix+arguments)
-
-            requestedCommands = ["userdel"]+arguments
+            requestedCommands = "userdel #{prefix.empty? ? arguments : prefix+arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -627,12 +623,10 @@ module ISM
             end
         end
 
-        def runGroupAddCommand(arguments : Array(String))
-            prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
+        def runGroupAddCommand(arguments : String)
+            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
 
-            arguments = (prefix.empty? ? arguments : prefix+arguments)
-
-            requestedCommands = ["groupadd"]+arguments
+            requestedCommands = "groupadd #{prefix.empty? ? arguments : prefix+arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -642,12 +636,10 @@ module ISM
             end
         end
 
-        def runGroupDelCommand(arguments : Array(String))
-            prefix = option("Pass1") ? ["-R","#{Ism.settings.rootPath}"] : Array(String).new
+        def runGroupDelCommand(arguments : String)
+            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
 
-            arguments = (prefix.empty? ? arguments : prefix+arguments)
-
-            requestedCommands = ["groupdel"]+arguments
+            requestedCommands = "groupdel #{prefix.empty? ? arguments : prefix+arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -657,8 +649,8 @@ module ISM
             end
         end
 
-        def runFile(file : String, arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            requestedCommands = ["./#{file}"]+arguments
+        def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new)
+            requestedCommands = "./#{file} #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
@@ -668,8 +660,8 @@ module ISM
             end
         end
 
-        def runPythonCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            requestedCommands = ["python"]+arguments
+        def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+            requestedCommands = "python #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
@@ -679,8 +671,8 @@ module ISM
             end
         end
 
-        def runCrystalCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            requestedCommands = ["crystal"]+arguments
+        def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+            requestedCommands = "crystal #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
@@ -690,8 +682,8 @@ module ISM
             end
         end
 
-        def runCmakeCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            requestedCommands = ["cmake"]+arguments
+        def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+            requestedCommands = "cmake #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
@@ -701,8 +693,8 @@ module ISM
             end
         end
 
-        def runMesonCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            requestedCommands = ["meson"]+arguments
+        def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+            requestedCommands = "meson #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
@@ -712,15 +704,15 @@ module ISM
             end
         end
 
-        def runNinjaCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
+        def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                arguments.unshift(makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
+                prefix = (makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
             else
-                arguments.unshift(makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
+                prefix = (makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
             end
 
-            requestedCommands = ["ninja"]+arguments
+            requestedCommands = "ninja #{prefix} #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
@@ -730,8 +722,8 @@ module ISM
             end
         end
 
-        def runPwconvCommand(arguments = Array(String).new)
-            requestedCommands = ["pwconv"]+arguments
+        def runPwconvCommand(arguments = String.new)
+            requestedCommands = "pwconv #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -741,8 +733,8 @@ module ISM
             end
         end
 
-        def runGrpconvCommand(arguments = Array(String).new)
-            requestedCommands = ["grpconv"]+arguments
+        def runGrpconvCommand(arguments = String.new)
+            requestedCommands = "grpconv #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -752,8 +744,8 @@ module ISM
             end
         end
 
-        def runUdevadmCommand(arguments : Array(String))
-            requestedCommands = ["udevadm"]+arguments
+        def runUdevadmCommand(arguments : String)
+            requestedCommands = "udevadm #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -763,8 +755,8 @@ module ISM
             end
         end
 
-        def runDbusUuidgenCommand(arguments = Array(String).new)
-            requestedCommands = ["dbus-uuidgen"]+arguments
+        def runDbusUuidgenCommand(arguments = String.new)
+            requestedCommands = "dbus-uuidgen #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -774,8 +766,8 @@ module ISM
             end
         end
 
-        def runMakeinfoCommand(arguments : Array(String), path = String.new)
-            requestedCommands = ["makeinfo"]+arguments
+        def runMakeinfoCommand(arguments : String, path = String.new)
+            requestedCommands = "makeinfo #{arguments}"
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -785,8 +777,8 @@ module ISM
             end
         end
 
-        def runInstallInfoCommand(arguments : Array(String))
-            requestedCommands = ["install-info"]+arguments
+        def runInstallInfoCommand(arguments : String)
+            requestedCommands = "install-info #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -796,8 +788,8 @@ module ISM
             end
         end
 
-        def runAutoconfCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            requestedCommands = ["autoconf"]+arguments
+        def runAutoconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+            requestedCommands = "autoconf #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
@@ -807,8 +799,8 @@ module ISM
             end
         end
 
-        def runAutoreconfCommand(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new)
-            requestedCommands = ["autoreconf"]+arguments
+        def runAutoreconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+            requestedCommands = "autoreconf #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
@@ -818,8 +810,8 @@ module ISM
             end
         end
 
-        def runLocaledefCommand(arguments : Array(String))
-            requestedCommands = ["localedef"]+arguments
+        def runLocaledefCommand(arguments : String)
+            requestedCommands = "localedef #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -829,8 +821,8 @@ module ISM
             end
         end
 
-        def runGunzipCommand(arguments : Array(String), path = String.new)
-            requestedCommands = ["gunzip"]+arguments
+        def runGunzipCommand(arguments : String, path = String.new)
+            requestedCommands = "gunzip #{arguments}"
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -840,8 +832,8 @@ module ISM
             end
         end
 
-        def runMakeCaCommand(arguments : Array(String))
-            requestedCommands = ["make-ca"]+arguments
+        def runMakeCaCommand(arguments : String)
+            requestedCommands = "make-ca #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -851,8 +843,8 @@ module ISM
             end
         end
 
-        def runInstallCatalogCommand(arguments : Array(String))
-            requestedCommands = ["install-catalog"]+arguments
+        def runInstallCatalogCommand(arguments : String)
+            requestedCommands = "install-catalog #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -862,8 +854,8 @@ module ISM
             end
         end
 
-        def runXmlCatalogCommand(arguments : Array(String))
-            requestedCommands = ["xmlcatalog"]+arguments
+        def runXmlCatalogCommand(arguments : String)
+            requestedCommands = "xmlcatalog #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -873,8 +865,8 @@ module ISM
             end
         end
 
-        def runLdconfigCommand(arguments = Array(String).new)
-            requestedCommands = ["ldconfig"]+arguments
+        def runLdconfigCommand(arguments = String.new)
+            requestedCommands = "ldconfig #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -884,8 +876,8 @@ module ISM
             end
         end
 
-        def runGtkQueryImmodules2Command(arguments = Array(String).new)
-            requestedCommands = ["gtk-query-immodules-2.0"]+arguments
+        def runGtkQueryImmodules2Command(arguments = String.new)
+            requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -895,8 +887,8 @@ module ISM
             end
         end
 
-        def runGtkQueryImmodules3Command(arguments = Array(String).new)
-            requestedCommands = ["gtk-query-immodules-3.0"]+arguments
+        def runGtkQueryImmodules3Command(arguments = String.new)
+            requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -906,8 +898,8 @@ module ISM
             end
         end
 
-        def runGlibCompileSchemasCommand(arguments = Array(String).new)
-            requestedCommands = ["glib-compile-schemas"]+arguments
+        def runGlibCompileSchemasCommand(arguments = String.new)
+            requestedCommands = "glib-compile-schemas #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -917,8 +909,8 @@ module ISM
             end
         end
 
-        def runGdkPixbufQueryLoadersCommand(arguments = Array(String).new)
-            requestedCommands = ["gdk-pixbuf-query-loaders"]+arguments
+        def runGdkPixbufQueryLoadersCommand(arguments = String.new)
+            requestedCommands = "gdk-pixbuf-query-loaders #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -928,8 +920,8 @@ module ISM
             end
         end
 
-        def runUpdateMimeDatabaseCommand(arguments = Array(String).new)
-            requestedCommands = ["update-mime-database"]+arguments
+        def runUpdateMimeDatabaseCommand(arguments = String.new)
+            requestedCommands = "update-mime-database #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -939,8 +931,8 @@ module ISM
             end
         end
 
-        def sourceFile(arguments = Array(String).new)
-            requestedCommands = ["source"]+arguments
+        def sourceFile(arguments = String.new)
+            requestedCommands = "source #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -950,8 +942,8 @@ module ISM
             end
         end
 
-        def runCargoCommand(arguments : Array(String), path = String.new)
-            requestedCommands = ["cargo"]+arguments
+        def runCargoCommand(arguments : String, path = String.new)
+            requestedCommands = "cargo #{arguments}"
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -961,8 +953,8 @@ module ISM
             end
         end
 
-        def runGccCommand(arguments = Array(String).new, path = String.new)
-            requestedCommands = ["gcc"]+arguments
+        def runGccCommand(arguments = String.new, path = String.new)
+            requestedCommands = "gcc #{arguments}"
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -972,8 +964,8 @@ module ISM
             end
         end
 
-        def runRcUpdateCommand(arguments = Array(String).new)
-            requestedCommands = ["rc-update"]+arguments
+        def runRcUpdateCommand(arguments = String.new)
+            requestedCommands = "rc-update #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -983,8 +975,8 @@ module ISM
             end
         end
 
-        def runAlsactlCommand(arguments = Array(String).new)
-            requestedCommands = ["alsactl"]+arguments
+        def runAlsactlCommand(arguments = String.new)
+            requestedCommands = "alsactl #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -994,8 +986,8 @@ module ISM
             end
         end
 
-        def runGtkUpdateIconCacheCommand(arguments = Array(String).new)
-            requestedCommands = ["gtk-update-icon-cache"]+arguments
+        def runGtkUpdateIconCacheCommand(arguments = String.new)
+            requestedCommands = "gtk-update-icon-cache #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -1005,8 +997,8 @@ module ISM
             end
         end
 
-        def runUpdateDesktopDatabaseCommand(arguments = Array(String).new)
-            requestedCommands = ["update-desktop-database"]+arguments
+        def runUpdateDesktopDatabaseCommand(arguments = String.new)
+            requestedCommands = "update-desktop-database #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -1016,8 +1008,8 @@ module ISM
             end
         end
 
-        def runZicCommand(arguments : Array(String), path = String.new)
-            requestedCommands = ["zic"]+arguments
+        def runZicCommand(arguments : String, path = String.new)
+            requestedCommands = "zic #{arguments}"
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -1057,7 +1049,7 @@ module ISM
         end
 
         def makePerlSource(path = String.new)
-            requestedCommands = ["perl","Makefile.PL"]
+            requestedCommands = "perl Makefile.PL"
 
             process = runSystemCommand(requestedCommands, path)
 
@@ -1067,8 +1059,8 @@ module ISM
             end
         end
 
-        def runCpanCommand(arguments = Array(String).new)
-            requestedCommands = ["cpan"]+arguments
+        def runCpanCommand(arguments = String.new)
+            requestedCommands = "cpan #{arguments}"
 
             process = runSystemCommand(requestedCommands)
 
@@ -1078,15 +1070,15 @@ module ISM
             end
         end
 
-        def makeSource(arguments = Array(String).new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
+        def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                arguments.unshift(makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
+                prefix = (makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
             else
-                arguments.unshift(makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions)
+                prefix = (makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions)
             end
 
-            requestedCommands = ["make"]+arguments
+            requestedCommands = "make #{prefix} #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
