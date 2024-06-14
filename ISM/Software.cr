@@ -424,14 +424,14 @@ module ISM
             end
         end
 
-        def fileAppendDataFromFile(filePath : String, targetPath : String)
+        def fileAppendDataFromFile(path : String, targetPath : String)
             requestedCommands = <<-CMD
-                                cat #{targetPath} >> #{filePath}
+                                cat #{path} >> #{filePath}
                                 #{data}
                                 EOF
                                 CMD
 
-            process = runSystemCommand(requestedCommands, filePath)
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1019,12 +1019,12 @@ module ISM
             end
         end
 
-        def prepareOpenrcServiceInstallation(filePath : String, serviceName : String)
+        def prepareOpenrcServiceInstallation(path : String, name : String)
             servicesPath = "/etc/init.d/"
 
             makeDirectory("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
-            moveFile(filePath,"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{serviceName}")
-            runChmodCommand(["+x",serviceName],"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
+            moveFile(path,"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{name}")
+            runChmodCommand(["+x",name],"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
         end
 
         def configure
