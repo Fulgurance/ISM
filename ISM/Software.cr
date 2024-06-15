@@ -343,49 +343,10 @@ module ISM
             return process
         end
 
-        def fileReplaceText(filePath : String, text : String, newText : String)
+        def fileReplaceText(path : String, text : String, newText : String)
 
             requestedCommands = <<-CMD
-                                sed -i 's/#{text}/#{newText}/g' #{filePath}
-                                CMD
-
-            process = runSystemCommand(requestedCommands, filePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
-        end
-
-        def fileReplaceLineContaining(filePath : String, text : String, newLine : String)
-            requestedCommands = <<-CMD
-                                sed -i '/#{text}/c\#{newText}' #{filePath}
-                                CMD
-
-            process = runSystemCommand(requestedCommands, filePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
-        end
-
-        def fileReplaceTextAtLineNumber(filePath : String, text : String, newText : String,lineNumber : UInt64)
-            requestedCommands = <<-CMD
-                                sed -i '#{lineNumber.to_s}s/#{text}/#{newText}' #{filePath}
-                                CMD
-
-            process = runSystemCommand(requestedCommands, filePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
-        end
-
-        def fileDeleteLine(filePath : String, lineNumber : UInt64)
-            requestedCommands = <<-CMD
-                                sed -i '#{lineNumber.to_s}d' #{filePath}
+                                sed -i 's/#{text}/#{newText}/g' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands, path)
@@ -396,14 +357,12 @@ module ISM
             end
         end
 
-        def fileWriteData(filePath : String, data : String)
+        def fileReplaceLineContaining(path : String, text : String, newLine : String)
             requestedCommands = <<-CMD
-                                cat > #{filePath} <<EOF
-                                #{data}
-                                EOF
+                                sed -i '/#{text}/c\#{newText}' #{path}
                                 CMD
 
-            process = runSystemCommand(requestedCommands, filePath)
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -411,12 +370,53 @@ module ISM
             end
         end
 
-        def fileAppendData(filePath : String, data : String)
+        def fileReplaceTextAtLineNumber(path : String, text : String, newText : String,lineNumber : UInt64)
             requestedCommands = <<-CMD
-                                echo -i "#{data}" > "#{filePath}"
+                                sed -i '#{lineNumber.to_s}s/#{text}/#{newText}' #{path}
                                 CMD
 
-            process = runSystemCommand(requestedCommands, filePath)
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileDeleteLine(path : String, lineNumber : UInt64)
+            requestedCommands = <<-CMD
+                                sed -i '#{lineNumber.to_s}d' #{path}
+                                CMD
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileWriteData(path : String, data : String)
+            requestedCommands = <<-CMD
+                                cat > #{path} <<EOF
+                                #{data}
+                                EOF
+                                CMD
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def fileAppendData(path : String, data : String)
+            requestedCommands = <<-CMD
+                                echo -i "#{data}" > "#{path}"
+                                CMD
+
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
