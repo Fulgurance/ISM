@@ -324,6 +324,8 @@ module ISM
                 environmentCommand += " #{key}=\"#{environment[key]}\""
             end
 
+            Ism.recordSystemCall(process.exit_code, command, path, environment)
+
             if Ism.settings.installByChroot
                 chrootCommand = <<-CODE
                 #!/bin/bash
