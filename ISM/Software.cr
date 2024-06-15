@@ -71,8 +71,8 @@ module ISM
         end
 
         def prepareKernelSourcesInstallation
-            makeDirectory("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}usr/src/")
-            moveFile("#{workDirectoryPath}/Sources","#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
+            makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
+            moveFileNoChroot("#{workDirectoryPathNoChroot}/Sources","#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
         end
 
         def download
@@ -247,12 +247,12 @@ module ISM
 
         def extractSources
             extractArchive(workDirectoryPath+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPath)
-            moveFile(workDirectoryPath+"/"+@information.versionName,workDirectoryPath+"/"+ISM::Default::Software::SourcesDirectoryName)
+            moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
         end
 
         def extractPatches
             extractArchive(workDirectoryPath+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPath)
-            moveFile(workDirectoryPath+"/"+@information.versionName,workDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName)
+            moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPath)
@@ -301,8 +301,8 @@ module ISM
 
             #Generate all build directories
             @buildDirectoryNames.keys.each do |key|
-                if !Dir.exists?(buildDirectoryPath(key))
-                    makeDirectory(buildDirectoryPath(key))
+                if !Dir.exists?(buildDirectoryPathNoChroot(key))
+                    makeDirectoryNoChroot(buildDirectoryPathNoChroot(key))
                 end
             end
         end
