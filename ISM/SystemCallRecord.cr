@@ -7,7 +7,7 @@ module ISM
         property path :         String
         property environment :  Hash(String,String)
 
-        def initialize( @exitCode =     Int32.new,
+        def initialize( @exitCode =     0,
                         @command =      String.new,
                         @path =         String.new,
                         @environment =  Hash(String,String).new)
