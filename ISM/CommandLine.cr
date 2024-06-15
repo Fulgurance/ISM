@@ -297,7 +297,7 @@ module ISM
             @unavailableDependencySignals.push([relatedSoftware, missingDependency])
         end
 
-        def recordSystemCall(command : String, path : Path, environment : Hash(String,String))
+        def recordSystemCall(command : String, path : String, environment : Hash(String,String))
             @lastRecordedSystemCall = ISM::SystemCallRecord.new(command, path, environment)
         end
 
