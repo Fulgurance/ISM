@@ -25,6 +25,10 @@ module ISM
             return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
         end
 
+        def mainWorkDirectoryPathNoChroot : String
+            return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
+        end
+
         #Special function to improve performance (Internal use only)
         def buildDirectoryPathNoChroot(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPathNoChroot+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
