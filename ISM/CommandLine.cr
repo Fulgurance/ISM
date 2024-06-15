@@ -597,9 +597,9 @@ module ISM
             end
 
             title = "\n\n#{ISM::Default::CommandLine::SystemCallErrorNotificationTitle.colorize(:red)}"
-            separatorText = "#{separatorText.colorize(:red)}\n"
-            command = "#{@lastRecordedSystemCall.formattedOutput.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
-            help = "#{ISM::Default::CommandLine::SystemCallErrorNotificationHelp.colorize(:red)}"
+            separatorText = "#{separatorText.colorize(:red)}"
+            command = "\n#{@lastRecordedSystemCall.formattedOutput.colorize(Colorize::ColorRGB.new(255,100,100))}"
+            help = "\n#{ISM::Default::CommandLine::SystemCallErrorNotificationHelp.colorize(:red)}"
 
             puts title
             puts separatorText
