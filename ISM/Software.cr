@@ -15,6 +15,26 @@ module ISM
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
         end
 
+        #Special function to improve performance (Internal use only)
+        def workDirectoryPathNoChroot : String
+            return Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
+        end
+
+        #Special function to improve performance (Internal use only)
+        def mainWorkDirectoryPath : String
+            return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
+        end
+
+        #Special function to improve performance (Internal use only)
+        def buildDirectoryPathNoChroot(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
+            return mainWorkDirectoryPathNoChroot+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
+        end
+
+        #Special function to improve performance (Internal use only)
+        def builtSoftwareDirectoryPathNoChroot : String
+            return "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
+        end
+
         def workDirectoryPath : String
             return Ism.settings.installByChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
         end
@@ -284,6 +304,56 @@ module ISM
                 if !Dir.exists?(buildDirectoryPath(key))
                     makeDirectory(buildDirectoryPath(key))
                 end
+            end
+        end
+
+        #Special function to improve performance (Internal use only)
+        def copyDirectoryNoChroot(path : String, targetPath : String)
+            begin
+                FileUtils.cp_r(path, targetPath)
+            rescue error
+                Ism.notifyOfCopyDirectoryError(path, targetPath, error)
+                Ism.exitProgram
+            end
+        end
+
+        #Special function to improve performance (Internal use only)
+        def deleteFileNoChroot(path : String)
+            begin
+                FileUtils.rm(path)
+            rescue error
+                Ism.notifyOfDeleteFileError(path, error)
+                Ism.exitProgram
+            end
+        end
+
+        #Special function to improve performance (Internal use only)
+        def moveFileNoChroot(path : String, newPath : String)
+            begin
+                FileUtils.mv(path, newPath)
+            rescue error
+                Ism.notifyOfMoveFileError(path, newPath, error)
+                Ism.exitProgram
+            end
+        end
+
+        #Special function to improve performance (Internal use only)
+        def makeDirectoryNoChroot(directory : String)
+            begin
+                FileUtils.mkdir_p(directory)
+            rescue error
+                Ism.notifyOfMakeDirectoryError(directory, error)
+                Ism.exitProgram
+            end
+        end
+
+        #Special function to improve performance (Internal use only)
+        def deleteDirectoryNoChroot(directory : String)
+            begin
+                FileUtils.rm_r(directory)
+            rescue error
+                Ism.notifyOfDeleteDirectoryError(directory, error)
+                Ism.exitProgram
             end
         end
 
@@ -1129,25 +1199,25 @@ module ISM
         def install
             Ism.notifyOfInstall(@information)
 
-            filesList = Dir.glob(["#{builtSoftwareDirectoryPath}/**/*"], match: :dot_files)
+            filesList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
             filesList.each do |entry|
 
-                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath,"")}"
+                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
 
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
-                        makeDirectory(finalDestination)
+                        makeDirectoryNoChroot(finalDestination)
                         installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                     end
                 else
                     #Delete existing file instead of overriding it to avoid any crash
                     if File.exists?(finalDestination)
-                        deleteFile(finalDestination)
+                        deleteFileNoChroot(finalDestination)
                     end
 
-                    moveFile(entry,finalDestination)
+                    moveFileNoChroot(entry,finalDestination)
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                 end
 
@@ -1378,13 +1448,13 @@ module ISM
             Ism.notifyOfUpdateKernelOptionsDatabase(@information)
 
             if !Dir.exists?(kernelOptionsDatabasePath)
-                makeDirectory(kernelOptionsDatabasePath)
+                makeDirectoryNoChroot(kernelOptionsDatabasePath)
 
                 begin
                     generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
                     generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
                 rescue error
-                    deleteDirectory(kernelOptionsDatabasePath)
+                    deleteDirectoryNoChroot(kernelOptionsDatabasePath)
 
                     Ism.notifyOfUpdateKernelOptionsDatabaseError(@information, error)
                     Ism.exitProgram
@@ -1403,11 +1473,11 @@ module ISM
         end
 
         def cleanWorkDirectoryPath
-            if Dir.exists?(workDirectoryPath)
-                deleteDirectory(workDirectoryPath)
+            if Dir.exists?(workDirectoryPathNoChroot)
+                deleteDirectoryNoChroot(workDirectoryPathNoChroot)
             end
 
-            makeDirectory(workDirectoryPath)
+            makeDirectoryNoChroot(workDirectoryPathNoChroot)
         end
 
         def recordUnneededKernelFeatures
