@@ -346,11 +346,8 @@ module ISM
         end
 
         def fileReplaceText(path : String, text : String, newText : String)
-            text = text.gsub("/","\\/")
-            newText = newText.gsub("/","\\/")
-
             requestedCommands = <<-CMD
-                                sed -i 's/#{text}/#{newText}/g' #{path}
+                                sed -i 's/#{text.gsub("/","\\/")}/#{newText.gsub("/","\\/")}/g' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
@@ -362,11 +359,8 @@ module ISM
         end
 
         def fileReplaceLineContaining(path : String, text : String, newLine : String)
-            text = text.gsub("/","\\/")
-            newText = newText.gsub("/","\\/")
-
             requestedCommands = <<-CMD
-                                sed -i '/#{text}/c\#{newText}' #{path}
+                                sed -i '/#{text.gsub("/","\\/")}/c\#{newText.gsub("/","\\/")}' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
@@ -378,11 +372,8 @@ module ISM
         end
 
         def fileReplaceTextAtLineNumber(path : String, text : String, newText : String,lineNumber : UInt64)
-            text = text.gsub("/","\\/")
-            newText = newText.gsub("/","\\/")
-
             requestedCommands = <<-CMD
-                                sed -i '#{lineNumber.to_s}s/#{text}/#{newText}' #{path}
+                                sed -i '#{lineNumber.to_s}s/#{text.gsub("/","\\/")}/#{newText.gsub("/","\\/")}' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
@@ -448,11 +439,8 @@ module ISM
         end
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
-            text = text.gsub("/","\\/")
-            newText = newText.gsub("/","\\/")
-
             requestedCommands = <<-CMD
-                                find man -name #{filename} -exec sed -i 's/#{text}/#{newText}/'   {} \;
+                                find man -name #{filename} -exec sed -i 's/#{text.gsub("/","\\/")}/#{newText.gsub("/","\\/")}/'   {} \;
                                 CMD
 
             process = runSystemCommand(requestedCommands)
