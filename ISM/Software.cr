@@ -403,7 +403,7 @@ module ISM
                                 EOF
                                 CMD
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands)#, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -416,7 +416,7 @@ module ISM
                                 echo -i "#{data}" > "#{path}"
                                 CMD
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands)#, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -429,7 +429,7 @@ module ISM
                                 cat #{path} >> #{targetPath}
                                 CMD
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands)#, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -442,7 +442,7 @@ module ISM
                                 find man -name #{filename} -exec sed -i 's/#{text}/#{newText}/'   {} \;
                                 CMD
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands)#, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -463,7 +463,7 @@ module ISM
                                 find doc \( -name #{path} #{extensionCommands} ) -exec rm -v {} \;
                                 CMD
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand(requestedCommands)#, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
