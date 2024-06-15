@@ -588,7 +588,7 @@ module ISM
         end
 
         def printSystemCallErrorNotification
-            limit = ISM::Default::CommandLine::SystemCallErrorNotificationTitle
+            limit = ISM::Default::CommandLine::SystemCallErrorNotificationTitle.size
 
             separatorText = String.new
 
