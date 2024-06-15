@@ -1031,10 +1031,10 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
-        def configureSource(arguments = Array(String).new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, relatedToMainBuild = true)
+        def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, relatedToMainBuild = true)
             configureCommand = "#{@buildDirectory && relatedToMainBuild ? ".." : "."}/#{configureDirectory}/configure"
 
-            requestedCommands = [configureCommand]+arguments
+            requestedCommands = "#{configureCommand} #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
