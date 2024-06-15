@@ -13,6 +13,8 @@ module ISM
             ErrorUnknowArgumentHelp2 = "ism --help "
             ErrorUnknowArgumentHelp3 = "to know how to use ISM"
             ProcessNotificationCharacters = ">_"
+            SystemCallErrorNotificationTitle = "Internal error"
+            SystemCallErrorNotificationHelp = "When ISM raise that error, this probably mean the ran script did not call properly a system command or the system command itself need to be fix."
             DownloadText = "Downloading "
             CheckText = "Checking "
             ExtractText = "Extracting "

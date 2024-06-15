@@ -3,9 +3,9 @@ module ISM
     class CommandLine
 
         property requestedSoftwares : Array(ISM::SoftwareInformation)
-        property softwaresNeedRebuild : Array(ISM::SoftwareInformation)
         property neededKernelFeatures : Array(String)
         property unneededKernelFeatures : Array(String)
+        property lastRecordedSystemCall : ISM::SystemCallRecord
         property debugLevel : Int32
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
@@ -24,9 +24,9 @@ module ISM
 
         def initialize
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
-            @softwaresNeedRebuild = Array(ISM::SoftwareInformation).new
             @neededKernelFeatures = Array(String).new
             @unneededKernelFeatures = Array(String).new
+            @lastRecordedSystemCall = ISM::SystemCallRecord.new
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0
             @reverseAnimation = false
@@ -295,6 +295,10 @@ module ISM
 
         def reportMissingDependency(missingDependency : ISM::SoftwareInformation, relatedSoftware : ISM::SoftwareInformation)
             @unavailableDependencySignals.push([relatedSoftware, missingDependency])
+        end
+
+        def recordSystemCall(command : String, path : Path, environment : Hash(String,String))
+            @lastRecordedSystemCall = ISM::SystemCallRecord.new(command, path, environment)
         end
 
         def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
@@ -581,6 +585,26 @@ module ISM
                 puts "[#{"!".colorize(:red)}] "
                 puts "#{error.colorize(Colorize::ColorRGB.new(255,100,100))}"
             end
+        end
+
+        def printSystemCallErrorNotification
+            limit = ISM::Default::CommandLine::SystemCallErrorNotificationTitle
+
+            separatorText = String.new
+
+            (0..limit).each do |index|
+                separatorText += "_"
+            end
+
+            title = "#{ISM::Default::CommandLine::SystemCallErrorNotificationTitle.colorize(:red)}"
+            separatorText = "#{separatorText.colorize(:red)}"
+            command = @lastRecordedSystemCall.formattedOutput.colorize(Colorize::ColorRGB.new(255,100,100))
+            help = "#{ISM::Default::CommandLine::SystemCallErrorNotificationHelp.colorize(:red)}"
+
+            puts title
+            puts separatorText
+            puts command
+            puts help
         end
 
         def printInformationNotificationTitle(name : String, version : String)
@@ -1501,6 +1525,7 @@ module ISM
                                 Ism.removeInstalledSoftware(target.information)
                             end
 
+                            Ism.printSystemCallErrorNotification
                             Ism.exitProgram
                         end
 
@@ -1612,6 +1637,7 @@ module ISM
                             target.recordUnneededKernelFeatures
                             target.uninstall
                         rescue
+                            Ism.printSystemCallErrorNotification
                             Ism.exitProgram
                         end
 

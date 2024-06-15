@@ -340,6 +340,8 @@ module ISM
                                         env: environment)
             end
 
+            Ism.recordSystemCall(command, path, environment)
+
             return process
         end
 
