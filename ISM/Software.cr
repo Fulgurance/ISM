@@ -324,7 +324,7 @@ module ISM
                 environmentCommand += " #{key}=\"#{environment[key]}\""
             end
 
-            Ism.recordSystemCall(999, command, path, environment)
+            Ism.recordSystemCall(command, path, environment)
 
             if Ism.settings.installByChroot
                 chrootCommand = <<-CODE
@@ -341,8 +341,6 @@ module ISM
                                         chdir: (path == "" ? nil : path),
                                         env: environment)
             end
-
-            Ism.recordSystemCall(process.exit_code, command, path, environment)
 
             return process
         end
