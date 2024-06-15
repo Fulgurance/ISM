@@ -14,7 +14,7 @@ module ISM
         end
 
         def formattedOutput
-            exitCode =      "#{ISM::Default::SystemCallRecord::FormattedOutputText1}#{@exitCode.to_s}\n"
+            exitCode =      "#{ISM::Default::SystemCallRecord::FormattedOutputText1}#{@exitCode.to_s}\n\n"
             command =       "#{ISM::Default::SystemCallRecord::FormattedOutputText2}#{@command}"
             path =          "#{ISM::Default::SystemCallRecord::FormattedOutputText3}#{@path}"
             environment =   "#{ISM::Default::SystemCallRecord::FormattedOutputText4}#{(@environment.map { |key| key.join("=") }).join(" ")}"
