@@ -427,8 +427,6 @@ module ISM
         def fileAppendDataFromFile(path : String, targetPath : String)
             requestedCommands = <<-CMD
                                 cat #{path} >> #{targetPath}
-                                #{data}
-                                EOF
                                 CMD
 
             process = runSystemCommand(requestedCommands, path)
