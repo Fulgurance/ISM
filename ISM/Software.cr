@@ -340,7 +340,7 @@ module ISM
                                         env: environment)
             end
 
-            Ism.recordSystemCall(command, path, environment)
+            Ism.recordSystemCall(process.exit_code, command, path, environment)
 
             return process
         end
