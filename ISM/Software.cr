@@ -365,18 +365,6 @@ module ISM
             end
         end
 
-        # def fileUpdateContent(filePath : String, data : String)
-        #     begin
-        #         content = getFileContent(filePath)
-        #         if !content.includes?(data)
-        #             fileAppendData(filePath,"\n"+data)
-        #         end
-        #     rescue error
-        #         Ism.notifyOfFileUpdateContentError(filePath, error)
-        #         Ism.exitProgram
-        #     end
-        # end
-
         def runChrootTasks(chrootTasks) : Process::Status
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
@@ -421,6 +409,19 @@ module ISM
             end
 
             return process
+        end
+
+        def fileUpdateContent(path : String, data : String)
+            requestedCommands = <<-CMD
+                                grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
+                                CMD
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
         end
 
         def fileReplaceText(path : String, text : String, newText : String)
