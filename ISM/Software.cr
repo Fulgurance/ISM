@@ -155,7 +155,7 @@ module ISM
                         break
                     end
 
-                    filePath = "#{workDirectoryPath}/#{filename+fileExtensionName}"
+                    filePath = "#{workDirectoryPathNoChroot}/#{filename+fileExtensionName}"
                     colorizedFileFullName = "#{filename}#{fileExtensionName.colorize(Colorize::ColorRGB.new(255,100,100))}"
                     colorizedLink = "#{link.colorize(:magenta)}"
 
@@ -219,19 +219,19 @@ module ISM
         def check
             Ism.notifyOfCheck(@information)
             checkSourcesMd5sum
-            if File.exists?(workDirectoryPath+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
+            if File.exists?(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
                 checkPatchesMd5sum
             end
         end
 
         def checkSourcesMd5sum
-            checkFile(  workDirectoryPath+"/"+ISM::Default::Software::SourcesArchiveName,
-                        getFileContent(workDirectoryPath+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
+            checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName,
+                        getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
         end
 
         def checkPatchesMd5sum
-            checkFile(  workDirectoryPath+"/"+ISM::Default::Software::PatchesArchiveName,
-                        getFileContent(workDirectoryPath+"/"+ISM::Default::Software::PatchesMd5sumArchiveName).strip)
+            checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesArchiveName,
+                        getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName).strip)
         end
 
         def checkFile(archive : String, md5sum : String)
@@ -248,22 +248,22 @@ module ISM
         def extract
             Ism.notifyOfExtract(@information)
             extractSources
-            if File.exists?(workDirectoryPath+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
+            if File.exists?(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
                 extractPatches
             end
         end
 
         def extractSources
-            extractArchive(workDirectoryPath+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPath)
+            extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
         end
 
         def extractPatches
-            extractArchive(workDirectoryPath+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPath)
+            extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
-        def extractArchive(archivePath : String, destinationPath = workDirectoryPath)
+        def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
 
             process = Process.run(  "tar -xf #{archivePath}",
                                     error: :inherit,
@@ -278,8 +278,8 @@ module ISM
         def patch
             Ism.notifyOfPatch(@information)
 
-            if Dir.exists?("#{workDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName}")
-                Dir["#{workDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName}/*"].each do |patch|
+            if Dir.exists?("#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}")
+                Dir["#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}/*"].each do |patch|
                     applyPatch(patch)
                 end
             end
@@ -297,7 +297,7 @@ module ISM
             process = Process.run(  "patch -Np1 -i #{patch}",
                                     error: :inherit,
                                     shell: true,
-                                    chdir: mainWorkDirectoryPath)
+                                    chdir: mainWorkDirectoryPathNoChroot)
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 Ism.exitProgram
