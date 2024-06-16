@@ -492,7 +492,7 @@ module ISM
 
         def fileAppendData(path : String, data : String)
             requestedCommands = <<-CMD
-                                echo -i "#{data}" > "#{path}"
+                                echo "#{data}" > "#{path}"
                                 CMD
 
             process = runSystemCommand(requestedCommands)
