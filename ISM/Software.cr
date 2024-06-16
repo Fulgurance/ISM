@@ -451,7 +451,7 @@ module ISM
 
         def fileReplaceTextAtLineNumber(path : String, text : String, newText : String,lineNumber : UInt64)
             requestedCommands = <<-CMD
-                                sed -i '#{lineNumber.to_s}s/#{text.gsub("/","\\/")}/#{newText.gsub("/","\\/")}' #{path}
+                                sed -i '#{lineNumber.to_s}s/#{text.gsub("/","\\/")}/#{newText.gsub("/","\\/")}/' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
