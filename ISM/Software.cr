@@ -1176,7 +1176,7 @@ module ISM
             fileNumber = UInt128.new(0)
             totalSize = UInt128.new(0)
 
-            filesList = Dir.glob(["#{builtSoftwareDirectoryPath}/**/*"], match: :dot_files)
+            filesList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
 
             directoryNumber = UInt128.new(0)
             symlinkNumber = UInt128.new(0)
@@ -1185,7 +1185,7 @@ module ISM
 
             filesList.each do |entry|
 
-                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPath,"")}"
+                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
 
                 if File.directory?(entry)
                     if !Dir.exists?(finalDestination)
