@@ -518,12 +518,8 @@ module ISM
         end
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
-            specialCharacters = "/."
-            text = Regex.escape(specialCharacters)
-            newText = Regex.escape(specialCharacters)
-
             requestedCommands = <<-CMD
-                                find -name #{filename} -exec sed -i 's/#{text}/#{newText}/' {} \\;
+                                find -name #{filename} -exec sed -i 's/#{Regex.escape(text)}/#{Regex.escape(newText)}/' {} \\;
                                 CMD
 
             process = runSystemCommand(requestedCommands)
