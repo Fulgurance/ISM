@@ -60,12 +60,12 @@ module ISM
             settingInformation = ISM::SoftwareInformation.new
             settingInformation.loadInformationFile(@information.settingsFilePath)
 
-            information.uniqueDependencies.each do |uniqueDependency|
+            settingInformation.uniqueDependencies.each do |uniqueDependency|
                 uniqueDependency.each do |entry|
 
-                    if information.uniqueDependencyIsEnabled(entry)
+                    if settingInformation.uniqueDependencyIsEnabled(entry)
 
-                        information.dependencies(allowDeepSearch: true).each do |dependency|
+                        settingInformation.dependencies(allowDeepSearch: true).each do |dependency|
                             if dependency.fullName.downcase == entry.downcase
                                 return dependency.versionName.downcase
                             end
