@@ -25,6 +25,7 @@ module ISM
             return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
         end
 
+        #Special function to improve performance (Internal use only)
         def mainWorkDirectoryPathNoChroot : String
             return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
         end
@@ -56,12 +57,15 @@ module ISM
         end
 
         def mainKernelName : String
-            @information.uniqueDependencies.each do |uniqueDependency|
+            settingInformation = ISM::SoftwareInformation.new
+            settingInformation.loadInformationFile(@information.settingsFilePath)
+
+            information.uniqueDependencies.each do |uniqueDependency|
                 uniqueDependency.each do |entry|
 
-                    if @information.uniqueDependencyIsEnabled(entry)
+                    if information.uniqueDependencyIsEnabled(entry)
 
-                        @information.dependencies(allowDeepSearch: true).each do |dependency|
+                        information.dependencies(allowDeepSearch: true).each do |dependency|
                             if dependency.fullName.downcase == entry.downcase
                                 return dependency.versionName.downcase
                             end
