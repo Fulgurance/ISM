@@ -16,7 +16,7 @@ module ISM
             path =          "#{ISM::Default::SystemCallRecord::FormattedOutputText2}#{@path}"
             environment =   "#{ISM::Default::SystemCallRecord::FormattedOutputText3}#{(@environment.map { |key| key.join("=") }).join(" ")}"
 
-            return "#{command}#{path}#{environment}"
+            return "#{command}#{path}#{environment}".squeeze(" ")
         end
 
     end
