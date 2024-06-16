@@ -565,7 +565,7 @@ module ISM
                 Ism.exitProgram
             end
 
-            requestedCommands = "#{command} #{target} #{path}"
+            requestedCommands = "#{command} '#{target}' #{path}"
 
             process = runSystemCommand(requestedCommands)
 
