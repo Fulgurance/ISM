@@ -531,16 +531,15 @@ module ISM
         end
 
         def deleteAllFilesRecursivelyFinishing(path : String, extensions = Array(String).new)
-            extensionCommands = Array(String).new
+            extensionCommands = String.new
 
             extensions.each do |extension|
-                extensionCommands.push("-o")
-                extensionCommands.push("-name")
-                extensionCommands.push("\\*.#{extension} \\")
+                extensionCommands += ("-name")
+                extensionCommands += ("\\*.#{extension} ")
             end
 
             requestedCommands = <<-CMD
-                                find doc \( -name #{path} #{extensionCommands} ) -exec rm -v {} \;
+                                find #{path} -name \*.la -delete
                                 CMD
 
             process = runSystemCommand(requestedCommands)
