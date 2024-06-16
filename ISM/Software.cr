@@ -1147,6 +1147,17 @@ module ISM
             end
         end
 
+        def runDircolorsCommand(arguments = String.new)
+            requestedCommands = "dircolors #{arguments}"
+
+            process = runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
+            end
+        end
+
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
