@@ -478,7 +478,7 @@ module ISM
 
         def fileWriteData(path : String, data : String)
             requestedCommands = <<-CMD
-                                cat > #{path} <<EOF
+                                cat > #{path} <<"EOF"
                                 #{data}
                                 EOF
                                 CMD
