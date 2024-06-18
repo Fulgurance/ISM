@@ -1069,7 +1069,7 @@ module ISM
             software = ISM::SoftwareInformation.new
 
             #Instead to start from zero, start from passed index to gain performance
-            taskCodeLines[0..0-taskError.line].to_enum.with_index.reverse_each do |line, index|
+            taskCodeLines[0..0-taskError.line].reverse_each.with_index do |line, index|
 
                 if markPointFilter.matches?(line)
                     targetStartingLine = index+1
