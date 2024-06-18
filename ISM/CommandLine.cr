@@ -587,6 +587,19 @@ module ISM
             end
         end
 
+        # file
+        # line
+        # column
+        # size
+        # message
+        def printInternalErrorNotification(error : ISM::TaskBuildingProcessError)
+
+        end
+
+        def printInstallerImplementationErrorNotification(software : ISM::SoftwareInformation, error : ISM::TaskBuildingProcessError)
+
+        end
+
         def printSystemCallErrorNotification
             limit = ISM::Default::CommandLine::SystemCallErrorNotificationTitle.size
 
@@ -1044,6 +1057,45 @@ module ISM
             exit 1
         end
 
+        #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
+        def showTaskBuildingProcessErrorMessage(taskError : ISM::TaskBuildingProcessError, taskPath : String)
+            markPointFilter = /^[#]TARGET([0-9])#\/#{"#{Ism.settings.rootPath}#{ISM::Default::Path::SoftwaresDirectory}"}/
+
+            taskCodeLines = File.read_lines(taskPath)
+
+            targetStartingLine = 0
+            realLineNumber = 0
+            targetPath = String.new
+            software = ISM::SoftwareInformation.new
+
+            #Instead to start from zero, start from passed index to gain performance
+            taskCodeLines[0..0-taskError.line].to_enum.with_index.reverse_each do |line, index|
+
+                if markPointFilter.matches?(line)
+                    targetStartingLine = index+1
+                    realLineNumber = taskError.line-targetStartingLine
+                    targetPath = line[line.index("/")..-1]
+
+                    software.loadInformationFile(targetPath)
+                    break
+                end
+
+            end
+
+            #Not related to target installer implementation
+            if targetStartingLine == 0
+                printInternalErrorNotification(taskError)
+            else
+            #Related to target installer implementation
+                printInstallerImplementationErrorNotification(  software,
+                                                                ISM::TaskBuildingProcessError.new(  file:       targetPath,
+                                                                                                    line:       realLineNumber,
+                                                                                                    column:     taskError.column,
+                                                                                                    size:       taskError.size,
+                                                                                                    message:    taskError.message))
+            end
+        end
+
         def showNoMatchFoundMessage(wrongArguments : Array(String))
             puts ISM::Default::CommandLine::NoMatchFound + "#{wrongArguments.join(", ").colorize(:green)}"
             puts ISM::Default::CommandLine::NoMatchFoundAdvice
@@ -1392,10 +1444,9 @@ module ISM
             indexResult = "targetsAdditionalInformationIndex = ["
 
             neededSoftwares.each_with_index do |software, index|
-
                 #GENERATE TARGET ARRAY
                 if neededSoftwares.size == 1
-                    requiredTargetArrayResult = "targets = [Target#{index}.new(\"#{software.filePath}\")]"
+                    requiredTargetArrayResult += "targets = [Target#{index}.new(\"#{software.filePath}\")]"
                 else
                     if index == 0
                         requiredTargetArrayResult += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
@@ -1419,6 +1470,9 @@ module ISM
                 fileContent = File.read_lines(software.requireFilePath)
 
                 fileContent.each_with_index do |line, lineIndex|
+
+                    #Mark point for the task error parsor
+                    requiredTargetClassResult += "\n#TARGET#{index}##{software.filePath}"
 
                     #GENERATE TARGET CLASS BY INDEX
                     if lineIndex == 0
@@ -1559,13 +1613,20 @@ module ISM
         end
 
         def buildTasksFile
-            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
+            taskPath = "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}"
+            processResult = IO::Memory.new
+
+            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+                                    error: processResult,
                                     shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+                                    chdir: taskPath)
+
+            processResult.rewind
+
+            taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult)[0]
 
             if !process.success?
+                showTaskBuildingProcessErrorMessage(taskError, taskPath)
                 exitProgram
             end
         end
