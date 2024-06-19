@@ -609,7 +609,9 @@ module ISM
 
         def printInstallerImplementationErrorNotification(software : ISM::SoftwareInformation, error : ISM::TaskBuildingProcessError)
             limit = ISM::Default::CommandLine::InstallerImplementationErrorTitle.size
+            errorText1 = "#{ISM::Default::CommandLine::InstallerImplementationErrorText1.colorize(Colorize::ColorRGB.new(255,100,100))}"
             softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
+            errorText2 = "#{ISM::Default::CommandLine::InstallerImplementationErrorText2}#{error.line.to_s}".colorize(Colorize::ColorRGB.new(255,100,100))
             separatorText = String.new
 
             (0..limit).each do |index|
@@ -618,7 +620,7 @@ module ISM
 
             title = "\n\n#{ISM::Default::CommandLine::InstallerImplementationErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorText1}#{softwareText}#{ISM::Default::CommandLine::InstallerImplementationErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
+            errorText = "\n#{errorText1}#{softwareText}#{errorText2}#{error.line.to_s}\n\n#{error.message.colorize(:yellow)}"
             help = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
 
             puts title
