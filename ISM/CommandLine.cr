@@ -1095,11 +1095,13 @@ module ISM
             targetPath = String.new
             software = ISM::SoftwareInformation.new
 
+            codeLines = taskCodeLines[0..taskError.line-1]
+
             #Instead to start from zero, start from passed index to gain performance
-            taskCodeLines[0..0-taskError.line].reverse_each.with_index do |line, index|
+            codeLines.reverse_each.with_index do |line, index|
 
                 if markPointFilter.matches?(line)
-                    targetStartingLine = index+1
+                    targetStartingLine = codeLine.size-index
                     realLineNumber = taskError.line-targetStartingLine
                     targetPath = line[line.index("/")..-1]
 
@@ -1498,11 +1500,10 @@ module ISM
 
                 fileContent.each_with_index do |line, lineIndex|
 
-                    #Mark point for the task error parsor
-                    requiredTargetClassResult += "\n#TARGET#{index}##{software.filePath}"
-
                     #GENERATE TARGET CLASS BY INDEX
                     if lineIndex == 0
+                        #Mark point for the task error parsor
+                        requiredTargetClassResult += "\n#TARGET#{index}##{software.filePath}"
                         requiredTargetClassResult += "\n#{line.gsub("Target","Target#{index}")}"
                     else
                         requiredTargetClassResult += "\n#{line}"
@@ -1640,13 +1641,13 @@ module ISM
         end
 
         def buildTasksFile
-            taskPath = "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}"
+            taskPath = "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"
             processResult = IO::Memory.new
 
-            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{taskPath} -f json",
                                     error: processResult,
                                     shell: true,
-                                    chdir: taskPath)
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
             processResult.rewind
 
