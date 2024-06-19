@@ -1086,7 +1086,7 @@ module ISM
 
         #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
         def showTaskBuildingProcessErrorMessage(taskError : ISM::TaskBuildingProcessError, taskPath : String)
-            markPointFilter = /^[#]TARGET([0-9])#\/#{"#{Ism.settings.rootPath}#{ISM::Default::Path::SoftwaresDirectory}"}/
+            markPointFilter = /^#TARGET[0-9]+#\//
 
             taskCodeLines = File.read_lines(taskPath)
 
@@ -1651,10 +1651,10 @@ module ISM
 
             processResult.rewind
 
-            taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult)[0]
+            taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[0]
 
             if !process.success?
-                showTaskBuildingProcessErrorMessage(taskError, "#{ISM::Default::Filename::Task}.cr")
+                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
                 exitProgram
             end
         end
