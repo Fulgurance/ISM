@@ -587,21 +587,8 @@ module ISM
             end
         end
 
-        # file
-        # line
-        # column
-        # size
-        # message
         def printInternalErrorNotification(error : ISM::TaskBuildingProcessError)
-
-        end
-
-        def printInstallerImplementationErrorNotification(software : ISM::SoftwareInformation, error : ISM::TaskBuildingProcessError)
-
-        end
-
-        def printSystemCallErrorNotification
-            limit = ISM::Default::CommandLine::SystemCallErrorNotificationTitle.size
+            limit = ISM::Default::CommandLine::InternalErrorTitle.size
 
             separatorText = String.new
 
@@ -609,7 +596,47 @@ module ISM
                 separatorText += "_"
             end
 
-            title = "\n\n#{ISM::Default::CommandLine::SystemCallErrorNotificationTitle.colorize(:red)}"
+            title = "\n\n#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
+            separatorText = "#{separatorText.colorize(:red)}"
+            errorText = "\n#{ISM::Default::CommandLine::TaskBuildingProcessErrorText1}#{error.file}#{ISM::Default::CommandLine::TaskBuildingProcessErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
+            help = "\n#{ISM::Default::CommandLine::TaskBuildingErrorNotificationHelp.colorize(:red)}"
+
+            puts title
+            puts separatorText
+            puts errorText
+            puts help
+        end
+
+        def printInstallerImplementationErrorNotification(software : ISM::SoftwareInformation, error : ISM::TaskBuildingProcessError)
+            limit = ISM::Default::CommandLine::InstallerImplementationErrorTitle.size
+            softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
+            separatorText = String.new
+
+            (0..limit).each do |index|
+                separatorText += "_"
+            end
+
+            title = "\n\n#{ISM::Default::CommandLine::InstallerImplementationErrorTitle.colorize(:red)}"
+            separatorText = "#{separatorText.colorize(:red)}"
+            errorText = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorText1}#{softwareText}#{ISM::Default::CommandLine::InstallerImplementationErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
+            help = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
+
+            puts title
+            puts separatorText
+            puts errorText
+            puts help
+        end
+
+        def printSystemCallErrorNotification
+            limit = ISM::Default::CommandLine::InternalErrorTitle.size
+
+            separatorText = String.new
+
+            (0..limit).each do |index|
+                separatorText += "_"
+            end
+
+            title = "\n\n#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
             command = "\n#{@lastRecordedSystemCall.formattedOutput.colorize(Colorize::ColorRGB.new(255,100,100))}"
             help = "\n#{ISM::Default::CommandLine::SystemCallErrorNotificationHelp.colorize(:red)}"
