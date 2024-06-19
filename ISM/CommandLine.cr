@@ -1641,10 +1641,10 @@ module ISM
         end
 
         def buildTasksFile
-            taskPath = "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"
             processResult = IO::Memory.new
 
-            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{taskPath} -f json",
+            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+                                    output: :inherit,
                                     error: processResult,
                                     shell: true,
                                     chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
@@ -1654,7 +1654,7 @@ module ISM
             taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult)[0]
 
             if !process.success?
-                showTaskBuildingProcessErrorMessage(taskError, "#{taskPath}.cr")
+                showTaskBuildingProcessErrorMessage(taskError, "#{ISM::Default::Filename::Task}.cr")
                 exitProgram
             end
         end
