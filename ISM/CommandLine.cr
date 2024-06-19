@@ -1101,7 +1101,7 @@ module ISM
             codeLines.reverse_each.with_index do |line, index|
 
                 if markPointFilter.matches?(line)
-                    targetStartingLine = codeLine.size-index
+                    targetStartingLine = codeLines.size-index
                     realLineNumber = taskError.line-targetStartingLine
                     targetPath = line[line.index("/")..-1]
 
@@ -1644,7 +1644,7 @@ module ISM
             taskPath = "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}"
             processResult = IO::Memory.new
 
-            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{taskPath} -f json",
+            process = Process.run(  "crystal build #{taskPath}.cr -o #{taskPath} -f json",
                                     error: processResult,
                                     shell: true,
                                     chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
@@ -1654,7 +1654,7 @@ module ISM
             taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult)[0]
 
             if !process.success?
-                showTaskBuildingProcessErrorMessage(taskError, taskPath)
+                showTaskBuildingProcessErrorMessage(taskError, "#{taskPath}.cr")
                 exitProgram
             end
         end
