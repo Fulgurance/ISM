@@ -620,7 +620,7 @@ module ISM
 
             title = "\n\n#{ISM::Default::CommandLine::InstallerImplementationErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{errorText1}#{softwareText}#{errorText2}#{error.line.to_s}\n\n#{error.message.colorize(:yellow)}"
+            errorText = "\n#{errorText1}#{softwareText}#{errorText2}\n\n#{error.message.colorize(:yellow)}"
             help = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
 
             puts title
