@@ -1088,7 +1088,8 @@ module ISM
 
         #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
         def showTaskBuildingProcessErrorMessage(taskError : ISM::TaskBuildingProcessError, taskPath : String)
-            markPointFilter = /^#TARGET[0-9]+#\//
+            targetMarkPointFilter = /^#TARGET[0-9]+#\//
+            endTargetSectionMarkPoint = "#END TARGET SECTION"
 
             taskCodeLines = File.read_lines(taskPath)
 
@@ -1101,6 +1102,10 @@ module ISM
 
             #Instead to start from zero, start from passed index to gain performance
             codeLines.reverse_each.with_index do |line, index|
+
+                if line == endTargetSectionMarkPoint
+                    break
+                end
 
                 if markPointFilter.matches?(line)
                     targetStartingLine = codeLines.size-index
@@ -1564,6 +1569,7 @@ module ISM
 
                     #LOADING TARGETS, ADDITIONAL INFORMATION INDEX AND NEEDED OPTIONS
                     #{getRequiredTargets(neededSoftwares)}
+                    #END TARGET SECTION
 
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
