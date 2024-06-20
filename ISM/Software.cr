@@ -426,7 +426,7 @@ module ISM
 
         def fileReplaceText(path : String, text : String, newText : String)
             requestedCommands = <<-CMD
-                                sed -i 's/#{text.gsub("/","\\/")}/#{newText.gsub("/","\\/")}/g' #{path}
+                                sed -i 's/#{Regex.escape(text)}/#{Regex.escape(newText)}/g' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
@@ -439,7 +439,7 @@ module ISM
 
         def fileReplaceLineContaining(path : String, text : String, newLine : String)
             requestedCommands = <<-CMD
-                                sed -i '/#{text.gsub("/","\\/")}/c\#{newText.gsub("/","\\/")}' #{path}
+                                sed -i '/#{Regex.escape(text)}/c\#{Regex.escape(newText)}' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
@@ -452,7 +452,7 @@ module ISM
 
         def fileReplaceTextAtLineNumber(path : String, text : String, newText : String,lineNumber : UInt64)
             requestedCommands = <<-CMD
-                                sed -i '#{lineNumber.to_s}s/#{text.gsub("/","\\/")}/#{newText.gsub("/","\\/")}/' #{path}
+                                sed -i '#{lineNumber.to_s}s/#{Regex.escape(text)}/#{Regex.escape(newText)}/' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
