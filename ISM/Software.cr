@@ -786,7 +786,7 @@ module ISM
             if Ism.settings.installByChroot
                 prefix = (makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
             else
-                prefix = (makeOptions == "" ? Ism.settings.makeOptions : makeOptions)
+                prefix = (makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions)
             end
 
             requestedCommands = "ninja #{prefix} #{arguments}"
