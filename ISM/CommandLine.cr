@@ -1107,7 +1107,7 @@ module ISM
                     break
                 end
 
-                if markPointFilter.matches?(line)
+                if targetMarkPointFilter.matches?(line)
                     targetStartingLine = codeLines.size-index
                     realLineNumber = taskError.line-targetStartingLine
                     targetPath = line[line.index("/")..-1]
