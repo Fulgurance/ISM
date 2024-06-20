@@ -1659,11 +1659,15 @@ module ISM
 
             processResult.rewind
 
-            taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
+            begin
+                taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
 
-            if !process.success?
-                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
-                exitProgram
+                if !process.success?
+                    showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
+                    exitProgram
+                end
+            rescue
+                #If there is an error, normally that mean the compilation is successfull
             end
         end
 
