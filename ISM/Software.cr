@@ -737,6 +737,17 @@ module ISM
             end
         end
 
+        def runTarCommand(arguments = String.new, path = String.new)
+            requestedCommands = "tar #{arguments}"
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
+            end
+        end
+
         def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
             requestedCommands = "python #{arguments}"
 
