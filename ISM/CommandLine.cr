@@ -1482,7 +1482,7 @@ module ISM
             neededSoftwares.each_with_index do |software, index|
                 #GENERATE TARGET ARRAY
                 if neededSoftwares.size == 1
-                    requiredTargetArrayResult += "targets = [Target#{index}.new(\"#{software.filePath}\")]"
+                    requiredTargetArrayResult += "Target#{index}.new(\"#{software.filePath}\")]"
                 else
                     if index == 0
                         requiredTargetArrayResult += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
