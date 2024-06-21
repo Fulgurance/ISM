@@ -426,7 +426,7 @@ module ISM
 
         def fileReplaceText(path : String, text : String, newText : String)
             requestedCommands = <<-CMD
-                                sed -i 's/#{Regex.escape(text)}/#{Regex.escape(newText)}/g' #{path}
+                                sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/g' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
@@ -439,7 +439,7 @@ module ISM
 
         def fileReplaceLineContaining(path : String, text : String, newLine : String)
             requestedCommands = <<-CMD
-                                sed -i '/#{Regex.escape(text)}/c\#{Regex.escape(newText)}' #{path}
+                                sed -i '/#{text.gsub(/([\.\/])/, %q(\\\1))}/c\#{newText.gsub(/([\.\/])/, %q(\\\1))}' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
@@ -452,7 +452,7 @@ module ISM
 
         def fileReplaceTextAtLineNumber(path : String, text : String, newText : String,lineNumber : UInt64)
             requestedCommands = <<-CMD
-                                sed -i '#{lineNumber.to_s}s/#{Regex.escape(text)}/#{Regex.escape(newText)}/' #{path}
+                                sed -i '#{lineNumber.to_s}s/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' #{path}
                                 CMD
 
             process = runSystemCommand(requestedCommands)
@@ -519,7 +519,7 @@ module ISM
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
             requestedCommands = <<-CMD
-                                find -name #{filename} -exec sed -i 's/#{Regex.escape(text)}/#{Regex.escape(newText)}/' {} \\;
+                                find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
                                 CMD
 
             process = runSystemCommand(requestedCommands)
