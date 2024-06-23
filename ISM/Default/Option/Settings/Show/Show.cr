@@ -22,7 +22,7 @@ module ISM
                 #Host titles
                 SystemTargetNameText = "System name"
                 SystemArchitectureText = "System architecture"
-                SystemTargetText = "System Target"
+                SystemTargetText = "System target"
                 SystemMakeOptionsText = "System make options"
                 SystemBuildOptionsText = "System build options"
                 SystemNameText = "System name"
@@ -46,7 +46,7 @@ module ISM
                 #Chroot title
                 ChrootTargetNameText = "Chroot name"
                 ChrootArchitectureText = "Chroot architecture"
-                ChrootTargetText = "Chroot Target"
+                ChrootTargetText = "Chroot target"
                 ChrootMakeOptionsText = "Chroot make options"
                 ChrootBuildOptionsText = "Chroot build options"
                 ChrootNameText = "Chroot name"
