@@ -383,8 +383,12 @@ module ISM
             return process
         end
 
-        def runSystemCommand(command : String, path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new) : Process::Status
+        def runSystemCommand(command : String, path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new) : Process::Status
             environmentCommand = String.new
+
+            if environmentFilePath != ""
+                environmentCommand = "source \"#{environmentFilePath}\" && "
+            end
 
             environment.keys.each do |key|
                 environmentCommand += " #{key}=\"#{environment[key]}\""
