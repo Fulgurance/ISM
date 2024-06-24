@@ -882,13 +882,15 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, error)
         end
 
-        def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, error = nil)
+        def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
                                     arguments +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
                                     path +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
-                                    (environment.map { |key| key.join("=") }).join(" "),
+                                    (environment.map { |key| key.join("=") }).join(" ")   +
+                                    ISM::Default::CommandLine::ErrorRunSystemCommandText4 +
+                                    environmentFilePath,
                                     error)
         end
 
