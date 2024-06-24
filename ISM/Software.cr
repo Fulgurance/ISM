@@ -266,7 +266,6 @@ module ISM
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
 
             process = Process.run(  "tar -xf #{archivePath}",
-                                    #error: :inherit,#Experimental deletion to remove verbose
                                     shell: true,
                                     chdir: destinationPath)
             if !process.success?
