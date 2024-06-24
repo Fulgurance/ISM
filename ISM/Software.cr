@@ -730,13 +730,13 @@ module ISM
             end
         end
 
-        def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new)
+        def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "./#{file} #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
@@ -752,51 +752,51 @@ module ISM
             end
         end
 
-        def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+        def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "python #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
 
-        def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+        def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "crystal #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
 
-        def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+        def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, , environmentFilePath = String.new)
             requestedCommands = "cmake #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
 
-        def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+        def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "meson #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
 
-        def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
+        def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
                 prefix = (makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
@@ -806,10 +806,10 @@ module ISM
 
             requestedCommands = "ninja #{prefix} #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
@@ -880,24 +880,24 @@ module ISM
             end
         end
 
-        def runAutoconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+        def runAutoconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoconf #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
 
-        def runAutoreconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new)
+        def runAutoreconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoreconf #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
@@ -1123,15 +1123,15 @@ module ISM
             Ism.notifyOfConfigure(@information)
         end
 
-        def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, relatedToMainBuild = true)
+        def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, relatedToMainBuild = true)
             configureCommand = "#{@buildDirectory && relatedToMainBuild ? ".." : "."}/#{configureDirectory}/configure"
 
             requestedCommands = "#{configureCommand} #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
@@ -1173,7 +1173,7 @@ module ISM
             end
         end
 
-        def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, makeOptions = String.new, buildOptions = String.new)
+        def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
                 prefix = (makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
@@ -1183,10 +1183,10 @@ module ISM
 
             requestedCommands = "make #{prefix} #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
         end
