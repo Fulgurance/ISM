@@ -774,7 +774,7 @@ module ISM
             end
         end
 
-        def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, , environmentFilePath = String.new)
+        def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "cmake #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
