@@ -56,7 +56,7 @@ module ISM
             return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
         end
 
-        def mainKernelName : String
+        def recordSelectedKernel
             settingInformation = ISM::SoftwareInformation.new
             settingInformation.loadInformationFile(@information.settingsFilePath)
 
@@ -67,15 +67,22 @@ module ISM
 
                         settingInformation.dependencies(allowDeepSearch: true).each do |dependency|
                             if dependency.fullName.downcase == entry.downcase
-                                return dependency.versionName.downcase
+                                settingInformation.writeInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsSoftwaresDirectory}#{ISM::Default::Filename::SelectedKernel}")
                             end
                         end
                     end
                 end
             end
 
-            #Exit and show a message that no kernel are selected ?
-            return String.new
+            #Raise an error if nothing found
+        end
+
+        def mainKernelName : String
+            return Ism.selectedKernel.versionName.downcase
+        end
+
+        def mainKernelVersion : String
+            return Ism.selectedKernel.version
         end
 
         def prepareKernelSourcesInstallation

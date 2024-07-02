@@ -273,6 +273,11 @@ module ISM
             end
         end
 
+        def selectedKernel : ISM::SoftwareInformation
+            information = ISM::SoftwareInformation.new
+            return information.loadInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsSoftwaresDirectory}#{ISM::Default::Filename::SelectedKernel}")
+        end
+
         def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
             if filter.is_a?(Array(Regex))
                 userInput = input.split(" ")
