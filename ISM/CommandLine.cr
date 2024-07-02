@@ -812,6 +812,15 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory, error)
         end
 
+        def notifyOfMakeLinkUnknowTypeError(path : String, targetPath : String, linkType : Symbol, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText1 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText2 +
+                                    targetPath +
+                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText3 +
+                                    linkType.to_s, error)
+        end
+
         def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
                                     arguments +
