@@ -770,38 +770,6 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName, error)
         end
 
-        def notifyOfUpdateUserFileError(data : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorUpdateUserFileText+data, error)
-        end
-
-        def notifyOfUpdateGroupFileError(data : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorUpdateGroupFileText+data, error)
-        end
-
-        def notifyOfMakeLinkError(path : String, targetPath : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkText1 +
-                                    path +
-                                    ISM::Default::CommandLine::ErrorMakeLinkText2 +
-                                    targetPath, error)
-        end
-
-        def notifyOfMakeLinkFileExistError(path : String, targetPath : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkFileExistText1 +
-                                    path +
-                                    ISM::Default::CommandLine::ErrorMakeLinkFileExistText2 +
-                                    targetPath +
-                                    ISM::Default::CommandLine::ErrorMakeLinkFileExistText3, error)
-        end
-
-        def notifyOfMakeLinkUnknowTypeError(path : String, targetPath : String, linkType : Symbol, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText1 +
-                                    path +
-                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText2 +
-                                    targetPath +
-                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText3 +
-                                    linkType.to_s, error)
-        end
-
         def notifyOfCopyFileError(path : String | Enumerable(String), targetPath : String, error = nil)
             if path.is_a?(Enumerable(String))
                 path = path.join(",")
@@ -810,24 +778,6 @@ module ISM
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyFileText2 +
                                    targetPath, error)
-        end
-
-        def notifyOfCopyAllFilesFinishingError(path : String, destination : String,text : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorCopyAllFilesFinishingText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorCopyAllFilesFinishingText2 +
-                                    path +
-                                    ISM::Default::CommandLine::ErrorCopyAllFilesFinishingText3 +
-                                    destination, error)
-        end
-
-        def notifyOfCopyAllFilesRecursivelyFinishingError(path : String, destination : String,text : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorCopyAllFilesRecursivelyFinishingText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorCopyAllFilesRecursivelyFinishingText2 +
-                                    path +
-                                    ISM::Default::CommandLine::ErrorCopyAllFilesRecursivelyFinishingText3 +
-                                    destination, error)
         end
 
         def notifyOfCopyDirectoryError(path : String, targetPath : String, error = nil)
@@ -842,66 +792,6 @@ module ISM
                 path = path.join(",")
             end
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, error)
-        end
-
-        def notifyOfReplaceTextAllFilesNamedError(path : String, filename : String, text : String, newText : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorReplaceTextAllFilesNamedText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesNamedText2 +
-                                    newText +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesNamedText3 +
-                                    filename +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesNamedText4 +
-                                    path, error)
-        end
-
-        def notifyOfReplaceTextAllFilesRecursivelyNamedError(path : String, filename : String, text : String, newText : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorReplaceTextAllFilesRecursivelyNamedText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesRecursivelyNamedText2 +
-                                    newText +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesRecursivelyNamedText3 +
-                                    filename +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAllFilesRecursivelyNamedText4 +
-                                    path, error)
-        end
-
-        def notifyOfDeleteAllFilesFinishingError(path : String, text : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorDeleteAllFilesFinishingText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorDeleteAllFilesFinishingText2 +
-                                    path, error)
-        end
-
-        def notifyOfDeleteAllFilesRecursivelyFinishingError(path : String, text : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorDeleteAllFilesRecursivelyFinishingText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorDeleteAllFilesRecursivelyFinishingText2 +
-                                    path, error)
-        end
-
-        def notifyOfDeleteAllHiddenFilesError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesText+path, error)
-        end
-
-        def notifyOfDeleteAllHiddenFilesRecursivelyError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteAllHiddenFilesRecursivelyText+path, error)
-        end
-
-        def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
-                                    arguments +
-                                    ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
-                                    path +
-                                    ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
-                                    (environment.map { |key| key.join("=") }).join(" ")   +
-                                    ISM::Default::CommandLine::ErrorRunSystemCommandText4 +
-                                    environmentFilePath,
-                                    error)
-        end
-
-        def notifyOfGenerateEmptyFileError(path : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorGenerateEmptyFileText+path, error)
         end
 
         def notifyOfMoveFileError(path : String | Enumerable(String), newPath : String, error = nil)
@@ -922,95 +812,16 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory, error)
         end
 
-        def notifyOfDeleteDirectoryRecursivelyError(directory : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryRecursivelyText+directory, error)
-        end
-
-        def notifyOfSetPermissionsError(path : String, permissions : Int, error = nil)
-            if path.is_a?(Enumerable(String))
-                path = path.join(",")
-            end
-            printErrorNotification( ISM::Default::CommandLine::ErrorSetPermissionsText1 +
-                                    permissions.to_s +
-                                    ISM::Default::CommandLine::ErrorSetPermissionsText2 +
-                                    path, error)
-        end
-
-        def notifyOfSetPermissionsRecursivelyError(path : String, permissions : Int, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorSetPermissionsRecursivelyText1 +
-                                    permissions.to_s +
-                                    ISM::Default::CommandLine::ErrorSetPermissionsRecursivelyText2 +
-                                    path, error)
-        end
-
-        def notifyOfSetOwnerError(path : String, uid : Int | String, gid : Int | String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorSetOwnerText1 +
-                                    uid.to_s +
-                                    ISM::Default::CommandLine::ErrorSetOwnerText2 +
-                                    gid.to_s +
-                                    ISM::Default::CommandLine::ErrorSetOwnerText3 +
-                                    path, error)
-        end
-
-        def notifyOfSetOwnerRecursivelyError(path : String, uid : Int | String, gid : Int | String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorSetOwnerRecursivelyText1 +
-                                    uid.to_s +
-                                    ISM::Default::CommandLine::ErrorSetOwnerRecursivelyText2 +
-                                    gid.to_s +
-                                    ISM::Default::CommandLine::ErrorSetOwnerRecursivelyText3 +
-                                    path, error)
-        end
-
-        def notifyOfFileReplaceTextError(filePath : String, text : String, newText : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceTextText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorFileReplaceTextText2 +
-                                    newText +
-                                    ISM::Default::CommandLine::ErrorFileReplaceTextText3 +
-                                    filePath, error)
-        end
-
-        def notifyOfFileReplaceLineContainingError(filePath : String, text : String, newLine : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorFileReplaceLineContainingText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorFileReplaceLineContainingText2 +
-                                    newLine +
-                                    ISM::Default::CommandLine::ErrorFileReplaceLineContainingText3 +
-                                    filePath, error)
-        end
-
-        def notifyOfReplaceTextAtLineNumberError(filePath : String, text : String, newText : String, lineNumber : UInt64, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText1 +
-                                    text +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText2 +
-                                    newText +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText3 +
-                                    filePath +
-                                    ISM::Default::CommandLine::ErrorReplaceTextAtLineNumberText4 +
-                                    lineNumber.to_s, error)
-        end
-
-        def notifyOfFileDeleteLineError(filePath : String, lineNumber : UInt64, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorFileDeleteLineText1 +
-                                    lineNumber.to_s +
-                                    ISM::Default::CommandLine::ErrorFileDeleteLineText2 +
-                                    filePath, error)
-        end
-
-        def notifyOfGetFileContentError(filePath : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
-        end
-
-        def notifyOfFileWriteDataError(filePath : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorFileWriteDataText+filePath, error)
-        end
-
-        def notifyOfFileAppendDataError(filePath : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorFileAppendDataText+filePath, error)
-        end
-
-        def notifyOfFileUpdateContentError(filePath : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorFileUpdateContentText+filePath, error)
+        def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
+            printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
+                                    arguments +
+                                    ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
+                                    path +
+                                    ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
+                                    (environment.map { |key| key.join("=") }).join(" ")   +
+                                    ISM::Default::CommandLine::ErrorRunSystemCommandText4 +
+                                    environmentFilePath,
+                                    error)
         end
 
         def notifyOfUpdateKernelOptionsDatabaseError(software : ISM::SoftwareInformation, error = nil)
