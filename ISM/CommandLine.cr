@@ -275,7 +275,7 @@ module ISM
 
         def selectedKernel : ISM::SoftwareInformation
             information = ISM::SoftwareInformation.new
-            information.loadInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsSoftwaresDirectory}#{ISM::Default::Filename::SelectedKernel}")
+            information.loadInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
             return information
         end
 
