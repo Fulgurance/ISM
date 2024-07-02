@@ -67,7 +67,7 @@ module ISM
 
                         settingInformation.dependencies(allowDeepSearch: true).each do |dependency|
                             if dependency.fullName.downcase == entry.downcase
-                                settingInformation.writeInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+                                dependency.information.writeInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
                             end
                         end
                     end
