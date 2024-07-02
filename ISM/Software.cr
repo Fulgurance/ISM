@@ -78,6 +78,28 @@ module ISM
             return String.new
         end
 
+        def mainKernelVersion : String
+            settingInformation = ISM::SoftwareInformation.new
+            settingInformation.loadInformationFile(@information.settingsFilePath)
+
+            settingInformation.uniqueDependencies.each do |uniqueDependency|
+                uniqueDependency.each do |entry|
+
+                    if settingInformation.uniqueDependencyIsEnabled(entry)
+
+                        settingInformation.dependencies(allowDeepSearch: true).each do |dependency|
+                            if dependency.fullName.downcase == entry.downcase
+                                return dependency.version
+                            end
+                        end
+                    end
+                end
+            end
+
+            #Exit and show a message that no kernel are selected ?
+            return String.new
+        end
+
         def prepareKernelSourcesInstallation
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
             moveFileNoChroot("#{workDirectoryPathNoChroot}/Sources","#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
