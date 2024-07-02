@@ -635,6 +635,10 @@ module ISM
             puts help
         end
 
+        def notifyOfGetFileContentError(filePath : String, error = nil)
+            printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
+        end
+
         def printSystemCallErrorNotification
             limit = ISM::Default::CommandLine::InternalErrorTitle.size
 

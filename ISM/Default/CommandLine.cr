@@ -59,6 +59,7 @@ module ISM
             ErrorMakeLinkUnknowTypeText1 = "Failed to make symbolic link from "
             ErrorMakeLinkUnknowTypeText2 = " to "
             ErrorMakeLinkUnknowTypeText3 = ". Unknow link type: "
+            ErrorGetFileContentText = "Failed to get file content from "
             ErrorRunSystemCommandText1 = "Failed to run "
             ErrorRunSystemCommandText2 = " in "
             ErrorRunSystemCommandText3 = " with given environment "
