@@ -225,6 +225,7 @@ module ISM
 
         def check
             Ism.notifyOfCheck(@information)
+
             checkSourcesMd5sum
             if File.exists?(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
                 checkPatchesMd5sum
@@ -254,6 +255,7 @@ module ISM
 
         def extract
             Ism.notifyOfExtract(@information)
+
             extractSources
             if File.exists?(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
                 extractPatches
@@ -1504,11 +1506,13 @@ module ISM
 
         def recordNeededKernelFeatures
             Ism.notifyOfRecordNeededKernelFeatures(@information)
+
             Ism.neededKernelFeatures += @information.kernelDependencies
         end
         
         def clean
             Ism.notifyOfClean(@information)
+
             cleanWorkDirectoryPath
         end
 
@@ -1522,6 +1526,7 @@ module ISM
 
         def recordUnneededKernelFeatures
             Ism.notifyOfRecordUnneededKernelFeatures(@information)
+
             Ism.unneededKernelFeatures += @information.kernelDependencies
         end
 
@@ -1532,6 +1537,7 @@ module ISM
 
         def uninstall
             Ism.notifyOfUninstall(@information)
+
             Ism.removeInstalledSoftware(@information)
         end
 
