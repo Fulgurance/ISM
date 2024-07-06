@@ -531,13 +531,13 @@ module ISM
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
             requestedCommands = <<-CMD
-                                find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' #{path}  {} \\;
+                                find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
                 Ism.exitProgram
             end
         end
