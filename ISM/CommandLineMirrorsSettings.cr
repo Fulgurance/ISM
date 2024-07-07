@@ -2,51 +2,55 @@ module ISM
 
     class CommandLineMirrorsSettings
 
-        record MirrorsSettings,
-            defaultMirror : String do
-            include JSON::Serializable
-        end
+        include JSON::Serializable
 
         property defaultMirror : String
 
         def initialize(@defaultMirror = ISM::Default::CommandLineMirrorsSettings::DefaultMirror)
         end
 
-        def filePath : String
+        def self.filePath : String
             return Ism.settings.rootPath+ISM::Default::CommandLineMirrorsSettings::MirrorsSettingsFilePath
         end
 
-        def loadMirrorsSettingsFile
-            if !File.exists?(filePath)
-                writeMirrorsSettingsFile
-            end
-
-            information = MirrorsSettings.from_json(File.read(filePath))
-            @defaultMirror = information.defaultMirror
+        def self.generateConfiguration(path = filePath)
+            file = File.open(path,"w")
+            self.new.to_json
+            file.close
         end
 
-        def writeMirrorsSettingsFile
-            mirrorsSettings = MirrorsSettings.new(@defaultMirror)
+        def self.loadConfiguration(path = filePath)
+            if !File.exists?(path)
+                generateConfiguration(path)
+            end
 
-            file = File.open(filePath,"w")
-            mirrorsSettings.to_json(file)
+            from_json(File.read(path))
+        end
+
+        def loadConfiguration(path = self.class.filePath)
+            if !File.exists?(path)
+                writeConfiguration(path)
+            end
+
+            self.class.from_json(File.read(path))
+        end
+
+        def writeConfiguration(path = self.class.filePath)
+            file = File.open(path,"w")
+            to_json(file)
             file.close
         end
 
         def setDefaultMirror(@defaultMirror)
-            writeMirrorsSettingsFile
+            writeConfiguration
         end
 
         def sourcesLink : String
-            mirror = Mirror.new(@defaultMirror)
-            mirror.loadMirrorFile
-            return mirror.sourcesLink
+            return Ism.mirrorsSettings.sourcesLink(@defaultMirror)
         end
 
         def patchesLink : String
-            mirror = Mirror.new(@defaultMirror)
-            mirror.loadMirrorFile
-            return mirror.patchesLink
+            return Ism.mirrorsSettings.patchesLink(@defaultMirror)
         end
 
     end

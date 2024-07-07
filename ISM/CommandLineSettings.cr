@@ -2,63 +2,7 @@ module ISM
 
     class CommandLineSettings
 
-        record Settings,
-            #Generic parameters
-            secureMode : Bool,
-            installByChroot : Bool,
-            rootPath : String,
-            defaultMirror : String,
-
-            #Host related parameters
-            systemTargetName : String,
-            systemArchitecture : String,
-            systemTarget : String,
-            systemMakeOptions : String,
-            systemBuildOptions : String,
-            systemName : String,
-            systemFullName : String,
-            systemId : String,
-            systemRelease : String,
-            systemCodeName : String,
-            systemDescription : String,
-            systemVersion : String,
-            systemVersionId : String,
-            systemAnsiColor : String,
-            systemCpeName : String,
-            systemHomeUrl : String,
-            systemSupportUrl : String,
-            systemBugReportUrl : String,
-            systemPrivacyPolicyUrl : String,
-            systemBuildId : String,
-            systemVariant : String,
-            systemVariantId : String,
-
-            #Chroot related parameters
-            chrootTargetName : String,
-            chrootArchitecture : String,
-            chrootTarget : String,
-            chrootMakeOptions : String,
-            chrootBuildOptions : String,
-            chrootName : String,
-            chrootFullName : String,
-            chrootId : String,
-            chrootRelease : String,
-            chrootCodeName : String,
-            chrootDescription : String,
-            chrootVersion : String,
-            chrootVersionId : String,
-            chrootAnsiColor : String,
-            chrootCpeName : String,
-            chrootHomeUrl : String,
-            chrootSupportUrl : String,
-            chrootBugReportUrl : String,
-            chrootPrivacyPolicyUrl : String,
-            chrootBuildId : String,
-            chrootVariant : String,
-            chrootVariantId : String do
-
-            include JSON::Serializable
-        end
+        include JSON::Serializable
 
         #Generic parameters
         property    secureMode : Bool

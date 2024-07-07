@@ -213,22 +213,19 @@ module ISM
             favouriteGroupsFiles = Dir.children(@settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory)
 
             if favouriteGroupsFiles.size == 0
-                favouriteGroup = ISM::FavouriteGroup.new
-                favouriteGroup.loadFavouriteGroupFile
-                @favouriteGroups << favouriteGroup
+                @favouriteGroups << ISM::FavouriteGroup.loadConfiguration
             else
                 favouriteGroupsFiles.each do |favouriteGroupFile|
-                    favouriteGroup = ISM::FavouriteGroup.new(favouriteGroupFile[0..-6])
-                    favouriteGroup.loadFavouriteGroupFile
-                    @favouriteGroups << favouriteGroup
+                    path = ISM::FavouriteGroup.filePath(favouriteGroupFile[0..-6])
+                    @favouriteGroups << ISM::FavouriteGroup.loadConfiguration(path)
                 end
             end
         end
 
         def loadSettingsFiles
-            @settings.loadSettingsFile
-            @portsSettings.loadPortsSettingsFile
-            @mirrorsSettings.loadMirrorsSettingsFile
+            @settings.loadConfiguration
+            @portsSettings.loadConfiguration
+            @mirrorsSettings.loadConfiguration
         end
 
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
@@ -314,18 +311,23 @@ module ISM
         end
 
         def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
-            favouriteGroup = ISM::FavouriteGroup.new(favouriteGroupName)
-            favouriteGroup.loadFavouriteGroupFile
+            path = ISM::FavouriteGroup.filePath(favouriteGroupName)
+
+            favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
+            favouriteGroup.loadConfiguration
             favouriteGroup.softwares = favouriteGroup.softwares | [fullVersionName]
-            favouriteGroup.writeFavouriteGroupFile
+            favouriteGroup.writeConfiguration
         end
 
         def removeSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
-            #Ne pas créer si groupe n'existe pas
-            favouriteGroup = ISM::FavouriteGroup.new(favouriteGroupName)
-            favouriteGroup.loadFavouriteGroupFile
+            path = ISM::FavouriteGroup.filePath(favouriteGroupName)
+
+            if File.exists?(path)
+
+            favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
+            favouriteGroup.loadConfiguration
             favouriteGroup.softwares.delete(fullVersionName)
-            favouriteGroup.writeFavouriteGroupFile
+            favouriteGroup.writeConfiguration
         end
 
         def removeInstalledSoftware(software : ISM::SoftwareInformation)

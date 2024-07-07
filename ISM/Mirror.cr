@@ -13,28 +13,35 @@ module ISM
                         @mainUrl = ISM::Default::Mirror::MainUrl)
         end
 
-        def filePath : String
-            return Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory+@codeName+".json"
+        def self.filePath(codeName = ISM::Default::Mirror::CodeName) : String
+            return Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory+codeName+".json"
         end
 
-        def loadMirrorFile
-            if !File.exists?(filePath)
-                writeMirrorFile
+        def self.generateConfiguration(path = filePath)
+            file = File.open(path,"w")
+            self.new.to_json
+            file.close
+        end
+
+        def self.loadConfiguration(path = filePath)
+            if !File.exists?(path)
+                generateConfiguration(path)
             end
 
-            information = Mirror.from_json(File.read(filePath))
-            @codeName = information.codeName
-            @urls = information.urls
-            @mainUrl = information.mainUrl
+            from_json(File.read(path))
         end
 
-        def writeMirrorFile
-            mirror = Mirror.new(@codeName,
-                                @urls,
-                                @mainUrl)
+        def loadConfiguration(path = self.class.filePath)
+            if !File.exists?(path)
+                writeConfiguration(path)
+            end
 
-            file = File.open(filePath,"w")
-            mirror.to_json(file)
+            self.class.from_json(File.read(path))
+        end
+
+        def writeConfiguration(path = self.class.filePath)
+            file = File.open(path,"w")
+            to_json(file)
             file.close
         end
 

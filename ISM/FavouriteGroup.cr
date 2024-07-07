@@ -12,25 +12,35 @@ module ISM
         def initialize(@name = ISM::Default::FavouriteGroup::Name, @softwares = Array(String).new)
         end
 
-        def filePath : String
-            return Ism.settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory+@name+".json"
+        def self.filePath(name = ISM::Default::FavouriteGroup::Name) : String
+            return Ism.settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory+name+".json"
         end
 
-        def loadFavouriteGroupFile
-            if !File.exists?(filePath)
-                writeFavouriteGroupFile
+        def self.generateConfiguration(path = filePath)
+            file = File.open(path,"w")
+            self.new.to_json
+            file.close
+        end
+
+        def self.loadConfiguration(path = filePath)
+            if !File.exists?(path)
+                generateConfiguration(path)
             end
 
-            information = FavouriteGroup.from_json(File.read(filePath))
-            @name = information.name
-            @softwares = information.softwares
+            from_json(File.read(path))
         end
 
-        def writeFavouriteGroupFile
-            favouriteGroup = FavouriteGroup.new(@name,@softwares)
+        def loadConfiguration(path = self.class.filePath)
+            if !File.exists?(path)
+                writeConfiguration(path)
+            end
 
-            file = File.open(filePath,"w")
-            favouriteGroup.to_json(file)
+            self.class.from_json(File.read(path))
+        end
+
+        def writeConfiguration(path = self.class.filePath)
+            file = File.open(path,"w")
+            to_json(file)
             file.close
         end
 
