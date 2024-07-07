@@ -412,7 +412,7 @@ module ISM
                             @chrootVariantId)
 
             if @rootPath != "/"
-                writeChrootSettingsFile
+                writeChrootConfiguration
             end
         end
 
@@ -611,42 +611,42 @@ module ISM
 
         #   Generic
         def setSecureMode(@secureMode)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setInstallByChroot(@installByChroot)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setRootPath(@rootPath)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setDefaultMirror(@defaultMirror)
-            writeSettingsFile
+            writeConfiguration
         end
 
         #   Host
         def setSystemTargetName(@systemTargetName)
-            writeSettingsFile
+            writeConfiguration
             setSystemTarget
         end
 
         def setSystemArchitecture(@systemArchitecture)
-            writeSettingsFile
+            writeConfiguration
             setSystemTarget
         end
 
         def setSystemTarget
             @systemTarget = @systemArchitecture + "-" + @systemTargetName + "-" + "linux-gnu"
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemMakeOptions(@systemMakeOptions)
             match,invalidValue = Ism.inputMatchWithFilter(@systemMakeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
 
             if match
-                writeSettingsFile
+                writeConfiguration
             else
                 puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
@@ -655,97 +655,97 @@ module ISM
         end
 
         def setSystemBuildOptions(@systemBuildOptions)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemName(@systemName)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemFullName(@systemFullName)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemId(@systemId)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemRelease(@systemRelease)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemCodeName(@systemCodeName)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemDescription(@systemDescription)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemVersion(@systemVersion)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemVersionId(@systemVersionId)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemAnsiColor(@systemAnsiColor)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemCpeName(@systemCpeName)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemHomeUrl(@systemHomeUrl)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemSupportUrl(@systemSupportUrl)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemBugReportUrl(@systemBugReportUrl)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemPrivacyPolicyUrl(@systemPrivacyPolicyUrl)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemBuildId(@systemBuildId)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemVariant(@systemVariant)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setSystemVariantId(@systemVariantId)
-            writeSettingsFile
+            writeConfiguration
         end
 
         #   Chroot
         def setChrootTargetName(@chrootTargetName)
-            writeSettingsFile
+            writeConfiguration
             setChrootTarget
         end
 
         def setChrootArchitecture(@chrootArchitecture)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootTarget
             @chrootTarget = @chrootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootMakeOptions(@chrootMakeOptions)
             match,invalidValue = Ism.inputMatchWithFilter(@chrootMakeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
 
             if match
-                writeSettingsFile
+                writeConfiguration
             else
                 puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
@@ -754,76 +754,76 @@ module ISM
         end
 
         def setChrootBuildOptions(@chrootBuildOptions)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootName(@chrootName)
-            writeSettingsFile
+            writeConfiguration
         end
 
 
         def setChrootFullName(@chrootFullName)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootId(@chrootId)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootRelease(@chrootRelease)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootCodeName(@chrootCodeName)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootDescription(@chrootDescription)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootVersion(@chrootVersion)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootVersionId(@chrootVersionId)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootAnsiColor(@chrootAnsiColor)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootCpeName(@chrootCpeName)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootHomeUrl(@chrootHomeUrl)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootSupportUrl(@chrootSupportUrl)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootBugReportUrl(@chrootBugReportUrl)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootPrivacyPolicyUrl(@chrootPrivacyPolicyUrl)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootBuildId(@chrootBuildId)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootVariant(@chrootVariant)
-            writeSettingsFile
+            writeConfiguration
         end
 
         def setChrootVariantId(@chrootVariantId)
-            writeSettingsFile
+            writeConfiguration
         end
 
     end

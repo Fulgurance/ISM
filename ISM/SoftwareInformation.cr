@@ -72,6 +72,34 @@ module ISM
                     @allowCodependencies = Array(String).new)
     end
 
+    def self.loadConfiguration(path : String)
+        begin
+            from_json(File.read(path))
+        rescue error : JSON::ParseException
+            puts    "#{ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
+                    path +
+                    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText2 +
+                    error.line_number.to_s}".colorize(:yellow)
+            return
+        end
+    end
+
+    def loadConfiguration(path : String)
+        return self.class.loadConfiguration(path)
+    end
+
+    def writeInformationFile(path : String)
+        finalPath = path.chomp(path[path.rindex("/")..-1])
+
+        if !Dir.exists?(finalPath)
+            Dir.mkdir_p(finalPath)
+        end
+
+        file = File.open(path,"w")
+        to_json(file)
+        file.close
+    end
+
     def isValid : Bool
         return (@port != "" && @name != "" && @version != "") && File.exists?(filePath)
     end
@@ -89,103 +117,6 @@ module ISM
     def getEnabledPassNumber : Int32
         stringNumber = getEnabledPass
         return stringNumber == "" ? 0 : stringNumber.gsub("Pass","").to_i
-    end
-
-    def loadInformationFile(loadInformationFilePath : String)
-        begin
-            information = Information.from_json(File.read(loadInformationFilePath))
-        rescue error : JSON::ParseException
-            puts    "#{ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
-                    loadInformationFilePath +
-                    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText2 +
-                    error.line_number.to_s}".colorize(:yellow)
-            return
-        end
-
-        @port = information.port
-        @name = information.name
-        @version = information.version
-        @architectures = information.architectures
-        @description = information.description
-        @website = information.website
-        @installedFiles = information.installedFiles
-        @kernelDependencies = information.kernelDependencies
-        @uniqueDependencies = information.uniqueDependencies
-        @uniqueOptions = information.uniqueOptions
-        @selectedDependencies = information.selectedDependencies
-        @allowCodependencies = information.allowCodependencies
-
-        information.dependencies.each do |data|
-            dependency = ISM::SoftwareDependency.new
-            dependency.port = data.port
-            dependency.name = data.name
-            dependency.version = data.version
-            dependency.options = data.options
-            @dependencies << dependency
-        end
-
-        information.options.each do |data|
-            dependenciesArray = Array(ISM::SoftwareDependency).new
-            data.dependencies.each do |dependency|
-                temporary = ISM::SoftwareDependency.new
-                temporary.port = dependency.port
-                temporary.name = dependency.name
-                temporary.version = dependency.version
-                temporary.options = dependency.options
-                dependenciesArray << temporary
-            end
-
-            option = ISM::SoftwareOption.new
-            option.name = data.name
-            option.description = data.description
-            option.active = data.active
-            option.dependencies = dependenciesArray
-            option.kernelDependencies = data.kernelDependencies
-            @options << option
-        end
-    end
-
-    def writeInformationFile(writeInformationFilePath : String)
-        path = writeInformationFilePath.chomp(writeInformationFilePath[writeInformationFilePath.rindex("/")..-1])
-
-        if !Dir.exists?(path)
-            Dir.mkdir_p(path)
-        end
-
-        dependenciesArray = Array(Dependency).new
-        @dependencies.each do |data|
-            dependenciesArray << Dependency.new(data.port,data.name,data.version,data.options)
-        end
-
-        optionsArray = Array(Option).new
-        @options.each do |data|
-            optionsDependenciesArray = Array(Dependency).new
-            data.dependencies.each do |dependencyData|
-                dependency = Dependency.new(dependencyData.port,dependencyData.name,dependencyData.requiredVersion,dependencyData.options)
-                optionsDependenciesArray << dependency
-            end
-
-            optionsArray << Option.new(data.name,data.description,data.active,optionsDependenciesArray,data.kernelDependencies)
-        end
-
-        information = Information.new(  @port,
-                                        @name,
-                                        @version,
-                                        @architectures,
-                                        @description,
-                                        @website,
-                                        @installedFiles,
-                                        dependenciesArray,
-                                        @kernelDependencies,
-                                        optionsArray,
-                                        @uniqueDependencies,
-                                        @uniqueOptions,
-                                        @selectedDependencies,
-                                        @allowCodependencies)
-
-        file = File.open(writeInformationFilePath,"w")
-        information.to_json(file)
-        file.close
     end
 
     def hiddenName : String

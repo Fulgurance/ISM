@@ -17,38 +17,30 @@ module ISM
                     @blockers = Array(String).new)
     end
 
-    def loadInformationFile(loadInformationFilePath : String)
+    def self.loadConfiguration(path : String)
         begin
-            information = KernelOption.from_json(File.read(loadInformationFilePath))
+            from_json(File.read(path))
         rescue error : JSON::ParseException
             puts    "#{ISM::Default::KernelOption::FileLoadProcessSyntaxErrorText1 +
-                    loadInformationFilePath +
+                    path +
                     ISM::Default::KernelOption::FileLoadProcessSyntaxErrorText2 +
                     error.line_number.to_s}".colorize(:yellow)
             return
         end
-
-        @name = information.name
-        @tristate = information.tristate
-        @dependencies = information.dependencies
-        @singleChoiceDependencies = information.singleChoiceDependencies
-        @blockers = information.blockers
     end
 
-    def writeInformationFile(writeInformationFilePath : String)
-        path = writeInformationFilePath.chomp(writeInformationFilePath[writeInformationFilePath.rindex("/")..-1])
+    def loadConfiguration(path : String)
+        return self.loadConfiguration(path)
+    end
 
-        if !Dir.exists?(path)
-            Dir.mkdir_p(path)
+    def writeConfiguration(path : String)
+        finalPath = path.chomp(path[path.rindex("/")..-1])
+
+        if !Dir.exists?(finalPath)
+            Dir.mkdir_p(finalPath)
         end
 
-        information = KernelOption.new( @name,
-                                        @tristate,
-                                        @dependencies,
-                                        @singleChoiceDependencies,
-                                        @blockers)
-
-        file = File.open(writeInformationFilePath,"w")
+        file = File.open(path,"w")
         information.to_json(file)
         file.close
     end

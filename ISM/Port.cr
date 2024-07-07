@@ -27,6 +27,14 @@ module ISM
             FileUtils.rm_r(self.directoryPathPrefix+ARGV[2+Ism.debugLevel])
         end
 
+        def self.filePath(name : String) : String
+            return filePathPrefix+name+".json"
+        end
+
+        def self.directoryPath(name : String) : String
+            return directoryPathPrefix+name
+        end
+
         def filePath : String
             return self.class.filePathPrefix+@name+".json"
         end
@@ -35,18 +43,13 @@ module ISM
             return self.class.directoryPathPrefix+@name
         end
 
-        def loadPortFile
-            port = Port.from_json(File.read(filePath))
-      
-            @name = port.name
-            @url = port.url
+        def loadConfiguration
+            self.class.from_json(File.read(filePath))
         end
 
-        def writePortFile
-            port = Port.new(@name,@url)
-
+        def writeConfiguration
             file = File.open(filePath,"w")
-            port.to_json(file)
+            to_json(file)
             file.close
         end
 
@@ -66,7 +69,7 @@ module ISM
             result = process.wait
 
             if result.success?
-                writePortFile
+                writeConfiguration
             else
                 FileUtils.rm_r(directoryPath)
             end
