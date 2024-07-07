@@ -35,6 +35,10 @@ module ISM
             return directoryPathPrefix+name
         end
 
+        def self.loadConfiguration(path = filePath)
+            from_json(File.read(path))
+        end
+
         def filePath : String
             return self.class.filePathPrefix+@name+".json"
         end

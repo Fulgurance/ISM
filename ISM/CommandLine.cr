@@ -83,10 +83,7 @@ module ISM
                 availableKernel = ISM::AvailableKernel.new(kernelDirectory)
 
                 kernelOptionFiles.each do |kernelOptionFile|
-                    kernelOption = ISM::KernelOption.new
-                    kernelOption.loadInformationFile(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelDirectory+"/"+kernelOptionFile)
-
-                    availableKernel.options << kernelOption
+                    availableKernel.options << ISM::KernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelDirectory+"/"+kernelOptionFile)
                 end
 
                 @kernels << availableKernel
@@ -95,14 +92,12 @@ module ISM
         end
 
         def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
-            software = ISM::SoftwareInformation.new
-
-            software.loadInformationFile(   @settings.rootPath +
-                                            ISM::Default::Path::SoftwaresDirectory +
-                                            port + "/" +
-                                            name + "/" +
-                                            version + "/" +
-                                            ISM::Default::Filename::Information)
+            software = ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
+                                                                    ISM::Default::Path::SoftwaresDirectory +
+                                                                    port + "/" +
+                                                                    name + "/" +
+                                                                    version + "/" +
+                                                                    ISM::Default::Filename::Information)
 
             if File.exists?(@settings.rootPath +
                             ISM::Default::Path::SettingsSoftwaresDirectory +
@@ -111,13 +106,12 @@ module ISM
                             version + "/" +
                             ISM::Default::Filename::SoftwareSettings)
 
-                softwareSettings = ISM::SoftwareInformation.new
-                softwareSettings.loadInformationFile(   @settings.rootPath +
-                                                        ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                        port + "/" +
-                                                        name + "/" +
-                                                        version + "/" +
-                                                        ISM::Default::Filename::SoftwareSettings)
+                softwareSettings = ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
+                                                                                ISM::Default::Path::SettingsSoftwaresDirectory +
+                                                                                port + "/" +
+                                                                                name + "/" +
+                                                                                version + "/" +
+                                                                                ISM::Default::Filename::SoftwareSettings)
 
                 softwareSettings.options.each do |option|
 
@@ -179,9 +173,8 @@ module ISM
             portsFiles = Dir.children(@settings.rootPath+ISM::Default::Path::PortsDirectory)
 
             portsFiles.each do |portFile|
-                port = ISM::Port.new(portFile[0..-6])
-                port.loadPortFile
-                @ports << port
+                path = ISM::Port.filePath(portFile[0..-6])
+                @ports << ISM::Port.loadConfiguration(path)
             end
         end
 
@@ -193,14 +186,11 @@ module ISM
             mirrorsFiles = Dir.children(@settings.rootPath+ISM::Default::Path::MirrorsDirectory)
 
             if mirrorsFiles.size == 0
-                mirror = ISM::Mirror.new
-                mirror.loadMirrorFile
-                @mirrors << mirror
+                @mirrors << ISM::Mirror.loadConfiguration
             else
                 mirrorsFiles.each do |mirrorFile|
-                    mirror = ISM::Mirror.new(mirrorFile[0..-6])
-                    mirror.loadMirrorFile
-                    @mirrors << mirror
+                    path = ISM::Mirror.filePath(mirrorFile[0..-6])
+                    @mirrors << ISM::Mirror.loadConfiguration(path)
                 end
             end
         end
@@ -232,12 +222,12 @@ module ISM
             installedSoftware = ISM::SoftwareInformation.new
 
             begin
-                installedSoftware.loadInformationFile(  @settings.rootPath +
-                                                        ISM::Default::Path::InstalledSoftwaresDirectory +
-                                                        port + "/" +
-                                                        name + "/" +
-                                                        version + "/" +
-                                                        ISM::Default::Filename::Information)
+                installedSoftware.loadConfiguration(@settings.rootPath +
+                                                    ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                    port + "/" +
+                                                    name + "/" +
+                                                    version + "/" +
+                                                    ISM::Default::Filename::Information)
             rescue
             end
 
@@ -323,11 +313,11 @@ module ISM
             path = ISM::FavouriteGroup.filePath(favouriteGroupName)
 
             if File.exists?(path)
-
-            favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
-            favouriteGroup.loadConfiguration
-            favouriteGroup.softwares.delete(fullVersionName)
-            favouriteGroup.writeConfiguration
+                favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
+                favouriteGroup.loadConfiguration
+                favouriteGroup.softwares.delete(fullVersionName)
+                favouriteGroup.writeConfiguration
+            end
         end
 
         def removeInstalledSoftware(software : ISM::SoftwareInformation)
@@ -393,7 +383,7 @@ module ISM
             installedOne = ISM::SoftwareInformation.new
 
             if File.exists?(software.installedFilePath)
-                installedOne.loadInformationFile(software.installedFilePath)
+                installedOne.loadConfiguration(software.installedFilePath)
             end
 
             alreadyInstalled = installedOne.isValid
@@ -946,7 +936,7 @@ module ISM
                     realLineNumber = taskError.line-targetStartingLine
                     targetPath = line[line.index("/")..-1]
 
-                    software.loadInformationFile(targetPath)
+                    software.loadConfiguration(targetPath)
                     break
                 end
 

@@ -2,39 +2,47 @@ module ISM
 
     class CommandLinePortsSettings
 
-        record PortsSettings,
-            targetVersion : String do
-            include JSON::Serializable
-        end
+        include JSON::Serializable
 
         property targetVersion : String
 
         def initialize(@targetVersion = ISM::Default::CommandLinePortsSettings::TargetVersion)
         end
 
-        def filePath : String
+        def self.filePath : String
             return Ism.settings.rootPath+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath
         end
 
-        def loadPortsSettingsFile
-            if !File.exists?(filePath)
-                writePortsSettingsFile
-            end
-
-            information = PortsSettings.from_json(File.read(filePath))
-            @targetVersion = information.targetVersion
+        def self.generateConfiguration(path = filePath)
+            file = File.open(path,"w")
+            self.new.to_json
+            file.close
         end
 
-        def writePortsSettingsFile
-            portsSettings = PortsSettings.new(@targetVersion)
+        def self.loadConfiguration(path = filePath)
+            if !File.exists?(path)
+                generateConfiguration(path)
+            end
 
-            file = File.open(filePath,"w")
-            portsSettings.to_json(file)
+            from_json(File.read(path))
+        end
+
+        def loadConfiguration(path = self.class.filePath)
+            if !File.exists?(path)
+                writeConfiguration(path)
+            end
+
+            self.class.from_json(File.read(path))
+        end
+
+        def writeConfiguration(path = self.class.filePath)
+            file = File.open(path,"w")
+            to_json(file)
             file.close
         end
 
         def setTargetVersion(@targetVersion)
-            writePortsSettingsFile
+            writeConfiguration
         end
 
     end

@@ -80,7 +80,7 @@ module ISM
                     path +
                     ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText2 +
                     error.line_number.to_s}".colorize(:yellow)
-            return
+            return self.new
         end
     end
 

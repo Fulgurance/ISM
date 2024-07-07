@@ -25,7 +25,7 @@ module ISM
                     path +
                     ISM::Default::KernelOption::FileLoadProcessSyntaxErrorText2 +
                     error.line_number.to_s}".colorize(:yellow)
-            return
+            return self.new
         end
     end
 

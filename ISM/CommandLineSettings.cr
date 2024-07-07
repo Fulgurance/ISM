@@ -113,303 +113,270 @@ module ISM
                         @chrootVariantId = ISM::Default::CommandLineSettings::ChrootVariantId)
         end
 
-        def loadSettingsFile
-            if !File.exists?("/"+ISM::Default::CommandLineSettings::SettingsFilePath)
-                writeSettingsFile
-            end
-
-            information = Settings.from_json(File.read("/"+ISM::Default::CommandLineSettings::SettingsFilePath))
-
-            #Generic parameters
-            @secureMode = information.secureMode
-            @installByChroot = information.installByChroot
-            @rootPath = information.rootPath
-            @defaultMirror = information.defaultMirror
-
-            #Host related parameters
-            @systemTargetName = information.systemTargetName
-            @systemArchitecture = information.systemArchitecture
-            @systemTarget = information.systemTarget
-            @systemMakeOptions = information.systemMakeOptions
-            @systemBuildOptions = information.systemBuildOptions
-            @systemName = information.systemName
-            @systemFullName = information.systemFullName
-            @systemId = information.systemId
-            @systemRelease = information.systemRelease
-            @systemCodeName = information.systemCodeName
-            @systemDescription = information.systemDescription
-            @systemVersion = information.systemVersion
-            @systemVersionId = information.systemVersionId
-            @systemAnsiColor = information.systemAnsiColor
-            @systemCpeName = information.systemCpeName
-            @systemHomeUrl = information.systemHomeUrl
-            @systemSupportUrl = information.systemSupportUrl
-            @systemBugReportUrl = information.systemBugReportUrl
-            @systemPrivacyPolicyUrl = information.systemPrivacyPolicyUrl
-            @systemBuildId = information.systemBuildId
-            @systemVariant = information.systemVariant
-            @systemVariantId = information.systemVariantId
-
-            #Chroot related parameters
-            @chrootTargetName = information.chrootTargetName
-            @chrootArchitecture = information.chrootArchitecture
-            @chrootTarget = information.chrootTarget
-            @chrootMakeOptions = information.chrootMakeOptions
-            @chrootBuildOptions = information.chrootBuildOptions
-            @chrootName = information.chrootName
-            @chrootFullName = information.chrootFullName
-            @chrootId = information.chrootId
-            @chrootRelease = information.chrootRelease
-            @chrootCodeName = information.chrootCodeName
-            @chrootDescription = information.chrootDescription
-            @chrootVersion = information.chrootVersion
-            @chrootVersionId = information.chrootVersionId
-            @chrootAnsiColor = information.chrootAnsiColor
-            @chrootCpeName = information.chrootCpeName
-            @chrootHomeUrl = information.chrootHomeUrl
-            @chrootSupportUrl = information.chrootSupportUrl
-            @chrootBugReportUrl = information.chrootBugReportUrl
-            @chrootPrivacyPolicyUrl = information.chrootPrivacyPolicyUrl
-            @chrootBuildId = information.chrootBuildId
-            @chrootVariant = information.chrootVariant
-            @chrootVariantId = information.chrootVariantId
+        def self.filePath : String
+            return "/"+ISM::Default::CommandLineSettings::SettingsFilePath
         end
 
-        def writeSettings(  filePath : String,
-                            #Generic parameters
-                            secureMode : Bool,
-                            installByChroot : Bool,
-                            rootPath : String,
-                            defaultMirror : String,
+        def self.generateConfiguration(path = filePath)
+            file = File.open(path,"w")
+            self.new.to_json
+            file.close
+        end
 
-                            #Host related parameters
-                            systemTargetName : String,
-                            systemArchitecture : String,
-                            systemTarget : String,
-                            systemMakeOptions : String,
-                            systemBuildOptions : String,
-                            systemName : String,
-                            systemFullName : String,
-                            systemId : String,
-                            systemRelease : String,
-                            systemCodeName : String,
-                            systemDescription : String,
-                            systemVersion : String,
-                            systemVersionId : String,
-                            systemAnsiColor : String,
-                            systemCpeName : String,
-                            systemHomeUrl : String,
-                            systemSupportUrl : String,
-                            systemBugReportUrl : String,
-                            systemPrivacyPolicyUrl : String,
-                            systemBuildId : String,
-                            systemVariant : String,
-                            systemVariantId : String,
-
-                            #Chroot related parameters
-                            chrootTargetName : String,
-                            chrootArchitecture : String,
-                            chrootTarget : String,
-                            chrootMakeOptions : String,
-                            chrootBuildOptions : String,
-                            chrootName : String,
-                            chrootFullName : String,
-                            chrootId : String,
-                            chrootRelease : String,
-                            chrootCodeName : String,
-                            chrootDescription : String,
-                            chrootVersion : String,
-                            chrootVersionId : String,
-                            chrootAnsiColor : String,
-                            chrootCpeName : String,
-                            chrootHomeUrl : String,
-                            chrootSupportUrl : String,
-                            chrootBugReportUrl : String,
-                            chrootPrivacyPolicyUrl : String,
-                            chrootBuildId : String,
-                            chrootVariant : String,
-                            chrootVariantId : String)
-
-            path = filePath.chomp(filePath[filePath.rindex("/")..-1])
-
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
+        def self.loadConfiguration(path = filePath)
+            if !File.exists?(path)
+                generateConfiguration(path)
             end
 
-            settings = Settings.new(#Generic parameters
-                                    secureMode,
-                                    installByChroot,
-                                    rootPath,
-                                    defaultMirror,
+            from_json(File.read(path))
+        end
+
+        def self.writeConfiguration(#File path
+                                    path : String,
+
+                                    #Generic parameters
+                                    secureMode : Bool,
+                                    installByChroot : Bool,
+                                    rootPath : String,
+                                    defaultMirror : String,
 
                                     #Host related parameters
-                                    systemTargetName,
-                                    systemArchitecture,
-                                    systemTarget,
-                                    systemMakeOptions,
-                                    systemBuildOptions,
-                                    systemName,
-                                    systemFullName,
-                                    systemId,
-                                    systemRelease,
-                                    systemCodeName,
-                                    systemDescription,
-                                    systemVersion,
-                                    systemVersionId,
-                                    systemAnsiColor,
-                                    systemCpeName,
-                                    systemHomeUrl,
-                                    systemSupportUrl,
-                                    systemBugReportUrl,
-                                    systemPrivacyPolicyUrl,
-                                    systemBuildId,
-                                    systemVariant,
-                                    systemVariantId,
+                                    systemTargetName : String,
+                                    systemArchitecture : String,
+                                    systemTarget : String,
+                                    systemMakeOptions : String,
+                                    systemBuildOptions : String,
+                                    systemName : String,
+                                    systemFullName : String,
+                                    systemId : String,
+                                    systemRelease : String,
+                                    systemCodeName : String,
+                                    systemDescription : String,
+                                    systemVersion : String,
+                                    systemVersionId : String,
+                                    systemAnsiColor : String,
+                                    systemCpeName : String,
+                                    systemHomeUrl : String,
+                                    systemSupportUrl : String,
+                                    systemBugReportUrl : String,
+                                    systemPrivacyPolicyUrl : String,
+                                    systemBuildId : String,
+                                    systemVariant : String,
+                                    systemVariantId : String,
 
                                     #Chroot related parameters
-                                    chrootTargetName,
-                                    chrootArchitecture,
-                                    chrootTarget,
-                                    chrootMakeOptions,
-                                    chrootBuildOptions,
-                                    chrootName,
-                                    chrootFullName,
-                                    chrootId,
-                                    chrootRelease,
-                                    chrootCodeName,
-                                    chrootDescription,
-                                    chrootVersion,
-                                    chrootVersionId,
-                                    chrootAnsiColor,
-                                    chrootCpeName,
-                                    chrootHomeUrl,
-                                    chrootSupportUrl,
-                                    chrootBugReportUrl,
-                                    chrootPrivacyPolicyUrl,
-                                    chrootBuildId,
-                                    chrootVariant,
-                                    chrootVariantId)
+                                    chrootTargetName : String,
+                                    chrootArchitecture : String,
+                                    chrootTarget : String,
+                                    chrootMakeOptions : String,
+                                    chrootBuildOptions : String,
+                                    chrootName : String,
+                                    chrootFullName : String,
+                                    chrootId : String,
+                                    chrootRelease : String,
+                                    chrootCodeName : String,
+                                    chrootDescription : String,
+                                    chrootVersion : String,
+                                    chrootVersionId : String,
+                                    chrootAnsiColor : String,
+                                    chrootCpeName : String,
+                                    chrootHomeUrl : String,
+                                    chrootSupportUrl : String,
+                                    chrootBugReportUrl : String,
+                                    chrootPrivacyPolicyUrl : String,
+                                    chrootBuildId : String,
+                                    chrootVariant : String,
+                                    chrootVariantId : String)
+
+            finalPath = path.chomp(path[path.rindex("/")..-1])
+
+            if !Dir.exists?(finalPath)
+                Dir.mkdir_p(finalPath)
+            end
+
+            settings = {#Generic parameters
+                        "secureMode" => secureMode,
+                        "installByChroot" => installByChroot,
+                        "rootPath" => rootPath,
+                        "defaultMirror" => defaultMirror,
+
+                        #Host related parameters
+                        "systemTargetName" => systemTargetName,
+                        "systemArchitecture" => systemArchitecture,
+                        "systemTarget" => systemTarget,
+                        "systemMakeOptions" => systemMakeOptions,
+                        "systemBuildOptions" => systemBuildOptions,
+                        "systemName" => systemName,
+                        "systemFullName" => systemFullName,
+                        "systemId" => systemId,
+                        "systemRelease" => systemRelease,
+                        "systemCodeName" => systemCodeName,
+                        "systemDescription" => systemDescription,
+                        "systemVersion" => systemVersion,
+                        "systemVersionId" => systemVersionId,
+                        "systemAnsiColor" => systemAnsiColor,
+                        "systemCpeName" => systemCpeName,
+                        "systemHomeUrl" => systemHomeUrl,
+                        "systemSupportUrl" => systemSupportUrl,
+                        "systemBugReportUrl" => systemBugReportUrl,
+                        "systemPrivacyPolicyUrl" => systemPrivacyPolicyUrl,
+                        "systemBuildId" => systemBuildId,
+                        "systemVariant" => systemVariant,
+                        "systemVariantId" => systemVariantId,
+
+                        #Chroot related parameters
+                        "chrootTargetName" => chrootTargetName,
+                        "chrootArchitecture" => chrootArchitecture,
+                        "chrootTarget" => chrootTarget,
+                        "chrootMakeOptions" => chrootMakeOptions,
+                        "chrootBuildOptions" => chrootBuildOptions,
+                        "chrootName" => chrootName,
+                        "chrootFullName" => chrootFullName,
+                        "chrootId" => chrootId,
+                        "chrootRelease" => chrootRelease,
+                        "chrootCodeName" => chrootCodeName,
+                        "chrootDescription" => chrootDescription,
+                        "chrootVersion" => chrootVersion,
+                        "chrootVersionId" => chrootVersionId,
+                        "chrootAnsiColor" => chrootAnsiColor,
+                        "chrootCpeName" => chrootCpeName,
+                        "chrootHomeUrl" => chrootHomeUrl,
+                        "chrootSupportUrl" => chrootSupportUrl,
+                        "chrootBugReportUrl" => chrootBugReportUrl,
+                        "chrootPrivacyPolicyUrl" => chrootPrivacyPolicyUrl,
+                        "chrootBuildId" => chrootBuildId,
+                        "chrootVariant" => chrootVariant,
+                        "chrootVariantId" => chrootVariantId}
 
 
-            file = File.open(filePath,"w")
+            file = File.open(path,"w")
             settings.to_json(file)
             file.close
         end
 
-        def writeChrootSettingsFile
-            writeSettings(  #File path
-                            @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
-                            #Generic parameters
-                            ISM::Default::CommandLineSettings::SecureMode,
-                            ISM::Default::CommandLineSettings::InstallByChroot,
-                            ISM::Default::CommandLineSettings::RootPath,
-                            @defaultMirror,
+        def loadConfiguration(path = self.class.filePath)
+            if !File.exists?(path)
+                writeSystemConfiguration
+            end
 
-                            #Host related parameters
-                            @chrootTargetName,
-                            @chrootArchitecture,
-                            @chrootTarget,
-                            @chrootMakeOptions,
-                            @chrootBuildOptions,
-                            @chrootName,
-                            @chrootFullName,
-                            @chrootId,
-                            @chrootRelease,
-                            @chrootCodeName,
-                            @chrootDescription,
-                            @chrootVersion,
-                            @chrootVersionId,
-                            @chrootAnsiColor,
-                            @chrootCpeName,
-                            @chrootHomeUrl,
-                            @chrootSupportUrl,
-                            @chrootBugReportUrl,
-                            @chrootPrivacyPolicyUrl,
-                            @chrootBuildId,
-                            @chrootVariant,
-                            @chrootVariantId,
-
-                            #Chroot related parameters
-                            ISM::Default::CommandLineSettings::SystemTargetName ,
-                            ISM::Default::CommandLineSettings::SystemArchitecture,
-                            ISM::Default::CommandLineSettings::SystemTarget,
-                            ISM::Default::CommandLineSettings::SystemMakeOptions,
-                            ISM::Default::CommandLineSettings::SystemBuildOptions,
-                            ISM::Default::CommandLineSettings::SystemName,
-                            ISM::Default::CommandLineSettings::SystemFullName,
-                            ISM::Default::CommandLineSettings::SystemId,
-                            ISM::Default::CommandLineSettings::SystemRelease,
-                            ISM::Default::CommandLineSettings::SystemCodeName,
-                            ISM::Default::CommandLineSettings::SystemDescription,
-                            ISM::Default::CommandLineSettings::SystemVersion,
-                            ISM::Default::CommandLineSettings::SystemVersionId,
-                            ISM::Default::CommandLineSettings::SystemAnsiColor,
-                            ISM::Default::CommandLineSettings::SystemCpeName,
-                            ISM::Default::CommandLineSettings::SystemHomeUrl,
-                            ISM::Default::CommandLineSettings::SystemSupportUrl,
-                            ISM::Default::CommandLineSettings::SystemBugReportUrl,
-                            ISM::Default::CommandLineSettings::SystemPrivacyPolicyUrl,
-                            ISM::Default::CommandLineSettings::SystemBuildId,
-                            ISM::Default::CommandLineSettings::SystemVariant,
-                            ISM::Default::CommandLineSettings::SystemVariantId)
+            self.class.from_json(File.read(path))
         end
 
-        def writeSettingsFile
-            writeSettings(  #File path
-                            "/"+ISM::Default::CommandLineSettings::SettingsFilePath,
-                            #Generic parameters
-                            @secureMode,
-                            @installByChroot,
-                            @rootPath,
-                            @defaultMirror,
+        def writeChrootConfiguration
+            self.class.writeConfiguration(  #File path
+                                            @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
+                                            #Generic parameters
+                                            ISM::Default::CommandLineSettings::SecureMode,
+                                            ISM::Default::CommandLineSettings::InstallByChroot,
+                                            ISM::Default::CommandLineSettings::RootPath,
+                                            @defaultMirror,
 
-                            #Host related parameters
-                            @systemTargetName,
-                            @systemArchitecture,
-                            @systemTarget,
-                            @systemMakeOptions,
-                            @systemBuildOptions,
-                            @systemName,
-                            @systemFullName,
-                            @systemId,
-                            @systemRelease,
-                            @systemCodeName,
-                            @systemDescription,
-                            @systemVersion,
-                            @systemVersionId,
-                            @systemAnsiColor,
-                            @systemCpeName,
-                            @systemHomeUrl,
-                            @systemSupportUrl,
-                            @systemBugReportUrl,
-                            @systemPrivacyPolicyUrl,
-                            @systemBuildId,
-                            @systemVariant,
-                            @systemVariantId,
+                                            #Host related parameters
+                                            @chrootTargetName,
+                                            @chrootArchitecture,
+                                            @chrootTarget,
+                                            @chrootMakeOptions,
+                                            @chrootBuildOptions,
+                                            @chrootName,
+                                            @chrootFullName,
+                                            @chrootId,
+                                            @chrootRelease,
+                                            @chrootCodeName,
+                                            @chrootDescription,
+                                            @chrootVersion,
+                                            @chrootVersionId,
+                                            @chrootAnsiColor,
+                                            @chrootCpeName,
+                                            @chrootHomeUrl,
+                                            @chrootSupportUrl,
+                                            @chrootBugReportUrl,
+                                            @chrootPrivacyPolicyUrl,
+                                            @chrootBuildId,
+                                            @chrootVariant,
+                                            @chrootVariantId,
 
-                            #Chroot related parameters
-                            @chrootTargetName,
-                            @chrootArchitecture,
-                            @chrootTarget,
-                            @chrootMakeOptions,
-                            @chrootBuildOptions,
-                            @chrootName,
-                            @chrootFullName,
-                            @chrootId,
-                            @chrootRelease,
-                            @chrootCodeName,
-                            @chrootDescription,
-                            @chrootVersion,
-                            @chrootVersionId,
-                            @chrootAnsiColor,
-                            @chrootCpeName,
-                            @chrootHomeUrl,
-                            @chrootSupportUrl,
-                            @chrootBugReportUrl,
-                            @chrootPrivacyPolicyUrl,
-                            @chrootBuildId,
-                            @chrootVariant,
-                            @chrootVariantId)
+                                            #Chroot related parameters
+                                            ISM::Default::CommandLineSettings::SystemTargetName ,
+                                            ISM::Default::CommandLineSettings::SystemArchitecture,
+                                            ISM::Default::CommandLineSettings::SystemTarget,
+                                            ISM::Default::CommandLineSettings::SystemMakeOptions,
+                                            ISM::Default::CommandLineSettings::SystemBuildOptions,
+                                            ISM::Default::CommandLineSettings::SystemName,
+                                            ISM::Default::CommandLineSettings::SystemFullName,
+                                            ISM::Default::CommandLineSettings::SystemId,
+                                            ISM::Default::CommandLineSettings::SystemRelease,
+                                            ISM::Default::CommandLineSettings::SystemCodeName,
+                                            ISM::Default::CommandLineSettings::SystemDescription,
+                                            ISM::Default::CommandLineSettings::SystemVersion,
+                                            ISM::Default::CommandLineSettings::SystemVersionId,
+                                            ISM::Default::CommandLineSettings::SystemAnsiColor,
+                                            ISM::Default::CommandLineSettings::SystemCpeName,
+                                            ISM::Default::CommandLineSettings::SystemHomeUrl,
+                                            ISM::Default::CommandLineSettings::SystemSupportUrl,
+                                            ISM::Default::CommandLineSettings::SystemBugReportUrl,
+                                            ISM::Default::CommandLineSettings::SystemPrivacyPolicyUrl,
+                                            ISM::Default::CommandLineSettings::SystemBuildId,
+                                            ISM::Default::CommandLineSettings::SystemVariant,
+                                            ISM::Default::CommandLineSettings::SystemVariantId)
+        end
+
+        def writeSystemConfiguration
+            self.class.writeConfiguration(  #File path
+                                            self.class.filePath,
+
+                                            #Generic parameters
+                                            @secureMode,
+                                            @installByChroot,
+                                            @rootPath,
+                                            @defaultMirror,
+
+                                            #Host related parameters
+                                            @systemTargetName,
+                                            @systemArchitecture,
+                                            @systemTarget,
+                                            @systemMakeOptions,
+                                            @systemBuildOptions,
+                                            @systemName,
+                                            @systemFullName,
+                                            @systemId,
+                                            @systemRelease,
+                                            @systemCodeName,
+                                            @systemDescription,
+                                            @systemVersion,
+                                            @systemVersionId,
+                                            @systemAnsiColor,
+                                            @systemCpeName,
+                                            @systemHomeUrl,
+                                            @systemSupportUrl,
+                                            @systemBugReportUrl,
+                                            @systemPrivacyPolicyUrl,
+                                            @systemBuildId,
+                                            @systemVariant,
+                                            @systemVariantId,
+
+                                            #Chroot related parameters
+                                            @chrootTargetName,
+                                            @chrootArchitecture,
+                                            @chrootTarget,
+                                            @chrootMakeOptions,
+                                            @chrootBuildOptions,
+                                            @chrootName,
+                                            @chrootFullName,
+                                            @chrootId,
+                                            @chrootRelease,
+                                            @chrootCodeName,
+                                            @chrootDescription,
+                                            @chrootVersion,
+                                            @chrootVersionId,
+                                            @chrootAnsiColor,
+                                            @chrootCpeName,
+                                            @chrootHomeUrl,
+                                            @chrootSupportUrl,
+                                            @chrootBugReportUrl,
+                                            @chrootPrivacyPolicyUrl,
+                                            @chrootBuildId,
+                                            @chrootVariant,
+                                            @chrootVariantId)
 
             if @rootPath != "/"
                 writeChrootConfiguration
@@ -611,42 +578,42 @@ module ISM
 
         #   Generic
         def setSecureMode(@secureMode)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setInstallByChroot(@installByChroot)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setRootPath(@rootPath)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setDefaultMirror(@defaultMirror)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         #   Host
         def setSystemTargetName(@systemTargetName)
-            writeConfiguration
+            writeSystemConfiguration
             setSystemTarget
         end
 
         def setSystemArchitecture(@systemArchitecture)
-            writeConfiguration
+            writeSystemConfiguration
             setSystemTarget
         end
 
         def setSystemTarget
             @systemTarget = @systemArchitecture + "-" + @systemTargetName + "-" + "linux-gnu"
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemMakeOptions(@systemMakeOptions)
             match,invalidValue = Ism.inputMatchWithFilter(@systemMakeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
 
             if match
-                writeConfiguration
+                writeSystemConfiguration
             else
                 puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
@@ -655,97 +622,97 @@ module ISM
         end
 
         def setSystemBuildOptions(@systemBuildOptions)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemName(@systemName)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemFullName(@systemFullName)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemId(@systemId)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemRelease(@systemRelease)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemCodeName(@systemCodeName)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemDescription(@systemDescription)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemVersion(@systemVersion)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemVersionId(@systemVersionId)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemAnsiColor(@systemAnsiColor)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemCpeName(@systemCpeName)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemHomeUrl(@systemHomeUrl)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemSupportUrl(@systemSupportUrl)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemBugReportUrl(@systemBugReportUrl)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemPrivacyPolicyUrl(@systemPrivacyPolicyUrl)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemBuildId(@systemBuildId)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemVariant(@systemVariant)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setSystemVariantId(@systemVariantId)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         #   Chroot
         def setChrootTargetName(@chrootTargetName)
-            writeConfiguration
+            writeSystemConfiguration
             setChrootTarget
         end
 
         def setChrootArchitecture(@chrootArchitecture)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootTarget
             @chrootTarget = @chrootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootMakeOptions(@chrootMakeOptions)
             match,invalidValue = Ism.inputMatchWithFilter(@chrootMakeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
 
             if match
-                writeConfiguration
+                writeSystemConfiguration
             else
                 puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
@@ -754,76 +721,76 @@ module ISM
         end
 
         def setChrootBuildOptions(@chrootBuildOptions)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootName(@chrootName)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
 
         def setChrootFullName(@chrootFullName)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootId(@chrootId)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootRelease(@chrootRelease)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootCodeName(@chrootCodeName)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootDescription(@chrootDescription)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootVersion(@chrootVersion)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootVersionId(@chrootVersionId)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootAnsiColor(@chrootAnsiColor)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootCpeName(@chrootCpeName)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootHomeUrl(@chrootHomeUrl)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootSupportUrl(@chrootSupportUrl)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootBugReportUrl(@chrootBugReportUrl)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootPrivacyPolicyUrl(@chrootPrivacyPolicyUrl)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootBuildId(@chrootBuildId)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootVariant(@chrootVariant)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
         def setChrootVariantId(@chrootVariantId)
-            writeConfiguration
+            writeSystemConfiguration
         end
 
     end
