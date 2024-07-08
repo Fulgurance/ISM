@@ -38,11 +38,11 @@ module ISM
         end
 
         def sourcesLink : String
-            return Ism.mirrorsSettings.sourcesLink(@defaultMirror)
+            return ISM::Mirror.sourcesLink(@defaultMirror)
         end
 
         def patchesLink : String
-            return Ism.mirrorsSettings.patchesLink(@defaultMirror)
+            return ISM::Mirror.patchesLink(@defaultMirror)
         end
 
     end
