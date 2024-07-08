@@ -219,12 +219,16 @@ module ISM
         end
 
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
-            return ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
-                                                                ISM::Default::Path::InstalledSoftwaresDirectory +
-                                                                port + "/" +
-                                                                name + "/" +
-                                                                version + "/" +
-                                                                ISM::Default::Filename::Information)
+            begin
+                return ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
+                                                                    ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                                    port + "/" +
+                                                                    name + "/" +
+                                                                    version + "/" +
+                                                                    ISM::Default::Filename::Information)
+            rescue
+                return ISM::SoftwareInformation.new
+            end
         end
 
         def loadInstalledSoftwareDatabase
