@@ -28,7 +28,7 @@ module ISM
                                 dependency = ARGV[3+Ism.debugLevel].downcase
 
                                 if matchingSoftware.selectUniqueDependency(dependency)
-                                    matchingSoftware.writeInformationFile(matchingSoftware.settingsFilePath)
+                                    matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
                                     Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
                                                                 dependency +
                                                                 ISM::Default::Option::SoftwareSelectDependency::SetText2 +

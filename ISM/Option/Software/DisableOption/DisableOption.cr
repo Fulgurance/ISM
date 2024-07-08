@@ -36,7 +36,7 @@ module ISM
                                 end
 
                                 if match
-                                    matchingSoftware.writeInformationFile(matchingSoftware.settingsFilePath)
+                                    matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
                                     Ism.printProcessNotification(   ISM::Default::Option::SoftwareDisableOption::SetText1 +
                                                                 matchingOption.name +
                                                                 ISM::Default::Option::SoftwareDisableOption::SetText2 +
