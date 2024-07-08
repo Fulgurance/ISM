@@ -258,7 +258,7 @@ module ISM
         end
 
         def selectedKernel : ISM::SoftwareInformation
-            return ISM::SoftwareInformation.loadInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+            return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
         end
 
         def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))

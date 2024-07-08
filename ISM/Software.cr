@@ -8,8 +8,7 @@ module ISM
         property buildDirectoryNames : Hash(String,String)
 
         def initialize(informationPath : String)
-            @information = ISM::SoftwareInformation.new
-            @information.loadInformationFile(informationPath)
+            @information = ISM::SoftwareInformation.loadConfiguration(informationPath)
             @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
             @buildDirectory = false
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
@@ -57,8 +56,7 @@ module ISM
         end
 
         def recordSelectedKernel
-            settingInformation = ISM::SoftwareInformation.new
-            settingInformation.loadInformationFile(@information.settingsFilePath)
+            settingInformation = ISM::SoftwareInformation.loadConfiguration(@information.settingsFilePath)
 
             settingInformation.uniqueDependencies.each do |uniqueDependency|
                 uniqueDependency.each do |entry|
