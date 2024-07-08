@@ -49,7 +49,7 @@ module ISM
         end
     end
 
-    def writeInformationFile(path : String)
+    def writeConfiguration(path : String)
         finalPath = path.chomp(path[path.rindex("/")..-1])
 
         if !Dir.exists?(finalPath)
