@@ -39,7 +39,7 @@ module ISM
 
     def self.loadConfiguration(path : String)
         begin
-            from_json(File.read(path))
+            return from_json(File.read(path))
         rescue error : JSON::ParseException
             puts    "#{ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
                     path +
