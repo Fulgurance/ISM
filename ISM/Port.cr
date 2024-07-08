@@ -47,10 +47,6 @@ module ISM
             return self.class.directoryPathPrefix+@name
         end
 
-        # def loadConfiguration
-        #     self = self.class.from_json(File.read(filePath))
-        # end
-
         def writeConfiguration
             file = File.open(filePath,"w")
             to_json(file)

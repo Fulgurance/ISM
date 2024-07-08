@@ -31,13 +31,21 @@ module ISM
             return from_json(File.read(path))
         end
 
-        # def loadConfiguration(path = self.class.filePath)
-        #     if !File.exists?(path)
-        #         writeConfiguration(path)
-        #     end
-        #
-        #     self = self.class.from_json(File.read(path))
-        # end
+        def self.sourcesLink(codeName : String) : String
+            begin
+                return from_json(File.read(filePath(codeName))).sourcesLink
+            rescue
+                return String.new
+            end
+        end
+
+        def self.patchesLink(codeName : String) : String
+            begin
+                return from_json(File.read(filePath(codeName))).patchesLink
+            rescue
+                return String.new
+            end
+        end
 
         def writeConfiguration(path = self.class.filePath)
             file = File.open(path,"w")

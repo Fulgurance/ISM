@@ -29,10 +29,6 @@ module ISM
         end
     end
 
-    # def loadConfiguration(path : String)
-    #     self = self.class.loadConfiguration(path)
-    # end
-
     def writeConfiguration(path : String)
         finalPath = path.chomp(path[path.rindex("/")..-1])
 

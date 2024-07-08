@@ -27,14 +27,6 @@ module ISM
             return from_json(File.read(path))
         end
 
-        # def loadConfiguration(path = self.class.filePath)
-        #     if !File.exists?(path)
-        #         writeConfiguration(path)
-        #     end
-        #
-        #     self = self.class.from_json(File.read(path))
-        # end
-
         def writeConfiguration(path = self.class.filePath)
             file = File.open(path,"w")
             to_json(file)
