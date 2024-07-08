@@ -288,14 +288,13 @@ module ISM
         def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
             softwareInformation.installedFiles = installedFiles
 
-            softwareInformation.writeInformationFile(softwareInformation.installedFilePath)
+            softwareInformation.writeConfiguration(softwareInformation.installedFilePath)
         end
 
         def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
             path = ISM::FavouriteGroup.filePath(favouriteGroupName)
 
             favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
-            favouriteGroup.loadConfiguration
             favouriteGroup.softwares = favouriteGroup.softwares | [fullVersionName]
             favouriteGroup.writeConfiguration
         end
@@ -305,7 +304,6 @@ module ISM
 
             if File.exists?(path)
                 favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
-                favouriteGroup.loadConfiguration
                 favouriteGroup.softwares.delete(fullVersionName)
                 favouriteGroup.writeConfiguration
             end
@@ -374,7 +372,7 @@ module ISM
             installedOne = ISM::SoftwareInformation.new
 
             if File.exists?(software.installedFilePath)
-                installedOne.loadConfiguration(software.installedFilePath)
+                installedOne = ISM::SoftwareInformation.loadConfiguration(software.installedFilePath)
             end
 
             alreadyInstalled = installedOne.isValid
@@ -927,7 +925,7 @@ module ISM
                     realLineNumber = taskError.line-targetStartingLine
                     targetPath = line[line.index("/")..-1]
 
-                    software.loadConfiguration(targetPath)
+                    software = ISM::SoftwareInformation.loadConfiguration(targetPath)
                     break
                 end
 
