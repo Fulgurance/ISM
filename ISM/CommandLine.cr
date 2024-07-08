@@ -219,19 +219,12 @@ module ISM
         end
 
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
-            installedSoftware = ISM::SoftwareInformation.new
-
-            begin
-                installedSoftware.loadConfiguration(@settings.rootPath +
-                                                    ISM::Default::Path::InstalledSoftwaresDirectory +
-                                                    port + "/" +
-                                                    name + "/" +
-                                                    version + "/" +
-                                                    ISM::Default::Filename::Information)
-            rescue
-            end
-
-            return installedSoftware
+            return ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
+                                                                ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                                port + "/" +
+                                                                name + "/" +
+                                                                version + "/" +
+                                                                ISM::Default::Filename::Information)
         end
 
         def loadInstalledSoftwareDatabase
@@ -261,9 +254,7 @@ module ISM
         end
 
         def selectedKernel : ISM::SoftwareInformation
-            information = ISM::SoftwareInformation.new
-            information.loadInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
-            return information
+            return ISM::SoftwareInformation.loadInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
         end
 
         def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
