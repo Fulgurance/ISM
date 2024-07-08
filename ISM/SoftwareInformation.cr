@@ -3,41 +3,6 @@ module ISM
   class SoftwareInformation
 
     def_clone
-    
-    record Option,
-        name : String,
-        description : String,
-        active : Bool,
-        dependencies : Array(Dependency),
-        kernelDependencies : Array(String) do
-        include JSON::Serializable
-    end
-
-    record Dependency,
-        port : String,
-        name : String,
-        version : String,
-        options : Array(String) do
-        include JSON::Serializable
-    end
-
-    record Information,
-        port : String,
-        name : String,
-        version : String,
-        architectures : Array(String),
-        description : String,
-        website : String,
-        installedFiles : Array(String),
-        dependencies : Array(Dependency),
-        kernelDependencies : Array(String),
-        options : Array(Option),
-        uniqueDependencies : Array(Array(String)),
-        uniqueOptions : Array(Array(String)),
-        selectedDependencies : Array(String),
-        allowCodependencies : Array(String) do
-        include JSON::Serializable
-    end
 
     include JSON::Serializable
 
