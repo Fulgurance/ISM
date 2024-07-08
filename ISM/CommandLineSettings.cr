@@ -128,7 +128,7 @@ module ISM
                 generateConfiguration(path)
             end
 
-            from_json(File.read(path))
+            return from_json(File.read(path))
         end
 
         def self.writeConfiguration(#File path
@@ -254,13 +254,13 @@ module ISM
             file.close
         end
 
-        def loadConfiguration(path = self.class.filePath)
-            if !File.exists?(path)
-                writeSystemConfiguration
-            end
-
-            self.class.from_json(File.read(path))
-        end
+        # def loadConfiguration(path = self.class.filePath)
+        #     if !File.exists?(path)
+        #         writeSystemConfiguration
+        #     end
+        #
+        #     self = self.class.from_json(File.read(path))
+        # end
 
         def writeChrootConfiguration
             self.class.writeConfiguration(  #File path

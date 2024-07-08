@@ -36,7 +36,7 @@ module ISM
         end
 
         def self.loadConfiguration(path = filePath)
-            from_json(File.read(path))
+            return from_json(File.read(path))
         end
 
         def filePath : String
@@ -47,9 +47,9 @@ module ISM
             return self.class.directoryPathPrefix+@name
         end
 
-        def loadConfiguration
-            self.class.from_json(File.read(filePath))
-        end
+        # def loadConfiguration
+        #     self = self.class.from_json(File.read(filePath))
+        # end
 
         def writeConfiguration
             file = File.open(filePath,"w")

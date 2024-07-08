@@ -49,9 +49,9 @@ module ISM
         end
     end
 
-    def loadConfiguration(path : String)
-        return self.class.loadConfiguration(path)
-    end
+    # def loadConfiguration(path : String)
+    #     self = self.class.from_json(File.read(path))
+    # end
 
     def writeInformationFile(path : String)
         finalPath = path.chomp(path[path.rindex("/")..-1])

@@ -19,7 +19,7 @@ module ISM
 
     def self.loadConfiguration(path : String)
         begin
-            from_json(File.read(path))
+            return from_json(File.read(path))
         rescue error : JSON::ParseException
             puts    "#{ISM::Default::KernelOption::FileLoadProcessSyntaxErrorText1 +
                     path +
@@ -29,9 +29,9 @@ module ISM
         end
     end
 
-    def loadConfiguration(path : String)
-        return self.loadConfiguration(path)
-    end
+    # def loadConfiguration(path : String)
+    #     self = self.class.loadConfiguration(path)
+    # end
 
     def writeConfiguration(path : String)
         finalPath = path.chomp(path[path.rindex("/")..-1])

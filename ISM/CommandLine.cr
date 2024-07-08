@@ -213,9 +213,9 @@ module ISM
         end
 
         def loadSettingsFiles
-            @settings.loadConfiguration
-            @portsSettings.loadConfiguration
-            @mirrorsSettings.loadConfiguration
+            @settings = ISM::CommandLineSettings.loadConfiguration
+            @portsSettings = ISM::CommandLinePortsSettings.loadConfiguration
+            @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
         end
 
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
