@@ -119,7 +119,7 @@ module ISM
 
         def self.generateConfiguration(path = filePath)
             file = File.open(path,"w")
-            self.new.to_json
+            self.new.to_json(file)
             file.close
         end
 
