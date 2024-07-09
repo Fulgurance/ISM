@@ -1,5 +1,5 @@
 ![Static Badge](https://img.shields.io/badge/License-GPL_3.0-blue)
-![example event parameter](https://github.com/fulgurance/ism/actions/workflows/crystal.yml/badge.svg?branch=master?event=push)
+![Workflow](https://github.com/fulgurance/ism/actions/workflows/crystal.yml/badge.svg?branch=master?event=push)
 
 # ISM
 
