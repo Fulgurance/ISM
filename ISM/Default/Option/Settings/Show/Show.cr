@@ -20,7 +20,7 @@ module ISM
                 DefaultMirrorText = "Default mirror"
 
                 #Host titles
-                SystemTargetNameText = "System name"
+                SystemTargetNameText = "System target name"
                 SystemArchitectureText = "System architecture"
                 SystemTargetText = "System target"
                 SystemMakeOptionsText = "System make options"
@@ -44,7 +44,7 @@ module ISM
                 SystemVariantIdText = "System variant ID"
 
                 #Chroot title
-                ChrootTargetNameText = "Chroot name"
+                ChrootTargetNameText = "Chroot target name"
                 ChrootArchitectureText = "Chroot architecture"
                 ChrootTargetText = "Chroot target"
                 ChrootMakeOptionsText = "Chroot make options"
