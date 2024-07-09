@@ -1,5 +1,5 @@
 ![Static Badge](https://img.shields.io/badge/License-GPL_3.0-blue)
-![Workflow Status](https://github.com/fulgurance/ism/.github/workflows/crystal.yml)
+![Workflow Status](https://github.com/Fulgurance/ISM/tree/master/.github/workflows/crystal.yml)
 
 # ISM
 
