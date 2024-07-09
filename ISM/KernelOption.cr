@@ -5,12 +5,14 @@ module ISM
     include JSON::Serializable
 
     property name : String
+    property description : String
     property tristate : Bool
     property dependencies : Array(String)
     property singleChoiceDependencies : Array(Array(String))
     property blockers : Array(String)
 
     def initialize( @name = String.new,
+                    @description = String.new,
                     @tristate = false,
                     @dependencies = Array(String).new,
                     @singleChoiceDependencies = Array(Array(String)).new,

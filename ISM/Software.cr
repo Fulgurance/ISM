@@ -1410,6 +1410,7 @@ module ISM
             lastMenuConfigIndex =  0
             lastIfContent = String.new
             lastMenuConfigContent = String.new
+            underHelpSection = false
 
             kconfigContent.each_with_index do |line, index|
 
@@ -1434,45 +1435,57 @@ module ISM
                     kernelOption = ISM::KernelOption.new
                 end
 
-                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
-                    lastMenuConfigIndex = index
-                    lastMenuConfigContent = line.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
-                    kernelOption.name = line.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
-                end
+                if !underHelpSection
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:help])
+                        underHelpSection = true
+                    end
 
-                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
-                    kernelOption.name = line.gsub(ISM::Default::Software::KconfigKeywords[:config],"")
-                end
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
+                        lastMenuConfigIndex = index
+                        lastMenuConfigContent = line.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
+                        kernelOption.name = line.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
+                    end
 
-                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
-                    kernelOption.tristate = false
-                end
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
+                        kernelOption.name = line.gsub(ISM::Default::Software::KconfigKeywords[:config],"")
+                    end
 
-                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
-                    kernelOption.tristate = true
-                end
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
+                        kernelOption.tristate = false
+                    end
 
-                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
+                        kernelOption.tristate = true
+                    end
 
-                    newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
 
-                    kernelOption.dependencies += newDependencies
-                    kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
-                    kernelOption.blockers += newBlockers
-                end
+                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
 
-                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
+                        kernelOption.dependencies += newDependencies
+                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
+                        kernelOption.blockers += newBlockers
+                    end
 
-                    newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:select],""))
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
 
-                    kernelOption.dependencies += newDependencies
-                    kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
-                    kernelOption.blockers += newBlockers
-                end
+                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:select],""))
 
-                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
-                    lastIfIndex = index
-                    lastIfContent = line.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
+                        kernelOption.dependencies += newDependencies
+                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
+                        kernelOption.blockers += newBlockers
+                    end
+
+                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
+                        lastIfIndex = index
+                        lastIfContent = line.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
+                    end
+                else
+                    if !line.matches?(/\s/)
+                        underHelpSection = false
+                    else
+                        kernelOption.description += line.strip
+                    end
                 end
 
             end

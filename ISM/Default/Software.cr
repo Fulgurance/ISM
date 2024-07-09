@@ -26,7 +26,8 @@ module ISM
                                 :menuconfig => /\s*menuconfig\s+/,
                                 :tristate => /\s*tristate\s+/,
                                 :select => /\s*select\s+/,
-                                :source => /\s*source\s+/}
+                                :source => /\s*source\s+/,
+                                :help => /\s*help\s+/,}
 
         end
 
