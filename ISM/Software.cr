@@ -56,6 +56,8 @@ module ISM
         end
 
         def recordSelectedKernel
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             settingInformation = ISM::SoftwareInformation.loadConfiguration(@information.settingsFilePath)
 
             settingInformation.uniqueDependencies.each do |uniqueDependency|
@@ -84,11 +86,15 @@ module ISM
         end
 
         def prepareKernelSourcesInstallation
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
             moveFileNoChroot("#{workDirectoryPathNoChroot}/Sources","#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
         end
 
         def download
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             Ism.notifyOfDownload(@information)
 
             cleanWorkDirectoryPath
@@ -103,12 +109,16 @@ module ISM
         end
 
         def downloadSources
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             downloadFile(   @information.sourcesLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveExtensionName)
         end
 
         def downloadSourcesMd5sum
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             downloadFile(   @information.sourcesMd5sumLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
@@ -121,18 +131,24 @@ module ISM
         end
 
         def downloadPatches
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             downloadFile(   @information.patchesLink,
                                 ISM::Default::Software::PatchesArchiveBaseName,
                                 ISM::Default::Software::ArchiveExtensionName)
         end
 
         def downloadPatchesMd5sum
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             downloadFile(   @information.patchesMd5sumLink,
                             ISM::Default::Software::PatchesArchiveBaseName,
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
         def downloadFile(link : String, filename : String, fileExtensionName : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             originalLink = link
             downloaded = false
             error = String.new
@@ -212,6 +228,8 @@ module ISM
         end
         
         def getFileContent(filePath : String) : String
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             begin
                 content = File.read(filePath)
             rescue error
@@ -222,6 +240,8 @@ module ISM
         end
 
         def check
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             Ism.notifyOfCheck(@information)
 
             checkSourcesMd5sum
@@ -231,16 +251,22 @@ module ISM
         end
 
         def checkSourcesMd5sum
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName,
                         getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
         end
 
         def checkPatchesMd5sum
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesArchiveName,
                         getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName).strip)
         end
 
         def checkFile(archive : String, md5sum : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             digest = Digest::MD5.new
             digest.file(archive)
             archiveMd5sum = digest.hexfinal
@@ -252,6 +278,8 @@ module ISM
         end
 
         def extract
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             Ism.notifyOfExtract(@information)
 
             extractSources
@@ -261,16 +289,21 @@ module ISM
         end
 
         def extractSources
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
         end
 
         def extractPatches
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             process = Process.run(  "tar -xf #{archivePath}",
                                     shell: true,
@@ -282,6 +315,8 @@ module ISM
         end
         
         def patch
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             Ism.notifyOfPatch(@information)
 
             if Dir.exists?("#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}")
@@ -300,6 +335,8 @@ module ISM
         end
         
         def applyPatch(patch : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             process = Process.run(  "patch -Np1 -i #{patch}",
                                     error: :inherit,
                                     shell: true,
@@ -311,6 +348,8 @@ module ISM
         end
 
         def prepare
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             Ism.notifyOfPrepare(@information)
 
             #Generate all build directories
@@ -323,6 +362,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             begin
                 FileUtils.cp_r(path, targetPath)
             rescue error
@@ -333,6 +374,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             begin
                 FileUtils.rm(path)
             rescue error
@@ -343,6 +386,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             begin
                 FileUtils.mv(path, newPath)
             rescue error
@@ -353,6 +398,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(directory : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             begin
                 FileUtils.mkdir_p(directory)
             rescue error
@@ -363,6 +410,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(directory : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             begin
                 FileUtils.rm_r(directory)
             rescue error
@@ -372,6 +421,8 @@ module ISM
         end
 
         def runChrootTasks(chrootTasks) : Process::Status
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
             process = Process.run(  "chmod +x #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}",
@@ -1118,6 +1169,8 @@ module ISM
         end
 
         def prepareOpenrcServiceInstallation(path : String, name : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             servicesPath = "/etc/init.d/"
 
             makeDirectory("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
@@ -1213,6 +1266,8 @@ module ISM
         end
 
         def recordInstallationInformation : Tuple(UInt128, UInt128, UInt128, UInt128)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             directoryNumber = UInt128.new(0)
             symlinkNumber = UInt128.new(0)
             fileNumber = UInt128.new(0)
@@ -1248,6 +1303,8 @@ module ISM
         end
 
         def install
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             Ism.notifyOfInstall(@information)
 
             filesList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
@@ -1509,6 +1566,8 @@ module ISM
         end
 
         def updateKernelOptionsDatabase
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             Ism.notifyOfUpdateKernelOptionsDatabase(@information)
 
             if !Dir.exists?(kernelOptionsDatabasePath)

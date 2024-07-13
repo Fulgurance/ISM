@@ -11,6 +11,10 @@ module ISM
                         @environment =  Hash(String,String).new)
         end
 
+        def isValid : Bool
+            return @command != ""
+        end
+
         def formattedOutput
             command =       "#{ISM::Default::SystemCallRecord::FormattedOutputText1}#{@command}"
             path =          "#{ISM::Default::SystemCallRecord::FormattedOutputText2}#{@path}"
