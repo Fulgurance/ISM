@@ -1334,12 +1334,8 @@ module ISM
             Ism.addInstalledSoftware(@information, installedFiles)
         end
 
-        def kernelName : String
-            return "#{@information.versionName.downcase}"
-        end
-
         def kernelSourcesPath : String
-            return "#{Ism.settings.rootPath}usr/src/#{kernelName}/"
+            return "#{Ism.settings.rootPath}usr/src/#{mainKernelName}/"
         end
 
         def kernelSourcesArchitecturePath : String
@@ -1359,7 +1355,7 @@ module ISM
         end
 
         def kernelOptionsDatabasePath : String
-            return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+kernelName
+            return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+mainKernelName
         end
 
         def setKernelOption(symbol : String, state : Symbol, value = String.new)
@@ -1560,7 +1556,7 @@ module ISM
 
             kernelOptions.each do |option|
                 if !option.name.empty?
-                    option.writeInformationFile(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelName+"/"+option.name+".json")
+                    option.writeInformationFile(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
                 end
             end
         end
@@ -1568,7 +1564,7 @@ module ISM
         def updateKernelOptionsDatabase
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            Ism.notifyOfUpdateKernelOptionsDatabase(@information)
+            Ism.notifyOfUpdateKernelOptionsDatabase(Ism.selectedKernel)
 
             if !Dir.exists?(kernelOptionsDatabasePath)
                 makeDirectoryNoChroot(kernelOptionsDatabasePath)
@@ -1579,16 +1575,16 @@ module ISM
                 rescue error
                     deleteDirectoryNoChroot(kernelOptionsDatabasePath)
 
-                    Ism.notifyOfUpdateKernelOptionsDatabaseError(@information, error)
+                    Ism.notifyOfUpdateKernelOptionsDatabaseError(Ism.selectedKernel, error)
                     Ism.exitProgram
                 end
             end
         end
 
         def recordNeededKernelFeatures
-            Ism.notifyOfRecordNeededKernelFeatures(@information)
+            Ism.notifyOfRecordNeededKernelFeatures(Ism.selectedKernel)
 
-            Ism.neededKernelFeatures += @information.kernelDependencies
+            Ism.neededKernelFeatures += Ism.selectedKernel.kernelDependencies
         end
         
         def clean
@@ -1606,9 +1602,9 @@ module ISM
         end
 
         def recordUnneededKernelFeatures
-            Ism.notifyOfRecordUnneededKernelFeatures(@information)
+            Ism.notifyOfRecordUnneededKernelFeatures(Ism.selectedKernel)
 
-            Ism.unneededKernelFeatures += @information.kernelDependencies
+            Ism.unneededKernelFeatures += Ism.selectedKernel.kernelDependencies
         end
 
         def showInformations
