@@ -157,7 +157,7 @@ module ISM
 
                     end
 
-                    @softwares << ISM::AvailableSoftware.new("@#{portDirectory}:#{softwareDirectory}",softwaresInformations)
+                    @softwares << ISM::AvailableSoftware.new(portDirectory, softwareDirectory, softwaresInformations)
 
                 end
 
@@ -471,7 +471,7 @@ module ISM
 
         def getAvailableSoftware(userEntry : String) : ISM::AvailableSoftware
             @softwares.each do |software|
-                if userEntry.downcase.includes?(software.name.downcase) && userEntry.size == software.name.size
+                if userEntry.downcase.includes?(software.fullName.downcase) && userEntry.size == software.fullName.size
                     return software
                 else
                     software.versions.each do |version|
@@ -1962,7 +1962,7 @@ module ISM
                     greatestSoftware = availableSoftware.greatestVersion
                     greatestVersion = SemanticVersion.parse(greatestSoftware.version)
 
-                    if installedSoftware.name == availableSoftware.name
+                    if installedSoftware.fullName == availableSoftware.fullName
                         if currentVersion < greatestVersion && !softwareIsInstalled(greatestSoftware)
                             #We test first if the software is installable
                             installable = !(getRequiredDependencies([greatestSoftware],allowSkipUnavailable: true)).empty?

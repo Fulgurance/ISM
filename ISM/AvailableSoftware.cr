@@ -2,10 +2,15 @@ module ISM
 
     class AvailableSoftware
 
+        property port : String
         property name : String
         property versions : Array(ISM::SoftwareInformation)
 
-        def initialize(@name = String.new, @versions = Array(ISM::SoftwareInformation).new)
+        def initialize(@port = String.new, @name = String.new, @versions = Array(ISM::SoftwareInformation).new)
+        end
+
+        def fullName : String
+            return "@#{@port}:#{@name}"
         end
 
         private def includeComparators(request : String) : Bool
