@@ -68,7 +68,7 @@ module ISM
 
                             installedVersionText = ""
                             Ism.installedSoftwares.each_with_index do |installed, index|
-                                if software.name == installed.fullName
+                                if software.fullName == installed.fullName
                                     installedVersionText += "#{"\n\t| ".colorize(:green)}"
                                     installedVersionText += "#{installed.version.colorize(Colorize::ColorRGB.new(255,100,100))}"
 
