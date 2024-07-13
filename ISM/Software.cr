@@ -831,8 +831,19 @@ module ISM
             end
         end
 
-        def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
-            requestedCommands = "cmake #{arguments}"
+        def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
+
+            if Ism.settings.installByChroot
+                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions} "
+                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
+                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
+            else
+                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions}"
+                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
+                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
+            end
+
+            requestedCommands = "cmake #{prefix} #{arguments}"
 
             process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
@@ -856,9 +867,13 @@ module ISM
         def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                prefix = (makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
+                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions} "
+                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
+                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
             else
-                prefix = (makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions)
+                prefix = "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions}"
+                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
+                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
             end
 
             requestedCommands = "ninja #{prefix} #{arguments}"
@@ -1246,9 +1261,13 @@ module ISM
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                prefix = (makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions)
+                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions} "
+                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
+                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
             else
-                prefix = (makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions)
+                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions}"
+                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
+                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
             end
 
             requestedCommands = "make #{prefix} #{arguments}"
