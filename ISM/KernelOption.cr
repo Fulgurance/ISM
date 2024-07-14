@@ -39,7 +39,7 @@ module ISM
         end
 
         file = File.open(path,"w")
-        information.to_json(file)
+        to_json(file)
         file.close
     end
 
