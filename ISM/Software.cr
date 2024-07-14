@@ -56,7 +56,7 @@ module ISM
         end
 
         def recordSelectedKernel
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             settingInformation = ISM::SoftwareInformation.loadConfiguration(@information.settingsFilePath)
 
@@ -86,14 +86,14 @@ module ISM
         end
 
         def prepareKernelSourcesInstallation
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
             moveFileNoChroot("#{workDirectoryPathNoChroot}/Sources","#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
         end
 
         def download
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfDownload(@information)
 
@@ -109,7 +109,7 @@ module ISM
         end
 
         def downloadSources
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             downloadFile(   @information.sourcesLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
@@ -117,7 +117,7 @@ module ISM
         end
 
         def downloadSourcesMd5sum
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             downloadFile(   @information.sourcesMd5sumLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
@@ -131,7 +131,7 @@ module ISM
         end
 
         def downloadPatches
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             downloadFile(   @information.patchesLink,
                                 ISM::Default::Software::PatchesArchiveBaseName,
@@ -139,7 +139,7 @@ module ISM
         end
 
         def downloadPatchesMd5sum
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             downloadFile(   @information.patchesMd5sumLink,
                             ISM::Default::Software::PatchesArchiveBaseName,
@@ -147,7 +147,7 @@ module ISM
         end
 
         def downloadFile(link : String, filename : String, fileExtensionName : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             originalLink = link
             downloaded = false
@@ -228,7 +228,7 @@ module ISM
         end
         
         def getFileContent(filePath : String) : String
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             begin
                 content = File.read(filePath)
@@ -240,7 +240,7 @@ module ISM
         end
 
         def check
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfCheck(@information)
 
@@ -251,21 +251,21 @@ module ISM
         end
 
         def checkSourcesMd5sum
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName,
                         getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
         end
 
         def checkPatchesMd5sum
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesArchiveName,
                         getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName).strip)
         end
 
         def checkFile(archive : String, md5sum : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             digest = Digest::MD5.new
             digest.file(archive)
@@ -278,7 +278,7 @@ module ISM
         end
 
         def extract
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfExtract(@information)
 
@@ -289,21 +289,21 @@ module ISM
         end
 
         def extractSources
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
         end
 
         def extractPatches
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             process = Process.run(  "tar -xf #{archivePath}",
                                     shell: true,
@@ -315,7 +315,7 @@ module ISM
         end
         
         def patch
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfPatch(@information)
 
@@ -335,7 +335,7 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             process = Process.run(  "patch -Np1 -i #{patch}",
                                     error: :inherit,
@@ -348,7 +348,7 @@ module ISM
         end
 
         def prepare
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfPrepare(@information)
 
@@ -362,7 +362,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             begin
                 FileUtils.cp_r(path, targetPath)
@@ -374,7 +374,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             begin
                 FileUtils.rm(path)
@@ -386,7 +386,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             begin
                 FileUtils.mv(path, newPath)
@@ -398,7 +398,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(directory : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             begin
                 FileUtils.mkdir_p(directory)
@@ -410,7 +410,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(directory : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             begin
                 FileUtils.rm_r(directory)
@@ -421,7 +421,7 @@ module ISM
         end
 
         def runChrootTasks(chrootTasks) : Process::Status
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
@@ -834,13 +834,25 @@ module ISM
         def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions} "
-                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
-                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
+                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
+
+                if !environment.has_key?("CFLAGS")
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
+                end
+
+                if !environment.has_key?("CXXFLAGS")
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
+                end
             else
                 prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
-                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
-                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
+
+                if !environment.has_key?("CFLAGS")
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                end
+
+                if !environment.has_key?("CXXFLAGS")
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                end
             end
 
             requestedCommands = "cmake #{prefix} #{arguments}"
@@ -867,13 +879,25 @@ module ISM
         def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions} "
-                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
-                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
+                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
+
+                if !environment.has_key?("CFLAGS")
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
+                end
+
+                if !environment.has_key?("CXXFLAGS")
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
+                end
             else
-                prefix = "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
-                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
-                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
+                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
+
+                if !environment.has_key?("CFLAGS")
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                end
+
+                if !environment.has_key?("CXXFLAGS")
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                end
             end
 
             requestedCommands = "ninja #{prefix} #{arguments}"
@@ -1184,7 +1208,7 @@ module ISM
         end
 
         def prepareOpenrcServiceInstallation(path : String, name : String)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             servicesPath = "/etc/init.d/"
 
@@ -1261,13 +1285,25 @@ module ISM
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions} "
-                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
-                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
+                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
+
+                if !environment.has_key?("CFLAGS")
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
+                end
+
+                if !environment.has_key?("CXXFLAGS")
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
+                end
             else
                 prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
-                prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
-                prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
+
+                if !environment.has_key?("CFLAGS")
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                end
+
+                if !environment.has_key?("CXXFLAGS")
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                end
             end
 
             requestedCommands = "make #{prefix} #{arguments}"
@@ -1285,7 +1321,7 @@ module ISM
         end
 
         def recordInstallationInformation : Tuple(UInt128, UInt128, UInt128, UInt128)
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             directoryNumber = UInt128.new(0)
             symlinkNumber = UInt128.new(0)
@@ -1322,7 +1358,7 @@ module ISM
         end
 
         def install
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfInstall(@information)
 
@@ -1581,7 +1617,7 @@ module ISM
         end
 
         def updateKernelOptionsDatabase
-            #Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfUpdateKernelOptionsDatabase(Ism.selectedKernel)
 
