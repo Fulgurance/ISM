@@ -838,7 +838,7 @@ module ISM
                 prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
                 prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
             else
-                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions}"
+                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
                 prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
                 prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
             end
@@ -871,7 +871,7 @@ module ISM
                 prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
                 prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
             else
-                prefix = "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions}"
+                prefix = "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
                 prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
                 prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
             end
@@ -1265,7 +1265,7 @@ module ISM
                 prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\" "
                 prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}\""
             else
-                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions}"
+                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
                 prefix +=   "CFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\" "
                 prefix +=   "CXXFLAGS=\"#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}\""
             end
