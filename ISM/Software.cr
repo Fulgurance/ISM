@@ -1455,7 +1455,7 @@ module ISM
 
                     if line.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && !line.includes?("Kconfig.include")
 
-                        mainArchitecture = (Ism.settings.installByChroot ? Ism.settings.chrootArchitecture : Ism.settings.architecture).gsub(/_.*/,"")
+                        mainArchitecture = (Ism.settings.installByChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemArchitecture).gsub(/_.*/,"")
 
                         path = kernelSourcesPath+line
                         path = path.gsub(ISM::Default::Software::KconfigKeywords[:source],"")
