@@ -67,7 +67,7 @@ module ISM
 
                         settingInformation.dependencies(allowDeepSearch: true).each do |dependency|
                             if dependency.fullName.downcase == entry.downcase
-                                dependency.information.writeInformationFile("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+                                dependency.information.writeConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
                             end
                         end
                     end
@@ -1575,7 +1575,7 @@ module ISM
 
             kernelOptions.each do |option|
                 if !option.name.empty?
-                    option.writeInformationFile(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
+                    option.writeConfiguration(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
                 end
             end
         end
