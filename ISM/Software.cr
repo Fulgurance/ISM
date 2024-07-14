@@ -1637,9 +1637,11 @@ module ISM
         end
 
         def recordNeededKernelFeatures
-            Ism.notifyOfRecordNeededKernelFeatures(Ism.selectedKernel)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            Ism.neededKernelFeatures += Ism.selectedKernel.kernelDependencies
+            #Ism.notifyOfRecordNeededKernelFeatures(Ism.selectedKernel)
+
+            #Ism.neededKernelFeatures += Ism.selectedKernel.kernelDependencies
         end
         
         def clean
@@ -1657,9 +1659,11 @@ module ISM
         end
 
         def recordUnneededKernelFeatures
-            Ism.notifyOfRecordUnneededKernelFeatures(Ism.selectedKernel)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            Ism.unneededKernelFeatures += Ism.selectedKernel.kernelDependencies
+            #Ism.notifyOfRecordUnneededKernelFeatures(Ism.selectedKernel)
+
+            #Ism.unneededKernelFeatures += Ism.selectedKernel.kernelDependencies
         end
 
         def showInformations
