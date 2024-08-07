@@ -1381,7 +1381,8 @@ module ISM
                         deleteFileNoChroot(finalDestination)
                     end
 
-                    moveFileNoChroot(entry,finalDestination)
+                    File.symlink?(entry) ? moveFile(entry,finalDestination) : moveFileNoChroot(entry,finalDestination)
+
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                 end
 

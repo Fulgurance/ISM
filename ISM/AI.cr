@@ -2,13 +2,19 @@ module ISM
 
     module AI
 
+        #Note: Threads need to be implemented properly
+        Name = "Epsilon"
         ModeleFile = "gemma-2-9b-it-Q4_K_M.gguf"
         ModeleDirectory = "/modeles"
         ModelePath = "#{ModeleDirectory}/#{ModeleFile}"
-        Prompt = "You are an assistant call Epsilon, and you answer user request in polite and accurate manner"
+        CommandPath = "/usr/bin/llama-cli"
+        Prompt = "You are an assistant name #{name}, and you answer user request in polite and accurate manner"
         Parameters = "--chat-template vicuna-orca --n-predict 512 --threads 8 --ctx-size 2048 --temp 0.9 --top-k 80 --repeat-penalty 1.1 --no-display-prompt --log-disable"
         Commands = {"" => ""}
-        #Threads need to be implemented properly
+
+        def self.available : Bool
+            return File.exists?(CommandPath)
+        end
 
         def self.askRequest(request : String) : String
             processResult = IO::Memory.new
