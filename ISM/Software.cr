@@ -1377,7 +1377,7 @@ module ISM
                     end
                 else
                     #Delete existing file instead of overriding it to avoid any crash
-                    if File.exists?(finalDestination)
+                    if File.exists?(finalDestination) && !File.symlink?(finalDestination)
                         deleteFileNoChroot(finalDestination)
                     end
 
