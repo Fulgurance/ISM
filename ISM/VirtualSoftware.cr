@@ -26,10 +26,6 @@ module ISM
         def prepareInstallation
         end
 
-        def install
-            Ism.addInstalledSoftware(@information)
-        end
-
         def clean
         end
 
