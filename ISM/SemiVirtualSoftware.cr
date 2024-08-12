@@ -1,6 +1,6 @@
 module ISM
 
-    class ISM::SemiVirtualSoftware < ISM::Software
+    class SemiVirtualSoftware < ISM::Software
 
         def download
         end
