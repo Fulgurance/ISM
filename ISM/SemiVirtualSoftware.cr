@@ -1,27 +1,31 @@
-class Target < ISM::SemiVirtualSoftware
+module ISM
 
-    def download
-    end
+    class ISM::SemiVirtualSoftware < ISM::Software
 
-    def check
-    end
+        def download
+        end
 
-    def extract
-    end
+        def check
+        end
 
-    def patch
-    end
+        def extract
+        end
 
-    def prepare
-    end
+        def patch
+        end
 
-    def configure
-    end
+        def prepare
+        end
 
-    def build
-    end
+        def configure
+        end
 
-    def clean
+        def build
+        end
+
+        def clean
+        end
+
     end
 
 end
