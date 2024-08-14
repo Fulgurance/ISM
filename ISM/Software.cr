@@ -1377,11 +1377,11 @@ module ISM
                     end
                 else
                     #Delete existing file instead of overriding it to avoid any crash
-                    if File.exists?(finalDestination) && !File.symlink?(finalDestination)
+                    if File.exists?(finalDestination)
                         deleteFileNoChroot(finalDestination)
                     end
 
-                    File.symlink?(entry) && Ism.settings.installByChroot ? moveFile(entry.sub(Ism.settings.rootPath,"/"),finalDestination.gsub(Ism.settings.rootPath,"/")) : moveFileNoChroot(entry,finalDestination)
+                    moveFileNoChroot(entry,finalDestination)
 
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                 end
