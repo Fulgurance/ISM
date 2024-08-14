@@ -1370,16 +1370,17 @@ module ISM
 
                 finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
 
-                if File.directory?(entry)
-                    if !Dir.exists?(finalDestination)
-                        makeDirectoryNoChroot(finalDestination)
-                        installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
-                    end
-                else
-                    #Use install to avoid any crash ?
-                    moveFileNoChroot(entry,finalDestination)
-
+                if !File.exists?(finalDestination)
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
+                end
+
+                if File.directory?(entry) && !Dir.exists?(finalDestination) && !File.symlink?(entry)
+                    makeDirectoryNoChroot(finalDestination)
+                end
+
+                if !File.directory?(entry)
+                 #Use install to avoid any crash ?
+                    moveFileNoChroot(entry,finalDestination)
                 end
 
             end
