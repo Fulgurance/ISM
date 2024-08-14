@@ -1286,7 +1286,7 @@ module ISM
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
+                prefix = "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
 
                 if !environment.has_key?("CFLAGS")
                     environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
@@ -1376,11 +1376,7 @@ module ISM
                         installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                     end
                 else
-                    #Delete existing file instead of overriding it to avoid any crash
-                    if File.exists?(finalDestination)
-                        deleteFileNoChroot(finalDestination)
-                    end
-
+                    #Use install to avoid any crash ?
                     moveFileNoChroot(entry,finalDestination)
 
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
