@@ -1378,9 +1378,9 @@ module ISM
                     makeDirectoryNoChroot(finalDestination)
                 end
 
-                if !File.directory?(entry)
-                 #Use install to avoid any crash ?
-                    moveFileNoChroot(entry,finalDestination)
+                if !File.directory?(entry) || File.symlink?(entry)
+                    #Use install to avoid any crash ?
+                    File.symlink?(entry) ? moveFile(entry.gsub(Ism.settings.rootPath,""),finalDestination.sub(Ism.settings.rootPath,"")) : moveFileNoChroot(entry,finalDestination)
                 end
 
             end
