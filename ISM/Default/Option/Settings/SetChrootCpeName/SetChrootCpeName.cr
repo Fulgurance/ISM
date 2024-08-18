@@ -6,7 +6,7 @@ module ISM
 
             module SettingsSetChrootCpeName
 
-                ShortText = "-sccn"
+                ShortText = "-sccpen"
                 LongText = "setchrootcpename"
                 Description = "Set the CPE name of the future chroot installed system"
                 SetText = "Setting chroot system cpe name to the value "
