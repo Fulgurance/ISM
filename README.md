@@ -91,7 +91,7 @@ Configure ISM settings
         -ssd    setsystemdescription    Set the description of the future installed system
         -ssv    setsystemversion        Set the version of the future installed system
         -ssac   setsystemansicolor      Set the ANSI color of the future installed system
-        -sscn   setsystemcpename        Set the CPE name of the future installed system
+        -sscpen setsystemcpename        Set the CPE name of the future installed system
         -sshu   setsystemhomeurl        Set the home url of the future installed system
         -sssu   setsystemsupporturl     Set the support url of the future installed system
         -ssbru  setsystembugreporturl   Set the bug report url of the future installed system
@@ -111,7 +111,7 @@ Configure ISM settings
         -scd    setchrootdescription    Set the description of the future chroot installed system
         -scv    setchrootversion        Set the version of the future chroot installed system
         -scac   setchrootansicolor      Set the ANSI color of the future chroot installed system
-        -sccn   setchrootcpename        Set the CPE name of the future chroot installed system
+        -sccpen setchrootcpename        Set the CPE name of the future chroot installed system
         -schu   setchroothomeurl        Set the home url of the future chroot installed system
         -scsu   setchrootsupporturl     Set the support url of the future chroot installed system
         -scbru  setchrootbugreporturl   Set the bug report url of the future chroot installed system
