@@ -1374,8 +1374,10 @@ module ISM
                     installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
                 end
 
-                if File.directory?(entry) && !Dir.exists?(finalDestination) && !File.symlink?(entry)
-                    makeDirectoryNoChroot(finalDestination)
+                if File.directory?(entry) && !File.symlink?(entry)
+                    if !Dir.exists?(finalDestination)
+                        makeDirectoryNoChroot(finalDestination)
+                    end
                 else
                     if File.symlink?(entry)
                         moveFile(entry.gsub(Ism.settings.rootPath,"/"),finalDestination.sub(Ism.settings.rootPath,"/"))
