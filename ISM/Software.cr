@@ -1380,7 +1380,7 @@ module ISM
                     end
                 else
                     if File.symlink?(entry)
-                        moveFile(entry.gsub(Ism.settings.rootPath,"/"),finalDestination.sub(Ism.settings.rootPath,"/"))
+                        moveFile(entry,finalDestination)
                     else
                         moveFileNoChroot(entry,finalDestination)
                     end
