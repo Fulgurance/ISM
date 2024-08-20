@@ -1376,13 +1376,13 @@ module ISM
 
                 if File.directory?(entry) && !Dir.exists?(finalDestination) && !File.symlink?(entry)
                     makeDirectoryNoChroot(finalDestination)
+                else
+                    if File.symlink?(entry)
+                        moveFile(entry.gsub(Ism.settings.rootPath,"/"),finalDestination.sub(Ism.settings.rootPath,"/"))
+                    else
+                        moveFileNoChroot(entry,finalDestination)
+                    end
                 end
-
-                if !File.directory?(entry) || File.symlink?(entry)
-                    #Use install to avoid any crash ?
-                    File.symlink?(entry) ? moveFile(entry.gsub(Ism.settings.rootPath,"/"),finalDestination.sub(Ism.settings.rootPath,"/")) : moveFileNoChroot(entry,finalDestination)
-                end
-
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
