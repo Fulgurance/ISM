@@ -1509,7 +1509,7 @@ module ISM
         def buildTasksFile
             processResult = IO::Memory.new
 
-            process = Process.run(  "crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+            process = Process.run(  "crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
                                     output: :inherit,
                                     error: processResult,
                                     shell: true,
