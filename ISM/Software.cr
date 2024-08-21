@@ -1379,16 +1379,7 @@ module ISM
                         makeDirectoryNoChroot(finalDestination)
                     end
                 else
-                    if File.symlink?(entry)
-                        if File.exists?(Ism.settings.installByChroot ? finalDestination.sub(Ism.settings.rootPath,"/") : finalDestination)
-                            deleteFile(Ism.settings.installByChroot ? finalDestination.sub(Ism.settings.rootPath,"/") : finalDestination)
-                        end
-
-                        moveFile(   Ism.settings.installByChroot ? entry.sub(Ism.settings.rootPath,"/") : entry,
-                                    Ism.settings.installByChroot ? finalDestination.sub(Ism.settings.rootPath,"/") : finalDestination)
-                    else
-                        moveFileNoChroot(entry,finalDestination)
-                    end
+                    moveFileNoChroot(entry,finalDestination)
                 end
             end
 
