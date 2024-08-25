@@ -361,6 +361,18 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
+        def copyFileNoChroot(path : String, targetPath : String)
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
+            begin
+                FileUtils.cp(path, targetPath)
+            rescue error
+                Ism.notifyOfCopyFileError(path, targetPath, error)
+                Ism.exitProgram
+            end
+        end
+
+        #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String)
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
@@ -1379,7 +1391,7 @@ module ISM
                         makeDirectoryNoChroot(finalDestination)
                     end
                 else
-                    moveFileNoChroot(entry,finalDestination)
+                    copyFileNoChroot(entry,finalDestination)
                 end
             end
 
