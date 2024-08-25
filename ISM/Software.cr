@@ -1391,6 +1391,10 @@ module ISM
                         makeDirectoryNoChroot(finalDestination)
                     end
                 else
+                    if File.exists?(finalDestination)
+                        deleteFileNoChroot(finalDestination)
+                    end
+
                     copyFileNoChroot(entry,finalDestination)
                 end
             end
