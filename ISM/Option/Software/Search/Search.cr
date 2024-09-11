@@ -42,7 +42,7 @@ module ISM
 
                             architecturesText = ""
                             greatestVersion.architectures.each_with_index do |architecture, index|
-                                architecturesText += "#{architecture.colorize(:green)}"
+                                architecturesText += architecture
                                 if index+1 < greatestVersion.architectures.size
                                     architecturesText += " | "
                                 end
