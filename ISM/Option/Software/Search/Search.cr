@@ -51,7 +51,7 @@ module ISM
                                 architecturesText = ISM::Default::Option::SoftwareSearch::None
                             end
                             puts    ISM::Default::Option::SoftwareSearch::AvailablesArchitecturesField +
-                                        "#{architecturesText.colorize(:green)}"
+                                        "#{architecturesText.colorize(Colorize::ColorRGB.new(255,170,0))}"
 
                             puts    ISM::Default::Option::SoftwareSearch::WebsiteField +
                                         "#{greatestVersion.website.colorize(:green)}"
