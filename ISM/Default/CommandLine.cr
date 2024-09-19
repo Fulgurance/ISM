@@ -22,6 +22,7 @@ module ISM
             InstallerImplementationErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean the related installer need to be fix."
             TaskBuildingErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean probably the task building process need to be fix."
             SystemCallErrorNotificationHelp = "ISM raised that error because the ran script did not call properly a system command or the system command itself need to be fix."
+            TaskBuildingText = "Task compilation in process: "
             DownloadText = "Downloading "
             CheckText = "Checking "
             ExtractText = "Extracting "
