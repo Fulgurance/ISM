@@ -331,7 +331,7 @@ module ISM
                 end
             end
 
-            if requestedVersion.name != ""
+            if requestedVersion.isValid
 
                 protectedFiles = otherVersions.map {|version| version.installedFiles }.flatten.uniq
 
@@ -452,7 +452,7 @@ module ISM
                 end
 
                 #Update case
-                if software.version > installedSoftware.version && installedSoftware.name != ""
+                if software.version > installedSoftware.version && installedSoftware.isValid
                     return :update
                 end
 
@@ -877,6 +877,7 @@ module ISM
             currentTime = Time.monotonic
 
             if (currentTime - @calculationStartingTime).milliseconds > 40
+
                 if @frameIndex == @text.size && !@reverseAnimation
                     @reverseAnimation = true
                 end
@@ -886,15 +887,21 @@ module ISM
                 end
 
                 if @reverseAnimation
+
+                    print "\b "
                     print "\033[1D"
-                    print " "
-                    print "\033[1D"
+                    print "\b#{@text[@frameIndex-1].colorize(:green)}"
+
                     @frameIndex -= 1
+
                 end
 
                 if !@reverseAnimation
+
+                    print "\b "
                     print "#{@text[@frameIndex].colorize(:green)}"
                     @frameIndex += 1
+
                 end
 
                 @calculationStartingTime = Time.monotonic
