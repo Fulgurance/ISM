@@ -1113,7 +1113,7 @@ module ISM
             puts "\n"
         end
 
-        def showCompilationTitleMessage
+        def showTaskCompilationTitleMessage
             print "#{ISM::Default::CommandLine::TaskCompilationText.colorize(:green)}"
         end
 
