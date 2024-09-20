@@ -710,10 +710,6 @@ module ISM
             puts "#{message.colorize(:magenta).back(Colorize::ColorRGB.new(80, 80, 80))}"
         end
 
-        def notifyOfTaskCompilation
-            puts "#{ISM::Default::CommandLine::TaskCompilationText.colorize(:green)}"
-        end
-
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+softwareInformation.name)
         end
@@ -1117,6 +1113,10 @@ module ISM
             puts "\n"
         end
 
+        def showCompilationTitleMessage
+            print "#{ISM::Default::CommandLine::TaskCompilationText.colorize(:green)}"
+        end
+
         def showCalculationDoneMessage
             cleanCalculationAnimation
             print "#{ISM::Default::CommandLine::CalculationDoneText.colorize(:green)}\n"
@@ -1512,14 +1512,17 @@ module ISM
 
                     CODE
 
+            showTaskCompilationTitleMessage
+
             generateTasksFile(tasks)
             buildTasksFile
+
+            showCalculationDoneMessage
+
             runTasksFile(logEnabled: true, softwareList: neededSoftwares)
         end
 
         def buildTasksFile
-            notifyOfTaskCompilation
-
             processResult = IO::Memory.new
 
             process = Process.run(  "crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
