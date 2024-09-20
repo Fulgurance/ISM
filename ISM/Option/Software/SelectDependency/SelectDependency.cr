@@ -30,8 +30,8 @@ module ISM
                                 if matchingSoftware.selectUniqueDependency(dependency)
                                     matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
                                     Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
-                                                                    "#{dependency[0..dependency.index(':')].colorize(:red)}" +
-                                                                    "#{dependency[dependency.index(':')+1..-1].colorize(:green)}" +
+                                                                    "#{dependency[0..dependency.index(":")].colorize(:red)}" +
+                                                                    "#{dependency[dependency.index(":")+1..-1].colorize(:green)}" +
                                                                     ISM::Default::Option::SoftwareSelectDependency::SetText2 +
                                                                     "#{("@"+matchingSoftware.port).colorize(:red)}#{matchingSoftware.name}.colorize(:green)")
                                 else
