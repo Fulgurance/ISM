@@ -1532,7 +1532,9 @@ module ISM
                                     shell: true,
                                     chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
 
-            print processOutput.to_s
+            processOutput.to_s.each do |output|
+                print output
+            end
 
             processResult.rewind
 
