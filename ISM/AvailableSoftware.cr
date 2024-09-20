@@ -50,18 +50,8 @@ module ISM
 
         def getVersionByCondition(condition : String, returnMaximum = true) : ISM::SoftwareInformation
 
-            version = condition.tr("><=","")
-            semanticVersion = SemanticVersion.parse(version)
+            if intervalComparator(condition)
 
-            if greaterComparator(condition) && !@versions.empty?
-                temp = @versions.select {|entry| SemanticVersion.parse(entry.version) > semanticVersion}
-            elsif lessComparator(condition)
-                temp = @versions.select {|entry| SemanticVersion.parse(entry.version) < semanticVersion}
-            elsif greaterOrEqualComparator(condition)
-                temp = @versions.select {|entry| SemanticVersion.parse(entry.version) >= semanticVersion}
-            elsif lessOrEqualComparator(condition)
-                temp = @versions.select {|entry| SemanticVersion.parse(entry.version) <= semanticVersion}
-            elsif intervalComparator(condition)
                 startCondition = condition.split(" ~ ")[0][1..-1]
                 endCondition = condition.split(" ~ ")[1][0..-2]
 
@@ -75,8 +65,24 @@ module ISM
                 intervalEnd = getVersionByCondition(condition: endCondition, returnMaximum: true)
 
                 temp = @versions.select {|entry| SemanticVersion.parse(entry.version) >= startSemanticVersion && SemanticVersion.parse(entry.version) <= endSemanticVersion}
+
             else
-                return ISM::SoftwareInformation.new
+
+                version = condition.tr("><=","")
+                semanticVersion = SemanticVersion.parse(version)
+
+                if greaterComparator(condition) && !@versions.empty?
+                    temp = @versions.select {|entry| SemanticVersion.parse(entry.version) > semanticVersion}
+                elsif lessComparator(condition)
+                    temp = @versions.select {|entry| SemanticVersion.parse(entry.version) < semanticVersion}
+                elsif greaterOrEqualComparator(condition)
+                    temp = @versions.select {|entry| SemanticVersion.parse(entry.version) >= semanticVersion}
+                elsif lessOrEqualComparator(condition)
+                    temp = @versions.select {|entry| SemanticVersion.parse(entry.version) <= semanticVersion}
+                else
+                    return ISM::SoftwareInformation.new
+                end
+
             end
 
             return temp.empty? ? ISM::SoftwareInformation.new : (returnMaximum ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
