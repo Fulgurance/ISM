@@ -27,7 +27,7 @@ module ISM
 
                                 dependency = ARGV[3+Ism.debugLevel].downcase
 
-                                dependencyText = "#{dependency[0..dependency.index(":")].titleize.colorize(:red)}#{dependency.gsub(dependency[0..dependency.index(":")],"").titleize.colorize(:green)}"
+                                dependencyText = "#{dependency[0..dependency.index(":")].colorize(:red)}#{dependency.gsub(dependency[0..dependency.index(":")],"").colorize(:green)}"
                                 matchingSoftwareText = "#{("@"+matchingSoftware.port+":").colorize(:red)}#{matchingSoftware.name.colorize(:green)}"
 
                                 if matchingSoftware.selectUniqueDependency(dependency)
