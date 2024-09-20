@@ -76,8 +76,6 @@ module ISM
                 intervalEnd = getVersionByCondition(condition: endCondition, returnMaximum: true)
 
                 temp = @versions.select {|entry| SemanticVersion.parse(entry.version) >= startSemanticVersion && SemanticVersion.parse(entry.version) <= endSemanticVersion}
-
-                return temp.max_by {|entry| SemanticVersion.parse(entry.version)}
             else
                 return ISM::SoftwareInformation.new
             end
