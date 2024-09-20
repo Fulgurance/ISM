@@ -38,8 +38,8 @@ module ISM
             separator = request.includes?(" ~ ")
 
             if request.size >= 15
-                startCondition = request.split(" ~ ")[0][1..-1]
-                endCondition = request.split(" ~ ")[1][0..-2]
+                startCondition = request.split(" ~ ")[0]
+                endCondition = request.split(" ~ ")[1]
                 comparators = ( (greaterComparator(startCondition) || greaterOrEqualComparator(startCondition)) && (lessComparator(endCondition) || lessOrEqualComparator(endCondition)) )
             else
                 return false
