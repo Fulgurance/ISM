@@ -30,14 +30,15 @@ module ISM
                                 if matchingSoftware.selectUniqueDependency(dependency)
                                     matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
                                     Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
-                                                                dependency +
-                                                                ISM::Default::Option::SoftwareSelectDependency::SetText2 +
-                                                                matchingSoftware.fullName)
+                                                                    "#{dependency[0..dependency.index(':')].colorize(:red)}" +
+                                                                    "#{dependency[dependency.index(':')+1..-1].colorize(:green)}" +
+                                                                    ISM::Default::Option::SoftwareSelectDependency::SetText2 +
+                                                                    "#{("@"+matchingSoftware.port).colorize(:red)}#{matchingSoftware.name}.colorize(:green)")
                                 else
                                     Ism.printErrorNotification( ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
-                                                            dependency +
-                                                            ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound2 +
-                                                            matchingSoftware.fullName,nil)
+                                                                dependency +
+                                                                ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound2 +
+                                                                matchingSoftware.fullName,nil)
                                 end
                             else
                                 showHelp
