@@ -31,9 +31,9 @@ module ISM
                                     matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
                                     Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
                                                                     "#{dependency[0..dependency.index(":")].colorize(:red)}" +
-                                                                    "#{dependency[dependency.index(":")+1..-1].colorize(:green)}" +
+                                                                    "#{dependency.gsub(dependency[0..dependency.index(":")],"").colorize(:green)}" +
                                                                     ISM::Default::Option::SoftwareSelectDependency::SetText2 +
-                                                                    "#{("@"+matchingSoftware.port).colorize(:red)}#{matchingSoftware.name}.colorize(:green)")
+                                                                    "#{("@"+matchingSoftware.port).colorize(:red)}#{matchingSoftware.name.colorize(:green)}")
                                 else
                                     Ism.printErrorNotification( ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
                                                                 dependency +
