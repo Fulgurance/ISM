@@ -1527,7 +1527,7 @@ module ISM
             processResult = IO::Memory.new
 
             process = Process.run(  "crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
-                                    output: :inherit,
+                                    output: processOutput,
                                     error: processResult,
                                     shell: true,
                                     chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
