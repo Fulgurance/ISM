@@ -1526,8 +1526,10 @@ module ISM
             processOutput = IO::Memory.new
             processResult = IO::Memory.new
 
+            loadingOutput = IO::MultiWriter.new(STDOUT,processOutput)
+
             process = Process.run(  "crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
-                                    output: processOutput,
+                                    output: loadingOutput,
                                     error: processResult,
                                     shell: true,
                                     chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
