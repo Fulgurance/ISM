@@ -52,8 +52,8 @@ module ISM
 
             if intervalComparator(condition)
 
-                startCondition = condition.split(" ~ ")[0][1..-1]
-                endCondition = condition.split(" ~ ")[1][0..-2]
+                startCondition = condition.split(" ~ ")[0]
+                endCondition = condition.split(" ~ ")[1]
 
                 startVersion = startCondition.tr("><=","")
                 endVersion = endCondition.tr("><=","")
@@ -99,8 +99,8 @@ module ISM
                         end
                     end
                 elsif intervalComparator(condition)
-                    startCondition = condition.split(" ~ ")[0][1..-1]
-                    endCondition = condition.split(" ~ ")[1][0..-2]
+                    startCondition = condition.split(" ~ ")[0]
+                    endCondition = condition.split(" ~ ")[1]
 
                     startVersion = startCondition.tr("><=","")
                     endVersion = endCondition.tr("><=","")
