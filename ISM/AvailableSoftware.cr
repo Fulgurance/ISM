@@ -34,11 +34,10 @@ module ISM
         end
 
         private def intervalComparator(request : String) : Bool
-            #EXEMPLE: "{>=5.0.0 ~ <6.0.0}"
-            brackets = (request[0] == "{" && request[0] == "}")
+            #EXEMPLE: ">=5.0.0 ~ <6.0.0"
             separator = request.includes?(" ~ ")
 
-            if request.size > 17
+            if request.size >= 15
                 startCondition = request.split(" ~ ")[0][1..-1]
                 endCondition = request.split(" ~ ")[1][0..-2]
                 comparators = ( (greaterComparator(startCondition) || greaterOrEqualComparator(startCondition)) && (lessComparator(endCondition) || lessOrEqualComparator(endCondition)) )
@@ -46,7 +45,7 @@ module ISM
                 return false
             end
 
-            return (brackets && separator && comparators)
+            return (separator && comparators)
         end
 
         def getVersionByCondition(condition : String, returnMaximum = true) : ISM::SoftwareInformation
