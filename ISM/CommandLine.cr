@@ -1546,16 +1546,16 @@ module ISM
             processResult = IO::Memory.new
 
             Process.run("crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
-                        error: processResult,
+                        #error: processResult,
                         shell: true,
-                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |currentProcess|
+                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
                 loop do
-                    data = currentProcess.output.gets(chomp: false)
+                    data = process.output.gets(chomp: false)
 
                     print data
 
                     Fiber.yield
-                    break if currentProcess.terminated?
+                    break if process.terminated?
                 end
             end
 
