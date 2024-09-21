@@ -19,7 +19,7 @@ module ISM
                     Ism.synchronizePorts
 
                     print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
-                    puts ISM::Default::Option::SoftwareSynchronize::SynchronizedText
+                    puts "#{ISM::Default::Option::SoftwareSynchronize::SynchronizedText.colorize(:green)}"
                 end
             end
 
