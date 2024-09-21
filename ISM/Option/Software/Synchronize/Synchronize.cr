@@ -14,7 +14,7 @@ module ISM
                 if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                     Ism.printNeedSuperUserAccessNotification
                 else
-                    oldPortList = Ism.ports.dump
+                    oldPortList = Ism.ports.dup
 
                     print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
 
