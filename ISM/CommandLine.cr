@@ -880,10 +880,22 @@ module ISM
 
                 if @frameIndex == @text.size && !@reverseAnimation
                     @reverseAnimation = true
+
+                    (0..(@text.size-1)).each do |index|
+                        print "\033[1D"
+                    end
+
+                    print "#{@text.colorize(:dark_gray)}"
                 end
 
                 if @frameIndex < 1
                     @reverseAnimation = false
+
+                    print "#{@text.colorize(:dark_gray)}"
+
+                    (0..(@text.size-1)).each do |index|
+                        print "\033[1D"
+                    end
                 end
 
                 if @reverseAnimation
