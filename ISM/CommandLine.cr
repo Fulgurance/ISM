@@ -931,6 +931,14 @@ module ISM
                     break
                 end
             end
+
+            (0..@text.size-1).each do |index|
+                print " "
+            end
+
+            (0..(@text.size-1)).each do |index|
+                print "\033[1D"
+            end
         end
 
         def getRequestedSoftwares(list : Array(String)) : Array(ISM::SoftwareInformation)
