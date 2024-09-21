@@ -37,11 +37,14 @@ module ISM
             #EXEMPLE: ">=5.0.0 ~ <6.0.0"
             separator = request.includes?(" ~ ")
 
-            #Need to add a rescue in case the interval is not well formatted to locate the problem
             if separator
-                startCondition = request.split(" ~ ")[0]
-                endCondition = request.split(" ~ ")[1]
-                comparators = ( (greaterComparator(startCondition) || greaterOrEqualComparator(startCondition)) && (lessComparator(endCondition) || lessOrEqualComparator(endCondition)) )
+                begin
+                    startCondition = request.split(" ~ ")[0]
+                    endCondition = request.split(" ~ ")[1]
+                    comparators = ( (greaterComparator(startCondition) || greaterOrEqualComparator(startCondition)) && (lessComparator(endCondition) || lessOrEqualComparator(endCondition)) )
+                rescue
+                    return false
+                end
             else
                 return false
             end
