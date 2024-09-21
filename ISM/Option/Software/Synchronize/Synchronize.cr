@@ -14,9 +14,18 @@ module ISM
                 if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                     Ism.printNeedSuperUserAccessNotification
                 else
+                    oldPortList = Ism.ports.dump
+
                     print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
 
                     Ism.synchronizePorts
+
+                    #Show synchronization report
+
+                    #New ports
+                    #Deleted ports
+                    #Totat port synchronized    -> Ism.ports.size
+                    #Total available softwares  -> Ism.softwares.size
 
                     print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
                     puts "#{ISM::Default::Option::SoftwareSynchronize::SynchronizedText.colorize(:green)}"
