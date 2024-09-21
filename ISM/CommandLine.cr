@@ -1545,19 +1545,19 @@ module ISM
         def buildTasksFile
             processResult = IO::Memory.new
 
-            process = Process.run(  "crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
-                                    error: processResult,
-                                    shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")  do |currentProcess|
-                                                                                                                    loop do
-                                                                                                                        data = currentProcess.output.gets(chomp: false)
+            Process.run("crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+                        error: processResult,
+                        shell: true,
+                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |currentProcess|
+                loop do
+                    data = currentProcess.output.gets(chomp: false)
 
-                                                                                                                        print data
+                    print data
 
-                                                                                                                        Fiber.yield
-                                                                                                                        break if currentProcess.terminated?
-                                                                                                                    end
-                                                                                                                end
+                    Fiber.yield
+                    break if currentProcess.terminated?
+                end
+            end
 
             processResult.rewind
 
