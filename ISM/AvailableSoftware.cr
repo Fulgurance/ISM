@@ -36,15 +36,12 @@ module ISM
         private def intervalComparator(request : String) : Bool
             #EXEMPLE: ">=5.0.0 ~ <6.0.0"
             separator = request.includes?(" ~ ")
+            comparators = false
 
             if separator
-                begin
-                    startCondition = request.split(" ~ ")[0]
-                    endCondition = request.split(" ~ ")[1]
-                    comparators = ( (greaterComparator(startCondition) || greaterOrEqualComparator(startCondition)) && (lessComparator(endCondition) || lessOrEqualComparator(endCondition)) )
-                rescue
-                    return false
-                end
+                startCondition = request.split(" ~ ")[0]
+                endCondition = request.split(" ~ ")[1]
+                comparators = ( (greaterComparator(startCondition) || greaterOrEqualComparator(startCondition)) && (lessComparator(endCondition) || lessOrEqualComparator(endCondition)) )
             else
                 return false
             end
@@ -125,25 +122,10 @@ module ISM
                             return software
                         end
                     end
-                elsif intervalComparator(condition)
-                    startCondition = condition.split(" ~ ")[0]
-                    endCondition = condition.split(" ~ ")[1]
-
-                    startVersion = startCondition.tr("><=","")
-                    endVersion = endCondition.tr("><=","")
-
-                    startSemanticVersion = SemanticVersion.parse(startVersion)
-                    endSemanticVersion = SemanticVersion.parse(endVersion)
-
-                    intervalStart = getVersionByCondition(condition: startCondition, returnMaximum: false)
-                    intervalEnd = getVersionByCondition(condition: endCondition, returnMaximum: true)
-
-                    temp = @versions.select {|entry| SemanticVersion.parse(entry.version) >= startSemanticVersion && SemanticVersion.parse(entry.version) <= endSemanticVersion}
-
-                    return temp.max_by {|entry| SemanticVersion.parse(entry.version)}
                 else
                     return getVersionByCondition(condition: condition, returnMaximum: true)
                 end
+
                 return ISM::SoftwareInformation.new
             else
                 return ISM::SoftwareInformation.new
