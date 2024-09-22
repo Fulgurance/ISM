@@ -125,11 +125,9 @@ module ISM
                 else
                     return getVersionByCondition(condition: condition, returnMaximum: true)
                 end
-
-                return ISM::SoftwareInformation.new
-            else
-                return ISM::SoftwareInformation.new
             end
+
+            return ISM::SoftwareInformation.new
         end
 
     end
