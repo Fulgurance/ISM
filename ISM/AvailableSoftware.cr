@@ -67,9 +67,9 @@ module ISM
                 startSemanticVersion = SemanticVersion.parse(startVersion)
                 endSemanticVersion = SemanticVersion.parse(endVersion)
 
-                @versions.each do |entry|
+                firstConditionFulfilledArray = Array(ISM::SoftwareInformation).new
 
-                    firstConditionFulfilledArray = Array(ISM::SoftwareInformation).new
+                @versions.each do |entry|
 
                     if greaterComparator(startCondition) && !@versions.empty? && SemanticVersion.parse(entry.version) > startSemanticVersion ||
                         lessComparator(startCondition) && SemanticVersion.parse(entry.version) < startSemanticVersion ||
@@ -79,16 +79,16 @@ module ISM
                         firstConditionFulfilledArray.push(entry)
                     end
 
-                    firstConditionFulfilledArray.each do |software|
+                end
 
-                        if greaterComparator(endCondition) && !@versions.empty? && SemanticVersion.parse(software.version) > endSemanticVersion ||
-                            lessComparator(endCondition) && SemanticVersion.parse(software.version) < endSemanticVersion ||
-                            greaterOrEqualComparator(endCondition) && SemanticVersion.parse(software.version) >= endSemanticVersion ||
-                            lessOrEqualComparator(endCondition) && SemanticVersion.parse(software.version) <= endSemanticVersion
+                firstConditionFulfilledArray.each do |software|
 
-                            temp.push(software)
-                        end
+                    if greaterComparator(endCondition) && !@versions.empty? && SemanticVersion.parse(software.version) > endSemanticVersion ||
+                        lessComparator(endCondition) && SemanticVersion.parse(software.version) < endSemanticVersion ||
+                        greaterOrEqualComparator(endCondition) && SemanticVersion.parse(software.version) >= endSemanticVersion ||
+                        lessOrEqualComparator(endCondition) && SemanticVersion.parse(software.version) <= endSemanticVersion
 
+                        temp.push(software)
                     end
 
                 end
