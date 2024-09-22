@@ -68,7 +68,7 @@ module ISM
 
                 @versions.each do |entry|
 
-                    if greaterComparator(startCondition) && !@versions.empty? && SemanticVersion.parse(entry.version) > startSemanticVersion ||
+                    if greaterComparator(startCondition) && SemanticVersion.parse(entry.version) > startSemanticVersion ||
                         lessComparator(startCondition) && SemanticVersion.parse(entry.version) < startSemanticVersion ||
                         greaterOrEqualComparator(startCondition) && SemanticVersion.parse(entry.version) >= startSemanticVersion ||
                         lessOrEqualComparator(startCondition) && SemanticVersion.parse(entry.version) <= startSemanticVersion
@@ -80,7 +80,7 @@ module ISM
 
                 firstConditionFulfilledArray.each do |software|
 
-                    if greaterComparator(endCondition) && !@versions.empty? && SemanticVersion.parse(software.version) > endSemanticVersion ||
+                    if greaterComparator(endCondition) && SemanticVersion.parse(software.version) > endSemanticVersion ||
                         lessComparator(endCondition) && SemanticVersion.parse(software.version) < endSemanticVersion ||
                         greaterOrEqualComparator(endCondition) && SemanticVersion.parse(software.version) >= endSemanticVersion ||
                         lessOrEqualComparator(endCondition) && SemanticVersion.parse(software.version) <= endSemanticVersion
@@ -95,7 +95,7 @@ module ISM
                 version = condition.tr("><=","")
                 semanticVersion = SemanticVersion.parse(version)
 
-                if greaterComparator(condition) && !@versions.empty?
+                if greaterComparator(condition)
                     temp = @versions.select {|entry| SemanticVersion.parse(entry.version) > semanticVersion}
                 elsif lessComparator(condition)
                     temp = @versions.select {|entry| SemanticVersion.parse(entry.version) < semanticVersion}
