@@ -1127,7 +1127,9 @@ module ISM
             puts "#{fullName.colorize(:magenta)}" + " /" + "#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
 
             dependencySelection.each do |selection|
-                puts "\t#{ISM::Default::CommandLine::MissingSelectionText.colorize(:magenta)} #{selection.join(" | ").colorize(:magenta)}"
+                dependencySet = selection.map { |entry| "#{(entry[0..entry.index(":")])[0..-2].colorize(:red)}#{entry.gsub(entry[0..entry.index(":")],"").colorize(:green)}" }
+
+                puts "\t#{ISM::Default::CommandLine::MissingSelectionText} #{dependencySet.join(" | ")}"
             end
 
             puts "\n"
