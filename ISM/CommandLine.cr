@@ -1554,7 +1554,8 @@ module ISM
                 loop do
                     data = process.output.gets(chomp: false)
 
-                    print data
+                    STDOUT << data
+                    STDOUT.flush
 
                     Fiber.yield
                     break if process.terminated?
