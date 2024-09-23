@@ -14,21 +14,38 @@ module ISM
                 if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                     Ism.printNeedSuperUserAccessNotification
                 else
-                    oldPortList = Ism.ports.dup
+                    oldPortList = Ism.ports.map { |entry| entry.name}
 
                     print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
 
                     Ism.synchronizePorts
 
-                    #Show synchronization report
+                    newPortList = Ism.ports.map { |entry| entry.name}
 
-                    #New ports
-                    #Deleted ports
-                    #Totat port synchronized    -> Ism.ports.size
-                    #Total available softwares  -> Ism.softwares.size
+                    newPortNumber = 0
+                    deletedPortNumber = 0
+
+                    oldPortList.each do |entry|
+                        if !newPortList.includes?(entry)
+                            deletedPortNumber += 1
+                        end
+                    end
+
+                    newPortList.each do |entry|
+                        if !oldPortList.includes?(entry)
+                            newPortNumber += 1
+                        end
+                    end
 
                     print "#{ISM::Default::Option::SoftwareSynchronize::SynchronizationDoneText.colorize(:green)}\n"
                     puts "#{ISM::Default::Option::SoftwareSynchronize::SynchronizedText.colorize(:green)}"
+
+                    puts
+
+                    puts "#{ISM::Default::Option::SoftwareSynchronize::NewPortsText.colorize(:green)} #{newPortNumber > 0 ? "#{"+".colorize(:red)}" : ""}#{newPortNumber.colorize(:red)}"
+                    puts "#{ISM::Default::Option::SoftwareSynchronize::DeletedPortsText.colorize(:green)} #{deletedPortNumber > 0 ? "#{"-".colorize(:blue)}" : ""}#{newPortNumber.colorize(:blue)}"
+                    puts "#{ISM::Default::Option::SoftwareSynchronize::TotalSynchronizedPortsText.colorize(:green)} #{Ism.softwares.size}"
+                    puts "#{ISM::Default::Option::SoftwareSynchronize::TotalAvailableSoftwaresText.colorize(:green)} #{Ism.softwares.size}"
                 end
             end
 

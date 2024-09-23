@@ -12,7 +12,10 @@ module ISM
                 SynchronizationTitle = "ISM start to synchronizing: "
                 SynchronizationDoneText = "Done !"
                 SynchronizedText = "The database is synchronized"
-
+                NewPortsText = "New added ports:"
+                DeletedPortsText = "Deleted ports:"
+                TotalSynchronizedPortsText = "Synchronized ports:"
+                TotalAvailableSoftwaresText = "Available softwares:"
             end
             
         end
