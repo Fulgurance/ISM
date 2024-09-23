@@ -42,9 +42,9 @@ module ISM
 
                     puts
 
-                    puts "#{ISM::Default::Option::SoftwareSynchronize::NewPortsText.colorize(:green)} #{newPortNumber > 0 ? "#{"+".colorize(:red)}" : ""}#{newPortNumber.colorize(:red)}"
-                    puts "#{ISM::Default::Option::SoftwareSynchronize::DeletedPortsText.colorize(:green)} #{deletedPortNumber > 0 ? "#{"-".colorize(:blue)}" : ""}#{newPortNumber.colorize(:blue)}"
-                    puts "#{ISM::Default::Option::SoftwareSynchronize::TotalSynchronizedPortsText.colorize(:green)} #{Ism.softwares.size}"
+                    puts "#{ISM::Default::Option::SoftwareSynchronize::NewPortsText.colorize(:green)} #{newPortNumber > 0 ? "#{"+".colorize(:red)}" : ""}#{newPortNumber > 0 ? newPortNumber.colorize(:red) : newPortNumber}"
+                    puts "#{ISM::Default::Option::SoftwareSynchronize::DeletedPortsText.colorize(:green)} #{deletedPortNumber > 0 ? "#{"-".colorize(:blue)}" : ""}#{deletedPortNumber > 0 ? deletedPortNumber.colorize(:blue) : deletedPortNumber}"
+                    puts "#{ISM::Default::Option::SoftwareSynchronize::TotalSynchronizedPortsText.colorize(:green)} #{Ism.ports.size}"
                     puts "#{ISM::Default::Option::SoftwareSynchronize::TotalAvailableSoftwaresText.colorize(:green)} #{Ism.softwares.size}"
                 end
             end
