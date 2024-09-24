@@ -1551,11 +1551,18 @@ module ISM
                         error: processResult,
                         shell: true,
                         chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
-                loop do
-                    data = process.output.gets(chomp: false)
 
-                    STDOUT << data
-                    STDOUT.flush
+                output = process.output.each_char
+
+                loop do
+                    char = output.next
+
+                    if char == '\r'
+                        STDOUT << "\033[1D \033[1D"
+                        STDOUT.flush
+                    else
+                        STDOUT << char
+                    end
 
                     Fiber.yield
                     break if process.terminated?
