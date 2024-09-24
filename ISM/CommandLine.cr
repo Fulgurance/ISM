@@ -1534,6 +1534,8 @@ module ISM
 
                     CODE
 
+            puts
+
             showTaskCompilationTitleMessage
 
             generateTasksFile(tasks)
