@@ -1661,6 +1661,7 @@ module ISM
                     end
 
                     CODE
+            puts
 
             showTaskCompilationTitleMessage
 
