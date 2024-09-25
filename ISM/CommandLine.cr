@@ -1149,6 +1149,7 @@ module ISM
         end
 
         def showCalculationTitleMessage
+            puts
             print "#{ISM::Default::CommandLine::CalculationTitle}"
         end
 
