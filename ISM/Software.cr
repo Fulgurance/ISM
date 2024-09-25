@@ -1381,9 +1381,10 @@ module ISM
             filesList.each do |entry|
 
                 finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
+                recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
 
-                if !File.exists?(finalDestination)
-                    installedFiles << "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
+                if !File.exists?(finalDestination) || Ism.softwareIsInstalled(@information) && ISM::SoftwareInformation.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
+                    installedFiles << recordedFilePath
                 end
 
                 if File.directory?(entry) && !File.symlink?(entry)
