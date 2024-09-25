@@ -19,7 +19,7 @@ module ISM
                     else
                         matchingSoftware = Ism.getSoftwareInformation(ARGV[1+Ism.debugLevel].downcase)
 
-                        if matchingSoftware.name == ""
+                        if !matchingSoftware.isValid
                             puts ISM::Default::Option::SoftwareEnableOption::NoMatchFound + "#{ARGV[1+Ism.debugLevel].colorize(:green)}"
                             puts ISM::Default::Option::SoftwareEnableOption::NoMatchFoundAdvice
                         else
@@ -35,17 +35,19 @@ module ISM
                                     end
                                 end
 
+                                matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
+
                                 if match
                                     matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
                                     Ism.printProcessNotification(   ISM::Default::Option::SoftwareEnableOption::SetText1 +
-                                                                matchingOption.name +
+                                                                "#{matchingOption.name.colorize(:green)}" +
                                                                 ISM::Default::Option::SoftwareEnableOption::SetText2 +
-                                                                matchingSoftware.name)
+                                                                matchingSoftwareText)
                                 else
                                     Ism.printErrorNotification( ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound1 +
-                                                            ARGV[3+Ism.debugLevel] +
+                                                            "#{ARGV[3+Ism.debugLevel].colorize(:green)}" +
                                                             ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound2 +
-                                                            matchingSoftware.name,nil)
+                                                            matchingSoftwareText,nil)
                                 end
                             else
                                 showHelp
