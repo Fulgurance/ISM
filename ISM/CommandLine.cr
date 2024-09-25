@@ -1626,6 +1626,7 @@ module ISM
                     Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
                     Ism.loadSoftwareDatabase
+                    Ism.loadInstalledSoftwareDatabase
 
                     limit = targets.size
 
@@ -1661,8 +1662,13 @@ module ISM
 
                     CODE
 
+            showTaskCompilationTitleMessage
+
             generateTasksFile(tasks)
             buildTasksFile
+
+            showCalculationDoneMessage
+
             runTasksFile
         end
 
