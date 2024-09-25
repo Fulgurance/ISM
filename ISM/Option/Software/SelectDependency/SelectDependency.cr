@@ -27,15 +27,10 @@ module ISM
 
                                 dependency = ARGV[3+Ism.debugLevel].downcase
 
-                                port = (dependency[0..dependency.index(":")])[0..-2].gsub(/[@-]([^@-]+)/) do |entry|
-                                    entry[0] + entry[1..].titleize
-                                end
+                                port = (dependency[1..dependency.index(":")])[0..-2].gsub("-"," ").titleize.gsub(" ","-")
+                                name = dependency.gsub(dependency[0..dependency.index(":")],"").gsub("-"," ").titleize.gsub(" ","-")
 
-                                name = dependency.gsub(dependency[0..dependency.index(":")],"").gsub(/[@-]([^@-]+)/) do |entry|
-                                    entry[0] + entry[1..].titleize
-                                end
-
-                                dependencyText = "#{port.colorize(:red)}:#{name.colorize(:green)}"
+                                dependencyText = "#{("@"+port).colorize(:red)}:#{name.colorize(:green)}"
                                 matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
 
                                 if matchingSoftware.selectUniqueDependency(dependency)
