@@ -335,11 +335,15 @@ module ISM
 
                 protectedFiles = otherVersions.map {|version| version.installedFiles }.flatten.uniq
 
-                protectedFiles.each do |file|
+                if protectedFiles.size > 0
+                    protectedFiles.each do |file|
 
-                    if !requestedVersion.installedFiles.includes?(file)
-                        filesForRemoval.push(file)
+                        if !requestedVersion.installedFiles.includes?(file)
+                            filesForRemoval.push(file)
+                        end
                     end
+                else
+                    filesForRemoval = requestedVersion.installedFiles
                 end
 
                 filesForRemoval.each do |file|
