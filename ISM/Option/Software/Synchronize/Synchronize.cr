@@ -16,7 +16,8 @@ module ISM
                 else
                     oldPortList = Ism.ports.map { |entry| entry.name}
 
-                    puts ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
+                    puts
+                    print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
 
                     Ism.synchronizePorts
 
