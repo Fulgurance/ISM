@@ -11,13 +11,13 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel
+                if ARGV.size == 2
                     showHelp
                 else
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        userRequest = ARGV[2+Ism.debugLevel..-1].uniq
+                        userRequest = ARGV[2..-1].uniq
                         Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest)
 
                         #No match found

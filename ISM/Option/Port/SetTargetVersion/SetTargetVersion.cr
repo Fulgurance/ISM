@@ -11,13 +11,13 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel
+                if ARGV.size == 2
                     showHelp
                 else
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        targetVersion = ARGV[2+Ism.debugLevel]
+                        targetVersion = ARGV[2]
                         validVersion = false
 
                         if !Ism.ports.empty?

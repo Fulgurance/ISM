@@ -23,8 +23,8 @@ module ISM
         end
 
         def self.delete(name : String)
-            File.delete(self.filePathPrefix+ARGV[2+Ism.debugLevel]+".json")
-            FileUtils.rm_r(self.directoryPathPrefix+ARGV[2+Ism.debugLevel])
+            File.delete(self.filePathPrefix+ARGV[2]+".json")
+            FileUtils.rm_r(self.directoryPathPrefix+ARGV[2])
         end
 
         def self.filePath(name : String) : String

@@ -11,24 +11,24 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel || ARGV.size == 3+Ism.debugLevel
+                if ARGV.size == 2 || ARGV.size == 3
                     showHelp
                 else
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1+Ism.debugLevel].downcase)
+                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase)
 
                         if !matchingSoftware.isValid
-                            puts ISM::Default::Option::SoftwareEnableOption::NoMatchFound + "#{ARGV[1+Ism.debugLevel].colorize(:green)}"
+                            puts ISM::Default::Option::SoftwareEnableOption::NoMatchFound + "#{ARGV[1].colorize(:green)}"
                             puts ISM::Default::Option::SoftwareEnableOption::NoMatchFoundAdvice
                         else
-                            if ARGV[2+Ism.debugLevel] == @shortText || ARGV[2+Ism.debugLevel] == @longText
+                            if ARGV[2] == @shortText || ARGV[2] == @longText
                                 match = false
                                 matchingOption = ISM::SoftwareOption.new
 
                                 matchingSoftware.options.each do |option|
-                                    if ARGV[3+Ism.debugLevel] == option.name || ARGV[3+Ism.debugLevel] == option.name.downcase
+                                    if ARGV[3] == option.name || ARGV[3] == option.name.downcase
                                         matchingSoftware.enableOption(option.name)
                                         matchingOption = option
                                         match = true
@@ -45,7 +45,7 @@ module ISM
                                                                 matchingSoftwareText)
                                 else
                                     Ism.printErrorNotification( ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound1 +
-                                                            "#{ARGV[3+Ism.debugLevel].colorize(:green)}" +
+                                                            "#{ARGV[3].colorize(:green)}" +
                                                             ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound2 +
                                                             matchingSoftwareText,nil)
                                 end

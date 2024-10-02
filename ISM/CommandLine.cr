@@ -6,7 +6,6 @@ module ISM
         property neededKernelFeatures : Array(String)
         property unneededKernelFeatures : Array(String)
         property lastRecordedSystemCall : ISM::SystemCallRecord
-        property debugLevel : Int32
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
         property kernels : Array(ISM::AvailableKernel)
@@ -31,7 +30,6 @@ module ISM
             @frameIndex = 0
             @reverseAnimation = false
             @text = ISM::Default::CommandLine::CalculationWaitingText
-            @debugLevel = ISM::Default::CommandLine::DebugLevel
             @options = ISM::Default::CommandLine::Options
             @settings = ISM::CommandLineSettings.new
             @kernels = Array(ISM::AvailableKernel).new
@@ -514,47 +512,6 @@ module ISM
             return result
         end
 
-        # def checkEnteredArguments
-        #     matchingOption = false
-        #
-        #     terminalTitleArguments = (ARGV.empty? ? "" : ARGV.join(" "))
-        #     setTerminalTitle("#{ISM::Default::CommandLine::Name} #{terminalTitleArguments}")
-        #
-        #     if ARGV.empty?
-        #         matchingOption = true
-        #         @options[0+@debugLevel].start
-        #         resetTerminalTitle
-        #     else
-        #         @options.each_with_index do |argument, index|
-        #             if ARGV[0] == ISM::Default::Option::Debug::ShortText || ARGV[0] == ISM::Default::Option::Debug::LongText
-        #                 @debugLevel = 1
-        #             end
-        #
-        #             if @debugLevel == 0 || @debugLevel == 1 && ARGV.size < 2 || @debugLevel == 1 && ARGV.size == 1
-        #                 if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
-        #                     matchingOption = true
-        #                     @options[index].start
-        #                     resetTerminalTitle
-        #                     break
-        #                 end
-        #             end
-        #
-        #             if @debugLevel == 1 && ARGV.size > 1
-        #                 if ARGV[0+@debugLevel] == argument.shortText || ARGV[0+@debugLevel] == argument.longText
-        #                     matchingOption = true
-        #                     @options[index].start
-        #                     resetTerminalTitle
-        #                     break
-        #                 end
-        #             end
-        #         end
-        #     end
-        #
-        #     if !matchingOption
-        #         showErrorUnknowArgument
-        #     end
-        # end
-
         def checkEnteredArguments
             matchingOption = false
 
@@ -563,31 +520,18 @@ module ISM
 
             if ARGV.empty?
                 matchingOption = true
-                @options[0+@debugLevel].start
+                @options[0].start
                 resetTerminalTitle
             else
                 @options.each_with_index do |argument, index|
-                    if ARGV[0] == ISM::Default::Option::Debug::ShortText || ARGV[0] == ISM::Default::Option::Debug::LongText
-                        @debugLevel = 1
+
+                    if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
+                        matchingOption = true
+                        @options[index].start
+                        resetTerminalTitle
+                        break
                     end
 
-                    if @debugLevel == 0 || @debugLevel == 1 && ARGV.size < 2 || @debugLevel == 1 && ARGV.size == 1
-                        if ARGV[0] == argument.shortText || ARGV[0] == argument.longText
-                            matchingOption = true
-                            @options[index].start
-                            resetTerminalTitle
-                            break
-                        end
-                    end
-
-                    if @debugLevel == 1 && ARGV.size > 1
-                        if ARGV[0+@debugLevel] == argument.shortText || ARGV[0+@debugLevel] == argument.longText
-                            matchingOption = true
-                            @options[index].start
-                            resetTerminalTitle
-                            break
-                        end
-                    end
                 end
             end
 

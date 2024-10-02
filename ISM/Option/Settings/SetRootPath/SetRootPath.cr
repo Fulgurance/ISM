@@ -11,13 +11,13 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel
+                if ARGV.size == 2
                     showHelp
                 else
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        path = ARGV[2+Ism.debugLevel]
+                        path = ARGV[2]
 
                         if path[-1] != '/'
                             path = path+"/"

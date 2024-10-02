@@ -11,21 +11,21 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel || ARGV.size == 3+Ism.debugLevel
+                if ARGV.size == 2 || ARGV.size == 3
                     showHelp
                 else
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1+Ism.debugLevel].downcase)
+                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase)
 
                         if matchingSoftware.fullName == ""
-                            puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFound + "#{ARGV[1+Ism.debugLevel].colorize(:green)}"
+                            puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFound + "#{ARGV[1].colorize(:green)}"
                             puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFoundAdvice
                         else
-                            if ARGV[2+Ism.debugLevel] == @shortText || ARGV[2+Ism.debugLevel] == @longText
+                            if ARGV[2] == @shortText || ARGV[2] == @longText
 
-                                dependency = ARGV[3+Ism.debugLevel].downcase
+                                dependency = ARGV[3].downcase
 
                                 port = (dependency[1..dependency.index(":")])[0..-2].gsub("-"," ").titleize.gsub(" ","-")
                                 name = dependency.gsub(dependency[0..dependency.index(":")],"").gsub("-"," ").titleize.gsub(" ","-")

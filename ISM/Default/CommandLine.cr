@@ -4,7 +4,6 @@ module ISM
 
         module CommandLine
 
-            DebugLevel = 0
             Title = "Ingenius System Manager"
             Name = "ism"
             NeedSuperUserAccessText = "ISM need superuser access to run this command"
@@ -119,8 +118,7 @@ module ISM
                         ISM::Option::Version.new,
                         ISM::Option::Software.new,
                         ISM::Option::Port.new,
-                        ISM::Option::Settings.new,
-                        ISM::Option::Debug.new]
+                        ISM::Option::Settings.new]
 
         end
 

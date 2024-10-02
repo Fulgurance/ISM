@@ -11,7 +11,7 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel
+                if ARGV.size == 2
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else

@@ -25,7 +25,6 @@ Ingenius System Manager
         -so     software        Install, configure and remove softwares
         -p      port    Manage ISM ports
         -se     settings        Configure ISM settings
-        -d      debug   Enable debug mode to track any error
 ```
 
 ```

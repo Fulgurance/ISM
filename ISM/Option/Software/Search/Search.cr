@@ -11,19 +11,19 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel
+                if ARGV.size == 2
                     showHelp
                 else
                     matchingSoftwaresArray = Array(ISM::AvailableSoftware).new
 
                     Ism.softwares.each do |software|
-                        if software.name.includes?(ARGV[2+Ism.debugLevel]) || software.name.downcase.includes?(ARGV[2+Ism.debugLevel])
+                        if software.name.includes?(ARGV[2]) || software.name.downcase.includes?(ARGV[2])
                             matchingSoftwaresArray << software
                         end
                     end
 
                     if matchingSoftwaresArray.empty?
-                        puts ISM::Default::Option::SoftwareSearch::NoMatchFound + "#{ARGV[2+Ism.debugLevel].colorize(:green)}"
+                        puts ISM::Default::Option::SoftwareSearch::NoMatchFound + "#{ARGV[2].colorize(:green)}"
                         puts ISM::Default::Option::SoftwareSearch::NoMatchFoundAdvice
                     else
                         puts "\n"

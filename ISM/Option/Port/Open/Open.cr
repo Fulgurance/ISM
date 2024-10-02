@@ -21,13 +21,13 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel
+                if ARGV.size == 2
                     showHelp
                 else
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        port = convertUrlToPort(ARGV[2+Ism.debugLevel])
+                        port = convertUrlToPort(ARGV[2])
 
                         if port.open
                             Ism.printProcessNotification(ISM::Default::Option::PortOpen::OpenText+"#{("@#{port.name}").colorize(Colorize::ColorRGB.new(255,100,100))}")

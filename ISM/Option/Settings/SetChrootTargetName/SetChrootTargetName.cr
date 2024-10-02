@@ -11,14 +11,14 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2+Ism.debugLevel
+                if ARGV.size == 2
                     showHelp
                 else
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        Ism.settings.setChrootTargetName(ARGV[2+Ism.debugLevel])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootTargetName::SetText+ARGV[2+Ism.debugLevel])
+                        Ism.settings.setChrootTargetName(ARGV[2])
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootTargetName::SetText+ARGV[2])
                     end
                 end
             end
