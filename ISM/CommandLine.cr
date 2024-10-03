@@ -659,19 +659,19 @@ module ISM
         end
 
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::DownloadText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::CheckText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::CheckText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::ExtractText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::ExtractText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PatchText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::PatchText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfLocalPatch(patchName : String)
@@ -679,43 +679,43 @@ module ISM
         end
 
         def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PrepareText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::PrepareText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::ConfigureText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfBuild(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::BuildText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::BuildText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfPrepareInstallation(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::InstallText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::InstallText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfUpdateKernelOptionsDatabase(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfRecordNeededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::CleanText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::CleanText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfRecordUnneededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::UninstallText+softwareInformation.name)
+            printProcessNotification(ISM::Default::CommandLine::UninstallText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfDownloadError(link : String, error = nil)
