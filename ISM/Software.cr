@@ -1469,7 +1469,6 @@ module ISM
 
                     reverseCondition = word.starts_with?("!")
 
-
                 else
                     if word.starts_with?("!")
                         blockers.push(word)

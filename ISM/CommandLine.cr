@@ -829,7 +829,7 @@ module ISM
         def playCalculationAnimation(@text = ISM::Default::CommandLine::CalculationWaitingText)
             currentTime = Time.monotonic
 
-            if (currentTime - @calculationStartingTime).milliseconds > 45
+            if (currentTime - @calculationStartingTime).milliseconds > 40
 
                 if @frameIndex > @text.size-1
                     @reverseAnimation = true
