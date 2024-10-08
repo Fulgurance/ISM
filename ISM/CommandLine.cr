@@ -824,10 +824,11 @@ module ISM
         def playCalculationAnimation(@text = ISM::Default::CommandLine::CalculationWaitingText)
             currentTime = Time.monotonic
 
-            if (currentTime - @calculationStartingTime).milliseconds > 40
+            if (currentTime - @calculationStartingTime).milliseconds > 45
 
-                if @frameIndex == @text.size && !@reverseAnimation
+                if @frameIndex > @text.size-1
                     @reverseAnimation = true
+                    @frameIndex = @text.size-1
 
                     (0..(@text.size-1)).each do |index|
                         print "\033[1D"
@@ -836,17 +837,7 @@ module ISM
                     print "#{@text.colorize(:dark_gray)}"
                 end
 
-                if @frameIndex < 1
-                    @reverseAnimation = false
-
-                    print "#{@text.colorize(:dark_gray)}"
-
-                    (0..(@text.size-1)).each do |index|
-                        print "\033[1D"
-                    end
-                end
-
-                if @reverseAnimation
+                if @reverseAnimation && @frameIndex >= 0
 
                     print "\b "
                     print "\033[1D"
@@ -854,13 +845,23 @@ module ISM
 
                     @frameIndex -= 1
 
+                    if @frameIndex < 0
+                        @reverseAnimation = false
+                        @frameIndex = 0
+                        print "#{@text.colorize(:dark_gray)}"
+                        (0..(@text.size-1)).each do |index|
+                            print "\033[1D"
+                        end
+                    end
+
                 end
 
-                if !@reverseAnimation
+                if !@reverseAnimation && @frameIndex <= @text.size-1
+
+                    @frameIndex += 1
 
                     print "\b "
-                    print "#{@text[@frameIndex].colorize(:green)}"
-                    @frameIndex += 1
+                    print "#{@text[@frameIndex-1].colorize(:green)}"
 
                 end
 
