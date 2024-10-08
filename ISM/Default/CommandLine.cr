@@ -74,7 +74,7 @@ module ISM
             NoUpdate = "System up to date."
             NoCleaningRequiredMessage = "No cleaning required. Task complete."
             CalculationTitle = "ISM start to calculate dependencies: "
-            CalculationWaitingText = "Checking dependencies tree"
+            CalculationWaitingText = "Checking dependency tree"
             SynchronizationWaitingText = "Synchronization with the online database"
             CodependencyExtensionText = "Codependency"
             CalculationDoneText = "Done !"
