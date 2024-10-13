@@ -14,14 +14,20 @@ module ISM
                 if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                     Ism.printNeedSuperUserAccessNotification
                 else
-                    oldPortList = Ism.ports.map { |entry| entry.name}
+                    oldPortList = Array(String).new
+
+                    Ism.ports.each do |port|
+                        if Dir.exists?(port.directoryPath) && !Dir.empty?(port.directoryPath)
+                            oldPortList.push(port.name)
+                        end
+                    end
 
                     puts
                     print ISM::Default::Option::SoftwareSynchronize::SynchronizationTitle
 
                     Ism.synchronizePorts
 
-                    newPortList = Ism.ports.map { |entry| entry.name}
+                    newPortList = Ism.ports.map { |port| port.name}
 
                     newPortNumber = 0
                     deletedPortNumber = 0
