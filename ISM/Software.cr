@@ -1154,6 +1154,17 @@ module ISM
             end
         end
 
+        def runXargoCommand(arguments : String, path = String.new)
+            requestedCommands = "xargo #{arguments}"
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
+            end
+        end
+
         def runGccCommand(arguments = String.new, path = String.new)
             requestedCommands = "gcc #{arguments}"
 
