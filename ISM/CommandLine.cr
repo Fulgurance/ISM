@@ -1507,7 +1507,11 @@ module ISM
                         error: processResult,
                         shell: true,
                         chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
-                playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
+                loop do
+                    playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
+                    Fiber.yield
+                    break if process.terminated?
+                end
             end
 
             processResult.rewind
