@@ -46,7 +46,6 @@ module ISM
             @totalInstalledSymlinkNumber = UInt128.new(0)
             @totalInstalledFileNumber = UInt128.new(0)
             @totalInstalledSize = UInt128.new(0)
-
             @increasingPhase = true
             @colorPhase = 0
             @red = UInt8.new(55)
@@ -836,12 +835,6 @@ module ISM
             currentTime = Time.monotonic
 
             if (currentTime - @calculationStartingTime).milliseconds > 40
-
-                #Color value increase or not
-                #@increasingPhase = true
-
-                #0:Red,1:Blue,2:Green
-                #@colorPhase = 0
 
                 #Limits
                 minimumValue = 55
