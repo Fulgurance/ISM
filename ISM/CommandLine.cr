@@ -46,6 +46,12 @@ module ISM
             @totalInstalledSymlinkNumber = UInt128.new(0)
             @totalInstalledFileNumber = UInt128.new(0)
             @totalInstalledSize = UInt128.new(0)
+
+            @increasingPhase = true
+            @colorPhase = 0
+            @red = UInt8.new(55)
+            @blue = UInt8.new(55)
+            @green = UInt8.new(55)
         end
 
         def ranAsSuperUser : Bool
@@ -831,6 +837,48 @@ module ISM
 
             if (currentTime - @calculationStartingTime).milliseconds > 40
 
+                #Color value increase or not
+                #@increasingPhase = true
+
+                #0:Red,1:Blue,2:Green
+                #@colorPhase = 0
+
+                #Limits
+                minimumValue = 55
+                maximumValue = 255
+                speed = 10
+
+                if @increasingPhase && @red >= maximumValue && @blue >= maximumValue && @green >= maximumValue
+                    @increasingPhase = false
+                end
+
+                if !@increasingPhase && @red <= minimumValue && @blue <= minimumValue && @green <= minimumValue
+                    @increasingPhase = true
+                end
+
+                case @colorPhase
+                when 0
+                    @increasingPhase ? (@red += speed) : (@red -= speed)
+
+                    if @increasingPhase && @red >= maximumValue || !@increasingPhase && @red <= minimumValue
+                        @colorPhase += 1
+                    end
+                when 1
+                    @increasingPhase ? (@blue += speed) : (@blue -= speed)
+
+                    if @increasingPhase && @blue >= maximumValue || !@increasingPhase && @blue <= minimumValue
+                        @colorPhase += 1
+                    end
+                when 2
+                    @increasingPhase ? (@green += speed) : (@green -= speed)
+
+                    if @increasingPhase && @green >= maximumValue || !@increasingPhase && @green <= minimumValue
+                        @colorPhase = 0
+                    end
+                end
+
+                color = Colorize::ColorRGB.new(@red,@blue,@green)
+
                 if @frameIndex > @text.size-1
                     @reverseAnimation = true
                     @frameIndex = @text.size-1
@@ -846,7 +894,7 @@ module ISM
 
                     print "\b "
                     print "\033[1D"
-                    print "\b#{@text[@frameIndex-1].colorize(:green)}"
+                    print "\b#{@text[@frameIndex-1].colorize(color)}"
 
                     @frameIndex -= 1
 
@@ -866,7 +914,7 @@ module ISM
                     @frameIndex += 1
 
                     print "\b "
-                    print "#{@text[@frameIndex-1].colorize(:green)}"
+                    print "#{@text[@frameIndex-1].colorize(color)}"
 
                 end
 
