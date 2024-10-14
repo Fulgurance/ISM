@@ -1507,22 +1507,7 @@ module ISM
                         error: processResult,
                         shell: true,
                         chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
-
-                output = process.output.each_char
-
-                loop do
-                    char = output.next
-
-                    if char == '\r'
-                        STDOUT << "\033[1D \033[1D"
-                        STDOUT.flush
-                    else
-                        STDOUT << char
-                    end
-
-                    Fiber.yield
-                    break if process.terminated?
-                end
+                playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
             end
 
             processResult.rewind
