@@ -17,7 +17,7 @@ module ISM
                     oldPortList = Array(String).new
 
                     Ism.ports.each do |port|
-                        if Dir.exists?(port.directoryPath) && !Dir.empty?(port.directoryPath)
+                        if Dir.exists?(port.directoryPath) && !Dir.glob("#{port.directoryPath}/*").empty?
                             oldPortList.push(port.name)
                         end
                     end
