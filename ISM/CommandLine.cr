@@ -583,7 +583,7 @@ module ISM
             separatorText = String.new
 
             (0..limit).each do |index|
-                separatorText += "_"
+                separatorText += "="
             end
 
             title = "\n\n#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
@@ -591,6 +591,7 @@ module ISM
             errorText = "\n#{ISM::Default::CommandLine::TaskBuildingProcessErrorText1}#{error.file}#{ISM::Default::CommandLine::TaskBuildingProcessErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
             help = "\n#{ISM::Default::CommandLine::TaskBuildingErrorNotificationHelp.colorize(:red)}"
 
+            puts separatorText
             puts title
             puts separatorText
             puts errorText
@@ -613,6 +614,7 @@ module ISM
             errorText = "\n#{errorText1}#{softwareText}#{errorText2}\n\n#{error.message.colorize(:yellow)}"
             help = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
 
+            puts separatorText
             puts title
             puts separatorText
             puts errorText
