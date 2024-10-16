@@ -586,7 +586,7 @@ module ISM
                 separatorText += "="
             end
 
-            title = "\n\n#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
+            title = "#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
             errorText = "\n#{ISM::Default::CommandLine::TaskBuildingProcessErrorText1}#{error.file}#{ISM::Default::CommandLine::TaskBuildingProcessErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
             help = "\n#{ISM::Default::CommandLine::TaskBuildingErrorNotificationHelp.colorize(:red)}"
@@ -606,10 +606,10 @@ module ISM
             separatorText = String.new
 
             (0..limit).each do |index|
-                separatorText += "_"
+                separatorText += "="
             end
 
-            title = "\n\n#{ISM::Default::CommandLine::InstallerImplementationErrorTitle.colorize(:red)}"
+            title = "#{ISM::Default::CommandLine::InstallerImplementationErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
             errorText = "\n#{errorText1}#{softwareText}#{errorText2}\n\n#{error.message.colorize(:yellow)}"
             help = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
@@ -631,14 +631,15 @@ module ISM
             separatorText = String.new
 
             (0..limit).each do |index|
-                separatorText += "_"
+                separatorText += "="
             end
 
-            title = "\n\n#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
+            title = "#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
             command = "\n#{@lastRecordedSystemCall.formattedOutput.colorize(Colorize::ColorRGB.new(255,100,100))}"
             help = "\n#{ISM::Default::CommandLine::SystemCallErrorNotificationHelp.colorize(:red)}"
 
+            puts separatorText
             puts title
             puts separatorText
             puts command
