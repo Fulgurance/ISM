@@ -591,6 +591,7 @@ module ISM
             errorText = "\n#{ISM::Default::CommandLine::TaskBuildingProcessErrorText1}#{error.file}#{ISM::Default::CommandLine::TaskBuildingProcessErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
             help = "\n#{ISM::Default::CommandLine::TaskBuildingErrorNotificationHelp.colorize(:red)}"
 
+            puts
             puts separatorText
             puts title
             puts separatorText
@@ -614,6 +615,7 @@ module ISM
             errorText = "\n#{errorText1}#{softwareText}#{errorText2}\n\n#{error.message.colorize(:yellow)}"
             help = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
 
+            puts
             puts separatorText
             puts title
             puts separatorText
@@ -639,6 +641,7 @@ module ISM
             command = "\n#{@lastRecordedSystemCall.formattedOutput.colorize(Colorize::ColorRGB.new(255,100,100))}"
             help = "\n#{ISM::Default::CommandLine::SystemCallErrorNotificationHelp.colorize(:red)}"
 
+            puts
             puts separatorText
             puts title
             puts separatorText
@@ -658,6 +661,7 @@ module ISM
 
             separatorText = "#{separatorText.colorize(:green)}"
 
+            puts
             puts separatorText
             puts text
             puts separatorText
