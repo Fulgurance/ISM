@@ -1144,7 +1144,7 @@ module ISM
 
         def showTaskCompilationFailedMessage
             cleanCalculationAnimation
-            print "#{ISM::Default::CommandLine::TaskCompilationFailedText.colorize(:red)}\n"
+            print "#{ISM::Default::CommandLine::TaskCompilationFailedText.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
         end
 
         def showCalculationDoneMessage
