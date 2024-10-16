@@ -1131,7 +1131,13 @@ module ISM
         end
 
         def showTaskCompilationTitleMessage
-            print "#{ISM::Default::CommandLine::TaskCompilationText.colorize(:green)}"
+            puts
+            print "#{ISM::Default::CommandLine::TaskCompilationText}"
+        end
+
+        def showTaskCompilationFailedMessage
+            cleanCalculationAnimation
+            print "#{ISM::Default::CommandLine::TaskCompilationFailedText.colorize(:red)}\n"
         end
 
         def showCalculationDoneMessage
@@ -1529,8 +1535,6 @@ module ISM
 
                     CODE
 
-            puts
-
             showTaskCompilationTitleMessage
 
             generateTasksFile(tasks)
@@ -1559,6 +1563,8 @@ module ISM
 
             if processResult.to_s != ""
                 taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
+
+                showTaskCompilationFailedMessage
                 showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
                 exitProgram
             end

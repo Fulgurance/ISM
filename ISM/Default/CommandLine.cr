@@ -23,6 +23,7 @@ module ISM
             SystemCallErrorNotificationHelp = "ISM raised that error because the ran script did not call properly a system command or the system command itself need to be fix."
             TaskCompilationText = "Task compilation in process: "
             CompilationWaitingText = "Compiling the requested task"
+            TaskCompilationFailedText = "Failed !"
             DownloadText = "Downloading "
             CheckText = "Checking "
             ExtractText = "Extracting "
