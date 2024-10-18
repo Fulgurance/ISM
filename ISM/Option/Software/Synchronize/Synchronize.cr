@@ -29,8 +29,8 @@ module ISM
 
                     newPortList = Array(String).new
 
-                    Dir.glob("#{port.directoryPath}/*").each do |port|
-                        name = port.sub(self.port.directoryPath,"")[0..-6]
+                    Dir.glob("#{ISM::Default::Path::PortsDirectory}/*").each do |port|
+                        name = port.sub(ISM::Default::Path::PortsDirectory,"")[0..-6]
 
                         newPortList.push(name)
                     end
