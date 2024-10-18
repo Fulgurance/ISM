@@ -11,7 +11,7 @@ module ISM
                 Description = "Close the specified port"
                 CloseText = "Closing port "
                 NoMatchFoundText1 = "The port "
-                NoMatchFoundText2 = "isn't open"
+                NoMatchFoundText2 = " is not open"
 
             end
             
