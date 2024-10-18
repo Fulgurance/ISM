@@ -27,7 +27,13 @@ module ISM
 
                     Ism.synchronizePorts
 
-                    newPortList = Ism.ports.map { |port| port.name}
+                    newPortList = Array(String).new
+
+                    Dir.glob("#{port.directoryPath}/*").each do |port|
+                        name = port.sub(self.port.directoryPath,"")[0..-6]
+
+                        newPortList.push(name)
+                    end
 
                     newPortNumber = 0
                     deletedPortNumber = 0
