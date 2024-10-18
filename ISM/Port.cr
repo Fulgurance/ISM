@@ -19,12 +19,27 @@ module ISM
         end
 
         def self.exists(name : String) : Bool
-            return File.exists?(self.filePathPrefix+name+".json")
+            Dir.glob("#{self.filePathPrefix}/*").each do |port|
+                filename = port[0..-6]
+
+                if filename.downcase == name.downcase || "@#{filename.downcase}" == name.downcase
+                    return true
+                end
+            end
+
+            return false
         end
 
         def self.delete(name : String)
-            File.delete(self.filePathPrefix+ARGV[2]+".json")
-            FileUtils.rm_r(self.directoryPathPrefix+ARGV[2])
+            Dir.glob("#{self.filePathPrefix}/*").each do |port|
+                filename = port[0..-6]
+
+                if filename.downcase == name.downcase || "@#{filename.downcase}" == name.downcase
+                    File.delete(self.filePathPrefix+filename+".json")
+                    FileUtils.rm_r(self.directoryPathPrefix+filename)
+                    break
+                end
+            end
         end
 
         def self.filePath(name : String) : String
