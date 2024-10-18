@@ -28,7 +28,7 @@ module ISM
                                 exist = false
 
                                 Ism.requestedSoftwares.each do |software|
-                                    if request == software.fullName || request == software.fullVersionName
+                                    if request.downcase == software.fullName.downcase || request.downcase == software.fullVersionName.downcase
                                         exist = true
                                         break
                                     end
