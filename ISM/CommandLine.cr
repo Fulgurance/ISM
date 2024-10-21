@@ -924,7 +924,7 @@ module ISM
 
         def cleanCalculationAnimation
             loop do
-                if @frameIndex > 0
+                if @frameIndex >= 0
                     print "\033[1D"
                     print " "
                     print "\033[1D"
