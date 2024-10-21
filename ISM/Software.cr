@@ -832,6 +832,17 @@ module ISM
             end
         end
 
+        def runPipCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
+            requestedCommands = "pip #{arguments}"
+
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
+            end
+        end
+
         def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "crystal #{arguments}"
 
