@@ -5,8 +5,8 @@ module ISM
         def prepare
             super
 
-            runPythonCommand(   arguments: "pip install '#{@information.name}==#{@information.version}'",
-                                environment: {"PYTHONUSERBASE" => "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}"})
+            runPipCommand(  arguments: "install '#{@information.name}==#{@information.version}'",
+                            environment: {"PYTHONUSERBASE" => "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}"})
         end
 
     end
