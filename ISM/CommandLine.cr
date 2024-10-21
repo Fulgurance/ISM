@@ -934,11 +934,11 @@ module ISM
                 end
             end
 
-            (0..@text.size-1).each do |index|
+            (0..@text.size).each do |index|
                 print " "
             end
 
-            (0..(@text.size-1)).each do |index|
+            (0..(@text.size)).each do |index|
                 print "\033[1D"
             end
         end
