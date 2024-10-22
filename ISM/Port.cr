@@ -54,12 +54,20 @@ module ISM
             return from_json(File.read(path))
         end
 
+        def self.softwareNumber(name : String) : Int32
+            return Dir.glob("#{self.directoryPath(name)}/*").size
+        end
+
         def filePath : String
             return self.class.filePathPrefix+@name+".json"
         end
 
         def directoryPath : String
             return self.class.directoryPathPrefix+@name
+        end
+
+        def softwareNumber
+            return self.class.softwareNumber(@name)
         end
 
         def writeConfiguration

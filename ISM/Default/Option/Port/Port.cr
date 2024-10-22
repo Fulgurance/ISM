@@ -11,7 +11,8 @@ module ISM
                 Description = "Manage ISM ports"
                 Options = [ ISM::Option::PortOpen.new,
                             ISM::Option::PortClose.new,
-                            ISM::Option::PortSetTargetVersion.new]
+                            ISM::Option::PortSetTargetVersion.new,
+                            ISM::Option::PortSearch.new]
 
             end
         end
