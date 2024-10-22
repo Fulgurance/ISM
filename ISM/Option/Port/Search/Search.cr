@@ -28,8 +28,8 @@ module ISM
                     else
                         matchingPortArray.each_with_index do |port, index|
 
-                            nameField = "#{ISM::Default::Option::PortSearch::NameText.colorize(:green)} #{port.softwareNumber}"
-                            urlField = "#{ISM::Default::Option::PortSearch::UrlText.colorize(:green)} #{port.softwareNumber}"
+                            nameField = "#{ISM::Default::Option::PortSearch::NameText.colorize(:green)} #{port.name}"
+                            urlField = "#{ISM::Default::Option::PortSearch::UrlText.colorize(:green)} #{port.url}"
                             availableSoftwareField = "#{ISM::Default::Option::PortSearch::AvailableSoftwareText.colorize(:green)} #{port.softwareNumber}"
 
                             puts nameField
