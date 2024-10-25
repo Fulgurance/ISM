@@ -1916,6 +1916,11 @@ module ISM
                                             option.dependencies.each do |dependency|
                                                 if dependency.hiddenName == key2
                                                     calculatedDependencies[key1][0].disableOption(option.name)
+
+                                                    #Don't add the first builb pass of the codependency if it's installed yet
+                                                    if softwareIsInstalled(calculatedDependencies[key1][0])
+                                                        calculatedDependencies.delete(key1)
+                                                    end
                                                 end
                                             end
                                         end
@@ -1942,6 +1947,11 @@ module ISM
                                             option.dependencies.each do |dependency|
                                                 if dependency.hiddenName == key1
                                                     calculatedDependencies[key2][0].disableOption(option.name)
+
+                                                    #Don't add the first builb pass of the codependency if it's installed yet
+                                                    if softwareIsInstalled(calculatedDependencies[key2][0])
+                                                        calculatedDependencies.delete(key2)
+                                                    end
                                                 end
                                             end
                                         end
