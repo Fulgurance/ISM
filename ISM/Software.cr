@@ -1713,11 +1713,12 @@ module ISM
         end
 
         def dependency(fullName : String) : ISM::SoftwareInformation
-            @information.dependencies.each do |entry|
+            @information.dependencies(unsorted: true).each do |entry|
                 if entry.fullName == fullName
                     return entry.information
                 end
             end
+
             return ISM::SoftwareInformation.new
         end
 

@@ -212,7 +212,11 @@ module ISM
         return false
     end
 
-    def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
+    def dependencies(allowDeepSearch = false, unsorted = false) : Array(ISM::SoftwareDependency)
+        if unsorted
+            return @dependencies
+        end
+
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
         #CHECK IF THERE IS ANY UNIQUE DEPENDENCIES NOT SELECTIONED
