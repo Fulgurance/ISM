@@ -1721,6 +1721,10 @@ module ISM
             return ISM::SoftwareInformation.new
         end
 
+        def dependencyMajorVersion(fullName : String) : Int32
+            return SemanticVersion.parse(dependency(fullName).version).major
+        end
+
         def softwareIsInstalled(softwareName : String) : Bool
             return Ism.softwareAnyVersionInstalled(softwareName)
         end
