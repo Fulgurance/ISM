@@ -1712,6 +1712,15 @@ module ISM
             return @information.option(optionName)
         end
 
+        def dependency(fullName : String) : ISM::SoftwareInformation
+            @information.dependencies.each do |entry|
+                if entry.fullName == fullName
+                    return entry.information
+                end
+            end
+            return ISM::SoftwareInformation.new
+        end
+
         def softwareIsInstalled(softwareName : String) : Bool
             return Ism.softwareAnyVersionInstalled(softwareName)
         end
