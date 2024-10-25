@@ -1920,10 +1920,6 @@ module ISM
                                             end
                                         end
 
-                                        #Don't add the first builb pass of the codependency if it's installed yet
-                                        if softwareIsInstalled(calculatedDependencies[key1][0])
-                                            calculatedDependencies.delete(key1)
-                                        end
                                     end
                                     #--------------------------------------------------------------------
 
@@ -1950,10 +1946,6 @@ module ISM
                                             end
                                         end
 
-                                        #Don't add the first builb pass of the codependency if it's installed yet
-                                        if softwareIsInstalled(calculatedDependencies[key2][0])
-                                            calculatedDependencies.delete(key2)
-                                        end
                                     end
                                     #--------------------------------------------------------------------
 
@@ -1967,7 +1959,14 @@ module ISM
                             end
 
                         end
+                        #Don't add the first builb pass of the codependency if it's installed yet
+                        if softwareIsInstalled(calculatedDependencies[key1][0])
+                            calculatedDependencies.delete(key1)
+                        end
 
+                        if softwareIsInstalled(calculatedDependencies[key2][0])
+                            calculatedDependencies.delete(key2)
+                        end
                     end
                 end
             end
