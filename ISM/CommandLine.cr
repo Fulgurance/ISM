@@ -1918,7 +1918,6 @@ module ISM
                                                 if dependency.hiddenName == key2
                                                     calculatedDependencies[key1][0].disableOption(option.name)
 
-                                                    #EXPERIMENTAL
                                                     if softwareIsInstalled(calculatedDependencies[key1][0])
                                                         keyToDelete.push(key1)
                                                     end
@@ -1949,7 +1948,6 @@ module ISM
                                                 if dependency.hiddenName == key1
                                                     calculatedDependencies[key2][0].disableOption(option.name)
 
-                                                    #EXPERIMENTAL
                                                     if softwareIsInstalled(calculatedDependencies[key2][0])
                                                         keyToDelete.push(key2)
                                                     end
@@ -1974,13 +1972,11 @@ module ISM
                 end
             end
 
-            #Remove all installed codependencies(EXPERIMENTAL)
             keyToDelete.uniq!
 
             keyToDelete.each do |key|
                 calculatedDependencies.delete(key)
             end
-            ##################################################
 
             return calculatedDependencies
         end
