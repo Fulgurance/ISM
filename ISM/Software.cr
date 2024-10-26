@@ -1728,6 +1728,8 @@ module ISM
         end
 
         def softwareMajorVersion(fullName : String) : Int32
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
             if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
                 return dependencyMajorVersion(fullName)
             else
