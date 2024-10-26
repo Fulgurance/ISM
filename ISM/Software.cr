@@ -1722,12 +1722,17 @@ module ISM
             return ISM::SoftwareInformation.new
         end
 
+        #Internal use prefered. Use softwareMajorVersion instead
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
         end
 
         def softwareMajorVersion(fullName : String) : Int32
-            return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).major
+            if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
+                return dependencyMajorVersion(fullName)
+            else
+                return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).major
+            end
         end
 
         def softwareIsInstalled(softwareName : String) : Bool
