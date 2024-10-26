@@ -1722,7 +1722,7 @@ module ISM
             return ISM::SoftwareInformation.new
         end
 
-        #Internal use prefered. Use softwareMajorVersion instead
+        #Internal use, or can bring internal error when called in installation script. Use softwareMajorVersion instead
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
         end
