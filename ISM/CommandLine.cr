@@ -1875,6 +1875,7 @@ module ISM
             end
 
             keys = calculatedDependencies.keys
+            keyToDelete = Array(String).new
 
             keys.each do |key1|
                 playCalculationAnimation
@@ -1916,6 +1917,11 @@ module ISM
                                             option.dependencies.each do |dependency|
                                                 if dependency.hiddenName == key2
                                                     calculatedDependencies[key1][0].disableOption(option.name)
+
+                                                    #EXPERIMENTAL
+                                                    if softwareIsInstalled(calculatedDependencies[key1][0])
+                                                        keyToDelete.push(key1)
+                                                    end
                                                 end
                                             end
                                         end
@@ -1942,6 +1948,11 @@ module ISM
                                             option.dependencies.each do |dependency|
                                                 if dependency.hiddenName == key1
                                                     calculatedDependencies[key2][0].disableOption(option.name)
+
+                                                    #EXPERIMENTAL
+                                                    if softwareIsInstalled(calculatedDependencies[key2][0])
+                                                        keyToDelete.push(key2)
+                                                    end
                                                 end
                                             end
                                         end
@@ -1962,6 +1973,14 @@ module ISM
                     end
                 end
             end
+
+            #Remove all installed codependencies(EXPERIMENTAL)
+            keyToDelete.uniq!
+
+            keyToDelete.each do |key|
+                calculatedDependencies.delete(key)
+            end
+            ##################################################
 
             return calculatedDependencies
         end
