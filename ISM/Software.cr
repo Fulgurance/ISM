@@ -476,12 +476,26 @@ module ISM
 
                 process = runChrootTasks(chrootCommand)
             else
+                environmentHash = Hash(String, String).new
+
+                #Substitute all environment variables by the real value
+                environment.keys.each do |key|
+                    environmentHash[key] = environment[key].gsub(/\$([A-Z0-9]+)/) do |_, match|
+                        begin
+                            ENV[match[1]]
+                        rescue
+                            #Return empty string if the var don't exist
+                            String.new
+                        end
+                    end
+                end
+
                 process = Process.run(  command,
                                         output: :inherit,
                                         error: :inherit,
                                         shell: true,
                                         chdir: (path == "" ? nil : path),
-                                        env: environment)
+                                        env: environmentHash)
             end
 
             return process
