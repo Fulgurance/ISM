@@ -1725,8 +1725,12 @@ module ISM
             return ISM::SoftwareInformation.new
         end
 
-        def greatestVersion : Bool
+        def isGreatestVersion : Bool
             return Ism.getSoftwareInformation(fullName).version <= @information.version
+        end
+
+        def majorVersion : Int32
+            return SemanticVersion.parse(@information.version).major
         end
 
         #Internal use, or can bring internal error when called in installation script. Use softwareMajorVersion instead
