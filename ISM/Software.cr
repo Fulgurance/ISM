@@ -155,9 +155,9 @@ module ISM
             startingTime = Time.monotonic
 
             until downloaded
-                HTTP::Client.get(link) do |response, index|
+                HTTP::Client.get(link) do |response|
                     #Program exit if the first download take over 1500 ms (EXPERIMENTAL)
-                    if index == 0 && (Time.monotonic - startingTime).milliseconds > 1500
+                    if (Time.monotonic - startingTime).milliseconds > 1500
                         Ism.notifyOfConnexionError(link)
                         Ism.exitProgram
                     end
