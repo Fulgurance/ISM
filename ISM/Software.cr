@@ -467,7 +467,7 @@ module ISM
                 chrootCommand = <<-CODE
                 #!/bin/bash
 
-                if [ -f "/etc/profile"]; then
+                if \[ -f "/etc/profile"\]; then
                     source /etc/profile
                 fi
 
