@@ -66,6 +66,7 @@ Manage ISM ports
         -o      open    Open the specified port
         -c      close   Close the specified port
         -stv    settargetversion        Set the target version for all ports, based on a ISM version
+        -s      search  Search a specified port in the database
 ```
 
 ```
@@ -121,6 +122,6 @@ Configure ISM settings
 ```
 
 ## About
-The project is still experimental, most of the functionnalities are already implemented. It is actually possible to install a full desktop environment with the provided ports .
+The project is actually quite advanced now and most of the functionnalities are implemented yet. It is actually possible to install a full desktop environment with the provided ports.
 
-That is not ready at the moment for a production environment. It is actually only for test purpose.
+That is not ready at the moment for a production environment. It still on test.
