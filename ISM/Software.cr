@@ -152,18 +152,16 @@ module ISM
             originalLink = link
             downloaded = false
             error = String.new
-
-            #ACTUALLY BRING DOWNLOAD FAILURE
-            #Checking if connexion is available
-            # begin
-            #     TCPSocket.new(link, port: 80, connect_timeout: 500.milliseconds).close
-            # rescue ex : IO::Error
-            #     Ism.notifyOfConnexionError(link)
-            #     Ism.exitProgram
-            # end
+            startingTime = Time.monotonic
 
             until downloaded
                 HTTP::Client.get(link) do |response|
+                    #Program exit if the first download take over 1500 ms (EXPERIMENTAL)
+                    if index == 0 && (Time.monotonic - startingTime).milliseconds > 1500
+                        Ism.notifyOfConnexionError(link)
+                        Ism.exitProgram
+                    end
+
                     if response.status.redirection?
                         begin
                             link = response.headers["location"]
@@ -468,7 +466,12 @@ module ISM
             if Ism.settings.installByChroot
                 chrootCommand = <<-CODE
                 #!/bin/bash
-                source /etc/profile && cd #{path} && #{environmentCommand} #{command}
+
+                if [ -f "/etc/profile"]; then
+                    source /etc/profile
+                fi
+
+                cd #{path} && #{environmentCommand} #{command}
                 CODE
 
                 process = runChrootTasks(chrootCommand)
