@@ -1726,7 +1726,7 @@ module ISM
         end
 
         def isGreatestVersion : Bool
-            return Ism.getSoftwareInformation(fullName).version <= @information.version
+            return Ism.getSoftwareInformation(@information.fullName).version <= @information.version
         end
 
         def majorVersion : Int32
