@@ -1529,15 +1529,16 @@ module ISM
 
             loop do
 
-                if !result.any? {|line| line.starts_with?(ISM::Default::Software::KconfigKeywords[:source])}
+                if !result.any? {|line| line.lstrip.starts_with?(ISM::Default::Software::KconfigKeywords[:source])}
                     break
                 end
 
                 nextResult.clear
 
                 result.each do |line|
+                    text = line.lstrip
 
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && !line.includes?("Kconfig.include")
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && !text.includes?("Kconfig.include")
 
                         mainArchitecture = (Ism.settings.installByChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemArchitecture).gsub(/_.*/,"")
 
@@ -1554,7 +1555,7 @@ module ISM
                             nextResult += Array(String).new
                         end
 
-                    elsif line.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && line.includes?("Kconfig.include")
+                    elsif text.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && text.includes?("Kconfig.include")
                         nextResult += Array(String).new
                     else
                         nextResult.push(line)
@@ -1582,9 +1583,10 @@ module ISM
             currentLignAligmentSize = 0
 
             kconfigContent.each_with_index do |line, index|
-                currentLignAligmentSize = (line.size - line.lstrip.size)
+                text = line.lstrip
+                currentLignAligmentSize = (line.size - text.size)
 
-                if line.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:config]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:if]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:endif])
+                if text.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig]) || text.starts_with?(ISM::Default::Software::KconfigKeywords[:config]) || text.starts_with?(ISM::Default::Software::KconfigKeywords[:if]) || text.starts_with?(ISM::Default::Software::KconfigKeywords[:endif])
 
                     if index > 0
 
@@ -1606,47 +1608,47 @@ module ISM
                 end
 
                 if !underHelpSection
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:help])
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:help])
                         underHelpSection = true
                     end
 
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
                         lastMenuConfigIndex = index
-                        lastMenuConfigContent = line.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
-                        kernelOption.name = line.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
+                        lastMenuConfigContent = text.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
+                        kernelOption.name = text.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
                     end
 
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
-                        kernelOption.name = line.gsub(ISM::Default::Software::KconfigKeywords[:config],"")
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
+                        kernelOption.name = text.gsub(ISM::Default::Software::KconfigKeywords[:config],"")
                     end
 
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
                         kernelOption.tristate = false
                     end
 
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
                         kernelOption.tristate = true
                     end
 
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
 
-                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
-
-                        kernelOption.dependencies += newDependencies
-                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
-                        kernelOption.blockers += newBlockers
-                    end
-
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
-
-                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(line.gsub(ISM::Default::Software::KconfigKeywords[:select],""))
+                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
 
                         kernelOption.dependencies += newDependencies
                         kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
                         kernelOption.blockers += newBlockers
                     end
 
-                    if line.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
+
+                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.gsub(ISM::Default::Software::KconfigKeywords[:select],""))
+
+                        kernelOption.dependencies += newDependencies
+                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
+                        kernelOption.blockers += newBlockers
+                    end
+
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
                         lastIfIndex = index
                         lastIfContent = line.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
                     end
@@ -1654,11 +1656,11 @@ module ISM
                     if currentLignAligmentSize < previousLignAlignmentSize
                         underHelpSection = false
                     else
-                        kernelOption.description += line.lstrip
+                        kernelOption.description += text
                     end
                 end
 
-                previousLignAlignmentSize = (line.size - line.lstrip.size)
+                previousLignAlignmentSize = (line.size - text.size)
             end
 
             kernelOptions.each do |option|
