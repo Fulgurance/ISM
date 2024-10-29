@@ -1542,8 +1542,7 @@ module ISM
 
                         mainArchitecture = (Ism.settings.installByChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemArchitecture).gsub(/_.*/,"")
 
-                        path = kernelSourcesPath+text
-                        path = path.gsub(ISM::Default::Software::KconfigKeywords[:source],"")
+                        path = kernelSourcesPath+text.sub(ISM::Default::Software::KconfigKeywords[:source],"").strip
                         path = path.gsub("\"","")
                         path = path.gsub("$(SRCARCH)","#{mainArchitecture}")
                         path = path.gsub("$(HEADER_ARCH)","#{mainArchitecture}")
@@ -1558,7 +1557,7 @@ module ISM
                     elsif text.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && text.includes?("Kconfig.include")
                         nextResult += Array(String).new
                     else
-                        nextResult.push(text)
+                        nextResult.push(line)
                     end
                 end
 
@@ -1579,16 +1578,66 @@ module ISM
             lastIfContent = String.new
             lastMenuConfigContent = String.new
             underHelpSection = false
-            lastSectionAlignmentSize = 0
+            lastHelpAlignmentSize = 0
             currentLignAligmentSize = 0
 
             kconfigContent.each_with_index do |line, index|
                 text = line.lstrip
                 currentLignAligmentSize = (line.size - text.size)
 
-                if text.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig]) || text.starts_with?(ISM::Default::Software::KconfigKeywords[:config]) || text.starts_with?(ISM::Default::Software::KconfigKeywords[:if]) || text.starts_with?(ISM::Default::Software::KconfigKeywords[:endif])
+                if !underHelpSection && text.starts_with?(ISM::Default::Software::KconfigKeywords[:help])
 
-                    if index > 0
+                    underHelpSection = true
+                    lastHelpAlignmentSize = (line.size - text.size)
+
+                elsif !underHelpSection
+
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
+                        lastMenuConfigIndex = index
+                        lastMenuConfigContent = text.sub(ISM::Default::Software::KconfigKeywords[:menuconfig],"").lstrip
+
+                        kernelOption = ISM::KernelOption.new
+                        kernelOption.name = text.sub(ISM::Default::Software::KconfigKeywords[:menuconfig],"").lstrip
+                    end
+
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
+                        kernelOption = ISM::KernelOption.new
+                        kernelOption.name = text.sub(ISM::Default::Software::KconfigKeywords[:config],"").lstrip
+                    end
+
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
+                        kernelOption.tristate = false
+                    end
+
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
+                        kernelOption.tristate = true
+                    end
+
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
+
+                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.sub(ISM::Default::Software::KconfigKeywords[:dependsOn],"").lstrip)
+
+                        kernelOption.dependencies += newDependencies
+                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
+                        kernelOption.blockers += newBlockers
+                    end
+
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
+
+                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.sub(ISM::Default::Software::KconfigKeywords[:select],"").lstrip)
+
+                        kernelOption.dependencies += newDependencies
+                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
+                        kernelOption.blockers += newBlockers
+                    end
+
+                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
+                        lastIfIndex = index
+                        lastIfContent = text.sub(ISM::Default::Software::KconfigKeywords[:if],"").lstrip
+                    end
+                else
+                    if currentLignAligmentSize <= lastHelpAlignmentSize
+                        underHelpSection = false
 
                         #IF LAST DEPENDENCY IS A MENUCONFIG
                         if lastIfIndex < lastEndIfIndex || lastIfIndex > lastEndIfIndex && lastMenuConfigIndex > lastIfIndex
@@ -1602,71 +1651,10 @@ module ISM
 
                         kernelOptions.push(kernelOption.dup)
 
-                    end
-
-                    kernelOption = ISM::KernelOption.new
-                end
-
-                if !underHelpSection
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:help])
-                        underHelpSection = true
-                        lastSectionAlignmentSize = (line.size - text.size)
-                    end
-
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
-                        lastMenuConfigIndex = index
-                        lastMenuConfigContent = text.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
-                        kernelOption.name = text.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
-                        lastSectionAlignmentSize = (line.size - text.size)
-                    end
-
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
-                        kernelOption.name = text.gsub(ISM::Default::Software::KconfigKeywords[:config],"")
-                        lastSectionAlignmentSize = (line.size - text.size)
-                    end
-
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
-                        kernelOption.tristate = false
-                        lastSectionAlignmentSize = (line.size - text.size)
-                    end
-
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
-                        kernelOption.tristate = true
-                        lastSectionAlignmentSize = (line.size - text.size)
-                    end
-
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
-
-                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.gsub(ISM::Default::Software::KconfigKeywords[:dependsOn],""))
-
-                        kernelOption.dependencies += newDependencies
-                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
-                        kernelOption.blockers += newBlockers
-
-                        lastSectionAlignmentSize = (line.size - text.size)
-                    end
-
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
-
-                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.gsub(ISM::Default::Software::KconfigKeywords[:select],""))
-
-                        kernelOption.dependencies += newDependencies
-                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
-                        kernelOption.blockers += newBlockers
-
-                        lastSectionAlignmentSize = (line.size - text.size)
-                    end
-
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
-                        lastIfIndex = index
-                        lastIfContent = text.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
-                        lastSectionAlignmentSize = (line.size - text.size)
-                    end
-                else
-                    if currentLignAligmentSize <= lastSectionAlignmentSize
-                        underHelpSection = false
                     else
+
                         kernelOption.description += text
+
                     end
                 end
 
@@ -1684,18 +1672,16 @@ module ISM
 
             Ism.notifyOfUpdateKernelOptionsDatabase(Ism.selectedKernel)
 
-            if !Dir.exists?(kernelOptionsDatabasePath)
-                makeDirectoryNoChroot(kernelOptionsDatabasePath)
+            makeDirectoryNoChroot(kernelOptionsDatabasePath)
 
-                begin
-                    generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
-                    generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
-                rescue error
-                    deleteDirectoryNoChroot(kernelOptionsDatabasePath)
+            begin
+                generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
+                generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
+            rescue error
+                deleteDirectoryNoChroot(kernelOptionsDatabasePath)
 
-                    Ism.notifyOfUpdateKernelOptionsDatabaseError(Ism.selectedKernel, error)
-                    Ism.exitProgram
-                end
+                Ism.notifyOfUpdateKernelOptionsDatabaseError(Ism.selectedKernel, error)
+                Ism.exitProgram
             end
         end
 
