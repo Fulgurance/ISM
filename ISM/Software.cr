@@ -1542,7 +1542,7 @@ module ISM
 
                         mainArchitecture = (Ism.settings.installByChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemArchitecture).gsub(/_.*/,"")
 
-                        path = kernelSourcesPath+line
+                        path = kernelSourcesPath+text
                         path = path.gsub(ISM::Default::Software::KconfigKeywords[:source],"")
                         path = path.gsub("\"","")
                         path = path.gsub("$(SRCARCH)","#{mainArchitecture}")
@@ -1558,7 +1558,7 @@ module ISM
                     elsif text.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && text.includes?("Kconfig.include")
                         nextResult += Array(String).new
                     else
-                        nextResult.push(line)
+                        nextResult.push(text)
                     end
                 end
 
@@ -1659,7 +1659,7 @@ module ISM
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
                         lastIfIndex = index
-                        lastIfContent = line.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
+                        lastIfContent = text.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
                         lastSectionAlignmentSize = (line.size - text.size)
                     end
                 else
