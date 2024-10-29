@@ -1578,8 +1578,11 @@ module ISM
             lastIfContent = String.new
             lastMenuConfigContent = String.new
             underHelpSection = false
+            previousLignAlignmentSize = 0
+            currentLignAligmentSize = 0
 
             kconfigContent.each_with_index do |line, index|
+                currentLignAligmentSize = (line.size - line.lstrip.size)
 
                 if line.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:config]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:if]) || line.starts_with?(ISM::Default::Software::KconfigKeywords[:endif])
 
@@ -1648,13 +1651,14 @@ module ISM
                         lastIfContent = line.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
                     end
                 else
-                    if !line.matches?(/\s/)
+                    if currentLignAligmentSize < previousLignAlignmentSize
                         underHelpSection = false
                     else
-                        kernelOption.description += line.strip
+                        kernelOption.description += line.lstrip
                     end
                 end
 
+                previousLignAlignmentSize = (line.size - line.lstrip.size)
             end
 
             kernelOptions.each do |option|
