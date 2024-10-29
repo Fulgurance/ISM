@@ -1579,7 +1579,7 @@ module ISM
             lastIfContent = String.new
             lastMenuConfigContent = String.new
             underHelpSection = false
-            previousLignAlignmentSize = 0
+            lastSectionAlignmentSize = 0
             currentLignAligmentSize = 0
 
             kconfigContent.each_with_index do |line, index|
@@ -1610,24 +1610,29 @@ module ISM
                 if !underHelpSection
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:help])
                         underHelpSection = true
+                        lastSectionAlignmentSize = (line.size - text.size)
                     end
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
                         lastMenuConfigIndex = index
                         lastMenuConfigContent = text.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
                         kernelOption.name = text.gsub(ISM::Default::Software::KconfigKeywords[:menuconfig],"")
+                        lastSectionAlignmentSize = (line.size - text.size)
                     end
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
                         kernelOption.name = text.gsub(ISM::Default::Software::KconfigKeywords[:config],"")
+                        lastSectionAlignmentSize = (line.size - text.size)
                     end
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
                         kernelOption.tristate = false
+                        lastSectionAlignmentSize = (line.size - text.size)
                     end
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
                         kernelOption.tristate = true
+                        lastSectionAlignmentSize = (line.size - text.size)
                     end
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
@@ -1637,6 +1642,8 @@ module ISM
                         kernelOption.dependencies += newDependencies
                         kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
                         kernelOption.blockers += newBlockers
+
+                        lastSectionAlignmentSize = (line.size - text.size)
                     end
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
@@ -1646,11 +1653,14 @@ module ISM
                         kernelOption.dependencies += newDependencies
                         kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
                         kernelOption.blockers += newBlockers
+
+                        lastSectionAlignmentSize = (line.size - text.size)
                     end
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
                         lastIfIndex = index
                         lastIfContent = line.gsub(ISM::Default::Software::KconfigKeywords[:if],"")
+                        lastSectionAlignmentSize = (line.size - text.size)
                     end
                 else
                     if currentLignAligmentSize < previousLignAlignmentSize
@@ -1660,7 +1670,6 @@ module ISM
                     end
                 end
 
-                previousLignAlignmentSize = (line.size - text.size)
             end
 
             kernelOptions.each do |option|
