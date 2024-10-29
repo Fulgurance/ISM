@@ -1663,7 +1663,7 @@ module ISM
                         lastSectionAlignmentSize = (line.size - text.size)
                     end
                 else
-                    if currentLignAligmentSize < lastSectionAlignmentSize
+                    if currentLignAligmentSize <= lastSectionAlignmentSize
                         underHelpSection = false
                     else
                         kernelOption.description += text
