@@ -2148,12 +2148,121 @@ module ISM
             return true
         end
 
-        #############################################
-        #GERER LE CAS OU LE NOYAU N'EST PAS INSTALLE#
-        #############################################
+        def runChrootTasks(chrootTasks) : Process::Status
+            recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
+            File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
+
+            process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true)
+
+            process = Process.run(  "chroot #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
+                                    output: :inherit,
+                                    error: :inherit,
+                                    shell: true)
+
+            File.delete(@settings.rootPath+ISM::Default::Filename::Task)
+
+            return process
+        end
+
+        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new) : Process::Status
+            environmentCommand = String.new
+
+            if environmentFilePath != ""
+                environmentCommand = "source \"#{environmentFilePath}\" && "
+            end
+
+            environment.keys.each do |key|
+                environmentCommand += " #{key}=\"#{environment[key]}\""
+            end
+
+            recordSystemCall(command, path, environment)
+
+            if @settings.installByChroot
+                chrootCommand = <<-CODE
+                #!/bin/bash
+
+                if \[ -f "/etc/profile"\]; then
+                    source /etc/profile
+                fi
+
+                cd #{path} && #{environmentCommand} #{command}
+                CODE
+
+                process = runChrootTasks(chrootCommand)
+            else
+                environmentHash = Hash(String, String).new
+
+                #Substitute all environment variables by the real value
+                environment.keys.each do |key|
+                    environmentHash[key] = environment[key].gsub(/\$([A-Z0-9]+)/) do |_, match|
+                        begin
+                            ENV[match[1]]
+                        rescue
+                            #Return empty string if the var don't exist
+                            String.new
+                        end
+                    end
+                end
+
+                process = Process.run(  command,
+                                        output: :inherit,
+                                        error: :inherit,
+                                        shell: true,
+                                        chdir: (path == "" ? nil : path),
+                                        env: environmentHash)
+            end
+
+            return process
+        end
+
+        def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
+            requestedCommands = "./#{file} #{arguments}"
+
+            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+
+            if !process.success?
+                notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                exitProgram
+            end
+        end
+
+        #GERER LE CAS OU LE NOYAU N'EST PAS INSTALLE
         #COMMENT GERER SI UNE FEATURE AVAIT DES DEPENDANCES LORS DE LA DESINSTALLATION ?
 
-        def getKernelFeatureDependencies(feature : String) : Array(String)
+        def mainKernelName : String
+            return @selectedKernel.versionName.downcase
+        end
+
+        def mainKernelVersion : String
+            return @selectedKernel.version
+        end
+
+        def kernelSourcesPath : String
+            return "#{@settings.rootPath}usr/src/#{mainKernelName}/"
+        end
+
+        def setKernelOption(symbol : String, state : Symbol, value = String.new)
+            case state
+            when :enable
+                arguments = ["-e","#{symbol}"]
+            when :disable
+                arguments = ["-d","#{symbol}"]
+            when :module
+                arguments = ["-m","#{symbol}"]
+            when :string
+                arguments = ["--set-str","#{symbol}",value]
+            when :value
+                arguments = ["--set-val","#{symbol}",value]
+            end
+
+            runFile("#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
+        end
+
+        def getRequiredKernelFeatures : Array(String)
 
         end
 

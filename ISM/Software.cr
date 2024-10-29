@@ -78,11 +78,11 @@ module ISM
         end
 
         def mainKernelName : String
-            return Ism.selectedKernel.versionName.downcase
+            return Ism.mainKernelName
         end
 
         def mainKernelVersion : String
-            return Ism.selectedKernel.version
+            return Ism.mainKernelVersion
         end
 
         def prepareKernelSourcesInstallation
@@ -430,83 +430,12 @@ module ISM
             end
         end
 
-        def runChrootTasks(chrootTasks) : Process::Status
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
-            File.write(Ism.settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
-
-            process = Process.run(  "chmod +x #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
-                                    shell: true)
-
-            process = Process.run(  "chroot #{Ism.settings.rootPath} ./#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
-                                    shell: true)
-
-            File.delete(Ism.settings.rootPath+ISM::Default::Filename::Task)
-
-            return process
-        end
-
-        def runSystemCommand(command : String, path = Ism.settings.installByChroot ? "/" : Ism.settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new) : Process::Status
-            environmentCommand = String.new
-
-            if environmentFilePath != ""
-                environmentCommand = "source \"#{environmentFilePath}\" && "
-            end
-
-            environment.keys.each do |key|
-                environmentCommand += " #{key}=\"#{environment[key]}\""
-            end
-
-            Ism.recordSystemCall(command, path, environment)
-
-            if Ism.settings.installByChroot
-                chrootCommand = <<-CODE
-                #!/bin/bash
-
-                if \[ -f "/etc/profile"\]; then
-                    source /etc/profile
-                fi
-
-                cd #{path} && #{environmentCommand} #{command}
-                CODE
-
-                process = runChrootTasks(chrootCommand)
-            else
-                environmentHash = Hash(String, String).new
-
-                #Substitute all environment variables by the real value
-                environment.keys.each do |key|
-                    environmentHash[key] = environment[key].gsub(/\$([A-Z0-9]+)/) do |_, match|
-                        begin
-                            ENV[match[1]]
-                        rescue
-                            #Return empty string if the var don't exist
-                            String.new
-                        end
-                    end
-                end
-
-                process = Process.run(  command,
-                                        output: :inherit,
-                                        error: :inherit,
-                                        shell: true,
-                                        chdir: (path == "" ? nil : path),
-                                        env: environmentHash)
-            end
-
-            return process
-        end
-
         def fileUpdateContent(path : String, data : String)
             requestedCommands = <<-CMD
                                 grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -519,7 +448,7 @@ module ISM
                                 sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/g' #{path}
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -532,7 +461,7 @@ module ISM
                                 sed -i '/#{text.gsub(/([\.\/])/, %q(\\\1))}/c\#{newText.gsub(/([\.\/])/, %q(\\\1))}' #{path}
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -545,7 +474,7 @@ module ISM
                                 sed -i '#{lineNumber.to_s}s/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' #{path}
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -558,7 +487,7 @@ module ISM
                                 sed -i '#{lineNumber.to_s}d' #{path}
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -573,7 +502,7 @@ module ISM
                                 EOF
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -586,7 +515,7 @@ module ISM
                                 echo "#{data}" > "#{path}"
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -599,7 +528,7 @@ module ISM
                                 cat "#{fromPath}" >> "#{path}"
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -612,7 +541,7 @@ module ISM
                                 find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
                                 CMD
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -632,7 +561,7 @@ module ISM
                                 find #{path} -name \*.la -delete
                                 CMD
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -657,7 +586,7 @@ module ISM
 
             requestedCommands = "#{command} '#{target}' #{path}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -668,7 +597,7 @@ module ISM
         def generateEmptyFile(path : String)
             requestedCommands = "touch #{path}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -679,7 +608,7 @@ module ISM
         def copyFile(path : String, targetPath : String)
             requestedCommands = "cp #{path} #{targetPath}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -690,7 +619,7 @@ module ISM
         def copyDirectory(path : String, targetPath : String)
             requestedCommands = "cp -r #{path} #{targetPath}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -701,7 +630,7 @@ module ISM
         def moveFile(path : String, newPath : String)
             requestedCommands = "mv #{path} #{newPath}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -712,7 +641,7 @@ module ISM
         def makeDirectory(path : String)
             requestedCommands = "mkdir -p #{path}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -723,7 +652,7 @@ module ISM
         def deleteDirectory(path : String)
             requestedCommands = "rm -r #{path}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -734,7 +663,7 @@ module ISM
         def deleteFile(path : String)
             requestedCommands = "rm #{path}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -745,7 +674,7 @@ module ISM
         def runChmodCommand(arguments = String.new, path = String.new)
             requestedCommands = "chmod #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -756,7 +685,7 @@ module ISM
         def runChownCommand(arguments = String.new, path = String.new)
             requestedCommands = "chown #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -769,7 +698,7 @@ module ISM
 
             requestedCommands = "useradd #{prefix.empty? ? arguments : prefix+arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -782,7 +711,7 @@ module ISM
 
             requestedCommands = "userdel #{prefix.empty? ? arguments : prefix+arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -795,7 +724,7 @@ module ISM
 
             requestedCommands = "groupadd #{prefix.empty? ? arguments : prefix+arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -808,7 +737,7 @@ module ISM
 
             requestedCommands = "groupdel #{prefix.empty? ? arguments : prefix+arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -817,20 +746,13 @@ module ISM
         end
 
         def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
-            requestedCommands = "./#{file} #{arguments}"
-
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runFile(file, arguments, path, environment, environmentFilePath)
         end
 
         def runTarCommand(arguments = String.new, path = String.new)
             requestedCommands = "tar #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -841,7 +763,7 @@ module ISM
         def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "python #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -852,7 +774,7 @@ module ISM
         def runPipCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "pip #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -863,7 +785,7 @@ module ISM
         def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "crystal #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment)
+            process = Ism.runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -898,7 +820,7 @@ module ISM
             #requestedCommands = "cmake #{prefix} #{arguments}"
             requestedCommands = "cmake #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -909,7 +831,7 @@ module ISM
         def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "meson #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -943,7 +865,7 @@ module ISM
 
             requestedCommands = "ninja #{prefix} #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -954,7 +876,7 @@ module ISM
         def runPwconvCommand(arguments = String.new)
             requestedCommands = "pwconv #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -965,7 +887,7 @@ module ISM
         def runGrpconvCommand(arguments = String.new)
             requestedCommands = "grpconv #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -976,7 +898,7 @@ module ISM
         def runUdevadmCommand(arguments : String)
             requestedCommands = "udevadm #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -987,7 +909,7 @@ module ISM
         def runDbusUuidgenCommand(arguments = String.new)
             requestedCommands = "dbus-uuidgen #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -998,7 +920,7 @@ module ISM
         def runMakeinfoCommand(arguments : String, path = String.new)
             requestedCommands = "makeinfo #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -1009,7 +931,7 @@ module ISM
         def runInstallInfoCommand(arguments : String)
             requestedCommands = "install-info #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1020,7 +942,7 @@ module ISM
         def runAutoconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoconf #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -1031,7 +953,7 @@ module ISM
         def runAutoreconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoreconf #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -1042,7 +964,7 @@ module ISM
         def runLocaledefCommand(arguments : String)
             requestedCommands = "localedef #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1053,7 +975,7 @@ module ISM
         def runGunzipCommand(arguments : String, path = String.new)
             requestedCommands = "gunzip #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -1064,7 +986,7 @@ module ISM
         def runMakeCaCommand(arguments : String)
             requestedCommands = "make-ca #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1075,7 +997,7 @@ module ISM
         def runInstallCatalogCommand(arguments : String)
             requestedCommands = "install-catalog #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1086,7 +1008,7 @@ module ISM
         def runXmlCatalogCommand(arguments : String)
             requestedCommands = "xmlcatalog #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1097,7 +1019,7 @@ module ISM
         def runLdconfigCommand(arguments = String.new)
             requestedCommands = "ldconfig #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1108,7 +1030,7 @@ module ISM
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1119,7 +1041,7 @@ module ISM
         def runGtkQueryImmodules3Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1130,7 +1052,7 @@ module ISM
         def runGlibCompileSchemasCommand(arguments = String.new)
             requestedCommands = "glib-compile-schemas #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1141,7 +1063,7 @@ module ISM
         def runGdkPixbufQueryLoadersCommand(arguments = String.new)
             requestedCommands = "gdk-pixbuf-query-loaders #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1152,7 +1074,7 @@ module ISM
         def runUpdateMimeDatabaseCommand(arguments = String.new)
             requestedCommands = "update-mime-database #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1163,7 +1085,7 @@ module ISM
         def sourceFile(arguments = String.new)
             requestedCommands = "source #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1174,7 +1096,7 @@ module ISM
         def runCargoCommand(arguments : String, path = String.new)
             requestedCommands = "cargo #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -1185,7 +1107,7 @@ module ISM
         def runXargoCommand(arguments : String, path = String.new)
             requestedCommands = "xargo #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -1196,7 +1118,7 @@ module ISM
         def runGccCommand(arguments = String.new, path = String.new)
             requestedCommands = "gcc #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -1207,7 +1129,7 @@ module ISM
         def runRcUpdateCommand(arguments = String.new)
             requestedCommands = "rc-update #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1218,7 +1140,7 @@ module ISM
         def runAlsactlCommand(arguments = String.new)
             requestedCommands = "alsactl #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1229,7 +1151,7 @@ module ISM
         def runGtkUpdateIconCacheCommand(arguments = String.new)
             requestedCommands = "gtk-update-icon-cache #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1240,7 +1162,7 @@ module ISM
         def runUpdateDesktopDatabaseCommand(arguments = String.new)
             requestedCommands = "update-desktop-database #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1251,7 +1173,7 @@ module ISM
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)
@@ -1278,7 +1200,7 @@ module ISM
 
             requestedCommands = "#{configureCommand} #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -1293,7 +1215,7 @@ module ISM
         def makePerlSource(path = String.new)
             requestedCommands = "perl Makefile.PL"
 
-            process = runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1304,7 +1226,7 @@ module ISM
         def runCpanCommand(arguments = String.new)
             requestedCommands = "cpan #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(arguments)
@@ -1315,7 +1237,7 @@ module ISM
         def runDircolorsCommand(arguments = String.new)
             requestedCommands = "dircolors #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(arguments)
@@ -1326,7 +1248,7 @@ module ISM
         def runDepmodCommand(arguments = String.new)
             requestedCommands = "depmod #{arguments}"
 
-            process = runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(arguments)
@@ -1360,7 +1282,7 @@ module ISM
 
             requestedCommands = "make #{prefix} #{arguments}"
 
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
@@ -1439,7 +1361,7 @@ module ISM
         end
 
         def kernelSourcesPath : String
-            return "#{Ism.settings.rootPath}usr/src/#{mainKernelName}/"
+            return Ism.kernelSourcesPath
         end
 
         def kernelSourcesArchitecturePath : String
@@ -1460,23 +1382,6 @@ module ISM
 
         def kernelOptionsDatabasePath : String
             return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+mainKernelName
-        end
-
-        def setKernelOption(symbol : String, state : Symbol, value = String.new)
-            case state
-            when :enable
-                arguments = ["-e","#{symbol}"]
-            when :disable
-                arguments = ["-d","#{symbol}"]
-            when :module
-                arguments = ["-m","#{symbol}"]
-            when :string
-                arguments = ["--set-str","#{symbol}",value]
-            when :value
-                arguments = ["--set-val","#{symbol}",value]
-            end
-
-            runScript("#{kernelSourcesPath}config",arguments,"#{kernelSourcesPath}scripts")
         end
 
         #Return an array splitted, except when there are conditions between parenthesis
@@ -1688,9 +1593,9 @@ module ISM
         def recordNeededKernelFeatures
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            #Ism.notifyOfRecordNeededKernelFeatures(Ism.selectedKernel)
+            Ism.notifyOfRecordNeededKernelFeatures(Ism.selectedKernel)
 
-            #Ism.neededKernelFeatures += Ism.selectedKernel.kernelDependencies
+
         end
         
         def clean
@@ -1710,9 +1615,9 @@ module ISM
         def recordUnneededKernelFeatures
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            #Ism.notifyOfRecordUnneededKernelFeatures(Ism.selectedKernel)
+            Ism.notifyOfRecordUnneededKernelFeatures(Ism.selectedKernel)
 
-            #Ism.unneededKernelFeatures += Ism.selectedKernel.kernelDependencies
+
         end
 
         def showInformations
