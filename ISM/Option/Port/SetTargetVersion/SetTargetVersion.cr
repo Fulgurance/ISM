@@ -31,7 +31,7 @@ module ISM
 
                                 until process.terminated?
                                     Ism.playCalculationAnimation(text: text)
-                                    sleep 0
+                                    sleep(Time::Span.new(seconds: 0))
                                 end
 
                                 validVersion = !process.error?

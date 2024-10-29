@@ -1695,7 +1695,7 @@ module ISM
 
                 until synchronization.terminated?
                     playCalculationAnimation(ISM::Default::CommandLine::SynchronizationWaitingText)
-                    sleep 0
+                    sleep(Time::Span.new(seconds: 0))
                 end
 
             end
