@@ -724,7 +724,7 @@ module ISM
         end
 
         def notifyOfRecordNeededKernelFeatures
-            kernelName = (selectedKernel.name == "" ? ISM::DefaultCommandLine::FuturKernelText : selectedKernel.name )
+            kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
 
             printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+"#{kernelName.colorize(:green)}")
         end
@@ -734,7 +734,7 @@ module ISM
         end
 
         def notifyOfRecordUnneededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
-            kernelName = (selectedKernel.name == "" ? ISM::DefaultCommandLine::FuturKernelText : selectedKernel.name )
+            kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
 
             printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+"#{kernelName.colorize(:green)}")
         end
