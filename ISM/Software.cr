@@ -1582,8 +1582,7 @@ module ISM
         def recordNeededKernelFeatures
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            Ism.notifyOfRecordNeededKernelFeatures(Ism.selectedKernel)
-
+            Ism.notifyOfRecordNeededKernelFeatures
 
         end
         
@@ -1604,8 +1603,7 @@ module ISM
         def recordUnneededKernelFeatures
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            Ism.notifyOfRecordUnneededKernelFeatures(Ism.selectedKernel)
-
+            Ism.notifyOfRecordUnneededKernelFeatures
 
         end
 

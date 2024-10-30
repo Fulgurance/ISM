@@ -719,8 +719,8 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
         end
 
-        def notifyOfRecordNeededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+"#{softwareInformation.name.colorize(:green)}")
+        def notifyOfRecordNeededKernelFeatures
+            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+"#{selectedKernel.name.colorize(:green)}")
         end
 
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
@@ -728,7 +728,7 @@ module ISM
         end
 
         def notifyOfRecordUnneededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+"#{selectedKernel.name.colorize(:green)}")
         end
 
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
