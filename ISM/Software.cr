@@ -14,6 +14,18 @@ module ISM
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
         end
 
+        def version : String
+            return @information.version
+        end
+
+        def name : String
+            return @information.name
+        end
+
+        def versionName : String
+            return @information.versionName
+        end
+
         #Special function to improve performance (Internal use only)
         def workDirectoryPathNoChroot : String
             return Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
