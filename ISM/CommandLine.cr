@@ -2234,11 +2234,11 @@ module ISM
         #COMMENT GERER SI UNE FEATURE AVAIT DES DEPENDANCES LORS DE LA DESINSTALLATION ?
 
         def mainKernelName : String
-            return @selectedKernel.versionName.downcase
+            return selectedKernel.versionName.downcase
         end
 
         def mainKernelVersion : String
-            return @selectedKernel.version
+            return selectedKernel.version
         end
 
         def kernelSourcesPath : String

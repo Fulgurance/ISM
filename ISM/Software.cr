@@ -1082,17 +1082,6 @@ module ISM
             end
         end
 
-        def sourceFile(arguments = String.new)
-            requestedCommands = "source #{arguments}"
-
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
-        end
-
         def runCargoCommand(arguments : String, path = String.new)
             requestedCommands = "cargo #{arguments}"
 
