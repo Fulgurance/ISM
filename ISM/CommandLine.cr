@@ -261,7 +261,11 @@ module ISM
         end
 
         def selectedKernel : ISM::SoftwareInformation
-            return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+            if File.exists?("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+                return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+            else
+                return ISM::SoftwareInformation.new
+            end
         end
 
         def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
@@ -720,7 +724,9 @@ module ISM
         end
 
         def notifyOfRecordNeededKernelFeatures
-            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+"#{selectedKernel.name.colorize(:green)}")
+            kernelName = (selectedKernel.name == "" ? ISM::DefaultCommandLine::FuturKernelText : selectedKernel.name )
+
+            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+"#{kernelName.colorize(:green)}")
         end
 
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
@@ -728,7 +734,9 @@ module ISM
         end
 
         def notifyOfRecordUnneededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+"#{selectedKernel.name.colorize(:green)}")
+            kernelName = (selectedKernel.name == "" ? ISM::DefaultCommandLine::FuturKernelText : selectedKernel.name )
+
+            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+"#{kernelName.colorize(:green)}")
         end
 
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
