@@ -63,6 +63,9 @@ module ISM
 
         def start
             loadSettingsFiles
+            loadCurrentKernelFeatures
+            loadNeededKernelFeatures
+            loadUnneededKernelFeatures
             loadKernelOptionDatabase
             loadSoftwareDatabase
             loadInstalledSoftwareDatabase
@@ -70,6 +73,24 @@ module ISM
             loadMirrorsDatabase
             loadFavouriteGroupsDatabase
             checkEnteredArguments
+        end
+
+        #Loading current selected kernel features from .config or config in /boot ? (same)
+        #Case1: there is a kernel
+        #Case2: kernel but no .config
+        #Case3: no kernel
+        def loadCurrentKernelFeatures
+        end
+
+        #Create a class to handle this:
+        #Class:
+        #NAME
+        #BUILT-IN or MODULE or VALUE(if relevant)
+        def loadNeededKernelFeatures
+        end
+
+        #Just a list in a single .json file
+        def loadUnneededKernelFeatures
         end
 
         def loadKernelOptionDatabase
@@ -2268,10 +2289,6 @@ module ISM
             end
 
             runFile("#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
-        end
-
-        def getRequiredKernelFeatures : Array(String)
-
         end
 
         def enableKernelFeature(feature : String)
