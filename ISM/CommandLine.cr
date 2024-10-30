@@ -327,7 +327,7 @@ module ISM
             protectedFiles = Array(String).new
             filesForRemoval = Array(String).new
 
-            rootPath = @settings.installByChroot ? "#{@settings.rootPath}/" : "/"
+            rootPath = @settings.installByChroot ? "/" : "#{@settings.rootPath}/"
 
             @installedSoftwares.each do |installedSoftware|
                 if software.hiddenName == installedSoftware.hiddenName
