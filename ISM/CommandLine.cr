@@ -3,8 +3,8 @@ module ISM
     class CommandLine
 
         property requestedSoftwares : Array(ISM::SoftwareInformation)
-        property neededKernelFeatures : Array(String)
-        property unneededKernelFeatures : Array(String)
+        property neededKernelOptions : Array(ISM::NeededKernelOption)
+        property unneededKernelOptions : Array(ISM::UnneededKernelOption)
         property lastRecordedSystemCall : ISM::SystemCallRecord
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
@@ -23,8 +23,8 @@ module ISM
 
         def initialize
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
-            @neededKernelFeatures = Array(String).new
-            @unneededKernelFeatures = Array(String).new
+            @neededKernelOptions = Array(ISM::NeededKernelOption).new
+            @unneededKernelOptions = Array(ISM::UnneededKernelOption).new
             @lastRecordedSystemCall = ISM::SystemCallRecord.new
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0
@@ -63,9 +63,9 @@ module ISM
 
         def start
             loadSettingsFiles
-            loadCurrentKernelFeatures
-            loadNeededKernelFeatures
-            loadUnneededKernelFeatures
+            loadCurrentKernelOptions
+            loadNeededKernelOptions
+            loadUnneededKernelOptions
             loadKernelOptionDatabase
             loadSoftwareDatabase
             loadInstalledSoftwareDatabase
@@ -75,22 +75,43 @@ module ISM
             checkEnteredArguments
         end
 
-        #Loading current selected kernel features from .config or config in /boot ? (same)
+        #Loading current selected kernel options from .config or config in /boot ? (same)
         #Case1: there is a kernel
         #Case2: kernel but no .config
         #Case3: no kernel
-        def loadCurrentKernelFeatures
+        def loadCurrentKernelOptions
         end
 
         #Create a class to handle this:
         #Class:
         #NAME
         #BUILT-IN or MODULE or VALUE(if relevant)
-        def loadNeededKernelFeatures
+        def loadNeededKernelOptions
+            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
+                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
+            end
+
+            neededKernelOptions = Dir.children(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
+
+            neededKernelOptions.each do |option|
+
+                @neededKernelOptions << ISM::NeededKernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory+"/"+option)
+
+            end
         end
 
-        #Just a list in a single .json file
-        def loadUnneededKernelFeatures
+        def loadUnneededKernelOptions
+            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::UnneededKernelOptionsDirectory)
+                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::UnneededKernelOptionsDirectory)
+            end
+
+            unneededKernelOptions = Dir.children(@settings.rootPath+ISM::Default::Path::UnneededKernelOptionsDirectory)
+
+            unneededKernelOptions.each do |option|
+
+                @unneededKernelOptions << ISM::UnneededKernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::UnneededKernelOptionsDirectory+"/"+option)
+
+            end
         end
 
         def loadKernelOptionDatabase
@@ -744,20 +765,20 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
         end
 
-        def notifyOfRecordNeededKernelFeatures
+        def notifyOfRecordNeededKernelOptions
             kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
 
-            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelFeaturesText+"#{kernelName.colorize(:green)}")
+            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
         end
 
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::CleanText+"#{softwareInformation.name.colorize(:green)}")
         end
 
-        def notifyOfRecordUnneededKernelFeatures(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfRecordUnneededKernelOptions(softwareInformation : ISM::SoftwareInformation)
             kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
 
-            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelFeaturesText+"#{kernelName.colorize(:green)}")
+            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelOptionsText+"#{kernelName.colorize(:green)}")
         end
 
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
@@ -1536,7 +1557,7 @@ module ISM
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
 
                             target.install
-                            target.recordNeededKernelFeatures
+                            target.recordNeededKernelOptions
                             target.clean
                         rescue
                             if File.exists?(target.information.installedFilePath)
@@ -1671,7 +1692,7 @@ module ISM
                         Ism.showStartSoftwareUninstallingMessage(index, limit, port, name, version)
 
                         begin
-                            target.recordUnneededKernelFeatures
+                            target.recordUnneededKernelOptions
                             target.uninstall
                         rescue
                             Ism.printSystemCallErrorNotification
@@ -2291,23 +2312,23 @@ module ISM
             runFile("#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
         end
 
-        def enableKernelFeature(feature : String)
+        def enableKernelOption(option : String)
 
         end
 
-        def disableKernelFeature(feature : String)
+        def disableKernelOption(option : String)
 
         end
 
-        def enableKernelFeatures(features : Array(String))
-            features.each do |feature|
-                enableKernelFeature(feature)
+        def enableKernelOptions(options : Array(String))
+            options.each do |option|
+                enableKernelOption(option)
             end
         end
 
-        def disableKernelFeatures(features : Array(String))
-            features.each do |feature|
-                disableKernelFeature(feature)
+        def disableKernelOptions(options : Array(String))
+            options.each do |option|
+                disableKernelOption(option)
             end
         end
 

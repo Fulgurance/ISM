@@ -15,6 +15,8 @@ module ISM
             LibraryDirectory = "usr/share/#{IsmDirectory}"
             PortsDirectory = "#{RuntimeDataDirectory}ports/"
             KernelOptionsDirectory = "#{RuntimeDataDirectory}kerneloptions/"
+            NeededKernelOptionsDirectory = "#{RuntimeDataDirectory}neededkerneloptions/"
+            UnneededKernelOptionsDirectory = "#{RuntimeDataDirectory}unneededkerneloptions/"
             SoftwaresDirectory = "#{RuntimeDataDirectory}softwares/"
             InstalledSoftwaresDirectory = "#{RuntimeDataDirectory}installedsoftwares/"
             SettingsSoftwaresDirectory = "#{SettingsDirectory}softwares/"
