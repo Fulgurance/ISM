@@ -64,7 +64,6 @@ module ISM
         def start
             loadSettingsFiles
             loadKernelOptionDatabase
-            loadCurrentKernelOptions
             loadNeededKernelOptions
             loadUnneededKernelOptions
             loadSoftwareDatabase
@@ -73,25 +72,6 @@ module ISM
             loadMirrorsDatabase
             loadFavouriteGroupsDatabase
             checkEnteredArguments
-        end
-
-        #Loading current selected kernel options from .config or config in /boot ? (same)
-        #Case1: there is a kernel
-        #Case2: kernel but no .config
-        #Case3: no kernel
-        #Other case: kernel existing but no one is selected ? (auto selection)
-        def loadCurrentKernelOptions
-
-            #Any kernel source selected ?
-            if Dir.exists?(kernelSourcesPath)
-
-                #Existing kernel config file ?
-                if !File.exists?("#{kernelConfigPath}")
-                    generateDefaultKernelConfig
-                end
-
-            end
-
         end
 
         def loadNeededKernelOptions
