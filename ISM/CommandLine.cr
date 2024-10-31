@@ -63,10 +63,10 @@ module ISM
 
         def start
             loadSettingsFiles
+            loadKernelOptionDatabase
             loadCurrentKernelOptions
             loadNeededKernelOptions
             loadUnneededKernelOptions
-            loadKernelOptionDatabase
             loadSoftwareDatabase
             loadInstalledSoftwareDatabase
             loadPortsDatabase
@@ -79,13 +79,21 @@ module ISM
         #Case1: there is a kernel
         #Case2: kernel but no .config
         #Case3: no kernel
+        #Other case: kernel existing but no one is selected ? (auto selection)
         def loadCurrentKernelOptions
+
+            #Any kernel source selected ?
+            if Dir.exists?(kernelSourcesPath)
+
+                #Existing kernel config file ?
+                if !File.exists?("#{kernelConfigPath}")
+                    generateDefaultKernelConfig
+                end
+
+            end
+
         end
 
-        #Create a class to handle this:
-        #Class:
-        #NAME
-        #BUILT-IN or MODULE or VALUE(if relevant)
         def loadNeededKernelOptions
             if !Dir.exists?(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
                 Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
@@ -2280,6 +2288,18 @@ module ISM
             end
         end
 
+        def generateDefaultKernelConfig
+            requestedCommands = "make #{@settings.systemMakeOptions} defconfig"
+            path = kernelSourcesPath
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                notifyOfRunSystemCommandError(requestedCommands, path)
+                exitProgram
+            end
+        end
+
         #GERER LE CAS OU LE NOYAU N'EST PAS INSTALLE
         #COMMENT GERER SI UNE FEATURE AVAIT DES DEPENDANCES LORS DE LA DESINSTALLATION ?
 
@@ -2293,6 +2313,10 @@ module ISM
 
         def kernelSourcesPath : String
             return "#{@settings.rootPath}usr/src/#{mainKernelName}/"
+        end
+
+        def kernelConfigPath : String
+            return "#{kernelSourcesPath}/.config"
         end
 
         def setKernelOption(symbol : String, state : Symbol, value = String.new)
