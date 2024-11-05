@@ -228,9 +228,6 @@ module ISM
             Ism.notifyOfCheck(@information)
 
             checkSourcesMd5sum
-            if File.exists?(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
-                checkPatchesMd5sum
-            end
         end
 
         def checkSourcesMd5sum
@@ -238,13 +235,6 @@ module ISM
 
             checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName,
                         getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
-        end
-
-        def checkPatchesMd5sum
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
-            checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesArchiveName,
-                        getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName).strip)
         end
 
         def checkFile(archive : String, md5sum : String)
