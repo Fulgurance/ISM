@@ -41,10 +41,6 @@ module ISM
             return ISM::Mirror.sourcesLink(@defaultMirror)
         end
 
-        def patchesLink : String
-            return ISM::Mirror.patchesLink(@defaultMirror)
-        end
-
     end
 
 end

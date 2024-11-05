@@ -39,14 +39,6 @@ module ISM
             end
         end
 
-        def self.patchesLink(codeName : String) : String
-            begin
-                return from_json(File.read(filePath(codeName))).patchesLink
-            rescue
-                return String.new
-            end
-        end
-
         def writeConfiguration(path = self.class.filePath)
             file = File.open(path,"w")
             to_json(file)
@@ -59,10 +51,6 @@ module ISM
 
         def sourcesLink : String
             return defaultUrl+ISM::Default::Mirror::SourcesLinkDirectory
-        end
-
-        def patchesLink : String
-            return defaultUrl+ISM::Default::Mirror::PatchesLinkDirectory
         end
 
     end

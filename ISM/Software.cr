@@ -113,11 +113,6 @@ module ISM
 
             downloadSources
             downloadSourcesMd5sum
-
-            if remoteFileIsAvailable(@information.patchesLink)
-                downloadPatches
-                downloadPatchesMd5sum
-            end
         end
 
         def downloadSources
@@ -133,28 +128,6 @@ module ISM
 
             downloadFile(   @information.sourcesMd5sumLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
-                            ISM::Default::Software::ArchiveMd5sumExtensionName)
-        end
-
-        def remoteFileIsAvailable(fileUrl : String) : Bool
-            response = HTTP::Client.get(fileUrl)
-
-            return response.status == HTTP::Status::OK
-        end
-
-        def downloadPatches
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
-            downloadFile(   @information.patchesLink,
-                                ISM::Default::Software::PatchesArchiveBaseName,
-                                ISM::Default::Software::ArchiveExtensionName)
-        end
-
-        def downloadPatchesMd5sum
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
-            downloadFile(   @information.patchesMd5sumLink,
-                            ISM::Default::Software::PatchesArchiveBaseName,
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
         end
 
@@ -293,9 +266,9 @@ module ISM
             Ism.notifyOfExtract(@information)
 
             extractSources
-            if File.exists?(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesMd5sumArchiveName)
-                extractPatches
-            end
+
+            #Copy of the current available patches from the port
+            copyFileNoChroot(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
         def extractSources
@@ -303,13 +276,6 @@ module ISM
 
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
-        end
-
-        def extractPatches
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
-            extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesArchiveName, workDirectoryPathNoChroot)
-            moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)

@@ -101,22 +101,20 @@ module ISM
         return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
     end
 
-    def filePath : String
+    def mainDirectoryPath : String
         return Ism.settings.rootPath +
                ISM::Default::Path::SoftwaresDirectory +
                @port + "/" +
                @name + "/" +
-               @version + "/" +
-               ISM::Default::Filename::Information
+               @version + "/"
+    end
+
+    def filePath : String
+        return mainDirectoryPath + ISM::Default::Filename::Information
     end
 
     def requireFilePath : String
-        return Ism.settings.rootPath +
-               ISM::Default::Path::SoftwaresDirectory +
-               @port + "/" +
-               @name + "/" +
-               @version + "/" +
-               @version + ".cr"
+        return mainDirectoryPath + @version + ".cr"
     end
 
     def settingsFilePath : String
@@ -300,14 +298,6 @@ module ISM
 
     def sourcesMd5sumLink : String
         return Ism.mirrorsSettings.sourcesLink+archiveMd5sumName
-    end
-
-    def patchesLink : String
-        return Ism.mirrorsSettings.patchesLink+archiveName
-    end
-
-    def patchesMd5sumLink : String
-        return Ism.mirrorsSettings.patchesLink+archiveMd5sumName
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency
