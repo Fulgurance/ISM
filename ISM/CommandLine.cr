@@ -1127,7 +1127,7 @@ module ISM
 
             softwareText = "#{software.fullName.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/"
 
-            puts "\t" + dependencyText + " " + optionsText + missingDependencyText + softwareText + "\n"
+            puts "\t" + dependencyText + optionsText + missingDependencyText + softwareText + "\n"
 
             if allowTitle
                 puts "\n"
