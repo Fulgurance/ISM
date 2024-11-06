@@ -1098,6 +1098,8 @@ module ISM
         end
 
         def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareInformation, allowTitle = true)
+            puts
+
             if allowTitle
                 puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
                 puts "\n"
@@ -1133,6 +1135,7 @@ module ISM
         end
 
         def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
+            puts
             puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
             puts "\n"
 
