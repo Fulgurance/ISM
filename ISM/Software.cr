@@ -1549,10 +1549,10 @@ module ISM
             end
         end
 
-        def recordNeededKernelFeatures
+        def recordNeededKernelOptions
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            Ism.notifyOfRecordNeededKernelFeatures
+            Ism.notifyOfRecordNeededKernelOptions
 
         end
         
