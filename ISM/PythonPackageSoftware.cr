@@ -18,7 +18,7 @@ module ISM
             end
 
             pythonData = <<-CODE
-            pathappend /usr/lib/python3.11/site-packages/#{@information.name.downcase}-#{@information.version.downcase}-py3.11-linux-x86_64.egg PYTHONPATH
+            pathappend /usr/lib/python3.13/site-packages/#{@information.name.downcase}-#{@information.version.downcase}-py3.13-linux-x86_64.egg PYTHONPATH
             CODE
             fileUpdateContent("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}etc/profile.d/python.sh",pythonData)
         end
