@@ -2211,7 +2211,7 @@ module ISM
 
         def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new) : Process::Status
             environmentCommand = String.new
-            finalCommand = command.squeeze(" ")
+            finalCommand = command.squeeze(" ")delete("\n")
 
             if environmentFilePath != ""
                 environmentCommand = "source \"#{environmentFilePath}\" && "
