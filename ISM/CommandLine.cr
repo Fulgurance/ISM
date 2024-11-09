@@ -856,7 +856,7 @@ module ISM
 
         def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
-                                    arguments.squeeze(" ") +
+                                    arguments +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
                                     path +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
@@ -2211,6 +2211,7 @@ module ISM
 
         def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new) : Process::Status
             environmentCommand = String.new
+            finalCommand = command.squeeze(" ")
 
             if environmentFilePath != ""
                 environmentCommand = "source \"#{environmentFilePath}\" && "
@@ -2220,7 +2221,7 @@ module ISM
                 environmentCommand += " #{key}=\"#{environment[key]}\""
             end
 
-            recordSystemCall(command, path, environment)
+            recordSystemCall(finalCommand, path, environment)
 
             if @settings.installByChroot
                 chrootCommand = <<-CODE
@@ -2230,7 +2231,7 @@ module ISM
                     source /etc/profile
                 fi
 
-                cd #{path} && #{environmentCommand} #{command}
+                cd #{path} && #{environmentCommand} #{finalCommand}
                 CODE
 
                 process = runChrootTasks(chrootCommand)
@@ -2249,7 +2250,7 @@ module ISM
                     end
                 end
 
-                process = Process.run(  command,
+                process = Process.run(  finalCommand,
                                         output: :inherit,
                                         error: :inherit,
                                         shell: true,

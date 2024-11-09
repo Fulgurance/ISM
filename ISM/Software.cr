@@ -766,7 +766,6 @@ module ISM
         def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
             if Ism.settings.installByChroot
-                #prefix =    "--parallel #{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
 
                 if !environment.has_key?("CFLAGS")
                     environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
@@ -776,7 +775,6 @@ module ISM
                     environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
                 end
             else
-                #prefix =    "--parallel #{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
 
                 if !environment.has_key?("CFLAGS")
                     environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
@@ -787,7 +785,6 @@ module ISM
                 end
             end
 
-            #requestedCommands = "cmake #{prefix} #{arguments}"
             requestedCommands = "cmake #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
