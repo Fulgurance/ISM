@@ -1290,9 +1290,9 @@ module ISM
             loop do
                 userInput = gets
 
-                if userInput.downcase == ISM::Default::CommandLine::YesReplyOption.downcase
+                if userInput == ISM::Default::CommandLine::YesReplyOption.downcase
                     return true
-                elsif userInput.downcase == ISM::Default::CommandLine::NoReplyOption.downcase
+                elsif userInput == ISM::Default::CommandLine::NoReplyOption.downcase
                     return false
                 else
                     return false
