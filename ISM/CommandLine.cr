@@ -2220,6 +2220,8 @@ module ISM
                 environmentCommand += " #{key}=\"#{environment[key]}\""
             end
 
+            command = command.gsub("\n"," ").squeeze(" ")
+
             recordSystemCall(command, path, environment)
 
             if @settings.installByChroot
