@@ -2217,10 +2217,8 @@ module ISM
             end
 
             environment.keys.each do |key|
-                environmentCommand += " #{key}=\"#{environment[key]}\""
+                environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
-
-            command = command.gsub("\n"," ").squeeze(" ")
 
             recordSystemCall(command, path, environment)
 
