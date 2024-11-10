@@ -856,7 +856,7 @@ module ISM
 
         def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
-                                    arguments +
+                                    arguments.squeeze(" ") +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
                                     path +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
