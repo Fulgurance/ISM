@@ -2211,7 +2211,6 @@ module ISM
 
         def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new) : Process::Status
             environmentCommand = String.new
-            finalCommand = command.squeeze(" ").delete("\n")
 
             if environmentFilePath != ""
                 environmentCommand = "source \"#{environmentFilePath}\" && "
@@ -2221,7 +2220,7 @@ module ISM
                 environmentCommand += " #{key}=\"#{environment[key]}\""
             end
 
-            recordSystemCall(finalCommand, path, environment)
+            recordSystemCall(command, path, environment)
 
             if @settings.installByChroot
                 chrootCommand = <<-CODE
@@ -2231,7 +2230,7 @@ module ISM
                     source /etc/profile
                 fi
 
-                cd #{path} && #{environmentCommand} #{finalCommand}
+                cd #{path} && #{environmentCommand} #{command}
                 CODE
 
                 process = runChrootTasks(chrootCommand)
@@ -2250,7 +2249,7 @@ module ISM
                     end
                 end
 
-                process = Process.run(  finalCommand,
+                process = Process.run(  command,
                                         output: :inherit,
                                         error: :inherit,
                                         shell: true,
