@@ -101,6 +101,10 @@ module ISM
         end
 
         def synchronize : Process
+            Process.new("git reset --hard",
+                        shell: true,
+                        chdir: directoryPath)
+
             return Process.new( "git pull origin #{Ism.portsSettings.targetVersion}",
                                 shell: true,
                                 chdir: directoryPath)
