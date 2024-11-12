@@ -1791,12 +1791,16 @@ module ISM
                         if dependencyHash.has_key?(key)
 
                             hashOptions = dependencyHash[key].toSoftwareDependency.options.uniq
+                            dependencyOptions = dependency.options.uniq
 
-                            differentOptions = !(hashOptions & dependency.options.uniq == hashOptions)
+                            differentOptions = !(hashOptions & dependencyOptions == hashOptions)
 
-                            #VERIFIER SI LA SEULE DIFFERENCE N'EST PAS UNE OPTION QUI REQUIRE UNE CODEPENDENCE
+                            differences = (hashOptions - dependencyOptions | dependencyOptions - hashOptions)
 
-                            if differentOptions
+                            needToEnableNewOnes = (dependencyOptions.any? { |option| !hashOptions.includes?(option)})
+
+                            if differentOptions && needToEnableNewOnes
+
                                 dependency.options.each do |option|
                                     playCalculationAnimation
 
