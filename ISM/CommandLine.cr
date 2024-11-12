@@ -531,7 +531,8 @@ module ISM
             return ISM::AvailableSoftware.new
         end
 
-        def getSoftwareInformation(userEntry : String) : ISM::SoftwareInformation
+        #Add process to search only by name
+        def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false) : ISM::SoftwareInformation
             result = ISM::SoftwareInformation.new
 
             availableSoftware = getAvailableSoftware(userEntry)
@@ -859,7 +860,7 @@ module ISM
             printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
                                     arguments.squeeze(" ") +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
-                                    path +
+                                    "#{(Ism.settings.installByChroot ? "/" : Ism.settings.rootPath)}#{path}" +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
                                     (environment.map { |key| key.join("=") }).join(" ")   +
                                     ISM::Default::CommandLine::ErrorRunSystemCommandText4 +
@@ -982,11 +983,11 @@ module ISM
             end
         end
 
-        def getRequestedSoftwares(list : Array(String)) : Array(ISM::SoftwareInformation)
+        def getRequestedSoftwares(list : Array(String), allowSearchByNameOnly = false) : Array(ISM::SoftwareInformation)
             softwaresList = Array(ISM::SoftwareInformation).new
 
             list.each do |entry|
-                software = getSoftwareInformation(entry)
+                software = getSoftwareInformation(entry, allowSearchByNameOnly)
 
                 if software.isValid
                     softwaresList << software
