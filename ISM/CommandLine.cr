@@ -1792,7 +1792,7 @@ module ISM
 
                             hashOptions = dependencyHash[key].toSoftwareDependency.options.uniq
 
-                            differentOptions = (hashOptions & dependency.options.uniq == hashOptions)
+                            differentOptions = !(hashOptions & dependency.options.uniq == hashOptions)
 
                             #VERIFIER SI LA SEULE DIFFERENCE N'EST PAS UNE OPTION QUI REQUIRE UNE CODEPENDENCE
 
