@@ -1790,12 +1790,9 @@ module ISM
 
                         if dependencyHash.has_key?(key)
 
-                            #???????? A MODIFIER, COMPLETEMENT RIDICULE
-                            #differentOptions = (dependencyHash[key].dependencies(allowDeepSearch).size - dependencies.size).abs > 0
                             hashOptions = dependencyHash[key].toSoftwareDependency.options.uniq
-                            hashOptions & dependency.options.uniq == hashOptions
 
-                            differentOptions = (dependencyHash[key].dependencies(allowDeepSearch).size - dependencies.size).abs > 0
+                            differentOptions = (hashOptions & dependency.options.uniq == hashOptions)
 
                             #VERIFIER SI LA SEULE DIFFERENCE N'EST PAS UNE OPTION QUI REQUIRE UNE CODEPENDENCE
 
