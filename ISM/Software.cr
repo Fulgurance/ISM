@@ -753,7 +753,7 @@ module ISM
         end
 
         def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
-            requestedCommands = "crystal #{arguments}"
+            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, path, environment)
 

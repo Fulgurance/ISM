@@ -1609,7 +1609,7 @@ module ISM
         def buildTasksFile
             processResult = IO::Memory.new
 
-            Process.run("crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
                         error: processResult,
                         shell: true,
                         chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
@@ -1637,7 +1637,7 @@ module ISM
 
             logWriter = logEnabled ? IO::MultiWriter.new(STDOUT,logIOMemory) : Process::Redirect::Inherit
 
-            process = Process.run(  "./#{ISM::Default::Filename::Task}",
+            process = Process.run(  "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} ./#{ISM::Default::Filename::Task}",
                                     output: logWriter,
                                     error: logWriter,
                                     shell: true,
