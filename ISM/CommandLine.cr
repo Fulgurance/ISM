@@ -857,14 +857,25 @@ module ISM
         end
 
         def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorRunSystemCommandText1 +
-                                    arguments.squeeze(" ") +
-                                    ISM::Default::CommandLine::ErrorRunSystemCommandText2 +
-                                    "#{(Ism.settings.installByChroot ? "/" : Ism.settings.rootPath)}#{path}" +
-                                    ISM::Default::CommandLine::ErrorRunSystemCommandText3 +
-                                    (environment.map { |key| key.join("=") }).join(" ")   +
-                                    ISM::Default::CommandLine::ErrorRunSystemCommandText4 +
-                                    environmentFilePath,
+
+            argumentText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText1}#{arguments.squeeze(" ")}"
+            pathText = String.new
+            environmentText = String.new
+            environmentFilePathText = String.new
+
+            if !path.empty?
+                pathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText2}#{(Ism.settings.installByChroot ? "/" : Ism.settings.rootPath)}#{path}"
+            end
+
+            if !environment.empty?
+                environmentText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText3}#{(environment.map { |key| key.join("=") }).join(" ")}"
+            end
+
+            if !environmentFilePath.empty?
+                environmentFilePathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText4}#{environmentFilePath}"
+            end
+
+            printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
                                     error)
         end
 
