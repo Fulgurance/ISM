@@ -1777,7 +1777,6 @@ module ISM
 
                     key = dependency.hiddenName
                     dependencyInformation = dependency.information
-                    dependencies = dependency.dependencies(allowDeepSearch)
                     installed = softwareIsInstalled(dependencyInformation)
 
                     if !installed || installed && allowRebuild  && softwareIsRequestedSoftware(dependencyInformation) && !dependencyInformation.passEnabled || allowDeepSearch || softwares.any? { |entry| entry.hiddenName == key}
