@@ -875,8 +875,12 @@ module ISM
                 environmentFilePathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText4}#{environmentFilePath}"
             end
 
-            printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
-                                    error)
+            if !arguments.empty?
+                printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
+                                        error)
+            else
+                printErrorNotification(ISM::Default::CommandLine::ErrorRunSystemCommandUnknownError, error)
+            end
         end
 
         def notifyOfUpdateKernelOptionsDatabaseError(software : ISM::SoftwareInformation, error = nil)

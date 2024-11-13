@@ -67,6 +67,7 @@ module ISM
             ErrorRunSystemCommandText2 = " in "
             ErrorRunSystemCommandText3 = " with given environment "
             ErrorRunSystemCommandText4 = " with the loaded environment file "
+            ErrorRunSystemCommandUnknownError = "ISM encountered an error with the last executed command, but this one was not recorded. The reason is unknown."
             ErrorUpdateKernelOptionsDatabaseText = "Failed to update the option database for the kernel "
             InextricableText = "ISM stopped due to an inextricable problem of dependencies with these softwares:"
             MissingSelectedDependenciesText = "ISM stopped due to missing unique dependencies not selected yet:"
