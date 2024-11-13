@@ -864,7 +864,7 @@ module ISM
             environmentFilePathText = String.new
 
             if !path.empty?
-                pathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText2}#{(Ism.settings.installByChroot ? "/" : Ism.settings.rootPath)}#{path}"
+                pathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText2}#{(Ism.settings.installByChroot ? Ism.settings.rootPath : "")}#{path}"
             end
 
             if !environment.empty?
