@@ -1607,9 +1607,27 @@ module ISM
             return SemanticVersion.parse(@information.version).major
         end
 
-        #Internal use, or can bring internal error when called in installation script. Use softwareMajorVersion instead
+        def minorVersion : Int32
+            return SemanticVersion.parse(@information.version).minor
+        end
+
+        def patchVersion : Int32
+            return SemanticVersion.parse(@information.version).patch
+        end
+
+        #Internal use only
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
+        end
+
+        #Internal use only
+        def dependencyMinorVersion(fullName : String) : Int32
+            return SemanticVersion.parse(dependency(fullName).version).minor
+        end
+
+        #Internal use only
+        def dependencyPatchVersion(fullName : String) : Int32
+            return SemanticVersion.parse(dependency(fullName).version).patch
         end
 
         def softwareMajorVersion(fullName : String) : Int32
@@ -1619,6 +1637,26 @@ module ISM
                 return dependencyMajorVersion(fullName)
             else
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).major
+            end
+        end
+
+        def softwareMinorVersion(fullName : String) : Int32
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
+            if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
+                return dependencyMinorVersion(fullName)
+            else
+                return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).minor
+            end
+        end
+
+        def softwarePatchVersion(fullName : String) : Int32
+            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
+            if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
+                return dependencyPatchVersion(fullName)
+            else
+                return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).patch
             end
         end
 
