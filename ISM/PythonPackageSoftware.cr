@@ -13,9 +13,11 @@ module ISM
 
             Dir.glob(["#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/**/*"], match: :dot_files).each do |filePath|
 
+                fullName = "@ProgrammingLanguages-Main:Python"
+
                 if filePath != packagesPath && filePath != "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}bin"
                     moveFile(   path:       filePath,
-                                newPath:    "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/lib/python#{softwareMajorVersion}.#{softwareMinorVersion}/site-packages/")
+                                newPath:    "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/lib/python#{softwareMajorVersion(fullName)}.#{softwareMinorVersion(fullName)}/site-packages/")
                 end
 
             end
