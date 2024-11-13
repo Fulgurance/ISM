@@ -5,8 +5,7 @@ module ISM
         def prepare
             super
 
-            runPipCommand(  arguments: "install '#{@information.name}==#{@information.version}'",
-                            environment: {"PYTHONUSERBASE" => "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}"})
+            runPipCommand(  arguments: "install --no-dependencies --target \"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}\" '#{@information.name}==#{@information.version}'")
         end
 
     end
