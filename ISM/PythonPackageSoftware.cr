@@ -5,6 +5,8 @@ module ISM
         def prepare
             super
 
+            fullName = "@ProgrammingLanguages-Main:Python"
+
             runPipCommand(  arguments: "install --no-dependencies --target \"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}\" '#{@information.name}==#{@information.version}'")
 
             packagesPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}usr/lib/python#{softwareMajorVersion(fullName)}.#{softwareMinorVersion(fullName)}/site-packages"
@@ -12,8 +14,6 @@ module ISM
             makeDirectory(packagesPath)
 
             Dir.glob(["#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/**/*"], match: :dot_files).each do |filePath|
-
-                fullName = "@ProgrammingLanguages-Main:Python"
 
                 if filePath != packagesPath && filePath != "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}bin"
                     moveFile(   path:       filePath,
