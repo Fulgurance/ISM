@@ -78,7 +78,7 @@ module ISM
                 path = value
             end
 
-            return Dir.glob(patterns, match: match)
+            return Dir.glob(path, match: match)
         end
 
         def recordSelectedKernel
