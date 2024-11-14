@@ -16,7 +16,7 @@ module ISM
             directoryContent(packagesPath, matchHidden: true).each do |filePath|
 
                 if filePath.squeeze("/") == "#{packagesPath}/share".squeeze("/")
-                    destinationPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/share"
+                    destinationPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr"
 
                     makeDirectory(destinationPath)
 
@@ -25,7 +25,7 @@ module ISM
                 end
 
                 if filePath.squeeze("/") == "#{packagesPath}/bin".squeeze("/")
-                    destinationPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/bin"
+                    destinationPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr"
 
                     makeDirectory(destinationPath)
 
