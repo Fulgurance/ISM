@@ -11,7 +11,7 @@ module ISM
 
             makeDirectory(packagesPath)
 
-            runPipCommand(  arguments: "install --root-user-action --no-dependencies --target \"#{packagesPath}\" '#{@information.name}==#{@information.version}'")
+            runPipCommand(  arguments: "install --no-dependencies --target \"#{packagesPath}\" '#{@information.name}==#{@information.version}'")
 
             directoryContent(packagesPath, matchHidden: true).each do |filePath|
 
