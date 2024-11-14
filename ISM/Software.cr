@@ -67,6 +67,20 @@ module ISM
             return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
         end
 
+        def directoryContent(patterns : String, match : File::MatchOptions = File::MatchOptions.glob_default) : Array(String)
+
+            path = Union(String | Enumerable).new
+            value = (Ism.settings.installByChroot ? patterns[(Ism.settings.rootPath.size-1)..-1] : patterns)
+
+            if patterns.includes?("*")
+                path = [value]
+            else
+                path = value
+            end
+
+            return Dir.glob(patterns, match: match)
+        end
+
         def recordSelectedKernel
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
