@@ -7,11 +7,9 @@ module ISM
 
             fullName = "@ProgrammingLanguages-Main:Python"
 
-            runPipCommand(  arguments: "install --root-user-action --no-dependencies --target \"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}\" '#{@information.name}==#{@information.version}'")
-
             packagesPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}usr/lib/python#{softwareMajorVersion(fullName)}.#{softwareMinorVersion(fullName)}/site-packages"
 
-            makeDirectory(packagesPath)
+            runPipCommand(  arguments: "install --root-user-action --no-dependencies --target \"#{packagesPath}\" '#{@information.name}==#{@information.version}'")
 
             directoryContent(packagesPath, matchHidden: true).each do |filePath|
 
