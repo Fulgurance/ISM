@@ -69,7 +69,7 @@ module ISM
 
         def directoryContent(patterns : String, match) : Array(String)
 
-            path = Union(String | Enumerable).new
+            path = Union(String | Array(String)).new
             value = (Ism.settings.installByChroot ? patterns[(Ism.settings.rootPath.size-1)..-1] : patterns)
 
             if patterns.includes?("*")
