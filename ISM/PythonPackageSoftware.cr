@@ -13,7 +13,7 @@ module ISM
 
             makeDirectory(packagesPath)
 
-            directoryContent("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/**/*", matchHidden = true).each do |filePath|
+            directoryContent("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/**/*", matchHidden: true).each do |filePath|
 
                 if filePath != packagesPath && filePath != "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}bin"
                     moveFile(   path:       filePath,
