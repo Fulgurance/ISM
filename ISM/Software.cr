@@ -69,6 +69,8 @@ module ISM
 
         def directoryContent(path : String, matchHidden = false) : Array(String)
 
+            path = "#{path}/*"
+
             fileList = Dir.glob((Ism.settings.installByChroot ? Ism.settings.rootPath+path : path), match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
 
             return fileList.map { |file| (Ism.settings.installByChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
