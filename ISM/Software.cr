@@ -67,10 +67,9 @@ module ISM
             return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
         end
 
-        def directoryContent(patterns : String, matchHidden = false) : Array(String)
+        def directoryContent(path : String, matchHidden = false) : Array(String)
 
-            path = (Ism.settings.installByChroot ? patterns[(Ism.settings.rootPath.size-1)..-1] : patterns)
-            fileList = Dir.glob(path, match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
+            fileList = Dir.glob((Ism.settings.installByChroot ? Ism.settings.rootPath+path : path), match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
 
             return fileList.map { |file| (Ism.settings.installByChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
         end
