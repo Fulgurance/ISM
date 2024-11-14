@@ -13,11 +13,20 @@ module ISM
 
             makeDirectory(packagesPath)
 
-            directoryContent("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}", matchHidden: true).each do |filePath|
+            directoryContent(packagesPath, matchHidden: true).each do |filePath|
 
-                if filePath != packagesPath && filePath != "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}bin"
+                if filePath == "#{packagesPath}/share"
+                    destinationPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/share"
+
                     moveFile(   path:       filePath,
-                                newPath:    "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/lib/python#{softwareMajorVersion(fullName)}.#{softwareMinorVersion(fullName)}/site-packages/")
+                                newPath:    destinationPath)
+                end
+
+                if filePath == "#{packagesPath}/bin"
+                    destinationPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/bin"
+
+                    moveFile(   path:       filePath,
+                                newPath:    destinationPath)
                 end
 
             end
