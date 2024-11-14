@@ -70,8 +70,9 @@ module ISM
         def directoryContent(patterns : String, matchHidden = false) : Array(String)
 
             path = (Ism.settings.installByChroot ? patterns[(Ism.settings.rootPath.size-1)..-1] : patterns)
+            fileList = Dir.glob(path, match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
 
-            return Dir.glob(path, match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
+            return fileList.map { |file| (Ism.settings.installByChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
         end
 
         def recordSelectedKernel
