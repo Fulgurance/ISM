@@ -388,7 +388,7 @@ module ISM
                     FileUtils.rm_r(rootPath+file)
                 end
 
-                FileUtils.rm_r(software.installedDirectoryPath+"/"+software.version)
+                FileUtils.rm_r(rootPath+software.installedDirectoryPath+"/"+software.version)
 
                 if Dir.empty?(rootPath+software.installedDirectoryPath)
                     FileUtils.rm_r(rootPath+software.installedDirectoryPath)
