@@ -122,6 +122,10 @@ module ISM
             moveFileNoChroot("#{workDirectoryPathNoChroot}/Sources","#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
         end
 
+        def selectedKernel
+            return Ism.selectedKernel
+        end
+
         def download
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
