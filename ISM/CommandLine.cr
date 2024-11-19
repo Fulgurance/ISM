@@ -681,13 +681,8 @@ module ISM
             puts separatorText
             puts title
             puts separatorText
-
-            if @lastRecordedSystemCall.isValid
-                puts command
-                puts help
-            else
-                puts "\n#{ISM::Default::CommandLine::ErrorRunSystemCommandUnknownError.colorize(:red)}"
-            end
+            puts command
+            puts help
         end
 
         def printInformationNotificationTitle(name : String, version : String)
