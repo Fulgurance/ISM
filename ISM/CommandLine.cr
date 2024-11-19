@@ -875,7 +875,7 @@ module ISM
                 environmentFilePathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText4}#{environmentFilePath}"
             end
 
-            if !arguments.empty?
+            if arguments != "."
                 printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
                                         error)
             else
