@@ -686,7 +686,7 @@ module ISM
                 puts command
                 puts help
             else
-                "\n#{ISM::Default::CommandLine::ErrorRunSystemCommandUnknownError.colorize(:red)}"
+                puts "\n#{ISM::Default::CommandLine::ErrorRunSystemCommandUnknownError.colorize(:red)}"
             end
         end
 
