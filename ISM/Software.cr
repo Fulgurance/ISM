@@ -88,9 +88,18 @@ module ISM
 
                         settingInformation.dependencies(allowDeepSearch: true).each do |dependency|
                             if dependency.fullName.downcase == entry.downcase
-                                dependency.information.writeConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+
+                                installedVersion = SemanticVersion.parse(Ism.mainKernelVersion)
+                                availableVersion = SemanticVersion.parse(Ism.getSoftwareInformation(entry))
+
+                                #Record kernel as default if it's a newer version of the selected one OR if none are selected
+                                if selectedKernel.isValid && selectedKernel.fullName.downcase == entry.downcase && availableVersion > installedVersion || !selectedKernel.isValid
+                                    dependency.information.writeConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+                                end
+
                             end
                         end
+
                     end
                 end
             end
@@ -532,12 +541,12 @@ module ISM
             extensionCommands = String.new
 
             extensions.each do |extension|
-                extensionCommands += ("-name")
+                extensionCommands += ("-name ")
                 extensionCommands += ("\\*.#{extension} ")
             end
 
             requestedCommands = <<-CMD
-                                find #{path} -name \*.la -delete
+                                find #{path} #{extensionCommands} -delete
                                 CMD
 
             process = Ism.runSystemCommand(requestedCommands)
@@ -557,6 +566,12 @@ module ISM
             when :symbolicLink
                 command = "ln -s"
             when :symbolicLinkByOverwrite
+                symlinkRealPath = (Ism.settings.installByChroot ? "#{Ism.settings.rootPath}/#{path}" : "/#{path}")
+
+                if File.symlink?(symlinkRealPath)
+                    deleteFileNoChroot(symlinkRealPath)
+                end
+
                 command = "ln -sf"
             else
                 Ism.notifyOfMakeLinkUnknowTypeError(target, path, type)
@@ -1212,6 +1227,17 @@ module ISM
 
         def runDepmodCommand(arguments = String.new)
             requestedCommands = "depmod #{arguments}"
+
+            process = Ism.runSystemCommand(requestedCommands)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
+            end
+        end
+
+        def runSshKeygenCommand(arguments = String.new)
+            requestedCommands = "ssh-keygen #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands)
 
