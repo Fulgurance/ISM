@@ -681,8 +681,13 @@ module ISM
             puts separatorText
             puts title
             puts separatorText
-            puts command
-            puts help
+
+            if @lastRecordedSystemCall.isValid
+                puts command
+                puts help
+            else
+                "\n#{ISM::Default::CommandLine::ErrorRunSystemCommandUnknownError.colorize(:red)}"
+            end
         end
 
         def printInformationNotificationTitle(name : String, version : String)
@@ -875,12 +880,8 @@ module ISM
                 environmentFilePathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText4}#{environmentFilePath}"
             end
 
-            if arguments != "."
-                printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
+            printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
                                         error)
-            else
-                printErrorNotification(ISM::Default::CommandLine::ErrorRunSystemCommandUnknownError, error)
-            end
         end
 
         def notifyOfUpdateKernelOptionsDatabaseError(software : ISM::SoftwareInformation, error = nil)
