@@ -90,7 +90,7 @@ module ISM
                             if dependency.fullName.downcase == entry.downcase
 
                                 installedVersion = SemanticVersion.parse(Ism.mainKernelVersion)
-                                availableVersion = SemanticVersion.parse(Ism.getSoftwareInformation(entry))
+                                availableVersion = SemanticVersion.parse(Ism.getSoftwareInformation(entry).version)
 
                                 #Record kernel as default if it's a newer version of the selected one OR if none are selected
                                 if selectedKernel.isValid && selectedKernel.fullName.downcase == entry.downcase && availableVersion > installedVersion || !selectedKernel.isValid
