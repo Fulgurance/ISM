@@ -64,8 +64,8 @@ module ISM
         end
 
         def start
-            loadSystemInformationFile
             loadSettingsFiles
+            loadSystemInformationFile
             loadKernelOptionDatabase
             loadNeededKernelOptions
             loadUnneededKernelOptions
