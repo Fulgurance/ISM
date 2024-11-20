@@ -89,13 +89,21 @@ module ISM
                         settingInformation.dependencies(allowDeepSearch: true).each do |dependency|
                             if dependency.fullName.downcase == entry.downcase
 
+                                needUpdateKernelFile = false
+
                                 if selectedKernel.isValid
                                     installedVersion = SemanticVersion.parse(Ism.mainKernelVersion)
                                     availableVersion = SemanticVersion.parse(Ism.getSoftwareInformation(entry).version)
+
+                                    if selectedKernel.fullName.downcase == entry.downcase && availableVersion > installedVersion
+                                        needUpdateKernelFile = true
+                                    end
+                                else
+                                    needUpdateKernelFile = true
                                 end
 
                                 #Record kernel as default if it's a newer version of the selected one OR if none are selected
-                                if selectedKernel.isValid && selectedKernel.fullName.downcase == entry.downcase && availableVersion > installedVersion || !selectedKernel.isValid
+                                if needUpdateKernelFile
                                     dependency.information.writeConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
                                 end
 
