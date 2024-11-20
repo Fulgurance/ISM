@@ -335,11 +335,7 @@ module ISM
 
         def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
             softwareInformation.installedFiles = installedFiles
-
             softwareInformation.writeConfiguration(softwareInformation.installedFilePath)
-
-            #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
-            @installedSoftwares.push(softwareInformation)
         end
 
         def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
@@ -1578,6 +1574,7 @@ module ISM
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
 
                             target.install
+                            target.updateInstalledSoftwaresInstance
                             target.recordNeededKernelOptions
                             target.clean
                         rescue

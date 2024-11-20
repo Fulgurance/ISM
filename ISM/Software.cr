@@ -440,7 +440,8 @@ module ISM
             end
         end
 
-        def stripFile(filePath = String.new)
+         #Special function to improve performance (Internal use only)
+        def stripFileNoChroot(filePath : String)
             #No exit process because if the file can't be strip, we can just go next)
             process = Process.run("strip --strip-unneeded #{filePath}", shell: true)
         end
@@ -1363,7 +1364,7 @@ module ISM
                 if File.directory?(entry) || entry[-3..-1] != ".la" || preserveLibtoolArchives
 
                     #Pre-Strip the file if needed
-                    stripFile(entry)
+                    stripFileNoChroot(entry)
 
                     finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
                     recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
@@ -1384,6 +1385,11 @@ module ISM
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
+        end
+
+        #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
+        def updateInstalledSoftwaresInstance
+            @installedSoftwares.push(@information)
         end
 
         def kernelSourcesPath : String
