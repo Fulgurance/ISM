@@ -6,6 +6,7 @@ module ISM
 
             IsmBinary = "ism"
             RequiredLibraries = "RequiredLibraries.cr"
+            SystemInformation = "SystemInformation.json"
             Information = "Information.json"
             Settings = "Settings.json"
             SoftwareSettings = "Settings.json"

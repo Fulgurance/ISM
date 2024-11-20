@@ -14,6 +14,10 @@ module ISM
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
         end
 
+        def recordCrossToolchainAsFullyBuilt
+            Ism.systemInformation.setCrossToolchainFullyBuilt(true)
+        end
+
         def version : String
             return @information.version
         end

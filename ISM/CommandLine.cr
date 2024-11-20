@@ -2,6 +2,7 @@ module ISM
 
     class CommandLine
 
+        property systemInformation : ISM::CommandLineSystemInformation
         property requestedSoftwares : Array(ISM::SoftwareInformation)
         property neededKernelOptions : Array(ISM::NeededKernelOption)
         property unneededKernelOptions : Array(ISM::UnneededKernelOption)
@@ -22,6 +23,7 @@ module ISM
         property totalInstalledSize : UInt128
 
         def initialize
+            @systemInformation = ISM::CommandLineSystemInformation.new
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
             @neededKernelOptions = Array(ISM::NeededKernelOption).new
             @unneededKernelOptions = Array(ISM::UnneededKernelOption).new
@@ -62,6 +64,7 @@ module ISM
         end
 
         def start
+            loadSystemInformationFile
             loadSettingsFiles
             loadKernelOptionDatabase
             loadNeededKernelOptions
@@ -243,6 +246,10 @@ module ISM
                     @favouriteGroups << ISM::FavouriteGroup.loadConfiguration(path)
                 end
             end
+        end
+
+        def loadSystemInformationFile
+            @systemInformation = ISM::CommandLineSystemInformation.loadConfiguration
         end
 
         def loadSettingsFiles
