@@ -249,7 +249,7 @@ module ISM
         end
 
         def loadSystemInformationFile
-            @systemInformation = ISM::CommandLineSystemInformation.loadConfiguration
+            @systemInformation = @settings.rootPath +ISM::CommandLineSystemInformation.loadConfiguration
         end
 
         def loadSettingsFiles
