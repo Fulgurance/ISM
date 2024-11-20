@@ -1344,7 +1344,8 @@ module ISM
             return directoryNumber, symlinkNumber, fileNumber, totalSize
         end
 
-        def install
+        #Add stripping capability
+        def install(preserveLibtoolArchives = false)
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfInstall(@information)
@@ -1354,19 +1355,24 @@ module ISM
 
             filesList.each do |entry|
 
-                finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
-                recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
+                #Don't keep libtool archives by default except if explicitely specified
+                if !File.directory?(entry) && entry[ ] != ".la" || preserveLibtoolArchives
 
-                if !File.exists?(finalDestination) || Ism.softwareIsInstalled(@information) && ISM::SoftwareInformation.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
-                    installedFiles << recordedFilePath
-                end
+                    finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
+                    recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
 
-                if File.directory?(entry) && !File.symlink?(entry)
-                    if !Dir.exists?(finalDestination)
-                        makeDirectoryNoChroot(finalDestination)
+                    if !File.exists?(finalDestination) || Ism.softwareIsInstalled(@information) && ISM::SoftwareInformation.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
+                        installedFiles << recordedFilePath
                     end
-                else
-                    moveFileNoChroot(entry,finalDestination)
+
+                    if File.directory?(entry) && !File.symlink?(entry)
+                        if !Dir.exists?(finalDestination)
+                            makeDirectoryNoChroot(finalDestination)
+                        end
+                    else
+                        moveFileNoChroot(entry,finalDestination)
+                    end
+
                 end
             end
 
