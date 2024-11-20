@@ -440,6 +440,11 @@ module ISM
             end
         end
 
+        def stripFile(filePath = String.new)
+            #No exit process because if the file can't be strip, we can just go next)
+            process = Process.run("strip --strip-unneeded #{filePath}", shell: true)
+        end
+
         def fileUpdateContent(path : String, data : String)
             requestedCommands = <<-CMD
                                 grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
@@ -1172,13 +1177,6 @@ module ISM
             end
         end
 
-        def stripFile(filePath = String.new)
-            requestedCommands = "strip --strip-unneeded #{filePath}"
-
-            #No exit process because if the file can't be strip, we can just go next)
-            process = Ism.runSystemCommand(requestedCommands, quiet: true)
-        end
-
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
 
@@ -1351,7 +1349,6 @@ module ISM
             return directoryNumber, symlinkNumber, fileNumber, totalSize
         end
 
-        #Add stripping capability
         def install(preserveLibtoolArchives = false)
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
