@@ -1172,6 +1172,18 @@ module ISM
             end
         end
 
+        def stripFile(filePath = String.new)
+            requestedCommands = "strip --strip-unneeded #{filePath}"
+
+            process = Ism.runSystemCommand(requestedCommands)
+
+            if !process.success?
+                #ACTUALLY JUST SKIP
+                #Ism.notifyOfRunSystemCommandError(requestedCommands)
+                #Ism.exitProgram
+            end
+        end
+
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
 
@@ -1356,7 +1368,10 @@ module ISM
             filesList.each do |entry|
 
                 #Don't keep libtool archives by default except if explicitely specified
-                if !File.directory?(entry) && entry[ ] != ".la" || preserveLibtoolArchives
+                if File.directory?(entry) || entry[-3..-1] != ".la" || preserveLibtoolArchives
+
+                    #Pre-Strip the file if needed
+                    stripFile(entry)
 
                     finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
                     recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
