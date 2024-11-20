@@ -361,7 +361,7 @@ module ISM
             filesForRemoval = Array(String).new
             softwareForRemovalIndex = 0
 
-            @installedSoftwares.each do |installedSoftware, index|
+            @installedSoftwares.each_with_index do |installedSoftware, index|
                 if software.hiddenName == installedSoftware.hiddenName
                     requestedVersion = installedSoftware
                     softwareForRemovalIndex = index
