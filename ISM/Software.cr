@@ -1175,13 +1175,8 @@ module ISM
         def stripFile(filePath = String.new)
             requestedCommands = "strip --strip-unneeded #{filePath}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                #ACTUALLY JUST SKIP
-                #Ism.notifyOfRunSystemCommandError(requestedCommands)
-                #Ism.exitProgram
-            end
+            #No exit process because if the file can't be strip, we can just go next)
+            process = Ism.runSystemCommand(requestedCommands, quiet: true)
         end
 
         def runZicCommand(arguments : String, path = String.new)

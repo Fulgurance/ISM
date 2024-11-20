@@ -2226,19 +2226,21 @@ module ISM
             return true
         end
 
-        def runChrootTasks(chrootTasks) : Process::Status
+        def runChrootTasks(chrootTasks, quiet = false) : Process::Status
             recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
+
+            quietMode = (quiet ? :none : :inherit)
 
             File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
             process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
+                                    output: quietMode,
+                                    error: quietMode,
                                     shell: true)
 
             process = Process.run(  "chroot #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
-                                    output: :inherit,
-                                    error: :inherit,
+                                    output: quietMode,
+                                    error: quietMode,
                                     shell: true)
 
             File.delete(@settings.rootPath+ISM::Default::Filename::Task)
@@ -2246,7 +2248,9 @@ module ISM
             return process
         end
 
-        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new) : Process::Status
+        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
+            quietMode = (quiet ? :none : :inherit)
+
             environmentCommand = String.new
 
             if environmentFilePath != ""
@@ -2270,7 +2274,7 @@ module ISM
                 cd #{path} && #{environmentCommand} #{command}
                 CODE
 
-                process = runChrootTasks(chrootCommand)
+                process = runChrootTasks(chrootCommand, quiet)
             else
                 environmentHash = Hash(String, String).new
 
@@ -2287,8 +2291,8 @@ module ISM
                 end
 
                 process = Process.run(  command,
-                                        output: :inherit,
-                                        error: :inherit,
+                                        output: quietMode,
+                                        error: quietMode,
                                         shell: true,
                                         chdir: (path == "" ? nil : path),
                                         env: environmentHash)
