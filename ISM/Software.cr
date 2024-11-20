@@ -30,6 +30,10 @@ module ISM
             return @information.versionName
         end
 
+        def passEnabled : Bool
+            return @information.passEnabled
+        end
+
         #Special function to improve performance (Internal use only)
         def workDirectoryPathNoChroot : String
             return Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
