@@ -1574,7 +1574,6 @@ module ISM
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
 
                             target.install
-                            target.updateInstalledSoftwaresInstance
                             target.recordNeededKernelOptions
                             target.clean
                         rescue
@@ -1585,6 +1584,9 @@ module ISM
                             Ism.printSystemCallErrorNotification
                             Ism.exitProgram
                         end
+
+                        #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
+                        Ism.installedSoftwares.push(@information)
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 

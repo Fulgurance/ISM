@@ -1387,11 +1387,6 @@ module ISM
             Ism.addInstalledSoftware(@information, installedFiles)
         end
 
-        #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
-        def updateInstalledSoftwaresInstance
-            Ism.installedSoftwares.push(@information)
-        end
-
         def kernelSourcesPath : String
             return Ism.kernelSourcesPath
         end
