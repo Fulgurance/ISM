@@ -359,10 +359,12 @@ module ISM
             otherVersions = Array(ISM::SoftwareInformation).new
             protectedFiles = Array(String).new
             filesForRemoval = Array(String).new
+            softwareForRemovalIndex = 0
 
-            @installedSoftwares.each do |installedSoftware|
+            @installedSoftwares.each do |installedSoftware, index|
                 if software.hiddenName == installedSoftware.hiddenName
                     requestedVersion = installedSoftware
+                    softwareForRemovalIndex = index
                 else
                     if software.fullName == installedSoftware.fullName
                         otherVersions.push(installedSoftware)
@@ -371,7 +373,6 @@ module ISM
             end
 
             if requestedVersion.isValid
-
                 protectedFiles = otherVersions.map {|version| version.installedFiles }.flatten.uniq
 
                 if protectedFiles.size > 0
@@ -394,6 +395,9 @@ module ISM
                 if Dir.empty?(software.installedDirectoryPath)
                     FileUtils.rm_r(software.installedDirectoryPath)
                 end
+
+                #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
+                @installedSoftwares.delete(softwareForRemovalIndex)
             end
         end
 
