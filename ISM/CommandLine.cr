@@ -2229,7 +2229,7 @@ module ISM
         def runChrootTasks(chrootTasks, quiet = false) : Process::Status
             recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
-            quietMode = (quiet ? Process::Redirect::Clone : Process::Redirect::Inherit)
+            quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
@@ -2249,7 +2249,7 @@ module ISM
         end
 
         def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
-            quietMode = (quiet ? Process::Redirect::Clone : Process::Redirect::Inherit)
+            quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             environmentCommand = String.new
 
