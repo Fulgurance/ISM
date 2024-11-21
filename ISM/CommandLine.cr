@@ -1586,7 +1586,7 @@ module ISM
                         end
 
                         #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
-                        Ism.installedSoftwares.push(@information)
+                        Ism.installedSoftwares.push(target.information)
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
