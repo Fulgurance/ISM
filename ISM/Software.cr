@@ -1350,7 +1350,7 @@ module ISM
             return directoryNumber, symlinkNumber, fileNumber, totalSize
         end
 
-        def install(preserveLibtoolArchives = false)
+        def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
 
             Ism.notifyOfInstall(@information)
@@ -1364,7 +1364,9 @@ module ISM
                 if File.directory?(entry) || entry[-3..-1] != ".la" || preserveLibtoolArchives
 
                     #Pre-Strip the file if needed
-                    stripFileNoChroot(entry)
+                    if stripFiles
+                        stripFileNoChroot(entry)
+                    end
 
                     finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
                     recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
