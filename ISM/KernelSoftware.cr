@@ -8,6 +8,10 @@ module ISM
             prepareKernelSourcesInstallation
         end
 
+        def install(stripFiles: false)
+            super
+        end
+
     end
 
 end
