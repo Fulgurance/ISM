@@ -847,6 +847,17 @@ module ISM
             end
         end
 
+        def runQmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
+            requestedCommands = "qmake #{arguments}"
+
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
+            end
+        end
+
         def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "meson #{arguments}"
 
