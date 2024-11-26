@@ -1206,7 +1206,7 @@ module ISM
             puts "\n"
 
             matches.each_with_index do |name, index|
-                names += "#{name}#{index < matches.size-1 ? ", " : "."}"
+                names += "#{name.colorize(:red)}#{index < matches.size-1 ? ", " : "."}"
             end
 
             puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"

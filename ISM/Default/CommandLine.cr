@@ -70,7 +70,7 @@ module ISM
             ErrorRunSystemCommandUnknownError = "ISM encountered an error with the last executed command, but was not able to record it. The reason is unknown."
             ErrorUpdateKernelOptionsDatabaseText = "Failed to update the option database for the kernel "
             AmbiguousSearchTitle = "The searched software name is ambiguous."
-            AmbiguousSearchText = "ISM is unable to find the requested software because there multiple entry in the database for this name:"
+            AmbiguousSearchText = "ISM is unable to find the requested software because there are multiple entry in the database for this name:"
             InextricableText = "ISM stopped due to an inextricable problem of dependencies with these softwares:"
             MissingSelectedDependenciesText = "ISM stopped due to missing unique dependencies not selected yet:"
             MissingSelectionText = "One of these unique dependencies need to be selected:"
