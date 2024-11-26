@@ -1202,7 +1202,7 @@ module ISM
             names = String.new
 
             puts
-            puts "#{ISM::Default::CommandLine::AmbiguousSearchTitle.colorize(:orange)}"
+            puts "#{ISM::Default::CommandLine::AmbiguousSearchTitle.colorize(:yellow)}"
             puts "\n"
 
             matches.each_with_index do |name, index|
