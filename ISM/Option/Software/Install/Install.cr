@@ -18,7 +18,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         userRequest = ARGV[2..-1].uniq
-                        Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest)
+                        Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest, allowSearchByNameOnly: true)
 
                         #No match found
                         if userRequest.size != Ism.requestedSoftwares.size
