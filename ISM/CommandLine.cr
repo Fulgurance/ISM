@@ -552,9 +552,17 @@ module ISM
             matches = Array(String).new
             result = ISM::SoftwareInformation.new
 
-            @softwares.each do |software|
-                if software.name == entry
-                    matches.push(software.fullName)
+            @softwares.each do |availableSoftware|
+
+                #Check if the user request a specific version or not
+                if availableSoftware.name == entry
+                    matches.push(availableSoftware.fullName)
+                else
+                    availableSoftware.versions |software|
+                        if software.versionName == entry
+                            matches.push(availableSoftware.fullVersionName)
+                        end
+                    end
                 end
             end
 
