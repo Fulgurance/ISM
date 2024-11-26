@@ -547,11 +547,11 @@ module ISM
         #Add process to search only by name
         def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false) : ISM::SoftwareInformation
 
-            #Check first if the user entry if by name only or not, and if it is valid
             entry = String.new
             matches = Array(String).new
             result = ISM::SoftwareInformation.new
 
+            #Check first if the user entry if by name only or not, and if it is valid
             @softwares.each do |availableSoftware|
 
                 #Check if the user request a specific version or not
