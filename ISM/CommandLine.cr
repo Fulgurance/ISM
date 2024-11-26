@@ -546,27 +546,52 @@ module ISM
 
         #Add process to search only by name
         def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false) : ISM::SoftwareInformation
+
+            #Check first if the user entry if by name only or not, and if it is valid
+            entry = String.new
+            matches = Array(String).new
             result = ISM::SoftwareInformation.new
 
-            availableSoftware = getAvailableSoftware(userEntry)
-            versions = availableSoftware.versions
-
-            if !versions.empty?
-
-                versions.each do |software|
-                    if software.fullVersionName.downcase == userEntry.downcase
-
-                        result = loadSoftware(software.port, software.name, software.version)
-
-                        break
-                    end
-                end
-
-                if !result.isValid
-                    return availableSoftware.greatestVersion
+            @softwares.each do |software|
+                if software.name == entry
+                    matches.push(software.fullName)
                 end
             end
 
+            #There are more than one match, the user need to specify a port (Ambiguous)
+            if matches.size > 1
+                showAmbiguousSearchMessage(matches)
+                exitProgram
+            end
+
+            #If there is only one match, it mean the user enter by name only, we record the fullName
+            if !matches.empty? && matches.size == 1
+                entry = matches[0]
+            end
+
+            if entry != ""
+
+                availableSoftware = getAvailableSoftware(entry)
+                versions = availableSoftware.versions
+
+                if !versions.empty?
+
+                    versions.each do |software|
+                        if software.fullVersionName.downcase == entry.downcase
+
+                            result = loadSoftware(software.port, software.name, software.version)
+
+                            break
+                        end
+                    end
+
+                    if !result.isValid
+                        return availableSoftware.greatestVersion
+                    end
+                end
+            end
+
+            #No match found
             return result
         end
 
@@ -1158,6 +1183,20 @@ module ISM
             if allowTitle
                 puts "\n"
             end
+        end
+
+        def showAmbiguousSearchMessage(matches : Array(String))
+            names = String.new
+
+            puts
+            puts "#{ISM::Default::CommandLine::AmbiguousSearchTitle.colorize(:green)}"
+            puts "\n"
+
+            matches.each do |name|
+                names += "#{name}, "
+            end
+
+            puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:yellow)} #{names}"
         end
 
         def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
