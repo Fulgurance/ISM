@@ -551,30 +551,35 @@ module ISM
             matches = Array(String).new
             result = ISM::SoftwareInformation.new
 
-            #Check first if the user entry if by name only or not, and if it is valid
-            @softwares.each do |availableSoftware|
+            if allowSearchByNameOnly
 
-                #Check if the user request a specific version or not
-                if availableSoftware.name == entry
-                    matches.push(availableSoftware.fullName)
-                else
-                    availableSoftware.versions.each do |software|
-                        if software.versionName == entry
-                            matches.push(software.fullVersionName)
+                #Check first if the user entry if by name only or not, and if it is valid
+                @softwares.each do |availableSoftware|
+
+                    #Check if the user request a specific version or not
+                    if availableSoftware.name == entry
+                        matches.push(availableSoftware.fullName)
+                    else
+                        availableSoftware.versions.each do |software|
+                            if software.versionName == entry
+                                matches.push(software.fullVersionName)
+                            end
                         end
                     end
                 end
-            end
 
-            #There are more than one match, the user need to specify a port (Ambiguous)
-            if matches.size > 1
-                showAmbiguousSearchMessage(matches)
-                exitProgram
-            end
+                #There are more than one match, the user need to specify a port (Ambiguous)
+                if matches.size > 1
+                    showAmbiguousSearchMessage(matches)
+                    exitProgram
+                end
 
-            #If there is only one match, it mean the user enter by name only, we record the fullName
-            if !matches.empty? && matches.size == 1
-                entry = matches[0]
+                #If there is only one match, it mean the user enter by name only, we record the fullName
+                if !matches.empty? && matches.size == 1
+                    entry = matches[0]
+                end
+            else
+                entry = userEntry
             end
 
             if entry != ""
