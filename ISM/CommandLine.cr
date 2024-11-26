@@ -557,11 +557,11 @@ module ISM
                 @softwares.each do |availableSoftware|
 
                     #Check if the user request a specific version or not
-                    if availableSoftware.name.downcase == entry.downcase
+                    if availableSoftware.name.downcase == userEntry.downcase
                         matches.push(availableSoftware.fullName)
                     else
                         availableSoftware.versions.each do |software|
-                            if software.versionName.downcase == entry.downcase
+                            if software.versionName.downcase == userEntry.downcase
                                 matches.push(software.fullVersionName)
                             end
                         end
@@ -1202,14 +1202,14 @@ module ISM
             names = String.new
 
             puts
-            puts "#{ISM::Default::CommandLine::AmbiguousSearchTitle.colorize(:green)}"
+            puts "#{ISM::Default::CommandLine::AmbiguousSearchTitle.colorize(:orange)}"
             puts "\n"
 
-            matches.each do |name|
-                names += "#{name}, "
+            matches.each_with_index do |name, index|
+                names += "#{name}#{index < matches.size-1 ? ", " : "."}"
             end
 
-            puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:yellow)} #{names}"
+            puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
         end
 
         def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
