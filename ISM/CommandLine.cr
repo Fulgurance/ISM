@@ -560,7 +560,7 @@ module ISM
                 else
                     availableSoftware.versions.each do |software|
                         if software.versionName == entry
-                            matches.push(availableSoftware.fullVersionName)
+                            matches.push(software.fullVersionName)
                         end
                     end
                 end
