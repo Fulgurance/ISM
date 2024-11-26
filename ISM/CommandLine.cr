@@ -557,11 +557,11 @@ module ISM
                 @softwares.each do |availableSoftware|
 
                     #Check if the user request a specific version or not
-                    if availableSoftware.name == entry
+                    if availableSoftware.name.downcase == entry.downcase
                         matches.push(availableSoftware.fullName)
                     else
                         availableSoftware.versions.each do |software|
-                            if software.versionName == entry
+                            if software.versionName.downcase == entry.downcase
                                 matches.push(software.fullVersionName)
                             end
                         end
