@@ -578,29 +578,28 @@ module ISM
                 if !matches.empty? && matches.size == 1
                     entry = matches[0]
                 end
-            else
+            end
+
+            if entry == ""
                 entry = userEntry
             end
 
-            if entry != ""
+            availableSoftware = getAvailableSoftware(entry)
+            versions = availableSoftware.versions
 
-                availableSoftware = getAvailableSoftware(entry)
-                versions = availableSoftware.versions
+            if !versions.empty?
 
-                if !versions.empty?
+                versions.each do |software|
+                    if software.fullVersionName.downcase == entry.downcase
 
-                    versions.each do |software|
-                        if software.fullVersionName.downcase == entry.downcase
+                        result = loadSoftware(software.port, software.name, software.version)
 
-                            result = loadSoftware(software.port, software.name, software.version)
-
-                            break
-                        end
+                        break
                     end
+                end
 
-                    if !result.isValid
-                        return availableSoftware.greatestVersion
-                    end
+                if !result.isValid
+                    return availableSoftware.greatestVersion
                 end
             end
 
