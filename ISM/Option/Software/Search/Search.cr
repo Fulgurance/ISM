@@ -16,6 +16,7 @@ module ISM
                 else
                     matchingSoftwaresArray = Array(ISM::AvailableSoftware).new
 
+                    #Need improvement by using directly getRequestedSoftwares(list : Array(String), allowSearchByNameOnly = false)
                     Ism.softwares.each do |software|
                         if software.name.includes?(ARGV[2]) || software.name.downcase.includes?(ARGV[2])
                             matchingSoftwaresArray << software
