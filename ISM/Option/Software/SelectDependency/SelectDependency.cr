@@ -17,7 +17,7 @@ module ISM
                     if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
-                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true))
+                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
 
                         if matchingSoftware.fullName == ""
                             puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFound + "#{ARGV[1].colorize(:green)}"
