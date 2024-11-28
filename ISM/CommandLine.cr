@@ -435,7 +435,7 @@ module ISM
 
             alreadyInstalled = installedOne.isValid
 
-            if !alreadyInstalled && !software.passEnabled && !@systemInformation.crossToolchainFullyBuilt
+            if !alreadyInstalled && !software.passEnabled || !alreadyInstalled && software.passEnabled && @systemInformation.crossToolchainFullyBuilt
                 return false
             else
 
