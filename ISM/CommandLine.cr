@@ -435,7 +435,7 @@ module ISM
 
             alreadyInstalled = installedOne.isValid
 
-            if !alreadyInstalled
+            if !alreadyInstalled && !software.passEnabled && !@systemInformation.crossToolchainFullyBuilt
                 return false
             else
 
@@ -445,13 +445,9 @@ module ISM
                 #Case when requested software have an enabled pass
                 if software.passEnabled
 
-                    #Case when the cross toolchain is already fully built: no need to build any pass (EXPERIMENTAL)
-                    if @systemInformation.crossToolchainFullyBuilt
-                        return true
-                    end
-
                     #If the installed one don't have enabled pass, that mean the software is already fully installed
-                    if !installedOne.passEnabled
+                    #Case when the cross toolchain is already fully built: no need to build any pass
+                    if !installedOne.passEnabled || @systemInformation.crossToolchainFullyBuilt
                         return true
                     else
                     #If not, we need to compare the pass numbers
