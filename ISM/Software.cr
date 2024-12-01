@@ -40,11 +40,6 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def mainWorkDirectoryPath : String
-            return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
-        end
-
-        #Special function to improve performance (Internal use only)
         def mainWorkDirectoryPathNoChroot : String
             return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
         end
