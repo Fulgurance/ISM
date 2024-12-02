@@ -2,16 +2,15 @@ module ISM
 
     class PythonPackageSoftware < ISM::SemiVirtualSoftware
 
-        def prepare
-            super
-
+        def preparePythonPackage(version = String.new)
             fullName = "@ProgrammingLanguages-Main:Python"
 
-            packagesPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}usr/lib/python#{softwareMajorVersion(fullName)}.#{softwareMinorVersion(fullName)}/site-packages"
+            packagesPath = "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}usr/lib/python#{version}/site-packages"
 
             makeDirectory(packagesPath)
 
-            runPipCommand(  arguments: "install --no-dependencies --target \"#{packagesPath}\" '#{@information.name}==#{@information.version}'")
+            runPipCommand(  arguments:  "install --no-dependencies --target \"#{packagesPath}\" '#{@information.name}==#{@information.version}'",
+                            version:    version)
 
             directoryContent(packagesPath, matchHidden: true).each do |filePath|
 
@@ -31,6 +30,22 @@ module ISM
 
                     moveFile(   path:       filePath,
                                 newPath:    destinationPath)
+                end
+
+            end
+        end
+
+        def prepare
+            super
+
+            prefix = "Python-"
+
+            @information.options.each do |option|
+
+                optionName = option.name
+
+                if optionName.starts_with?(prefix)
+                    preparePythonPackage(version: optionName[prefix.size..-1])
                 end
 
             end
