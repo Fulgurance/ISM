@@ -777,8 +777,8 @@ module ISM
             end
         end
 
-        def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
-            requestedCommands = "python #{arguments}"
+        def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
+            requestedCommands = "python#{version} #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
@@ -788,8 +788,8 @@ module ISM
             end
         end
 
-        def runPipCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
-            requestedCommands = "pip #{arguments}"
+        def runPipCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
+            requestedCommands = "pip#{version} #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
