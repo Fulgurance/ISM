@@ -1107,13 +1107,13 @@ module ISM
             end
         end
 
-        def runCargoCommand(arguments : String, path = String.new)
+        def runCargoCommand(arguments : String, path = String.new, environment = Hash(String, String).new)
             requestedCommands = "cargo #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
                 Ism.exitProgram
             end
         end
