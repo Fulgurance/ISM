@@ -976,7 +976,6 @@ module ISM
 
                 color = Colorize::ColorRGB.new(@red,@blue,@green)
 
-                #Experimental fixe when the animation start (need tests)
                 if !@reverseAnimation && @frameIndex == 0
                     print "#{@text.colorize(:dark_gray)}"
                     (0..(@text.size-1)).each do |index|
