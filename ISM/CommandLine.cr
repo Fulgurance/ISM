@@ -979,6 +979,9 @@ module ISM
                 #Experimental fixe when the animation start (need tests)
                 if !@reverseAnimation && @frameIndex == 0
                     print "#{@text.colorize(:dark_gray)}"
+                    (0..(@text.size-1)).each do |index|
+                        print "\033[1D"
+                    end
                 end
 
                 if @frameIndex > @text.size-1
