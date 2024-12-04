@@ -436,9 +436,13 @@ module ISM
         end
 
          #Special function to improve performance (Internal use only)
-        def stripFileNoChroot(filePath : String)
+        def stripFileListNoChroot(fileList : Array(String))
+            requestedCommands = <<-CMD
+                                strip --strip-unneeded $(< {#{fileList.join(",")}})
+                                CMD
+
             #No exit process because if the file can't be strip, we can just go next)
-            process = Process.run("strip --strip-unneeded #{filePath}", shell: true)
+            process = Process.run(requestedCommands, shell: true)
         end
 
         def fileUpdateContent(path : String, data : String)
@@ -1361,18 +1365,13 @@ module ISM
 
             Ism.notifyOfInstall(@information)
 
-            filesList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
+            fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
-            filesList.each do |entry|
+            fileList.each do |entry|
 
                 #Don't keep libtool archives by default except if explicitely specified
                 if File.directory?(entry) || entry[-3..-1] != ".la" || preserveLibtoolArchives
-
-                    #Pre-Strip the file if needed
-                    if stripFiles
-                        stripFileNoChroot(entry)
-                    end
 
                     finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
                     recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
@@ -1390,6 +1389,11 @@ module ISM
                     end
 
                 end
+            end
+
+            #Strip the file if needed
+            if stripFiles
+                stripFileListNoChroot(fileList)
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
