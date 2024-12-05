@@ -1282,7 +1282,7 @@ module ISM
             puts "\n"
 
             neededSoftwares.each do |software|
-                softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
+                softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
                 optionsText = "{ "
 
                 if software.options.empty?
