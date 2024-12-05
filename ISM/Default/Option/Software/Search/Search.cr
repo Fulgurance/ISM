@@ -12,6 +12,7 @@ module ISM
                 NoMatchFound = "No match found with the database for "
                 NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
                 None = "None"
+                TypeField = "Type: "
                 PortField = "Port: "
                 NameField = "Name: "
                 DescriptionField = "Description: "

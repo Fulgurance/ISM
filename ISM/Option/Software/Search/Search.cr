@@ -32,6 +32,9 @@ module ISM
                         matchingSoftwaresArray.each_with_index do |software, index|
                             greatestVersion = software.greatestVersion
 
+                            puts    ISM::Default::Option::SoftwareSearch::TypeField +
+                                        "#{(greatestVersion.type).colorize(Colorize::ColorRGB.new(255,100,100))}"
+
                             puts    ISM::Default::Option::SoftwareSearch::PortField +
                                         "#{("@"+greatestVersion.port).colorize(Colorize::ColorRGB.new(255,100,100))}"
 
