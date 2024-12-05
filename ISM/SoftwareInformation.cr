@@ -65,6 +65,21 @@ module ISM
         return (@port != "" && @name != "" && @version != "") && File.exists?(filePath)
     end
 
+    def type : String
+        File.each_line(requireFilePath) do |line|
+            identifier = /(.)+ </
+
+            if line.starts_with?(identifier)
+                type = line.gsub(identifier,"").strip
+
+                return type
+            end
+
+        end
+
+        return String.new
+    end
+
     def getEnabledPass : String
         @options.each do |option|
             if option.isPass && option.active

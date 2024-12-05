@@ -16,6 +16,10 @@ module ISM
                         @options = Array(String).new)
         end
 
+        def type : String
+            return information.type
+        end
+
         def getEnabledPass : String
             @options.each do |option|
                 if option.starts_with?(/Pass[0-9]/)
