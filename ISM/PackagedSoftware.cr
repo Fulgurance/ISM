@@ -15,7 +15,7 @@ module ISM
         def prepareInstallation
             super
 
-            filesList = Dir.glob(mainWorkDirectoryPathNoChroot, match: :dot_files)
+            filesList = Dir.glob("#{mainWorkDirectoryPathNoChroot}/*", match: :dot_files)
 
             filesList.each do |entry|
 
