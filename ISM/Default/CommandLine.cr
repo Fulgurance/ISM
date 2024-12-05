@@ -92,6 +92,7 @@ module ISM
             BuildingPhaseText = "Building Phase"
             OptionUpdateText = "Option Update"
             RebuildText = "Rebuild"
+            RebuildDueOfCodependencyText = "Rebuild due of codependency"
             InstallSummaryText = " new softwares will be install"
             InstallQuestion = "Would you like to install these softwares ?"
             UpdateSummaryText = " softwares will be build for the system update"
