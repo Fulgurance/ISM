@@ -68,9 +68,10 @@ module ISM
     def type : String
         File.each_line(requireFilePath) do |line|
             identifier = /(.)+ </
+            prefix = "ISM::"
 
             if line.starts_with?(identifier)
-                type = line.gsub(identifier,"").strip
+                type = line.gsub(identifier,"").gsub(prefix,"").strip
 
                 return type
             end

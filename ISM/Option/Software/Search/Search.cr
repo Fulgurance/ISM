@@ -33,7 +33,7 @@ module ISM
                             greatestVersion = software.greatestVersion
 
                             puts    ISM::Default::Option::SoftwareSearch::TypeField +
-                                        "#{(greatestVersion.type).colorize(Colorize::ColorRGB.new(255,100,100))}"
+                                        "#{(greatestVersion.type).colorize(:magenta)}"
 
                             puts    ISM::Default::Option::SoftwareSearch::PortField +
                                         "#{("@"+greatestVersion.port).colorize(Colorize::ColorRGB.new(255,100,100))}"
