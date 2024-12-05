@@ -511,13 +511,14 @@ module ISM
                     return :update
                 end
 
-                return :new
-            else
-
-                #Option updates case (!check if it's the right condition)
-                if software.options != installedSoftware.options
+                #Option updates case
+                if software.version == installedSoftware.version && software.options != installedSoftware.options && installedSoftware.isValid
                     return :optionUpdate
                 end
+
+                #None of above case: new one
+                return :new
+            else
 
                 #Rebuild case
                 return :rebuild
