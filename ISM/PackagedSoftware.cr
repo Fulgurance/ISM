@@ -19,7 +19,9 @@ module ISM
 
             filesList.each do |entry|
 
-                moveFileNoChroot(entry,builtSoftwareDirectoryPathNoChroot)
+                filename = "#{entry.gsub(builtSoftwareDirectoryPathNoChroot,"")}"
+
+                moveFileNoChroot(entry,builtSoftwareDirectoryPathNoChroot+filename)
 
             end
         end
