@@ -1303,7 +1303,7 @@ module ISM
                 additionalText = ""
 
                 if mode == :installation
-                    additionalText += "("
+                    additionalText += "(#{(software.type+":").colorize(:green)}"
 
                     status = getSoftwareStatus(software)
 
