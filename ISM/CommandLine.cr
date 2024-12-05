@@ -1336,7 +1336,7 @@ module ISM
                     additionalText += ")"
                 end
 
-                checkedSofwares.push(software.hiddenName)
+                checkedSoftwares.push(software.hiddenName)
 
                 puts "\t" + softwareText + " " + optionsText + " " + additionalText + "\n"
             end
