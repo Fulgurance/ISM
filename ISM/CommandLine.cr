@@ -491,6 +491,7 @@ module ISM
             return software1.allowCodependencies.includes?(software2.fullName) && software2.allowCodependencies.includes?(software1.fullName) && !software1.passEnabled && !software2.passEnabled
         end
 
+        #Pass a list as argument to get if it is rebuild due of a co dependency
         def getSoftwareStatus(software : ISM::SoftwareInformation) : Symbol
             installedSoftware = loadInstalledSoftware(software.port,software.name,software.version)
 
@@ -1280,9 +1281,11 @@ module ISM
         end
 
         def showSoftwares(neededSoftwares : Array(ISM::SoftwareInformation), mode = :installation)
+            checkedSoftwares = Array(String).new
+
             puts "\n"
 
-            neededSoftwares.each do |software|
+            neededSoftwares.each_with_index do |software, index|
                 softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
                 optionsText = "{ "
 
@@ -1306,27 +1309,34 @@ module ISM
                 if mode == :installation
                     additionalText += "(#{(software.type+":").colorize(:light_magenta)} "
 
-                    status = getSoftwareStatus(software)
+                    #Codependency case
+                    if checkedSoftwares.includes?(software.hiddenName)
+                        additionalText += "#{ISM::Default::CommandLine::RebuildDueOfCodependencyText.colorize(:yellow)}"
+                    else
 
-                    #Add a condition to check by a dictionnary if we request again the same software and version, if yes, indicate it's a rebuild due of a codependency
+                        status = getSoftwareStatus(software)
 
-                    case status
-                    when :new
-                        additionalText += "#{ISM::Default::CommandLine::NewText.colorize(:yellow)}"
-                    when :additionalVersion
-                        additionalText += "#{ISM::Default::CommandLine::AdditionalVersionText.colorize(:yellow)}"
-                    when :update
-                        additionalText += "#{ISM::Default::CommandLine::UpdateText.colorize(:yellow)}"
-                    when :buildingPhase
-                        additionalText += "#{ISM::Default::CommandLine::BuildingPhaseText.colorize(:yellow)} #{software.getEnabledPassNumber.colorize(:yellow)}"
-                    when :optionUpdate
-                        additionalText += "#{ISM::Default::CommandLine::OptionUpdateText.colorize(:yellow)}"
-                    when :rebuild
-                        additionalText += "#{ISM::Default::CommandLine::RebuildText.colorize(:yellow)}"
+                        case status
+                        when :new
+                            additionalText += "#{ISM::Default::CommandLine::NewText.colorize(:yellow)}"
+                        when :additionalVersion
+                            additionalText += "#{ISM::Default::CommandLine::AdditionalVersionText.colorize(:yellow)}"
+                        when :update
+                            additionalText += "#{ISM::Default::CommandLine::UpdateText.colorize(:yellow)}"
+                        when :buildingPhase
+                            additionalText += "#{ISM::Default::CommandLine::BuildingPhaseText.colorize(:yellow)} #{software.getEnabledPassNumber.colorize(:yellow)}"
+                        when :optionUpdate
+                            additionalText += "#{ISM::Default::CommandLine::OptionUpdateText.colorize(:yellow)}"
+                        when :rebuild
+                            #Check if rebuild a second time
+                            additionalText += "#{ISM::Default::CommandLine::RebuildText.colorize(:yellow)}"
+                        end
                     end
 
                     additionalText += ")"
                 end
+
+                checkedSofwares.push(software.hiddenName)
 
                 puts "\t" + softwareText + " " + optionsText + " " + additionalText + "\n"
             end
