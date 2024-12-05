@@ -1766,7 +1766,7 @@ module ISM
                         Ism.showStartSoftwareUninstallingMessage(index, limit, port, name, version)
 
                         begin
-                            target.recordUnneededKernelOptions
+                            #target.recordUnneededKernelOptions
                             target.uninstall
                         rescue
                             Ism.printSystemCallErrorNotification
