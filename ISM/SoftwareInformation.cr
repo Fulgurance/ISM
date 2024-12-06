@@ -59,10 +59,18 @@ module ISM
         file = File.open(path,"w")
         to_json(file)
         file.close
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def isValid : Bool
         return (@port != "" && @name != "" && @version != "") && File.exists?(filePath)
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def type : String
@@ -79,6 +87,10 @@ module ISM
         end
 
         return String.new
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def getEnabledPass : String
@@ -89,32 +101,60 @@ module ISM
         end
 
         return String.new
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def getEnabledPassNumber : Int32
         stringNumber = getEnabledPass
         return stringNumber == "" ? 0 : stringNumber.gsub("Pass","").to_i
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def hiddenName : String
         passName = getEnabledPass
         return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def fullName : String
         return "@#{@port}:#{@name}"
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def versionName : String
         return "#{@name}-#{@version}"
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def fullVersionName : String
         return "#{fullName}-#{@version}"
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def builtSoftwareDirectoryPath
         return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def mainDirectoryPath : String
@@ -123,14 +163,26 @@ module ISM
                @port + "/" +
                @name + "/" +
                @version + "/"
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def filePath : String
         return mainDirectoryPath + ISM::Default::Filename::Information
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def requireFilePath : String
         return mainDirectoryPath + @version + ".cr"
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def settingsFilePath : String
@@ -140,6 +192,10 @@ module ISM
                 @name + "/" +
                 @version + "/" +
                 ISM::Default::Filename::SoftwareSettings
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def installedDirectoryPath : String
@@ -147,6 +203,10 @@ module ISM
                ISM::Default::Path::InstalledSoftwaresDirectory +
                @port + "/" +
                @name + "/"
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def installedFilePath : String
@@ -156,6 +216,10 @@ module ISM
                @name + "/" +
                @version + "/" +
                ISM::Default::Filename::Information
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def optionExist(optionName : String) : Bool
@@ -166,6 +230,10 @@ module ISM
         end
 
         return false
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def option(optionName : String) : Bool
@@ -176,6 +244,10 @@ module ISM
         end
 
         return false
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def enableOption(optionName : String)
@@ -206,6 +278,10 @@ module ISM
                 end
             end
         end
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def disableOption(optionName : String)
@@ -214,6 +290,10 @@ module ISM
                 @options[index].active = false
             end
         end
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def passEnabled : Bool
@@ -224,6 +304,10 @@ module ISM
         end
 
         return false
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def dependencies(allowDeepSearch = false, unsorted = false) : Array(ISM::SoftwareDependency)
@@ -272,6 +356,10 @@ module ISM
             #REJECT INSTALLED DEPENDENCIES AND UNIQUE DEPENDENCIES NOT SELECTIONED
             return @dependencies.reject {|entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.fullName) && !uniqueDependencyIsEnabled(entry.fullName)}+dependenciesArray
         end
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def kernelDependencies : Array(String)
@@ -286,34 +374,66 @@ module ISM
         end
 
         return @kernelDependencies+dependenciesArray
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def archiveName : String
         return archiveBaseName+archiveExtensionName
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def archiveMd5sumName : String
         return archiveName+archiveMd5sumExtensionName
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def archiveBaseName : String
         return versionName
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def archiveExtensionName : String
         return ISM::Default::SoftwareInformation::ArchiveExtensionName
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def archiveMd5sumExtensionName : String
         return ISM::Default::SoftwareInformation::ArchiveMd5sumExtensionName
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def sourcesLink : String
         return Ism.mirrorsSettings.sourcesLink+archiveName
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def sourcesMd5sumLink : String
         return Ism.mirrorsSettings.sourcesLink+archiveMd5sumName
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency
@@ -330,16 +450,28 @@ module ISM
         end
 
         return softwareDependency
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def == (other : ISM::SoftwareInformation) : Bool
         return @name == other.name &&
             @version == other.version &&
             @options == other.options
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def dependencyIsUnique(dependency : String) : Bool
         return @uniqueDependencies.map {|entry| entry.includes?(dependency)}.includes?(true)
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def getMissingSelectedDependencies : Array(Array(String))
@@ -361,6 +493,10 @@ module ISM
         end
 
         return result
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def selectUniqueDependency(dependency : String) : Bool
@@ -388,10 +524,18 @@ module ISM
         end
 
         return selected
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
     def uniqueDependencyIsEnabled(dependency : String) : Bool
         return @selectedDependencies.any? { |item| item.downcase == dependency.downcase}
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
     end
 
   end

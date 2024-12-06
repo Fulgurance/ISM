@@ -15,12 +15,20 @@ module ISM
 
         def self.filePath(codeName = ISM::Default::Mirror::CodeName) : String
             return Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory+codeName+".json"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def self.generateConfiguration(path = filePath)
             file = File.open(path,"w")
             self.new.to_json(file)
             file.close
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def self.loadConfiguration(path = filePath)
@@ -29,6 +37,10 @@ module ISM
             end
 
             return from_json(File.read(path))
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def self.sourcesLink(codeName : String) : String
@@ -43,14 +55,26 @@ module ISM
             file = File.open(path,"w")
             to_json(file)
             file.close
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def defaultUrl : String
             return @urls[@mainUrl]
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def sourcesLink : String
             return defaultUrl+ISM::Default::Mirror::SourcesLinkDirectory
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

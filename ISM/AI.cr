@@ -14,6 +14,10 @@ module ISM
 
         def self.available : Bool
             return File.exists?(CommandPath)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def self.askRequest(request : String) : String
@@ -24,6 +28,10 @@ module ISM
                                     shell: false)
 
             return processResult.to_s.strip
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

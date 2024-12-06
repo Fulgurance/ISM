@@ -31,6 +31,10 @@ module ISM
             file = File.open(path,"w")
             to_json(file)
             file.close
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

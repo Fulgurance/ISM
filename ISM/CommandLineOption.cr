@@ -20,6 +20,10 @@ module ISM
                         "\t" + "#{argument.longText.colorize(:white)}" +
                         "\t" + "#{argument.description.colorize(:green)}"
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

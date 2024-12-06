@@ -16,72 +16,125 @@ module ISM
 
         def recordCrossToolchainAsFullyBuilt
             Ism.systemInformation.setCrossToolchainFullyBuilt(true)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def version : String
             return @information.version
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def name : String
             return @information.name
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def versionName : String
             return @information.versionName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def passEnabled : Bool
             return @information.passEnabled
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def workDirectoryPathNoChroot : String
             return Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def mainWorkDirectoryPathNoChroot : String
             return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def buildDirectoryPathNoChroot(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPathNoChroot+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def builtSoftwareDirectoryPathNoChroot : String
             return "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def workDirectoryPath : String
             return Ism.settings.installByChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def mainWorkDirectoryPath : String
             return workDirectoryPath+"/"+@mainSourceDirectoryName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def buildDirectoryPath(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPath+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def builtSoftwareDirectoryPath : String
             return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def directoryContent(path : String, matchHidden = false) : Array(String)
-
             path = "#{path}/*"
 
             fileList = Dir.glob((Ism.settings.installByChroot ? Ism.settings.rootPath+path : path), match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
 
             return fileList.map { |file| (Ism.settings.installByChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def recordSelectedKernel
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             settingInformation = ISM::SoftwareInformation.loadConfiguration(@information.settingsFilePath)
 
             settingInformation.uniqueDependencies.each do |uniqueDependency|
@@ -117,58 +170,78 @@ module ISM
                 end
             end
 
-            #Raise an error if nothing found
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def mainKernelName : String
             return Ism.mainKernelName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def mainKernelVersion : String
             return Ism.mainKernelVersion
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def prepareKernelSourcesInstallation
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
             moveFileNoChroot("#{workDirectoryPathNoChroot}/Sources","#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def selectedKernel
             return Ism.selectedKernel
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def download
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             Ism.notifyOfDownload(@information)
 
             cleanWorkDirectoryPath
 
             downloadSources
             downloadSourcesMd5sum
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadSources
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             downloadFile(   @information.sourcesLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveExtensionName)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadSourcesMd5sum
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             downloadFile(   @information.sourcesMd5sumLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveMd5sumExtensionName)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadFile(link : String, filename : String, fileExtensionName : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             originalLink = link
             downloaded = false
             error = String.new
@@ -243,11 +316,13 @@ module ISM
             end
 
             puts
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
         
         def getFileContent(filePath : String) : String
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             begin
                 content = File.read(filePath)
             rescue error
@@ -255,26 +330,32 @@ module ISM
                 Ism.exitProgram
             end
             return content
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def check
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             Ism.notifyOfCheck(@information)
 
             checkSourcesMd5sum
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def checkSourcesMd5sum
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName,
                         getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def checkFile(archive : String, md5sum : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             digest = Digest::MD5.new
             digest.file(archive)
             archiveMd5sum = digest.hexfinal
@@ -283,11 +364,13 @@ module ISM
                 Ism.notifyOfCheckError(archive, md5sum)
                 Ism.exitProgram
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def extract
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             Ism.notifyOfExtract(@information)
 
             extractSources
@@ -296,18 +379,22 @@ module ISM
             if Dir.exists?(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName)
                 copyDirectoryNoChroot(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def extractSources
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             process = Process.run(  "tar -xf #{archivePath}",
                                     shell: true,
                                     chdir: destinationPath)
@@ -315,11 +402,13 @@ module ISM
                 Ism.notifyOfExtractError(archivePath, destinationPath)
                 Ism.exitProgram
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
         
         def patch
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             Ism.notifyOfPatch(@information)
 
             if Dir.exists?("#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}")
@@ -335,11 +424,13 @@ module ISM
                     applyPatch(patch)
                 end
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
         
         def applyPatch(patch : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             process = Process.run(  "patch -Np1 -i #{patch}",
                                     error: :inherit,
                                     shell: true,
@@ -348,11 +439,13 @@ module ISM
                 Ism.notifyOfApplyPatchError(patch)
                 Ism.exitProgram
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def prepare
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             Ism.notifyOfPrepare(@information)
 
             #Generate all build directories
@@ -361,12 +454,14 @@ module ISM
                     makeDirectoryNoChroot(buildDirectoryPathNoChroot(key))
                 end
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             begin
                 FileUtils.cp(path, targetPath)
             rescue error
@@ -377,8 +472,6 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             begin
                 FileUtils.cp_r(path, targetPath)
             rescue error
@@ -389,8 +482,6 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             begin
                 FileUtils.rm(path)
             rescue error
@@ -401,8 +492,6 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             begin
                 FileUtils.mv(path, newPath)
             rescue error
@@ -413,8 +502,6 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(directory : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             begin
                 FileUtils.mkdir_p(directory)
             rescue error
@@ -425,8 +512,6 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(directory : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             begin
                 FileUtils.rm_r(directory)
             rescue error
@@ -443,6 +528,10 @@ module ISM
 
             #No exit process because if the file can't be strip, we can just go next)
             process = Process.run(requestedCommands, shell: true)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def fileUpdateContent(path : String, data : String)
@@ -1200,17 +1289,23 @@ module ISM
         end
 
         def prepareOpenrcServiceInstallation(path : String, name : String)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             servicesPath = "/etc/init.d/"
 
             makeDirectory("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
             moveFile(path,"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{name}")
             runChmodCommand("+x #{name}","#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def configure
             Ism.notifyOfConfigure(@information)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, relatedToMainBuild = true)
@@ -1324,8 +1419,6 @@ module ISM
         end
 
         def recordInstallationInformation : Tuple(UInt128, UInt128, UInt128, UInt128)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             directoryNumber = UInt128.new(0)
             symlinkNumber = UInt128.new(0)
             fileNumber = UInt128.new(0)
@@ -1358,11 +1451,13 @@ module ISM
             end
 
             return directoryNumber, symlinkNumber, fileNumber, totalSize
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def install(preserveLibtoolArchives = false, stripFiles = true)
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             Ism.notifyOfInstall(@information)
 
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
@@ -1397,30 +1492,58 @@ module ISM
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelSourcesPath : String
             return Ism.kernelSourcesPath
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelSourcesArchitecturePath : String
             return "#{kernelSourcesPath}arch/"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelKconfigFilePath : String
             return "#{kernelSourcesPath}Kconfig"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelArchitectureKconfigFilePath : String
             return "#{kernelSourcesArchitecturePath}Kconfig"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelConfigFilePath : String
             return "#{kernelSourcesPath}.config"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelOptionsDatabasePath : String
             return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+mainKernelName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Return an array splitted, except when there are conditions between parenthesis
@@ -1435,6 +1558,10 @@ module ISM
             end
 
             return conditions.split(" && ")
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def parseKconfigConditions(conditions : String)
@@ -1463,6 +1590,10 @@ module ISM
             end
 
             return dependencies,singleChoiceDependencies,blockers
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
@@ -1510,6 +1641,10 @@ module ISM
             end
 
             return result
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def generateKernelOptionsFiles(kconfigContent : Array(String))
@@ -1609,11 +1744,13 @@ module ISM
                     option.writeConfiguration(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
                 end
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def updateKernelOptionsDatabase
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             Ism.notifyOfUpdateKernelOptionsDatabase(Ism.selectedKernel)
 
             makeDirectoryNoChroot(kernelOptionsDatabasePath)
@@ -1630,16 +1767,21 @@ module ISM
         end
 
         def recordNeededKernelOptions
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             Ism.notifyOfRecordNeededKernelOptions
 
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
         
         def clean
             Ism.notifyOfClean(@information)
 
             cleanWorkDirectoryPath
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def cleanWorkDirectoryPath
@@ -1648,28 +1790,45 @@ module ISM
             end
 
             makeDirectoryNoChroot(workDirectoryPathNoChroot)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
-        def recordUnneededKernelFeatures
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
+        def recordUnneededKernelOptions
             Ism.notifyOfRecordUnneededKernelFeatures
 
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def showInformations
             puts
             Ism.printInformationNotificationTitle(@information.name,@information.version)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def uninstall
             Ism.notifyOfUninstall(@information)
 
             Ism.removeInstalledSoftware(@information)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def option(optionName : String) : Bool
             return @information.option(optionName)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def dependency(fullName : String) : ISM::SoftwareInformation
@@ -1680,10 +1839,18 @@ module ISM
             end
 
             return ISM::SoftwareInformation.new
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def isGreatestVersion : Bool
             return Ism.getSoftwareInformation(@information.fullName).version <= @information.version
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def majorVersion : Int32
@@ -1692,71 +1859,113 @@ module ISM
 
         def minorVersion : Int32
             return SemanticVersion.parse(@information.version).minor
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def patchVersion : Int32
             return SemanticVersion.parse(@information.version).patch
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyMinorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).minor
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyPatchVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).patch
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def softwareMajorVersion(fullName : String) : Int32
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
                 return dependencyMajorVersion(fullName)
             else
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).major
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def softwareMinorVersion(fullName : String) : Int32
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
                 return dependencyMinorVersion(fullName)
             else
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).minor
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def softwarePatchVersion(fullName : String) : Int32
-            Ism.recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
                 return dependencyPatchVersion(fullName)
             else
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).patch
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def softwareIsInstalled(softwareName : String) : Bool
             return Ism.softwareAnyVersionInstalled(softwareName)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def architecture(architecture : String) : Bool
             return Ism.settings.systemArchitecture == architecture
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def showInfo(message : String)
             Ism.printInformationNotification(message)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def showInfoCode(message : String)
             Ism.printInformationCodeNotification(message)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

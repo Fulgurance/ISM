@@ -11,26 +11,50 @@ module ISM
 
         def fullName : String
             return "@#{@port}:#{@name}"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         private def includeComparators(request : String) : Bool
             return request.includes?("<") || request.includes?(">")
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         private def greaterComparator(request : String) : Bool
             return request[0] == '>' && request[1] != '='
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         private def lessComparator(request : String) : Bool
             return request[0] == '<' && request[1] != '='
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         private def greaterOrEqualComparator(request : String) : Bool
             return request[0..1] == ">="
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         private def lessOrEqualComparator(request : String) : Bool
             return request[0..1] == "<="
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         private def intervalComparator(request : String) : Bool
@@ -47,6 +71,10 @@ module ISM
             end
 
             return (separator && comparators)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def getVersionByCondition(condition : String, returnMaximum = true) : ISM::SoftwareInformation
@@ -110,6 +138,10 @@ module ISM
             end
 
             return temp.empty? ? ISM::SoftwareInformation.new : (returnMaximum ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def greatestVersion(condition=String.new) : ISM::SoftwareInformation
@@ -128,6 +160,10 @@ module ISM
             end
 
             return ISM::SoftwareInformation.new
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

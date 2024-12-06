@@ -18,6 +18,10 @@ module ISM
 
         def type : String
             return information.type
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def getEnabledPass : String
@@ -28,19 +32,35 @@ module ISM
             end
 
             return String.new
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def fullName : String
             return "@#{@port}:#{@name}"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def fullVersionName : String
             return "#{fullName}-#{version}"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def hiddenName : String
             passName = getEnabledPass
             return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def version=(@version)
@@ -48,14 +68,26 @@ module ISM
 
         def versionName
             return @name+"-"+version
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def version
             return Ism.getAvailableSoftware(fullName).greatestVersion(@version).version
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def requiredVersion : String
             return @version
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def information : ISM::SoftwareInformation
@@ -73,6 +105,10 @@ module ISM
             end
 
             return dependencyInformation
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def installedFiles
@@ -83,28 +119,52 @@ module ISM
                     return software.installedFiles
                 end
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
             return information.dependencies(allowDeepSearch)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def builtSoftwareDirectoryPath : String
             return information.builtSoftwareDirectoryPath
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def requireFilePath : String
             return information.requireFilePath
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def filePath : String
             return information.filePath
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def == (other : ISM::SoftwareDependency) : Bool
             return hiddenName == other.hiddenName &&
             version == other.version &&
             @options == other.options
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end
