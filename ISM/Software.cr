@@ -526,12 +526,10 @@ module ISM
                                 strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
                                 CMD
 
-            #No exit process because if the file can't be strip, we can just go next)
             process = Process.run(requestedCommands, shell: true)
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            #No exit process because if the file can't be strip, we can just keep going
+            rescue
         end
 
         def fileUpdateContent(path : String, data : String)
