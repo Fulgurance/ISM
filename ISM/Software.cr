@@ -523,7 +523,7 @@ module ISM
          #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String))
             requestedCommands = <<-CMD
-                                strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")}
+                                strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
                                 CMD
 
             #No exit process because if the file can't be strip, we can just go next)
