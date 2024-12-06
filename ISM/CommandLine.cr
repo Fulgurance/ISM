@@ -2786,8 +2786,6 @@ module ISM
         end
 
         def runChrootTasks(chrootTasks, quiet = false) : Process::Status
-            recordSystemCall(command: "#{{% @def.receiver %}}.#{{% @def.name %}}")
-
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
@@ -2823,8 +2821,6 @@ module ISM
             environment.keys.each do |key|
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
-
-            recordSystemCall(command, path, environment)
 
             if @settings.installByChroot
                 chrootCommand = <<-CODE
