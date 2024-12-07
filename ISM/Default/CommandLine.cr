@@ -97,7 +97,7 @@ module ISM
             InstallQuestion = "Would you like to install these softwares ?"
             UpdateSummaryText = " softwares will be build for the system update"
             UpdateQuestion = "Would you like to build these softwares ?"
-            UninstallSummaryText = " softwares will be uninstall included unneeded dependencies"
+            UninstallSummaryText = " softwares will be uninstall including unneeded dependencies"
             UninstallQuestion = "Would you like to uninstall these softwares ?"
             YesReplyOption = "y"
             NoReplyOption = "n"
