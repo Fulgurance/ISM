@@ -2218,7 +2218,7 @@ module ISM
                         begin
                             target.recordUnneededKernelOptions
                             target.uninstall
-                        rescue
+                        rescue error
                             Ism.printSystemCallErrorNotification(error)
                             Ism.exitProgram
                         end
