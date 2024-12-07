@@ -462,14 +462,18 @@ module ISM
                     filesForRemoval = requestedVersion.installedFiles
                 end
 
-                filesForRemoval.each do |file|
-                    FileUtils.rm_r(file)
-                end
+                begin
+                    filesForRemoval.each do |file|
+                        FileUtils.rm_r(file)
+                    end
 
-                FileUtils.rm_r(software.installedDirectoryPath+"/"+software.version)
+                    FileUtils.rm_r(software.installedDirectoryPath+"/"+software.version)
 
-                if Dir.empty?(software.installedDirectoryPath)
-                    FileUtils.rm_r(software.installedDirectoryPath)
+                    if Dir.empty?(software.installedDirectoryPath)
+                        FileUtils.rm_r(software.installedDirectoryPath)
+                    end
+                #Deletion of non existent file is not critical
+                rescue
                 end
 
                 #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
@@ -477,11 +481,8 @@ module ISM
             end
 
             rescue error
-                #Deletion of non existent file is not critical
-                if typeof(error) != File::NotFoundError
-                    printSystemCallErrorNotification(error)
-                    exitProgram
-                end
+                printSystemCallErrorNotification(error)
+                exitProgram
         end
 
         def softwareAnyVersionInstalled(fullName : String) : Bool
