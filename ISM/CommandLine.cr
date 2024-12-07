@@ -462,18 +462,16 @@ module ISM
                     filesForRemoval = requestedVersion.installedFiles
                 end
 
-                begin
-                    filesForRemoval.each do |file|
+                filesForRemoval.each do |file|
+                    if File.exists?
                         FileUtils.rm_r(file)
                     end
+                end
 
-                    FileUtils.rm_r(software.installedDirectoryPath+"/"+software.version)
+                FileUtils.rm_r(software.installedDirectoryPath+"/"+software.version)
 
-                    if Dir.empty?(software.installedDirectoryPath)
-                        FileUtils.rm_r(software.installedDirectoryPath)
-                    end
-                #Deletion of non existent file is not critical
-                rescue
+                if Dir.empty?(software.installedDirectoryPath)
+                    FileUtils.rm_r(software.installedDirectoryPath)
                 end
 
                 #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
