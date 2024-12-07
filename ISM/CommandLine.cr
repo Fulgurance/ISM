@@ -429,7 +429,7 @@ module ISM
                 exitProgram
         end
 
-        def removeInstalledSoftware(software : ISM::SoftwareInformation)
+        def uninstallSoftware(software : ISM::SoftwareInformation)
 
             requestedVersion = ISM::SoftwareInformation.new
             otherVersions = Array(ISM::SoftwareInformation).new
@@ -1687,7 +1687,6 @@ module ISM
                         when :optionUpdate
                             additionalText += "#{ISM::Default::CommandLine::OptionUpdateText.colorize(:yellow)}"
                         when :rebuild
-                            #Check if rebuild a second time
                             additionalText += "#{ISM::Default::CommandLine::RebuildText.colorize(:yellow)}"
                         end
                     end
@@ -2070,7 +2069,7 @@ module ISM
                             target.clean
                         rescue error
                             if File.exists?(target.information.installedFilePath)
-                                Ism.removeInstalledSoftware(target.information)
+                                Ism.uninstallSoftware(target.information)
                             end
 
                             Ism.printSystemCallErrorNotification(error)

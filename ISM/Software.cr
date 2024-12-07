@@ -1814,7 +1814,7 @@ module ISM
         def uninstall
             Ism.notifyOfUninstall(@information)
 
-            Ism.removeInstalledSoftware(@information)
+            Ism.uninstallSoftware(@information)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
