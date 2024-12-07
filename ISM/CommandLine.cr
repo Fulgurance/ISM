@@ -463,7 +463,7 @@ module ISM
                 end
 
                 filesForRemoval.each do |file|
-                    if File.exists?
+                    if File.exists?(file)
                         FileUtils.rm_r(file)
                     end
                 end
