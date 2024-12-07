@@ -477,8 +477,11 @@ module ISM
             end
 
             rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+                #Deletion of non existent file is not critical
+                if typeof(error) != File::NotFoundError
+                    printSystemCallErrorNotification(error)
+                    exitProgram
+                end
         end
 
         def softwareAnyVersionInstalled(fullName : String) : Bool
