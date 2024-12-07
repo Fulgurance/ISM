@@ -157,7 +157,7 @@ module ISM
                         shell: true,
                         chdir: directoryPath)
 
-            return Process.new( "git pull --depth 1 origin #{Ism.portsSettings.targetVersion}",
+            return Process.new( "git pull origin #{Ism.portsSettings.targetVersion}",
                                 shell: true,
                                 chdir: directoryPath)
 
