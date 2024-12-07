@@ -1795,7 +1795,7 @@ module ISM
         end
 
         def recordUnneededKernelOptions
-            Ism.notifyOfRecordUnneededKernelFeatures
+            Ism.notifyOfRecordUnneededKernelOptions
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
