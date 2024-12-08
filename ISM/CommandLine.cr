@@ -586,7 +586,6 @@ module ISM
                 exitProgram
         end
 
-        #Pass a list as argument to get if it is rebuild due of a co dependency
         def getSoftwareStatus(software : ISM::SoftwareInformation) : Symbol
             installedSoftware = loadInstalledSoftware(software.port,software.name,software.version)
 
@@ -608,7 +607,7 @@ module ISM
                 end
 
                 #Option updates case
-                if software.version == installedSoftware.version && software.options != installedSoftware.options && installedSoftware.isValid
+                if software.version == installedSoftware.version && software.options != installedSoftware.options && installedSoftware.isValid && !software.passEnabled && !installedSoftware.passEnabled
                     return :optionUpdate
                 end
 
