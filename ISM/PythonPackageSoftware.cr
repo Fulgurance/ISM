@@ -44,7 +44,7 @@ module ISM
 
                 optionName = option.name
 
-                if optionName.starts_with?(prefix)
+                if optionName.starts_with?(prefix) && option.enabled
                     preparePythonPackage(version: optionName[prefix.size..-1])
                 end
 
