@@ -278,7 +278,7 @@ module ISM
                     if response.status_code == 200
                         buffer = Bytes.new(65536)
                         totalRead = Int64.new(0)
-                        lenght = response.headers["Content-Length"]? ? response.headers["Content-Length"].to_i32 : Int64.new(0)
+                        lenght = response.headers["Content-Length"]? ? response.headers["Content-Length"].to_i64 : Int64.new(0)
 
                         File.open(filePath, "wb") do |data|
                             while (pos = response.body_io.read(buffer)) > 0
