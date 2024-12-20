@@ -2094,8 +2094,6 @@ module ISM
 
                     end
 
-                    puts
-
                     targetsAdditionalInformationIndex.each do |index|
                         targets[index].showInformations
                     end
