@@ -2082,7 +2082,7 @@ module ISM
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
-                        if Ism.softwareIsRequestedSoftware(target.information, requestedSoftwareFullVersionNames)
+                        if Ism.softwareIsRequestedSoftware(target.information, requestedSoftwareFullVersionNames) && !Ism.softwareIsInstalled(target.information)
                             Ism.addSoftwareToFavouriteGroup(fullVersionName)
                         end
 
