@@ -1712,7 +1712,7 @@ module ISM
 
             puts "#{summaryText.colorize(:green)}"
 
-            print   "#{ISM::Default::CommandLine::InstallQuestion.colorize.mode(:underline)}" +
+            print   "#{ISM::Default::CommandLine::InstallQuestion}" +
                     "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
 
@@ -1726,7 +1726,7 @@ module ISM
 
             puts "#{summaryText.colorize(:green)}"
 
-            print   "#{ISM::Default::CommandLine::UninstallQuestion.colorize.mode(:underline)}" +
+            print   "#{ISM::Default::CommandLine::UninstallQuestion.colorize}" +
                     "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
 
