@@ -1484,7 +1484,7 @@ module ISM
                 stripFileListNoChroot(fileList)
             end
 
-            if Ism.softwareIsRequestedSoftware(@information, requestedSoftwareFullVersionNames) && !Ism.softwareIsInstalled(@information)
+            if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
                 Ism.addSoftwareToFavouriteGroup(@information.fullVersionName)
             end
 
