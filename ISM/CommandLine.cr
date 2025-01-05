@@ -2082,10 +2082,6 @@ module ISM
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
-                        if Ism.softwareIsRequestedSoftware(target.information, requestedSoftwareFullVersionNames)
-                            Ism.addSoftwareToFavouriteGroup(fullVersionName)
-                        end
-
                         Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version)
 
                         if index < limit-1

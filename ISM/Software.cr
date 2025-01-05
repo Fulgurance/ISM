@@ -1484,6 +1484,10 @@ module ISM
                 stripFileListNoChroot(fileList)
             end
 
+            if Ism.softwareIsRequestedSoftware(@information, requestedSoftwareFullVersionNames) && !Ism.softwareIsInstalled(@information)
+                Ism.addSoftwareToFavouriteGroup(@information.fullVersionName)
+            end
+
             Ism.addInstalledSoftware(@information, installedFiles)
 
             rescue error
