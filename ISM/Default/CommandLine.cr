@@ -11,7 +11,7 @@ module ISM
             ErrorUnknowArgumentHelp1 = "Use "
             ErrorUnknowArgumentHelp2 = "ism --help "
             ErrorUnknowArgumentHelp3 = "to know how to use ISM"
-            ProcessNotificationCharacters = ">_"
+            ProcessNotificationCharacters = "■"
             InternalErrorTitle = "Internal error"
             TaskBuildingProcessErrorText1 = "The ISM task at "
             TaskBuildingProcessErrorText2 = " encountered an error at line number "
