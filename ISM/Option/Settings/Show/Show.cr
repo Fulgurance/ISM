@@ -14,6 +14,7 @@ module ISM
                 puts "#{ISM::Default::Option::SettingsShow::TitleText}:".colorize(:yellow)
 
                 puts "\t#{ISM::Default::Option::SettingsShow::SecureModeText}: #{Ism.settings.secureMode.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::BinaryTaskModeText}: #{Ism.settings.binaryTaskMode.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::InstallByChrootText}: #{Ism.settings.installByChroot.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::RootPathText}: #{Ism.settings.rootPath.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::DefaultMirrorText}: #{Ism.settings.defaultMirror.colorize(:green)}"
