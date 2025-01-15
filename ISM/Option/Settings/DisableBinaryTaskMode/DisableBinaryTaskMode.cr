@@ -12,7 +12,7 @@ module ISM
 
             def start
                 if ARGV.size == 2
-                    if !Ism.ranAsSuperUser
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setBinaryTaskMode(false)
