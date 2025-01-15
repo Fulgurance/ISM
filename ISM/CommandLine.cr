@@ -2101,11 +2101,14 @@ module ISM
             showTaskCompilationTitleMessage
 
             generateTasksFile(tasks)
-            buildTasksFile
+
+            if Ism.settings.binaryTaskMode
+                buildTasksFile
+            end
 
             showCalculationDoneMessage
 
-            runTasksFile(logEnabled: true, softwareList: neededSoftwares)
+            runTasksFile(asBinary: Ism.settings.binaryTaskMode, logEnabled: true, softwareList: neededSoftwares)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -2115,7 +2118,7 @@ module ISM
         def buildTasksFile
             processResult = IO::Memory.new
 
-            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release --progress #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
                         error: processResult,
                         shell: true,
                         chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
@@ -2141,13 +2144,15 @@ module ISM
                 exitProgram
         end
 
-        def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+        def runTasksFile(asBinary = true, logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+
+            command = (asBinary ? "./#{ISM::Default::Filename::Task}" : "crystal #{ISM::Default::Filename::Task}.cr")
 
             logIOMemory = IO::Memory.new
 
             logWriter = logEnabled ? IO::MultiWriter.new(STDOUT,logIOMemory) : Process::Redirect::Inherit
 
-            process = Process.run(  "./#{ISM::Default::Filename::Task}",
+            process = Process.run(  command: command,
                                     output: logWriter,
                                     error: logWriter,
                                     shell: true,

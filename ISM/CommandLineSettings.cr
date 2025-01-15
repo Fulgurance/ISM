@@ -6,6 +6,7 @@ module ISM
 
         #Generic parameters
         property    secureMode : Bool
+        property    binaryTaskMode : Bool
         property    installByChroot : Bool
         property    rootPath : String
         property    defaultMirror : String
@@ -60,6 +61,7 @@ module ISM
 
         def initialize( #Generic parameters
                         @secureMode = ISM::Default::CommandLineSettings::SecureMode,
+                        @binaryTaskMode = ISM::Default::CommandLineSettings::BinaryTaskMode,
                         @installByChroot = ISM::Default::CommandLineSettings::InstallByChroot,
                         @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
@@ -148,6 +150,7 @@ module ISM
 
                                     #Generic parameters
                                     secureMode : Bool,
+                                    binaryTaskMode : Bool,
                                     installByChroot : Bool,
                                     rootPath : String,
                                     defaultMirror : String,
@@ -208,6 +211,7 @@ module ISM
 
             settings = {#Generic parameters
                         "secureMode" => secureMode,
+                        "binaryTaskMode" => binaryTaskMode,
                         "installByChroot" => installByChroot,
                         "rootPath" => rootPath,
                         "defaultMirror" => defaultMirror,
@@ -275,6 +279,7 @@ module ISM
                                             @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
                                             #Generic parameters
                                             ISM::Default::CommandLineSettings::SecureMode,
+                                            ISM::Default::CommandLineSettings::BinaryTaskMode,
                                             ISM::Default::CommandLineSettings::InstallByChroot,
                                             ISM::Default::CommandLineSettings::RootPath,
                                             @defaultMirror,
@@ -338,6 +343,7 @@ module ISM
 
                                             #Generic parameters
                                             @secureMode,
+                                            @binaryTaskMode,
                                             @installByChroot,
                                             @rootPath,
                                             @defaultMirror,
@@ -694,6 +700,14 @@ module ISM
 
         #   Generic
         def setSecureMode(@secureMode)
+            writeSystemConfiguration
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def setBinaryTaskMode(@binaryTaskMode)
             writeSystemConfiguration
 
             rescue error

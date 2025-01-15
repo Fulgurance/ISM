@@ -13,6 +13,8 @@ module ISM
                             #Global options
                             ISM::Option::SettingsEnableSecureMode.new,
                             ISM::Option::SettingsDisableSecureMode.new,
+                            ISM::Option::SettingsEnableBinaryTaskMode.new,
+                            ISM::Option::SettingsDisableBinaryTaskMode.new,
                             ISM::Option::SettingsEnableInstallByChroot.new,
                             ISM::Option::SettingsDisableInstallByChroot.new,
                             ISM::Option::SettingsSetRootPath.new,
