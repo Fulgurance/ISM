@@ -2098,15 +2098,13 @@ module ISM
 
                     CODE
 
-            showTaskCompilationTitleMessage
-
             generateTasksFile(tasks)
 
             if Ism.settings.binaryTaskMode
+                showTaskCompilationTitleMessage
                 buildTasksFile
+                showCalculationDoneMessage
             end
-
-            showCalculationDoneMessage
 
             runTasksFile(asBinary: Ism.settings.binaryTaskMode, logEnabled: true, softwareList: neededSoftwares)
 
@@ -2231,14 +2229,14 @@ module ISM
                     end
 
                     CODE
-            puts
-
-            showTaskCompilationTitleMessage
 
             generateTasksFile(tasks)
-            buildTasksFile
 
-            showCalculationDoneMessage
+            if Ism.settings.binaryTaskMode
+                showTaskCompilationTitleMessage
+                buildTasksFile
+                showCalculationDoneMessage
+            end
 
             runTasksFile
 
