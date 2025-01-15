@@ -1490,6 +1490,8 @@ module ISM
 
             Ism.addInstalledSoftware(@information, installedFiles)
 
+            runLdconfigCommand
+
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
