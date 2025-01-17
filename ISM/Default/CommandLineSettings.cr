@@ -13,7 +13,7 @@ module ISM
 
             #Generic parameters
             SecureMode = true
-            BinaryTaskMode = true
+            BinaryTaskMode = false
             InstallByChroot = false
             RootPath = "/"
             DefaultMirror = "Uk"

@@ -18,7 +18,7 @@ module ISM
         end
 
         def self.filePath : String
-            return Ism.settings.rootPath+ISM::Default::PatchInformation::SystemInformationFilePath
+            #return Ism.settings.rootPath+ISM::Default::PatchInformation::SystemInformationFilePath
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
