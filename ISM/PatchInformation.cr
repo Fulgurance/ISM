@@ -17,14 +17,6 @@ module ISM
                         @description = String.new)
         end
 
-        def self.filePath : String
-            #return Ism.settings.rootPath+ISM::Default::PatchInformation::SystemInformationFilePath
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
         def self.loadConfiguration(path = filePath)
             if !File.exists?(path)
                 generateConfiguration(path)
