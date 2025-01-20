@@ -39,15 +39,6 @@ module ISM
                 Ism.exitProgram
         end
 
-        # FUNCTION EXAMPLE
-        # def setCrossToolchainFullyBuilt(@crossToolchainFullyBuilt)
-        #     writeConfiguration
-        #
-        #     rescue error
-        #         Ism.printSystemCallErrorNotification(error)
-        #         Ism.exitProgram
-        # end
-
     end
 
 end

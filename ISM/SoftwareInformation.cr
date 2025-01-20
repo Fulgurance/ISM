@@ -317,7 +317,7 @@ module ISM
 
         dependenciesArray = Array(ISM::SoftwareDependency).new
 
-        #CHECK IF THERE IS ANY UNIQUE DEPENDENCIES NOT SELECTIONED
+        #CHECK IF THERE IS ANY UNIQUE DEPENDENCIES NOT SELECTED
         missingSelectedDependencies = getMissingSelectedDependencies
 
         if missingSelectedDependencies.empty?
