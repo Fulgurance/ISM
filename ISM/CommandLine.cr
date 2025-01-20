@@ -2325,9 +2325,7 @@ module ISM
                             hashOptions = dependencyHash[key].toSoftwareDependency.options.uniq
                             dependencyOptions = dependency.options.uniq
 
-                            differentOptions = !(hashOptions & dependencyOptions == hashOptions)
-
-                            differences = (hashOptions - dependencyOptions | dependencyOptions - hashOptions)
+                            differentOptions = !((hashOptions - dependencyOptions | dependencyOptions - hashOptions).empty?)
 
                             needToEnableNewOnes = (dependencyOptions.any? { |option| !hashOptions.includes?(option)})
 
