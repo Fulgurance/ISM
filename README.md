@@ -14,9 +14,6 @@ The software handle too the calculation of Linux kernel dependencies. That mean 
 
 ![ISM-Example.png](https://www.zupimages.net/up/24/20/2mn6.png)
 
-[<img src="https://img.youtube.com/vi/4aGN-vvmhHo/hqdefault.jpg" width="600" height="300"
-/>](https://www.youtube.com/embed/4aGN-vvmhHo)
-
 ## Usage
 
 You can see main functionnalities when you just type ism in a terminal:
