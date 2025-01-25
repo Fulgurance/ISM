@@ -12,7 +12,7 @@ The software handle too the calculation of Linux kernel dependencies. That mean 
 
 ***Guide***: https://github.com/Fulgurance/ISM/wiki/Guide
 
-![ISM-Example.png](https://www.zupimages.net/up/24/20/2mn6.png)
+![ISM-Example.png](https://www.zupimages.net/up/25/04/jsxe.png)
 
 ## Usage
 
