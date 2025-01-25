@@ -1770,8 +1770,8 @@ module ISM
                 exitProgram
         end
 
-        def updateInstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String)
-            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} @#{port}:#{name} /#{version}/")
+        def updateInstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
+            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} @#{port}:#{name} #{passNumber > 0 ? "" : "(Pass#{passNumber})"} /#{version}/")
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -1808,9 +1808,9 @@ module ISM
                 exitProgram
         end
 
-        def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
+        def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
             puts
-            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
+            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} #{passNumber > 0 ? "" : "(Pass#{passNumber})".colorize(:yellow)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     " #{ISM::Default::CommandLine::InstalledText} " +
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
@@ -2042,13 +2042,14 @@ module ISM
                         port = information.port
                         name = information.name
                         version = information.version
+                        passNumber = information.getEnabledPassNumber
                         fullVersionName = information.fullVersionName
 
                         #START INSTALLATION PROCESS
 
-                        Ism.updateInstallationTerminalTitle(index, limit, port, name, version)
+                        Ism.updateInstallationTerminalTitle(index, limit, port, name, version, passNumber)
 
-                        Ism.showStartSoftwareInstallingMessage(index, limit, port, name, version)
+                        Ism.showStartSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
@@ -2082,7 +2083,7 @@ module ISM
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
-                        Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version)
+                        Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
 
                         if index < limit-1
                             Ism.showSeparator
@@ -2245,12 +2246,12 @@ module ISM
                 exitProgram
         end
 
-        def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
+        def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
             puts    "#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
                     "] #{ISM::Default::CommandLine::InstallingText} " +
-                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
+                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} #{passNumber > 0 ? "" : "(Pass#{passNumber})".colorize(:yellow)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
 
             rescue error
