@@ -27,8 +27,16 @@ module ISM
                 Ism.exitProgram
         end
 
+        def self.isPassName(optionName : String) : Bool
+            return optionName.starts_with?(/Pass[0-9]/)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         def isPass : Bool
-            return @name.starts_with?(/Pass[0-9]/)
+            return self.class.isPassName(@name)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)

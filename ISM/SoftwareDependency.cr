@@ -38,6 +38,20 @@ module ISM
                 Ism.exitProgram
         end
 
+        def passEnabled : Bool
+            @options.each do |option|
+                if ISM::SoftwareOption.isPassName(option)
+                    return true
+                end
+            end
+
+            return false
+
+            rescue error
+                    Ism.printSystemCallErrorNotification(error)
+                    Ism.exitProgram
+        end
+
         def fullName : String
             return "@#{@port}:#{@name}"
 
