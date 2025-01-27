@@ -1754,15 +1754,16 @@ module ISM
             userAgreement = false
 
             loop do
-                userInput = gets
+                userInput = gets.to_s
 
-                if userInput == ISM::Default::CommandLine::YesReplyOption.downcase
+                if userInput.downcase == ISM::Default::CommandLine::YesReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::YesReplyOption[0].downcase
                     return true
-                elsif userInput == ISM::Default::CommandLine::NoReplyOption.downcase
+                elsif userInput.downcase == ISM::Default::CommandLine::NoReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::NoReplyOption[0].downcase
                     return false
                 else
                     return false
                 end
+
             end
 
             rescue error
