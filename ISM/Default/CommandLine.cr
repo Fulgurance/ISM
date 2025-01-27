@@ -101,6 +101,8 @@ module ISM
             UninstallQuestion = "Would you like to uninstall these softwares ?"
             YesReplyOption = "yes"
             NoReplyOption = "no"
+            YesShortReplyOption = "y"
+            NoShortReplyOption = "n"
             InstallingText = "Installing"
             UninstallingText = "Uninstalling"
             InstallationDetailsText = "Installation Complete"
