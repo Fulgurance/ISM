@@ -1750,17 +1750,19 @@ module ISM
         end
 
         def getUserAgreement : Bool
-            userInput = ""
-            userAgreement = false
 
             loop do
                 userInput = gets.to_s
 
                 if userInput.downcase == ISM::Default::CommandLine::YesReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::YesReplyOption[0].downcase
                     return true
-                elsif userInput.downcase == ISM::Default::CommandLine::NoReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::NoReplyOption[0].downcase
+                end
+
+                if userInput.downcase == ISM::Default::CommandLine::NoReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::NoReplyOption[0].downcase
                     return false
-                else
+                end
+
+                if userInput == ""
                     return false
                 end
 
