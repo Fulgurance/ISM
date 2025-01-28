@@ -17,6 +17,7 @@ module ISM
             InstallByChroot = false
             RootPath = "/"
             DefaultMirror = "Uk"
+            BuildKernelOptionsAsModule = true
 
             #Host related parameters
             SystemTargetName = "unknown"

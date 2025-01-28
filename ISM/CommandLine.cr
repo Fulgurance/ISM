@@ -2596,6 +2596,31 @@ module ISM
                 exitProgram
         end
 
+        def getRequiredKernelOptions
+            neededOptions = Hash(String,ISM::KernelOption).new
+            buildAsModule = Hash(String,Bool).new
+            choiceSolved = Hash(String,Bool).new
+            blockerSolved = Hash(String,Bool).new
+
+            #1 - We perform a first pass to record the options that don't need any special requirements
+            @neededKernelOptions.each do |option|
+
+                if option.singleChoiceDependencies.empty? && option.blockers.empty?
+                    neededOptions[option.name] = options
+                    buildAsModule[option.name] = (option.tristate && @settings.buildKernelOptionsAsModule ? true : false)
+                    choiceSolved[option.name] = true
+                    blockerSolved[option.name] = true
+                end
+
+            end
+
+            #return
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def generateTasksFile(tasks : String)
             File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
 
@@ -2954,6 +2979,7 @@ module ISM
         end
 
         def disableKernelOption(option : String)
+
             rescue error
                 printSystemCallErrorNotification(error)
                 exitProgram

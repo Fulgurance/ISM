@@ -1,6 +1,5 @@
 module ISM
 
-    #EXPERIMENTAL
     class PackagedSoftware < ISM::Software
 
         def prepare

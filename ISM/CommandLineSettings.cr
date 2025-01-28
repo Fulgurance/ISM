@@ -10,6 +10,7 @@ module ISM
         property    installByChroot : Bool
         property    rootPath : String
         property    defaultMirror : String
+        property    buildKernelOptionsAsModule : Bool
 
         #Host related parameters
         property    systemTargetName : String
@@ -65,6 +66,7 @@ module ISM
                         @installByChroot = ISM::Default::CommandLineSettings::InstallByChroot,
                         @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
+                        @buildKernelOptionsAsModule = ISM::Default::CommandLineSettings::BuildKernelOptionsAsModule,
 
                         #Host related parameters
                         @systemTargetName = ISM::Default::CommandLineSettings::SystemTargetName,
@@ -154,6 +156,7 @@ module ISM
                                     installByChroot : Bool,
                                     rootPath : String,
                                     defaultMirror : String,
+                                    buildKernelOptionsAsModule : Bool,
 
                                     #Host related parameters
                                     systemTargetName : String,
@@ -215,6 +218,7 @@ module ISM
                         "installByChroot" => installByChroot,
                         "rootPath" => rootPath,
                         "defaultMirror" => defaultMirror,
+                        "buildKernelOptionsAsModule" => buildKernelOptionsAsModule,
 
                         #Host related parameters
                         "systemTargetName" => systemTargetName,
@@ -283,6 +287,7 @@ module ISM
                                             ISM::Default::CommandLineSettings::InstallByChroot,
                                             ISM::Default::CommandLineSettings::RootPath,
                                             @defaultMirror,
+                                            @buildKernelOptionsAsModule,
 
                                             #Host related parameters
                                             @chrootTargetName,
@@ -347,6 +352,7 @@ module ISM
                                             @installByChroot,
                                             @rootPath,
                                             @defaultMirror,
+                                            @buildKernelOptionsAsModule,
 
                                             #Host related parameters
                                             @systemTargetName,
@@ -732,6 +738,14 @@ module ISM
         end
 
         def setDefaultMirror(@defaultMirror)
+            writeSystemConfiguration
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def setBuildKernelOptionsAsModule(@buildKernelOptionsAsModule)
             writeSystemConfiguration
 
             rescue error
