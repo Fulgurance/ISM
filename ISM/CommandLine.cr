@@ -5,7 +5,6 @@ module ISM
         property systemInformation : ISM::CommandLineSystemInformation
         property requestedSoftwares : Array(ISM::SoftwareInformation)
         property neededKernelOptions : Array(ISM::NeededKernelOption)
-        property unneededKernelOptions : Array(ISM::UnneededKernelOption)
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
         property kernels : Array(ISM::AvailableKernel)
@@ -25,7 +24,6 @@ module ISM
             @systemInformation = ISM::CommandLineSystemInformation.new
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
             @neededKernelOptions = Array(ISM::NeededKernelOption).new
-            @unneededKernelOptions = Array(ISM::UnneededKernelOption).new
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0
             @reverseAnimation = false
@@ -74,7 +72,6 @@ module ISM
             loadSystemInformationFile
             loadKernelOptionDatabase
             loadNeededKernelOptions
-            loadUnneededKernelOptions
             loadSoftwareDatabase
             loadInstalledSoftwareDatabase
             loadPortsDatabase
@@ -93,24 +90,6 @@ module ISM
             neededKernelOptions.each do |option|
 
                 @neededKernelOptions << ISM::NeededKernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory+"/"+option)
-
-            end
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
-        def loadUnneededKernelOptions
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::UnneededKernelOptionsDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::UnneededKernelOptionsDirectory)
-            end
-
-            unneededKernelOptions = Dir.children(@settings.rootPath+ISM::Default::Path::UnneededKernelOptionsDirectory)
-
-            unneededKernelOptions.each do |option|
-
-                @unneededKernelOptions << ISM::UnneededKernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::UnneededKernelOptionsDirectory+"/"+option)
 
             end
 
@@ -1019,16 +998,6 @@ module ISM
 
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::CleanText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
-        def notifyOfRecordUnneededKernelOptions(softwareInformation : ISM::SoftwareInformation)
-            kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
-
-            printProcessNotification(ISM::Default::CommandLine::RecordUnneededKernelOptionsText+"#{kernelName.colorize(:green)}")
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -2213,7 +2182,6 @@ module ISM
                         Ism.showStartSoftwareUninstallingMessage(index, limit, port, name, version)
 
                         begin
-                            target.recordUnneededKernelOptions
                             target.uninstall
                         rescue error
                             Ism.printSystemCallErrorNotification(error)
@@ -2596,31 +2564,6 @@ module ISM
                 exitProgram
         end
 
-        def getRequiredKernelOptions
-            neededOptions = Hash(String,ISM::KernelOption).new
-            buildAsModule = Hash(String,Bool).new
-            choiceSolved = Hash(String,Bool).new
-            blockerSolved = Hash(String,Bool).new
-
-            #1 - We perform a first pass to record the options that don't need any special requirements
-            @neededKernelOptions.each do |option|
-
-                if option.singleChoiceDependencies.empty? && option.blockers.empty?
-                    neededOptions[option.name] = options
-                    buildAsModule[option.name] = (option.tristate && @settings.buildKernelOptionsAsModule ? true : false)
-                    choiceSolved[option.name] = true
-                    blockerSolved[option.name] = true
-                end
-
-            end
-
-            #return
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
         def generateTasksFile(tasks : String)
             File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
 
@@ -2899,6 +2842,31 @@ module ISM
                 exitProgram
         end
 
+        def getNeededKernelOptions : Array(ISM::NeededKernelOption)
+            neededOptions = Hash(String,ISM::KernelOption).new
+            buildAsModule = Hash(String,Bool).new
+            choiceSolved = Hash(String,Bool).new
+            blockerSolved = Hash(String,Bool).new
+
+            #1 - We perform a first pass to record the options that don't need any special requirements
+            @neededKernelOptions.each do |option|
+
+                if option.singleChoiceDependencies.empty? && option.blockers.empty?
+                    neededOptions[option.name] = options
+                    buildAsModule[option.name] = (option.tristate && @settings.buildKernelOptionsAsModule ? true : false)
+                    choiceSolved[option.name] = true
+                    blockerSolved[option.name] = true
+                end
+
+            end
+
+            #return
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def generateDefaultKernelConfig
             requestedCommands = "make #{@settings.systemMakeOptions} defconfig"
             path = kernelSourcesPath
@@ -2915,8 +2883,41 @@ module ISM
                 exitProgram
         end
 
-        #GERER LE CAS OU LE NOYAU N'EST PAS INSTALLE
-        #COMMENT GERER SI UNE FEATURE AVAIT DES DEPENDANCES LORS DE LA DESINSTALLATION ?
+        def generateKernelConfig
+
+        end
+
+        def generateKernel
+            requestedCommands = "make #{@settings.systemMakeOptions} mrproper && make #{@settings.systemMakeOptions} modules_prepare && make #{@settings.systemMakeOptions} && make #{@settings.systemMakeOptions} modules_install && make #{@settings.systemMakeOptions} install"
+            path = kernelSourcesPath
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                notifyOfRunSystemCommandError(requestedCommands, path)
+                exitProgram
+            end
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def installKernel
+            requestedCommands = "mv System.map /boot/System.map-linux-#{mainKernelVersion} && mv vmlinuz /boot/vmlinuz-linux-#{mainKernelVersion} && cp .config /boot/config-linux-#{mainKernelVersion}"
+            path = kernelSourcesPath
+
+            process = runSystemCommand(requestedCommands, path)
+
+            if !process.success?
+                notifyOfRunSystemCommandError(requestedCommands, path)
+                exitProgram
+            end
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
 
         def mainKernelName : String
             return selectedKernel.versionName.downcase

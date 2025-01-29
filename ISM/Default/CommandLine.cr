@@ -38,7 +38,6 @@ module ISM
             CleanText = "Cleaning "
             FuturKernelText = "future kernel (not installed yet)"
             UpdateKernelOptionsDatabaseText = "Updating kernel options database for "
-            RecordUnneededKernelOptionsText = "Recording unneeded kernel options for "
             UninstallText = "Uninstalling "
             ErrorDownloadText = "Failed to download from "
             ErrorConnexionText1 = "Failed to connect to "
