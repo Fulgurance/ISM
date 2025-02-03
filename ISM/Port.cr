@@ -124,28 +124,33 @@ module ISM
                 Ism.exitProgram
         end
 
+        def isAvailable : Bool
+            process = Process.new(  "git ls-remote",
+                                    shell: true,
+                                    chdir: directoryPath)
+            result = process.wait
+
+            return result.success?
+        end
+
         def open : Bool
             Dir.mkdir_p(directoryPath)
 
             Process.run("git init",
                         shell: true,
                         chdir: directoryPath)
+
             Process.run("git remote add origin #{@url}",
                         shell: true,
                         chdir: directoryPath)
 
-            process = Process.new(  "git ls-remote",
-                                    shell: true,
-                                    chdir: directoryPath)
-            result = process.wait
-
-            if result.success?
+            if isAvailable
                 writeConfiguration
+                return true
             else
                 FileUtils.rm_r(directoryPath)
+                return false
             end
-
-            return result.success?
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -157,9 +162,19 @@ module ISM
                         shell: true,
                         chdir: directoryPath)
 
-            return Process.new( "git pull origin #{Ism.portsSettings.targetVersion}",
-                                shell: true,
-                                chdir: directoryPath)
+            if isAvailable
+                return Process.new( "git pull origin #{Ism.portsSettings.targetVersion}",
+                                    shell: true,
+                                    chdir: directoryPath)
+            else
+                Ism.printErrorNotification(ISM::Default::Port::SynchronizeTextError1+"#{@name.colorize(:red)}"+ISM::Default::Port::SynchronizeTextError2+"#{@url.colorize(:red)}"+ISM::Default::Port::SynchronizeTextError3,nil)
+
+                self.class.delete(@name)
+
+                return Process.new( "true",
+                                    shell: true,
+                                    chdir: directoryPath)
+            end
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)

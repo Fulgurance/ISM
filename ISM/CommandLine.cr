@@ -2843,19 +2843,13 @@ module ISM
         end
 
         def getNeededKernelOptions : Array(ISM::NeededKernelOption)
-            neededOptions = Hash(String,ISM::KernelOption).new
-            buildAsModule = Hash(String,Bool).new
-            choiceSolved = Hash(String,Bool).new
-            blockerSolved = Hash(String,Bool).new
 
             #1 - We perform a first pass to record the options that don't need any special requirements
             @neededKernelOptions.each do |option|
 
                 if option.singleChoiceDependencies.empty? && option.blockers.empty?
-                    neededOptions[option.name] = options
-                    buildAsModule[option.name] = (option.tristate && @settings.buildKernelOptionsAsModule ? true : false)
-                    choiceSolved[option.name] = true
-                    blockerSolved[option.name] = true
+                    #(option.tristate && @settings.buildKernelOptionsAsModule ? true : false)
+
                 end
 
             end
