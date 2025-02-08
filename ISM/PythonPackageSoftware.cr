@@ -9,7 +9,7 @@ module ISM
 
             makeDirectory(packagesPath)
 
-            runPipCommand(  arguments:  "install --no-dependencies --target \"#{packagesPath}\" '#{@information.name}==#{@information.version}'",
+            runPipCommand(  arguments:  "install --root-user-action=ignore --no-dependencies --target \"#{packagesPath}\" '#{@information.name}==#{@information.version}'",
                             version:    version)
 
             directoryContent(packagesPath, matchHidden: true).each do |filePath|
