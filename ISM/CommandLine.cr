@@ -2842,6 +2842,9 @@ module ISM
                 exitProgram
         end
 
+        # setKernelOption(symbol : String, state : Symbol, value = String.new)
+        # state = :enable, :disable, :module, :string, :value
+
         def getNeededKernelOptions : Array(ISM::NeededKernelOption)
 
             #1 - We perform a first pass to record the options that don't need any special requirements
@@ -2960,36 +2963,6 @@ module ISM
             end
 
             runFile("#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
-        def enableKernelOption(option : String)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
-        def disableKernelOption(option : String)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
-        def enableKernelOptions(options : Array(String))
-            options.each do |option|
-                enableKernelOption(option)
-            end
-        end
-
-        def disableKernelOptions(options : Array(String))
-            options.each do |option|
-                disableKernelOption(option)
-            end
 
             rescue error
                 printSystemCallErrorNotification(error)

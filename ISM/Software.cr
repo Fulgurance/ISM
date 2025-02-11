@@ -192,8 +192,19 @@ module ISM
         end
 
         def prepareKernelSourcesInstallation
+            #Install the kernel sources
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
-            moveFileNoChroot("#{workDirectoryPathNoChroot}/Sources","#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
+            moveFileNoChroot(   path:       "#{workDirectoryPathNoChroot}/Sources",
+                                newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
+
+            #Separate the headers from the sources
+            moveFileNoChroot(   path:       "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}/usr/include",
+                                newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.name.downcase}-Headers-#{@information.version.downcase}")
+
+            #Symlink the headers for the kernel sources
+            makeLink(   target:   "/usr/src/#{@information.name.downcase}-Headers-#{@information.version.downcase}",
+                        path: "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}/usr/include",
+                        type:   :symbolicLinkByOverwrite)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
