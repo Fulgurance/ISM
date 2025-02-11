@@ -202,7 +202,7 @@ module ISM
                                 newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
 
             #Symlink the headers for the kernel sources
-            makeLink(   target:   "../../#{@information.name.downcase}-Headers-#{@information.version.downcase}",
+            makeLink(   target:   "../../#{@information.name.downcase}-headers-#{@information.version.downcase}",
                         path: "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}/usr/include",
                         type:   :symbolicLinkByOverwrite)
 
