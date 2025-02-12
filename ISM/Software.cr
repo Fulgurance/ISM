@@ -194,6 +194,7 @@ module ISM
         def prepareKernelSourcesInstallation
             #Install the kernel sources
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
+
             moveFileNoChroot(   path:       "#{workDirectoryPathNoChroot}/Sources",
                                 newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
 
@@ -1945,6 +1946,18 @@ module ISM
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
+        end
+
+        def selectedKernel : ISM::SoftwareInformation
+            return Ism.selectedKernel
+        end
+
+        def kernelSelected : Bool
+            return selectedKernel.isValid
+        end
+
+        def isCurrentKernel : Bool
+            return selectedKernel.versionName == @information.versionName
         end
 
         def showInfo(message : String)
