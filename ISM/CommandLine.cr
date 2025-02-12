@@ -2666,6 +2666,7 @@ module ISM
                     greatestVersion = SemanticVersion.parse(greatestSoftware.version)
 
                     if installedSoftware.fullName == availableSoftware.fullName
+                        #TO DO: Add a condition for the case when there is an update for the kernel
                         if currentVersion < greatestVersion && !softwareIsInstalled(greatestSoftware)
                             #We test first if the software is installable
                             installable = !(getRequiredDependencies([greatestSoftware],allowSkipUnavailable: true)).empty?
