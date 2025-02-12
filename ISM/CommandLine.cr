@@ -2924,6 +2924,14 @@ module ISM
                 exitProgram
         end
 
+        def mainKernelHeadersName : String
+            return "#{mainKernel}-headers"
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def mainKernelVersion : String
             return selectedKernel.version
 

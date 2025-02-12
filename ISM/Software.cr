@@ -175,6 +175,14 @@ module ISM
                 Ism.exitProgram
         end
 
+        def mainKernelHeadersName : String
+            return Ism.mainKernelHeadersName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         def mainKernelName : String
             return Ism.mainKernelName
 
@@ -192,15 +200,27 @@ module ISM
         end
 
         def prepareKernelSourcesInstallation
-            #Install the kernel sources
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
 
+            #Install the kernel sources
             moveFileNoChroot(   path:       "#{workDirectoryPathNoChroot}/Sources",
                                 newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
 
             #Make a copy of the headers for the system
             copyDirectoryNoChroot(  path:       "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}/usr/include",
                                     newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
+
+            #Create/Update symlinks if needed
+            if !selectedKernel || isCurrentKernel
+                makeLink(   target: "#{mainKernelName}",
+                        path:   "#{Ism.settings.rootPath}/usr/src/main-kernel-sources",
+                        type:   :symbolicLinkByOverwrite)
+
+                makeLink(   target: "#{mainKernelHeadersName}",
+                    path:   "#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers",
+                    type:   :symbolicLinkByOverwrite)
+            end
+
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -1950,14 +1970,26 @@ module ISM
 
         def selectedKernel : ISM::SoftwareInformation
             return Ism.selectedKernel
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelSelected : Bool
             return selectedKernel.isValid
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def isCurrentKernel : Bool
             return selectedKernel.versionName == @information.versionName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def showInfo(message : String)
