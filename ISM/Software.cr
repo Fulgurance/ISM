@@ -208,7 +208,7 @@ module ISM
 
             #Make a copy of the headers for the system
             copyDirectoryNoChroot(  path:       "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}/usr/include",
-                                    newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
+                                    targetPath: "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
 
             #Create/Update symlinks if needed
             if !selectedKernel || isCurrentKernel
