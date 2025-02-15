@@ -2926,7 +2926,7 @@ module ISM
         end
 
         def mainKernelHeadersName : String
-            return "#{selectedKernel.name}-headers-#{selectedKernel.version}"
+            return "#{selectedKernel.name.downcase}-headers-#{selectedKernel.version.downcase}"
 
             rescue error
                 printSystemCallErrorNotification(error)
