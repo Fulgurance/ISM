@@ -220,7 +220,7 @@ module ISM
 
                 #Generate symlinks of the current kernel headers to /usr/include
                 headerPath = "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers/"
-                headerDirectories = Dir.children(headerPath).select { |entry| File.directory?("#{headerPath}/#{entry}") }
+                headerDirectories = Dir.children(headerPath)#.select { |entry| File.directory?("#{headerPath}/#{entry}") } >>> NEED PATCH
 
                 headerDirectories.each do |headerDirectory|
                     makeLink(   target: "../src/main-kernel-sources-headers/#{headerDirectory}",
