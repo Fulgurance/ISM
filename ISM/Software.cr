@@ -238,16 +238,16 @@ module ISM
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/share/doc/")
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/include")
 
+            #Install the kernel sources
+            moveFileNoChroot(   path:       "#{workDirectoryPathNoChroot}/Sources",
+                                newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
+
             #Generate headers
             makeSource( arguments:   "clean",
                         path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
 
             makeSource( arguments:  "headers",
                         path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
-
-            #Install the kernel sources
-            moveFileNoChroot(   path:       "#{workDirectoryPathNoChroot}/Sources",
-                                newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
 
             #Make a copy of the headers for the system
             copyDirectoryNoChroot(  path:       "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}/usr/include",
