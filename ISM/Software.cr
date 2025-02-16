@@ -199,6 +199,30 @@ module ISM
                 Ism.exitProgram
         end
 
+        def updateKernelSymlinks
+            #Create/Update symlinks if needed
+            if !selectedKernel || isCurrentKernel
+                #Make link for the current running kernel sources
+                makeLink(   target: "#{mainKernelName}",
+                            path:   "#{Ism.settings.rootPath}/usr/src/main-kernel-sources",
+                            type:   :symbolicLinkByOverwrite)
+
+                #Make link for the current running kernel source headers
+                makeLink(   target: "#{mainKernelHeadersName}",
+                            path:   "#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers",
+                            type:   :symbolicLinkByOverwrite)
+
+                #Make link for the current kernel documentation
+                makeLink(   target: "main-kernel-sources/Documentation",
+                            path:   "#{Ism.settings.rootPath}/usr/share/doc/main-kernel-documentation",
+                            type:   :symbolicLinkByOverwrite)
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         def prepareKernelSourcesInstallation
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
 
@@ -210,17 +234,7 @@ module ISM
             copyDirectoryNoChroot(  path:       "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}/usr/include",
                                     targetPath: "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
 
-            #Create/Update symlinks if needed
-            if !selectedKernel || isCurrentKernel
-                makeLink(   target: "#{mainKernelName}",
-                        path:   "#{Ism.settings.rootPath}/usr/src/main-kernel-sources",
-                        type:   :symbolicLinkByOverwrite)
-
-                makeLink(   target: "#{mainKernelHeadersName}",
-                    path:   "#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers",
-                    type:   :symbolicLinkByOverwrite)
-            end
-
+            updateKernelSymlinks
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
