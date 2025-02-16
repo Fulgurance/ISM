@@ -200,21 +200,22 @@ module ISM
         end
 
         def updateKernelSymlinks
+
             #Create/Update symlinks if needed
             if !selectedKernel || isCurrentKernel
                 #Make link for the current running kernel sources
                 makeLink(   target: "#{mainKernelName}",
-                            path:   "#{Ism.settings.rootPath}/usr/src/main-kernel-sources",
+                            path:   "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/main-kernel-sources",
                             type:   :symbolicLinkByOverwrite)
 
                 #Make link for the current running kernel source headers
                 makeLink(   target: "#{mainKernelHeadersName}",
-                            path:   "#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers",
+                            path:   "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers",
                             type:   :symbolicLinkByOverwrite)
 
                 #Make link for the current kernel documentation
                 makeLink(   target: "main-kernel-sources/Documentation",
-                            path:   "#{Ism.settings.rootPath}/usr/share/doc/main-kernel-documentation",
+                            path:   "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/share/doc/main-kernel-documentation",
                             type:   :symbolicLinkByOverwrite)
 
                 #Generate symlinks of the current kernel headers to /usr/include
@@ -223,7 +224,7 @@ module ISM
 
                 headerDirectories.each do |headerDirectory|
                     makeLink(   target: "../src/main-kernel-sources-headers/#{headerDirectory}",
-                                path:   "#{Ism.settings.rootPath}/usr/include/#{headerDirectory}",
+                                path:   "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/include/#{headerDirectory}",
                                 type:   :symbolicLinkByOverwrite)
                 end
             end
@@ -234,13 +235,13 @@ module ISM
         end
 
         def prepareKernelSourcesInstallation
-            makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
+            makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/")
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/share/doc/")
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/include")
 
             #Install the kernel sources
             moveFileNoChroot(   path:       "#{workDirectoryPathNoChroot}/Sources",
-                                newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}")
+                                newPath:    "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/#{@information.versionName.downcase}")
 
             #Generate headers
             makeSource( arguments:   "clean",
@@ -250,8 +251,8 @@ module ISM
                         path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
 
             #Make a copy of the headers for the system
-            copyDirectoryNoChroot(  path:       "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.versionName.downcase}/usr/include",
-                                    targetPath: "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
+            copyDirectoryNoChroot(  path:       "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/#{@information.versionName.downcase}/usr/include",
+                                    targetPath: "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
 
             updateKernelSymlinks
 
