@@ -341,6 +341,14 @@ module ISM
                 exitProgram
         end
 
+        def kernelIsSelected
+            return selectedKernel.isValid
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
             if filter.is_a?(Array(Regex))
                 userInput = input.split(" ")

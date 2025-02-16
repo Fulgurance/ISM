@@ -202,7 +202,7 @@ module ISM
         def updateKernelSymlinks
 
             #Create/Update symlinks if needed
-            if !selectedKernel || isCurrentKernel
+            if !kernelIsSelected || isCurrentKernel
                 #Make link for the current running kernel sources
                 makeLink(   target: "#{@information.versionName.downcase}",
                             path:   "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/main-kernel-sources",
@@ -263,6 +263,14 @@ module ISM
 
         def selectedKernel
             return Ism.selectedKernel
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def kernelIsSelected
+            return Ism.kernelIsSelected
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
