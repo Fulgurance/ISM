@@ -240,10 +240,10 @@ module ISM
 
             #Generate headers
             makeSource( arguments:   "clean",
-                        path: "#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
+                        path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
 
             makeSource( arguments:  "headers",
-                        path: "#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
+                        path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
 
             #Install the kernel sources
             moveFileNoChroot(   path:       "#{workDirectoryPathNoChroot}/Sources",
