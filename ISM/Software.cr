@@ -219,7 +219,7 @@ module ISM
                             type:   :symbolicLinkByOverwrite)
 
                 #Generate symlinks of the current kernel headers to /usr/include
-                headerPath = "#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers/usr/include/"
+                headerPath = "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers/usr/include/"
                 headerDirectories = Dir.children(headerPath).select { |entry| File.directory?("#{headerPath}/#{entry}") }
 
                 headerDirectories.each do |headerDirectory|
