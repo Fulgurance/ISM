@@ -216,6 +216,16 @@ module ISM
                 makeLink(   target: "main-kernel-sources/Documentation",
                             path:   "#{Ism.settings.rootPath}/usr/share/doc/main-kernel-documentation",
                             type:   :symbolicLinkByOverwrite)
+
+                #Generate symlinks of the current kernel headers to /usr/include
+                headerPath = "#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers/usr/include/"
+                headerDirectories = Dir.children(headerPath).select { |entry| File.directory?("#{headerPath}/#{entry}") }
+
+                headerDirectories.each do |headerDirectory|
+                    makeLink(   target: "../src/main-kernel-sources-headers/#{headerDirectory}",
+                                path:   "#{Ism.settings.rootPath}/usr/include/#{headerDirectory}",
+                                type:   :symbolicLinkByOverwrite)
+                end
             end
 
             rescue error
@@ -225,6 +235,15 @@ module ISM
 
         def prepareKernelSourcesInstallation
             makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}usr/src/")
+            makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/share/doc/")
+            makeDirectoryNoChroot("#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/include")
+
+            #Generate headers
+            makeSource( arguments:   "clean",
+                        path: "#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
+
+            makeSource( arguments:  "headers",
+                        path: "#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
 
             #Install the kernel sources
             moveFileNoChroot(   path:       "#{workDirectoryPathNoChroot}/Sources",
