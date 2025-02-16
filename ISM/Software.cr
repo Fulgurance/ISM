@@ -204,12 +204,12 @@ module ISM
             #Create/Update symlinks if needed
             if !selectedKernel || isCurrentKernel
                 #Make link for the current running kernel sources
-                makeLink(   target: "#{mainKernelName}",
+                makeLink(   target: "#{@information.versionName.downcase}",
                             path:   "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/main-kernel-sources",
                             type:   :symbolicLinkByOverwrite)
 
                 #Make link for the current running kernel source headers
-                makeLink(   target: "#{mainKernelHeadersName}",
+                makeLink(   target: "#{@information.name.downcase}-headers-#{@information.version.downcase}",
                             path:   "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/main-kernel-sources-headers",
                             type:   :symbolicLinkByOverwrite)
 
@@ -245,10 +245,10 @@ module ISM
 
             #Generate headers
             makeSource( arguments:   "clean",
-                        path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
+                        path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{@information.versionName.downcase}")
 
             makeSource( arguments:  "headers",
-                        path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{mainKernelName}")
+                        path: "#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}/usr/src/#{@information.versionName.downcase}")
 
             #Make a copy of the headers for the system
             copyDirectoryNoChroot(  path:       "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/#{@information.versionName.downcase}/usr/include",
