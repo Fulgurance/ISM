@@ -25,15 +25,12 @@ module ISM
                         else
                             if ARGV[2] == @shortText || ARGV[2] == @longText
 
-                                dependency = ARGV[3].downcase
+                                dependency = Ism.getSoftwareInformation(ARGV[3].downcase, allowSearchByNameOnly: true)
 
-                                port = (dependency[1..dependency.index(":")])[0..-2].gsub("-"," ").titleize.gsub(" ","-")
-                                name = dependency.gsub(dependency[0..dependency.index(":")],"").gsub("-"," ").titleize.gsub(" ","-")
-
-                                dependencyText = "#{("@"+port).colorize(:red)}:#{name.colorize(:green)}"
+                                dependencyText = "#{("@"+dependency.port).colorize(:red)}:#{dependency.name.colorize(:green)}"
                                 matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
 
-                                if matchingSoftware.selectUniqueDependency(dependency)
+                                if matchingSoftware.selectUniqueDependency(dependency.fullName)
                                     matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
 
                                     Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
