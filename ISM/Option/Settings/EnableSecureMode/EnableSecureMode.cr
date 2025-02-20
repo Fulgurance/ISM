@@ -12,12 +12,8 @@ module ISM
 
             def start
                 if ARGV.size == 2
-                    if !Ism.ranAsSuperUser
-                        Ism.printNeedSuperUserAccessNotification
-                    else
-                        Ism.settings.setSecureMode(true)
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsEnableSecureMode::SetText)
-                    end
+                    Ism.settings.setSecureMode(true)
+                    Ism.printProcessNotification(ISM::Default::Option::SettingsEnableSecureMode::SetText)
                 end
             end
 
