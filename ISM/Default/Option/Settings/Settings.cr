@@ -11,8 +11,6 @@ module ISM
                 Description = "Configure ISM settings"
                 Options = [ ISM::Option::SettingsShow.new,
                             #Global options
-                            ISM::Option::SettingsEnableSecureMode.new,
-                            ISM::Option::SettingsDisableSecureMode.new,
                             ISM::Option::SettingsEnableBinaryTaskMode.new,
                             ISM::Option::SettingsDisableBinaryTaskMode.new,
                             ISM::Option::SettingsEnableInstallByChroot.new,
