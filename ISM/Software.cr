@@ -1528,6 +1528,7 @@ module ISM
         end
 
         def install(preserveLibtoolArchives = false, stripFiles = true, asNormalUser = false)
+            #MANAGE MOUNT/UMOUNT READ ONLY FILESYSTEM PARTS (BIN/SBIN/LIBS)
             #NEW CASE: FIND A WAY TO INSTALL BY ROOT OR NOT
             #Ism.systemInformation.handleUserAccess
 
