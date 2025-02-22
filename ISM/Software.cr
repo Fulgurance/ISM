@@ -22,7 +22,7 @@ module ISM
                 Ism.exitProgram
         end
 
-        def recordHandleUserAccess
+        def recordSystemHandleUserAccess
             Ism.systemInformation.setHandleUserAccess(true)
 
             rescue error
