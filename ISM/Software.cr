@@ -1527,7 +1527,10 @@ module ISM
                 Ism.exitProgram
         end
 
-        def install(preserveLibtoolArchives = false, stripFiles = true)
+        def install(preserveLibtoolArchives = false, stripFiles = true, asNormalUser = false)
+            #NEW CASE: FIND A WAY TO INSTALL BY ROOT OR NOT
+            #Ism.systemInformation.handleUserAccess
+
             Ism.notifyOfInstall(@information)
 
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
