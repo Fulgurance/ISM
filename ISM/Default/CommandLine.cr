@@ -6,6 +6,7 @@ module ISM
 
             Title = "Ingenius System Manager"
             Name = "ism"
+            SystemId = 250
             NeedToBeRunAsNormalUserText = "#{name.upcase} can't be run as superuser. You must be a standard user and in the system group ism"
             NeedToBeRunAsMemberOfIsmGroupText = "#{name.upcase} can't be run if you are not member of the system group ism"
             ErrorUnknowArgument = "#{name.upcase} error: unknow argument "

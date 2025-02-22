@@ -51,6 +51,10 @@ module ISM
             @green = UInt8.new(55)
         end
 
+        def systemId
+            return ISM::Default::CommandLine::SystemId
+        end
+
         def ranAsSuperUser : Bool
             return (LibC.getuid == 0)
 
@@ -60,7 +64,7 @@ module ISM
         end
 
         def ranAsMemberOfGroupIsm : Bool
-            return (LibC.getuid == 0)
+            return (LibC.getuid == systemId)
 
             rescue error
                 printSystemCallErrorNotification(error)
