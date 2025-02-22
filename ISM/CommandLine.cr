@@ -59,6 +59,14 @@ module ISM
                 exitProgram
         end
 
+        def ranAsMemberOfGroupIsm : Bool
+            return (LibC.getuid == 0)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def secureModeEnabled
             return @settings.secureMode
 
@@ -68,16 +76,22 @@ module ISM
         end
 
         def start
-            loadSettingsFiles
-            loadSystemInformationFile
-            loadKernelOptionDatabase
-            loadNeededKernelOptions
-            loadSoftwareDatabase
-            loadInstalledSoftwareDatabase
-            loadPortsDatabase
-            loadMirrorsDatabase
-            loadFavouriteGroupsDatabase
-            checkEnteredArguments
+            if ranAsSuperUser
+                printNeedToBeRunAsNormalUserNotification
+            elsif !ranAsMemberOfGroupIsm
+                printNeedToBeRunAsMemberOfIsmGroupNotification
+            else
+                loadSettingsFiles
+                loadSystemInformationFile
+                loadKernelOptionDatabase
+                loadNeededKernelOptions
+                loadSoftwareDatabase
+                loadInstalledSoftwareDatabase
+                loadPortsDatabase
+                loadMirrorsDatabase
+                loadFavouriteGroupsDatabase
+                checkEnteredArguments
+            end
         end
 
         def loadNeededKernelOptions
@@ -730,8 +744,16 @@ module ISM
                 exitProgram
         end
 
-        def printNeedSuperUserAccessNotification
-            puts "#{ISM::Default::CommandLine::NeedSuperUserAccessText.colorize(:yellow)}"
+        def printNeedToBeRunAsNormalUserNotification
+            puts "#{ISM::Default::CommandLine::NeedToBeRunAsNormalUserText.colorize(:yellow)}"
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printNeedToBeRunAsMemberOfIsmGroupNotification
+            puts "#{ISM::Default::CommandLine::NeedToBeRunAsMemberOfIsmGroupText.colorize(:yellow)}"
 
             rescue error
                 printSystemCallErrorNotification(error)
