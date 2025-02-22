@@ -388,8 +388,8 @@ module ISM
                 Ism.exitProgram
     end
 
-    def archiveMd5sumName : String
-        return archiveName+archiveMd5sumExtensionName
+    def archiveSha512Name : String
+        return archiveName+archiveSha512ExtensionName
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -412,8 +412,8 @@ module ISM
                 Ism.exitProgram
     end
 
-    def archiveMd5sumExtensionName : String
-        return ISM::Default::SoftwareInformation::ArchiveMd5sumExtensionName
+    def archiveSha512ExtensionName : String
+        return ISM::Default::SoftwareInformation::ArchiveSha512ExtensionName
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -428,8 +428,8 @@ module ISM
                 Ism.exitProgram
     end
 
-    def sourcesMd5sumLink : String
-        return Ism.mirrorsSettings.sourcesLink+archiveMd5sumName
+    def sourcesSha512Link : String
+        return Ism.mirrorsSettings.sourcesLink+archiveSha512Name
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)

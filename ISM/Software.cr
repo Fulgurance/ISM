@@ -291,7 +291,7 @@ module ISM
             cleanWorkDirectoryPath
 
             downloadSources
-            downloadSourcesMd5sum
+            downloadSourcesSha512
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -308,10 +308,10 @@ module ISM
                 Ism.exitProgram
         end
 
-        def downloadSourcesMd5sum
-            downloadFile(   @information.sourcesMd5sumLink,
+        def downloadSourcesSha512
+            downloadFile(   @information.sourcesSha512Link,
                             ISM::Default::Software::SourcesArchiveBaseName,
-                            ISM::Default::Software::ArchiveMd5sumExtensionName)
+                            ISM::Default::Software::ArchiveSha512ExtensionName)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -411,29 +411,29 @@ module ISM
         def check
             Ism.notifyOfCheck(@information)
 
-            checkSourcesMd5sum
+            checkSourcesSha512
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
         end
 
-        def checkSourcesMd5sum
+        def checkSourcesSha512
             checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName,
-                        getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
+                        getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
         end
 
-        def checkFile(archive : String, md5sum : String)
-            digest = Digest::MD5.new
+        def checkFile(archive : String, sha512 : String)
+            digest = Digest::SHA512.new
             digest.file(archive)
-            archiveMd5sum = digest.hexfinal
+            archiveSha512 = digest.hexfinal
 
-            if archiveMd5sum != md5sum
-                Ism.notifyOfCheckError(archive, md5sum)
+            if archiveSha512 != sha512
+                Ism.notifyOfCheckError(archive, sha512)
                 Ism.exitProgram
             end
 
