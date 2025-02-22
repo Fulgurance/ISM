@@ -125,7 +125,7 @@ module ISM
         end
 
         def isAvailable : Bool
-            process = Process.new(  "git ls-remote",
+            process = Process.new(  "git ls-remote #{url}",
                                     shell: true,
                                     chdir: directoryPath)
             result = process.wait
