@@ -64,7 +64,7 @@ module ISM
         end
 
         def ranAsMemberOfGroupIsm : Bool
-            return (LibC.getuid == systemId)
+            return (LibC.getgid == systemId)
 
             rescue error
                 printSystemCallErrorNotification(error)
