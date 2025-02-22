@@ -5,8 +5,10 @@ module ISM
         include JSON::Serializable
 
         property crossToolchainFullyBuilt : Bool
+        property handleUserAccess : Bool
 
-        def initialize(@crossToolchainFullyBuilt = false)
+        def initialize( @crossToolchainFullyBuilt = false,
+                        @handleUserAccess = false)
         end
 
         def self.filePath : String
@@ -50,6 +52,14 @@ module ISM
         end
 
         def setCrossToolchainFullyBuilt(@crossToolchainFullyBuilt)
+            writeConfiguration
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def setHandleUserAccess(@handleUserAccess)
             writeConfiguration
 
             rescue error

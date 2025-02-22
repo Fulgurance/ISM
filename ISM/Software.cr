@@ -22,6 +22,14 @@ module ISM
                 Ism.exitProgram
         end
 
+        def recordHandleUserAccess
+            Ism.systemInformation.setHandleUserAccess(true)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         def version : String
             return @information.version
 
