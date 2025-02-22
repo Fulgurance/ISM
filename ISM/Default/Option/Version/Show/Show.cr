@@ -8,7 +8,7 @@ module ISM
 
                 ShortText = "-s"
                 LongText = "show"
-                Description = "Show the current ISM version"
+                Description = "Show the current #{ISM::Default::CommandLine::Name.upcase} version"
 
             end
             

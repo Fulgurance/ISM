@@ -8,7 +8,7 @@ module ISM
 
                 ShortText = "-se"
                 LongText = "settings"
-                Description = "Configure ISM settings"
+                Description = "Configure #{ISM::Default::CommandLine::Name.upcase} settings"
                 Options = [ ISM::Option::SettingsShow.new,
                             #Global options
                             ISM::Option::SettingsEnableBinaryTaskMode.new,

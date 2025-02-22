@@ -9,7 +9,7 @@ module ISM
                 ShortText = "-sy"
                 LongText = "synchronize"
                 Description = "Synchronize the software database"
-                SynchronizationTitle = "ISM start to synchronizing: "
+                SynchronizationTitle = "#{ISM::Default::CommandLine::Name.upcase} start to synchronizing: "
                 SynchronizationDoneText = "Done !"
                 SynchronizedText = "The database is synchronized"
                 NewPortsText = "New added ports:"

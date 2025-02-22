@@ -8,7 +8,7 @@ module ISM
 
                 ShortText = "-sdm"
                 LongText = "setdefaultmirror"
-                Description = "Set the default mirror for ISM"
+                Description = "Set the default mirror for #{ISM::Default::CommandLine::Name.upcase}"
                 SetText = "Setting the default mirror to "
 
             end

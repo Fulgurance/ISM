@@ -9,7 +9,7 @@ module ISM
                 ShortText = "-s"
                 LongText = "show"
                 Description = "Show the current settings"
-                TitleText = "Current ISM settings"
+                TitleText = "Current #{ISM::Default::CommandLine::Name.upcase} settings"
 
                 #Generic titles
                 ToolsPathText = "Tools path"
