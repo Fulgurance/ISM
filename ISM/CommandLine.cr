@@ -51,7 +51,7 @@ module ISM
             @green = UInt8.new(55)
         end
 
-        def systemId
+        def systemId : Int32
             return ISM::Default::CommandLine::SystemId
         end
 
@@ -64,14 +64,20 @@ module ISM
         end
 
         def ranAsMemberOfGroupIsm : Bool
-            return (LibC.getgid == systemId)
+            processResult = IO::Memory.new
+
+            process = Process.run(  "id -G",
+                                    output: processResult,
+                                    shell: true)
+
+            return processResult.to_s.strip.split(" ").includes?(systemId.to_s)
 
             rescue error
                 printSystemCallErrorNotification(error)
                 exitProgram
         end
 
-        def secureModeEnabled
+        def secureModeEnabled : Bool
             return @settings.secureMode
 
             rescue error
