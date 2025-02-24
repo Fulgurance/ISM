@@ -1569,7 +1569,7 @@ module ISM
         #Special function to improve performance (Internal use only)
         def installFileNoChroot(target : String, path : String, asRoot = false)
             requestedCommands = <<-CMD
-                                #{asRoot ? "sudo" : ""} install #{target} #{path}
+                                #{asRoot ? "sudo" : ""} install \"#{target}\" \"#{path}\"
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
@@ -1583,7 +1583,7 @@ module ISM
         #Special function to improve performance (Internal use only)
         def installDirectoryNoChroot(path : String, asRoot = false)
             requestedCommands = <<-CMD
-                                #{asRoot ? "sudo" : ""} install -d #{path}
+                                #{asRoot ? "sudo" : ""} install -d \"#{path}\"
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
@@ -1597,7 +1597,7 @@ module ISM
         #Special function to improve performance (Internal use only)
         def installSymlinkNoChroot(target : String, path : String, asRoot = false)
             requestedCommands = <<-CMD
-                                #{asRoot ? "sudo" : ""} cp -P #{target} #{path}
+                                #{asRoot ? "sudo" : ""} cp -P \"#{target}\" \"#{path}\"
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
