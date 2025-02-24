@@ -38,6 +38,36 @@ module ISM
                 Ism.exitProgram
         end
 
+        def enableInstallationByChroot
+            Ism.settings.setInstallByChroot(true)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def mountChrootKernelFileSystem
+            requestedCommands = <<-CMD
+                                mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1
+                                mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3
+                                mount -v --bind /dev #{Ism.settings.rootPath}/dev
+                                mount -v --bind /dev/pts #{Ism.settings.rootPath}/dev/pts
+                                mount -vt proc proc #{Ism.settings.rootPath}/proc
+                                mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys
+                                CMD
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
+
+            if !process.success?
+                Ism.notifyOfApplyPatchError(requestedCommands)
+                Ism.exitProgram
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         def version : String
             return @information.version
 

@@ -2781,7 +2781,7 @@ module ISM
                 exitProgram
         end
 
-        def runChrootTasks(chrootTasks, quiet = false) : Process::Status
+        def runChrootTasks(chrootTasks, quiet = false, asRoot = false) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
@@ -2791,7 +2791,7 @@ module ISM
                                     error: quietMode,
                                     shell: true)
 
-            process = Process.run(  "chroot --userspec=#{systemId}:#{systemId} #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
+            process = Process.run(  "chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
                                     output: quietMode,
                                     error: quietMode,
                                     shell: true)
@@ -2805,7 +2805,7 @@ module ISM
                 exitProgram
         end
 
-        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
+        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             environmentCommand = String.new
@@ -2829,7 +2829,7 @@ module ISM
                 cd #{path} && #{environmentCommand} #{command}
                 CODE
 
-                process = runChrootTasks(chrootCommand, quiet)
+                process = runChrootTasks(chrootCommand, quiet, asRoot)
             else
                 environmentHash = Hash(String, String).new
 
@@ -2845,7 +2845,7 @@ module ISM
                     end
                 end
 
-                process = Process.run(  command,
+                process = Process.run(  "#{asRoot ? "sudo " : ""}#{command}",
                                         output: quietMode,
                                         error: quietMode,
                                         shell: true,
