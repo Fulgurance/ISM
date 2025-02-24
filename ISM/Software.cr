@@ -30,6 +30,14 @@ module ISM
                 Ism.exitProgram
         end
 
+        def systemHandleUserAccess : Bool
+            return Ism.systemInformation.handleUserAccess
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         def version : String
             return @information.version
 
@@ -1578,12 +1586,12 @@ module ISM
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
                             installDirectoryNoChroot(   path:   finalDestination,
-                                                        asRoot: handleUserAccess)
+                                                        asRoot: systemHandleUserAccess)
                         end
                     else
                         installFileNoChroot(target: entry,
                                             path:   finalDestination,
-                                            asRoot: handleUserAccess)
+                                            asRoot: systemHandleUserAccess)
                     end
 
                 end
@@ -1591,8 +1599,8 @@ module ISM
 
             #Strip the file if needed
             if stripFiles
-                stripFileListNoChroot(  fileList: fileList,
-                                        asRoot: handleUserAccess)
+                stripFileListNoChroot(  fileList:   fileList,
+                                        asRoot:     systemHandleUserAccess)
             end
 
             if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
