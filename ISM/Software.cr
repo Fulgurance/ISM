@@ -1604,7 +1604,7 @@ module ISM
                         end
                     else
                         if File.symlink?(entry)
-                            installSymlinkNoChroot( starget: entry,
+                            installSymlinkNoChroot( target: entry,
                                                     path:   finalDestination,
                                                     asRoot: systemHandleUserAccess)
                         else
