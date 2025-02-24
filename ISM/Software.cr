@@ -1638,8 +1638,8 @@ module ISM
                         # moveFileNoChroot(   path: entry,
                         #                     newPath:   finalDestination,
                         #                     asRoot: systemHandleUserAccess)
-                        moveFile(   path: entry,
-                                    newPath:   finalDestination)
+                        moveFileNoChroot(   path: entry,
+                                            newPath:   finalDestination)
                     end
 
                 end
