@@ -1621,11 +1621,11 @@ module ISM
                         end
                     else
                         if File.symlink?(entry)
-                            installSymlink( path: entry,
-                                            newPath:   finalDestination)
+                            installSymlink( target: entry,
+                                            path:   finalDestination)
                         else
-                            installFile(path: entry,
-                                        newPath:   finalDestination)
+                            installFile(target: entry,
+                                        path:   finalDestination)
                         end
                     end
 
