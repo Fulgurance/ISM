@@ -1563,6 +1563,20 @@ module ISM
             end
         end
 
+        #Special function to improve performance (Internal use only)
+        def installSymlinkNoChroot(target : String, path : String, asRoot = false)
+            requestedCommands = <<-CMD
+                                #{asRoot ? "sudo" : ""} cp -P #{target} #{path}
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def install(preserveLibtoolArchives = false, stripFiles = true)
             #MANAGE MOUNT/UMOUNT READ ONLY FILESYSTEM PARTS (BIN/SBIN/LIBS)
 
@@ -1589,9 +1603,15 @@ module ISM
                                                         asRoot: systemHandleUserAccess)
                         end
                     else
-                        installFileNoChroot(target: entry,
-                                            path:   finalDestination,
-                                            asRoot: systemHandleUserAccess)
+                        if File.symlink?(entry)
+                            installSymlinkNoChroot( starget: entry,
+                                                    path:   finalDestination,
+                                                    asRoot: systemHandleUserAccess)
+                        else
+                            installFileNoChroot(target: entry,
+                                                path:   finalDestination,
+                                                asRoot: systemHandleUserAccess)
+                        end
                     end
 
                 end
