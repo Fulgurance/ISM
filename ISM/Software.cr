@@ -592,18 +592,6 @@ module ISM
             end
         end
 
-         #Special function to improve performance (Internal use only)
-        def stripFileListNoChroot(fileList : Array(String))
-            requestedCommands = <<-CMD
-                                strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
-                                CMD
-
-            process = Process.run(requestedCommands, shell: true)
-
-            #No exit process because if the file can't be strip, we can just keep going
-            rescue
-        end
-
         def fileUpdateContent(path : String, data : String)
             requestedCommands = <<-CMD
                                 grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
@@ -1527,9 +1515,48 @@ module ISM
                 Ism.exitProgram
         end
 
+        #Special function to improve performance (Internal use only)
+        def stripFileListNoChroot(fileList : Array(String), asRoot = false)
+            requestedCommands = <<-CMD
+                                #{asRoot ? "sudo" : ""} strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            #No exit process because if the file can't be strip, we can just keep going
+            rescue
+        end
+
+        #Special function to improve performance (Internal use only)
+        def installFileNoChroot(target : String, path : String, asRoot = false)
+            requestedCommands = <<-CMD
+                                #{asRoot ? "sudo" : ""} install #{target} #{path}
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        #Special function to improve performance (Internal use only)
+        def installDirectoryNoChroot(path : String, asRoot = false)
+            requestedCommands = <<-CMD
+                                #{asRoot ? "sudo" : ""} install -d #{path}
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def install(preserveLibtoolArchives = false, stripFiles = true)
             #MANAGE MOUNT/UMOUNT READ ONLY FILESYSTEM PARTS (BIN/SBIN/LIBS)
-            #Ism.systemInformation.handleUserAccess
 
             Ism.notifyOfInstall(@information)
 
@@ -1550,10 +1577,13 @@ module ISM
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            makeDirectoryNoChroot(finalDestination)
+                            installDirectoryNoChroot(   path:   finalDestination,
+                                                        asRoot: handleUserAccess)
                         end
                     else
-                        moveFileNoChroot(entry,finalDestination)
+                        installFileNoChroot(target: entry,
+                                            path:   finalDestination,
+                                            asRoot: handleUserAccess)
                     end
 
                 end
@@ -1561,7 +1591,8 @@ module ISM
 
             #Strip the file if needed
             if stripFiles
-                stripFileListNoChroot(fileList)
+                stripFileListNoChroot(  fileList: fileList,
+                                        asRoot: handleUserAccess)
             end
 
             if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
