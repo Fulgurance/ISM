@@ -884,7 +884,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, asRoot: true)
                 Ism.exitProgram
             end
         end
@@ -895,7 +895,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, asRoot: true)
                 Ism.exitProgram
             end
         end
