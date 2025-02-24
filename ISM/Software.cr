@@ -1630,13 +1630,16 @@ module ISM
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            makeDirectoryNoChroot(  path:   finalDestination,
-                                                    asRoot: systemHandleUserAccess)
+                            # makeDirectoryNoChroot(  path:   finalDestination,
+                            #                         asRoot: systemHandleUserAccess)
+                            makeDirectoryNoChroot(  path:   finalDestination)
                         end
                     else
-                        moveFileNoChroot(   path: entry,
-                                            newPath:   finalDestination,
-                                            asRoot: systemHandleUserAccess)
+                        # moveFileNoChroot(   path: entry,
+                        #                     newPath:   finalDestination,
+                        #                     asRoot: systemHandleUserAccess)
+                        moveFile(   path: entry,
+                                    newPath:   finalDestination)
                     end
 
                 end
