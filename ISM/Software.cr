@@ -1556,33 +1556,44 @@ module ISM
             rescue
         end
 
-        # #Special function to improve performance (Internal use only)
-        # def installFileNoChroot(target : String, path : String, asRoot = false)
-        #     requestedCommands = <<-CMD
-        #                         #{asRoot ? "sudo" : ""} install \"#{target}\" \"#{path}\"
-        #                         CMD
-        #
-        #     process = Process.run(requestedCommands, shell: true)
-        #
-        #     if !process.success?
-        #         Ism.notifyOfRunSystemCommandError(requestedCommands)
-        #         Ism.exitProgram
-        #     end
-        # end
-        #
-        # #Special function to improve performance (Internal use only)
-        # def installDirectoryNoChroot(path : String, asRoot = false)
-        #     requestedCommands = <<-CMD
-        #                         #{asRoot ? "sudo" : ""} install -d \"#{path}\"
-        #                         CMD
-        #
-        #     process = Process.run(requestedCommands, shell: true)
-        #
-        #     if !process.success?
-        #         Ism.notifyOfRunSystemCommandError(requestedCommands)
-        #         Ism.exitProgram
-        #     end
-        # end
+        def installFile(target : String, path : String)
+            requestedCommands = <<-CMD
+                                #{asRoot ? "sudo" : ""} install \"#{target}\" \"#{path}\"
+                                CMD
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def installSymlink(target : String, path : String)
+            requestedCommands = <<-CMD
+                                #{asRoot ? "sudo" : ""} mv \"#{target}\" \"#{path}\"
+                                CMD
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def installDirectory(path : String)
+            requestedCommands = <<-CMD
+                                #{asRoot ? "sudo" : ""} install -d \"#{path}\"
+                                CMD
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
 
         def install(preserveLibtoolArchives = false, stripFiles = true)
             #MANAGE MOUNT/UMOUNT READ ONLY FILESYSTEM PARTS (BIN/SBIN/LIBS)
@@ -1606,13 +1617,16 @@ module ISM
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            makeDirectory(  path:   finalDestination,
-                                            asRoot: systemHandleUserAccess)
+                            installDirectory(finalDestination)
                         end
                     else
-                        moveFile(   path: entry,
-                                    newPath:   finalDestination,
-                                    asRoot: systemHandleUserAccess)
+                        if File.symlink?(entry)
+                            installSymlink( path: entry,
+                                            newPath:   finalDestination)
+                        else
+                            installFile(path: entry,
+                                        newPath:   finalDestination)
+                        end
                     end
 
                 end
