@@ -54,7 +54,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
