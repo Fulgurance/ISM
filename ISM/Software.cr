@@ -30,6 +30,10 @@ module ISM
                 Ism.exitProgram
         end
 
+        def systemId : Int32
+            return Ism.systemId
+        end
+
         def systemHandleUserAccess : Bool
             return Ism.systemInformation.handleUserAccess
 
