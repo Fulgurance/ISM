@@ -46,17 +46,84 @@ module ISM
                 Ism.exitProgram
         end
 
-        def prepareChrootFileSystem
-            requestedCommands = <<-CMD
-                                mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1 && mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3 && mount -v --bind /dev #{Ism.settings.rootPath}/dev && mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts && mount -vt proc proc #{Ism.settings.rootPath}/proc && mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys && cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf
-                                CMD
-
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
+        def prepareChrootDevConsole
+            process = Process.run(  "sudo mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1",
+                                    shell: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
+        end
+
+        def prepareChrootDevNull
+            process = Process.run(  "sudo mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3",
+                                    shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def prepareChrootDev
+            process = Process.run(  "sudo mount -v --bind /dev #{Ism.settings.rootPath}/dev",
+                                    shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def prepareChrootDevPts
+            process = Process.run(  "sudo mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts",
+                                    shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def prepareChrootProc
+            process = Process.run(  "sudo mount -vt proc proc #{Ism.settings.rootPath}/proc",
+                                    shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def prepareChrootSysfs
+            process = Process.run(  "sudo mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys",
+                                    shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def prepareChrootNetworkConfiguration
+            process = Process.run(  "sudo cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf",
+                                    shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def prepareChrootFileSystem
+            prepareChrootDevConsole
+            prepareChrootDevNull
+            prepareChrootDev
+            prepareChrootDevPts
+            prepareChrootProc
+            prepareChrootSysfs
+            prepareChrootNetworkConfiguration
         end
 
         def version : String
