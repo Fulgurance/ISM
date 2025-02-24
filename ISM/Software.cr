@@ -881,10 +881,10 @@ module ISM
         def runChmodCommand(arguments = String.new, path = String.new)
             requestedCommands = "chmod #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path, asRoot: true)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, asRoot: true)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
                 Ism.exitProgram
             end
         end
@@ -892,10 +892,10 @@ module ISM
         def runChownCommand(arguments = String.new, path = String.new)
             requestedCommands = "chown #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path, asRoot: true)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, asRoot: true)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
                 Ism.exitProgram
             end
         end
