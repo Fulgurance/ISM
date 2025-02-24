@@ -2791,7 +2791,7 @@ module ISM
                                     error: quietMode,
                                     shell: true)
 
-            process = Process.run(  "chroot #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
+            process = Process.run(  "chroot --userspec=#{systemId}:#{systemId} #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
                                     output: quietMode,
                                     error: quietMode,
                                     shell: true)
