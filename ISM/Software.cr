@@ -47,7 +47,9 @@ module ISM
         end
 
         def prepareChrootDevConsole
-            process = Process.run(  "sudo mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1",
+            requestedCommands = "sudo mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
+
+            process = Process.run(  requestedCommands,
                                     shell: true)
 
             if !process.success?
@@ -57,7 +59,9 @@ module ISM
         end
 
         def prepareChrootDevNull
-            process = Process.run(  "sudo mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3",
+            requestedCommands = "sudo mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
+
+            process = Process.run(  requestedCommands,
                                     shell: true)
 
             if !process.success?
@@ -67,7 +71,9 @@ module ISM
         end
 
         def prepareChrootDev
-            process = Process.run(  "sudo mount -v --bind /dev #{Ism.settings.rootPath}/dev",
+            requestedCommands = "sudo mount -v --bind /dev #{Ism.settings.rootPath}/dev"
+
+            process = Process.run(  requestedCommands,
                                     shell: true)
 
             if !process.success?
@@ -77,7 +83,9 @@ module ISM
         end
 
         def prepareChrootDevPts
-            process = Process.run(  "sudo mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts",
+            requestedCommands = "sudo mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
+
+            process = Process.run(  requestedCommands,
                                     shell: true)
 
             if !process.success?
@@ -87,7 +95,9 @@ module ISM
         end
 
         def prepareChrootProc
-            process = Process.run(  "sudo mount -vt proc proc #{Ism.settings.rootPath}/proc",
+            requestedCommands = "sudo mount -vt proc proc #{Ism.settings.rootPath}/proc"
+
+            process = Process.run(  requestedCommands,
                                     shell: true)
 
             if !process.success?
@@ -97,7 +107,9 @@ module ISM
         end
 
         def prepareChrootSysfs
-            process = Process.run(  "sudo mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys",
+            requestedCommands = "sudo mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
+
+            process = Process.run(  requestedCommands,
                                     shell: true)
 
             if !process.success?
@@ -107,7 +119,9 @@ module ISM
         end
 
         def prepareChrootNetworkConfiguration
-            process = Process.run(  "sudo cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf",
+            requestedCommands = "sudo cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
+
+            process = Process.run(  requestedCommands,
                                     shell: true)
 
             if !process.success?
