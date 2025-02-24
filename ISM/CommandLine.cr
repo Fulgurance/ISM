@@ -77,14 +77,6 @@ module ISM
                 exitProgram
         end
 
-        def secureModeEnabled : Bool
-            return @settings.secureMode
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
         def start
             if ranAsSuperUser
                 printNeedToBeRunAsNormalUserNotification

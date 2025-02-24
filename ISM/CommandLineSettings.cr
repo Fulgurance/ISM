@@ -5,7 +5,6 @@ module ISM
         include JSON::Serializable
 
         #Generic parameters
-        property    secureMode : Bool
         property    binaryTaskMode : Bool
         property    installByChroot : Bool
         property    rootPath : String
@@ -61,7 +60,6 @@ module ISM
         property    chrootVariantId : String
 
         def initialize( #Generic parameters
-                        @secureMode = ISM::Default::CommandLineSettings::SecureMode,
                         @binaryTaskMode = ISM::Default::CommandLineSettings::BinaryTaskMode,
                         @installByChroot = ISM::Default::CommandLineSettings::InstallByChroot,
                         @rootPath = ISM::Default::CommandLineSettings::RootPath,
@@ -151,7 +149,6 @@ module ISM
                                     path : String,
 
                                     #Generic parameters
-                                    secureMode : Bool,
                                     binaryTaskMode : Bool,
                                     installByChroot : Bool,
                                     rootPath : String,
@@ -213,7 +210,6 @@ module ISM
             end
 
             settings = {#Generic parameters
-                        "secureMode" => secureMode,
                         "binaryTaskMode" => binaryTaskMode,
                         "installByChroot" => installByChroot,
                         "rootPath" => rootPath,
@@ -347,7 +343,6 @@ module ISM
                                             self.class.filePath,
 
                                             #Generic parameters
-                                            @secureMode,
                                             @binaryTaskMode,
                                             @installByChroot,
                                             @rootPath,
@@ -705,14 +700,6 @@ module ISM
         #Setter methods
 
         #   Generic
-        def setSecureMode(@secureMode)
-            writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
         def setBinaryTaskMode(@binaryTaskMode)
             writeSystemConfiguration
 
