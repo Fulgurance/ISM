@@ -46,7 +46,7 @@ module ISM
                 Ism.exitProgram
         end
 
-        def mountChrootKernelFileSystem
+        def prepareChrootFileSystem
             requestedCommands = <<-CMD
                                 mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1
                                 mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3
@@ -54,6 +54,7 @@ module ISM
                                 mount -v --bind /dev/pts #{Ism.settings.rootPath}/dev/pts
                                 mount -vt proc proc #{Ism.settings.rootPath}/proc
                                 mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys
+                                cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf
                                 CMD
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
