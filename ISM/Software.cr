@@ -1558,7 +1558,7 @@ module ISM
 
         def installFile(target : String, path : String)
             requestedCommands = <<-CMD
-                                #{asRoot ? "sudo" : ""} install \"#{target}\" \"#{path}\"
+                                install \"#{target}\" \"#{path}\"
                                 CMD
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
@@ -1571,7 +1571,7 @@ module ISM
 
         def installSymlink(target : String, path : String)
             requestedCommands = <<-CMD
-                                #{asRoot ? "sudo" : ""} mv \"#{target}\" \"#{path}\"
+                                mv \"#{target}\" \"#{path}\"
                                 CMD
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
@@ -1584,7 +1584,7 @@ module ISM
 
         def installDirectory(path : String)
             requestedCommands = <<-CMD
-                                #{asRoot ? "sudo" : ""} install -d \"#{path}\"
+                                install -d \"#{path}\"
                                 CMD
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
