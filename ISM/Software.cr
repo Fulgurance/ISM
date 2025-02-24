@@ -1632,7 +1632,7 @@ module ISM
                         if !Dir.exists?(finalDestination)
                             # makeDirectoryNoChroot(  path:   finalDestination,
                             #                         asRoot: systemHandleUserAccess)
-                            makeDirectoryNoChroot(  path:   finalDestination)
+                            makeDirectoryNoChroot(finalDestination)
                         end
                     else
                         # moveFileNoChroot(   path: entry,
