@@ -14,7 +14,6 @@ module ISM
                 #Generic titles
                 ToolsPathText = "Tools path"
                 SourcesPathText = "Sources path"
-                SecureModeText = "Secure mode"
                 BinaryTaskModeText = "Binary task mode"
                 InstallByChrootText = "Install by chroot"
                 RootPathText = "Root path"

@@ -278,7 +278,6 @@ module ISM
             self.class.writeConfiguration(  #File path
                                             @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
                                             #Generic parameters
-                                            ISM::Default::CommandLineSettings::SecureMode,
                                             ISM::Default::CommandLineSettings::BinaryTaskMode,
                                             ISM::Default::CommandLineSettings::InstallByChroot,
                                             ISM::Default::CommandLineSettings::RootPath,
