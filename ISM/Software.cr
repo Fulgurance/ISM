@@ -905,7 +905,7 @@ module ISM
 
             requestedCommands = "useradd #{prefix.empty? ? arguments : prefix+arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -918,7 +918,7 @@ module ISM
 
             requestedCommands = "userdel #{prefix.empty? ? arguments : prefix+arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -931,7 +931,7 @@ module ISM
 
             requestedCommands = "groupadd #{prefix.empty? ? arguments : prefix+arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -944,7 +944,7 @@ module ISM
 
             requestedCommands = "groupdel #{prefix.empty? ? arguments : prefix+arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
