@@ -2117,10 +2117,10 @@ module ISM
         def buildTasksFile
             processResult = IO::Memory.new
 
-            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task} -f json",
                         error: processResult,
                         shell: true,
-                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
+                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}") do |process|
                 loop do
                     playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
                     Fiber.yield
@@ -2134,7 +2134,7 @@ module ISM
                 taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
 
                 showTaskCompilationFailedMessage
-                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
+                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr")
                 exitProgram
             end
 
@@ -2155,7 +2155,7 @@ module ISM
                                     output: logWriter,
                                     error: logWriter,
                                     shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}")
 
             if logEnabled
 
@@ -2597,7 +2597,7 @@ module ISM
         end
 
         def generateTasksFile(tasks : String)
-            File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
+            File.write("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -2784,19 +2784,19 @@ module ISM
         def runChrootTasks(chrootTasks, quiet = false, asRoot = false) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
-            File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
+            File.write(@settings.rootPath+ISM::Default::Path::TemporaryDirectory+ISM::Default::Filename::Task, chrootTasks)
 
-            process = Process.run(  "sudo chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+            process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                     output: quietMode,
                                     error: quietMode,
                                     shell: true)
 
-            process = Process.run(  "sudo chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
+            process = Process.run(  "sudo chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                     output: quietMode,
                                     error: quietMode,
                                     shell: true)
 
-            File.delete(@settings.rootPath+ISM::Default::Filename::Task)
+            File.delete(@settings.rootPath+ISM::Default::Path::TemporaryDirectory+ISM::Default::Filename::Task)
 
             return process
 
