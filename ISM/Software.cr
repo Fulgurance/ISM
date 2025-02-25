@@ -1643,10 +1643,10 @@ module ISM
 
         def installFile(target : String, path : String)
             requestedCommands = <<-CMD
-                                install \"#{target}\" \"#{path}\"
+                                #{systemHandleUserAccess ? "sudo " : ""} install \"#{target}\" \"#{path}\"
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: systemHandleUserAccess)
+            process = Process.run(requestedCommands, shell: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1656,10 +1656,10 @@ module ISM
 
         def installSymlink(target : String, path : String)
             requestedCommands = <<-CMD
-                                mv \"#{target}\" \"#{path}\"
+                                #{systemHandleUserAccess ? "sudo " : ""} mv \"#{target}\" \"#{path}\"
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: systemHandleUserAccess)
+            process = Process.run(requestedCommands, shell: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1669,10 +1669,10 @@ module ISM
 
         def installDirectory(path : String)
             requestedCommands = <<-CMD
-                                install -d \"#{path}\"
+                                #{systemHandleUserAccess ? "sudo " : ""} install -d \"#{path}\"
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: systemHandleUserAccess)
+            process = Process.run(requestedCommands, shell: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
