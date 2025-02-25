@@ -2032,6 +2032,7 @@ module ISM
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
+                    Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
 
                     limit = targets.size
@@ -2194,6 +2195,7 @@ module ISM
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
+                    Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
                     Ism.loadInstalledSoftwareDatabase
 
