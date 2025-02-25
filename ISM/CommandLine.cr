@@ -2786,12 +2786,12 @@ module ISM
 
             File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
-            process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+            process = Process.run(  "sudo chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                     output: quietMode,
                                     error: quietMode,
                                     shell: true)
 
-            process = Process.run(  "chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
+            process = Process.run(  "sudo chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
                                     output: quietMode,
                                     error: quietMode,
                                     shell: true)
