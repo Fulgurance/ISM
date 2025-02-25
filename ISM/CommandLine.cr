@@ -930,6 +930,23 @@ module ISM
                 exitProgram
         end
 
+        def printSecurityNotification(reason : String, details : String)
+            puts "#{ISM::Default::CommandLine::SecurityNotificationTitleText.colorize(:red)}\n#{ISM::Default::CommandLine::SecurityNotificationReasonText}: #{reason.colorize(:yellow)}\n#{ISM::Default::CommandLine::SecurityNotificationDetailsText}: #{details.colorize(:green)}"
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printChrootSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::ChrootSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::ChrootSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
 
@@ -2792,6 +2809,8 @@ module ISM
                                     output: quietMode,
                                     error: quietMode,
                                     shell: true)
+
+            printChrootSecurityNotification
 
             process = Process.run(  "sudo chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                     output: quietMode,
