@@ -19,7 +19,7 @@ module ISM
                 Ism.exitProgram
         end
 
-        def self.generateConfiguration(path = filePath)
+        def self.generateConfiguration(path = self.filePath)
             file = File.open(path,"w")
             self.new.to_json(file)
             file.close
@@ -29,7 +29,7 @@ module ISM
                 Ism.exitProgram
         end
 
-        def self.loadConfiguration(path = filePath)
+        def self.loadConfiguration(path = self.filePath)
             if !File.exists?(path)
                 generateConfiguration(path)
             end
