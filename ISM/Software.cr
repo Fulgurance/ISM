@@ -1641,6 +1641,7 @@ module ISM
             rescue
         end
 
+        #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String)
             requestedCommands = <<-CMD
                                 #{systemHandleUserAccess ? "sudo" : ""} install \"#{target}\" \"#{path}\"
@@ -1654,6 +1655,7 @@ module ISM
             end
         end
 
+        #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
             requestedCommands = <<-CMD
                                 #{systemHandleUserAccess ? "sudo" : ""} mv \"#{target}\" \"#{path}\"
@@ -1667,6 +1669,7 @@ module ISM
             end
         end
 
+        #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String)
             requestedCommands = <<-CMD
                                 #{systemHandleUserAccess ? "sudo" : ""} install -d \"#{path}\"
