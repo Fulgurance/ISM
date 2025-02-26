@@ -931,7 +931,7 @@ module ISM
         end
 
         def printSecurityNotification(reason : String, details : String)
-            puts "#{ISM::Default::CommandLine::SecurityNotificationTitleText.colorize(:red)}\n#{ISM::Default::CommandLine::SecurityNotificationReasonText}: #{reason.colorize(:yellow)}\n#{ISM::Default::CommandLine::SecurityNotificationDetailsText}: #{details.colorize(:green)}"
+            puts "#{ISM::Default::CommandLine::SecurityNotificationTitleText.colorize(:red)}\n#{ISM::Default::CommandLine::SecurityNotificationReasonText} #{reason.colorize(:yellow)}\n#{ISM::Default::CommandLine::SecurityNotificationDetailsText} #{details.colorize(:green)}"
 
             rescue error
                 printSystemCallErrorNotification(error)
