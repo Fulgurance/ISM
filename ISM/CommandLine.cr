@@ -2618,6 +2618,10 @@ module ISM
         end
 
         def generateTasksFile(tasks : String)
+            if !Dir.exists?("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}")
+                Dir.mkdir_p("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}")
+            end
+
             File.write("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
 
             rescue error
