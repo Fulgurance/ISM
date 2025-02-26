@@ -1683,6 +1683,34 @@ module ISM
             end
         end
 
+        #Special function for the uninstallation process without chroot (Internal use only)
+        def uninstallFile(path : String)
+            requestedCommands = <<-CMD
+                                #{systemHandleUserAccess ? "sudo" : ""} rm \"#{path}\"
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        #Special function for the uninstallation process without chroot (Internal use only)
+        def uninstallDirectory(path : String)
+            requestedCommands = <<-CMD
+                                #{systemHandleUserAccess ? "sudo" : ""} rm -r \"#{path}\"
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def install(preserveLibtoolArchives = false, stripFiles = true)
             #MANAGE MOUNT/UMOUNT READ ONLY FILESYSTEM PARTS (BIN/SBIN/LIBS)
 
