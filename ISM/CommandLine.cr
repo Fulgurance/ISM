@@ -2802,6 +2802,17 @@ module ISM
                 exitProgram
         end
 
+        def stillHaveSudoAccess : Bool
+            process = Process.run(  "sudo -n true 2>/dev/null",
+                                    shell: true)
+
+            return (process.exit_code == 0)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def runChrootTasks(chrootTasks, quiet = false, asRoot = false) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
@@ -2812,7 +2823,9 @@ module ISM
                                     error: quietMode,
                                     shell: true)
 
-            printChrootSecurityNotification
+            if !stillHaveSudoAccess
+                printChrootSecurityNotification
+            end
 
             process = Process.run(  "sudo chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                     output: quietMode,
