@@ -951,7 +951,7 @@ module ISM
 
         def printPrepareChrootDevConsoleSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationReasonText,
-                                        ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityDetailsText)
+                                        ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationDetailsText)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -960,7 +960,7 @@ module ISM
 
         def printPrepareChrootDevNullSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationReasonText,
-                                        ISM::Default::CommandLine::PrepareChrootDevNullSecurityDetailsText)
+                                        ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationDetailsText)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -969,7 +969,7 @@ module ISM
 
         def printPrepareChrootDevSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationReasonText,
-                                        ISM::Default::CommandLine::PrepareChrootDevSecurityDetailsText)
+                                        ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationDetailsText)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -978,7 +978,7 @@ module ISM
 
         def printPrepareChrootDevPtsSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationReasonText,
-                                        ISM::Default::CommandLine::PrepareChrootDevPtsSecurityDetailsText)
+                                        ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationDetailsText)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -987,7 +987,7 @@ module ISM
 
         def printPrepareChrootProcSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationReasonText,
-                                        ISM::Default::CommandLine::PrepareChrootProcSecurityDetailsText)
+                                        ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationDetailsText)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -996,7 +996,7 @@ module ISM
 
         def printPrepareChrootSysSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationReasonText,
-                                        ISM::Default::CommandLine::PrepareChrootSysSecurityDetailsText)
+                                        ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationDetailsText)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -1005,7 +1005,7 @@ module ISM
 
         def printPrepareChrootNetworkConfigurationSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationReasonText,
-                                        ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityDetailsText)
+                                        ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationDetailsText)
 
             rescue error
                 printSystemCallErrorNotification(error)
