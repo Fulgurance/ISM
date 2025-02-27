@@ -1363,7 +1363,7 @@ module ISM
 
         def runLdconfigCommand(arguments = String.new)
             if !Ism.stillHaveSudoAccess
-                Ism.printRunLdconfigSecurityNotification
+                Ism.printRunLdconfigCommandSecurityNotification
             end
 
             requestedCommands = "ldconfig #{arguments}"
