@@ -1102,6 +1102,24 @@ module ISM
                 exitProgram
         end
 
+        def printRunPwconvCommandSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::RunPwconvCommandSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::RunPwconvCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunGrpconvCommandSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::RunGrpconvCommandSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::RunGrpconvCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
 

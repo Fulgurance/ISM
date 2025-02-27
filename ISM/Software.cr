@@ -1207,9 +1207,13 @@ module ISM
         end
 
         def runPwconvCommand(arguments = String.new)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunPwconvCommandSecurityNotification
+            end
+
             requestedCommands = "pwconv #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1218,12 +1222,16 @@ module ISM
         end
 
         def runGrpconvCommand(arguments = String.new)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunGrpconvCommandSecurityNotification
+            end
+
             requestedCommands = "grpconv #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.notifyOfRunSystemCommandError(requestedCommands, asRoot: true)
                 Ism.exitProgram
             end
         end
