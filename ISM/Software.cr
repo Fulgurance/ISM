@@ -915,6 +915,21 @@ module ISM
             end
         end
 
+        def generateEmptyPasswdFile
+            if !Ism.stillHaveSudoAccess
+                Ism.printGenerateEmptyPasswdFileSecurityNotification
+            end
+
+            requestedCommands = "touch /usr/bin/passwd"
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
         def copyFile(path : String, targetPath : String)
             requestedCommands = "cp #{path} #{targetPath}"
 
@@ -1280,9 +1295,13 @@ module ISM
         end
 
         def runLocaledefCommand(arguments : String)
+            if !Ism.stillHaveSudoAccess
+                printRunLocaledefCommandSecurityNotification
+            end
+
             requestedCommands = "localedef #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1336,7 +1355,7 @@ module ISM
 
         def runLdconfigCommand(arguments = String.new)
             if !Ism.stillHaveSudoAccess
-                Ism.printUninstallFileSecurityNotification
+                Ism.printRunLdconfigSecurityNotification
             end
 
             requestedCommands = "ldconfig #{arguments}"
@@ -1553,7 +1572,7 @@ module ISM
 
         def runDircolorsCommand(arguments = String.new)
             if !Ism.stillHaveSudoAccess
-                Ism.printUninstallFileSecurityNotification
+                Ism.printRunDircolorsCommandSecurityNotification
             end
 
             requestedCommands = "dircolors #{arguments}"

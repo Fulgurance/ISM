@@ -1066,6 +1066,42 @@ module ISM
                 exitProgram
         end
 
+        def printGenerateEmptyPasswdFileSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::GenerateEmptyPasswdFileSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::GenerateEmptyPasswdFileSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunLocaledefCommandSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::RunLocaledefCommandSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::RunLocaledefCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunDircolorsCommandSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::RunDircolorsCommandSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::RunDircolorsCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunLdconfigCommandSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::RunLdconfigCommandSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::RunLdconfigCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
 
