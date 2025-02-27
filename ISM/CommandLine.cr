@@ -949,6 +949,124 @@ module ISM
                 exitProgram
         end
 
+        def printPrepareChrootDevConsoleSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootDevNullSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::PrepareChrootDevNullSecurityDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootDevSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::PrepareChrootDevSecurityDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootDevPtsSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::PrepareChrootDevPtsSecurityDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootProcSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::PrepareChrootProcSecurityDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootSysSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::PrepareChrootSysSecurityDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootNetworkConfigurationSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printStripInstalledFilesSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printInstallFileSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::InstallFileSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::InstallFileSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printInstallSymlinkSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::InstallSymlinkSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::InstallSymlinkSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printInstallDirectorySecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::InstallDirectorySecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::InstallDirectorySecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printUninstallFileSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::UninstallFileSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::UninstallFileSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printUninstallDirectorySecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::UninstallDirectorySecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::UninstallDirectorySecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        #----------------------
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
 
@@ -2883,6 +3001,10 @@ module ISM
                             String.new
                         end
                     end
+                end
+
+                if !stillHaveSudoAccess
+                    printChrootSecurityNotification
                 end
 
                 process = Process.run(  "#{asRoot ? "sudo " : ""}#{command}",

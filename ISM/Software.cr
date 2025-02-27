@@ -51,6 +51,10 @@ module ISM
         end
 
         def prepareChrootDevConsole
+            if !Ism.stillHaveSudoAccess
+                Ism.printPrepareChrootDevConsoleSecurityNotification
+            end
+
             requestedCommands = "sudo mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
             process = Process.run(  requestedCommands,
@@ -63,6 +67,10 @@ module ISM
         end
 
         def prepareChrootDevNull
+            if !Ism.stillHaveSudoAccess
+                Ism.printPrepareChrootDevNullSecurityNotification
+            end
+
             requestedCommands = "sudo mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
             process = Process.run(  requestedCommands,
@@ -75,6 +83,10 @@ module ISM
         end
 
         def prepareChrootDev
+            if !Ism.stillHaveSudoAccess
+                Ism.printPrepareChrootDevSecurityNotification
+            end
+
             requestedCommands = "sudo mount -v --bind /dev #{Ism.settings.rootPath}/dev"
 
             process = Process.run(  requestedCommands,
@@ -87,6 +99,10 @@ module ISM
         end
 
         def prepareChrootDevPts
+            if !Ism.stillHaveSudoAccess
+                Ism.printPrepareChrootDevPtsSecurityNotification
+            end
+
             requestedCommands = "sudo mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
             process = Process.run(  requestedCommands,
@@ -99,6 +115,10 @@ module ISM
         end
 
         def prepareChrootProc
+            if !Ism.stillHaveSudoAccess
+                Ism.printPrepareChrootProcSecurityNotification
+            end
+
             requestedCommands = "sudo mount -vt proc proc #{Ism.settings.rootPath}/proc"
 
             process = Process.run(  requestedCommands,
@@ -111,6 +131,10 @@ module ISM
         end
 
         def prepareChrootSysfs
+            if !Ism.stillHaveSudoAccess
+                Ism.printPrepareChrootSysSecurityNotification
+            end
+
             requestedCommands = "sudo mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
 
             process = Process.run(  requestedCommands,
@@ -123,6 +147,10 @@ module ISM
         end
 
         def prepareChrootNetworkConfiguration
+            if !Ism.stillHaveSudoAccess
+                Ism.printPrepareChrootNetworkConfigurationSecurityNotification
+            end
+
             requestedCommands = "sudo cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
             process = Process.run(  requestedCommands,
@@ -1631,6 +1659,10 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String), asRoot = false)
+            if !Ism.stillHaveSudoAccess && asRoot
+                Ism.printStripInstalledFilesSecurityNotification
+            end
+
             requestedCommands = <<-CMD
                                 #{asRoot ? "sudo" : ""} strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
                                 CMD
@@ -1643,6 +1675,10 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String)
+            if !Ism.stillHaveSudoAccess && asRoot
+                Ism.printInstallFileSecurityNotification
+            end
+
             requestedCommands = <<-CMD
                                 #{systemHandleUserAccess ? "sudo" : ""} install \"#{target}\" \"#{path}\"
                                 CMD
@@ -1657,6 +1693,10 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
+            if !Ism.stillHaveSudoAccess && asRoot
+                Ism.printInstallSymlinkSecurityNotification
+            end
+
             requestedCommands = <<-CMD
                                 #{systemHandleUserAccess ? "sudo" : ""} mv \"#{target}\" \"#{path}\"
                                 CMD
@@ -1671,6 +1711,10 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String)
+            if !Ism.stillHaveSudoAccess && asRoot
+                Ism.printInstallDirectorySecurityNotification
+            end
+
             requestedCommands = <<-CMD
                                 #{systemHandleUserAccess ? "sudo" : ""} install -d \"#{path}\"
                                 CMD
@@ -1685,6 +1729,10 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallFile(path : String)
+            if !Ism.stillHaveSudoAccess && asRoot
+                Ism.printUninstallFileSecurityNotification
+            end
+
             requestedCommands = <<-CMD
                                 #{systemHandleUserAccess ? "sudo" : ""} rm \"#{path}\"
                                 CMD
@@ -1699,6 +1747,10 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallDirectory(path : String)
+            if !Ism.stillHaveSudoAccess && asRoot
+                Ism.printUninstallDirectorySecurityNotification
+            end
+
             requestedCommands = <<-CMD
                                 #{systemHandleUserAccess ? "sudo" : ""} rm -r \"#{path}\"
                                 CMD
