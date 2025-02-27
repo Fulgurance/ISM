@@ -1228,10 +1228,10 @@ module ISM
 
             requestedCommands = "grpconv #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, asRoot: true)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
