@@ -26,7 +26,7 @@ module ISM
             TaskCompilationText = "Task compilation in process: "
             CompilationWaitingText = "Compiling the requested task"
             TaskCompilationFailedText = "Failed !"
-            SecurityNotificationTitleText = "(SECURITY: action required)"
+            SecurityNotificationTitleText = "(SECURITY: superuser access required or expired)"
             SecurityNotificationReasonText = "Reason:"
             SecurityNotificationDetailsText = "Details:"
             ChrootSecurityNotificationReasonText = "ISM will perform a chroot."
