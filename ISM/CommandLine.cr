@@ -1066,7 +1066,6 @@ module ISM
                 exitProgram
         end
 
-        #----------------------
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
 
