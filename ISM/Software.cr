@@ -1335,6 +1335,10 @@ module ISM
         end
 
         def runLdconfigCommand(arguments = String.new)
+            if !Ism.stillHaveSudoAccess
+                Ism.printUninstallFileSecurityNotification
+            end
+
             requestedCommands = "ldconfig #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands)
