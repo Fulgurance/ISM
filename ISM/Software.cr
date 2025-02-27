@@ -1546,18 +1546,22 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         def runDircolorsCommand(arguments = String.new)
+            if !Ism.stillHaveSudoAccess
+                Ism.printUninstallFileSecurityNotification
+            end
+
             requestedCommands = "dircolors #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
@@ -1568,7 +1572,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
@@ -1579,7 +1583,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
