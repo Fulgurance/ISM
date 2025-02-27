@@ -1675,7 +1675,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String)
-            if !Ism.stillHaveSudoAccess && asRoot
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallFileSecurityNotification
             end
 
@@ -1693,7 +1693,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
-            if !Ism.stillHaveSudoAccess && asRoot
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallSymlinkSecurityNotification
             end
 
@@ -1711,7 +1711,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String)
-            if !Ism.stillHaveSudoAccess && asRoot
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallDirectorySecurityNotification
             end
 
@@ -1729,7 +1729,7 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallFile(path : String)
-            if !Ism.stillHaveSudoAccess && asRoot
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printUninstallFileSecurityNotification
             end
 
@@ -1747,7 +1747,7 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallDirectory(path : String)
-            if !Ism.stillHaveSudoAccess && asRoot
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printUninstallDirectorySecurityNotification
             end
 
