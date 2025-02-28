@@ -3113,12 +3113,13 @@ module ISM
 
             rootPath = (@settings.installByChroot ? Ism.settings.rootPath : "/")
 
-            mountLib = "sudo mount --rbind -o #{mode} #{rootPath}lib #{rootPath}lib"
-            mountBin = "sudo mount --rbind -o #{mode} #{rootPath}bin #{rootPath}bin"
-            mountSbin = "sudo mount --rbind -o #{mode} #{rootPath}sbin #{rootPath}sbin"
+            mountLib = "sudo mount --rbind -o #{mode} #{rootPath}usr/lib #{rootPath}usr/lib"
+            mountBin = "sudo mount --rbind -o #{mode} #{rootPath}usr/bin #{rootPath}usr/bin"
+            mountSbin = "sudo mount --rbind -o #{mode} #{rootPath}usr/sbin #{rootPath}usr/sbin"
+            mountLibexec = "sudo mount --rbind -o #{mode} #{rootPath}usr/libexec #{rootPath}usr/libexec"
 
             requestedCommands = <<-CMD
-                                #{mountLib} && #{mountBin} && #{mountSbin}
+                                #{mountLib} && #{mountBin} && #{mountSbin} && #{mountLibexec}
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
