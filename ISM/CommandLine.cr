@@ -3002,7 +3002,7 @@ module ISM
                 printChrootSecurityNotification
             end
 
-            process = Process.run(  "sudo chroot #{asRoot ? "" : "HOME=/var/lib/ism --userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+            process = Process.run(  "sudo HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                     output: quietMode,
                                     error: quietMode,
                                     shell: true)
