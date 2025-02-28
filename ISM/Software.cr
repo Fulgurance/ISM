@@ -1304,7 +1304,7 @@ module ISM
 
         def runLocaledefCommand(arguments : String)
             if !Ism.stillHaveSudoAccess
-                printRunLocaledefCommandSecurityNotification
+                Ism.printRunLocaledefCommandSecurityNotification
             end
 
             requestedCommands = "localedef #{arguments}"
