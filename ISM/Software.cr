@@ -1804,7 +1804,7 @@ module ISM
 
         #Manage stripping, recording installed files and favourites, libtool archive removal, and mount/remount critical point with read-only/read-write access
         def install(preserveLibtoolArchives = false, stripFiles = true)
-            unlockSystemAccess
+            Ism.unlockSystemAccess
 
             Ism.notifyOfInstall(@information)
 
@@ -1852,10 +1852,10 @@ module ISM
 
             Ism.addInstalledSoftware(@information, installedFiles)
 
-            lockSystemAccess
+            Ism.lockSystemAccess
 
             rescue error
-                lockSystemAccess
+                Ism.lockSystemAccess
 
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
