@@ -3090,6 +3090,51 @@ module ISM
                 exitProgram
         end
 
+        def setSystemAccess(locked : Bool)
+            mode = (locked ? "rw" : "ro")
+
+            rootPath = (@settings.installByChroot ? Ism.settings.rootPath : "/")
+
+            mountLib = "sudo mount --rbind -o #{mode} #{rootPath}lib #{rootPath}lib"
+            mountBin = "sudo mount --rbind -o #{mode} #{rootPath}bin #{rootPath}bin"
+            mountSbin = "sudo mount --rbind -o #{mode} #{rootPath}sbin #{rootPath}sbin"
+
+            requestedCommands = <<-CMD
+                                #{mountLib} && #{mountBin} && #{mountSbin}
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
+        end
+
+        def unlockSystemAccess
+            if !stillHaveSudoAccess && @systemInformation.handleUserAccess
+                printLockSystemAccessSecurityNotification
+            end
+
+            setSystemAccess(true)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def lockSystemAccess
+            if !stillHaveSudoAccess && @systemInformation.handleUserAccess
+                printUnlockSystemAccessSecurityNotification
+            end
+
+            setSystemAccess(false)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         # setKernelOption(symbol : String, state : Symbol, value = String.new)
         # state = :enable, :disable, :module, :string, :value
 
