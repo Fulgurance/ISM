@@ -1509,9 +1509,13 @@ module ISM
         end
 
         def runZicCommand(arguments : String, path = String.new)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunZicCommandSecurityNotification
+            end
+
             requestedCommands = "zic #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path)

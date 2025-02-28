@@ -1120,6 +1120,15 @@ module ISM
                 exitProgram
         end
 
+        def printRunZicCommandSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::RunZicCommandSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::RunZicCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def printLockSystemAccessSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::LockSystemAccessSecurityNotificationReasonText,
                                         ISM::Default::CommandLine::LockSystemAccessSecurityNotificationDetailsText)

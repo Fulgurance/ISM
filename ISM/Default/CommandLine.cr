@@ -69,6 +69,8 @@ module ISM
             RunPwconvCommandSecurityNotificationDetailsText = "This task can only be performed as root. It will run the command pwconv to generate it."
             RunGrpconvCommandSecurityNotificationReasonText = "ISM need to generate the /etc/gshadow file."
             RunGrpconvCommandSecurityNotificationDetailsText = "This task can only be performed as root. It will run the command grpconv to generate it."
+            RunZicCommandSecurityNotificationReasonText = "ISM need to compile a timezone"
+            RunZicCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will generate a time conversion information file."
             LockSystemAccessSecurityNotification = "ISM need to temporary unlock the access to system critical points"
             LockSystemAccessSecurityNotification = "This task can only be performed as root. It unlock temporary the access of /lib,/bin,/sbin and /libexec"
             UnlockSystemAccessSecurityNotification = "ISM need to lock the access to system critical points"
