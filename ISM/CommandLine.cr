@@ -1120,6 +1120,24 @@ module ISM
                 exitProgram
         end
 
+        def printLockSystemAccessSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::LockSystemAccessSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::LockSystemAccessSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printUnlockSystemAccessSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
 
@@ -3111,7 +3129,7 @@ module ISM
             end
         end
 
-        def unlockSystemAccess
+        def lockSystemAccess
             if !stillHaveSudoAccess && @systemInformation.handleUserAccess
                 printLockSystemAccessSecurityNotification
             end
@@ -3123,7 +3141,7 @@ module ISM
                 exitProgram
         end
 
-        def lockSystemAccess
+        def unlockSystemAccess
             if !stillHaveSudoAccess && @systemInformation.handleUserAccess
                 printUnlockSystemAccessSecurityNotification
             end
