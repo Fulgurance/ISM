@@ -12,7 +12,7 @@ module ISM
         end
 
         def self.filePath : String
-            return "/#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}"
+            return "#{Ism.settings.installByChroot && Ism.settings.rootPath != "/" ? Ism.settings.rootPath : "/"}#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}"
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
