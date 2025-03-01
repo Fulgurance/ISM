@@ -3118,7 +3118,7 @@ module ISM
         end
 
         def setSystemAccess(locked : Bool)
-            mode = (locked ? "rw" : "ro")
+            mode = (locked ? "ro" : "rw")
 
             rootPath = (@settings.installByChroot ? Ism.settings.rootPath : "/")
 
@@ -3144,7 +3144,7 @@ module ISM
                 printLockSystemAccessSecurityNotification
             end
 
-            setSystemAccess(true)
+            setSystemAccess(locked: true)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -3156,7 +3156,7 @@ module ISM
                 printUnlockSystemAccessSecurityNotification
             end
 
-            setSystemAccess(false)
+            setSystemAccess(locked: false)
 
             rescue error
                 printSystemCallErrorNotification(error)
