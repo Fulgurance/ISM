@@ -17,6 +17,23 @@ module ISM
                 Ism.exitProgram
         end
 
+        def descriptor(filePath : String) : ISM::SoftwareSecurityDescriptor
+            #Return the matching descriptor
+            @descriptors.each do |entry|
+                if entry.target == filePath
+                    return entry
+                end
+            end
+
+            #If there is no descriptor, return the one by default
+            @descriptors.each do |entry|
+                if entry.target == "Default"
+                    return entry
+                end
+            end
+
+            return ISM::SoftwareSecurityDescriptor.new
+        end
     end
 
 end

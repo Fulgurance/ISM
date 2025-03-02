@@ -1713,13 +1713,13 @@ module ISM
         end
 
         #Special function for the installation process without chroot (Internal use only)
-        def installFile(target : String, path : String)
+        def installFile(target : String, path : String, user : String, group : String, mode : String)
             if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallFileSecurityNotification
             end
 
             requestedCommands = <<-CMD
-                                #{systemHandleUserAccess ? "sudo" : ""} install \"#{target}\" \"#{path}\"
+                                #{systemHandleUserAccess ? "sudo" : ""} install -o #{user} -g #{group} -m #{mode} \"#{target}\" \"#{path}\"
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
@@ -1749,13 +1749,13 @@ module ISM
         end
 
         #Special function for the installation process without chroot (Internal use only)
-        def installDirectory(path : String)
+        def installDirectory(path : String, user : String, group : String, mode : String)
             if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallDirectorySecurityNotification
             end
 
             requestedCommands = <<-CMD
-                                #{systemHandleUserAccess ? "sudo" : ""} install -d \"#{path}\"
+                                #{systemHandleUserAccess ? "sudo" : ""} install -d  -o #{user} -g #{group} -m #{mode} \"#{path}\"
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
@@ -1823,9 +1823,19 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
+                    #Apply the security descriptor (if there is none, will apply the default descriptor)
+                    securityDescriptor = @information.securityMap.descriptor(finalDestination)
+
+                    user =  securityDescriptor.user
+                    group = securityDescriptor.group
+                    mode =  securityDescriptor.mode
+
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            installDirectory(finalDestination)
+                            installDirectory(   path:  finalDestination,
+                                                user:   user,
+                                                group:  group,
+                                                mode:   mode)
                         end
                     else
                         if File.symlink?(entry)
@@ -1833,7 +1843,10 @@ module ISM
                                             path:   finalDestination)
                         else
                             installFile(target: entry,
-                                        path:   finalDestination)
+                                        path:   finalDestination,
+                                        user:   user,
+                                        group:  group,
+                                        mode:   mode)
                         end
                     end
 
@@ -1855,6 +1868,7 @@ module ISM
             Ism.lockSystemAccess
 
             rescue error
+                #We make sure the system is locked even an error occured
                 Ism.lockSystemAccess
 
                 Ism.printSystemCallErrorNotification(error)
