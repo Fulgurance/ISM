@@ -222,6 +222,14 @@ module ISM
                 Ism.exitProgram
     end
 
+    def securityMapFilePath : String
+        return mainDirectoryPath + ISM::Default::Filename::SecurityMap
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+    end
+
     def optionExist(optionName : String) : Bool
         @options.each do |option|
             if optionName == option.name
@@ -532,6 +540,14 @@ module ISM
 
     def uniqueDependencyIsEnabled(dependency : String) : Bool
         return @selectedDependencies.any? { |item| item.downcase == dependency.downcase}
+
+        rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+    end
+
+    def securityMap : Array(ISM::SoftwareSecurityMap)
+        return ISM::SoftwareSecurityMap.loadConfiguration(securityMapFilePath)
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)
