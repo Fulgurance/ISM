@@ -25,14 +25,7 @@ module ISM
                 end
             end
 
-            #If there is no descriptor, return the one by default
-            @descriptors.each do |entry|
-                if entry.target == ISM::Default::SoftwareSecurityMap::DefaultDescriptorName
-                    return entry
-                end
-            end
-
-            return ISM::SoftwareSecurityDescriptor.new
+            return @descriptors[0]
         end
     end
 
