@@ -1823,12 +1823,13 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
-                    #Apply the security descriptor (if there is none, will apply the default descriptor)
+                    #Apply the security descriptor if the system handle user access
+                    #If there is none, will apply the default descriptor
                     securityDescriptor = @information.securityMap.descriptor(finalDestination)
 
-                    user =  securityDescriptor.user
-                    group = securityDescriptor.group
-                    mode =  securityDescriptor.mode
+                    user =  systemHandleUserAccess ? securityDescriptor.user : "ism"
+                    group = systemHandleUserAccess ? securityDescriptor.group : "ism"
+                    mode =  systemHandleUserAccess ? securityDescriptor.mode : "0644"
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
