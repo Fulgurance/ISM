@@ -3120,7 +3120,7 @@ module ISM
         def setSystemAccess(locked : Bool)
             mode = (locked ? "ro" : "rw")
 
-            rootPath = (@settings.installByChroot ? Ism.settings.rootPath : "/")
+            rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
 
             mountLib = "sudo mount --rbind -o remount,#{mode} #{rootPath}usr/lib #{rootPath}usr/lib"
             mountBin = "sudo mount --rbind -o remount,#{mode} #{rootPath}usr/bin #{rootPath}usr/bin"

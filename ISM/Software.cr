@@ -1815,9 +1815,9 @@ module ISM
 
         #Manage stripping, recording installed files and favourites, libtool archive removal, and mount/remount critical point with read-only/read-write access
         def install(preserveLibtoolArchives = false, stripFiles = true)
-            Ism.unlockSystemAccess
-
             Ism.notifyOfInstall(@information)
+
+            Ism.unlockSystemAccess
 
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
