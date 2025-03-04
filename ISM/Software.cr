@@ -1766,6 +1766,17 @@ module ISM
             end
         end
 
+        #Special function for the installation process (Internal use only)
+        def updateSystemCache
+            if commandIsAvailable("ldconfig")
+                runLdconfigCommand
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallFile(path : String)
             if !Ism.stillHaveSudoAccess && systemHandleUserAccess
@@ -1859,6 +1870,9 @@ module ISM
                 stripFileListNoChroot(  fileList:   fileList,
                                         asRoot:     systemHandleUserAccess)
             end
+
+            #Update various caches of many linux program if there are available
+            updateSystemCache
 
             if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
                 Ism.addSoftwareToFavouriteGroup(@information.fullVersionName)
@@ -2356,6 +2370,16 @@ module ISM
 
         def showInfoCode(message : String)
             Ism.printInformationCodeNotification(message)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def commandIsAvailable(command : String) : Bool
+            process = Ism.runSystemCommand("type #{command} >/dev/null 2>&1")
+
+            return (process.exit_code == 0)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
