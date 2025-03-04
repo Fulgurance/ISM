@@ -1817,7 +1817,9 @@ module ISM
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
 
-            Ism.unlockSystemAccess
+            if systemHandleUserAccess
+                Ism.unlockSystemAccess
+            end
 
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
@@ -1880,7 +1882,9 @@ module ISM
 
             Ism.addInstalledSoftware(@information, installedFiles)
 
-            Ism.lockSystemAccess
+            if systemHandleUserAccess
+                Ism.lockSystemAccess
+            end
 
             rescue error
                 #We make sure the system is locked even an error occured
