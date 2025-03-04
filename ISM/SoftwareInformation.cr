@@ -546,7 +546,7 @@ module ISM
                 Ism.exitProgram
     end
 
-    def securityMap : Array(ISM::SoftwareSecurityMap)
+    def securityMap : ISM::SoftwareSecurityMap
         return ISM::SoftwareSecurityMap.loadConfiguration(securityMapFilePath)
 
         rescue error
