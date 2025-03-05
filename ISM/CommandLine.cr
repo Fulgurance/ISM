@@ -3126,7 +3126,7 @@ module ISM
         end
 
         def setSystemAccess(locked : Bool)
-            mode = (locked ? "ro" : "#{@settings.installByChroot ? "remount," : ""}rw")
+            mode = (locked ? "ro" : "#{@systemInformation.handleUserAccess && @settings.installByChroot ? "remount," : ""}rw")
 
             rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
 
