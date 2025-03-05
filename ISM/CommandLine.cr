@@ -873,7 +873,7 @@ module ISM
                 separatorText += "="
             end
 
-            fullLog = (error.backtrace? ? error.backtrace.join("\n") : error.message)
+            fullLog = (error.backtrace.empty? ? error.backtrace.join("\n") : error.message)
 
             title = "#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"

@@ -1658,11 +1658,6 @@ module ISM
         end
 
         def recordInstallationInformation : Tuple(UInt128, UInt128, UInt128, UInt128)
-            directoryNumber = UInt128.new(0)
-            symlinkNumber = UInt128.new(0)
-            fileNumber = UInt128.new(0)
-            totalSize = UInt128.new(0)
-
             filesList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
 
             directoryNumber = UInt128.new(0)
@@ -1888,7 +1883,9 @@ module ISM
 
             rescue error
                 #We make sure the system is locked even an error occured
-                Ism.lockSystemAccess
+                if systemHandleUserAccess
+                    Ism.lockSystemAccess
+                end
 
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
