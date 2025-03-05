@@ -1877,6 +1877,8 @@ module ISM
 
             Ism.addInstalledSoftware(@information, installedFiles)
 
+            deploy
+
             if systemHandleUserAccess
                 Ism.lockSystemAccess
             end
@@ -1889,6 +1891,10 @@ module ISM
 
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
+        end
+
+        def deploy
+            Ism.notifyOfDeploy(@information)
         end
 
         def kernelSourcesPath : String

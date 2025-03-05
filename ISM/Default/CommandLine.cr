@@ -85,6 +85,7 @@ module ISM
             BuildText = "Building "
             PrepareInstallationText = "Preparing installation for "
             InstallText = "Installing "
+            DeployText = "Deploying "
             RecordNeededKernelOptionsText = "Recording needed kernel options for "
             CleanText = "Cleaning "
             FuturKernelText = "future kernel (not installed yet)"
