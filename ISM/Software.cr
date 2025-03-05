@@ -1837,7 +1837,7 @@ module ISM
 
                     user =  systemHandleUserAccess ? securityDescriptor.user : "ism"
                     group = systemHandleUserAccess ? securityDescriptor.group : "ism"
-                    mode =  systemHandleUserAccess ? securityDescriptor.mode : "0644"
+                    mode =  systemHandleUserAccess ? securityDescriptor.mode : "0755"
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
