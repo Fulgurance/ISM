@@ -3122,10 +3122,10 @@ module ISM
 
             rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
 
-            mountLib = "sudo mount --rbind -o remount,#{mode} #{rootPath}usr/lib #{rootPath}usr/lib"
-            mountBin = "sudo mount --rbind -o remount,#{mode} #{rootPath}usr/bin #{rootPath}usr/bin"
-            mountSbin = "sudo mount --rbind -o remount,#{mode} #{rootPath}usr/sbin #{rootPath}usr/sbin"
-            mountLibexec = "sudo mount --rbind -o remount,#{mode} #{rootPath}usr/libexec #{rootPath}usr/libexec"
+            mountLib = "sudo mount --rbind -o #{mode} #{rootPath}usr/lib #{rootPath}usr/lib"
+            mountBin = "sudo mount --rbind -o #{mode} #{rootPath}usr/bin #{rootPath}usr/bin"
+            mountSbin = "sudo mount --rbind -o #{mode} #{rootPath}usr/sbin #{rootPath}usr/sbin"
+            mountLibexec = "sudo mount --rbind -o #{mode} #{rootPath}usr/libexec #{rootPath}usr/libexec"
 
             requestedCommands = <<-CMD
                                 #{mountLib} && #{mountBin} && #{mountSbin} && #{mountLibexec}
