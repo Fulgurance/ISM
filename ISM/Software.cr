@@ -1868,16 +1868,15 @@ module ISM
                                         asRoot:     systemHandleUserAccess)
             end
 
-            #Update various caches of many linux program if there are available
+            #Update library cache and run post installation process
             updateSystemCache
+            deploy
 
             if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
                 Ism.addSoftwareToFavouriteGroup(@information.fullVersionName)
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
-
-            deploy
 
             if systemHandleUserAccess
                 Ism.lockSystemAccess
