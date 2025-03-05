@@ -3126,17 +3126,17 @@ module ISM
         end
 
         def setSystemAccess(locked : Bool)
-            mode = (locked ? "ro" : "#{@systemInformation.handleUserAccess && @settings.installByChroot ? "remount," : ""}rw")
+            mode = (locked ? "-" : "+")
 
             rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
 
-            mountLib = "sudo mount --rbind -o #{mode} #{rootPath}usr/lib #{rootPath}usr/lib"
-            mountBin = "sudo mount --rbind -o #{mode} #{rootPath}usr/bin #{rootPath}usr/bin"
-            mountSbin = "sudo mount --rbind -o #{mode} #{rootPath}usr/sbin #{rootPath}usr/sbin"
-            mountLibexec = "sudo mount --rbind -o #{mode} #{rootPath}usr/libexec #{rootPath}usr/libexec"
+            setLib = "sudo chattr -R #{mode}i #{rootPath}usr/lib"
+            setBin = "sudo chattr -R #{mode}i  #{rootPath}usr/bin"
+            setSbin = "sudo chattr -R #{mode}i  #{rootPath}usr/sbin"
+            setLibexec = "sudo chattr -R #{mode}i  #{rootPath}usr/libexec"
 
             requestedCommands = <<-CMD
-                                #{mountLib} && #{mountBin} && #{mountSbin} && #{mountLibexec}
+                                #{setLib} && #{setBin} && #{setSbin} && #{setLibexec}
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
