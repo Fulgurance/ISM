@@ -3141,7 +3141,7 @@ module ISM
 
             process = Process.run(requestedCommands, shell: true)
 
-            if !process.success? && process.status_code != 1
+            if !process.success? && process.exit_code != 1
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
