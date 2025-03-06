@@ -51,7 +51,7 @@ module ISM
             @green = UInt8.new(55)
         end
 
-        def systemId : Int32
+        def systemId : String
             return ISM::Default::CommandLine::SystemId
         end
 
@@ -70,7 +70,7 @@ module ISM
                                     output: processResult,
                                     shell: true)
 
-            return processResult.to_s.strip.split(" ").includes?(systemId.to_s)
+            return processResult.to_s.strip.split(" ").includes?(systemId)
 
             rescue error
                 printSystemCallErrorNotification(error)

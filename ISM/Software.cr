@@ -30,7 +30,7 @@ module ISM
                 Ism.exitProgram
         end
 
-        def systemId : Int32
+        def systemId : String
             return Ism.systemId
         end
 
@@ -170,6 +170,23 @@ module ISM
             prepareChrootProc
             prepareChrootSysfs
             prepareChrootNetworkConfiguration
+        end
+
+        # Internal use only
+        def prepareRootPermissions
+            if !Ism.stillHaveSudoAccess
+                Ism.printPrepareRootPermissionsSecurityNotification
+            end
+
+            requestedCommands = "sudo chown -R root:root #{Ism.settings.rootPath}"
+
+            process = Process.run(  requestedCommands,
+                                    shell: true)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
         end
 
         def version : String
@@ -1814,6 +1831,12 @@ module ISM
 
             if systemHandleUserAccess
                 Ism.unlockSystemAccess
+
+                #Special case when we are switching to the installation by chroot during cross toolchain construction
+                if !Ism.settings.installByChroot && !Ism.systemInformation.crossToolchainFullyBuilt
+                    prepareRootPermissions
+                end
+
             end
 
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
@@ -1835,8 +1858,8 @@ module ISM
                     #If there is none, will apply the default descriptor
                     securityDescriptor = @information.securityMap.descriptor(finalDestination)
 
-                    user =  systemHandleUserAccess ? securityDescriptor.user : "ism"
-                    group = systemHandleUserAccess ? securityDescriptor.group : "ism"
+                    user =  systemHandleUserAccess ? securityDescriptor.user : ISM::Default::CommandLine::SystemId
+                    group = systemHandleUserAccess ? securityDescriptor.group : ISM::Default::CommandLine::SystemId
                     mode =  systemHandleUserAccess ? securityDescriptor.mode : "0755"
 
                     if File.directory?(entry) && !File.symlink?(entry)
