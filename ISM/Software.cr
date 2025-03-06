@@ -183,8 +183,9 @@ module ISM
             setEtcIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/etc/ism"
             setVarLogIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
             setTmpIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
+            setSources = "sudo chown -R ism:ism #{Ism.settings.sourcesPath}"
 
-            requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm}"
+            requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources}"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
