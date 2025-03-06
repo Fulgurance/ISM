@@ -45,6 +45,8 @@ module ISM
             PrepareChrootSysSecurityNotificationDetailsText = "This task can only be performed as root. It will prepare the new system for a chroot."
             PrepareChrootNetworkConfigurationSecurityNotificationReasonText = "ISM will copy the network settings at /etc/resolv.conf from the host under the chroot."
             PrepareChrootNetworkConfigurationSecurityNotificationDetailsText = "This task can only be performed as root. It will prepare the new system for a chroot."
+            PrepareRootPermissionsSecurityNotificationReasonText = "ISM will set proper rights for the new system"
+            PrepareRootPermissionsSecurityNotificationDetailsText = "This task can only be performed as root. It will change the default owner as root for the new system."
             StripInstalledFilesSecurityNotificationReasonText = "ISM will strip all installed files."
             StripInstalledFilesSecurityNotificationDetailsText = "To strip the installed files, it is needed root access. I will remove all debug symbols."
             InstallFileSecurityNotificationReasonText = "ISM will install a file to the system."

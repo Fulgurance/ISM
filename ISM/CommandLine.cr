@@ -1012,6 +1012,15 @@ module ISM
                 exitProgram
         end
 
+        def printPrepareRootPermissionsSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::PrepareRootPermissionsSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::PrepareRootPermissionsSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def printStripInstalledFilesSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationReasonText,
                                         ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationDetailsText)
