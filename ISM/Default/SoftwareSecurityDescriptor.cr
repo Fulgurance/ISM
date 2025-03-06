@@ -7,7 +7,6 @@ module ISM
             DefaultEntryName = "Default"
             SourcesPathEntryName = "Sources"
             ToolsPathEntryName = "Tools"
-            RootPathEntryName = "Root"
 
         end
 
