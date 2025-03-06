@@ -178,7 +178,13 @@ module ISM
                 Ism.printPrepareRootPermissionsSecurityNotification
             end
 
-            requestedCommands = "sudo chown -R root:root #{Ism.settings.rootPath}"
+            setRoot = "sudo chown -R root:root #{Ism.settings.rootPath}"
+            setVarIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/var/ism"
+            setEtcIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/etc/ism"
+            setVarLogIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
+            setTmpIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
+
+            requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm}"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
