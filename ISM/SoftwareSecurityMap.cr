@@ -18,8 +18,21 @@ module ISM
         end
 
         def descriptor(filePath : String) : ISM::SoftwareSecurityDescriptor
-            #Return the matching descriptor
+            #Check first if the target match with any special entries or with the filepath
+            #Then return the matching descriptor
             @descriptors.each do |entry|
+                if entry.target == ISM::Default::SoftwareSecurityDescriptor::SourcesPathEntryName
+                    return entry
+                end
+
+                if entry.target == ISM::Default::SoftwareSecurityDescriptor::ToolsPathEntryName
+                    return entry
+                end
+
+                if entry.target == ISM::Default::SoftwareSecurityDescriptor::RootPathEntryName
+                    return entry
+                end
+
                 if entry.target == filePath
                     return entry
                 end
@@ -27,7 +40,7 @@ module ISM
 
             #If there is no descriptor, return the one by default
             @descriptors.each do |entry|
-                if entry.target == ISM::Default::SoftwareSecurityMap::DefaultDescriptorName
+                if entry.target == ISM::Default::SoftwareSecurityDescriptor::DefaultEntryName
                     return entry
                 end
             end

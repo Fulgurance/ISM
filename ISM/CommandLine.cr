@@ -3130,10 +3130,10 @@ module ISM
 
             rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
 
-            setLib = "sudo chattr -R #{mode}i #{rootPath}usr/lib"
-            setBin = "sudo chattr -R #{mode}i  #{rootPath}usr/bin"
-            setSbin = "sudo chattr -R #{mode}i  #{rootPath}usr/sbin"
-            setLibexec = "sudo chattr -R #{mode}i  #{rootPath}usr/libexec"
+            setLib = "sudo chattr -R -f #{mode}i #{rootPath}usr/lib"
+            setBin = "sudo chattr -R -f #{mode}i  #{rootPath}usr/bin"
+            setSbin = "sudo chattr -R -f #{mode}i  #{rootPath}usr/sbin"
+            setLibexec = "sudo chattr -R -f #{mode}i  #{rootPath}usr/libexec"
 
             requestedCommands = <<-CMD
                                 #{setLib} && #{setBin} && #{setSbin} && #{setLibexec}
@@ -3141,7 +3141,7 @@ module ISM
 
             process = Process.run(requestedCommands, shell: true)
 
-            if !process.success?
+            if !process.success? && process.status_code != 1
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
