@@ -3135,7 +3135,7 @@ module ISM
         end
 
         def setSystemAccess(locked : Bool)
-            mode = (locked ? "-" : "+")
+            mode = (locked ? "+" : "-")
 
             rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
 
