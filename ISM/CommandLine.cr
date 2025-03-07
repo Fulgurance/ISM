@@ -2082,6 +2082,7 @@ module ISM
 
             separatorText = "#{separatorText.colorize(:green)}\n"
 
+            puts
             puts    separatorText +
                     "#{title.colorize(:green)}\n" +
                     separatorText +
