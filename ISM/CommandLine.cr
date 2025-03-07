@@ -3139,7 +3139,7 @@ module ISM
 
             rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
 
-            setLib = "sudo chattr -R -f #{mode}i #{rootPath}usr/lib"
+            setLib = "sudo chattr -R -f #{mode}i #{rootPath}usr/lib64"
             setBin = "sudo chattr -R -f #{mode}i  #{rootPath}usr/bin"
             setSbin = "sudo chattr -R -f #{mode}i  #{rootPath}usr/sbin"
             setLibexec = "sudo chattr -R -f #{mode}i  #{rootPath}usr/libexec"
