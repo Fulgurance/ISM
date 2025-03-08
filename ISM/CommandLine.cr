@@ -1138,6 +1138,15 @@ module ISM
                 exitProgram
         end
 
+        def printRunInstallCatalogCommandSecurityNotification
+            printSecurityNotification(  ISM::Default::CommandLine::RunInstallCatalogCommandSecurityNotificationReasonText,
+                                        ISM::Default::CommandLine::RunInstallCatalogCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def printLockSystemAccessSecurityNotification
             printSecurityNotification(  ISM::Default::CommandLine::LockSystemAccessSecurityNotificationReasonText,
                                         ISM::Default::CommandLine::LockSystemAccessSecurityNotificationDetailsText)

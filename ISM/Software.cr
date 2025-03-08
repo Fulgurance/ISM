@@ -1364,9 +1364,13 @@ module ISM
         end
 
         def runInstallCatalogCommand(arguments : String)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunInstallCatalogCommandSecurityNotification
+            end
+
             requestedCommands = "install-catalog #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
