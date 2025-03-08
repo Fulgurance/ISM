@@ -1294,9 +1294,13 @@ module ISM
         end
 
         def runInstallInfoCommand(arguments : String)
+            if !Ism.stillHaveSudoAccess
+                Ism.printrunInstallInfoCommandSecurityNotification
+            end
+
             requestedCommands = "install-info #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
