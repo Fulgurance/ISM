@@ -1193,8 +1193,18 @@ module ISM
                 exitProgram
         end
 
+        def printRunMakeCaCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunMakeCaCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunMakeCaCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def printLockSystemAccessSecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationCommandText
+            printSecurityNotification(  command:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationCommandText,
                                         reason:     ISM::Default::CommandLine::LockSystemAccessSecurityNotificationReasonText,
                                         details:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationDetailsText)
 
