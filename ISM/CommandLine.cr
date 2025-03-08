@@ -1304,7 +1304,7 @@ module ISM
         end
 
         def notifyOfDeploy(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::DeployText+"#{softwareInformation.name.colorize(:green)}")
+            printSubProcessNotification(ISM::Default::CommandLine::DeployText+"#{softwareInformation.name.colorize(:green)}")
 
             rescue error
                 printSystemCallErrorNotification(error)
