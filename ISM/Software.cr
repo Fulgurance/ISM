@@ -1441,7 +1441,11 @@ module ISM
         def runGlibCompileSchemasCommand(arguments = String.new)
             requestedCommands = "glib-compile-schemas #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunGlibCompileSchemasCommandSecurityNotification(requestedCommands)
+            end
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)

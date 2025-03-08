@@ -89,6 +89,8 @@ module ISM
             RunInstallInfoCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will update the database."
             RunMakeCaCommandSecurityNotificationReasonText = "ISM need to update the certificate database."
             RunMakeCaCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will update the certificate database."
+            RunGlibCompileSchemasCommandSecurityNotificationReasonText = "ISM need to update the gsettings cache"
+            RunGlibCompileSchemasCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will update the gsettings schema database."
             LockSystemAccessSecurityNotificationCommandText = "sudo chattr -R -f +i [path]"
             LockSystemAccessSecurityNotificationReasonText = "ISM need to lock the access to system critical points"
             LockSystemAccessSecurityNotificationDetailsText = "This task can only be performed as root. It will lock the access of /lib,/bin,/sbin and /libexec"

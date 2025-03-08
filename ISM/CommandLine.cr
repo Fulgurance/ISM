@@ -1203,6 +1203,16 @@ module ISM
                 exitProgram
         end
 
+        def printRunGlibCompileSchemasCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def printLockSystemAccessSecurityNotification
             printSecurityNotification(  command:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationCommandText,
                                         reason:     ISM::Default::CommandLine::LockSystemAccessSecurityNotificationReasonText,
