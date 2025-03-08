@@ -1363,7 +1363,7 @@ module ISM
                 Ism.printRunMakeCaCommandSecurityNotification(requestedCommands)
             end
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
