@@ -1379,9 +1379,13 @@ module ISM
         end
 
         def runXmlCatalogCommand(arguments : String)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunXmlCatalogCommandSecurityNotification
+            end
+
             requestedCommands = "xmlcatalog #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)

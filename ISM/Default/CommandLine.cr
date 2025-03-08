@@ -75,6 +75,8 @@ module ISM
             RunZicCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will generate a time conversion information file."
             RunInstallCatalogCommandSecurityNotificationReasonText = "ISM need to install a SGML catalog"
             RunInstallCatalogCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will generate a catalog for SGML."
+            RunXmlCatalogCommandSecurityNotificationReasonText = "ISM need to install a XML catalog"
+            RunXmlCatalogCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will generate a catalog for XML."
             LockSystemAccessSecurityNotificationReasonText = "ISM need to temporary unlock the access to system critical points"
             LockSystemAccessSecurityNotificationDetailsText = "This task can only be performed as root. It unlock temporary the access of /lib,/bin,/sbin and /libexec"
             UnlockSystemAccessSecurityNotificationReasonText = "ISM need to lock the access to system critical points"
