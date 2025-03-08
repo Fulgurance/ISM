@@ -30,6 +30,7 @@ module ISM
             SecurityNotificationCommandText = "Command:"
             SecurityNotificationReasonText = "Reason:"
             SecurityNotificationDetailsText = "Details:"
+            ChrootSecurityNotificationCommandText = "sudo HOME=/var/lib/ism chroot --userspec=[uid:gid] [rootpath] [commandlist]"
             ChrootSecurityNotificationReasonText = "ISM will perform a chroot."
             ChrootSecurityNotificationDetailsText = "All tasks under the chroot will be performed as normal user. However, the chroot command require to be run as root."
             PrepareChrootDevConsoleSecurityNotificationReasonText = "ISM will create the /dev/console node to prepare the chroot."

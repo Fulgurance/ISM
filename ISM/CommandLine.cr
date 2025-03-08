@@ -943,8 +943,8 @@ module ISM
                 exitProgram
         end
 
-        def printChrootSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
+        def printChrootSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::ChrootSecurityNotificationCommandText,
                                         reason:     ISM::Default::CommandLine::ChrootSecurityNotificationReasonText,
                                         details:    ISM::Default::CommandLine::ChrootSecurityNotificationDetailsText)
 
