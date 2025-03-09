@@ -1153,6 +1153,16 @@ module ISM
                 exitProgram
         end
 
+        def printRunUdevadmCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunUdevadmCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunUdevadmCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def printRunZicCommandSecurityNotification(command : String)
             printSecurityNotification(  command:    command,
                                         reason:     ISM::Default::CommandLine::RunZicCommandSecurityNotificationReasonText,

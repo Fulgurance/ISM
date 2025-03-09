@@ -79,6 +79,8 @@ module ISM
             RunPwconvCommandSecurityNotificationDetailsText = "This task can only be performed as root. It will run the command pwconv to generate it."
             RunGrpconvCommandSecurityNotificationReasonText = "ISM need to generate the /etc/gshadow file."
             RunGrpconvCommandSecurityNotificationDetailsText = "This task can only be performed as root. It will run the command grpconv to generate it."
+            RunUdevadmCommandSecurityNotificationReasonText = "ISM need to update the hardware database"
+            RunUdevadmCommandSecurityNotificationDetailsText = "This task can only be performed as root. It will update the hardware database for eudev."
             RunZicCommandSecurityNotificationReasonText = "ISM need to compile a timezone"
             RunZicCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will generate a time conversion information file."
             RunInstallCatalogCommandSecurityNotificationReasonText = "ISM need to install a SGML catalog"

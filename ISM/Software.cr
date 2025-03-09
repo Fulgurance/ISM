@@ -1263,7 +1263,11 @@ module ISM
         def runUdevadmCommand(arguments : String)
             requestedCommands = "udevadm #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunUdevadmCommandSecurityNotification(requestedCommands)
+            end
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
