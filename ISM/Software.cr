@@ -1278,7 +1278,11 @@ module ISM
         def runDbusUuidgenCommand(arguments = String.new)
             requestedCommands = "dbus-uuidgen #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunDbusUuidgenCommandSecurityNotification(requestedCommands)
+            end
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
