@@ -933,7 +933,7 @@ module ISM
         def printSecurityNotification(command : String ,reason : String, details : String)
             puts
             puts "#{ISM::Default::CommandLine::SecurityNotificationTitleText.colorize(:red)}"
-            puts "#{ISM::Default::CommandLine::SecurityNotificationCommandText} #{reason.colorize(:magenta)}"
+            puts "#{ISM::Default::CommandLine::SecurityNotificationCommandText} #{command.colorize(:magenta)}"
             puts "#{ISM::Default::CommandLine::SecurityNotificationReasonText} #{reason.colorize(:yellow)}"
             puts "#{ISM::Default::CommandLine::SecurityNotificationDetailsText} #{details.colorize(:green)}"
             puts
