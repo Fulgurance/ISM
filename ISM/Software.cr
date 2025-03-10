@@ -940,11 +940,11 @@ module ISM
         end
 
         def generateEmptyPasswdFile
-            if !Ism.stillHaveSudoAccess
-                Ism.printGenerateEmptyPasswdFileSecurityNotification
-            end
-
             requestedCommands = "touch /usr/bin/passwd"
+
+            if !Ism.stillHaveSudoAccess
+                Ism.printGenerateEmptyPasswdFileSecurityNotification(requestedCommands)
+            end
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
