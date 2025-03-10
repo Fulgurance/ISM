@@ -1865,6 +1865,7 @@ module ISM
             Ism.notifyOfInstall(@information)
 
             if systemHandleUserAccess
+                Ism.notifyOfUnlockingSystemAccess(@information)
                 Ism.unlockSystemAccess
 
                 #Special case when we are switching to the installation by chroot during cross toolchain construction
@@ -1924,7 +1925,7 @@ module ISM
 
             #Strip the file if needed
             if stripFiles
-                Ism.notifyOfStripping(@information)
+                Ism.notifyOfStrippingFiles(@information)
 
                 stripFileListNoChroot(  fileList:   fileList,
                                         asRoot:     systemHandleUserAccess)
@@ -1941,6 +1942,7 @@ module ISM
             Ism.addInstalledSoftware(@information, installedFiles)
 
             if systemHandleUserAccess
+                Ism.notifyOfLockingSystemAccess(@information)
                 Ism.lockSystemAccess
             end
 

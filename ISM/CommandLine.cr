@@ -1333,6 +1333,14 @@ module ISM
                 exitProgram
         end
 
+        def notifyOfUnlockingSystemAccess(softwareInformation : ISM::SoftwareInformation)
+            printSubProcessNotification(ISM::Default::CommandLine::UnlockingSystemAccessText+"#{softwareInformation.name.colorize(:green)}")
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def notifyOfApplyingSecurityMap(softwareInformation : ISM::SoftwareInformation)
             printSubProcessNotification(ISM::Default::CommandLine::ApplyingSecurityMapText+"#{softwareInformation.name.colorize(:green)}")
 
@@ -1351,6 +1359,14 @@ module ISM
 
         def notifyOfDeploy(softwareInformation : ISM::SoftwareInformation)
             printSubProcessNotification(ISM::Default::CommandLine::DeployText+"#{softwareInformation.name.colorize(:green)}")
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def notifyOfLockingSystemAccess(softwareInformation : ISM::SoftwareInformation)
+            printSubProcessNotification(ISM::Default::CommandLine::LockingSystemAccessText+"#{softwareInformation.name.colorize(:green)}")
 
             rescue error
                 printSystemCallErrorNotification(error)
