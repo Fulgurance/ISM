@@ -5,7 +5,9 @@ module ISM
         def install
             super
 
-            runDepmodCommand
+            if commandIsAvailable("depmod")
+                runDepmodCommand
+            end
         end
 
     end
