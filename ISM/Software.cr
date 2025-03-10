@@ -1865,7 +1865,7 @@ module ISM
             Ism.notifyOfInstall(@information)
 
             if systemHandleUserAccess
-                Ism.notifyOfUnlockingSystemAccess(@information)
+                Ism.notifyOfUnlockingSystemAccess
                 Ism.unlockSystemAccess
 
                 #Special case when we are switching to the installation by chroot during cross toolchain construction
@@ -1878,7 +1878,7 @@ module ISM
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
-            Ism.notifyOfApplyingSecurityMap(@information)
+            Ism.notifyOfApplyingSecurityMap
 
             fileList.each do |entry|
 
@@ -1925,7 +1925,7 @@ module ISM
 
             #Strip the file if needed
             if stripFiles
-                Ism.notifyOfStrippingFiles(@information)
+                Ism.notifyOfStrippingFiles
 
                 stripFileListNoChroot(  fileList:   fileList,
                                         asRoot:     systemHandleUserAccess)
@@ -1942,7 +1942,7 @@ module ISM
             Ism.addInstalledSoftware(@information, installedFiles)
 
             if systemHandleUserAccess
-                Ism.notifyOfLockingSystemAccess(@information)
+                Ism.notifyOfLockingSystemAccess
                 Ism.lockSystemAccess
             end
 
@@ -1957,7 +1957,7 @@ module ISM
         end
 
         def deploy
-            Ism.notifyOfDeploy(@information)
+            Ism.notifyOfDeploy
         end
 
         def kernelSourcesPath : String
