@@ -1877,6 +1877,8 @@ module ISM
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
+            Ism.notifyOfApplyingSecurityMap(@information)
+
             fileList.each do |entry|
 
                 #Don't keep libtool archives by default except if explicitely specified
@@ -1922,6 +1924,8 @@ module ISM
 
             #Strip the file if needed
             if stripFiles
+                Ism.notifyOfStripping(@information)
+
                 stripFileListNoChroot(  fileList:   fileList,
                                         asRoot:     systemHandleUserAccess)
             end

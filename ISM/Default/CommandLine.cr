@@ -111,6 +111,8 @@ module ISM
             BuildText = "Building "
             PrepareInstallationText = "Preparing installation for "
             InstallText = "Installing "
+            ApplyingSecurityMapText = "Applying the security map for "
+            StrippingFilesText = "Stripping the installed files for "
             DeployText = "Deploying "
             RecordNeededKernelOptionsText = "Recording needed kernel options for "
             CleanText = "Cleaning "

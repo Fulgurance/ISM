@@ -1333,6 +1333,22 @@ module ISM
                 exitProgram
         end
 
+        def notifyOfApplyingSecurityMap(softwareInformation : ISM::SoftwareInformation)
+            printSubProcessNotification(ISM::Default::CommandLine::ApplyingSecurityMapText+"#{softwareInformation.name.colorize(:green)}")
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def notifyOfStrippingFiles(softwareInformation : ISM::SoftwareInformation)
+            printSubProcessNotification(ISM::Default::CommandLine::StrippingFilesText+"#{softwareInformation.name.colorize(:green)}")
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def notifyOfDeploy(softwareInformation : ISM::SoftwareInformation)
             printSubProcessNotification(ISM::Default::CommandLine::DeployText+"#{softwareInformation.name.colorize(:green)}")
 
