@@ -782,7 +782,7 @@ module ISM
         end
 
         def printSubProcessNotification(message : String)
-            puts "\t| #{message}"
+            puts "\t#{"|".colorize(:green)} #{message}"
 
             rescue error
                 printSystemCallErrorNotification(error)
