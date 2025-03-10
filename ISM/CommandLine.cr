@@ -1333,40 +1333,40 @@ module ISM
                 exitProgram
         end
 
-        def notifyOfUnlockingSystemAccess(softwareInformation : ISM::SoftwareInformation)
-            printSubProcessNotification(ISM::Default::CommandLine::UnlockingSystemAccessText+"#{softwareInformation.name.colorize(:green)}")
+        def notifyOfUnlockingSystemAccess
+            printSubProcessNotification(ISM::Default::CommandLine::UnlockingSystemAccessText)
 
             rescue error
                 printSystemCallErrorNotification(error)
                 exitProgram
         end
 
-        def notifyOfApplyingSecurityMap(softwareInformation : ISM::SoftwareInformation)
-            printSubProcessNotification(ISM::Default::CommandLine::ApplyingSecurityMapText+"#{softwareInformation.name.colorize(:green)}")
+        def notifyOfApplyingSecurityMap
+            printSubProcessNotification(ISM::Default::CommandLine::ApplyingSecurityMapText)
 
             rescue error
                 printSystemCallErrorNotification(error)
                 exitProgram
         end
 
-        def notifyOfStrippingFiles(softwareInformation : ISM::SoftwareInformation)
-            printSubProcessNotification(ISM::Default::CommandLine::StrippingFilesText+"#{softwareInformation.name.colorize(:green)}")
+        def notifyOfStrippingFiles
+            printSubProcessNotification(ISM::Default::CommandLine::StrippingFilesText)
 
             rescue error
                 printSystemCallErrorNotification(error)
                 exitProgram
         end
 
-        def notifyOfDeploy(softwareInformation : ISM::SoftwareInformation)
-            printSubProcessNotification(ISM::Default::CommandLine::DeployText+"#{softwareInformation.name.colorize(:green)}")
+        def notifyOfDeploy
+            printSubProcessNotification(ISM::Default::CommandLine::DeployText)
 
             rescue error
                 printSystemCallErrorNotification(error)
                 exitProgram
         end
 
-        def notifyOfLockingSystemAccess(softwareInformation : ISM::SoftwareInformation)
-            printSubProcessNotification(ISM::Default::CommandLine::LockingSystemAccessText+"#{softwareInformation.name.colorize(:green)}")
+        def notifyOfLockingSystemAccess
+            printSubProcessNotification(ISM::Default::CommandLine::LockingSystemAccessText)
 
             rescue error
                 printSystemCallErrorNotification(error)
