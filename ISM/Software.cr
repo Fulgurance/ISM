@@ -2300,7 +2300,7 @@ module ISM
         end
 
         def isGreatestVersion : Bool
-            return Ism.getSoftwareInformation(@information.fullName).version >= @information.version
+            return Ism.getSoftwareInformation(@information.fullName).version <= @information.version
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
