@@ -111,7 +111,7 @@ module ISM
             BuildText = "Building "
             PrepareInstallationText = "Preparing installation for "
             InstallText = "Installing "
-            UnlockingSystemAccessText = "Unlocking temporary the access of system critical points for the installation"
+            UnlockingSystemAccessText = "Unlocking temporary the access of system critical points"
             ApplyingSecurityMapText = "Applying the security map"
             StrippingFilesText = "Stripping the installed files"
             DeployText = "Deploying"
