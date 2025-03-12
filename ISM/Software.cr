@@ -1427,7 +1427,11 @@ module ISM
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunGtkQueryImmodules2CommandSecurityNotification(requestedCommands)
+            end
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1438,7 +1442,11 @@ module ISM
         def runGtkQueryImmodules3Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunGtkQueryImmodules3CommandSecurityNotification(requestedCommands)
+            end
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)

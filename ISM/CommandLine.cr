@@ -1213,6 +1213,26 @@ module ISM
                 exitProgram
         end
 
+        def printRunGtkQueryImmodules2CommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGtkQueryImmodules2CommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGtkQueryImmodules2CommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunGtkQueryImmodules3CommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGtkQueryImmodules3CommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGtkQueryImmodules3CommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def printRunGlibCompileSchemasCommandSecurityNotification(command : String)
             printSecurityNotification(  command:    command,
                                         reason:     ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationReasonText,
