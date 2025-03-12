@@ -1908,7 +1908,7 @@ module ISM
                                                 mode:   mode)
                         end
                     else
-                        if File.symlink?(entry)
+                        if File.symlink?(entry) && !File.exists?(finalDestination)
                             installSymlink( target: entry,
                                             path:   finalDestination)
                         else

@@ -2435,9 +2435,7 @@ module ISM
                             target.recordNeededKernelOptions
                             target.clean
                         rescue error
-                            if File.exists?(target.information.installedFilePath)
-                                Ism.uninstallSoftware(target.information)
-                            end
+                            Ism.uninstallSoftware(target.information)
 
                             Ism.printSystemCallErrorNotification(error)
                             Ism.exitProgram
