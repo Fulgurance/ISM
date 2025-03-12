@@ -1908,15 +1908,18 @@ module ISM
                                                 mode:   mode)
                         end
                     else
-                        if File.symlink?(entry) && !File.exists?(finalDestination)
-                            installSymlink( target: entry,
-                                            path:   finalDestination)
-                        else
-                            installFile(target: entry,
-                                        path:   finalDestination,
-                                        user:   user,
-                                        group:  group,
-                                        mode:   mode)
+                        #TO DO: Pre check if files are the same
+                        if !File.exists?(finalDestination)
+                            if File.symlink?(entry)
+                                installSymlink( target: entry,
+                                                path:   finalDestination)
+                            else
+                                installFile(target: entry,
+                                            path:   finalDestination,
+                                            user:   user,
+                                            group:  group,
+                                            mode:   mode)
+                            end
                         end
                     end
 
