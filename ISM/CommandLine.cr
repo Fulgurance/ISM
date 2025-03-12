@@ -1243,7 +1243,7 @@ module ISM
                 exitProgram
         end
 
-        def printRunAlsactlCommandSecurityNotification
+        def printRunAlsactlCommandSecurityNotification(command : String)
             printSecurityNotification(  command:    command,
                                         reason:     ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioReasonText,
                                         details:    ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioDetailsText)
