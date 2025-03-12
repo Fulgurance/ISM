@@ -1243,6 +1243,16 @@ module ISM
                 exitProgram
         end
 
+        def printRunAlsactlCommandSecurityNotification
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioReasonText,
+                                        details:    ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def printRunDbusUuidgenCommandSecurityNotification(command : String)
             printSecurityNotification(  command:    command,
                                         reason:     ISM::Default::CommandLine::RunDbusUuidgenCommandSecurityNotificationReasonText,

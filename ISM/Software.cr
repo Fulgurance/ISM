@@ -1538,7 +1538,11 @@ module ISM
         def runAlsactlCommand(arguments = String.new)
             requestedCommands = "alsactl #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            if !Ism.stillHaveSudoAccess
+                Ism.printRunAlsactlCommandSecurityNotification(requestedCommands)
+            end
+
+            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)

@@ -97,6 +97,8 @@ module ISM
             RunGtkQueryImmodules3CommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will update the GTK input method database."
             RunGlibCompileSchemasCommandSecurityNotificationReasonText = "ISM need to update the gsettings cache"
             RunGlibCompileSchemasCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will update the gsettings schema database."
+            RunAlsactlCommandSecurityNotificatioReasonText = "ISM need to generate the default ALSA file /var/lib/alsa/asound.state"
+            RunAlsactlCommandSecurityNotificatioDetailsText = "To perform this task, a root access is required. It will setup alsactl state."
             RunDbusUuidgenCommandSecurityNotificationReasonText = "ISM need to ensure that /var/lib/dbus/machine-id exist."
             RunDbusUuidgenCommandSecurityNotificationDetailsText = "To perform this task, a root access is required. It will run an utility to generate UUID."
             LockSystemAccessSecurityNotificationCommandText = "sudo chattr -R -f +i [path]"
