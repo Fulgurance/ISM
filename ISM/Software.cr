@@ -1851,21 +1851,12 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
-                    #Apply the security descriptor if the system handle user access
-                    #If there is none, will apply the default descriptor
-                    securityDescriptor = @information.securityMap.descriptor(finalDestination)
-
-                    #TO DO: Need to be improved because dir and file don't have the same mode
-                    user =  systemHandleUserAccess ? securityDescriptor.user : ISM::Default::CommandLine::SystemId
-                    group = systemHandleUserAccess ? securityDescriptor.group : ISM::Default::CommandLine::SystemId
-                    mode =  systemHandleUserAccess ? securityDescriptor.mode : "0755"
-
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            installDirectory(   path:  finalDestination,
-                                                user:   user,
-                                                group:  group,
-                                                mode:   mode)
+                            installDirectory(   path:   finalDestination,
+                                                user:   @information.securityMap.user,
+                                                group:  @information.securityMap.group,
+                                                mode:   @information.securityMap.mode)
                         end
                     else
                         #TO DO: Pre check if files are the same
@@ -1876,9 +1867,9 @@ module ISM
                             else
                                 installFile(target: entry,
                                             path:   finalDestination,
-                                            user:   user,
-                                            group:  group,
-                                            mode:   mode)
+                                            user:   @information.securityMap.user,
+                                            group:  @information.securityMap.group,
+                                            mode:   @information.securityMap.mode)
                             end
                         end
                     end

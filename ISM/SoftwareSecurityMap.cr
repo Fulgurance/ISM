@@ -4,9 +4,11 @@ module ISM
 
         include JSON::Serializable
 
+        property defaultConfiguration : ISM::SoftwareSecurityDefaultConfiguration
         property descriptors : Array(ISM::SoftwareSecurityDescriptor)
 
-        def initialize( @descriptors = Array(ISM::SoftwareSecurityDescriptor).new)
+        def initialize( @defaultConfiguration = ISM::SoftwareSecurityDefaultConfiguration.new,
+                        @descriptors = Array(ISM::SoftwareSecurityDescriptor).new)
         end
 
         def self.loadConfiguration(path = String.new)
@@ -18,33 +20,49 @@ module ISM
         end
 
         def descriptor(filePath : String) : ISM::SoftwareSecurityDescriptor
-            #Return the matching descriptor
-            @descriptors.each do |entry|
-                #Special entry for sources path
-                if entry.target == ISM::Default::SoftwareSecurityDescriptor::SourcesPathEntryName && filePath.squeeze("/") == Ism.settings.sourcesPath
-                    return entry
+            path = filePath.squeeze("/")
+            directory = (File.directory?(path) && !File.symlink?(path))
+
+            user = String.new
+            group = String.new
+            mode = String.new
+
+            if Ism.systemInformation.handleUserAccess
+                #Return the matching descriptor
+                @descriptors.each do |entry|
+                    #Special entry for sources path
+                    if entry.target == ISM::Default::SoftwareSecurityDescriptor::SourcesPathEntryName && path == Ism.settings.sourcesPath
+                        return entry
+                    end
+
+                    #Special entry for tools path
+                    if entry.target == ISM::Default::SoftwareSecurityDescriptor::ToolsPathEntryName && path == Ism.settings.toolsPath
+                        return entry
+                    end
+
+                    if entry.target == filePath
+                        return entry
+                    end
                 end
 
-                #Special entry for tools path
-                if entry.target == ISM::Default::SoftwareSecurityDescriptor::ToolsPathEntryName && filePath.squeeze("/") == Ism.settings.toolsPath
-                    return entry
-                end
+                #TO DO: ADD ADDITIONAL STEP TO CHECK IF THERE IS ANY PARENT DIRECTORY THAT WE SHOULD INHERIT RECURSIVELY OF THE RIGHTS
 
-                if entry.target == filePath
-                    return entry
-                end
+
+                #Apply default the default configuration for directory and file
+                user = (directory ? @defaultConfiguration.directoryUser : @defaultConfiguration.fileUser)
+                group = (directory ? @defaultConfiguration.directoryGroup : @defaultConfiguration.fileGroup)
+                mode = (directory ? @defaultConfiguration.directoryMode : @defaultConfiguration.fileMode)
+            else
+                #Set everything with default ism user, group and mode for directory and file
+                user = ISM::Default::CommandLine::SystemName
+                group = ISM::Default::CommandLine::SystemName
+                mode = (directory ? ISM::Default::SoftwareSecurityMap::DirectoryMode : ISM::Default::SoftwareSecurityMap::FileMode)
             end
 
-            #ADD ADDITIONAL STEP TO CHECK IF THERE IS ANY PARENT DIRECTORY THAT WE SHOULD INHERIT RECURSIVELY OF THE RIGHTS
-
-            #If there is no descriptor, return the one by default
-            @descriptors.each do |entry|
-                if entry.target == ISM::Default::SoftwareSecurityDescriptor::DefaultEntryName
-                    return entry
-                end
-            end
-
-            return ISM::SoftwareSecurityDescriptor.new
+            return ISM::SoftwareSecurityDescriptor.new( target: path,
+                                                        user:   user,
+                                                        group:  group,
+                                                        mode:   mode)
         end
     end
 

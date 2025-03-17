@@ -6,6 +6,7 @@ module ISM
 
             Title = "Ingenius System Manager"
             Name = "ism"
+            SystemName = "#{Name}"
             SystemId = "250"
             NeedSuidBit = "#{Name.upcase} can't run a command that required superuser access. Make sure that #{Name.upcase} have the bit suid set."
             NeedToBeRunAsNormalUserText = "#{Name.upcase} can't be run as superuser. You must be a standard user and in the system group ism"
