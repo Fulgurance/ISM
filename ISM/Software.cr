@@ -1732,15 +1732,13 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def stripFileListNoChroot(fileList : Array(String), asRoot = false)
-            #TO DO: MANAGE THE AS ROOT
-            #{asRoot ? "sudo" : ""}
-
+        def stripFileListNoChroot(fileList : Array(String))
             requestedCommands = <<-CMD
                                 strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
                                 CMD
-
-            process = Process.run(requestedCommands, shell: true)
+            runAsRoot   {
+                process = Process.run(requestedCommands, shell: true)
+            }
 
             #No exit process because if the file can't be strip, we can just keep going
             rescue
@@ -1892,8 +1890,7 @@ module ISM
             if stripFiles
                 Ism.notifyOfStrippingFiles
 
-                stripFileListNoChroot(  fileList:   fileList,
-                                        asRoot:     systemHandleUserAccess)
+                stripFileListNoChroot(  fileList:   fileList)
             end
 
             #Update library cache and run post installation process

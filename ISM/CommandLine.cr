@@ -96,8 +96,8 @@ module ISM
             end
         end
 
-        def runAsRoot(&)
-            if @systemInformation.handleUserAccess
+        def runAsRoot(validCondition = true, &)
+            if @systemInformation.handleUserAccess && validCondition
                 uid = LibC.getuid
                 result = LibC.setuid(0)
 
@@ -2890,12 +2890,12 @@ module ISM
                                     error: quietMode,
                                     shell: true)
 
-            #TO DO: Probably don't need anymore sudo
-
-            process = Process.run(  "sudo HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                                    output: quietMode,
-                                    error: quietMode,
-                                    shell: true)
+            runAsRoot   {
+                process = Process.run(  "HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+                                        output: quietMode,
+                                        error: quietMode,
+                                        shell: true)
+            }
 
             File.delete(@settings.rootPath+ISM::Default::Path::TemporaryDirectory+ISM::Default::Filename::Task)
 
@@ -2946,14 +2946,14 @@ module ISM
                     end
                 end
 
-                #TO DO: Remove sudo
-
-                process = Process.run(  "#{asRoot ? "sudo " : ""}#{command}",
-                                        output: quietMode,
-                                        error: quietMode,
-                                        shell: true,
-                                        chdir: (path == "" ? nil : path),
-                                        env: environmentHash)
+                runAsRoot(validCondition: asRoot)   {
+                    process = Process.run(  "#{command}",
+                                            output: quietMode,
+                                            error: quietMode,
+                                            shell: true,
+                                            chdir: (path == "" ? nil : path),
+                                            env: environmentHash)
+                }
             end
 
             return process
@@ -2983,16 +2983,18 @@ module ISM
 
             rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
 
-            setLib = "sudo chattr -R -f #{mode}i #{rootPath}usr/lib64"
-            setBin = "sudo chattr -R -f #{mode}i  #{rootPath}usr/bin"
-            setSbin = "sudo chattr -R -f #{mode}i  #{rootPath}usr/sbin"
-            setLibexec = "sudo chattr -R -f #{mode}i  #{rootPath}usr/libexec"
+            setLib = "chattr -R -f #{mode}i #{rootPath}usr/lib64"
+            setBin = "chattr -R -f #{mode}i  #{rootPath}usr/bin"
+            setSbin = "chattr -R -f #{mode}i  #{rootPath}usr/sbin"
+            setLibexec = "chattr -R -f #{mode}i  #{rootPath}usr/libexec"
 
             requestedCommands = <<-CMD
                                 #{setLib} && #{setBin} && #{setSbin} && #{setLibexec}
                                 CMD
 
-            process = Process.run(requestedCommands, shell: true)
+            runAsRoot   {
+                process = Process.run(requestedCommands, shell: true)
+            }
 
             if !process.success? && process.exit_code != 1
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -3001,8 +3003,6 @@ module ISM
         end
 
         def lockSystemAccess
-            #TO DO: Run always as root
-
             setSystemAccess(locked: true)
 
             rescue error
@@ -3011,8 +3011,6 @@ module ISM
         end
 
         def unlockSystemAccess
-            #TO DO: Run always as root
-
             setSystemAccess(locked: false)
 
             rescue error
