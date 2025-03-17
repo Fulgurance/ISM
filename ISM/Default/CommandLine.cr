@@ -8,7 +8,7 @@ module ISM
             Name = "ism"
             SystemName = "#{Name}"
             SystemId = "250"
-            NeedSuidBit = "#{Name.upcase} can't run a command that required superuser access. Make sure that #{Name.upcase} have the bit suid set."
+            NeedSuidBitText = "#{Name.upcase} can't run a command that required superuser access. Make sure that #{Name.upcase} have the bit suid set."
             NeedToBeRunAsNormalUserText = "#{Name.upcase} can't be run as superuser. You must be a standard user and in the system group ism"
             NeedToBeRunAsMemberOfIsmGroupText = "#{Name.upcase} can't be run if you are not member of the system group ism"
             ErrorUnknowArgument = "#{Name.upcase} error: unknow argument "
