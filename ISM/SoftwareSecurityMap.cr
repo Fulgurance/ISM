@@ -35,6 +35,8 @@ module ISM
                 end
             end
 
+            #ADD ADDITIONAL STEP TO CHECK IF THERE IS ANY PARENT DIRECTORY THAT WE SHOULD INHERIT RECURSIVELY OF THE RIGHTS
+
             #If there is no descriptor, return the one by default
             @descriptors.each do |entry|
                 if entry.target == ISM::Default::SoftwareSecurityDescriptor::DefaultEntryName

@@ -15,6 +15,8 @@ module ISM
             SelectedKernel = "SelectedKernel.json"
             SecurityMap = "SecurityMap.json"
             Task = ".ISM.task"
+            UserConfiguration = "passwd"
+            GroupConfiguration = "group"
 
         end
 

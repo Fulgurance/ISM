@@ -51,11 +51,7 @@ module ISM
         end
 
         def prepareChrootDevConsole
-            requestedCommands = "sudo mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootDevConsoleSecurityNotification(requestedCommands)
-            end
+            requestedCommands = "mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
@@ -67,11 +63,7 @@ module ISM
         end
 
         def prepareChrootDevNull
-            requestedCommands = "sudo mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootDevNullSecurityNotification(requestedCommands)
-            end
+            requestedCommands = "mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
@@ -83,11 +75,7 @@ module ISM
         end
 
         def prepareChrootDev
-            requestedCommands = "sudo mount -v --bind /dev #{Ism.settings.rootPath}/dev"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootDevSecurityNotification(requestedCommands)
-            end
+            requestedCommands = "mount -v --bind /dev #{Ism.settings.rootPath}/dev"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
@@ -99,11 +87,7 @@ module ISM
         end
 
         def prepareChrootDevPts
-            requestedCommands = "sudo mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootDevPtsSecurityNotification(requestedCommands)
-            end
+            requestedCommands = "mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
@@ -115,11 +99,7 @@ module ISM
         end
 
         def prepareChrootProc
-            requestedCommands = "sudo mount -vt proc proc #{Ism.settings.rootPath}/proc"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootProcSecurityNotification(requestedCommands)
-            end
+            requestedCommands = "mount -vt proc proc #{Ism.settings.rootPath}/proc"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
@@ -131,11 +111,7 @@ module ISM
         end
 
         def prepareChrootSysfs
-            requestedCommands = "sudo mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootSysSecurityNotification(requestedCommands)
-            end
+            requestedCommands = "mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
@@ -147,11 +123,7 @@ module ISM
         end
 
         def prepareChrootNetworkConfiguration
-            requestedCommands = "sudo cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootNetworkConfigurationSecurityNotification(requestedCommands)
-            end
+            requestedCommands = "cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
             process = Process.run(  requestedCommands,
                                     shell: true)
@@ -174,18 +146,14 @@ module ISM
 
         # Internal use only
         def prepareRootPermissions
-            setRoot = "sudo chown -R root:root #{Ism.settings.rootPath}"
-            setVarIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/var/ism"
-            setEtcIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/etc/ism"
-            setVarLogIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
-            setTmpIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
-            setSources = "sudo chown -R ism:ism #{Ism.settings.sourcesPath}"
+            setRoot = "chown -R root:root #{Ism.settings.rootPath}"
+            setVarIsm = "chown -R ism:ism #{Ism.settings.rootPath}/var/ism"
+            setEtcIsm = "chown -R ism:ism #{Ism.settings.rootPath}/etc/ism"
+            setVarLogIsm = "chown -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
+            setTmpIsm = "chown -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
+            setSources = "chown -R ism:ism #{Ism.settings.sourcesPath}"
 
             requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareRootPermissionsSecurityNotification(requestedCommands)
-            end
 
             process = Process.run(  requestedCommands,
                                     shell: true)
@@ -222,6 +190,82 @@ module ISM
 
         def passEnabled : Bool
             return @information.passEnabled
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        #Special function to improve performance (Internal use only)
+        def userConfigurationFilePathNoChroot : String
+            return "#{Ism.settings.sourcesPath}/#{ISM::Default::Filename::UserConfiguration}"
+        end
+
+        #Special function to improve performance (Internal use only)
+        def groupConfigurationFilePathNoChroot : String
+            return "#{Ism.settings.sourcesPath}/#{ISM::Default::Filename::GroupConfiguration}"
+        end
+
+        #Special function to improve performance (Internal use only)
+        def getUserId(name : String) : String
+            configFile = File.read_lines(userConfigurationFilePathNoChroot)
+
+            occurence = String.new
+
+            configFile.each do |line|
+                if line.starts_with?(name.downcase)
+                    occurence = line
+                    break
+                end
+            end
+
+            if occurence.empty?
+                return String.new
+            else
+                return occurence.split(":")[2]
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        #Special function to improve performance (Internal use only)
+        def getGroupId(name : String) : String
+            configFile = File.read_lines(groupConfigurationFilePathNoChroot)
+
+            occurence = String.new
+
+            configFile.each do |line|
+                if line.starts_with?(name.downcase)
+                    occurence = line
+                    break
+                end
+            end
+
+            if occurence.empty?
+                return String.new
+            else
+                return occurence.split(":")[2]
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        #Special function to improve performance (Internal use only)
+        def changeFileModeNoChroot(path : String, mode : String)
+            File.chmod(path, mode)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        #Special function to improve performance (Internal use only)
+        def changeFileOwnerNoChroot(path : String, user : String, group : String)
+            File.chown(path, getUserId(user), getGroupId(group))
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -942,10 +986,6 @@ module ISM
         def generateEmptyPasswdFile
             requestedCommands = "touch /usr/bin/passwd"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printGenerateEmptyPasswdFileSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1233,10 +1273,6 @@ module ISM
         def runPwconvCommand(arguments = String.new)
             requestedCommands = "pwconv #{arguments}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunPwconvCommandSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1247,10 +1283,6 @@ module ISM
 
         def runGrpconvCommand(arguments = String.new)
             requestedCommands = "grpconv #{arguments}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunGrpconvCommandSecurityNotification(requestedCommands)
-            end
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
@@ -1263,10 +1295,6 @@ module ISM
         def runUdevadmCommand(arguments : String)
             requestedCommands = "udevadm #{arguments}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunUdevadmCommandSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1277,10 +1305,6 @@ module ISM
 
         def runDbusUuidgenCommand(arguments = String.new)
             requestedCommands = "dbus-uuidgen #{arguments}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunDbusUuidgenCommandSecurityNotification(requestedCommands)
-            end
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
@@ -1303,10 +1327,6 @@ module ISM
 
         def runInstallInfoCommand(arguments : String)
             requestedCommands = "install-info #{arguments}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunInstallInfoCommandSecurityNotification(requestedCommands)
-            end
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
@@ -1341,10 +1361,6 @@ module ISM
         def runLocaledefCommand(arguments : String)
             requestedCommands = "localedef #{arguments}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunLocaledefCommandSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1367,10 +1383,6 @@ module ISM
         def runMakeCaCommand(arguments : String)
             requestedCommands = "make-ca #{arguments}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunMakeCaCommandSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1381,10 +1393,6 @@ module ISM
 
         def runInstallCatalogCommand(arguments : String)
             requestedCommands = "install-catalog #{arguments}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunInstallCatalogCommandSecurityNotification(requestedCommands)
-            end
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
@@ -1397,10 +1405,6 @@ module ISM
         def runXmlCatalogCommand(arguments : String)
             requestedCommands = "xmlcatalog #{arguments}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunXmlCatalogCommandSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1411,10 +1415,6 @@ module ISM
 
         def runLdconfigCommand(arguments = String.new)
             requestedCommands = "ldconfig #{arguments}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunLdconfigCommandSecurityNotification(requestedCommands)
-            end
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
@@ -1427,10 +1427,6 @@ module ISM
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunGtkQueryImmodules2CommandSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1442,10 +1438,6 @@ module ISM
         def runGtkQueryImmodules3Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunGtkQueryImmodules3CommandSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1456,10 +1448,6 @@ module ISM
 
         def runGlibCompileSchemasCommand(arguments = String.new)
             requestedCommands = "glib-compile-schemas #{arguments}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunGlibCompileSchemasCommandSecurityNotification(requestedCommands)
-            end
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
@@ -1538,10 +1526,6 @@ module ISM
         def runAlsactlCommand(arguments = String.new)
             requestedCommands = "alsactl #{arguments}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunAlsactlCommandSecurityNotification(requestedCommands)
-            end
-
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
             if !process.success?
@@ -1574,10 +1558,6 @@ module ISM
 
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunZicCommandSecurityNotification(requestedCommands)
-            end
 
             process = Ism.runSystemCommand(requestedCommands, path, asRoot: true)
 
@@ -1648,10 +1628,6 @@ module ISM
 
         def runDircolorsCommand(arguments = String.new)
             requestedCommands = "dircolors #{arguments}"
-
-            if !Ism.stillHaveSudoAccess
-                Ism.printRunDircolorsCommandSecurityNotification(requestedCommands)
-            end
 
             process = Ism.runSystemCommand(requestedCommands, asRoot: true)
 
@@ -1757,12 +1733,11 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String), asRoot = false)
-            if !Ism.stillHaveSudoAccess && asRoot
-                Ism.printStripInstalledFilesSecurityNotification
-            end
+            #TO DO: MANAGE THE AS ROOT
+            #{asRoot ? "sudo" : ""}
 
             requestedCommands = <<-CMD
-                                #{asRoot ? "sudo" : ""} strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
+                                strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
@@ -1773,48 +1748,34 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printInstallFileSecurityNotification
-            end
+            runAsRoot   {
+                moveFileNoChroot(target, path)
+                changeFileModeNoChroot(path, mode)
+                changeFileOwnerNoChroot(path, user, group)
+            }
 
-            requestedCommands = <<-CMD
-                                #{systemHandleUserAccess ? "sudo" : ""} install -o #{user} -g #{group} -m #{mode} \"#{target}\" \"#{path}\"
-                                CMD
-
-            process = Process.run(requestedCommands, shell: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
-            end
-        end
-
-        #Special function for the installation process without chroot (Internal use only)
-        def installSymlink(target : String, path : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printInstallSymlinkSecurityNotification
-            end
-
-            requestedCommands = <<-CMD
-                                #{systemHandleUserAccess ? "sudo" : ""} mv \"#{target}\" \"#{path}\"
-                                CMD
-
-            process = Process.run(requestedCommands, shell: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
         end
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printInstallDirectorySecurityNotification
-            end
+            runAsRoot   {
+                makeDirectoryNoChroot(path)
+                changeFileModeNoChroot(path, mode)
+                changeFileOwnerNoChroot(path, user, group)
+            }
 
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        #Special function for the installation process without chroot (Internal use only)
+        def installSymlink(target : String, path : String)
             requestedCommands = <<-CMD
-                                #{systemHandleUserAccess ? "sudo" : ""} install -d -o #{user} -g #{group} -m #{mode} \"#{path}\"
+                                mv \"#{target}\" \"#{path}\"
                                 CMD
 
             process = Process.run(requestedCommands, shell: true)
@@ -1828,7 +1789,9 @@ module ISM
         #Special function for the installation process (Internal use only)
         def updateSystemCache
             if commandIsAvailable("ldconfig")
-                runLdconfigCommand
+                runAsRoot {
+                    runLdconfigCommand
+                }
             end
 
             rescue error
@@ -1838,38 +1801,24 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallFile(path : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printUninstallFileSecurityNotification
-            end
+            runAsRoot {
+                deleteFileNoChroot(path)
+            }
 
-            requestedCommands = <<-CMD
-                                #{systemHandleUserAccess ? "sudo" : ""} rm \"#{path}\"
-                                CMD
-
-            process = Process.run(requestedCommands, shell: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
-            end
         end
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallDirectory(path : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printUninstallDirectorySecurityNotification
-            end
+            runAsRoot {
+                deleteDirectoryNoChroot(path)
+            }
 
-            requestedCommands = <<-CMD
-                                #{systemHandleUserAccess ? "sudo" : ""} rm -r \"#{path}\"
-                                CMD
-
-            process = Process.run(requestedCommands, shell: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
-            end
         end
 
         #Manage stripping, recording installed files and favourites, libtool archive removal, and mount/remount critical point with read-only/read-write access
@@ -1908,6 +1857,7 @@ module ISM
                     #If there is none, will apply the default descriptor
                     securityDescriptor = @information.securityMap.descriptor(finalDestination)
 
+                    #TO DO: Need to be improved because dir and file don't have the same mode
                     user =  systemHandleUserAccess ? securityDescriptor.user : ISM::Default::CommandLine::SystemId
                     group = systemHandleUserAccess ? securityDescriptor.group : ISM::Default::CommandLine::SystemId
                     mode =  systemHandleUserAccess ? securityDescriptor.mode : "0755"
