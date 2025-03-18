@@ -221,16 +221,16 @@ module ISM
                         break
                     end
                 end
+            end
 
-                if occurence.empty?
-                    begin
-                        #Small hack to check if the string contain a valid number
-                        return name.to_i.to_s
-                    rescue
-                    end
-                else
-                    return occurence.split(":")[2]
+            if occurence.empty?
+                begin
+                    #Small hack to check if the string contain a valid number
+                    return name.to_i.to_s
+                rescue
                 end
+            else
+                return occurence.split(":")[2]
             end
 
             return String.new
