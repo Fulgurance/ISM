@@ -155,8 +155,8 @@ module ISM
 
             requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources}"
 
-            Ism.runAsRoot{
-                process = Process.run(  requestedCommands,
+            process = Ism.runAsRoot {
+                Process.run(  requestedCommands,
                                         shell: true)
             }
 
@@ -1752,8 +1752,8 @@ module ISM
             requestedCommands = <<-CMD
                                 strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
                                 CMD
-            runAsRoot   {
-                process = Process.run(requestedCommands, shell: true)
+            process = runAsRoot {
+                Process.run(requestedCommands, shell: true)
             }
 
             #No exit process because if the file can't be strip, we can just keep going
@@ -1762,7 +1762,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-            runAsRoot   {
+            runAsRoot {
                 moveFileNoChroot(target, path)
                 changeFileModeNoChroot(path, mode)
                 changeFileOwnerNoChroot(path, user, group)
@@ -1775,7 +1775,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-            runAsRoot   {
+            runAsRoot {
                 makeDirectoryNoChroot(path)
                 changeFileModeNoChroot(path, mode)
                 changeFileOwnerNoChroot(path, user, group)
