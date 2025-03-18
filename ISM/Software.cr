@@ -155,8 +155,10 @@ module ISM
 
             requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources}"
 
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            Ism.runAsRoot{
+                process = Process.run(  requestedCommands,
+                                        shell: true)
+            }
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)

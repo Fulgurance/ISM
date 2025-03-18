@@ -97,20 +97,20 @@ module ISM
         end
 
         def runAsRoot(validCondition = true, &)
+            uid = LibC.getuid
+
             if @systemInformation.handleUserAccess && validCondition
-                uid = LibC.getuid
                 result = LibC.setuid(0)
+            end
 
-                if result.negative?
-                    printNeedSuidBitNotification
-                    exitProgram
-                end
+            if result.negative?
+                printNeedSuidBitNotification
+            end
 
-                begin
-                    yield
-                ensure
-                    LibC.setuid(uid)
-                end
+            begin
+                yield
+            ensure
+                LibC.setuid(uid)
             end
 
             rescue error
