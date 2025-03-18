@@ -227,12 +227,13 @@ module ISM
                         #Small hack to check if the string contain a valid number
                         return name.to_i.to_s
                     rescue
-                        return String.new
                     end
                 else
                     return occurence.split(":")[2]
                 end
             end
+
+            return String.new
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -255,15 +256,16 @@ module ISM
             end
 
             if occurence.empty?
-                    begin
-                        #Small hack to check if the string contain a valid number
-                        return name.to_i.to_s
-                    rescue
-                        return String.new
-                    end
-                else
-                    return occurence.split(":")[2]
+                begin
+                    #Small hack to check if the string contain a valid number
+                    return name.to_i.to_s
+                rescue
                 end
+            else
+                return occurence.split(":")[2]
+            end
+
+            return String.new
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
