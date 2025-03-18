@@ -259,9 +259,8 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def changeFileModeNoChroot(path : String, mode : String, recursively = false)
-            #File.chmod(path, mode.to_i(base: 8))
-            runChmodCommand("#{recursively ? "-R" : ""} #{mode} #{path}")
+        def changeFileModeNoChroot(path : String, mode : String)
+            File.chmod(path, mode.to_i(base: 8))
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -269,9 +268,8 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def changeFileOwnerNoChroot(path : String, user : String, group : String, recursively = false)
-            #File.chown(path, getUserId(user).to_i, getGroupId(group).to_i)
-            runChownCommand("#{recursively ? "-R" : ""} #{user}:#{group} #{path}")
+        def changeFileOwnerNoChroot(path : String, user : String, group : String)
+            File.chown(path, getUserId(user).to_i, getGroupId(group).to_i)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -1857,7 +1855,7 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
-                    securityDescriptor = @information.securityMap.descriptor(finalDestination)
+                    securityDescriptor = @information.securityMap.descriptor(entry)
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
