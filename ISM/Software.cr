@@ -225,7 +225,7 @@ module ISM
                 if occurence.empty?
                     begin
                         #Small hack to check if the string contain a valid number
-                        return name.to_is.to_s
+                        return name.to_i.to_s
                     rescue
                         return String.new
                     end
@@ -257,7 +257,7 @@ module ISM
             if occurence.empty?
                     begin
                         #Small hack to check if the string contain a valid number
-                        return name.to_is.to_s
+                        return name.to_i.to_s
                     rescue
                         return String.new
                     end
