@@ -210,27 +210,20 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def getUserId(name : String) : String
-            occurence = String.new
-
             if File.exists?(userConfigurationFilePathNoChroot)
                 configFile = File.read_lines(userConfigurationFilePathNoChroot)
 
                 configFile.each do |line|
                     if line.starts_with?(name.downcase)
-                        occurence = line
-                        break
+                        return line.split(":")[2]
                     end
                 end
-            end
-
-            if occurence.empty?
+            else
                 begin
                     #Small hack to check if the string contain a valid number
                     return name.to_i.to_s
                 rescue
                 end
-            else
-                return occurence.split(":")[2]
             end
 
             return String.new
@@ -242,27 +235,20 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def getGroupId(name : String) : String
-            occurence = String.new
-
             if File.exists?(groupConfigurationFilePathNoChroot)
                 configFile = File.read_lines(groupConfigurationFilePathNoChroot)
 
                 configFile.each do |line|
                     if line.starts_with?(name.downcase)
-                        occurence = line
-                        break
+                        return line.split(":")[2]
                     end
                 end
-            end
-
-            if occurence.empty?
+            else
                 begin
                     #Small hack to check if the string contain a valid number
                     return name.to_i.to_s
                 rescue
                 end
-            else
-                return occurence.split(":")[2]
             end
 
             return String.new
