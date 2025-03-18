@@ -22,7 +22,7 @@ module ISM
         def descriptor(filePath : String) : ISM::SoftwareSecurityDescriptor
             path = filePath.squeeze("/")
 
-            realPath = "#{Ism.settings.rootPath}#{path}".squeeze("/")
+            realPath = "#{builtSoftwareDirectoryPathNoChroot}#{path}".squeeze("/")
             directory = (File.directory?(realPath) && !File.symlink?(realPath))
 
             user = String.new
