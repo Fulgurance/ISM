@@ -259,9 +259,9 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def changeFileModeNoChroot(path : String, mode : String)
+        def changeFileModeNoChroot(path : String, mode : String, recursively = false)
             #File.chmod(path, mode.to_i(base: 8))
-            runChmodCommand("#{mode} #{path}")
+            runChmodCommand("#{recursively ? "-R" : ""} #{mode} #{path}")
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -271,7 +271,7 @@ module ISM
         #Special function to improve performance (Internal use only)
         def changeFileOwnerNoChroot(path : String, user : String, group : String)
             #File.chown(path, getUserId(user).to_i, getGroupId(group).to_i)
-            runChownCommand("#{user}:#{group} #{path}")
+            runChownCommand("#{recursively ? "-R" : ""} #{user}:#{group} #{path}")
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -1767,8 +1767,8 @@ module ISM
         def installDirectory(path : String, user : String, group : String, mode : String)
             Ism.runAsRoot {
                 makeDirectoryNoChroot(path)
-                changeFileModeNoChroot(path, mode)
-                changeFileOwnerNoChroot(path, user, group)
+                changeFileModeNoChroot(path, mode, recursively: true)
+                changeFileOwnerNoChroot(path, user, group, recursively: true)
             }
 
             rescue error
