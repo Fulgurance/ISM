@@ -283,7 +283,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def changeFileOwnerNoChroot(path : String, user : String, group : String)
-            File.chown(path, getUserId(user), getGroupId(group))
+            File.chown(path, getUserId(user).to_i, getGroupId(group).to_i)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
