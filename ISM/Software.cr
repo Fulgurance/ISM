@@ -1752,7 +1752,7 @@ module ISM
             requestedCommands = <<-CMD
                                 strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
                                 CMD
-            process = runAsRoot {
+            process = Ism.runAsRoot {
                 Process.run(requestedCommands, shell: true)
             }
 
@@ -1762,7 +1762,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-            runAsRoot {
+            Ism.runAsRoot {
                 moveFileNoChroot(target, path)
                 changeFileModeNoChroot(path, mode)
                 changeFileOwnerNoChroot(path, user, group)
@@ -1775,7 +1775,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-            runAsRoot {
+            Ism.runAsRoot {
                 makeDirectoryNoChroot(path)
                 changeFileModeNoChroot(path, mode)
                 changeFileOwnerNoChroot(path, user, group)
@@ -1803,7 +1803,7 @@ module ISM
         #Special function for the installation process (Internal use only)
         def updateSystemCache
             if commandIsAvailable("ldconfig")
-                runAsRoot {
+                Ism.runAsRoot {
                     runLdconfigCommand
                 }
             end
@@ -1815,7 +1815,7 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallFile(path : String)
-            runAsRoot {
+            Ism.runAsRoot {
                 deleteFileNoChroot(path)
             }
 
@@ -1826,7 +1826,7 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallDirectory(path : String)
-            runAsRoot {
+            Ism.runAsRoot {
                 deleteDirectoryNoChroot(path)
             }
 
