@@ -31,12 +31,12 @@ module ISM
                 #Return the matching descriptor
                 @descriptors.each do |entry|
                     #Special entry for sources path
-                    if entry.target == ISM::Default::SoftwareSecurityDescriptor::SourcesPathEntryName && path == Ism.settings.sourcesPath
+                    if entry.target == ISM::Default::SoftwareSecurityDescriptor::SourcesPathEntryName && path == "/#{ISM::Default::Path::SourcesDirectory}"
                         return entry
                     end
 
                     #Special entry for tools path
-                    if entry.target == ISM::Default::SoftwareSecurityDescriptor::ToolsPathEntryName && path == Ism.settings.toolsPath
+                    if entry.target == ISM::Default::SoftwareSecurityDescriptor::ToolsPathEntryName && path == "/#{ISM::Default::Path::ToolsDirectory}"
                         return entry
                     end
 
