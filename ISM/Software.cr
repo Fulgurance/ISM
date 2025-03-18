@@ -269,7 +269,7 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def changeFileOwnerNoChroot(path : String, user : String, group : String)
+        def changeFileOwnerNoChroot(path : String, user : String, group : String, recursively = false)
             #File.chown(path, getUserId(user).to_i, getGroupId(group).to_i)
             runChownCommand("#{recursively ? "-R" : ""} #{user}:#{group} #{path}")
 
