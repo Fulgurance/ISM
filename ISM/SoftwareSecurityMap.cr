@@ -19,10 +19,9 @@ module ISM
                 Ism.exitProgram
         end
 
-        def descriptor(filePath : String) : ISM::SoftwareSecurityDescriptor
-            path = filePath.squeeze("/")
+        def descriptor(path : String, realPath : String) : ISM::SoftwareSecurityDescriptor
+            path = path.squeeze("/")
 
-            realPath = "#{builtSoftwareDirectoryPathNoChroot}#{path}".squeeze("/")
             directory = (File.directory?(realPath) && !File.symlink?(realPath))
 
             user = String.new
@@ -42,7 +41,7 @@ module ISM
                         return entry
                     end
 
-                    if entry.target == filePath
+                    if entry.target == path
                         return entry
                     end
                 end
