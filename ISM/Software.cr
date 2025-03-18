@@ -260,7 +260,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def changeFileModeNoChroot(path : String, mode : String)
-            File.chmod(path, mode.to_i(base: 8))
+            File.chmod(path, mode.to_i)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
