@@ -4,7 +4,6 @@ module ISM
 
         module SoftwareSecurityDescriptor
 
-            DefaultEntryName = "Default"
             SourcesPathEntryName = "Sources"
             ToolsPathEntryName = "Tools"
 
