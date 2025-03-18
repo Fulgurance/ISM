@@ -200,31 +200,38 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def userConfigurationFilePathNoChroot : String
-            return "#{Ism.settings.sourcesPath}/#{ISM::Default::Filename::UserConfiguration}"
+            return "#{Ism.settings.rootPath}/etc/#{ISM::Default::Filename::UserConfiguration}"
         end
 
         #Special function to improve performance (Internal use only)
         def groupConfigurationFilePathNoChroot : String
-            return "#{Ism.settings.sourcesPath}/#{ISM::Default::Filename::GroupConfiguration}"
+            return "#{Ism.settings.rootPath}/etc/#{ISM::Default::Filename::GroupConfiguration}"
         end
 
         #Special function to improve performance (Internal use only)
         def getUserId(name : String) : String
-            configFile = File.read_lines(userConfigurationFilePathNoChroot)
-
             occurence = String.new
 
-            configFile.each do |line|
-                if line.starts_with?(name.downcase)
-                    occurence = line
-                    break
-                end
-            end
+            if File.exists?(userConfigurationFilePathNoChroot)
+                configFile = File.read_lines(userConfigurationFilePathNoChroot)
 
-            if occurence.empty?
-                return String.new
-            else
-                return occurence.split(":")[2]
+                configFile.each do |line|
+                    if line.starts_with?(name.downcase)
+                        occurence = line
+                        break
+                    end
+                end
+
+                if occurence.empty?
+                    begin
+                        #Small hack to check if the string contain a valid number
+                        return name.to_is.to_s
+                    rescue
+                        return String.new
+                    end
+                else
+                    return occurence.split(":")[2]
+                end
             end
 
             rescue error
@@ -234,22 +241,29 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def getGroupId(name : String) : String
-            configFile = File.read_lines(groupConfigurationFilePathNoChroot)
-
             occurence = String.new
 
-            configFile.each do |line|
-                if line.starts_with?(name.downcase)
-                    occurence = line
-                    break
+            if File.exists?(groupConfigurationFilePathNoChroot)
+                configFile = File.read_lines(groupConfigurationFilePathNoChroot)
+
+                configFile.each do |line|
+                    if line.starts_with?(name.downcase)
+                        occurence = line
+                        break
+                    end
                 end
             end
 
             if occurence.empty?
-                return String.new
-            else
-                return occurence.split(":")[2]
-            end
+                    begin
+                        #Small hack to check if the string contain a valid number
+                        return name.to_is.to_s
+                    rescue
+                        return String.new
+                    end
+                else
+                    return occurence.split(":")[2]
+                end
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -258,7 +272,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def changeFileModeNoChroot(path : String, mode : String)
-            File.chmod(path, mode)
+            File.chmod(path, mode.to_i(base: 8))
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
