@@ -1855,7 +1855,7 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
-                    securityDescriptor = @information.securityMap.descriptor(entry)
+                    securityDescriptor = @information.securityMap.descriptor(recordedFilePath)
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
