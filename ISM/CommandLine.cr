@@ -2946,13 +2946,13 @@ module ISM
                     end
                 end
 
-                runAsRoot(validCondition: asRoot)   {
-                    process = Process.run(  "#{command}",
-                                            output: quietMode,
-                                            error: quietMode,
-                                            shell: true,
-                                            chdir: (path == "" ? nil : path),
-                                            env: environmentHash)
+                process = runAsRoot(validCondition: asRoot)   {
+                    Process.run("#{command}",
+                                output: quietMode,
+                                error: quietMode,
+                                shell: true,
+                                chdir: (path == "" ? nil : path),
+                                env: environmentHash)
                 }
             end
 
