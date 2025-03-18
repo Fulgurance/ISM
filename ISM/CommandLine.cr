@@ -2992,8 +2992,8 @@ module ISM
                                 #{setLib} && #{setBin} && #{setSbin} && #{setLibexec}
                                 CMD
 
-            runAsRoot   {
-                process = Process.run(requestedCommands, shell: true)
+            process = runAsRoot {
+                Process.run(requestedCommands, shell: true)
             }
 
             if !process.success? && process.exit_code != 1
