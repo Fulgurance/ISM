@@ -21,7 +21,9 @@ module ISM
 
         def descriptor(filePath : String) : ISM::SoftwareSecurityDescriptor
             path = filePath.squeeze("/")
-            directory = (File.directory?(path) && !File.symlink?(path))
+
+            realPath = "#{Ism.settings.rootPath}#{path}".squeeze("/")
+            directory = (File.directory?(realPath) && !File.symlink?(realPath))
 
             user = String.new
             group = String.new
