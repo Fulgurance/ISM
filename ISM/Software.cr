@@ -1867,12 +1867,14 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
+                    securityDescriptor = @information.securityMap.descriptor(finalDestination)
+
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
                             installDirectory(   path:   finalDestination,
-                                                user:   @information.securityMap.user,
-                                                group:  @information.securityMap.group,
-                                                mode:   @information.securityMap.mode)
+                                                user:   securityDescriptor.user,
+                                                group:  securityDescriptor.group,
+                                                mode:   securityDescriptor.mode)
                         end
                     else
                         #TO DO: Pre check if files are the same
@@ -1883,9 +1885,9 @@ module ISM
                             else
                                 installFile(target: entry,
                                             path:   finalDestination,
-                                            user:   @information.securityMap.user,
-                                            group:  @information.securityMap.group,
-                                            mode:   @information.securityMap.mode)
+                                            user:   securityDescriptor.user,
+                                            group:  securityDescriptor.group,
+                                            mode:   securityDescriptor.mode)
                             end
                         end
                     end
