@@ -101,10 +101,10 @@ module ISM
 
             if @systemInformation.handleUserAccess && validCondition
                 result = LibC.setuid(0)
-            end
 
-            if result.negative?
-                printNeedSuidBitNotification
+                if result.negative?
+                    printNeedSuidBitNotification
+                end
             end
 
             begin
