@@ -1765,8 +1765,8 @@ module ISM
         def installDirectory(path : String, user : String, group : String, mode : String)
             Ism.runAsRoot {
                 makeDirectoryNoChroot(path)
-                changeFileModeNoChroot(path, mode, recursively: true)
-                changeFileOwnerNoChroot(path, user, group, recursively: true)
+                changeFileModeNoChroot(path, mode)
+                changeFileOwnerNoChroot(path, user, group)
             }
 
             rescue error
