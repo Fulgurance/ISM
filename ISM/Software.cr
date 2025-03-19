@@ -297,7 +297,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def changeFileModeNoChroot(path : String, mode : String, asRoot = false)
-            requestedCommands = "/usr/bin/chmod #{mode}#{path}"
+            requestedCommands = "/usr/bin/chmod #{mode} #{path}"
 
             process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
