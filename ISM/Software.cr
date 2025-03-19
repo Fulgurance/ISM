@@ -296,8 +296,15 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def changeFileModeNoChroot(path : String, mode : String)
-            File.chmod(path, mode.to_i(base: 8))
+        def changeFileModeNoChroot(path : String, mode : String, asRoot = false)
+            requestedCommands = "/usr/bin/chmod #{mode}#{path}"
+
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
+            end
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -306,11 +313,14 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def changeFileOwnerNoChroot(path : String, user : String, group : String)
-            File.chown(path, getUserId(user).to_i, getGroupId(group).to_i)
+            requestedCommands = "/usr/bin/chown #{user}:#{group} #{path}"
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
+            end
         end
 
         #Special function to improve performance (Internal use only)
