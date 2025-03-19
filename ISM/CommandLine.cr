@@ -98,11 +98,13 @@ module ISM
 
         def runAsRoot(validCondition = true, &)
             uid = LibC.getuid
+            gid = LibC.getgid
 
             if @systemInformation.handleUserAccess && validCondition
-                result = LibC.setuid(0)
+                uidResult = LibC.setuid(0)
+                gidResult = LibC.setgid(0)
 
-                if result.negative?
+                if uidResult.negative? || gidResult.negative?
                     printNeedSuidBitNotification
                 end
             end
@@ -111,6 +113,7 @@ module ISM
                 yield
             ensure
                 LibC.setuid(uid)
+                LibC.setgid(gid)
             end
 
             rescue error
