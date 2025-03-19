@@ -3267,12 +3267,30 @@ module ISM
                     end
                 end
 
-                process = Process.run(  "#{superuser ? "sudo" : ""} #{command}",
-                                        output: quietMode,
-                                        error: quietMode,
-                                        shell: shell,
-                                        chdir: (path == "" ? nil : path),
-                                        env: environmentHash)
+                #EXPERIMENTAL: Implementation when shell: false
+
+                shellCommand = String.new
+                noShellCommand = String.new
+                noShellArguments = Array(String).new
+
+                case shell
+                when true
+                    shellCommand = "#{superuser ? "sudo" : ""} #{command}"
+                when false
+                    sudo = "/usr/bin/sudo"
+                    commandArray = command.split(" ")
+
+                    noShellCommand = (superuser ? sudo : commandArray[0])
+                    noShellArguments = (superuser ? commandArray : commandArray[1..-1]
+                end
+
+                process = Process.run(  command:    shell ? shellCommand : noShellCommand,
+                                        args:       (shell ? nil : noShellArguments),
+                                        output:     quietMode,
+                                        error:      quietMode,
+                                        shell:      shell,
+                                        chdir:      ((path.empty? || !shell) ? nil : path),
+                                        env:        environmentHash)
             end
 
             return process

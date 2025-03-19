@@ -7,29 +7,14 @@ module ISM
         property buildDirectory : Bool
         property buildDirectoryNames : Hash(String,String)
 
-        def initialize(informationPath : String)
-            @information = ISM::SoftwareInformation.loadConfiguration(informationPath)
-            @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
-            @buildDirectory = false
-            @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
-        end
-
         #Alias
         def recordCrossToolchainAsFullyBuilt
             Ism.systemInformation.setCrossToolchainFullyBuilt(true)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Alias
         def recordSystemHandleUserAccess
             Ism.systemInformation.setHandleUserAccess(true)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Alias
@@ -40,19 +25,68 @@ module ISM
         #Alias
         def systemHandleUserAccess : Bool
             return Ism.systemInformation.handleUserAccess
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Alias
         def enableInstallationByChroot
             Ism.settings.setInstallByChroot(true)
+        end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+        #Alias
+        def version : String
+            return @information.version
+        end
+
+        #Alias
+        def name : String
+            return @information.name
+        end
+
+        #Alias
+        def versionName : String
+            return @information.versionName
+        end
+
+        #Alias
+        def passEnabled : Bool
+            return @information.passEnabled
+        end
+
+        #Alias
+        def mainKernelHeadersName : String
+            return Ism.mainKernelHeadersName
+        end
+
+        #Alias
+        def mainKernelName : String
+            return Ism.mainKernelName
+        end
+
+        #Alias
+        def mainKernelVersion : String
+            return Ism.mainKernelVersion
+        end
+
+        #Alias
+        def selectedKernel
+            return Ism.selectedKernel
+        end
+
+        #Alias
+        def kernelIsSelected
+            return Ism.kernelIsSelected
+        end
+
+        #Alias
+        def selectedKernel : ISM::SoftwareInformation
+            return Ism.selectedKernel
+        end
+
+        def initialize(informationPath : String)
+            @information = ISM::SoftwareInformation.loadConfiguration(informationPath)
+            @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
+            @buildDirectory = false
+            @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
         end
 
         def prepareChrootDevConsole
@@ -199,38 +233,6 @@ module ISM
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
-        end
-
-        def version : String
-            return @information.version
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
-        def name : String
-            return @information.name
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
-        def versionName : String
-            return @information.versionName
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
-        def passEnabled : Bool
-            return @information.passEnabled
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -432,30 +434,6 @@ module ISM
                 Ism.exitProgram
         end
 
-        def mainKernelHeadersName : String
-            return Ism.mainKernelHeadersName
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
-        def mainKernelName : String
-            return Ism.mainKernelName
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
-        def mainKernelVersion : String
-            return Ism.mainKernelVersion
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
         def updateKernelSymlinks
 
             #Create/Update symlinks if needed
@@ -512,22 +490,6 @@ module ISM
                                     targetPath: "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
 
             updateKernelSymlinks
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
-        def selectedKernel
-            return Ism.selectedKernel
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
-        def kernelIsSelected
-            return Ism.kernelIsSelected
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -782,61 +744,61 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def copyFileNoChroot(path : String, targetPath : String)
-            begin
-                FileUtils.cp(path, targetPath)
-            rescue error
-                Ism.notifyOfCopyFileError(path, targetPath, error)
+        def copyFileNoChroot(path : String, targetPath : String, asRoot = false)
+            process = Ism.runSystemCommand(command: "/usr/bin/cp #{path} #{targetPath}", shell: false, asRoot: asRoot)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def copyDirectoryNoChroot(path : String, targetPath : String)
-            begin
-                FileUtils.cp_r(path, targetPath)
-            rescue error
-                Ism.notifyOfCopyDirectoryError(path, targetPath, error)
+        def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
+            process = Ism.runSystemCommand(command: "/usr/bin/cp -R #{path} #{targetPath}", shell: false, asRoot: asRoot)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def deleteFileNoChroot(path : String)
-            begin
-                FileUtils.rm(path)
-            rescue error
-                Ism.notifyOfDeleteFileError(path, error)
+        def deleteFileNoChroot(path : String, asRoot = false)
+            process = Ism.runSystemCommand(command: "/usr/bin/rm #{path} #{newPath}", shell: false, asRoot: asRoot)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def moveFileNoChroot(path : String, newPath : String)
-            begin
-                FileUtils.mv(path, newPath)
-            rescue error
-                Ism.notifyOfMoveFileError(path, newPath, error)
+        def moveFileNoChroot(path : String, newPath : String, asRoot = false)
+            process = Ism.runSystemCommand(command: "/usr/bin/mv #{path} #{newPath}", shell: false, asRoot: asRoot)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def makeDirectoryNoChroot(directory : String)
-            begin
-                FileUtils.mkdir_p(directory)
-            rescue error
-                Ism.notifyOfMakeDirectoryError(directory, error)
+        def makeDirectoryNoChroot(directory : String, asRoot = false)
+            process = Ism.runSystemCommand(command: "/usr/bin/mkdir -p #{directory}", shell: false, asRoot: asRoot)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def deleteDirectoryNoChroot(directory : String)
-            begin
-                FileUtils.rm_r(directory)
-            rescue error
-                Ism.notifyOfDeleteDirectoryError(directory, error)
+        def deleteDirectoryNoChroot(directory : String, asRoot = false)
+            process = Ism.runSystemCommand(command: "/usr/bin/rm -rf #{directory}", shell: false, asRoot: asRoot)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
         end
@@ -1855,125 +1817,49 @@ module ISM
             rescue
         end
 
-        #AS ROOT
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-            # moveFileNoChroot(target, path)
-            # changeFileModeNoChroot(path, mode)
-            # changeFileOwnerNoChroot(path, user, group)
-
             if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallFileSecurityNotification
             end
 
-            sudo = "/usr/bin/sudo"
-
-            mv = "/usr/bin/mv"
-            mvCommand = (systemHandleUserAccess ? sudo : mv)
-            mvArguments = (systemHandleUserAccess ? [mv,target,path] : [target,path])
-
-            Process.run(command: mvCommand,
-                        args: mvArguments,
-                        shell: false)
-
-            chmod = "/usr/bin/chmod"
-            chmodCommand = (systemHandleUserAccess ? sudo : chmod)
-            chmodArguments = (systemHandleUserAccess ? [chmod,mode,path] : [mode,path])
-
-            Process.run(command: chmodCommand,
-                        args: chmodArguments,
-                        shell: false)
-
-            chown = "/usr/bin/chown"
-            chownCommand = (systemHandleUserAccess ? sudo : chown)
-            chownArguments = (systemHandleUserAccess ? [chown,"#{user}:#{group}",path] : ["#{user}:#{group}",path])
-
-            Process.run(command: chownCommand,
-                        args: chownArguments,
-                        shell: false)
+            moveFileNoChroot(target, path, asRoot: true)
+            changeFileModeNoChroot(path, mode, asRoot: true)
+            changeFileOwnerNoChroot(path, user, group, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
-            # if !process.success?
-            #     Ism.notifyOfRunSystemCommandError(requestedCommands)
-            #     Ism.exitProgram
-            # end
         end
 
-        #AS ROOT
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-            # makeDirectoryNoChroot(path)
-            # changeFileModeNoChroot(path, mode)
-            # changeFileOwnerNoChroot(path, user, group)
-
             if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallDirectorySecurityNotification
             end
 
-            sudo = "/usr/bin/sudo"
-
-            mkdir = "/usr/bin/mkdir"
-            mkdirCommand = (systemHandleUserAccess ? sudo : mkdir)
-            mkdirArguments = (systemHandleUserAccess ? [mkdir,path] : [path])
-
-            Process.run(command: mkdirCommand,
-                        args: mkdirArguments,
-                        shell: false)
-
-            chmod = "/usr/bin/chmod"
-            chmodCommand = (systemHandleUserAccess ? sudo : chmod)
-            chmodArguments = (systemHandleUserAccess ? [chmod,mode,path] : [mode,path])
-
-            Process.run(command: chmodCommand,
-                        args: chmodArguments,
-                        shell: false)
-
-            chown = "/usr/bin/chown"
-            chownCommand = (systemHandleUserAccess ? sudo : chown)
-            chownArguments = (systemHandleUserAccess ? [chown,"#{user}:#{group}",path] : ["#{user}:#{group}",path])
-
-            Process.run(command: chownCommand,
-                        args: chownArguments,
-                        shell: false)
+            makeDirectoryNoChroot(path, asRoot: true)
+            changeFileModeNoChroot(path, mode, asRoot: true)
+            changeFileOwnerNoChroot(path, user, group, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
-            # if !process.success?
-            #     Ism.notifyOfRunSystemCommandError(requestedCommands)
-            #     Ism.exitProgram
-            # end
         end
 
-        #AS ROOT
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
             if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallSymlinkSecurityNotification
             end
 
-            sudo = "/usr/bin/sudo"
-
-            mv = "/usr/bin/mv"
-            mvCommand = (systemHandleUserAccess ? sudo : mv)
-            mvArguments = (systemHandleUserAccess ? [mv,target,path] : [target,path])
-
-            Process.run(command: mvCommand,
-                        args: mvArguments,
-                        shell: false)
+            moveFileNoChroot(target, path, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
-            # if !process.success?
-            #     Ism.notifyOfRunSystemCommandError(requestedCommands)
-            #     Ism.exitProgram
-            # end
         end
 
-        #AS ROOT
         #Special function for the installation process (Internal use only)
         def updateSystemCache
             if commandIsAvailable("ldconfig") && systemHandleUserAccess
@@ -1985,12 +1871,11 @@ module ISM
                 Ism.exitProgram
         end
 
-        #AS ROOT
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallFile(path : String)
-            # if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-            #     Ism.printUninstallFileSecurityNotification
-            # end
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
+                Ism.printUninstallFileSecurityNotification
+            end
 
             deleteFileNoChroot(path)
 
@@ -1999,12 +1884,11 @@ module ISM
                 Ism.exitProgram
         end
 
-        #AS ROOT
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallDirectory(path : String)
-            # if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-            #     Ism.printUninstallDirectorySecurityNotification
-            # end
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
+                Ism.printUninstallDirectorySecurityNotification
+            end
 
             deleteDirectoryNoChroot(path)
 
@@ -2552,14 +2436,6 @@ module ISM
 
         def architecture(architecture : String) : Bool
             return Ism.settings.systemArchitecture == architecture
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
-        end
-
-        def selectedKernel : ISM::SoftwareInformation
-            return Ism.selectedKernel
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
