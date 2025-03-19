@@ -312,7 +312,7 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def changeFileOwnerNoChroot(path : String, user : String, group : String)
+        def changeFileOwnerNoChroot(path : String, user : String, group : String, asRoot = false)
             requestedCommands = "/usr/bin/chown #{user}:#{group} #{path}"
 
             process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
