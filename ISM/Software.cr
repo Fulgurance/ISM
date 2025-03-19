@@ -1790,7 +1790,7 @@ module ISM
 
         #Special function for the installation process (Internal use only)
         def updateSystemCache
-            if commandIsAvailable("ldconfig")
+            if commandIsAvailable("ldconfig") && Ism.systemInformation.handleUserAccess
                 Ism.runAsRoot {
                     runLdconfigCommand
                 }
@@ -1892,9 +1892,7 @@ module ISM
             end
 
             #Update library cache
-            if Ism.systemInformation.handleUserAccess
-                updateSystemCache
-            end
+            updateSystemCache
 
             #Run post installation process
             deploy
