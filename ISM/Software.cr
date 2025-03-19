@@ -1918,8 +1918,8 @@ module ISM
             mkdirCommand = (systemHandleUserAccess ? sudo : mkdir)
             mkdirArguments = (systemHandleUserAccess ? [mkdir,path] : [path])
 
-            Process.run(command: mvCommand,
-                        argv: mvArguments,
+            Process.run(command: mkdirCommand,
+                        argv: mkdirArguments,
                         shell: false)
 
             chmod = "/usr/bin/chmod"
