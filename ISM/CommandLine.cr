@@ -3281,7 +3281,7 @@ module ISM
                     commandArray = command.split(" ")
 
                     noShellCommand = (superuser ? sudo : commandArray[0])
-                    noShellArguments = (superuser ? commandArray : commandArray[1..-1]
+                    noShellArguments = (superuser ? commandArray : commandArray[1..-1])
                 end
 
                 process = Process.run(  command:    shell ? shellCommand : noShellCommand,
