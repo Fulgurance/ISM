@@ -1839,11 +1839,10 @@ module ISM
                 Ism.exitProgram
         end
 
-        #AS ROOT
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String))
             requestedCommands = <<-CMD
-                                strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
+                                #{systemHandleUserAccess ? "sudo" : ""} strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
                                 CMD
 
             if !Ism.stillHaveSudoAccess && systemHandleUserAccess
@@ -1859,52 +1858,119 @@ module ISM
         #AS ROOT
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-                # if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                #     Ism.printInstallFileSecurityNotification
-                # end
+            # moveFileNoChroot(target, path)
+            # changeFileModeNoChroot(path, mode)
+            # changeFileOwnerNoChroot(path, user, group)
 
-                moveFileNoChroot(target, path)
-                changeFileModeNoChroot(path, mode)
-                changeFileOwnerNoChroot(path, user, group)
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
+                Ism.printInstallFileSecurityNotification
+            end
+
+            sudo = "/usr/bin/sudo"
+
+            mv = "/usr/bin/mv"
+            mvCommand = (systemHandleUserAccess ? sudo : mv)
+            mvArguments = (systemHandleUserAccess ? [mv,target,path] : [target,path])
+
+            Process.run(command: mvCommand,
+                        argv: mvArguments,
+                        shell: false)
+
+            chmod = "/usr/bin/chmod"
+            chmodCommand = (systemHandleUserAccess ? sudo : chmod)
+            chmodArguments = (systemHandleUserAccess ? [chmod,mode,path] : [mode,path])
+
+            Process.run(command: chmodCommand,
+                        argv: chmodArguments,
+                        shell: false)
+
+            chown = "/usr/bin/chown"
+            chownCommand = (systemHandleUserAccess ? sudo : chown)
+            chownArguments = (systemHandleUserAccess ? [chown,"#{user}:#{group}",path] : ["#{user}:#{group}",path])
+
+            Process.run(command: chownCommand,
+                        argv: chownArguments,
+                        shell: false)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
+            # if !process.success?
+            #     Ism.notifyOfRunSystemCommandError(requestedCommands)
+            #     Ism.exitProgram
+            # end
         end
 
         #AS ROOT
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-                # if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                #     Ism.printInstallDirectorySecurityNotification
-                # end
+            # makeDirectoryNoChroot(path)
+            # changeFileModeNoChroot(path, mode)
+            # changeFileOwnerNoChroot(path, user, group)
 
-                makeDirectoryNoChroot(path)
-                changeFileModeNoChroot(path, mode)
-                changeFileOwnerNoChroot(path, user, group)
+            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
+                Ism.printInstallDirectorySecurityNotification
+            end
+
+            sudo = "/usr/bin/sudo"
+
+            mkdir = "/usr/bin/mkdir"
+            mkdirCommand = (systemHandleUserAccess ? sudo : mkdir)
+            mkdirArguments = (systemHandleUserAccess ? [mkdir,path] : [path])
+
+            Process.run(command: mvCommand,
+                        argv: mvArguments,
+                        shell: false)
+
+            chmod = "/usr/bin/chmod"
+            chmodCommand = (systemHandleUserAccess ? sudo : chmod)
+            chmodArguments = (systemHandleUserAccess ? [chmod,mode,path] : [mode,path])
+
+            Process.run(command: chmodCommand,
+                        argv: chmodArguments,
+                        shell: false)
+
+            chown = "/usr/bin/chown"
+            chownCommand = (systemHandleUserAccess ? sudo : chown)
+            chownArguments = (systemHandleUserAccess ? [chown,"#{user}:#{group}",path] : ["#{user}:#{group}",path])
+
+            Process.run(command: chownCommand,
+                        argv: chownArguments,
+                        shell: false)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
+            # if !process.success?
+            #     Ism.notifyOfRunSystemCommandError(requestedCommands)
+            #     Ism.exitProgram
+            # end
         end
 
         #AS ROOT
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
-            requestedCommands = <<-CMD
-                                sudo mv \"#{target}\" \"#{path}\"
-                                CMD
-
             if !Ism.stillHaveSudoAccess && systemHandleUserAccess
                 Ism.printInstallSymlinkSecurityNotification
             end
 
-            process = Process.run(requestedCommands, shell: true)
+            sudo = "/usr/bin/sudo"
 
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            mv = "/usr/bin/mv"
+            mvCommand = (systemHandleUserAccess ? sudo : mv)
+            mvArguments = (systemHandleUserAccess ? [mv,target,path] : [target,path])
+
+            Process.run(command: mvCommand,
+                        argv: mvArguments,
+                        shell: false)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
-            end
+            # if !process.success?
+            #     Ism.notifyOfRunSystemCommandError(requestedCommands)
+            #     Ism.exitProgram
+            # end
         end
 
         #AS ROOT

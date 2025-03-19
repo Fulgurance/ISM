@@ -3225,7 +3225,7 @@ module ISM
                 exitProgram
         end
 
-        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false) : Process::Status
+        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false, shell = true) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             superuser = (asRoot && @systemInformation.handleUserAccess)
@@ -3270,7 +3270,7 @@ module ISM
                 process = Process.run(  "#{superuser ? "sudo" : ""} #{command}",
                                         output: quietMode,
                                         error: quietMode,
-                                        shell: true,
+                                        shell: shell,
                                         chdir: (path == "" ? nil : path),
                                         env: environmentHash)
             end
