@@ -768,7 +768,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String, asRoot = false)
-            requestedCommands = "/usr/bin/rm #{path} #{newPath}"
+            requestedCommands = "/usr/bin/rm #{path}"
 
             process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
