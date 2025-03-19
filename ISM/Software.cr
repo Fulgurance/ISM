@@ -1891,8 +1891,12 @@ module ISM
                 stripFileListNoChroot(  fileList:   fileList)
             end
 
-            #Update library cache and run post installation process
-            updateSystemCache
+            #Update library cache
+            if Ism.systemInformation.handleUserAccess
+                updateSystemCache
+            end
+
+            #Run post installation process
             deploy
 
             if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
