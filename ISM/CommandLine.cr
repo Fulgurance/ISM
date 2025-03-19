@@ -96,28 +96,6 @@ module ISM
             end
         end
 
-        def runAsRoot(validCondition = true, &)
-            uid = LibC.getuid
-
-            if @systemInformation.handleUserAccess && validCondition
-                uidResult = LibC.setuid(0)
-
-                if uidResult.negative?
-                    printNeedSuidBitNotification
-                end
-            end
-
-            begin
-                yield
-            ensure
-                LibC.setuid(uid)
-            end
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
         def loadNeededKernelOptions
             if !Dir.exists?(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
                 Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
@@ -967,6 +945,346 @@ module ISM
             puts "#{ISM::Default::CommandLine::SecurityNotificationReasonText} #{reason.colorize(:yellow)}"
             puts "#{ISM::Default::CommandLine::SecurityNotificationDetailsText} #{details.colorize(:green)}"
             puts
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printChrootSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::ChrootSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::ChrootSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::ChrootSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootDevConsoleSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootDevNullSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootDevSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootDevPtsSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootProcSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootSysSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareChrootNetworkConfigurationSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printPrepareRootPermissionsSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareRootPermissionsSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareRootPermissionsSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printStripInstalledFilesSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printInstallFileSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallFileSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::InstallFileSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::InstallFileSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printInstallSymlinkSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallSymlinkSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::InstallSymlinkSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::InstallSymlinkSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printInstallDirectorySecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallDirectorySecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::InstallDirectorySecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::InstallDirectorySecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printUninstallFileSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::UninstallFileSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::UninstallFileSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::UninstallFileSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printUninstallDirectorySecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::UninstallDirectorySecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::UninstallDirectorySecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::UninstallDirectorySecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printGenerateEmptyPasswdFileSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::GenerateEmptyPasswdFileSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::GenerateEmptyPasswdFileSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunLocaledefCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunLocaledefCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunLocaledefCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunDircolorsCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunDircolorsCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunDircolorsCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunLdconfigCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunLdconfigCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunLdconfigCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunPwconvCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunPwconvCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunPwconvCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunGrpconvCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGrpconvCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGrpconvCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunUdevadmCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunUdevadmCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunUdevadmCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunZicCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunZicCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunZicCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunInstallCatalogCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunInstallCatalogCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunInstallCatalogCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunXmlCatalogCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunXmlCatalogCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunXmlCatalogCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunInstallInfoCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunInstallInfoCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunInstallInfoCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunMakeCaCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunMakeCaCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunMakeCaCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunGtkQueryImmodules2CommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGtkQueryImmodules2CommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGtkQueryImmodules2CommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunGtkQueryImmodules3CommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGtkQueryImmodules3CommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGtkQueryImmodules3CommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunGlibCompileSchemasCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunAlsactlCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioReasonText,
+                                        details:    ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printRunDbusUuidgenCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunDbusUuidgenCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunDbusUuidgenCommandSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printLockSystemAccessSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::LockSystemAccessSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationDetailsText)
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printUnlockSystemAccessSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationDetailsText)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -2890,12 +3208,12 @@ module ISM
                                     error: quietMode,
                                     shell: true)
 
-            runAsRoot   {
-                process = Process.run(  "HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                                        output: quietMode,
-                                        error: quietMode,
-                                        shell: true)
-            }
+            command = "sudo HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}"
+
+            process = Process.run(  command: command,
+                                    output: quietMode,
+                                    error: quietMode,
+                                    shell: true)
 
             File.delete(@settings.rootPath+ISM::Default::Path::TemporaryDirectory+ISM::Default::Filename::Task)
 
@@ -2908,6 +3226,8 @@ module ISM
 
         def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
+
+            superuser = (asRoot && @systemInformation.handleUserAccess)
 
             environmentCommand = String.new
 
@@ -2930,7 +3250,7 @@ module ISM
                 cd #{path} && #{environmentCommand} #{command}
                 CODE
 
-                process = runChrootTasks(chrootCommand, quiet, asRoot)
+                process = runChrootTasks(chrootCommand, quiet, superuser)
             else
                 environmentHash = Hash(String, String).new
 
@@ -2946,14 +3266,12 @@ module ISM
                     end
                 end
 
-                process = runAsRoot(validCondition: asRoot)   {
-                    Process.run("#{command}",
-                                output: quietMode,
-                                error: quietMode,
-                                shell: true,
-                                chdir: (path == "" ? nil : path),
-                                env: environmentHash)
-                }
+                process = Process.run(  "#{superuser ? "sudo" : ""} #{command}",
+                                        output: quietMode,
+                                        error: quietMode,
+                                        shell: true,
+                                        chdir: (path == "" ? nil : path),
+                                        env: environmentHash)
             end
 
             return process
@@ -2992,9 +3310,7 @@ module ISM
                                 #{setLib} && #{setBin} && #{setSbin} && #{setLibexec}
                                 CMD
 
-            process = runAsRoot {
-                Process.run(requestedCommands, shell: true)
-            }
+            process = Process.run(requestedCommands, shell: true)
 
             if !process.success? && process.exit_code != 1
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
