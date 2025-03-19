@@ -745,7 +745,9 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String, asRoot = false)
-            process = Ism.runSystemCommand(command: "/usr/bin/cp #{path} #{targetPath}", shell: false, asRoot: asRoot)
+            requestedCommands = "/usr/bin/cp #{path} #{targetPath}"
+
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -755,7 +757,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
-            process = Ism.runSystemCommand(command: "/usr/bin/cp -R #{path} #{targetPath}", shell: false, asRoot: asRoot)
+            requestedCommands = "/usr/bin/cp -R #{path} #{targetPath}"
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -765,7 +768,9 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String, asRoot = false)
-            process = Ism.runSystemCommand(command: "/usr/bin/rm #{path} #{newPath}", shell: false, asRoot: asRoot)
+            requestedCommands = "/usr/bin/rm #{path} #{newPath}"
+
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -775,7 +780,9 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            process = Ism.runSystemCommand(command: "/usr/bin/mv #{path} #{newPath}", shell: false, asRoot: asRoot)
+            requestedCommands = "/usr/bin/mv #{path} #{newPath}"
+
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -785,7 +792,9 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(directory : String, asRoot = false)
-            process = Ism.runSystemCommand(command: "/usr/bin/mkdir -p #{directory}", shell: false, asRoot: asRoot)
+            requestedCommands = "/usr/bin/mkdir -p #{directory}"
+
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -795,7 +804,9 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(directory : String, asRoot = false)
-            process = Ism.runSystemCommand(command: "/usr/bin/rm -rf #{directory}", shell: false, asRoot: asRoot)
+            requestedCommands = "/usr/bin/rm -rf #{directory}"
+
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
