@@ -97,15 +97,17 @@ module ISM
         end
 
         def loadNeededKernelOptions
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
+            directory = "#{@settings.rootPath}#{ISM::Default::Path::NeededKernelOptionsDirectory}"
+
+            if !Dir.exists?(directory)
+                Dir.mkdir_p(directory)
             end
 
-            neededKernelOptions = Dir.children(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
+            neededKernelOptions = Dir.children(directory)
 
             neededKernelOptions.each do |option|
 
-                @neededKernelOptions << ISM::NeededKernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory+"/"+option)
+                @neededKernelOptions << ISM::NeededKernelOption.loadConfiguration("#{directory}/#{option}")
 
             end
 
@@ -115,20 +117,22 @@ module ISM
         end
 
         def loadKernelOptionDatabase
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+            directory = "#{@settings.rootPath}#{ISM::Default::Path::KernelOptionsDirectory}"
+
+            if !Dir.exists?(directory)
+                Dir.mkdir_p(directory)
             end
 
-            availableKernels = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+            availableKernels = Dir.children(directory)
 
             availableKernels.each do |kernelDirectory|
 
-                kernelOptionFiles = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelDirectory)
+                kernelOptionFiles = Dir.children("#{directory}/#{kernelDirectory}")
 
                 availableKernel = ISM::AvailableKernel.new(kernelDirectory)
 
                 kernelOptionFiles.each do |kernelOptionFile|
-                    availableKernel.options << ISM::KernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelDirectory+"/"+kernelOptionFile)
+                    availableKernel.options << ISM::KernelOption.loadConfiguration("#{directory}/#{kernelDirectory}/#{kernelOptionFile}")
                 end
 
                 @kernels << availableKernel
@@ -141,26 +145,15 @@ module ISM
         end
 
         def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
-            software = ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
-                                                                    ISM::Default::Path::SoftwaresDirectory +
-                                                                    port + "/" +
-                                                                    name + "/" +
-                                                                    version + "/" +
-                                                                    ISM::Default::Filename::Information)
+            directory = "#{@settings.rootPath}#{ISM::Default::Path::SoftwaresDirectory}#{port}/#{name}/#{version}/#{ISM::Default::Filename::Information}"
+            "#{@settings.rootPath}#{ISM::Default::Path::SettingsSoftwaresDirectory}#{port}/#{name}/#{version}/#{ISM::Default::Filename::SoftwareSettings}"
+            settingsDirectory = "#{@settings.rootPath}#{ISM::Default::Path::SettingsSoftwaresDirectory}#{port}/#{name}/#{version}/#{ISM::Default::Filename::SoftwareSettings}"
 
-            if File.exists?(@settings.rootPath +
-                            ISM::Default::Path::SettingsSoftwaresDirectory +
-                            port + "/" +
-                            name + "/" +
-                            version + "/" +
-                            ISM::Default::Filename::SoftwareSettings)
+            software = ISM::SoftwareInformation.loadConfiguration(directory)
 
-                softwareSettings = ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
-                                                                                ISM::Default::Path::SettingsSoftwaresDirectory +
-                                                                                port + "/" +
-                                                                                name + "/" +
-                                                                                version + "/" +
-                                                                                ISM::Default::Filename::SoftwareSettings)
+            if File.exists?(settingsDirectory)
+
+                softwareSettings = ISM::SoftwareInformation.loadConfiguration(settingsDirectory)
 
                 softwareSettings.options.each do |option|
 
@@ -189,19 +182,19 @@ module ISM
         end
 
         def loadSoftwareDatabase
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
+            directory = "#{@settings.rootPath}#{ISM::Default::Path::SoftwaresDirectory}"
+
+            if !Dir.exists?(directory)
+                Dir.mkdir_p(directory)
             end
 
-            portDirectories = Dir.children(@settings.rootPath+ISM::Default::Path::SoftwaresDirectory)
+            portDirectories = Dir.children(directory)
 
             portDirectories.each do |portDirectory|
-                portSoftwareDirectories = Dir.children(@settings.rootPath+ISM::Default::Path::SoftwaresDirectory+portDirectory).reject!(&.starts_with?(".git"))
+                portSoftwareDirectories = Dir.children("#{directory}#{portDirectory}").reject!(&.starts_with?(".git"))
 
                 portSoftwareDirectories.each do |softwareDirectory|
-                    versionDirectories = Dir.children(  @settings.rootPath +
-                                                        ISM::Default::Path::SoftwaresDirectory+portDirectory + "/" +
-                                                        softwareDirectory)
+                    versionDirectories = Dir.children("#{directory}#{portDirectory}/#{softwareDirectory}")
                     softwaresInformations = Array(ISM::SoftwareInformation).new
 
                     versionDirectories.each do |versionDirectory|
@@ -222,11 +215,13 @@ module ISM
         end
 
         def loadPortsDatabase
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::PortsDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::PortsDirectory)
+            directory = "#{@settings.rootPath}#{ISM::Default::Path::PortsDirectory}"
+
+            if !Dir.exists?(directory)
+                Dir.mkdir_p(directory)
             end
 
-            portsFiles = Dir.children(@settings.rootPath+ISM::Default::Path::PortsDirectory)
+            portsFiles = Dir.children(directory)
 
             portsFiles.each do |portFile|
                 path = ISM::Port.filePath(portFile[0..-6])
@@ -239,11 +234,13 @@ module ISM
         end
 
         def loadMirrorsDatabase
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::MirrorsDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::MirrorsDirectory)
+            directory = "#{@settings.rootPath}#{ISM::Default::Path::MirrorsDirectory}"
+
+            if !Dir.exists?(directory)
+                Dir.mkdir_p(directory)
             end
 
-            mirrorsFiles = Dir.children(@settings.rootPath+ISM::Default::Path::MirrorsDirectory)
+            mirrorsFiles = Dir.children(directory)
 
             if mirrorsFiles.size == 0
                 @mirrors << ISM::Mirror.loadConfiguration
@@ -260,11 +257,13 @@ module ISM
         end
 
         def loadFavouriteGroupsDatabase
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory)
+            directory = "#{@settings.rootPath}#{ISM::Default::Path::FavouriteGroupsDirectory}"
+
+            if !Dir.exists?(directory)
+                Dir.mkdir_p(directory)
             end
 
-            favouriteGroupsFiles = Dir.children(@settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory)
+            favouriteGroupsFiles = Dir.children(directory)
 
             if favouriteGroupsFiles.size == 0
                 @favouriteGroups << ISM::FavouriteGroup.loadConfiguration
@@ -316,19 +315,19 @@ module ISM
         end
 
         def loadInstalledSoftwareDatabase
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
+            directory = "#{@settings.rootPath}#{ISM::Default::Path::InstalledSoftwaresDirectory}"
+
+            if !Dir.exists?(directory)
+                Dir.mkdir_p(directory)
             end
 
-            portDirectories = Dir.children(@settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory)
+            portDirectories = Dir.children(directory)
 
             portDirectories.each do |portDirectory|
-                portSoftwareDirectories = Dir.children(@settings.rootPath+ISM::Default::Path::InstalledSoftwaresDirectory+portDirectory)
+                portSoftwareDirectories = Dir.children("#{directory}#{portDirectory}")
 
                 portSoftwareDirectories.each do |softwareDirectory|
-                    versionDirectories = Dir.children(  @settings.rootPath +
-                                                        ISM::Default::Path::InstalledSoftwaresDirectory+portDirectory + "/" +
-                                                        softwareDirectory)
+                    versionDirectories = Dir.children("#{directory}#{portDirectory}/#{softwareDirectory}")
 
                     versionDirectories.each do |versionDirectory|
 
@@ -346,8 +345,10 @@ module ISM
         end
 
         def selectedKernel : ISM::SoftwareInformation
-            if File.exists?("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
-                return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+            file = "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}"
+
+            if File.exists?(file)
+                return ISM::SoftwareInformation.loadConfiguration(file)
             else
                 return ISM::SoftwareInformation.new
             end
