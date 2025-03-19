@@ -1873,7 +1873,7 @@ module ISM
             mvArguments = (systemHandleUserAccess ? [mv,target,path] : [target,path])
 
             Process.run(command: mvCommand,
-                        argv: mvArguments,
+                        args: mvArguments,
                         shell: false)
 
             chmod = "/usr/bin/chmod"
@@ -1881,7 +1881,7 @@ module ISM
             chmodArguments = (systemHandleUserAccess ? [chmod,mode,path] : [mode,path])
 
             Process.run(command: chmodCommand,
-                        argv: chmodArguments,
+                        args: chmodArguments,
                         shell: false)
 
             chown = "/usr/bin/chown"
@@ -1889,7 +1889,7 @@ module ISM
             chownArguments = (systemHandleUserAccess ? [chown,"#{user}:#{group}",path] : ["#{user}:#{group}",path])
 
             Process.run(command: chownCommand,
-                        argv: chownArguments,
+                        args: chownArguments,
                         shell: false)
 
             rescue error
