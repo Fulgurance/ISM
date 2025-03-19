@@ -102,7 +102,7 @@ module ISM
             if @systemInformation.handleUserAccess && validCondition
                 uidResult = LibC.setuid(0)
 
-                if uidResult.negative? || gidResult.negative?
+                if uidResult.negative?
                     printNeedSuidBitNotification
                 end
             end
