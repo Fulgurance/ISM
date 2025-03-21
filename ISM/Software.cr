@@ -673,8 +673,7 @@ module ISM
 
         def extractSources
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
-            File.rename(workDirectoryPathNoChroot+"/"+@information.versionName, workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
-            moveFileNoChroot(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
+            moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
