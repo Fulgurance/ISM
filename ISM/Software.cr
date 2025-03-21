@@ -93,10 +93,10 @@ module ISM
         def prepareChrootDevConsole
             requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
-            process = runSystemCommand( requestedCommands,
-                                        shell:  false,
-                                        chroot: false,
-                                        asRoot: true)
+            process = Ism.runSystemCommand( requestedCommands,
+                                            shell:  false,
+                                            chroot: false,
+                                            asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -108,10 +108,10 @@ module ISM
         def prepareChrootDevNull
             requestedCommands = "/usr/bin/mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
-            process = runSystemCommand( requestedCommands,
-                                        shell:  false,
-                                        chroot: false,
-                                        asRoot: true)
+            process = Ism.runSystemCommand( requestedCommands,
+                                            shell:  false,
+                                            chroot: false,
+                                            asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -123,10 +123,10 @@ module ISM
         def prepareChrootDev
             requestedCommands = "/usr/bin/mount -v --bind /dev #{Ism.settings.rootPath}/dev"
 
-            process = runSystemCommand( requestedCommands,
-                                        shell:  false,
-                                        chroot: false,
-                                        asRoot: true)
+            process = Ism.runSystemCommand( requestedCommands,
+                                            shell:  false,
+                                            chroot: false,
+                                            asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -138,10 +138,10 @@ module ISM
         def prepareChrootDevPts
             requestedCommands = "/usr/bin/mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
-            process = runSystemCommand( requestedCommands,
-                                        shell:  false,
-                                        chroot: false,
-                                        asRoot: true)
+            process = Ism.runSystemCommand( requestedCommands,
+                                            shell:  false,
+                                            chroot: false,
+                                            asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -153,10 +153,10 @@ module ISM
         def prepareChrootProc
             requestedCommands = "/usr/bin/mount -vt proc proc #{Ism.settings.rootPath}/proc"
 
-            process = runSystemCommand( requestedCommands,
-                                        shell:  false,
-                                        chroot: false,
-                                        asRoot: true)
+            process = Ism.runSystemCommand( requestedCommands,
+                                            shell:  false,
+                                            chroot: false,
+                                            asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -168,10 +168,10 @@ module ISM
         def prepareChrootSysfs
             requestedCommands = "/usr/bin/mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
 
-            process = runSystemCommand( requestedCommands,
-                                        shell:  false,
-                                        chroot: false,
-                                        asRoot: true)
+            process = Ism.runSystemCommand( requestedCommands,
+                                            shell:  false,
+                                            chroot: false,
+                                            asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -183,10 +183,10 @@ module ISM
         def prepareChrootNetworkConfiguration
             requestedCommands = "/usr/bin/cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
-            process = runSystemCommand( requestedCommands,
-                                        shell:  false,
-                                        chroot: false,
-                                        asRoot: true)
+            process = Ism.runSystemCommand( requestedCommands,
+                                            shell:  false,
+                                            chroot: false,
+                                            asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -217,10 +217,10 @@ module ISM
 
             requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources}"
 
-            process = runSystemCommand( requestedCommands,
-                                        shell:  false,
-                                        chroot: false,
-                                        asRoot: true)
+            process = Ism.runSystemCommand( requestedCommands,
+                                            shell:  false,
+                                            chroot: false,
+                                            asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -681,10 +681,10 @@ module ISM
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            process = runSystemCommand( "/usr/bin/tar -xf #{archivePath}",
-                                        shell: false,
-                                        chroot: false,
-                                        chdir: destinationPath)
+            process = Ism.runSystemCommand( "/usr/bin/tar -xf #{archivePath}",
+                                            shell: false,
+                                            chroot: false,
+                                            chdir: destinationPath)
             if !process.success?
                 Ism.notifyOfExtractError(archivePath, destinationPath)
                 Ism.exitProgram
@@ -718,10 +718,10 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            process = runSystemCommand( "/usr/bin/patch -Np1 -i #{patch}",
-                                        shell: false,
-                                        chroot: false,
-                                        chdir: mainWorkDirectoryPathNoChroot)
+            process = Ism.runSystemCommand( "/usr/bin/patch -Np1 -i #{patch}",
+                                            shell: false,
+                                            chroot: false,
+                                            chdir: mainWorkDirectoryPathNoChroot)
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 Ism.exitProgram
@@ -1746,7 +1746,7 @@ module ISM
         def stripFileListNoChroot(fileList : Array(String))
             requestedCommands = "/usr/bin/strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true"
 
-            process = runSystemCommand(requestedCommands, shell: false, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
 
             #No exit process because if the file can't be strip, we can just keep going
             rescue
