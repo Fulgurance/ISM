@@ -684,7 +684,7 @@ module ISM
             process = Ism.runSystemCommand( "/usr/bin/tar -xf #{archivePath}",
                                             shell: false,
                                             chroot: false,
-                                            chdir: destinationPath)
+                                            path: destinationPath)
             if !process.success?
                 Ism.notifyOfExtractError(archivePath, destinationPath)
                 Ism.exitProgram
@@ -721,7 +721,7 @@ module ISM
             process = Ism.runSystemCommand( "/usr/bin/patch -Np1 -i #{patch}",
                                             shell: false,
                                             chroot: false,
-                                            chdir: mainWorkDirectoryPathNoChroot)
+                                            path: mainWorkDirectoryPathNoChroot)
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 Ism.exitProgram
