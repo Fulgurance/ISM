@@ -1845,8 +1845,11 @@ module ISM
             end
 
             moveFileNoChroot(target, path, asRoot: true)
-            changeFileModeNoChroot(path, mode, asRoot: true)
-            changeFileOwnerNoChroot(path, user, group, asRoot: true)
+
+            # DISABLED FOR NOW, BUT THE FUNCTIONNALITY WORK
+            # MAPS NEED TO BE SET PROPERLY OR INSTALLATION PROCESS WILL GENERATE FUTUR ISSUES
+            # changeFileModeNoChroot(path, mode, asRoot: true)
+            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -1860,8 +1863,10 @@ module ISM
             end
 
             makeDirectoryNoChroot(path, asRoot: true)
-            changeFileModeNoChroot(path, mode, asRoot: true)
-            changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            # DISABLED FOR NOW, BUT THE FUNCTIONNALITY WORK
+            # MAPS NEED TO BE SET PROPERLY OR INSTALLATION PROCESS WILL GENERATE FUTUR ISSUES
+            # changeFileModeNoChroot(path, mode, asRoot: true)
+            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -2496,7 +2501,7 @@ module ISM
         end
 
         def commandIsAvailable(command : String) : Bool
-            process = Ism.runSystemCommand("type #{command} >/dev/null 2>&1")
+            process = Ism.runSystemCommand("type #{command} > /dev/null 2>&1")
 
             return (process.exit_code == 0)
 
