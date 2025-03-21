@@ -2961,7 +2961,7 @@ module ISM
                                 output:     (quiet ? Process::Redirect::Close : output),
                                 error:      (quiet ? Process::Redirect::Close : error),
                                 shell:      shell,
-                                chdir:      ((path.empty? || !shell) ? nil : path),
+                                chdir:      (path.empty? nil : path),
                                 env:        environmentHash)
                 }
             end
