@@ -1746,7 +1746,7 @@ module ISM
         def stripFileListNoChroot(fileList : Array(String))
             requestedCommands = "/usr/bin/strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, quiet: true, shell: true, asRoot: true)
 
             #No exit process because if the file can't be strip, we can just keep going
             rescue
