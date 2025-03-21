@@ -89,15 +89,14 @@ module ISM
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
         end
 
+        # Internal use only
         def prepareChrootDevConsole
-            requestedCommands = "sudo mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
+            requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootDevConsoleSecurityNotification(requestedCommands)
-            end
-
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            process = runSystemCommand( requestedCommands,
+                                        shell:  false,
+                                        chroot: false,
+                                        asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -105,15 +104,14 @@ module ISM
             end
         end
 
+        # Internal use only
         def prepareChrootDevNull
-            requestedCommands = "sudo mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
+            requestedCommands = "/usr/bin/mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootDevNullSecurityNotification(requestedCommands)
-            end
-
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            process = runSystemCommand( requestedCommands,
+                                        shell:  false,
+                                        chroot: false,
+                                        asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -121,15 +119,14 @@ module ISM
             end
         end
 
+        # Internal use only
         def prepareChrootDev
-            requestedCommands = "sudo mount -v --bind /dev #{Ism.settings.rootPath}/dev"
+            requestedCommands = "/usr/bin/mount -v --bind /dev #{Ism.settings.rootPath}/dev"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootDevSecurityNotification(requestedCommands)
-            end
-
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            process = runSystemCommand( requestedCommands,
+                                        shell:  false,
+                                        chroot: false,
+                                        asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -137,15 +134,14 @@ module ISM
             end
         end
 
+        # Internal use only
         def prepareChrootDevPts
-            requestedCommands = "sudo mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
+            requestedCommands = "/usr/bin/mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootDevPtsSecurityNotification(requestedCommands)
-            end
-
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            process = runSystemCommand( requestedCommands,
+                                        shell:  false,
+                                        chroot: false,
+                                        asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -153,15 +149,14 @@ module ISM
             end
         end
 
+        # Internal use only
         def prepareChrootProc
-            requestedCommands = "sudo mount -vt proc proc #{Ism.settings.rootPath}/proc"
+            requestedCommands = "/usr/bin/mount -vt proc proc #{Ism.settings.rootPath}/proc"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootProcSecurityNotification(requestedCommands)
-            end
-
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            process = runSystemCommand( requestedCommands,
+                                        shell:  false,
+                                        chroot: false,
+                                        asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -169,15 +164,14 @@ module ISM
             end
         end
 
+        # Internal use only
         def prepareChrootSysfs
-            requestedCommands = "sudo mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
+            requestedCommands = "/usr/bin/mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootSysSecurityNotification(requestedCommands)
-            end
-
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            process = runSystemCommand( requestedCommands,
+                                        shell:  false,
+                                        chroot: false,
+                                        asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -185,15 +179,14 @@ module ISM
             end
         end
 
+        # Internal use only
         def prepareChrootNetworkConfiguration
-            requestedCommands = "sudo cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
+            requestedCommands = "/usr/bin/cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareChrootNetworkConfigurationSecurityNotification(requestedCommands)
-            end
-
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            process = runSystemCommand( requestedCommands,
+                                        shell:  false,
+                                        chroot: false,
+                                        asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -201,6 +194,7 @@ module ISM
             end
         end
 
+        # Internal use only
         def prepareChrootFileSystem
             prepareChrootDevConsole
             prepareChrootDevNull
@@ -213,21 +207,20 @@ module ISM
 
         # Internal use only
         def prepareRootPermissions
-            setRoot = "sudo chown -R root:root #{Ism.settings.rootPath}"
-            setVarIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/var/ism"
-            setEtcIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/etc/ism"
-            setVarLogIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
-            setTmpIsm = "sudo chown -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
-            setSources = "sudo chown -R ism:ism #{Ism.settings.sourcesPath}"
+            binary = "/usr/bin/chown"
+            setRoot = "#{binary} -R root:root #{Ism.settings.rootPath}"
+            setVarIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/var/ism"
+            setEtcIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/etc/ism"
+            setVarLogIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
+            setTmpIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
+            setSources = "#{binary} -R ism:ism #{Ism.settings.sourcesPath}"
 
             requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources}"
 
-            if !Ism.stillHaveSudoAccess
-                Ism.printPrepareRootPermissionsSecurityNotification(requestedCommands)
-            end
-
-            process = Process.run(  requestedCommands,
-                                    shell: true)
+            process = runSystemCommand( requestedCommands,
+                                        shell:  false,
+                                        chroot: false,
+                                        asRoot: true)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -688,9 +681,10 @@ module ISM
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            process = Process.run(  "tar -xf #{archivePath}",
-                                    shell: true,
-                                    chdir: destinationPath)
+            process = runSystemCommand( "/usr/bin/tar -xf #{archivePath}",
+                                        shell: false,
+                                        chroot: false,
+                                        chdir: destinationPath)
             if !process.success?
                 Ism.notifyOfExtractError(archivePath, destinationPath)
                 Ism.exitProgram
@@ -724,10 +718,10 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            process = Process.run(  "patch -Np1 -i #{patch}",
-                                    error: :inherit,
-                                    shell: true,
-                                    chdir: mainWorkDirectoryPathNoChroot)
+            process = runSystemCommand( "/usr/bin/patch -Np1 -i #{patch}",
+                                        shell: false,
+                                        chroot: false,
+                                        chdir: mainWorkDirectoryPathNoChroot)
             if !process.success?
                 Ism.notifyOfApplyPatchError(patch)
                 Ism.exitProgram
@@ -755,73 +749,68 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String, asRoot = false)
-            requestedCommands = "/usr/bin/cp #{path} #{targetPath}"
+            Ism.runAsSuperUser(validCondition: asRoot) {
+                FileUtils.cp(path, targetPath)
+            }
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.notifyOfCopyFileError(path, targetPath, error)
                 Ism.exitProgram
-            end
         end
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
-            requestedCommands = "/usr/bin/cp -R #{path} #{targetPath}"
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
+            Ism.runAsSuperUser(validCondition: asRoot) {
+                FileUtils.cp_r(path, targetPath)
+            }
 
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.notifyOfCopyDirectoryError(path, targetPath, error)
                 Ism.exitProgram
-            end
         end
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String, asRoot = false)
-            requestedCommands = "/usr/bin/rm #{path}"
+            Ism.runAsSuperUser(validCondition: asRoot) {
+                FileUtils.rm(path)
+            }
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.notifyOfDeleteFileError(path, error)
                 Ism.exitProgram
-            end
         end
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            requestedCommands = "/usr/bin/mv #{path} #{newPath}"
+            Ism.runAsSuperUser(validCondition: asRoot) {
+                FileUtils.mv(path, newPath)
+            }
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.notifyOfMoveFileError(path, newPath, error)
                 Ism.exitProgram
-            end
         end
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(directory : String, asRoot = false)
-            requestedCommands = "/usr/bin/mkdir -p #{directory}"
+            Ism.runAsSuperUser(validCondition: asRoot) {
+                FileUtils.mkdir_p(directory)
+            }
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.notifyOfMakeDirectoryError(directory, error)
                 Ism.exitProgram
-            end
         end
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(directory : String, asRoot = false)
-            requestedCommands = "/usr/bin/rm -rf #{directory}"
+            Ism.runAsSuperUser(validCondition: asRoot) {
+                FileUtils.rm_r(directory)
+            }
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
+            rescue error
+                Ism.notifyOfDeleteDirectoryError(directory, error)
                 Ism.exitProgram
-            end
         end
 
         def fileUpdateContent(path : String, data : String)
@@ -1824,15 +1813,9 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String))
-            requestedCommands = <<-CMD
-                                #{systemHandleUserAccess ? "sudo" : ""} strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
-                                CMD
+            requestedCommands = "/usr/bin/strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true"
 
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printStripInstalledFilesSecurityNotification
-            end
-
-            process = Process.run(requestedCommands, shell: true)
+            process = runSystemCommand(requestedCommands, shell: false, asRoot: true)
 
             #No exit process because if the file can't be strip, we can just keep going
             rescue
@@ -1840,16 +1823,9 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printInstallFileSecurityNotification
-            end
-
             moveFileNoChroot(target, path, asRoot: true)
-
-            # DISABLED FOR NOW, BUT THE FUNCTIONNALITY WORK
-            # MAPS NEED TO BE SET PROPERLY OR INSTALLATION PROCESS WILL GENERATE FUTUR ISSUES
-            # changeFileModeNoChroot(path, mode, asRoot: true)
-            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            changeFileModeNoChroot(path, mode, asRoot: true)
+            changeFileOwnerNoChroot(path, user, group, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -1858,15 +1834,9 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printInstallDirectorySecurityNotification
-            end
-
             makeDirectoryNoChroot(path, asRoot: true)
-            # DISABLED FOR NOW, BUT THE FUNCTIONNALITY WORK
-            # MAPS NEED TO BE SET PROPERLY OR INSTALLATION PROCESS WILL GENERATE FUTUR ISSUES
-            # changeFileModeNoChroot(path, mode, asRoot: true)
-            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            changeFileModeNoChroot(path, mode, asRoot: true)
+            changeFileOwnerNoChroot(path, user, group, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -1875,10 +1845,6 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printInstallSymlinkSecurityNotification
-            end
-
             moveFileNoChroot(target, path, asRoot: true)
 
             rescue error
@@ -1899,11 +1865,7 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallFile(path : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printUninstallFileSecurityNotification
-            end
-
-            deleteFileNoChroot(path)
+            deleteFileNoChroot(path, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -1912,11 +1874,7 @@ module ISM
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallDirectory(path : String)
-            if !Ism.stillHaveSudoAccess && systemHandleUserAccess
-                Ism.printUninstallDirectorySecurityNotification
-            end
-
-            deleteDirectoryNoChroot(path)
+            deleteDirectoryNoChroot(path, asRoot: true)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -2063,7 +2021,7 @@ module ISM
         end
 
         def kernelOptionsDatabasePath : String
-            return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+mainKernelName
+            return "#{Ism.settings.rootPath}#{ISM::Default::Path::KernelOptionsDirectory}#{mainKernelName}"
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
