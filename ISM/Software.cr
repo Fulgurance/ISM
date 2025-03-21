@@ -682,6 +682,7 @@ module ISM
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
             process = Ism.runSystemCommand( "/usr/bin/tar -xf #{archivePath}",
+                                            quiet: true,
                                             shell: false,
                                             chroot: false,
                                             path: destinationPath)
