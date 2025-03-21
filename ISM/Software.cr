@@ -1745,7 +1745,9 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String))
-            requestedCommands = "/usr/bin/strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true"
+            requestedCommands = <<-CMD
+                                /usr/bin/strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
+                                CMD
 
             process = Ism.runSystemCommand(requestedCommands, quiet: true, shell: true, asRoot: true)
 
