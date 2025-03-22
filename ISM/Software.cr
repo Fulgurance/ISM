@@ -1745,12 +1745,20 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String))
-            requestedCommands = "/usr/bin/strip --strip-unneeded #{fileList.join("\' || true\nstrip --strip-unneeded \'")} || true"
+            data = fileList.join("\n")
+            path = "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::StrippingList}"
+            requestedCommands = "/usr/bin/xargs --arg-file=\'#{path}\' /usr/bin/strip --strip-unneeded || true"
 
-            process = Ism.runSystemCommand(requestedCommands, quiet: true, shell: true, asRoot: true)
+            File.write(path, data)
+
+            process = Ism.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: true)
+
+            deleteFileNoChroot(path)
 
             #No exit process because if the file can't be strip, we can just keep going
+            #We ensure that the stripping file list is deleted anyway
             rescue
+            deleteFileNoChroot(path)
         end
 
         #Special function for the installation process without chroot (Internal use only)
