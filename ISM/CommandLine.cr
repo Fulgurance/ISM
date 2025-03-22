@@ -984,6 +984,14 @@ module ISM
                 exitProgram
         end
 
+        def notifyOfDownloadAdditions
+            printSubProcessNotification(ISM::Default::CommandLine::DownloadAdditionsText)
+
+            rescue error
+                    printSystemCallErrorNotification(error)
+                    exitProgram
+        end
+
         def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::CheckText+"#{softwareInformation.name.colorize(:green)}")
 
@@ -992,12 +1000,28 @@ module ISM
                 exitProgram
         end
 
+        def notifyOfCheckAdditions
+            printSubProcessNotification(ISM::Default::CommandLine::CheckAdditionsText)
+
+            rescue error
+                    printSystemCallErrorNotification(error)
+                    exitProgram
+        end
+
         def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::ExtractText+"#{softwareInformation.name.colorize(:green)}")
 
             rescue error
                 printSystemCallErrorNotification(error)
                 exitProgram
+        end
+
+        def notifyOfExtractAdditions
+            printSubProcessNotification(ISM::Default::CommandLine::ExtractAdditionsText)
+
+            rescue error
+                    printSystemCallErrorNotification(error)
+                    exitProgram
         end
 
         def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
