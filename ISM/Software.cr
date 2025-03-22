@@ -1756,9 +1756,7 @@ module ISM
             deleteFileNoChroot(path)
 
             #No exit process because if the file can't be strip, we can just keep going
-            #We ensure that the stripping file list is deleted anyway
             rescue
-            deleteFileNoChroot(path)
         end
 
         #Special function for the installation process without chroot (Internal use only)
