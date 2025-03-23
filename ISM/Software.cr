@@ -516,10 +516,8 @@ module ISM
                 Ism.exitProgram
         end
 
-        def downloadAdditions(links = Array(String).new)
+        def downloadAdditions
             Ism.notifyOfDownloadAdditions
-
-            @additions = links
         end
 
         def downloadAdditionalSources
