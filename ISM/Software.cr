@@ -509,7 +509,9 @@ module ISM
             downloadSources
             downloadSourcesSha512
 
-            downloadAdditions
+            if !@additions.empty?
+                downloadAdditions
+            end
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -666,7 +668,10 @@ module ISM
             Ism.notifyOfCheck(@information)
 
             checkSourcesSha512
-            checkAdditionsSha512
+
+            if !@additions.empty?
+                checkAdditionsSha512
+            end
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -714,7 +719,10 @@ module ISM
             Ism.notifyOfExtract(@information)
 
             extractSources
-            extractAdditions
+
+            if !@additions.empty?
+                extractAdditions
+            end
 
             #Copy of the current available patches from the port
             if Dir.exists?(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName)
