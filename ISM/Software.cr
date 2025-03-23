@@ -673,8 +673,6 @@ module ISM
         end
 
         def checkSourcesSha512
-            archiveName = link.lchop(link[0..link.rindex("/")])
-
             checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                         sha512:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
 
