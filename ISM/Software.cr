@@ -675,8 +675,6 @@ module ISM
         end
 
         def checkAdditionsSha512
-            Ism.notifyOfCheckAdditionsSha512
-
             @additions.each do |link|
                 archiveName = link.lchop(url[0..link.rindex("/")])
 
