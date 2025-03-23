@@ -89,6 +89,10 @@ module ISM
             @buildDirectory = false
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
             @additions = Array(String).new
+            setup
+        end
+
+        def setup
         end
 
         # Internal use only
