@@ -525,7 +525,7 @@ module ISM
 
         def downloadAdditionalSources
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).delete(ISM::Default::Software::ArchiveExtensionName)
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
 
                 downloadFile(   link,
                                 archiveName,
@@ -539,7 +539,7 @@ module ISM
 
         def downloadAdditionalSourcesSha512
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).delete(ISM::Default::Software::ArchiveExtensionName)
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
 
                 downloadFile(   link,
                                 archiveName,
@@ -683,7 +683,7 @@ module ISM
 
         def checkAdditionsSha512
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).delete(ISM::Default::Software::ArchiveExtensionName)
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
 
                 checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
                             sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
