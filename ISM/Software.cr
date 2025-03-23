@@ -525,8 +525,10 @@ module ISM
 
         def downloadAdditionalSources
             @additions.each do |link|
+                archiveName = link.lchop(link[0..link.rindex("/")]).delete(ISM::Default::Software::ArchiveExtensionName)
+
                 downloadFile(   link,
-                                ISM::Default::Software::SourcesArchiveBaseName,
+                                archiveName,
                                 ISM::Default::Software::ArchiveExtensionName)
             end
 
@@ -537,8 +539,10 @@ module ISM
 
         def downloadAdditionalSourcesSha512
             @additions.each do |link|
+                archiveName = link.lchop(link[0..link.rindex("/")]).delete(ISM::Default::Software::ArchiveExtensionName)
+
                 downloadFile(   link,
-                                ISM::Default::Software::SourcesArchiveBaseName,
+                                archiveName,
                                 ISM::Default::Software::ArchiveSha512ExtensionName)
             end
 
@@ -669,7 +673,9 @@ module ISM
         end
 
         def checkSourcesSha512
-            checkFile(  archive:    workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName,
+            archiveName = link.lchop(link[0..link.rindex("/")])
+
+            checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                         sha512:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
 
             rescue error
@@ -679,10 +685,10 @@ module ISM
 
         def checkAdditionsSha512
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")])
+                archiveName = link.lchop(link[0..link.rindex("/")]).delete(ISM::Default::Software::ArchiveExtensionName)
 
                 checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
-                            sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}").strip)
+                            sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
             end
 
             rescue error
