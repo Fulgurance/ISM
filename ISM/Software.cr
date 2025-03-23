@@ -540,8 +540,9 @@ module ISM
         def downloadAdditionalSourcesSha512
             @additions.each do |link|
                 archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+                sha512Link = "#{link}#{ISM::Default::Software::ArchiveSha512ExtensionName}"
 
-                downloadFile(   link,
+                downloadFile(   sha512Link,
                                 archiveName,
                                 ISM::Default::Software::ArchiveSha512ExtensionName)
             end
