@@ -985,7 +985,7 @@ module ISM
         end
 
         def notifyOfDownloadAdditions
-            printSubProcessNotification(ISM::Default::CommandLine::DownloadAdditionsText)
+            printSubProcessNotification("#{ISM::Default::CommandLine::DownloadAdditionsText.colorize(:green)}")
 
             rescue error
                     printSystemCallErrorNotification(error)
@@ -1001,7 +1001,7 @@ module ISM
         end
 
         def notifyOfCheckAdditions
-            printSubProcessNotification(ISM::Default::CommandLine::CheckAdditionsText)
+            printSubProcessNotification("#{ISM::Default::CommandLine::CheckAdditionsText.colorize(:green)}")
 
             rescue error
                     printSystemCallErrorNotification(error)
@@ -1017,7 +1017,7 @@ module ISM
         end
 
         def notifyOfExtractAdditions
-            printSubProcessNotification(ISM::Default::CommandLine::ExtractAdditionsText)
+            printSubProcessNotification("#{ISM::Default::CommandLine::ExtractAdditionsText.colorize(:green)}")
 
             rescue error
                     printSystemCallErrorNotification(error)
