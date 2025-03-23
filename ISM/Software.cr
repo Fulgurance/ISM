@@ -518,6 +518,9 @@ module ISM
 
         def downloadAdditions
             Ism.notifyOfDownloadAdditions
+
+            downloadAdditionalSources
+            downloadAdditionalSourcesSha512
         end
 
         def downloadAdditionalSources
@@ -679,7 +682,7 @@ module ISM
                 archiveName = link.lchop(link[0..link.rindex("/")])
 
                 checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
-                            sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
+                            sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}").strip)
             end
 
             rescue error
@@ -733,7 +736,7 @@ module ISM
             @additions.each do |link|
                 archiveName = link.lchop(link[0..link.rindex("/")])
 
-                extractArchive("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}", workDirectoryPathNoChroot)
+                extractArchive("#{workDirectoryPathNoChroot}/#{archiveName}", workDirectoryPathNoChroot)
             end
 
             rescue error
