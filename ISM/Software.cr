@@ -89,10 +89,6 @@ module ISM
             @buildDirectory = false
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
             @additions = Array(String).new
-            setup
-        end
-
-        def setup
         end
 
         # Internal use only
@@ -503,6 +499,9 @@ module ISM
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
+        end
+
+        def setup
         end
 
         def download

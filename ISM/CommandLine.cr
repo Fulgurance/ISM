@@ -2166,6 +2166,7 @@ module ISM
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
                         begin
+                            target.setup
                             target.download
                             target.check
                             target.extract
