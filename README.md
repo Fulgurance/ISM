@@ -17,7 +17,7 @@ The software handle too the calculation of Linux kernel dependencies. That mean 
 ## Usage
 
 You can see main functionnalities when you just type ism in a terminal:
-```
+```bash
 user $ ism
 Ingenius System Manager
         -h      help    Display the help how to use ISM
@@ -27,14 +27,14 @@ Ingenius System Manager
         -se     settings        Configure ISM settings
 ```
 
-```
+```bash
 user $ ism version
 Show and manage the ISM version
         -s      show    Show the current ISM version
         -sw     switch  Switch ISM to another version
 ```
 
-```
+```bash
 user $ ism software
 Install, configure and remove softwares
         -se     search  Search specific(s) software(s)
@@ -60,7 +60,7 @@ Install, configure and remove softwares
                                 ism software [softwarename-softwareversion] deletepatch [patchpath]
 ```
 
-```
+```bash
 user $ ism port
 Manage ISM ports
         -o      open    Open the specified port
@@ -69,7 +69,7 @@ Manage ISM ports
         -s      search  Search a specified port in the database
 ```
 
-```
+```bash
 user $ ism settings
 Configure ISM settings
         -s      show    Show the current settings
