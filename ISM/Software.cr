@@ -676,7 +676,7 @@ module ISM
 
         def checkAdditionsSha512
             @additions.each do |link|
-                archiveName = link.lchop(url[0..link.rindex("/")])
+                archiveName = link.lchop(link[0..link.rindex("/")])
 
                 checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
                             sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
@@ -731,7 +731,7 @@ module ISM
             Ism.notifyOfExtractAdditions
 
             @additions.each do |link|
-                archiveName = link.lchop(url[0..link.rindex("/")])
+                archiveName = link.lchop(link[0..link.rindex("/")])
 
                 extractArchive("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}", workDirectoryPathNoChroot)
             end
