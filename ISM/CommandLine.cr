@@ -68,8 +68,8 @@ module ISM
             gid = LibC.getgid
 
             if validCondition
-                uidResult = LibC.seteuid(0)
-                gidResult = LibC.setegid(0)
+                uidResult = LibC.setuid(0)
+                gidResult = LibC.setgid(0)
 
                 if uidResult.negative? || gidResult.negative?
                     printNeedSuidBitNotification
@@ -79,8 +79,8 @@ module ISM
             begin
                 yield
             ensure
-                LibC.seteuid(uid)
-                LibC.setegid(uid)
+                LibC.setuid(uid)
+                LibC.setgid(gid)
             end
 
             rescue error
