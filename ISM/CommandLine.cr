@@ -73,6 +73,7 @@ module ISM
 
                 if uidResult.negative? || gidResult.negative?
                     printNeedSuidBitNotification
+                    exitProgram
                 end
             end
 
