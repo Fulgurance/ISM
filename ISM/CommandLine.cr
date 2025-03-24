@@ -2147,7 +2147,7 @@ module ISM
                     #END TARGET SECTION
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new
+                    Ism = ISM::CommandLine.new(taskMode: true)
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
@@ -2312,7 +2312,7 @@ module ISM
                     #{getRequiredTargets(unneededSoftwares)}
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new
+                    Ism = ISM::CommandLine.new(taskMode: true)
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
