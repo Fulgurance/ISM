@@ -2910,6 +2910,12 @@ module ISM
                                     error:      (quiet ? Process::Redirect::Close : error),
                                     shell: true)
 
+            process = Process.run(  "chown root:root #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+                                    input:      (quiet ? Process::Redirect::Close : input),
+                                    output:     (quiet ? Process::Redirect::Close : output),
+                                    error:      (quiet ? Process::Redirect::Close : error),
+                                    shell: true)
+
             command = "HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}"
 
             process = Process.run(  command: command,
