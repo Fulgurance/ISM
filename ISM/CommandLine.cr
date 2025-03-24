@@ -2228,12 +2228,12 @@ module ISM
         def buildTasksFile
             processResult = IO::Memory.new
 
-            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task} -f json"
+            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Filename::Task} -f json"
 
             Process.run(command: requestedCommands,
                         error: processResult,
                         shell: true,
-                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}") do |process|
+                        chdir: "#{@settings.rootPath}") do |process|
                 loop do
                     playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
                     Fiber.yield
@@ -2247,7 +2247,7 @@ module ISM
                 taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
 
                 showTaskCompilationFailedMessage
-                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr")
+                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Filename::Task}.cr")
                 exitProgram
             end
 
@@ -2269,7 +2269,7 @@ module ISM
                                         error: logWriter,
                                         shell: true,
                                         chroot: false,
-                                        path: "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}")
+                                        path: "#{@settings.rootPath}")
 
             if logEnabled
 
@@ -2716,7 +2716,7 @@ module ISM
                 Dir.mkdir_p("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}")
             end
 
-            File.write("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
+            File.write("#{@settings.rootPath}#{ISM::Default::Filename::Task}.cr", tasks)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -2902,15 +2902,15 @@ module ISM
 
         def runChrootTasks(chrootTasks, quiet = false, asRoot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
 
-            File.write(@settings.rootPath+ISM::Default::Path::TemporaryDirectory+ISM::Default::Filename::Task, chrootTasks)
+            File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
-            process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+            process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
                                     shell: true)
 
-            command = "HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}"
+            command = "HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Filename::Task}"
 
             process = Process.run(  command: command,
                                     input:      (quiet ? Process::Redirect::Close : input),
@@ -2918,7 +2918,7 @@ module ISM
                                     error:      (quiet ? Process::Redirect::Close : error),
                                     shell: true)
 
-            File.delete(@settings.rootPath+ISM::Default::Path::TemporaryDirectory+ISM::Default::Filename::Task)
+            File.delete(@settings.rootPath+ISM::Default::Filename::Task)
 
             return process
 
