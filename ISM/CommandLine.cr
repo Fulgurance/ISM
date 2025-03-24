@@ -2913,13 +2913,11 @@ module ISM
 
             command = "HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}"
 
-            process = runAsSuperUser {
-                Process.run(command: command,
-                            input:      (quiet ? Process::Redirect::Close : input),
-                            output:     (quiet ? Process::Redirect::Close : output),
-                            error:      (quiet ? Process::Redirect::Close : error),
-                            shell: true)
-            }
+            process = Process.run(  command: command,
+                                    input:      (quiet ? Process::Redirect::Close : input),
+                                    output:     (quiet ? Process::Redirect::Close : output),
+                                    error:      (quiet ? Process::Redirect::Close : error),
+                                    shell: true)
 
             File.delete(@settings.rootPath+ISM::Default::Path::TemporaryDirectory+ISM::Default::Filename::Task)
 
@@ -2954,7 +2952,9 @@ module ISM
                 cd #{path} && #{environmentCommand} #{command}
                 CODE
 
-                process = runChrootTasks(chrootCommand, quiet, superuser, input, output, error)
+                process = runAsSuperUser {
+                    runChrootTasks(chrootCommand, quiet, superuser, input, output, error)
+                }
             else
                 environmentHash = Hash(String, String).new
 
