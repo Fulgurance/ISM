@@ -1831,7 +1831,7 @@ module ISM
 
             File.write(path, data)
 
-            process = Ism.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: Ism.settings.systemHandleUserAccess)
+            process = Ism.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: systemHandleUserAccess)
 
             deleteFileNoChroot(path)
 
@@ -1841,7 +1841,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-            moveFileNoChroot(target, path, asRoot: Ism.settings.systemHandleUserAccess)
+            moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
@@ -1853,7 +1853,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-            makeDirectoryNoChroot(path, asRoot: Ism.settings.systemHandleUserAccess)
+            makeDirectoryNoChroot(path, asRoot: systemHandleUserAccess)
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
@@ -1865,7 +1865,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
-            moveFileNoChroot(target, path, asRoot: Ism.settings.systemHandleUserAccess)
+            moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
