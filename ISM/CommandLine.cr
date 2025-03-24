@@ -2905,7 +2905,7 @@ module ISM
 
             File.write(@settings.rootPath+ISM::Default::Path::TemporaryDirectory+ISM::Default::Filename::Task, chrootTasks)
 
-            process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+            process = Process.run(  "chmod ug+s+x #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
