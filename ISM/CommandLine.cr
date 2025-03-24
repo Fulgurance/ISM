@@ -67,7 +67,7 @@ module ISM
             uid = LibC.getuid
             gid = LibC.getgid
 
-            if @systemInformation.handleUserAccess && validCondition
+            if validCondition
                 uidResult = LibC.seteuid(0)
                 gidResult = LibC.setegid(0)
 
