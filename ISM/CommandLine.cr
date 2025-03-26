@@ -2261,7 +2261,7 @@ module ISM
             #   -owned by root (uid 0 and gid 0)
             #   -set as immutable to don't allow any suppression
             runAsSuperUser {
-                runSystemCommand(   command: "chown 0:0 && chmod ug+s,o-w && chattr +i #{ISM::Default::Filename::Task}",
+                runSystemCommand(   command: "chown 0:0 #{ISM::Default::Filename::Task} && chmod ug+s,o-w #{ISM::Default::Filename::Task} && chattr +i #{ISM::Default::Filename::Task}",
                                     shell: true,
                                     chroot: false,
                                     path: "#{@settings.rootPath}")
