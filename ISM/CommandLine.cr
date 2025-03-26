@@ -106,21 +106,23 @@ module ISM
             if !@taskMode
                 if ranAsSuperUser
                     printNeedToBeRunAsNormalUserNotification
+                    exitProgram
                 elsif !ranAsMemberOfGroupIsm
                     printNeedToBeRunAsMemberOfIsmGroupNotification
+                    exitProgram
                 end
-            else
-                loadSettingsFiles
-                loadSystemInformationFile
-                loadKernelOptionDatabase
-                loadNeededKernelOptions
-                loadSoftwareDatabase
-                loadInstalledSoftwareDatabase
-                loadPortsDatabase
-                loadMirrorsDatabase
-                loadFavouriteGroupsDatabase
-                checkEnteredArguments
             end
+
+            loadSettingsFiles
+            loadSystemInformationFile
+            loadKernelOptionDatabase
+            loadNeededKernelOptions
+            loadSoftwareDatabase
+            loadInstalledSoftwareDatabase
+            loadPortsDatabase
+            loadMirrorsDatabase
+            loadFavouriteGroupsDatabase
+            checkEnteredArguments
         end
 
         def loadNeededKernelOptions
