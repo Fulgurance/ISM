@@ -1193,7 +1193,7 @@ module ISM
         end
 
         def runUserAddCommand(arguments : String)
-            requestedCommands = "/usr/bin/useradd -R #{Ism.settings.rootPath} #{arguments}"
+            requestedCommands = "/usr/sbin/useradd -R #{Ism.settings.rootPath} #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
 
@@ -1204,7 +1204,7 @@ module ISM
         end
 
         def runUserDelCommand(arguments : String)
-            requestedCommands = "/usr/bin/userdel -R #{Ism.settings.rootPath} #{arguments}"
+            requestedCommands = "/usr/sbin/userdel -R #{Ism.settings.rootPath} #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
 
@@ -1215,7 +1215,7 @@ module ISM
         end
 
         def runGroupAddCommand(arguments : String)
-            requestedCommands = "/usr/bin/groupadd -R #{Ism.settings.rootPath} #{arguments}"
+            requestedCommands = "/usr/sbin/groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
 
@@ -1226,7 +1226,7 @@ module ISM
         end
 
         def runGroupDelCommand(arguments : String)
-            requestedCommands = "/usr/bin/groupdel -R #{Ism.settings.rootPath} #{arguments}"
+            requestedCommands = "/usr/sbin/groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
 
