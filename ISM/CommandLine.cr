@@ -2261,12 +2261,23 @@ module ISM
 
         def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
             # We first set proper rights for the binary task file:
-            #   -enable SUID and SGID bits
-            #   -remove write access to other users
             #   -owned by root (uid 0 and gid 0)
+            #   -enable SUID and SGID bits
             #   -set as immutable to don't allow any suppression
-            runSystemCommand(   command: "chown 0:0 #{ISM::Default::Filename::Task} && chmod ugo+s #{ISM::Default::Filename::Task}",
-                                shell: true,
+            runSystemCommand(   command: "/usr/bin/chown 0:0 #{ISM::Default::Filename::Task}",
+                                shell: false,
+                                chroot: false,
+                                asRoot: true,
+                                path: "#{@settings.rootPath}")
+
+            runSystemCommand(   command: "/usr/bin/chmod ugo+s #{ISM::Default::Filename::Task}",
+                                shell: false,
+                                chroot: false,
+                                asRoot: true,
+                                path: "#{@settings.rootPath}")
+
+            runSystemCommand(   command: "/usr/bin/chattr -f +i #{ISM::Default::Filename::Task}",
+                                shell: false,
                                 chroot: false,
                                 asRoot: true,
                                 path: "#{@settings.rootPath}")
@@ -2298,7 +2309,7 @@ module ISM
 
             #If the task failed, we remove the immutable flag and then suppress the file
             if !process.success?
-                runSystemCommand(   command: "rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                runSystemCommand(   command: "chattr -f -i #{ISM::Default::Filename::Task} && rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                     shell: true,
                                     chroot: false,
                                     asRoot: true,
