@@ -19,7 +19,6 @@ module ISM
         property totalInstalledSymlinkNumber : UInt128
         property totalInstalledFileNumber : UInt128
         property totalInstalledSize : UInt128
-        getter   taskMode : Bool
 
         def initialize(@taskMode = false)
             @systemInformation = ISM::CommandLineSystemInformation.new
@@ -103,14 +102,18 @@ module ISM
         end
 
         def start
-            if !@taskMode
-                if ranAsSuperUser
-                    printNeedToBeRunAsNormalUserNotification
-                    exitProgram
-                elsif !ranAsMemberOfGroupIsm
-                    printNeedToBeRunAsMemberOfIsmGroupNotification
-                    exitProgram
-                end
+            tryEscalatingAccess = false
+
+            if ranAsSuperUser
+                tryEscalatingAccess = true
+                printNeedToBeRunAsNormalUserNotification
+            elsif !ranAsMemberOfGroupIsm
+                tryEscalatingAccess = true
+                printNeedToBeRunAsMemberOfIsmGroupNotification
+            end
+
+            if tryEscalatingAccess
+                exitProgram
             end
 
             loadSettingsFiles
@@ -2133,8 +2136,6 @@ module ISM
 
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
-                    puts
-
                     #LOADING LIBRARIES
                     #{getRequiredLibraries}
 
@@ -2145,8 +2146,18 @@ module ISM
                     #{getRequiredTargets(neededSoftwares)}
                     #END TARGET SECTION
 
+                    euidResult = LibC.seteuid(250)
+                    egidResult = LibC.setegid(250)
+
+                    if euidResult.negative? || egidResult.negative?
+                        puts "Failed to set as ism user"
+                        exit 1
+                    end
+
+                    puts
+
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new(taskMode: true)
+                    Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
@@ -2336,7 +2347,7 @@ module ISM
                     #{getRequiredTargets(unneededSoftwares)}
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new(taskMode: true)
+                    Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
