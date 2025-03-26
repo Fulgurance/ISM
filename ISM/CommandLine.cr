@@ -19,8 +19,9 @@ module ISM
         property totalInstalledSymlinkNumber : UInt128
         property totalInstalledFileNumber : UInt128
         property totalInstalledSize : UInt128
+        getter   taskMode : Bool
 
-        def initialize
+        def initialize(@taskMode = false)
             @systemInformation = ISM::CommandLineSystemInformation.new
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
             @neededKernelOptions = Array(ISM::NeededKernelOption).new
@@ -102,10 +103,12 @@ module ISM
         end
 
         def start
-            if ranAsSuperUser
-                printNeedToBeRunAsNormalUserNotification
-            elsif !ranAsMemberOfGroupIsm
-                printNeedToBeRunAsMemberOfIsmGroupNotification
+            if !@taskMode
+                if ranAsSuperUser
+                    printNeedToBeRunAsNormalUserNotification
+                elsif !ranAsMemberOfGroupIsm
+                    printNeedToBeRunAsMemberOfIsmGroupNotification
+                end
             else
                 loadSettingsFiles
                 loadSystemInformationFile
@@ -2141,7 +2144,7 @@ module ISM
                     #END TARGET SECTION
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new
+                    Ism = ISM::CommandLine.new(taskMode: true)
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
@@ -2265,7 +2268,6 @@ module ISM
                                     shell: true,
                                     chroot: false,
                                     path: "#{@settings.rootPath}")
-                File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
             }
 
             # Log tracing
@@ -2325,7 +2327,7 @@ module ISM
                     #{getRequiredTargets(unneededSoftwares)}
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new
+                    Ism = ISM::CommandLine.new(taskMode: true)
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
