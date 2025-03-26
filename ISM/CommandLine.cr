@@ -2265,12 +2265,11 @@ module ISM
             #   -remove write access to other users
             #   -owned by root (uid 0 and gid 0)
             #   -set as immutable to don't allow any suppression
-            runAsSuperUser {
-                runSystemCommand(   command: "chown 0:0 #{ISM::Default::Filename::Task} && chmod ug+s,o-w #{ISM::Default::Filename::Task} && chattr +i #{ISM::Default::Filename::Task}",
-                                    shell: true,
-                                    chroot: false,
-                                    path: "#{@settings.rootPath}")
-            }
+            runSystemCommand(   command: "chown 0:0 #{ISM::Default::Filename::Task} && chmod ug+s,o-w #{ISM::Default::Filename::Task} && chattr +i #{ISM::Default::Filename::Task}",
+                                shell: true,
+                                chroot: false,
+                                asRoot: true,
+                                path: "#{@settings.rootPath}")
 
             # Log tracing
             logIOMemory = IO::Memory.new
@@ -2299,14 +2298,11 @@ module ISM
 
             #If the task failed, we remove the immutable flag and then suppress the file
             if !process.success?
-                runAsSuperUser {
-                    runSystemCommand(   command: "chattr -i #{ISM::Default::Filename::Task}",
-                                        shell: true,
-                                        chroot: false,
-                                        path: "#{@settings.rootPath}")
-
-                    File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                }
+                runSystemCommand(   command: "chattr -i #{ISM::Default::Filename::Task} && rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                    shell: true,
+                                    chroot: false,
+                                    asRoot: true,
+                                    path: "#{@settings.rootPath}")
                 exitProgram
             end
 
