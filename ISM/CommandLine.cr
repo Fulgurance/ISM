@@ -2238,8 +2238,8 @@ module ISM
                         shell: true,
                         chdir: "#{@settings.rootPath}") do |process|
                 loop do
-                    playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
                     Fiber.yield
+                    playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
                     break if process.terminated?
                 end
             end
@@ -2265,7 +2265,7 @@ module ISM
             #   -remove write access to other users
             #   -owned by root (uid 0 and gid 0)
             #   -set as immutable to don't allow any suppression
-            runSystemCommand(   command: "chown 0:0 #{ISM::Default::Filename::Task} && chmod ug+s,o-w #{ISM::Default::Filename::Task} && chattr +i #{ISM::Default::Filename::Task}",
+            runSystemCommand(   command: "chown 0:0 #{ISM::Default::Filename::Task} && chmod ugo+s #{ISM::Default::Filename::Task} && chattr +i #{ISM::Default::Filename::Task}",
                                 shell: true,
                                 chroot: false,
                                 asRoot: true,
