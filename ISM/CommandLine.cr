@@ -2265,7 +2265,7 @@ module ISM
             #   -remove write access to other users
             #   -owned by root (uid 0 and gid 0)
             #   -set as immutable to don't allow any suppression
-            runSystemCommand(   command: "chown 0:0 #{ISM::Default::Filename::Task} && chmod ugo+s #{ISM::Default::Filename::Task} && chattr +i #{ISM::Default::Filename::Task}",
+            runSystemCommand(   command: "chown 0:0 #{ISM::Default::Filename::Task} && chmod ugo+s #{ISM::Default::Filename::Task}",
                                 shell: true,
                                 chroot: false,
                                 asRoot: true,
@@ -2298,7 +2298,7 @@ module ISM
 
             #If the task failed, we remove the immutable flag and then suppress the file
             if !process.success?
-                runSystemCommand(   command: "chattr -i #{ISM::Default::Filename::Task} && rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                runSystemCommand(   command: "rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                     shell: true,
                                     chroot: false,
                                     asRoot: true,
