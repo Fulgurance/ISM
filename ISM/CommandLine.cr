@@ -2212,13 +2212,11 @@ module ISM
 
             generateTasksFile(tasks)
 
-            if Ism.settings.binaryTaskMode
-                showTaskCompilationTitleMessage
-                buildTasksFile
-                showCalculationDoneMessage
-            end
+            showTaskCompilationTitleMessage
+            buildTasksFile
+            showCalculationDoneMessage
 
-            runTasksFile(asBinary: Ism.settings.binaryTaskMode, logEnabled: true, softwareList: neededSoftwares)
+            runTasksFile(logEnabled: true, softwareList: neededSoftwares)
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -2228,7 +2226,7 @@ module ISM
         def buildTasksFile
             processResult = IO::Memory.new
 
-            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Filename::Task} -f json"
+            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Filename::Task} -f json"
 
             Process.run(command: requestedCommands,
                         error: processResult,
@@ -2256,21 +2254,33 @@ module ISM
                 exitProgram
         end
 
-        def runTasksFile(asBinary = true, logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+        def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+            # We first set proper rights for the binary task file:
+            #   -enable SUID and SGID bits
+            #   -remove write access to other users
+            #   -owned by root (uid 0 and gid 0)
+            #   -set as immutable to don't allow any suppression
+            runAsSuperUser {
+                runSystemCommand(   command: "chown 0:0 && chmod ug+s,o-w && chattr +i #{ISM::Default::Filename::Task}",
+                                    shell: true,
+                                    chroot: false,
+                                    path: "#{@settings.rootPath}")
+                File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+            }
 
-            command = (asBinary ? "./#{ISM::Default::Filename::Task}" : "crystal #{ISM::Default::Filename::Task}.cr")
-
+            # Log tracing
             logIOMemory = IO::Memory.new
-
             logWriter = logEnabled ? IO::MultiWriter.new(STDOUT,logIOMemory) : Process::Redirect::Inherit
 
-            process = runSystemCommand( command: command,
+            # Task execution
+            process = runSystemCommand( command: "./#{ISM::Default::Filename::Task}",
                                         output: logWriter,
                                         error: logWriter,
                                         shell: true,
                                         chroot: false,
                                         path: "#{@settings.rootPath}")
 
+            # Log recording
             if logEnabled
 
                 logs = logIOMemory.to_s.split("#{ISM::Default::CommandLine::Separator.colorize(:green)}\n")
@@ -2283,7 +2293,16 @@ module ISM
                 end
             end
 
+            #If the task failed, we remove the immutable flag and then suppress the file
             if !process.success?
+                runAsSuperUser {
+                    runSystemCommand(   command: "chattr -i #{ISM::Default::Filename::Task}",
+                                        shell: true,
+                                        chroot: false,
+                                        path: "#{@settings.rootPath}")
+
+                    File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+                }
                 exitProgram
             end
 
@@ -2347,11 +2366,9 @@ module ISM
 
             generateTasksFile(tasks)
 
-            if Ism.settings.binaryTaskMode
-                showTaskCompilationTitleMessage
-                buildTasksFile
-                showCalculationDoneMessage
-            end
+            showTaskCompilationTitleMessage
+            buildTasksFile
+            showCalculationDoneMessage
 
             runTasksFile
 
