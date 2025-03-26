@@ -55,6 +55,16 @@ module ISM
             return ISM::Default::CommandLine::SystemId
         end
 
+        def ensureSecurity
+            euidResult = LibC.seteuid(ISM::Default::CommandLine::SystemId)
+            egidResult = LibC.setegid(ISM::Default::CommandLine::SystemId)
+
+            if euidResult.negative? || egidResult.negative?
+                printFailedToEnsureSecurityNotification
+                exitProgram
+            end
+        end
+
         def ranAsSuperUser : Bool
             return (LibC.getuid == 0)
 
@@ -73,6 +83,7 @@ module ISM
 
                 if euidResult.negative? || egidResult.negative?
                     printNeedSuidBitNotification
+                    exitProgram
                 end
             end
 
@@ -773,6 +784,14 @@ module ISM
             if !matchingOption
                 showErrorUnknowArgument
             end
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
+        def printFailedToEnsureSecurityNotification
+            puts "#{ISM::Default::CommandLine::FailedToEnsureSecurity.colorize(:red)}"
 
             rescue error
                 printSystemCallErrorNotification(error)
@@ -2136,6 +2155,8 @@ module ISM
 
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
+                    Ism.ensureSecurity
+
                     #LOADING LIBRARIES
                     #{getRequiredLibraries}
 
@@ -2145,14 +2166,6 @@ module ISM
                     #LOADING TARGETS, ADDITIONAL INFORMATION INDEX AND NEEDED OPTIONS
                     #{getRequiredTargets(neededSoftwares)}
                     #END TARGET SECTION
-
-                    euidResult = LibC.seteuid(250)
-                    egidResult = LibC.setegid(250)
-
-                    if euidResult.negative? || egidResult.negative?
-                        puts "Failed to set as ism user"
-                        exit 1
-                    end
 
                     puts
 
@@ -2335,7 +2348,7 @@ module ISM
 
         def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
-                    puts "\n"
+                    Ism.ensureSecurity
 
                     #LOADING LIBRARIES
                     #{getRequiredLibraries}
@@ -2345,6 +2358,8 @@ module ISM
 
                     #LOADING TARGETS
                     #{getRequiredTargets(unneededSoftwares)}
+
+                    puts
 
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new

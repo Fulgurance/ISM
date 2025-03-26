@@ -19,6 +19,6 @@ jobs:
     - name: Generating ism tree
       run: mkdir /etc/ism && mkdir /var/ism
     - name: Building ism
-      run: crystal build Main.cr -o ism
+      run: crystal build Main.cr -o ism && chmod ugo+s ism
     - name: Run test
       run: ./ism
