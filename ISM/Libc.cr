@@ -1,5 +1,7 @@
 #Libc functions to deal with SUID and SGID bit
 lib LibC
-    fun getgid : UidT
-    fun setgid(gid : UidT) : Int
+    fun seteuid(uid : UidT): Int
+    fun setegid(uid : UidT): Int
+    fun getegid : UidT
+    fun geteuid : UidT
 end
