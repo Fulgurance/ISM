@@ -10,7 +10,7 @@ begin
     egidResult = LibC.setegid(ISM::Default::CommandLine::SystemId.to_i)
 
     #We check if the program have the suid bit set
-    if LibC.getuid.negative?
+    if LibC.euidResult.negative? || LibC.egidResult.negative?
         #printNeedSuidBitNotification
         puts "Need setted bit"
     else
