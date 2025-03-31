@@ -2298,7 +2298,9 @@ module ISM
                                     asRoot: true,
                                     path: "#{@settings.rootPath}")
 
-                File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+                runAsSuperUser{
+                    File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+                }
             end
 
             # We first set proper rights for the binary task file:

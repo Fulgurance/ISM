@@ -1838,7 +1838,9 @@ module ISM
             path = "#{Ism.settings.rootPath}#{ISM::Default::Filename::StrippingList}"
 
             if File.exists?(path)
-                deleteFileNoChroot(path)
+                Ism.runAsSuperUser {
+                    deleteFileNoChroot(path)
+                }
             end
 
             data = fileList.join("\n")
