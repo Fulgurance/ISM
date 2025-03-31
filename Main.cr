@@ -20,9 +20,9 @@ begin
 
 ensure
     #We make sure the program can't run any command as root
-    LibC.setuid(250)
-    LibC.setgid(250)
-    LibC.seteuid(250)
-    LibC.setegid(250)
+    LibC.setuid(ISM::Default::CommandLine::SystemId)
+    LibC.setgid(ISM::Default::CommandLine::SystemId)
+    LibC.seteuid(ISM::Default::CommandLine::SystemId)
+    LibC.setegid(ISM::Default::CommandLine::SystemId)
 end
 
