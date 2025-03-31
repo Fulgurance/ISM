@@ -2268,8 +2268,7 @@ module ISM
                         shell: true,
                         chdir: "#{@settings.rootPath}") do |process|
                 loop do
-                    Fiber.yield
-                    playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
+                    Fiber.yield.tap{ playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText) }
                     break if process.terminated?
                 end
             end
