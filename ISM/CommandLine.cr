@@ -3048,21 +3048,6 @@ module ISM
                 exitProgram
         end
 
-        def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
-            requestedCommands = "./#{file} #{arguments}"
-
-            process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                exitProgram
-            end
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
         def setSystemAccess(locked : Bool)
             mode = (locked ? "+" : "-")
 
@@ -3231,7 +3216,7 @@ module ISM
                 arguments = ["--set-val","#{symbol}",value]
             end
 
-            runFile("#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
+            runSystemCommand("./#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
 
             rescue error
                 printSystemCallErrorNotification(error)
