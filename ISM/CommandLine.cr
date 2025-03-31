@@ -55,18 +55,6 @@ module ISM
             return ISM::Default::CommandLine::SystemId
         end
 
-        def ensureSecurity
-            uidResult = LibC.setuid(0)
-            gidResult = LibC.setgid(0)
-            euidResult = LibC.seteuid(0)
-            egidResult = LibC.setegid(0)
-
-            if !uidResult.negative? || !gidResult.negative? || !euidResult.negative? || !egidResult.negative?
-                printFailedToEnsureSecurityNotification
-                exitProgram
-            end
-        end
-
         def ranAsSuperUser : Bool
             return (LibC.getuid == 0)
 
@@ -2161,8 +2149,6 @@ module ISM
 
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
-                    Ism.ensureSecurity
-
                     #LOADING LIBRARIES
                     #{getRequiredLibraries}
 
@@ -2362,8 +2348,6 @@ module ISM
 
         def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareInformation))
             tasks = <<-CODE
-                    Ism.ensureSecurity
-
                     #LOADING LIBRARIES
                     #{getRequiredLibraries}
 
