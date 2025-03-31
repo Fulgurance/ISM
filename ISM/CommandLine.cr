@@ -19,6 +19,7 @@ module ISM
         property totalInstalledSymlinkNumber : UInt128
         property totalInstalledFileNumber : UInt128
         property totalInstalledSize : UInt128
+        getter taskMode : Bool
 
         def initialize(@taskMode = false)
             @systemInformation = ISM::CommandLineSystemInformation.new
