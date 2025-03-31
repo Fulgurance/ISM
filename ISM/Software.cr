@@ -1835,15 +1835,18 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String))
-            data = fileList.join("\n")
             path = "#{Ism.settings.rootPath}#{ISM::Default::Filename::StrippingList}"
+
+            if File.exists?(path)
+                deleteFileNoChroot(path)
+            end
+
+            data = fileList.join("\n")
             requestedCommands = "/usr/bin/xargs --arg-file=\'#{path}\' /usr/bin/strip --strip-unneeded || true"
 
             File.write(path, data)
 
             process = Ism.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: systemHandleUserAccess)
-
-            deleteFileNoChroot(path)
 
             #No exit process because if the file can't be strip, we can just keep going
             rescue
