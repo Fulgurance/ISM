@@ -84,6 +84,8 @@ module ISM
             begin
                 yield
             ensure
+                LibC.setuid(uid)
+                LibC.setgid(gid)
                 LibC.seteuid(euid)
                 LibC.setegid(egid)
             end
