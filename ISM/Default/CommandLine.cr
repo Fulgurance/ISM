@@ -17,6 +17,7 @@ module ISM
             ErrorUnknowArgumentHelp2 = "ism --help "
             ErrorUnknowArgumentHelp3 = "to know how to use #{Name.upcase}"
             ProcessNotificationCharacters = "■"
+            SubProcessNotificationCharacters = "└"
             InternalErrorTitle = "Internal error"
             TaskBuildingProcessErrorText1 = "The #{Name.upcase} task at "
             TaskBuildingProcessErrorText2 = " encountered an error at line number "
