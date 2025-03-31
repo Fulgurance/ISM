@@ -2290,6 +2290,17 @@ module ISM
         end
 
         def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+            # We first check if there is any task left
+            if File.exits?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+                runSystemCommand(   command: "/usr/bin/chattr -f -i #{ISM::Default::Filename::Task}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: true,
+                                    path: "#{@settings.rootPath}")
+
+                File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+            end
+
             # We first set proper rights for the binary task file:
             #   -owned by root (uid 0 and gid 0)
             #   -enable SUID and SGID bits
@@ -2337,13 +2348,8 @@ module ISM
                 end
             end
 
-            #If the task failed, we remove the immutable flag and then suppress the file
             if !process.success?
-                runSystemCommand(   command: "chattr -f -i #{ISM::Default::Filename::Task} && rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                    shell: true,
-                                    chroot: false,
-                                    asRoot: true,
-                                    path: "#{@settings.rootPath}")
+                showTaskCompilationFailedMessage
                 exitProgram
             end
 
