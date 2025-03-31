@@ -1238,6 +1238,21 @@ module ISM
             end
         end
 
+        def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
+            requestedCommands = "./#{file} #{arguments}"
+
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+
+            if !process.success?
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
+            end
+
+            rescue error
+                printSystemCallErrorNotification(error)
+                exitProgram
+        end
+
         def runTarCommand(arguments = String.new, path = String.new)
             requestedCommands = "tar #{arguments}"
 

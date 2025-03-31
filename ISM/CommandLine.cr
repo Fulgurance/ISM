@@ -2438,12 +2438,7 @@ module ISM
         def synchronizePorts
             @ports.each do |port|
 
-                synchronization = port.synchronize
-
-                until synchronization.terminated?
-                    playCalculationAnimation(ISM::Default::CommandLine::SynchronizationWaitingText)
-                    sleep(Time::Span.new(seconds: 0))
-                end
+                synchronization = port.synchronize.tap { Ism.playCalculationAnimation }
 
             end
 

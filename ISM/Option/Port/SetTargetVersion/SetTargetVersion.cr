@@ -19,17 +19,11 @@ module ISM
 
                     if !Ism.ports.empty?
                         print ISM::Default::Option::PortSetTargetVersion::SetTitle
-                        text = ISM::Default::Option::PortSetTargetVersion::SetWaitingText
 
                         Ism.ports.each do |port|
                             process = Process.new(  "git switch --detach #{targetVersion}",
                                                     shell: true,
-                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
-
-                            until process.terminated?
-                                Ism.playCalculationAnimation(text: text)
-                                sleep(Time::Span.new(seconds: 0))
-                            end
+                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name).tap { Ism.playCalculationAnimation(ISM::Default::Option::PortSetTargetVersion::SetWaitingText) }
 
                             validVersion = !process.error?
 
