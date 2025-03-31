@@ -1247,10 +1247,6 @@ module ISM
                 Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 Ism.exitProgram
             end
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def runTarCommand(arguments = String.new, path = String.new)
