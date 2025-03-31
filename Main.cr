@@ -6,11 +6,11 @@ begin
     #Allow the program to run root commands
     uidResult = LibC.setuid(0)
     gidResult = LibC.setgid(0)
-    euidResult = LibC.seteuid(0)
-    egidResult = LibC.setegid(0)
+    euidResult = LibC.seteuid(ISM::Default::CommandLine::SystemId.to_i)
+    egidResult = LibC.setegid(ISM::Default::CommandLine::SystemId.to_i)
 
     #We check if the program have the suid bit set
-    if LibC.geteuid.negative? || LibC.getegid.negative?
+    if LibC.getuid.negative?
         #printNeedSuidBitNotification
         puts "Need setted bit"
     else
