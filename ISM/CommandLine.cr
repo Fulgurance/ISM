@@ -77,8 +77,8 @@ module ISM
             begin
                 yield
             ensure
-                LibC.seteuid(ISM::Default::CommandLine::SystemId)
-                LibC.setegid(ISM::Default::CommandLine::SystemId)
+                LibC.seteuid(ISM::Default::CommandLine::SystemId.to_i)
+                LibC.setegid(ISM::Default::CommandLine::SystemId.to_i)
             end
 
             rescue error
