@@ -93,10 +93,10 @@ module ISM
 
         # Internal use only
         def prepareChrootDevConsole
-            requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
+            requestedCommands = "mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
             process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  false,
+                                            shell:  true,
                                             chroot: false,
                                             asRoot: true)
 
@@ -108,10 +108,10 @@ module ISM
 
         # Internal use only
         def prepareChrootDevNull
-            requestedCommands = "/usr/bin/mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
+            requestedCommands = "mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
             process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  false,
+                                            shell:  true,
                                             chroot: false,
                                             asRoot: true)
 
@@ -123,10 +123,10 @@ module ISM
 
         # Internal use only
         def prepareChrootDev
-            requestedCommands = "/usr/bin/mount -v --bind /dev #{Ism.settings.rootPath}/dev"
+            requestedCommands = "mount -v --bind /dev #{Ism.settings.rootPath}/dev"
 
             process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  false,
+                                            shell:  true,
                                             chroot: false,
                                             asRoot: true)
 
@@ -138,10 +138,10 @@ module ISM
 
         # Internal use only
         def prepareChrootDevPts
-            requestedCommands = "/usr/bin/mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
+            requestedCommands = "mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
             process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  false,
+                                            shell:  true,
                                             chroot: false,
                                             asRoot: true)
 
@@ -153,10 +153,10 @@ module ISM
 
         # Internal use only
         def prepareChrootProc
-            requestedCommands = "/usr/bin/mount -vt proc proc #{Ism.settings.rootPath}/proc"
+            requestedCommands = "mount -vt proc proc #{Ism.settings.rootPath}/proc"
 
             process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  false,
+                                            shell:  true,
                                             chroot: false,
                                             asRoot: true)
 
@@ -168,10 +168,10 @@ module ISM
 
         # Internal use only
         def prepareChrootSysfs
-            requestedCommands = "/usr/bin/mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
+            requestedCommands = "mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
 
             process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  false,
+                                            shell:  true,
                                             chroot: false,
                                             asRoot: true)
 
@@ -183,10 +183,10 @@ module ISM
 
         # Internal use only
         def prepareChrootNetworkConfiguration
-            requestedCommands = "/usr/bin/cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
+            requestedCommands = "cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
             process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  false,
+                                            shell:  true,
                                             chroot: false,
                                             asRoot: true)
 
@@ -209,13 +209,15 @@ module ISM
 
         # Internal use only
         def prepareRootPermissions
-            binary = "/usr/bin/chown"
+            binary = "chown"
+            unlockTask = "chattr -f -i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}"
             setRoot = "#{binary} -R root:root #{Ism.settings.rootPath}"
             setVarIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/var/ism"
             setEtcIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/etc/ism"
             setVarLogIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
             setTmpIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
             setSources = "#{binary} -R ism:ism #{Ism.settings.sourcesPath}"
+            lockTask = "chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}"
 
             requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources}"
 

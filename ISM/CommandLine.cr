@@ -111,18 +111,16 @@ module ISM
         def start
             tryEscalatingAccess = false
 
-            if !@taskMode
-                if ranAsSuperUser
-                    tryEscalatingAccess = true
-                    printNeedToBeRunAsNormalUserNotification
-                elsif !ranAsMemberOfGroupIsm
-                    tryEscalatingAccess = true
-                    printNeedToBeRunAsMemberOfIsmGroupNotification
-                end
+            if ranAsSuperUser
+                tryEscalatingAccess = true
+                printNeedToBeRunAsNormalUserNotification
+            elsif !ranAsMemberOfGroupIsm
+                tryEscalatingAccess = true
+                printNeedToBeRunAsMemberOfIsmGroupNotification
+            end
 
-                if tryEscalatingAccess
-                    exitProgram
-                end
+            if tryEscalatingAccess
+                exitProgram
             end
 
             loadSettingsFiles
