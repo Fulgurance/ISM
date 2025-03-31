@@ -2252,11 +2252,10 @@ module ISM
         def buildTasksFile
             # We first check if there is any task left
             if File.exists?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                runSystemCommand(   command: "/usr/bin/chattr -f -i #{ISM::Default::Filename::Task}",
+                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                     shell: false,
                                     chroot: false,
-                                    asRoot: true,
-                                    path: "#{@settings.rootPath}")
+                                    asRoot: true)
 
                 runAsSuperUser {
                     File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
@@ -2298,23 +2297,20 @@ module ISM
             #   -owned by root (uid 0 and gid 0)
             #   -enable SUID and SGID bits
             #   -set as immutable to don't allow any suppression
-            runSystemCommand(   command: "/usr/bin/chown 0:0 #{ISM::Default::Filename::Task}",
+            runSystemCommand(   command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                 shell: false,
                                 chroot: false,
-                                asRoot: true,
-                                path: "#{@settings.rootPath}")
+                                asRoot: true)
 
-            runSystemCommand(   command: "/usr/bin/chmod ugo+s #{ISM::Default::Filename::Task}",
+            runSystemCommand(   command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                 shell: false,
                                 chroot: false,
-                                asRoot: true,
-                                path: "#{@settings.rootPath}")
+                                asRoot: true)
 
-            runSystemCommand(   command: "/usr/bin/chattr -f +i #{ISM::Default::Filename::Task}",
+            runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                 shell: false,
                                 chroot: false,
-                                asRoot: true,
-                                path: "#{@settings.rootPath}")
+                                asRoot: true)
 
             # Log tracing
             logIOMemory = IO::Memory.new
