@@ -56,10 +56,12 @@ module ISM
         end
 
         def ensureSecurity
+            uidResult = LibC.setuid(ISM::Default::CommandLine::SystemId.to_i)
+            gidResult = LibC.setgid(ISM::Default::CommandLine::SystemId.to_i)
             euidResult = LibC.seteuid(ISM::Default::CommandLine::SystemId.to_i)
             egidResult = LibC.setegid(ISM::Default::CommandLine::SystemId.to_i)
 
-            if euidResult.negative? || egidResult.negative?
+            if uidResult.negative? || gidResult.negative? || euidResult.negative? || egidResult.negative?
                 printFailedToEnsureSecurityNotification
                 exitProgram
             end
@@ -74,14 +76,18 @@ module ISM
         end
 
         def runAsSuperUser(validCondition = true, &)
+            uid = LibC.getuid
+            gid = LibC.getgid
             euid = LibC.geteuid
             egid = LibC.getegid
 
             if validCondition
+                uidResult = LibC.setuid(0)
+                gidResult = LibC.setgid(0)
                 euidResult = LibC.seteuid(0)
                 egidResult = LibC.setegid(0)
 
-                if euidResult.negative? || egidResult.negative?
+                if uidResult.negative? || gidResult.negative? || euidResult.negative? || egidResult.negative?
                     printNeedSuidBitNotification
                     exitProgram
                 end
