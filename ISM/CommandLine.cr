@@ -56,10 +56,12 @@ module ISM
         end
 
         def ensureSecurity
-            uidResult = LibC.setuid(ISM::Default::CommandLine::SystemId.to_i)
-            gidResult = LibC.setgid(ISM::Default::CommandLine::SystemId.to_i)
+            uidResult = LibC.setuid(0)
+            gidResult = LibC.setgid(0)
+            euidResult = LibC.seteuid(0)
+            egidResult = LibC.setegid(0)
 
-            if uidResult.negative? || gidResult.negative? || euidResult.negative? || egidResult.negative?
+            if !uidResult.negative? || !gidResult.negative? || !euidResult.negative? || !egidResult.negative?
                 printFailedToEnsureSecurityNotification
                 exitProgram
             end
