@@ -2291,7 +2291,7 @@ module ISM
 
         def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
             # We first check if there is any task left
-            if File.exits?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
                 runSystemCommand(   command: "/usr/bin/chattr -f -i #{ISM::Default::Filename::Task}",
                                     shell: false,
                                     chroot: false,
