@@ -19,9 +19,8 @@ module ISM
         property totalInstalledSymlinkNumber : UInt128
         property totalInstalledFileNumber : UInt128
         property totalInstalledSize : UInt128
-        getter taskMode : Bool
 
-        def initialize(@taskMode = false)
+        def initialize
             @systemInformation = ISM::CommandLineSystemInformation.new
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
             @neededKernelOptions = Array(ISM::NeededKernelOption).new
@@ -2167,7 +2166,7 @@ module ISM
                     puts
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new(taskMode = true)
+                    Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
@@ -2361,7 +2360,7 @@ module ISM
                     puts
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new(taskMode = true)
+                    Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
