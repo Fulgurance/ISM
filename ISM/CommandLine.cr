@@ -2305,10 +2305,10 @@ module ISM
                                 chroot: false,
                                 asRoot: true)
 
-            # runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-            #                     shell: false,
-            #                     chroot: false,
-            #                     asRoot: true)
+            runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                shell: false,
+                                chroot: false,
+                                asRoot: true)
 
             # Log tracing
             logIOMemory = IO::Memory.new
@@ -2951,6 +2951,18 @@ module ISM
         end
 
         def runChrootTasks(chrootTasks, quiet = false, asRoot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
+
+            # We first check if there is any task left
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: true)
+
+                runAsSuperUser {
+                    File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+                }
+            end
 
             File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
 
