@@ -2334,7 +2334,6 @@ module ISM
             end
 
             if !process.success?
-                showTaskCompilationFailedMessage
                 exitProgram
             end
 
