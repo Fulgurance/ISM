@@ -2303,10 +2303,10 @@ module ISM
                                 chroot: false,
                                 asRoot: true)
 
-            runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                shell: false,
-                                chroot: false,
-                                asRoot: true)
+            # runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+            #                     shell: false,
+            #                     chroot: false,
+            #                     asRoot: true)
 
             # Log tracing
             logIOMemory = IO::Memory.new
@@ -3060,8 +3060,8 @@ module ISM
             process = runSystemCommand(requestedCommands, shell: false, asRoot: true, chroot: false)
 
             if !process.success? && process.exit_code != 1
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
+                notifyOfRunSystemCommandError(requestedCommands)
+                exitProgram
             end
         end
 
