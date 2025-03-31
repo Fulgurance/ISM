@@ -1,5 +1,7 @@
 require "./RequiredLibraries"
 
+Ism = ISM::CommandLine.new
+
 begin
     #Record current user and group ID
     uid = LibC.getuid
@@ -13,11 +15,11 @@ begin
 
     #We check if the program have the suid bit set
     if LibC.geteuid.negative? || LibC.getegid.negative?
-        printNeedSuidBitNotification
+        #printNeedSuidBitNotification
+        puts "Need setted bit"
     else
         #Starting point
-        interface = ISM::CommandLine.new
-        interface.start
+        Ism.start
     end
 
 ensure

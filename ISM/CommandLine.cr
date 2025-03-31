@@ -109,19 +109,19 @@ module ISM
         end
 
         def start
-            tryEscalatingAccess = false
-
-            if ranAsSuperUser
-                tryEscalatingAccess = true
-                printNeedToBeRunAsNormalUserNotification
-            elsif !ranAsMemberOfGroupIsm
-                tryEscalatingAccess = true
-                printNeedToBeRunAsMemberOfIsmGroupNotification
-            end
-
-            if tryEscalatingAccess
-                exitProgram
-            end
+            # tryEscalatingAccess = false
+            #
+            # if ranAsSuperUser
+            #     tryEscalatingAccess = true
+            #     printNeedToBeRunAsNormalUserNotification
+            # elsif !ranAsMemberOfGroupIsm
+            #     tryEscalatingAccess = true
+            #     printNeedToBeRunAsMemberOfIsmGroupNotification
+            # end
+            #
+            # if tryEscalatingAccess
+            #     exitProgram
+            # end
 
             loadSettingsFiles
             loadSystemInformationFile
