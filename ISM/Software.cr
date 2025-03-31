@@ -219,10 +219,10 @@ module ISM
             setSources = "#{binary} -R ism:ism #{Ism.settings.sourcesPath}"
             lockTask = "chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}"
 
-            requestedCommands = "#{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources}"
+            requestedCommands = "#{unlockTask} && #{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources} && #{lockTask}"
 
             process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  false,
+                                            shell:  true,
                                             chroot: false,
                                             asRoot: true)
 
@@ -1195,9 +1195,9 @@ module ISM
         end
 
         def runUserAddCommand(arguments : String)
-            requestedCommands = "/usr/sbin/useradd -R #{Ism.settings.rootPath} #{arguments}"
+            requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1206,9 +1206,9 @@ module ISM
         end
 
         def runUserDelCommand(arguments : String)
-            requestedCommands = "/usr/sbin/userdel -R #{Ism.settings.rootPath} #{arguments}"
+            requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1217,9 +1217,9 @@ module ISM
         end
 
         def runGroupAddCommand(arguments : String)
-            requestedCommands = "/usr/sbin/groupadd -R #{Ism.settings.rootPath} #{arguments}"
+            requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1228,9 +1228,9 @@ module ISM
         end
 
         def runGroupDelCommand(arguments : String)
-            requestedCommands = "/usr/sbin/groupdel -R #{Ism.settings.rootPath} #{arguments}"
+            requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
