@@ -2258,7 +2258,7 @@ module ISM
                                     asRoot: true,
                                     path: "#{@settings.rootPath}")
 
-                runAsSuperUser{
+                runAsSuperUser {
                     File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
                 }
             end
@@ -3073,7 +3073,7 @@ module ISM
         def setSystemAccess(locked : Bool)
             mode = (locked ? "+" : "-")
 
-            rootPath = (@settings.installByChroot || @settings.rootPath != "/" ? @settings.rootPath : "/")
+            rootPath = (@settings.installByChroot || !@settings.installByChroot && (@settings.rootPath != "/") ? @settings.rootPath : "/")
 
             binary = "/usr/bin/chattr"
 
