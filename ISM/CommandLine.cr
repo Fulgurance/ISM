@@ -65,18 +65,18 @@ module ISM
         end
 
         def runAsSuperUser(validCondition = true, &)
-            uid = LibC.getuid
-            gid = LibC.getgid
+            # uid = LibC.getuid
+            # gid = LibC.getgid
             euid = LibC.geteuid
             egid = LibC.getegid
 
             if validCondition
-                uidResult = LibC.setuid(0)
-                gidResult = LibC.setgid(0)
+                # uidResult = LibC.setuid(0)
+                # gidResult = LibC.setgid(0)
                 euidResult = LibC.seteuid(0)
                 egidResult = LibC.setegid(0)
 
-                if LibC.getuid.negative? || LibC.getgid.negative? || LibC.geteuid.negative? || LibC.getegid.negative?
+                if LibC.geteuid.negative? || LibC.getegid.negative?
                     printNeedSuidBitNotification
                     exitProgram
                 end
@@ -85,8 +85,8 @@ module ISM
             begin
                 yield
             ensure
-                LibC.setuid(uid)
-                LibC.setgid(gid)
+                # LibC.setuid(uid)
+                # LibC.setgid(gid)
                 LibC.seteuid(euid)
                 LibC.setegid(egid)
             end
