@@ -2259,6 +2259,19 @@ module ISM
         end
 
         def buildTasksFile
+            # We first check if there is any task left
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+                runSystemCommand(   command: "/usr/bin/chattr -f -i #{ISM::Default::Filename::Task}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: true,
+                                    path: "#{@settings.rootPath}")
+
+                runAsSuperUser{
+                    File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
+                }
+            end
+
             processResult = IO::Memory.new
 
             requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Filename::Task} -f json"
@@ -2290,19 +2303,6 @@ module ISM
         end
 
         def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
-            # We first check if there is any task left
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                runSystemCommand(   command: "/usr/bin/chattr -f -i #{ISM::Default::Filename::Task}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: true,
-                                    path: "#{@settings.rootPath}")
-
-                runAsSuperUser{
-                    File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                }
-            end
-
             # We first set proper rights for the binary task file:
             #   -owned by root (uid 0 and gid 0)
             #   -enable SUID and SGID bits
