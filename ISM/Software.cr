@@ -123,7 +123,7 @@ module ISM
 
         # Internal use only
         def prepareChrootDev
-            requestedCommands = "mount -v --bind /dev #{Ism.settings.rootPath}/dev"
+            requestedCommands = "mount --bind /dev #{Ism.settings.rootPath}/dev"
 
             process = Ism.runSystemCommand( requestedCommands,
                                             shell:  true,
@@ -138,7 +138,7 @@ module ISM
 
         # Internal use only
         def prepareChrootDevPts
-            requestedCommands = "mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
+            requestedCommands = "mount --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
             process = Ism.runSystemCommand( requestedCommands,
                                             shell:  true,
@@ -153,7 +153,7 @@ module ISM
 
         # Internal use only
         def prepareChrootProc
-            requestedCommands = "mount -vt proc proc #{Ism.settings.rootPath}/proc"
+            requestedCommands = "mount -t proc proc #{Ism.settings.rootPath}/proc"
 
             process = Ism.runSystemCommand( requestedCommands,
                                             shell:  true,
@@ -168,7 +168,7 @@ module ISM
 
         # Internal use only
         def prepareChrootSysfs
-            requestedCommands = "mount -vt sysfs sysfs #{Ism.settings.rootPath}/sys"
+            requestedCommands = "mount -t sysfs sysfs #{Ism.settings.rootPath}/sys"
 
             process = Ism.runSystemCommand( requestedCommands,
                                             shell:  true,
