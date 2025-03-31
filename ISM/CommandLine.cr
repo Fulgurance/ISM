@@ -109,18 +109,20 @@ module ISM
         end
 
         def start
-            tryEscalatingAccess = false
+            if !taskMode
+                tryEscalatingAccess = false
 
-            if ranAsSuperUser
-                tryEscalatingAccess = true
-                printNeedToBeRunAsNormalUserNotification
-            elsif !ranAsMemberOfGroupIsm
-                tryEscalatingAccess = true
-                printNeedToBeRunAsMemberOfIsmGroupNotification
-            end
+                if ranAsSuperUser
+                    tryEscalatingAccess = true
+                    printNeedToBeRunAsNormalUserNotification
+                elsif !ranAsMemberOfGroupIsm
+                    tryEscalatingAccess = true
+                    printNeedToBeRunAsMemberOfIsmGroupNotification
+                end
 
-            if tryEscalatingAccess
-                exitProgram
+                if tryEscalatingAccess
+                    exitProgram
+                end
             end
 
             loadSettingsFiles
@@ -2164,7 +2166,7 @@ module ISM
                     puts
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new
+                    Ism = ISM::CommandLine.new(taskMode = true)
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
@@ -2362,7 +2364,7 @@ module ISM
                     puts
 
                     #LOADING DATABASE
-                    Ism = ISM::CommandLine.new
+                    Ism = ISM::CommandLine.new(taskMode = true)
                     Ism.loadSettingsFiles
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
