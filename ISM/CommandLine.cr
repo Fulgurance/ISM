@@ -2268,7 +2268,9 @@ module ISM
                         shell: true,
                         chdir: "#{@settings.rootPath}") do |process|
                 loop do
-                    Fiber.yield.tap{ playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText) }
+                    playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
+                    sleep(Time::Span.new(seconds: 0))
+                    Fiber.yield
                     break if process.terminated?
                 end
             end
@@ -2437,7 +2439,12 @@ module ISM
         def synchronizePorts
             @ports.each do |port|
 
-                synchronization = port.synchronize.tap { Ism.playCalculationAnimation }
+                synchronization = port.synchronize
+
+                until synchronization.terminated?
+                    playCalculationAnimation(ISM::Default::CommandLine::SynchronizationWaitingText)
+                    sleep(Time::Span.new(seconds: 0))
+                end
 
             end
 

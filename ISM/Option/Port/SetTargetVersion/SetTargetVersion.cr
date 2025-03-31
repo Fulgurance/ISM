@@ -23,7 +23,12 @@ module ISM
                         Ism.ports.each do |port|
                             process = Process.new(  "git switch --detach #{targetVersion}",
                                                     shell: true,
-                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name).tap { Ism.playCalculationAnimation(ISM::Default::Option::PortSetTargetVersion::SetWaitingText) }
+                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
+
+                            until process.terminated?
+                                Ism.playCalculationAnimation(text: ISM::Default::Option::PortSetTargetVersion::SetWaitingText)
+                                sleep(Time::Span.new(seconds: 0))
+                            end
 
                             validVersion = !process.error?
 
