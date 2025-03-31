@@ -68,7 +68,7 @@ module ISM
                 euidResult = LibC.seteuid(0)
                 egidResult = LibC.setegid(0)
 
-                if LibC.geteuid.negative? || LibC.getegid.negative?
+                if euidResult.negative? || egidResult.negative?
                     printNeedSuidBitNotification
                     exitProgram
                 end
