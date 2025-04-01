@@ -2260,7 +2260,6 @@ module ISM
                         chdir: "#{@settings.rootPath}") do |process|
                 loop do
                     playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
-                    sleep(Time::Span.new(seconds: 0))
                     Fiber.yield
                     break if process.terminated?
                 end
@@ -2434,7 +2433,6 @@ module ISM
 
                 until synchronization.terminated?
                     playCalculationAnimation(ISM::Default::CommandLine::SynchronizationWaitingText)
-                    sleep(Time::Span.new(seconds: 0))
                 end
 
             end

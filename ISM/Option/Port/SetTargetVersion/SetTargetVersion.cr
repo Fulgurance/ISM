@@ -27,7 +27,6 @@ module ISM
 
                             until process.terminated?
                                 Ism.playCalculationAnimation(text: ISM::Default::Option::PortSetTargetVersion::SetWaitingText)
-                                sleep(Time::Span.new(seconds: 0))
                             end
 
                             validVersion = !process.error?
