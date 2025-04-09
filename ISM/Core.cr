@@ -46,7 +46,7 @@ module ISM
 
             #Exclusive variables preparation
             chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId}"} #{ISM::CommandLineSettings.loadConfiguration.rootPath}"
-            taskPrefix =        "#{asSuperuser ? sudoCommand : "#{sudoCommand} -u #{ISM::Default::Core::Security::SystemId} -g #{ISM::Default::Core::Security::SystemId}"}"
+            taskPrefix =        "#{asSuperuser ? sudoCommand : "#{sudoCommand} -u #{ISM::Default::Core::Security::SystemId} -g #{ISM::Default::Core::Security::SystemId} exec"}"
 
             prefix =        (viaChroot ? chrootTaskPrefix : taskPrefix)
 
@@ -72,7 +72,7 @@ module ISM
             cd #{path} && #{environmentCommand} #{command}
             CODE
 
-            processCommand = "#{prefix} ./#{ISM::Default::Filename::Task}"
+            processCommand = "#{prefix} /#{ISM::Default::Filename::Task}"
 
             #########################TASKS#########################
 
