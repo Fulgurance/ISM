@@ -124,7 +124,7 @@ module ISM
             if !process.exit_code != 0 && !ignoreErrorCodeList.includes?(process.exit_code)
                 raise <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
-                command: #{command}
+                command: #{processCommand}
                 path: #{path}
                 environment: #{environmentCommand}
                 asRoot: #{asSuperuser}
@@ -137,7 +137,7 @@ module ISM
             rescue
                 raise <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
-                command: #{command}
+                command: #{processCommand}
                 path: #{path}
                 environment: #{environmentCommand}
                 asRoot: #{asSuperuser}
