@@ -53,27 +53,7 @@ module ISM
         end
 
         def systemId : String
-            return ISM::Default::CommandLine::SystemId
-        end
-
-        def ranAsSuperUser : Bool
-            return (LibC.getuid == 0)
-        end
-
-        def ranAsMemberOfGroupIsm : Bool
-            processResult = IO::Memory.new
-
-            runSystemCommand(   command: "id -G",
-                                output: processResult)
-
-            return processResult.to_s.strip.split(" ").includes?(systemId)
-        end
-
-        def stillHaveSudoAccess : Bool
-            process = Process.run(  "sudo -n true 2>/dev/null",
-                                    shell: true)
-
-            return (process.exit_code == 0)
+            return ISM::Default::Core::Security::SystemId
         end
 
         def start
@@ -1899,15 +1879,15 @@ module ISM
         def buildTasksFile
             # We first check if there is any task left
             if File.exists?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: true)
+                ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                            shell: false,
+                                            chroot: false,
+                                            asRoot: true)
 
-                runSystemCommand(   command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: true)
+                ISM::Core.runSystemCommand( command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                            shell: false,
+                                            chroot: false,
+                                            asRoot: true)
             end
 
             processResult = IO::Memory.new
@@ -1941,32 +1921,32 @@ module ISM
             #   -owned by root (uid 0 and gid 0)
             #   -enable SUID and SGID bits
             #   -set as immutable to don't allow any suppression
-            runSystemCommand(   command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                shell: false,
-                                chroot: false,
-                                asRoot: true)
+            ISM::Core.runSystemCommand( command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: true)
 
-            runSystemCommand(   command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                shell: false,
-                                chroot: false,
-                                asRoot: true)
+            ISM::Core.runSystemCommand( command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: true)
 
-            runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                shell: false,
-                                chroot: false,
-                                asRoot: true)
+            ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: true)
 
             # Log tracing
             logIOMemory = IO::Memory.new
             logWriter = logEnabled ? IO::MultiWriter.new(STDOUT,logIOMemory) : Process::Redirect::Inherit
 
             # Task execution
-            runSystemCommand(   command: "./#{ISM::Default::Filename::Task}",
-                                output: logWriter,
-                                error: logWriter,
-                                shell: true,
-                                chroot: false,
-                                path: "#{@settings.rootPath}")
+            ISM::Core.runSystemCommand( command: "./#{ISM::Default::Filename::Task}",
+                                        output: logWriter,
+                                        error: logWriter,
+                                        shell: true,
+                                        chroot: false,
+                                        path: "#{@settings.rootPath}")
 
             # Log recording
             if logEnabled
@@ -2534,159 +2514,6 @@ module ISM
             return true
         end
 
-        def runSystemCommand(   command : String,
-                                path = @settings.installByChroot ? "/" : @settings.rootPath,
-                                environment = Hash(String, String).new,
-                                environmentFilePath = String.new,
-                                quiet = false,
-                                asRoot = false,
-                                shell = true,
-                                chroot = true,
-                                input = Process::Redirect::Inherit,
-                                output = Process::Redirect::Inherit,
-                                error = Process::Redirect::Inherit,
-                                ignoreErrorCodeList = Array(Int32).new)
-
-            #########################TASKS#########################
-
-            #Common variables preparation
-            realRootPath =  "#{(chroot ? @settings.rootPath : "/")}"
-            taskFilePath =  "#{realRootPath}#{ISM::Default::Filename::Task}"
-            asSuperuser =   (asRoot && @systemInformation.handleUserAccess)
-            viaChroot =     (@settings.installByChroot && chroot ? true : false)
-            sudoCommand =   (shell ? "sudo" : "/usr/bin/sudo")
-            chrootCommand = (shell ? "chroot" : "/usr/sbin/chroot")
-            inputValue =    (quiet ? Process::Redirect::Close : input)
-            outputValue =   (quiet ? Process::Redirect::Close : output)
-            errorValue =    (quiet ? Process::Redirect::Close : error)
-
-            #Exclusive variables preparation
-            chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath}"
-            taskPrefix =        "#{asSuperuser ? sudoCommand : "#{sudoCommand} -u #{systemId} -g #{systemId}"}"
-
-            prefix =        (viaChroot ? chrootTaskPrefix : taskPrefix)
-
-            #Loading environment
-            environmentCommand = String.new
-
-            if !environmentFilePath.empty?
-                environmentCommand = "source \"#{environmentFilePath}\" && "
-            end
-
-            environment.keys.each do |key|
-                environmentCommand += "#{key}=\"#{environment[key]}\" "
-            end
-
-            #Task core
-            tasks = <<-CODE
-            #!/bin/bash
-
-            if \[ -f "/etc/profile" \]; then
-                source /etc/profile
-            fi
-
-            cd #{path} && #{environmentCommand} #{command}
-            CODE
-
-            processCommand = "#{prefix} ./#{ISM::Default::Filename::Task}"
-
-            #########################TASKS#########################
-
-            #Clean leftover from previous task
-            if File.exists?(taskFilePath)
-                #We need first to unlock it
-                process = Process.run(  command: "/usr/bin/sudo",
-                                        args: ["/usr/bin/chattr","-f","-i",taskFilePath],
-                                        shell: false,
-                                        input: (quiet ? Process::Redirect::Close : input),
-                                        output: (quiet ? Process::Redirect::Close : output),
-                                        error: (quiet ? Process::Redirect::Close : error))
-
-                #Then we delete it
-                process = Process.run(  command: "/usr/bin/sudo",
-                                        args: ["/usr/bin/rm",taskFilePath],
-                                        shell: false,
-                                        input: (quiet ? Process::Redirect::Close : input),
-                                        output: (quiet ? Process::Redirect::Close : output),
-                                        error: (quiet ? Process::Redirect::Close : error))
-            end
-
-            #Generate a new task file
-            File.write(taskFilePath, tasks)
-
-            #We make it executable
-            process = Process.run(  command: "/usr/bin/sudo",
-                                    args: ["/usr/bin/chmod","+x",taskFilePath],
-                                    shell: false,
-                                    input: (quiet ? Process::Redirect::Close : input),
-                                    output: (quiet ? Process::Redirect::Close : output),
-                                    error: (quiet ? Process::Redirect::Close : error))
-
-            #We now lock the new task to avoid any modification
-            process = Process.run(  command: "/usr/bin/sudo",
-                                    args: ["/usr/bin/chattr","-f","+i",taskFilePath],
-                                    shell: false,
-                                    input: (quiet ? Process::Redirect::Close : input),
-                                    output: (quiet ? Process::Redirect::Close : output),
-                                    error: (quiet ? Process::Redirect::Close : error))
-
-            #We can now run the generated task
-            process = Process.run(  command: processCommand,
-                                    shell: true,
-                                    input: (quiet ? Process::Redirect::Close : input),
-                                    output: (quiet ? Process::Redirect::Close : output),
-                                    error: (quiet ? Process::Redirect::Close : error))
-
-            #If the process fail, we first check if there is any error code we can ignore and then raise the error properly
-            if !process.success?
-
-                if !ignoreErrorCodeList.empty?
-                    if !ignoreErrorCodeList.includes?(process.exit_code)
-                        raise <<-ERROR
-                        #{ISM::Default::Error::SystemCommandFailure}
-                        command: #{command}
-                        path: #{path}
-                        environment: #{environmentCommand}
-                        asRoot: #{asSuperuser}
-                        chroot: #{viaChroot}
-                        shell:  #{shell}
-                        ERROR
-                    end
-                end
-            end
-        end
-
-        def setSystemAccess(locked : Bool)
-            mode = (locked ? "+" : "-")
-
-            rootPath = (@settings.installByChroot || !@settings.installByChroot && (@settings.rootPath != "/") ? @settings.rootPath : "/")
-
-            binary = "/usr/bin/chattr"
-
-            setLib = "#{binary} -R -f #{mode}i #{rootPath}usr/lib64"
-            setBin = "#{binary} -R -f #{mode}i  #{rootPath}usr/bin"
-            setSbin = "#{binary} -R -f #{mode}i  #{rootPath}usr/sbin"
-            setLibexec = "#{binary} -R -f #{mode}i  #{rootPath}usr/libexec"
-
-            requestedCommands = <<-CMD
-                                #{setLib} && #{setBin} && #{setSbin} && #{setLibexec}
-                                CMD
-
-            runSystemCommand(   command: requestedCommands,
-                                shell: false,
-                                asRoot: true,
-                                chroot: false,
-                                ignoreErrorCodeList: [1])
-        end
-
-        def lockSystemAccess
-            setSystemAccess(locked: true)
-        end
-
-        def unlockSystemAccess
-            setSystemAccess(locked: false)
-        end
-
         # setKernelOption(symbol : String, state : Symbol, value = String.new)
         # state = :enable, :disable, :module, :string, :value
 
@@ -2709,7 +2536,7 @@ module ISM
             requestedCommands = "make #{@settings.systemMakeOptions} defconfig"
             path = kernelSourcesPath
 
-            @currentProcess = runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def generateKernelConfig
@@ -2720,14 +2547,14 @@ module ISM
             requestedCommands = "make #{@settings.systemMakeOptions} mrproper && make #{@settings.systemMakeOptions} modules_prepare && make #{@settings.systemMakeOptions} && make #{@settings.systemMakeOptions} modules_install && make #{@settings.systemMakeOptions} install"
             path = kernelSourcesPath
 
-            @currentProcess = runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def installKernel
             requestedCommands = "mv System.map /boot/System.map-linux-#{mainKernelVersion} && mv vmlinuz /boot/vmlinuz-linux-#{mainKernelVersion} && cp .config /boot/config-linux-#{mainKernelVersion}"
             path = kernelSourcesPath
 
-            @currentProcess = runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def mainKernelName : String
@@ -2764,7 +2591,7 @@ module ISM
                 arguments = ["--set-val","#{symbol}",value]
             end
 
-            runSystemCommand("./#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
+            ISM::Core.runSystemCommand("./#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
         end
 
     end

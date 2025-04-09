@@ -95,70 +95,70 @@ module ISM
         def prepareChrootDevConsole
             requestedCommands = "mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
-            Ism.runSystemCommand(   requestedCommands,
-                                    shell:  true,
-                                    chroot: false,
-                                    asRoot: true)
+            ISM::Core.runSystemCommand( requestedCommands,
+                                        shell:  true,
+                                        chroot: false,
+                                        asRoot: true)
         end
 
         # Internal use only
         def prepareChrootDevNull
             requestedCommands = "mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
-            Ism.runSystemCommand(   requestedCommands,
-                                    shell:  true,
-                                    chroot: false,
-                                    asRoot: true)
+            ISM::Core.runSystemCommand( requestedCommands,
+                                        shell:  true,
+                                        chroot: false,
+                                        asRoot: true)
         end
 
         # Internal use only
         def prepareChrootDev
             requestedCommands = "mount --bind /dev #{Ism.settings.rootPath}/dev"
 
-            Ism.runSystemCommand(   requestedCommands,
-                                    shell:  true,
-                                    chroot: false,
-                                    asRoot: true)
+            ISM::Core.runSystemCommand( requestedCommands,
+                                        shell:  true,
+                                        chroot: false,
+                                        asRoot: true)
         end
 
         # Internal use only
         def prepareChrootDevPts
             requestedCommands = "mount --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
-            Ism.runSystemCommand(   requestedCommands,
-                                    shell:  true,
-                                    chroot: false,
-                                    asRoot: true)
+            ISM::Core.runSystemCommand( requestedCommands,
+                                        shell:  true,
+                                        chroot: false,
+                                        asRoot: true)
         end
 
         # Internal use only
         def prepareChrootProc
             requestedCommands = "mount -t proc proc #{Ism.settings.rootPath}/proc"
 
-            Ism.runSystemCommand(   requestedCommands,
-                                    shell:  true,
-                                    chroot: false,
-                                    asRoot: true)
+            ISM::Core.runSystemCommand( requestedCommands,
+                                        shell:  true,
+                                        chroot: false,
+                                        asRoot: true)
         end
 
         # Internal use only
         def prepareChrootSysfs
             requestedCommands = "mount -t sysfs sysfs #{Ism.settings.rootPath}/sys"
 
-            Ism.runSystemCommand(   requestedCommands,
-                                    shell:  true,
-                                    chroot: false,
-                                    asRoot: true)
+            ISM::Core.runSystemCommand( requestedCommands,
+                                        shell:  true,
+                                        chroot: false,
+                                        asRoot: true)
         end
 
         # Internal use only
         def prepareChrootNetworkConfiguration
             requestedCommands = "cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
-            Ism.runSystemCommand(   requestedCommands,
-                                    shell:  true,
-                                    chroot: false,
-                                    asRoot: true)
+            ISM::Core.runSystemCommand( requestedCommands,
+                                        shell:  true,
+                                        chroot: false,
+                                        asRoot: true)
         end
 
         # Internal use only
@@ -186,10 +186,10 @@ module ISM
 
             requestedCommands = "#{unlockTask} && #{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources} && #{lockTask}"
 
-            Ism.runSystemCommand(   requestedCommands,
-                                    shell:  true,
-                                    chroot: false,
-                                    asRoot: true)
+            ISM::Core.runSystemCommand( requestedCommands,
+                                        shell:  true,
+                                        chroot: false,
+                                        asRoot: true)
         end
 
         #Special function to improve performance (Internal use only)
@@ -258,7 +258,7 @@ module ISM
         def changeFileModeNoChroot(path : String, mode : String, asRoot = false)
             requestedCommands = "/usr/bin/chmod #{mode} #{path}"
 
-            Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
+            ISM::Core.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -270,7 +270,7 @@ module ISM
         def changeFileOwnerNoChroot(path : String, user : String, group : String, asRoot = false)
             requestedCommands = "/usr/bin/chown #{user}:#{group} #{path}"
 
-            Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
+            ISM::Core.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
@@ -612,11 +612,11 @@ module ISM
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            Ism.runSystemCommand(   "/usr/bin/tar -xf #{archivePath}",
-                                    quiet: true,
-                                    shell: false,
-                                    chroot: false,
-                                    path: destinationPath)
+            ISM::Core.runSystemCommand( "/usr/bin/tar -xf #{archivePath}",
+                                        quiet: true,
+                                        shell: false,
+                                        chroot: false,
+                                        path: destinationPath)
         end
         
         def patch
@@ -638,10 +638,10 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            Ism.runSystemCommand(   "/usr/bin/patch -Np1 -i #{patch}",
-                                    shell: false,
-                                    chroot: false,
-                                    path: mainWorkDirectoryPathNoChroot)
+            ISM::Core.runSystemCommand( "/usr/bin/patch -Np1 -i #{patch}",
+                                        shell: false,
+                                        chroot: false,
+                                        path: mainWorkDirectoryPathNoChroot)
         end
 
         def prepare
@@ -657,50 +657,50 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String, asRoot = false)
-            Ism.runSystemCommand(   "/usr/bin/cp #{path} #{targetPath}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: asRoot)
+            ISM::Core.runSystemCommand( "/usr/bin/cp #{path} #{targetPath}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
-            Ism.runSystemCommand(   "/usr/bin/cp -R #{path} #{targetPath}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: asRoot)
+            ISM::Core.runSystemCommand( "/usr/bin/cp -R #{path} #{targetPath}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String, asRoot = false)
-            Ism.runSystemCommand(   "/usr/bin/rm #{path}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: asRoot)
+            ISM::Core.runSystemCommand( "/usr/bin/rm #{path}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            Ism.runSystemCommand(   "/usr/bin/mv #{path} #{targetPath}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: asRoot)
+            ISM::Core.runSystemCommand( "/usr/bin/mv #{path} #{targetPath}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(path : String, asRoot = false)
-            Ism.runSystemCommand(   "/usr/bin/mkdir -p #{path} #{targetPath}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: asRoot)
+            ISM::Core.runSystemCommand( "/usr/bin/mkdir -p #{path} #{targetPath}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(path : String, asRoot = false)
-            Ism.runSystemCommand(   "/usr/bin/rm -R #{path}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: asRoot)
+            ISM::Core.runSystemCommand( "/usr/bin/rm -R #{path}",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: asRoot)
         end
 
         def fileUpdateContent(path : String, data : String)
@@ -708,7 +708,7 @@ module ISM
                                 grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def fileReplaceText(path : String, text : String, newText : String)
@@ -716,7 +716,7 @@ module ISM
                                 sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/g' #{path}
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def fileReplaceLineContaining(path : String, text : String, newLine : String)
@@ -724,7 +724,7 @@ module ISM
                                 sed -i '/#{text.gsub(/([\.\/])/, %q(\\\1))}/c\#{newText.gsub(/([\.\/])/, %q(\\\1))}' #{path}
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def fileReplaceTextAtLineNumber(path : String, text : String, newText : String,lineNumber : UInt64)
@@ -732,7 +732,7 @@ module ISM
                                 sed -i '#{lineNumber.to_s}s/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' #{path}
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def fileDeleteLine(path : String, lineNumber : UInt64)
@@ -740,7 +740,7 @@ module ISM
                                 sed -i '#{lineNumber.to_s}d' #{path}
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def fileWriteData(path : String, data : String)
@@ -750,7 +750,7 @@ module ISM
                                 EOF
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def fileAppendData(path : String, data : String)
@@ -758,7 +758,7 @@ module ISM
                                 echo "#{data}" > "#{path}"
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def fileAppendDataFromFile(path : String, fromPath : String)
@@ -766,7 +766,7 @@ module ISM
                                 cat "#{fromPath}" >> "#{path}"
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
@@ -774,7 +774,7 @@ module ISM
                                 find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def deleteAllFilesRecursivelyFinishing(path : String, extensions = Array(String).new)
@@ -789,7 +789,7 @@ module ISM
                                 find #{path} #{extensionCommands} -delete
                                 CMD
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def makeLink(target : String, path : String, type : Symbol)
@@ -815,139 +815,139 @@ module ISM
 
             requestedCommands = "#{command} '#{target}' #{path}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def generateEmptyFile(path : String)
             requestedCommands = "touch #{path}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def generateEmptyPasswdFile
             requestedCommands = "touch /usr/bin/passwd"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def copyFile(path : String, targetPath : String)
             requestedCommands = "cp #{path} #{targetPath}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def copyDirectory(path : String, targetPath : String)
             requestedCommands = "cp -r #{path} #{targetPath}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def moveFile(path : String, newPath : String)
             requestedCommands = "mv #{path} #{newPath}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def makeDirectory(path : String)
             requestedCommands = "mkdir -p #{path}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def deleteDirectory(path : String)
             requestedCommands = "rm -r #{path}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def deleteFile(path : String)
             requestedCommands = "rm #{path}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def runChmodCommand(arguments = String.new, path = String.new)
             requestedCommands = "chmod #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
         end
 
         def runChownCommand(arguments = String.new, path = String.new)
             requestedCommands = "chown #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
         end
 
         def runUserAddCommand(arguments : String)
             requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
 
-            Ism.runSystemCommand(   command: requestedCommands,
-                                    shell: true,
-                                    asRoot: true,
-                                    ignoreErrorCodeList: [9])
+            ISM::Core.runSystemCommand( command: requestedCommands,
+                                        shell: true,
+                                        asRoot: true,
+                                        ignoreErrorCodeList: [9])
         end
 
         def runUserDelCommand(arguments : String)
             requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
-            Ism.runSystemCommand(   command: requestedCommands,
-                                    shell: true,
-                                    asRoot: true,
-                                    ignoreErrorCodeList: [9])
+            ISM::Core.runSystemCommand( command: requestedCommands,
+                                        shell: true,
+                                        asRoot: true,
+                                        ignoreErrorCodeList: [9])
         end
 
         def runGroupAddCommand(arguments : String)
             requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
-            Ism.runSystemCommand(   command: requestedCommands,
-                                    shell: true,
-                                    asRoot: true,
-                                    ignoreErrorCodeList: [9])
+            ISM::Core.runSystemCommand( command: requestedCommands,
+                                        shell: true,
+                                        asRoot: true,
+                                        ignoreErrorCodeList: [9])
         end
 
         def runGroupDelCommand(arguments : String)
             requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
-            Ism.runSystemCommand(   command: requestedCommands,
-                                    shell: true,
-                                    asRoot: true,
-                                    ignoreErrorCodeList: [9])
+            ISM::Core.runSystemCommand( command: requestedCommands,
+                                        shell: true,
+                                        asRoot: true,
+                                        ignoreErrorCodeList: [9])
         end
 
         def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "./#{file} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runTarCommand(arguments = String.new, path = String.new)
             requestedCommands = "tar #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
             requestedCommands = "python#{version} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runPipCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
             requestedCommands = "pip#{version} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment)
         end
 
         def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -974,19 +974,19 @@ module ISM
 
             requestedCommands = "cmake #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runQmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "qmake #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "meson #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -1015,169 +1015,169 @@ module ISM
 
             requestedCommands = "ninja #{prefix} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runPwconvCommand(arguments = String.new)
             requestedCommands = "pwconv #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGrpconvCommand(arguments = String.new)
             requestedCommands = "grpconv #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runUdevadmCommand(arguments : String)
             requestedCommands = "udevadm #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runDbusUuidgenCommand(arguments = String.new)
             requestedCommands = "dbus-uuidgen #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runMakeinfoCommand(arguments : String, path = String.new)
             requestedCommands = "makeinfo #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def runInstallInfoCommand(arguments : String)
             requestedCommands = "install-info #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runAutoconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoconf #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runAutoreconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoreconf #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runLocaledefCommand(arguments : String)
             requestedCommands = "localedef #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGunzipCommand(arguments : String, path = String.new)
             requestedCommands = "gunzip #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def runMakeCaCommand(arguments : String)
             requestedCommands = "make-ca #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runInstallCatalogCommand(arguments : String)
             requestedCommands = "install-catalog #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runXmlCatalogCommand(arguments : String)
             requestedCommands = "xmlcatalog #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runLdconfigCommand(arguments = String.new)
             requestedCommands = "ldconfig #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGtkQueryImmodules3Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGlibCompileSchemasCommand(arguments = String.new)
             requestedCommands = "glib-compile-schemas #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGdkPixbufQueryLoadersCommand(arguments = String.new)
             requestedCommands = "gdk-pixbuf-query-loaders #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def runUpdateMimeDatabaseCommand(arguments = String.new)
             requestedCommands = "update-mime-database #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def runCargoCommand(arguments : String, path = String.new, environment = Hash(String, String).new)
             requestedCommands = "cargo #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment)
         end
 
         def runXargoCommand(arguments : String, path = String.new)
             requestedCommands = "xargo #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def runGccCommand(arguments = String.new, path = String.new)
             requestedCommands = "gcc #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def runRcUpdateCommand(arguments = String.new)
             requestedCommands = "rc-update #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def runAlsactlCommand(arguments = String.new)
             requestedCommands = "alsactl #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGtkUpdateIconCacheCommand(arguments = String.new)
             requestedCommands = "gtk-update-icon-cache #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def runUpdateDesktopDatabaseCommand(arguments = String.new)
             requestedCommands = "update-desktop-database #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
         end
 
         def prepareOpenrcServiceInstallation(path : String, name : String)
@@ -1197,7 +1197,7 @@ module ISM
 
             requestedCommands = "#{configureCommand} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
         
         def build
@@ -1207,31 +1207,31 @@ module ISM
         def makePerlSource(path = String.new)
             requestedCommands = "perl Makefile.PL"
 
-            Ism.runSystemCommand(requestedCommands, path)
+            ISM::Core.runSystemCommand(requestedCommands, path)
         end
 
         def runCpanCommand(arguments = String.new)
             requestedCommands = "cpan #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def runDircolorsCommand(arguments = String.new)
             requestedCommands = "dircolors #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, asRoot: true)
+            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runDepmodCommand(arguments = String.new)
             requestedCommands = "depmod #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def runSshKeygenCommand(arguments = String.new)
             requestedCommands = "ssh-keygen #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands)
+            ISM::Core.runSystemCommand(requestedCommands)
         end
 
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -1260,7 +1260,7 @@ module ISM
 
             requestedCommands = "make #{prefix} #{arguments}"
 
-            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def prepareInstallation
@@ -1310,7 +1310,7 @@ module ISM
 
             File.write(path, data)
 
-            Ism.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: systemHandleUserAccess)
+            ISM::Core.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: systemHandleUserAccess)
 
             #TO DO
             #No exit process because if the file can't be strip, we can just keep going
@@ -1361,7 +1361,7 @@ module ISM
 
             if systemHandleUserAccess
                 Ism.notifyOfUnlockingSystemAccess
-                Ism.unlockSystemAccess
+                ISM::Core::Security.unlockSystemAccess
 
                 #Special case when we are switching to the installation by chroot during cross toolchain construction
                 if !Ism.settings.installByChroot && !Ism.systemInformation.crossToolchainFullyBuilt
@@ -1437,7 +1437,7 @@ module ISM
 
             if systemHandleUserAccess
                 Ism.notifyOfLockingSystemAccess
-                Ism.lockSystemAccess
+                ISM::Core::Security.lockSystemAccess
             end
         end
 
@@ -1810,7 +1810,7 @@ module ISM
         end
 
         def commandIsAvailable(command : String) : Bool
-            Ism.runSystemCommand("type #{command} > /dev/null 2>&1")
+            ISM::Core.runSystemCommand("type #{command} > /dev/null 2>&1")
 
             return (process.exit_code == 0)
         end

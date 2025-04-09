@@ -3,18 +3,18 @@ require "./RequiredLibraries"
 Ism = ISM::CommandLine.new
 
 begin
-    #We check first if the user try to perform escalating access
-    tryEscalatingAccess = false
+    #We check first if the user try to perform right escalating access
+    tryEscalating = false
 
-    if Ism.ranAsSuperUser
-        tryEscalatingAccess = true
+    if ISM::Core::Security.ranAsSuperUser
+        tryEscalating = true
         Ism.printNeedToBeRunAsNormalUserNotification
-    elsif !Ism.ranAsMemberOfGroupIsm
-        tryEscalatingAccess = true
+    elsif !ISM::Core::Security.ranAsMemberOfGroupIsm
+        tryEscalating = true
         Ism.printNeedToBeRunAsMemberOfIsmGroupNotification
     end
 
-    if tryEscalatingAccess
+    if tryEscalating
         ISM::Core.exitProgram
     end
 
@@ -27,8 +27,8 @@ rescue error
 #We ensure that the program exit securely
 ensure
     #We ensure that the system is locked even we are facing an issue
-    if Ism.systemInformation.handleUserAccess
-        Ism.lockSystemAccess
+    if ISM::Core::Security.systemHandleUserAccess
+        ISM::Core::Security.lockSystemAccess
     end
 
     #To finish, we reset the initial terminal title and exit with the error code 1
