@@ -72,7 +72,12 @@ module ISM
                 end
             end
 
-            yield
+            begin
+                yield
+            ensure
+                LibC.seteuid(ISM::Default::CommandLine::SystemId.to_i)
+                LibC.setegid(ISM::Default::CommandLine::SystemId.to_i)
+            end
         end
 
         def ranAsMemberOfGroupIsm : Bool

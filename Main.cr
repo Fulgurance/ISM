@@ -34,9 +34,7 @@ ensure
 
     #We ensure the program can't run any command as root
     LibC.setuid(ISM::Default::CommandLine::SystemId.to_i)
-    LibC.seteuid(ISM::Default::CommandLine::SystemId.to_i)
     LibC.setgid(ISM::Default::CommandLine::SystemId.to_i)
-    LibC.setegid(ISM::Default::CommandLine::SystemId.to_i)
 
     #To finish, we reset the initial terminal title and exit with the error code 1
     ISM::Core.resetTerminalTitle
