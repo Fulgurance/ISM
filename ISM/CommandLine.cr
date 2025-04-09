@@ -69,6 +69,13 @@ module ISM
             return processResult.to_s.strip.split(" ").includes?(systemId)
         end
 
+        def stillHaveSudoAccess : Bool
+            process = Process.run(  "sudo -n true 2>/dev/null",
+                                    shell: true)
+
+            return (process.exit_code == 0)
+        end
+
         def start
             loadSettingsFiles
             loadSystemInformationFile
@@ -750,6 +757,210 @@ module ISM
             puts "#{ISM::Default::CommandLine::SecurityNotificationReasonText} #{reason.colorize(:yellow)}"
             puts "#{ISM::Default::CommandLine::SecurityNotificationDetailsText} #{details.colorize(:green)}"
             puts
+        end
+
+        def printChrootSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::ChrootSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::ChrootSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::ChrootSecurityNotificationDetailsText)
+        end
+
+        def printPrepareChrootDevConsoleSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationDetailsText)
+        end
+
+        def printPrepareChrootDevNullSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationDetailsText)
+        end
+
+        def printPrepareChrootDevSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationDetailsText)
+        end
+
+        def printPrepareChrootDevPtsSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationDetailsText)
+        end
+
+        def printPrepareChrootProcSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationDetailsText)
+        end
+
+        def printPrepareChrootSysSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationDetailsText)
+        end
+
+        def printPrepareChrootNetworkConfigurationSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationDetailsText)
+        end
+
+        def printPrepareRootPermissionsSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::PrepareRootPermissionsSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::PrepareRootPermissionsSecurityNotificationDetailsText)
+        end
+
+        def printStripInstalledFilesSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationDetailsText)
+        end
+
+        def printInstallFileSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallFileSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::InstallFileSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::InstallFileSecurityNotificationDetailsText)
+        end
+
+        def printInstallSymlinkSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallSymlinkSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::InstallSymlinkSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::InstallSymlinkSecurityNotificationDetailsText)
+        end
+
+        def printInstallDirectorySecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallDirectorySecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::InstallDirectorySecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::InstallDirectorySecurityNotificationDetailsText)
+        end
+
+        def printUninstallFileSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::UninstallFileSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::UninstallFileSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::UninstallFileSecurityNotificationDetailsText)
+        end
+
+        def printUninstallDirectorySecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::UninstallDirectorySecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::UninstallDirectorySecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::UninstallDirectorySecurityNotificationDetailsText)
+        end
+
+        def printGenerateEmptyPasswdFileSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::GenerateEmptyPasswdFileSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::GenerateEmptyPasswdFileSecurityNotificationDetailsText)
+        end
+
+        def printRunLocaledefCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunLocaledefCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunLocaledefCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunDircolorsCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunDircolorsCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunDircolorsCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunLdconfigCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunLdconfigCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunLdconfigCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunPwconvCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunPwconvCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunPwconvCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunGrpconvCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGrpconvCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGrpconvCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunUdevadmCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunUdevadmCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunUdevadmCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunZicCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunZicCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunZicCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunInstallCatalogCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunInstallCatalogCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunInstallCatalogCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunXmlCatalogCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunXmlCatalogCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunXmlCatalogCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunInstallInfoCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunInstallInfoCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunInstallInfoCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunMakeCaCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunMakeCaCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunMakeCaCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunGtkQueryImmodules2CommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGtkQueryImmodules2CommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGtkQueryImmodules2CommandSecurityNotificationDetailsText)
+        end
+
+        def printRunGtkQueryImmodules3CommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGtkQueryImmodules3CommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGtkQueryImmodules3CommandSecurityNotificationDetailsText)
+        end
+
+        def printRunGlibCompileSchemasCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationDetailsText)
+        end
+
+        def printRunAlsactlCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioReasonText,
+                                        details:    ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioDetailsText)
+        end
+
+        def printRunDbusUuidgenCommandSecurityNotification(command : String)
+            printSecurityNotification(  command:    command,
+                                        reason:     ISM::Default::CommandLine::RunDbusUuidgenCommandSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::RunDbusUuidgenCommandSecurityNotificationDetailsText)
+        end
+
+        def printLockSystemAccessSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::LockSystemAccessSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationDetailsText)
+        end
+
+        def printUnlockSystemAccessSecurityNotification
+            printSecurityNotification(  command:    ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationCommandText,
+                                        reason:     ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationReasonText,
+                                        details:    ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationDetailsText)
         end
 
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
