@@ -7,6 +7,7 @@ module ISM
             module Security
 
                 SystemId = "250"
+                SystemName = "#{ISM::Default::CommandLine::Name}"
 
             end
 

@@ -45,8 +45,8 @@ module ISM
             errorValue =    (quiet ? Process::Redirect::Close : error)
 
             #Exclusive variables preparation
-            chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId}"} #{ISM::CommandLineSettings.loadConfiguration.rootPath}"
-            taskPrefix =        "#{asSuperuser ? sudoCommand : "#{sudoCommand} -u #{ISM::Default::Core::Security::SystemId} -g #{ISM::Default::Core::Security::SystemId} exec"}"
+            chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemName}:#{ISM::Default::Core::Security::SystemName}"} #{ISM::CommandLineSettings.loadConfiguration.rootPath}"
+            taskPrefix =        "#{asSuperuser ? sudoCommand : "#{sudoCommand} -u #{ISM::Default::Core::Security::SystemName} -g #{ISM::Default::Core::Security::SystemName} exec"}"
 
             prefix =        (viaChroot ? chrootTaskPrefix : taskPrefix)
 
