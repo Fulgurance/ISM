@@ -95,105 +95,70 @@ module ISM
         def prepareChrootDevConsole
             requestedCommands = "mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
-            process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  true,
-                                            chroot: false,
-                                            asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   requestedCommands,
+                                    shell:  true,
+                                    chroot: false,
+                                    asRoot: true)
         end
 
         # Internal use only
         def prepareChrootDevNull
             requestedCommands = "mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
-            process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  true,
-                                            chroot: false,
-                                            asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   requestedCommands,
+                                    shell:  true,
+                                    chroot: false,
+                                    asRoot: true)
         end
 
         # Internal use only
         def prepareChrootDev
             requestedCommands = "mount --bind /dev #{Ism.settings.rootPath}/dev"
 
-            process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  true,
-                                            chroot: false,
-                                            asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   requestedCommands,
+                                    shell:  true,
+                                    chroot: false,
+                                    asRoot: true)
         end
 
         # Internal use only
         def prepareChrootDevPts
             requestedCommands = "mount --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
-            process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  true,
-                                            chroot: false,
-                                            asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   requestedCommands,
+                                    shell:  true,
+                                    chroot: false,
+                                    asRoot: true)
         end
 
         # Internal use only
         def prepareChrootProc
             requestedCommands = "mount -t proc proc #{Ism.settings.rootPath}/proc"
 
-            process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  true,
-                                            chroot: false,
-                                            asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   requestedCommands,
+                                    shell:  true,
+                                    chroot: false,
+                                    asRoot: true)
         end
 
         # Internal use only
         def prepareChrootSysfs
             requestedCommands = "mount -t sysfs sysfs #{Ism.settings.rootPath}/sys"
 
-            process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  true,
-                                            chroot: false,
-                                            asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   requestedCommands,
+                                    shell:  true,
+                                    chroot: false,
+                                    asRoot: true)
         end
 
         # Internal use only
         def prepareChrootNetworkConfiguration
             requestedCommands = "cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
-            process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  true,
-                                            chroot: false,
-                                            asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   requestedCommands,
+                                    shell:  true,
+                                    chroot: false,
+                                    asRoot: true)
         end
 
         # Internal use only
@@ -221,15 +186,10 @@ module ISM
 
             requestedCommands = "#{unlockTask} && #{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources} && #{lockTask}"
 
-            process = Ism.runSystemCommand( requestedCommands,
-                                            shell:  true,
-                                            chroot: false,
-                                            asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   requestedCommands,
+                                    shell:  true,
+                                    chroot: false,
+                                    asRoot: true)
         end
 
         #Special function to improve performance (Internal use only)
@@ -261,10 +221,6 @@ module ISM
             end
 
             return String.new
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -286,124 +242,71 @@ module ISM
             end
 
             return String.new
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         # def changeFileModeNoChroot(path : String, mode : String)
         #     File.chmod(path, mode.to_i(base: 8))
-        #
-        #     rescue error
-        #         Ism.printSystemCallErrorNotification(error)
-        #         Ism.exitProgram
         # end
         #
         # #Special function to improve performance (Internal use only)
         # def changeFileOwnerNoChroot(path : String, user : String, group : String)
         #     File.chown(path, getUserId(user).to_i, getGroupId(group).to_i)
-        #
-        #     rescue error
-        #         Ism.printSystemCallErrorNotification(error)
-        #         Ism.exitProgram
         # end
 
         #Special function to improve performance (Internal use only)
         def changeFileModeNoChroot(path : String, mode : String, asRoot = false)
             requestedCommands = "/usr/bin/chmod #{mode} #{path}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
+            Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
 
             if !process.success?
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
                 Ism.exitProgram
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def changeFileOwnerNoChroot(path : String, user : String, group : String, asRoot = false)
             requestedCommands = "/usr/bin/chown #{user}:#{group} #{path}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def workDirectoryPathNoChroot : String
             return Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def mainWorkDirectoryPathNoChroot : String
             return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def buildDirectoryPathNoChroot(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPathNoChroot+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def builtSoftwareDirectoryPathNoChroot : String
             return "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def workDirectoryPath : String
             return Ism.settings.installByChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def mainWorkDirectoryPath : String
             return workDirectoryPath+"/"+@mainSourceDirectoryName
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def buildDirectoryPath(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPath+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def builtSoftwareDirectoryPath : String
             return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def directoryContent(path : String, matchHidden = false) : Array(String)
@@ -412,10 +315,6 @@ module ISM
             fileList = Dir.glob((Ism.settings.installByChroot ? Ism.settings.rootPath+path : path), match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
 
             return fileList.map { |file| (Ism.settings.installByChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def recordSelectedKernel
@@ -453,10 +352,6 @@ module ISM
                     end
                 end
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def updateKernelSymlinks
@@ -488,10 +383,6 @@ module ISM
                                 type:   :symbolicLinkByOverwrite)
                 end
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def prepareKernelSourcesInstallation
@@ -515,10 +406,6 @@ module ISM
                                     targetPath: "#{builtSoftwareDirectoryPathNoChroot}#{Ism.settings.rootPath}/usr/src/#{@information.name.downcase}-headers-#{@information.version.downcase}")
 
             updateKernelSymlinks
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setup
@@ -535,10 +422,6 @@ module ISM
             if !@additions.empty?
                 downloadAdditions
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def downloadAdditions
@@ -556,10 +439,6 @@ module ISM
                                 archiveName,
                                 ISM::Default::Software::ArchiveExtensionName)
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def downloadAdditionalSourcesSha512
@@ -571,30 +450,18 @@ module ISM
                                 archiveName,
                                 ISM::Default::Software::ArchiveSha512ExtensionName)
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def downloadSources
             downloadFile(   @information.sourcesLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveExtensionName)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def downloadSourcesSha512
             downloadFile(   @information.sourcesSha512Link,
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveSha512ExtensionName)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def downloadFile(link : String, filename : String, fileExtensionName : String)
@@ -667,10 +534,6 @@ module ISM
             end
 
             puts
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
         
         def getFileContent(filePath : String) : String
@@ -681,10 +544,6 @@ module ISM
                 Ism.exitProgram
             end
             return content
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def check
@@ -695,19 +554,11 @@ module ISM
             if !@additions.empty?
                 checkAdditionsSha512
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def checkSourcesSha512
             checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                         sha512:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def checkAdditionsSha512
@@ -717,10 +568,6 @@ module ISM
                 checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
                             sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def checkFile(archive : String, sha512 : String)
@@ -732,10 +579,6 @@ module ISM
                 Ism.notifyOfCheckError(archive, sha512)
                 Ism.exitProgram
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def extract
@@ -751,19 +594,11 @@ module ISM
             if Dir.exists?(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName)
                 copyDirectoryNoChroot(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def extractSources
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def extractAdditions
@@ -774,26 +609,14 @@ module ISM
 
                 extractArchive("#{workDirectoryPathNoChroot}/#{archiveName}", workDirectoryPathNoChroot)
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            process = Ism.runSystemCommand( "/usr/bin/tar -xf #{archivePath}",
-                                            quiet: true,
-                                            shell: false,
-                                            chroot: false,
-                                            path: destinationPath)
-            if !process.success?
-                Ism.notifyOfExtractError(archivePath, destinationPath)
-                Ism.exitProgram
-            end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            Ism.runSystemCommand(   "/usr/bin/tar -xf #{archivePath}",
+                                    quiet: true,
+                                    shell: false,
+                                    chroot: false,
+                                    path: destinationPath)
         end
         
         def patch
@@ -812,25 +635,13 @@ module ISM
                     applyPatch(patch)
                 end
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
         
         def applyPatch(patch : String)
-            process = Ism.runSystemCommand( "/usr/bin/patch -Np1 -i #{patch}",
-                                            shell: false,
-                                            chroot: false,
-                                            path: mainWorkDirectoryPathNoChroot)
-            if !process.success?
-                Ism.notifyOfApplyPatchError(patch)
-                Ism.exitProgram
-            end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            Ism.runSystemCommand(   "/usr/bin/patch -Np1 -i #{patch}",
+                                    shell: false,
+                                    chroot: false,
+                                    path: mainWorkDirectoryPathNoChroot)
         end
 
         def prepare
@@ -842,10 +653,6 @@ module ISM
                     makeDirectoryNoChroot(buildDirectoryPathNoChroot(key))
                 end
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -853,10 +660,6 @@ module ISM
             Ism.runAsSuperUser(validCondition: asRoot) {
                 FileUtils.cp(path, targetPath)
             }
-
-            rescue error
-                Ism.notifyOfCopyFileError(path, targetPath, error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -864,10 +667,6 @@ module ISM
             Ism.runAsSuperUser(validCondition: asRoot) {
                 FileUtils.cp_r(path, targetPath)
             }
-
-            rescue error
-                Ism.notifyOfCopyDirectoryError(path, targetPath, error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -875,10 +674,6 @@ module ISM
             Ism.runAsSuperUser(validCondition: asRoot) {
                 FileUtils.rm(path)
             }
-
-            rescue error
-                Ism.notifyOfDeleteFileError(path, error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -886,10 +681,6 @@ module ISM
             Ism.runAsSuperUser(validCondition: asRoot) {
                 FileUtils.mv(path, newPath)
             }
-
-            rescue error
-                Ism.notifyOfMoveFileError(path, newPath, error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -897,10 +688,6 @@ module ISM
             Ism.runAsSuperUser(validCondition: asRoot) {
                 FileUtils.mkdir_p(directory)
             }
-
-            rescue error
-                Ism.notifyOfMakeDirectoryError(directory, error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -908,10 +695,6 @@ module ISM
             Ism.runAsSuperUser(validCondition: asRoot) {
                 FileUtils.rm_r(directory)
             }
-
-            rescue error
-                Ism.notifyOfDeleteDirectoryError(directory, error)
-                Ism.exitProgram
         end
 
         def fileUpdateContent(path : String, data : String)
@@ -919,12 +702,7 @@ module ISM
                                 grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def fileReplaceText(path : String, text : String, newText : String)
@@ -932,12 +710,7 @@ module ISM
                                 sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/g' #{path}
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def fileReplaceLineContaining(path : String, text : String, newLine : String)
@@ -945,12 +718,7 @@ module ISM
                                 sed -i '/#{text.gsub(/([\.\/])/, %q(\\\1))}/c\#{newText.gsub(/([\.\/])/, %q(\\\1))}' #{path}
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def fileReplaceTextAtLineNumber(path : String, text : String, newText : String,lineNumber : UInt64)
@@ -958,12 +726,7 @@ module ISM
                                 sed -i '#{lineNumber.to_s}s/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' #{path}
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def fileDeleteLine(path : String, lineNumber : UInt64)
@@ -971,12 +734,7 @@ module ISM
                                 sed -i '#{lineNumber.to_s}d' #{path}
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def fileWriteData(path : String, data : String)
@@ -986,12 +744,7 @@ module ISM
                                 EOF
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def fileAppendData(path : String, data : String)
@@ -999,12 +752,7 @@ module ISM
                                 echo "#{data}" > "#{path}"
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def fileAppendDataFromFile(path : String, fromPath : String)
@@ -1012,12 +760,7 @@ module ISM
                                 cat "#{fromPath}" >> "#{path}"
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
@@ -1025,12 +768,7 @@ module ISM
                                 find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands, path)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path)
         end
 
         def deleteAllFilesRecursivelyFinishing(path : String, extensions = Array(String).new)
@@ -1045,12 +783,7 @@ module ISM
                                 find #{path} #{extensionCommands} -delete
                                 CMD
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def makeLink(target : String, path : String, type : Symbol)
@@ -1076,221 +809,139 @@ module ISM
 
             requestedCommands = "#{command} '#{target}' #{path}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def generateEmptyFile(path : String)
             requestedCommands = "touch #{path}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def generateEmptyPasswdFile
             requestedCommands = "touch /usr/bin/passwd"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def copyFile(path : String, targetPath : String)
             requestedCommands = "cp #{path} #{targetPath}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def copyDirectory(path : String, targetPath : String)
             requestedCommands = "cp -r #{path} #{targetPath}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def moveFile(path : String, newPath : String)
             requestedCommands = "mv #{path} #{newPath}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def makeDirectory(path : String)
             requestedCommands = "mkdir -p #{path}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def deleteDirectory(path : String)
             requestedCommands = "rm -r #{path}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def deleteFile(path : String)
             requestedCommands = "rm #{path}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def runChmodCommand(arguments = String.new, path = String.new)
             requestedCommands = "chmod #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, asRoot: true)
         end
 
         def runChownCommand(arguments = String.new, path = String.new)
             requestedCommands = "chown #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, asRoot: true)
         end
 
         def runUserAddCommand(arguments : String)
             requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
-
-            if !process.success? && process.exit_code != 9
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    shell: true,
+                                    asRoot: true,
+                                    ignoreErrorCodeList: [9])
         end
 
         def runUserDelCommand(arguments : String)
             requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
-            if !process.success? && process.exit_code != 9
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    shell: true,
+                                    asRoot: true,
+                                    ignoreErrorCodeList: [9])
         end
 
         def runGroupAddCommand(arguments : String)
             requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
-            if !process.success? && process.exit_code != 9
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    shell: true,
+                                    asRoot: true,
+                                    ignoreErrorCodeList: [9])
         end
 
         def runGroupDelCommand(arguments : String)
             requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            Ism.runSystemCommand(requestedCommands, shell: true, asRoot: true)
 
-            if !process.success? && process.exit_code != 9
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    shell: true,
+                                    asRoot: true,
+                                    ignoreErrorCodeList: [9])
         end
 
         def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "./#{file} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runTarCommand(arguments = String.new, path = String.new)
             requestedCommands = "tar #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path)
         end
 
         def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
             requestedCommands = "python#{version} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runPipCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
             requestedCommands = "pip#{version} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment)
         end
 
         def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -1317,34 +968,19 @@ module ISM
 
             requestedCommands = "cmake #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runQmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "qmake #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "meson #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -1373,309 +1009,169 @@ module ISM
 
             requestedCommands = "ninja #{prefix} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runPwconvCommand(arguments = String.new)
             requestedCommands = "pwconv #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGrpconvCommand(arguments = String.new)
             requestedCommands = "grpconv #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runUdevadmCommand(arguments : String)
             requestedCommands = "udevadm #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runDbusUuidgenCommand(arguments = String.new)
             requestedCommands = "dbus-uuidgen #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runMakeinfoCommand(arguments : String, path = String.new)
             requestedCommands = "makeinfo #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path)
         end
 
         def runInstallInfoCommand(arguments : String)
             requestedCommands = "install-info #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runAutoconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoconf #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runAutoreconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoreconf #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def runLocaledefCommand(arguments : String)
             requestedCommands = "localedef #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGunzipCommand(arguments : String, path = String.new)
             requestedCommands = "gunzip #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path)
         end
 
         def runMakeCaCommand(arguments : String)
             requestedCommands = "make-ca #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runInstallCatalogCommand(arguments : String)
             requestedCommands = "install-catalog #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runXmlCatalogCommand(arguments : String)
             requestedCommands = "xmlcatalog #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runLdconfigCommand(arguments = String.new)
             requestedCommands = "ldconfig #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGtkQueryImmodules3Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGlibCompileSchemasCommand(arguments = String.new)
             requestedCommands = "glib-compile-schemas #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGdkPixbufQueryLoadersCommand(arguments = String.new)
             requestedCommands = "gdk-pixbuf-query-loaders #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def runUpdateMimeDatabaseCommand(arguments = String.new)
             requestedCommands = "update-mime-database #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def runCargoCommand(arguments : String, path = String.new, environment = Hash(String, String).new)
             requestedCommands = "cargo #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment)
         end
 
         def runXargoCommand(arguments : String, path = String.new)
             requestedCommands = "xargo #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path)
         end
 
         def runGccCommand(arguments = String.new, path = String.new)
             requestedCommands = "gcc #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path)
         end
 
         def runRcUpdateCommand(arguments = String.new)
             requestedCommands = "rc-update #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def runAlsactlCommand(arguments = String.new)
             requestedCommands = "alsactl #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runGtkUpdateIconCacheCommand(arguments = String.new)
             requestedCommands = "gtk-update-icon-cache #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def runUpdateDesktopDatabaseCommand(arguments = String.new)
             requestedCommands = "update-desktop-database #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, asRoot: true)
         end
 
         def prepareOpenrcServiceInstallation(path : String, name : String)
@@ -1684,18 +1180,10 @@ module ISM
             makeDirectory("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
             moveFile(path,"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{name}")
             runChmodCommand("+x #{name}","#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def configure
             Ism.notifyOfConfigure(@information)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, relatedToMainBuild = true)
@@ -1703,12 +1191,7 @@ module ISM
 
             requestedCommands = "#{configureCommand} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
         
         def build
@@ -1718,56 +1201,31 @@ module ISM
         def makePerlSource(path = String.new)
             requestedCommands = "perl Makefile.PL"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path)
         end
 
         def runCpanCommand(arguments = String.new)
             requestedCommands = "cpan #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def runDircolorsCommand(arguments = String.new)
             requestedCommands = "dircolors #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, asRoot: true)
         end
 
         def runDepmodCommand(arguments = String.new)
             requestedCommands = "depmod #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def runSshKeygenCommand(arguments = String.new)
             requestedCommands = "ssh-keygen #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands)
         end
 
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -1796,12 +1254,7 @@ module ISM
 
             requestedCommands = "make #{prefix} #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
-            end
+            Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
         end
 
         def prepareInstallation
@@ -1836,10 +1289,6 @@ module ISM
             end
 
             return directoryNumber, symlinkNumber, fileNumber, totalSize
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
@@ -1857,8 +1306,9 @@ module ISM
 
             File.write(path, data)
 
-            process = Ism.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: systemHandleUserAccess)
+            Ism.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: systemHandleUserAccess)
 
+            #TO DO
             #No exit process because if the file can't be strip, we can just keep going
             rescue
         end
@@ -1869,10 +1319,6 @@ module ISM
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function for the installation process without chroot (Internal use only)
@@ -1881,19 +1327,11 @@ module ISM
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
             moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function for the installation process (Internal use only)
@@ -1901,28 +1339,16 @@ module ISM
             if commandIsAvailable("ldconfig") && systemHandleUserAccess
                 runLdconfigCommand
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallFile(path : String)
             deleteFileNoChroot(path, asRoot: true)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Special function for the uninstallation process without chroot (Internal use only)
         def uninstallDirectory(path : String)
             deleteDirectoryNoChroot(path, asRoot: true)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Manage stripping, recording installed files and favourites, libtool archive removal, and mount/remount critical point with read-only/read-write access
@@ -2009,15 +1435,6 @@ module ISM
                 Ism.notifyOfLockingSystemAccess
                 Ism.lockSystemAccess
             end
-
-            rescue error
-                #We make sure the system is locked even an error occured
-                if systemHandleUserAccess
-                    Ism.lockSystemAccess
-                end
-
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def deploy
@@ -2026,50 +1443,26 @@ module ISM
 
         def kernelSourcesPath : String
             return Ism.kernelSourcesPath
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelSourcesArchitecturePath : String
             return "#{kernelSourcesPath}arch/"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelKconfigFilePath : String
             return "#{kernelSourcesPath}Kconfig"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelArchitectureKconfigFilePath : String
             return "#{kernelSourcesArchitecturePath}Kconfig"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelConfigFilePath : String
             return "#{kernelSourcesPath}.config"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelOptionsDatabasePath : String
             return "#{Ism.settings.rootPath}#{ISM::Default::Path::KernelOptionsDirectory}#{mainKernelName}"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Return an array splitted, except when there are conditions between parenthesis
@@ -2084,10 +1477,6 @@ module ISM
             end
 
             return conditions.split(" && ")
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def parseKconfigConditions(conditions : String)
@@ -2116,10 +1505,6 @@ module ISM
             end
 
             return dependencies,singleChoiceDependencies,blockers
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
@@ -2167,10 +1552,6 @@ module ISM
             end
 
             return result
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def generateKernelOptionsFiles(kconfigContent : Array(String))
@@ -2270,10 +1651,6 @@ module ISM
                     option.writeConfiguration(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
                 end
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def updateKernelOptionsDatabase
@@ -2281,6 +1658,7 @@ module ISM
 
             makeDirectoryNoChroot(kernelOptionsDatabasePath)
 
+            #TO DO
             begin
                 generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
                 generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
@@ -2294,20 +1672,12 @@ module ISM
 
         def recordNeededKernelOptions
             Ism.notifyOfRecordNeededKernelOptions
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
         
         def clean
             Ism.notifyOfClean(@information)
 
             cleanWorkDirectoryPath
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def cleanWorkDirectoryPath
@@ -2316,37 +1686,21 @@ module ISM
             end
 
             makeDirectoryNoChroot(workDirectoryPathNoChroot)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def showInformations
             puts
             Ism.printInformationNotificationTitle(@information.name,@information.version)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def uninstall
             Ism.notifyOfUninstall(@information)
 
             Ism.uninstallSoftware(@information)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def option(optionName : String) : Bool
             return @information.option(optionName)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def dependency(fullName : String) : ISM::SoftwareInformation
@@ -2357,18 +1711,10 @@ module ISM
             end
 
             return ISM::SoftwareInformation.new
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def isGreatestVersion : Bool
             return Ism.getSoftwareInformation(@information.fullName).version <= @information.version
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def majorVersion : Int32
@@ -2377,54 +1723,30 @@ module ISM
 
         def minorVersion : Int32
             return SemanticVersion.parse(@information.version).minor
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def patchVersion : Int32
             return SemanticVersion.parse(@information.version).patch
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyVersion(fullName : String) : SemanticVersion
             return SemanticVersion.parse(dependency(fullName).version)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyMinorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).minor
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyPatchVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).patch
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def softwareVersion(fullName : String) : SemanticVersion
@@ -2433,10 +1755,6 @@ module ISM
             else
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version)
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def softwareMajorVersion(fullName : String) : Int32
@@ -2445,10 +1763,6 @@ module ISM
             else
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).major
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def softwareMinorVersion(fullName : String) : Int32
@@ -2457,10 +1771,6 @@ module ISM
             else
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).minor
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def softwarePatchVersion(fullName : String) : Int32
@@ -2469,68 +1779,36 @@ module ISM
             else
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).patch
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def softwareIsInstalled(softwareName : String) : Bool
             return Ism.softwareAnyVersionInstalled(softwareName)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def architecture(architecture : String) : Bool
             return Ism.settings.systemArchitecture == architecture
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelSelected : Bool
             return selectedKernel.isValid
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def isCurrentKernel : Bool
             return selectedKernel.versionName == @information.versionName
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def showInfo(message : String)
             Ism.printInformationNotification(message)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def showInfoCode(message : String)
             Ism.printInformationCodeNotification(message)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def commandIsAvailable(command : String) : Bool
-            process = Ism.runSystemCommand("type #{command} > /dev/null 2>&1")
+            Ism.runSystemCommand("type #{command} > /dev/null 2>&1")
 
             return (process.exit_code == 0)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
     end

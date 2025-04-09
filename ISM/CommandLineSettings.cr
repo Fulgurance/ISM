@@ -115,20 +115,12 @@ module ISM
 
         def self.filePath : String
             return "/"+ISM::Default::CommandLineSettings::SettingsFilePath
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def self.generateConfiguration(path = filePath)
             file = File.open(path,"w")
             self.new.to_json(file)
             file.close
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def self.loadConfiguration(path = filePath)
@@ -137,10 +129,6 @@ module ISM
             end
 
             return from_json(File.read(path))
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def self.writeConfiguration(#File path
@@ -264,10 +252,6 @@ module ISM
             file = File.open(path,"w")
             settings.to_json(file)
             file.close
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def writeChrootConfiguration
@@ -326,10 +310,6 @@ module ISM
                                             ISM::Default::CommandLineSettings::SystemBuildId,
                                             ISM::Default::CommandLineSettings::SystemVariant,
                                             ISM::Default::CommandLineSettings::SystemVariantId)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def writeSystemConfiguration
@@ -393,35 +373,19 @@ module ISM
             if @rootPath != "/"
                 writeChrootConfiguration
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Generic methods
         def temporaryPath
             return "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def sourcesPath
             return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def toolsPath
             return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Host/Chroot methods
@@ -432,10 +396,6 @@ module ISM
             else
                 return @systemTargetName
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemArchitecture(relatedToChroot = true) : String
@@ -444,10 +404,6 @@ module ISM
             else
                 return @systemArchitecture
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemTarget(relatedToChroot = true) : String
@@ -456,10 +412,6 @@ module ISM
             else
                 return @systemTarget
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemMakeOptions(relatedToChroot = true) : String
@@ -468,10 +420,6 @@ module ISM
             else
                 return @systemMakeOptions
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemBuildOptions(relatedToChroot = true) : String
@@ -480,10 +428,6 @@ module ISM
             else
                 return @systemBuildOptions
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemName(relatedToChroot = true) : String
@@ -492,10 +436,6 @@ module ISM
             else
                 return @systemName
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemFullName(relatedToChroot = true) : String
@@ -504,10 +444,6 @@ module ISM
             else
                 return @systemFullName
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemId(relatedToChroot = true) : String
@@ -516,10 +452,6 @@ module ISM
             else
                 return @systemId
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemRelease(relatedToChroot = true) : String
@@ -528,10 +460,6 @@ module ISM
             else
                 return @systemRelease
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemCodeName(relatedToChroot = true) : String
@@ -540,10 +468,6 @@ module ISM
             else
                 return @systemCodeName
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemDescription(relatedToChroot = true) : String
@@ -552,10 +476,6 @@ module ISM
             else
                 return @systemDescription
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemVersion(relatedToChroot = true) : String
@@ -564,10 +484,6 @@ module ISM
             else
                 return @systemVersion
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemVersionId(relatedToChroot = true) : String
@@ -576,10 +492,6 @@ module ISM
             else
                 return @systemVersionId
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemAnsiColor(relatedToChroot = true) : String
@@ -588,10 +500,6 @@ module ISM
             else
                 return @systemAnsiColor
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemCpeName(relatedToChroot = true) : String
@@ -600,10 +508,6 @@ module ISM
             else
                 return @systemCpeName
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemHomeUrl(relatedToChroot = true) : String
@@ -612,10 +516,6 @@ module ISM
             else
                 return @systemHomeUrl
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemSupportUrl(relatedToChroot = true) : String
@@ -624,10 +524,6 @@ module ISM
             else
                 return @systemSupportUrl
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemBugReportUrl(relatedToChroot = true) : String
@@ -636,10 +532,6 @@ module ISM
             else
                 return @systemBugReportUrl
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemPrivacyPolicyUrl(relatedToChroot = true) : String
@@ -648,10 +540,6 @@ module ISM
             else
                 return @systemPrivacyPolicyUrl
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemBuildId(relatedToChroot = true) : String
@@ -660,10 +548,6 @@ module ISM
             else
                 return @systemBuildId
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemVariant(relatedToChroot = true) : String
@@ -672,10 +556,6 @@ module ISM
             else
                 return @systemVariant
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def systemVariantId(relatedToChroot = true) : String
@@ -684,10 +564,6 @@ module ISM
             else
                 return @systemVariantId
             end
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Setter methods
@@ -695,62 +571,34 @@ module ISM
         #   Generic
         def setInstallByChroot(@installByChroot)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setRootPath(@rootPath)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setDefaultMirror(@defaultMirror)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setBuildKernelOptionsAsModule(@buildKernelOptionsAsModule)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #   Host
         def setSystemTargetName(@systemTargetName)
             writeSystemConfiguration
             setSystemTarget
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemArchitecture(@systemArchitecture)
             writeSystemConfiguration
             setSystemTarget
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemTarget
             @systemTarget = @systemArchitecture + "-" + @systemTargetName + "-" + "linux-gnu"
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemMakeOptions(@systemMakeOptions)
@@ -761,183 +609,96 @@ module ISM
             else
                 puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
-                Ism.exitProgram
-            end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+                ISM::Core.exitProgram
+            end
         end
 
         def setSystemBuildOptions(@systemBuildOptions)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemName(@systemName)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemFullName(@systemFullName)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemId(@systemId)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemRelease(@systemRelease)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemCodeName(@systemCodeName)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemDescription(@systemDescription)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemVersion(@systemVersion)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemVersionId(@systemVersionId)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemAnsiColor(@systemAnsiColor)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemCpeName(@systemCpeName)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemHomeUrl(@systemHomeUrl)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemSupportUrl(@systemSupportUrl)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemBugReportUrl(@systemBugReportUrl)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemPrivacyPolicyUrl(@systemPrivacyPolicyUrl)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemBuildId(@systemBuildId)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemVariant(@systemVariant)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setSystemVariantId(@systemVariantId)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #   Chroot
         def setChrootTargetName(@chrootTargetName)
             writeSystemConfiguration
             setChrootTarget
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootArchitecture(@chrootArchitecture)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootTarget
             @chrootTarget = @chrootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootMakeOptions(@chrootMakeOptions)
@@ -948,157 +709,82 @@ module ISM
             else
                 puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
-                Ism.exitProgram
-            end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+                ISM::Core.exitProgram
+            end
         end
 
         def setChrootBuildOptions(@chrootBuildOptions)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootName(@chrootName)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
 
         def setChrootFullName(@chrootFullName)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootId(@chrootId)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootRelease(@chrootRelease)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootCodeName(@chrootCodeName)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootDescription(@chrootDescription)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootVersion(@chrootVersion)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootVersionId(@chrootVersionId)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootAnsiColor(@chrootAnsiColor)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootCpeName(@chrootCpeName)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootHomeUrl(@chrootHomeUrl)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootSupportUrl(@chrootSupportUrl)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootBugReportUrl(@chrootBugReportUrl)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootPrivacyPolicyUrl(@chrootPrivacyPolicyUrl)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootBuildId(@chrootBuildId)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootVariant(@chrootVariant)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def setChrootVariantId(@chrootVariantId)
             writeSystemConfiguration
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
     end

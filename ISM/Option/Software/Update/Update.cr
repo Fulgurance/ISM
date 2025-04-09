@@ -18,7 +18,8 @@ module ISM
                 #No update
                 if Ism.requestedSoftwares.empty?
                     Ism.showNoUpdateMessage
-                    Ism.exitProgram
+
+                    ISM::Core.exitProgram
                 end
 
                 Ism.showCalculationTitleMessage

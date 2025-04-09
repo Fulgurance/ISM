@@ -13,10 +13,6 @@ module ISM
 
         def self.loadConfiguration(path = String.new)
             return from_json(File.read(path))
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def descriptor(path : String, realPath : String) : ISM::SoftwareSecurityDescriptor

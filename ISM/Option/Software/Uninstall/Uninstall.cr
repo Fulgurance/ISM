@@ -37,7 +37,8 @@ module ISM
                         end
 
                         Ism.showNoMatchFoundMessage(wrongArguments)
-                        Ism.exitProgram
+
+                        ISM::Core.exitProgram
                     end
 
                     #No available version found
@@ -51,7 +52,8 @@ module ISM
                         end
 
                         Ism.showNoVersionAvailableMessage(wrongArguments)
-                        Ism.exitProgram
+
+                        ISM::Core.exitProgram
                     end
 
                     #Software not installed yet
@@ -65,7 +67,8 @@ module ISM
                         end
 
                         Ism.showSoftwareNotInstalledMessage(wrongArguments)
-                        Ism.exitProgram
+
+                        ISM::Core.exitProgram
                     end
 
                     Ism.showCalculationTitleMessage

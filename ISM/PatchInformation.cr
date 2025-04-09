@@ -23,20 +23,12 @@ module ISM
             end
 
             return from_json(File.read(path))
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def writeConfiguration(path = self.class.filePath)
             file = File.open(path,"w")
             to_json(file)
             file.close
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
     end

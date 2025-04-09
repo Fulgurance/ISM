@@ -2,8 +2,15 @@ module ISM
 
     module Error
 
+        def self.showWarning(warning : String)
+            puts warning
+            #TO DO: Show that the warning encounter an error itself and raise it too
+            rescue error
+
+        end
+
         def self.show(error : Exception)
-            limit = ISM::Default::Error::InternalErrorTitle.size
+            limit = ISM::Default::Error::Title.size
 
             separatorText = String.new
 
@@ -13,10 +20,10 @@ module ISM
 
             fullLog = (error.backtrace.empty? ? error.backtrace.join("\n") : error.message)
 
-            title = "#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
+            title = "#{ISM::Default::Error::Title.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
             errorText = "\n#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
-            help = "\n#{ISM::Default::CommandLine::SystemCallErrorNotificationHelp.colorize(:red)}"
+            help = "\n#{ISM::Default::Error::Help.colorize(:red)}"
 
             puts
             puts separatorText
@@ -25,9 +32,9 @@ module ISM
             puts errorText
             puts help
 
+            #TO DO: Show that the raising error process encounter an error itself and raise it too
             rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+
         end
 
     end
