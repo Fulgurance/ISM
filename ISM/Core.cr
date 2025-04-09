@@ -121,23 +121,29 @@ module ISM
                                     output: (quiet ? Process::Redirect::Close : output),
                                     error: (quiet ? Process::Redirect::Close : error))
 
-            #If the process fail, we first check if there is any error code we can ignore and then raise the error properly
-            if !process.success?
-
-                if !ignoreErrorCodeList.empty?
-                    if !ignoreErrorCodeList.includes?(process.exit_code)
-                        raise <<-ERROR
-                        #{ISM::Default::Error::SystemCommandFailure}
-                        command: #{command}
-                        path: #{path}
-                        environment: #{environmentCommand}
-                        asRoot: #{asSuperuser}
-                        chroot: #{viaChroot}
-                        shell:  #{shell}
-                        ERROR
-                    end
-                end
+            if !process.exit_code != 0 && !ignoreErrorCodeList.includes?(process.exit_code)
+                raise <<-ERROR
+                #{ISM::Default::Error::SystemCommandFailure}
+                command: #{command}
+                path: #{path}
+                environment: #{environmentCommand}
+                asRoot: #{asSuperuser}
+                chroot: #{viaChroot}
+                shell:  #{shell}
+                ERROR
             end
+
+            #If the process fail, we first check if there is any error code we can ignore and then raise the error properly
+            rescue
+                raise <<-ERROR
+                #{ISM::Default::Error::SystemCommandFailure}
+                command: #{command}
+                path: #{path}
+                environment: #{environmentCommand}
+                asRoot: #{asSuperuser}
+                chroot: #{viaChroot}
+                shell:  #{shell}
+                ERROR
         end
 
         #rootPath = (@settings.installByChroot || !@settings.installByChroot && (@settings.rootPath != "/") ? @settings.rootPath : "/")
