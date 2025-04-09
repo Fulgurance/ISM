@@ -60,31 +60,11 @@ module ISM
             return (LibC.getuid == 0)
         end
 
-        def runAsSuperUser(validCondition = true, &)
-            if validCondition
-                euidResult = LibC.seteuid(0)
-                egidResult = LibC.setegid(0)
-
-                if euidResult.negative?
-                    printNeedSuidBitNotification
-
-                    ISM::Core.exitProgram
-                end
-            end
-
-            begin
-                yield
-            ensure
-                LibC.seteuid(ISM::Default::CommandLine::SystemId.to_i)
-                LibC.setegid(ISM::Default::CommandLine::SystemId.to_i)
-            end
-        end
-
         def ranAsMemberOfGroupIsm : Bool
             processResult = IO::Memory.new
 
-            @currentProcess = runSystemCommand( command: "id -G",
-                                                output: processResult)
+            runSystemCommand(   command: "id -G",
+                                output: processResult)
 
             return processResult.to_s.strip.split(" ").includes?(systemId)
         end
@@ -1713,9 +1693,10 @@ module ISM
                                     chroot: false,
                                     asRoot: true)
 
-                runAsSuperUser {
-                    File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                }
+                runSystemCommand(   command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: true)
             end
 
             processResult = IO::Memory.new
@@ -2342,41 +2323,6 @@ module ISM
             return true
         end
 
-        def runChrootTasks(chrootTasks, quiet = false, asRoot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
-
-            # We first check if there is any task left
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                    shell: false,
-                                    chroot: false,
-                                    asRoot: true)
-
-                runAsSuperUser {
-                    File.delete("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                }
-            end
-
-            File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
-
-            process = Process.run(  command: "chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                    input: (quiet ? Process::Redirect::Close : input),
-                                    output: (quiet ? Process::Redirect::Close : output),
-                                    error: (quiet ? Process::Redirect::Close : error),
-                                    shell: true)
-
-            command = "HOME=/var/lib/ism chroot #{asRoot ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath} ./#{ISM::Default::Filename::Task}"
-
-            process = Process.run(  command: command,
-                                    input: (quiet ? Process::Redirect::Close : input),
-                                    output: (quiet ? Process::Redirect::Close : output),
-                                    error: (quiet ? Process::Redirect::Close : error),
-                                    shell: true)
-
-            File.delete(@settings.rootPath+ISM::Default::Filename::Task)
-
-            return process
-        end
-
         def runSystemCommand(   command : String,
                                 path = @settings.installByChroot ? "/" : @settings.rootPath,
                                 environment = Hash(String, String).new,
@@ -2390,8 +2336,26 @@ module ISM
                                 error = Process::Redirect::Inherit,
                                 ignoreErrorCodeList = Array(Int32).new)
 
-            superuser = (asRoot && @systemInformation.handleUserAccess)
+            #########################TASKS#########################
 
+            #Common variables preparation
+            realRootPath =  "#{(chroot ? @settings.rootPath : "/")}"
+            taskFilePath =  "#{realRootPath}#{ISM::Default::Filename::Task}"
+            asSuperuser =   (asRoot && @systemInformation.handleUserAccess)
+            viaChroot =     (@settings.installByChroot && chroot ? true : false)
+            sudoCommand =   (shell ? "sudo" : "/usr/bin/sudo")
+            chrootCommand = (shell ? "chroot" : "/usr/sbin/chroot")
+            inputValue =    (quiet ? Process::Redirect::Close : input)
+            outputValue =   (quiet ? Process::Redirect::Close : output)
+            errorValue =    (quiet ? Process::Redirect::Close : error)
+
+            #Exclusive variables preparation
+            chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{systemId}:#{systemId}"} #{@settings.rootPath}"
+            taskPrefix =        "#{asSuperuser ? sudoCommand : "#{sudoCommand} -u #{systemId} -g #{systemId}"}"
+
+            prefix =        (viaChroot ? chrootTaskPrefix : taskPrefix)
+
+            #Loading environment
             environmentCommand = String.new
 
             if !environmentFilePath.empty?
@@ -2402,70 +2366,80 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
-            if @settings.installByChroot && chroot
-                chrootCommand = <<-CODE
-                #!/bin/bash
+            #Task core
+            tasks = <<-CODE
+            #!/bin/bash
 
-                if \[ -f "/etc/profile" \]; then
-                    source /etc/profile
-                fi
+            if \[ -f "/etc/profile" \]; then
+                source /etc/profile
+            fi
 
-                cd #{path} && #{environmentCommand} #{command}
-                CODE
+            cd #{path} && #{environmentCommand} #{command}
+            CODE
 
-                process = runAsSuperUser {
-                    runChrootTasks(chrootCommand, quiet, superuser, input, output, error)
-                }
-            else
-                environmentHash = Hash(String, String).new
+            processCommand = "#{prefix} ./#{ISM::Default::Filename::Task}"
 
-                #Substitute all environment variables by the real value
-                environment.keys.each do |key|
-                    environmentHash[key] = environment[key].gsub(/\$([A-Z0-9]+)/) do |_, match|
-                        begin
-                            ENV[match[1]]
-                        rescue
-                            #Return empty string if the var don't exist
-                            String.new
-                        end
-                    end
-                end
+            #########################TASKS#########################
 
-                noShellCommand = String.new
-                noShellArguments = Array(String).new
+            #Clean leftover from previous task
+            if File.exists?(taskFilePath)
+                #We need first to unlock it
+                process = Process.run(  command: "/usr/bin/sudo",
+                                        args: ["/usr/bin/chattr","-f","-i",taskFilePath],
+                                        shell: false,
+                                        input: (quiet ? Process::Redirect::Close : input),
+                                        output: (quiet ? Process::Redirect::Close : output),
+                                        error: (quiet ? Process::Redirect::Close : error))
 
-                if !shell
-                    commandArray = command.split(" ")
-
-                    noShellCommand = commandArray[0]
-                    noShellArguments = commandArray[1..-1]
-                end
-
-                process = runAsSuperUser(validCondition: asRoot) {
-                    Process.run(command:    (shell ? command : noShellCommand),
-                                args:       (shell ? nil : noShellArguments),
-                                input:      (quiet ? Process::Redirect::Close : input),
-                                output:     (quiet ? Process::Redirect::Close : output),
-                                error:      (quiet ? Process::Redirect::Close : error),
-                                shell:      shell,
-                                chdir:      (path.empty? ? nil : path),
-                                env:        environmentHash)
-                }
+                #Then we delete it
+                process = Process.run(  command: "/usr/bin/sudo",
+                                        args: ["/usr/bin/rm",taskFilePath],
+                                        shell: false,
+                                        input: (quiet ? Process::Redirect::Close : input),
+                                        output: (quiet ? Process::Redirect::Close : output),
+                                        error: (quiet ? Process::Redirect::Close : error))
             end
 
+            #Generate a new task file
+            File.write(taskFilePath, tasks)
+
+            #We make it executable
+            process = Process.run(  command: "/usr/bin/sudo",
+                                    args: ["/usr/bin/chmod","+x",taskFilePath],
+                                    shell: false,
+                                    input: (quiet ? Process::Redirect::Close : input),
+                                    output: (quiet ? Process::Redirect::Close : output),
+                                    error: (quiet ? Process::Redirect::Close : error))
+
+            #We now lock the new task to avoid any modification
+            process = Process.run(  command: "/usr/bin/sudo",
+                                    args: ["/usr/bin/chattr","-f","+i",taskFilePath],
+                                    shell: false,
+                                    input: (quiet ? Process::Redirect::Close : input),
+                                    output: (quiet ? Process::Redirect::Close : output),
+                                    error: (quiet ? Process::Redirect::Close : error))
+
+            #We can now run the generated task
+            process = Process.run(  command: processCommand,
+                                    shell: true,
+                                    input: (quiet ? Process::Redirect::Close : input),
+                                    output: (quiet ? Process::Redirect::Close : output),
+                                    error: (quiet ? Process::Redirect::Close : error))
+
+            #If the process fail, we first check if there is any error code we can ignore and then raise the error properly
             if !process.success?
 
                 if !ignoreErrorCodeList.empty?
                     if !ignoreErrorCodeList.includes?(process.exit_code)
                         raise <<-ERROR
-                                #{ISM::Default::Error::SystemCommandFailure}
-                                command: #{command}
-                                path: #{path}
-                                environment: #{environmentCommand}
-                                asRoot: #{asRoot}
-                                chroot: #{chroot}
-                                shell:  #{shell}
-                                ERROR
+                        #{ISM::Default::Error::SystemCommandFailure}
+                        command: #{command}
+                        path: #{path}
+                        environment: #{environmentCommand}
+                        asRoot: #{asSuperuser}
+                        chroot: #{viaChroot}
+                        shell:  #{shell}
+                        ERROR
                     end
                 end
             end

@@ -657,44 +657,50 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String, asRoot = false)
-            Ism.runAsSuperUser(validCondition: asRoot) {
-                FileUtils.cp(path, targetPath)
-            }
+            Ism.runSystemCommand(   "/usr/bin/cp #{path} #{targetPath}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
-            Ism.runAsSuperUser(validCondition: asRoot) {
-                FileUtils.cp_r(path, targetPath)
-            }
+            Ism.runSystemCommand(   "/usr/bin/cp -R #{path} #{targetPath}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String, asRoot = false)
-            Ism.runAsSuperUser(validCondition: asRoot) {
-                FileUtils.rm(path)
-            }
+            Ism.runSystemCommand(   "/usr/bin/rm #{path}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            Ism.runAsSuperUser(validCondition: asRoot) {
-                FileUtils.mv(path, newPath)
-            }
+            Ism.runSystemCommand(   "/usr/bin/mv #{path} #{targetPath}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
-        def makeDirectoryNoChroot(directory : String, asRoot = false)
-            Ism.runAsSuperUser(validCondition: asRoot) {
-                FileUtils.mkdir_p(directory)
-            }
+        def makeDirectoryNoChroot(path : String, asRoot = false)
+            Ism.runSystemCommand(   "/usr/bin/mkdir -p #{path} #{targetPath}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: asRoot)
         end
 
         #Special function to improve performance (Internal use only)
-        def deleteDirectoryNoChroot(directory : String, asRoot = false)
-            Ism.runAsSuperUser(validCondition: asRoot) {
-                FileUtils.rm_r(directory)
-            }
+        def deleteDirectoryNoChroot(path : String, asRoot = false)
+            Ism.runSystemCommand(   "/usr/bin/rm -R #{path}",
+                                    shell: false,
+                                    chroot: false,
+                                    asRoot: asRoot)
         end
 
         def fileUpdateContent(path : String, data : String)
@@ -1296,9 +1302,7 @@ module ISM
             path = "#{Ism.settings.rootPath}#{ISM::Default::Filename::StrippingList}"
 
             if File.exists?(path)
-                Ism.runAsSuperUser {
-                    deleteFileNoChroot(path)
-                }
+                deleteFileNoChroot(path: path, asRoot: true)
             end
 
             data = fileList.join("\n")
