@@ -46,7 +46,7 @@ module ISM
 
             #Exclusive variables preparation
             chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemName}:#{ISM::Default::Core::Security::SystemName}"} #{ISM::CommandLineSettings.loadConfiguration.rootPath}"
-            taskPrefix =        "#{asSuperuser ? "#{sudoCommand} " : "."}"
+            taskPrefix =        "#{asSuperuser ? "#{sudoCommand} " : ""}"
 
             prefix =        (viaChroot ? chrootTaskPrefix : taskPrefix)
 
@@ -69,7 +69,7 @@ module ISM
                 source /etc/profile
             fi
 
-            cd #{path} && #{environmentCommand} #{command}
+            cd #{realRootPath} && #{environmentCommand} #{command}
             CODE
 
             processCommand = "#{prefix}/#{ISM::Default::Filename::Task}"
@@ -125,7 +125,7 @@ module ISM
                 raise <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
                 command: #{processCommand}
-                path: #{path}
+                path: #{realRootPath}
                 environment: #{environmentCommand}
                 asRoot: #{asSuperuser}
                 chroot: #{viaChroot}
@@ -138,7 +138,7 @@ module ISM
                 raise <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
                 command: #{processCommand}
-                path: #{path}
+                path: #{realRootPath}
                 environment: #{environmentCommand}
                 asRoot: #{asSuperuser}
                 chroot: #{viaChroot}
