@@ -34,7 +34,6 @@ module ISM
             #########################TASKS#########################
 
             #Common variables preparation
-            taskFilePath =  "#{realRootPath}#{ISM::Default::Filename::Task}"
             asSuperuser =   (asRoot && ISM::Core::Security.systemHandleUserAccess)
             viaChroot =     (ISM::CommandLineSettings.loadConfiguration.installByChroot && chroot ? true : false)
             sudoCommand =   (shell ? "sudo" : "/usr/bin/sudo")
@@ -43,6 +42,7 @@ module ISM
             outputValue =   (quiet ? Process::Redirect::Close : output)
             errorValue =    (quiet ? Process::Redirect::Close : error)
             realRootPath =  "#{(viaChroot ? ISM::CommandLineSettings.loadConfiguration.rootPath : "/")}"
+            taskFilePath =  "#{realRootPath}#{ISM::Default::Filename::Task}"
 
             #Exclusive variables preparation
             chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemName}:#{ISM::Default::Core::Security::SystemName}"} #{ISM::CommandLineSettings.loadConfiguration.rootPath}"
