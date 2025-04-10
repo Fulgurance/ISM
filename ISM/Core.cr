@@ -34,7 +34,6 @@ module ISM
             #########################TASKS#########################
 
             #Common variables preparation
-            realRootPath =  "#{(chroot ? ISM::CommandLineSettings.loadConfiguration.rootPath : "/")}"
             taskFilePath =  "#{realRootPath}#{ISM::Default::Filename::Task}"
             asSuperuser =   (asRoot && ISM::Core::Security.systemHandleUserAccess)
             viaChroot =     (ISM::CommandLineSettings.loadConfiguration.installByChroot && chroot ? true : false)
@@ -43,12 +42,14 @@ module ISM
             inputValue =    (quiet ? Process::Redirect::Close : input)
             outputValue =   (quiet ? Process::Redirect::Close : output)
             errorValue =    (quiet ? Process::Redirect::Close : error)
+            realRootPath =  "#{(viaChroot ? ISM::CommandLineSettings.loadConfiguration.rootPath : "/")}"
 
             #Exclusive variables preparation
             chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemName}:#{ISM::Default::Core::Security::SystemName}"} #{ISM::CommandLineSettings.loadConfiguration.rootPath}"
             taskPrefix =        "#{asSuperuser ? "#{sudoCommand} " : ""}"
 
-            prefix =        (viaChroot ? chrootTaskPrefix : taskPrefix)
+            #Determine what will prefix the requested command
+            prefix = (viaChroot ? chrootTaskPrefix : taskPrefix)
 
             #Loading environment
             environmentCommand = String.new
