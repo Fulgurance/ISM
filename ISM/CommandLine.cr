@@ -1921,12 +1921,7 @@ module ISM
             #   -owned by root (uid 0 and gid 0)
             #   -enable SUID and SGID bits
             #   -set as immutable to don't allow any suppression
-            ISM::Core.runSystemCommand( command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                        shell: false,
-                                        chroot: false,
-                                        asRoot: true)
-
-            ISM::Core.runSystemCommand( command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/chown #{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId} #{@settings.rootPath}#{ISM::Default::Filename::Task}",
                                         shell: false,
                                         chroot: false,
                                         asRoot: true)
