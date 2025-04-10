@@ -122,7 +122,7 @@ module ISM
                                     output: (quiet ? Process::Redirect::Close : output),
                                     error: (quiet ? Process::Redirect::Close : error))
 
-            if !process.exit_code != 0 && !ignoreErrorCodeList.includes?(process.exit_code)
+            if process.exit_code != 0 && !ignoreErrorCodeList.includes?(process.exit_code)
                 raise <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
                 command: #{processCommand}
