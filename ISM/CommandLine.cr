@@ -1452,7 +1452,7 @@ module ISM
                     case index
                     when 0
                         color = :green
-                    when (index == (chain.size - 1))
+                    when (chain.size - 1)
                         color = :red
                     end
 
