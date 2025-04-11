@@ -259,11 +259,6 @@ module ISM
             requestedCommands = "/usr/bin/chmod #{mode} #{path}"
 
             ISM::Core.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
-
-            if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
-            end
         end
 
         #Special function to improve performance (Internal use only)
@@ -479,8 +474,9 @@ module ISM
                         rescue
                             error = "#{ISM::Default::Software::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::Software::DownloadSourceRedirectionErrorText2}"
 
-                            Ism.notifyOfDownloadError(link, error)
-                            Ism.exitProgram
+                            #TO DO
+                            # Ism.notifyOfDownloadError(link, error)
+                            # Ism.exitProgram
                         end
                         break
                     end
@@ -527,8 +523,9 @@ module ISM
                     else
                         error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
 
-                        Ism.notifyOfDownloadError(link, error)
-                        Ism.exitProgram
+                        #TO DO
+                        # Ism.notifyOfDownloadError(link, error)
+                        # Ism.exitProgram
                     end
                 end
             end
@@ -539,9 +536,6 @@ module ISM
         def getFileContent(filePath : String) : String
             begin
                 content = File.read(filePath)
-            rescue error
-                Ism.notifyOfGetFileContentError(filePath, error)
-                Ism.exitProgram
             end
             return content
         end
@@ -575,10 +569,11 @@ module ISM
             digest.file(archive)
             archiveSha512 = digest.hexfinal
 
-            if archiveSha512 != sha512
-                Ism.notifyOfCheckError(archive, sha512)
-                Ism.exitProgram
-            end
+            #TO DO
+            # if archiveSha512 != sha512
+            #     Ism.notifyOfCheckError(archive, sha512)
+            #     Ism.exitProgram
+            # end
         end
 
         def extract
@@ -809,8 +804,9 @@ module ISM
 
                 command = "ln -sf"
             else
-                Ism.notifyOfMakeLinkUnknowTypeError(target, path, type)
-                Ism.exitProgram
+                #TO DO
+                # Ism.notifyOfMakeLinkUnknowTypeError(target, path, type)
+                # Ism.exitProgram
             end
 
             requestedCommands = "#{command} '#{target}' #{path}"
@@ -1669,8 +1665,9 @@ module ISM
             rescue error
                 deleteDirectoryNoChroot(kernelOptionsDatabasePath)
 
-                Ism.notifyOfUpdateKernelOptionsDatabaseError(Ism.selectedKernel, error)
-                Ism.exitProgram
+                #TO DO
+                # Ism.notifyOfUpdateKernelOptionsDatabaseError(Ism.selectedKernel, error)
+                # Ism.exitProgram
             end
         end
 
