@@ -16,7 +16,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "filePath",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.generateConfiguration(path = filePath)
@@ -28,7 +29,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "generateConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
@@ -42,7 +44,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "loadConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
@@ -54,7 +57,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def setTargetVersion(@targetVersion)
@@ -64,7 +68,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "setTargetVersion",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
     end

@@ -13,7 +13,8 @@ module ISM
             ISM::Core::Error.show(  className: "Core",
                                     functionName: "setTerminalTitle",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.resetTerminalTitle
@@ -23,7 +24,8 @@ module ISM
             ISM::Core::Error.show(  className: "Core",
                                     functionName: "resetTerminalTitle",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.exitProgram(code = 0)
@@ -33,7 +35,8 @@ module ISM
             ISM::Core::Error.show(  className: "Core",
                                     functionName: "exitProgram",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.runSystemCommand(  command : String,

@@ -16,7 +16,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "filePath",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.generateConfiguration(path = filePath)
@@ -28,7 +29,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "generateConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
@@ -42,7 +44,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "loadConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
@@ -54,7 +57,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def setDefaultMirror(@defaultMirror)
@@ -64,7 +68,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "setDefaultMirror",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def sourcesLink : String
@@ -74,7 +79,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "sourcesLink",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
     end

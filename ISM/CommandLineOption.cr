@@ -16,7 +16,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineOption",
                                     functionName: "start",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def showHelp
@@ -31,7 +32,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineOption",
                                     functionName: "showHelp",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
     end

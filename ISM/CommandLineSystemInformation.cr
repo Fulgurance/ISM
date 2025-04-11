@@ -18,7 +18,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineSystemInformation",
                                     functionName: "filePath",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.generateConfiguration(path = filePath)
@@ -30,7 +31,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineSystemInformation",
                                     functionName: "generateConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
@@ -44,7 +46,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineSystemInformation",
                                     functionName: "loadConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
@@ -56,7 +59,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineSystemInformation",
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def setCrossToolchainFullyBuilt(@crossToolchainFullyBuilt)
@@ -66,7 +70,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineSystemInformation",
                                     functionName: "setCrossToolchainFullyBuilt",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def setHandleUserAccess(@handleUserAccess)
@@ -76,7 +81,8 @@ module ISM
             ISM::Core::Error.show(  className: "CommandLineSystemInformation",
                                     functionName: "setHandleUserAccess",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
     end
