@@ -1432,7 +1432,8 @@ module ISM
 
                 #First we get which software first generate a codependency with the current software
                 currentDependencyList.each_with_index do |dependency, dependencyIndex|
-                    if codependentSoftwares.includes?(dependency.hiddenName)
+                    #if codependentSoftwares.includes?(dependency.hiddenName)
+                    if dependencies.any? { |entry| entry == dependency }
                         chain = currentHashList[0..(dependencyIndex-1)]
 
                         dependencyChains.push(chain)
@@ -1455,7 +1456,7 @@ module ISM
                         color = :red
                     end
 
-                    softwareText = "#{software.fullName.colorize(:magenta)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
+                    softwareText = "#{software.fullName.colorize(color)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
                     optionsText = "{ "
 
                     if software.options.empty?
