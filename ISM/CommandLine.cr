@@ -1412,27 +1412,23 @@ module ISM
             puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
         end
 
-        def showInextricableDependenciesMessage(dependencyList : Array(ISM::SoftwareInformation))
+        def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
+            dependencyChains = Array(Array(ISM::SoftwareInformation)).new
+
+            #For each codependent software we get first the full tree, and then generate the chain from it (excluding itself)
+            dependencies.each do |dependency|
+                dependencyTree = dependency.dependencies(allowDeepSearch: true).map { |entry| entry.information}
+
+                dependencyTree.each_with_index do |software, softwareIndex|
+                    if software != dependency
+                        dependencyChains.push(dependencyTree[0..softwareIndex])
+                    end
+                end
+            end
+
             puts
             puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
             puts "\n"
-
-            dependencyChains = Array(Array(ISM::SoftwareInformation)).new
-
-            dependencyChains = dependencyList.map { |dependency| dependency.dependencies(allowDeepSearch: true)}
-
-            # codependentSoftwares = dependencyList.map { |entry| entry[0] }
-            #
-            # dependencyList.each_with_index do |list, listIndex|
-            #
-            #     list.each_with_index do |dependency, dependencyIndex|
-            #         if dependency != list[0] && codependentSoftwares.any? { |entry| entry == dependency}
-            #             dependencyChains.push(dependency.dependencies(allowDeepSearch: true).reverse.map { |entry| entry.information})
-            #             break
-            #         end
-            #     end
-            #
-            # end
 
             #Now we print each chains with in highlight the first and last one
             dependencyChains.each do |chain|
