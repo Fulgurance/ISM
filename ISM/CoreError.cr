@@ -2,7 +2,11 @@ module ISM
 
     module Error
 
-        def self.show(error : Exception)
+        def self.show(  className : String,
+                        functionName : String,
+                        description = String.new,
+                        errorTitle : String,
+                        error : Exception)
             limit = ISM::Default::Error::Title.size
 
             separatorText = String.new

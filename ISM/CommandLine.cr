@@ -50,10 +50,22 @@ module ISM
             @red = UInt8.new(55)
             @blue = UInt8.new(55)
             @green = UInt8.new(55)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "Initialize",
+                                    errorTitle: "Initialization failure",
+                                    error: "Failed to initialize the class")
         end
 
         def systemId : String
             return ISM::Default::Core::Security::SystemId
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "systemId",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def start
@@ -67,6 +79,12 @@ module ISM
             loadMirrorsDatabase
             loadFavouriteGroupsDatabase
             checkEnteredArguments
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "start",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadNeededKernelOptions
@@ -83,6 +101,12 @@ module ISM
                 @neededKernelOptions << ISM::NeededKernelOption.loadConfiguration("#{directory}/#{option}")
 
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadNeededKernelOptions",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadKernelOptionDatabase
@@ -107,6 +131,12 @@ module ISM
                 @kernels << availableKernel
 
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadKernelOptionDatabase",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
@@ -140,6 +170,12 @@ module ISM
             end
 
             return software
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadSoftware",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadSoftwareDatabase
@@ -169,6 +205,12 @@ module ISM
                 end
 
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadSoftwareDatabase",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadPortsDatabase
@@ -184,6 +226,12 @@ module ISM
                 path = ISM::Port.filePath(portFile[0..-6])
                 @ports << ISM::Port.loadConfiguration(path)
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadPortsDatabase",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadMirrorsDatabase
@@ -203,6 +251,12 @@ module ISM
                     @mirrors << ISM::Mirror.loadConfiguration(path)
                 end
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadMirrorsDatabase",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadFavouriteGroupsDatabase
@@ -222,16 +276,34 @@ module ISM
                     @favouriteGroups << ISM::FavouriteGroup.loadConfiguration(path)
                 end
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadFavouriteGroupsDatabase",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadSystemInformationFile
             @systemInformation = ISM::CommandLineSystemInformation.loadConfiguration
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadSystemInformationFile",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadSettingsFiles
             @settings = ISM::CommandLineSettings.loadConfiguration
             @portsSettings = ISM::CommandLinePortsSettings.loadConfiguration
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadSettingsFiles",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
@@ -245,6 +317,12 @@ module ISM
             rescue
                 return ISM::SoftwareInformation.new
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadInstalledSoftware",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def loadInstalledSoftwareDatabase
@@ -271,6 +349,12 @@ module ISM
                 end
 
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "loadInstalledSoftwareDatabase",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def selectedKernel : ISM::SoftwareInformation
@@ -281,10 +365,22 @@ module ISM
             else
                 return ISM::SoftwareInformation.new
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "selectedKernel",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def kernelIsSelected
             return selectedKernel.isValid
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "kernelIsSelected",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
@@ -305,15 +401,33 @@ module ISM
             end
 
             return true,String.new
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "inputMatchWithFilter",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def reportMissingDependency(missingDependency : ISM::SoftwareInformation, relatedSoftware : ISM::SoftwareInformation)
             @unavailableDependencySignals.push([relatedSoftware, missingDependency])
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "reportMissingDependency",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
             softwareInformation.installedFiles = installedFiles
             softwareInformation.writeConfiguration(softwareInformation.installedFilePath)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "addInstalledSoftware",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
@@ -322,6 +436,12 @@ module ISM
             favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
             favouriteGroup.softwares = favouriteGroup.softwares | [fullVersionName]
             favouriteGroup.writeConfiguration
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "addSoftwareToFavouriteGroup",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def removeSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
@@ -332,6 +452,12 @@ module ISM
                 favouriteGroup.softwares.delete(fullVersionName)
                 favouriteGroup.writeConfiguration
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "removeSoftwareToFavouriteGroup",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def uninstallSoftware(software : ISM::SoftwareInformation)
@@ -382,6 +508,12 @@ module ISM
                 #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
                 @installedSoftwares.delete(softwareForRemovalIndex)
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "uninstallSoftware",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def softwareAnyVersionInstalled(fullName : String) : Bool
@@ -395,6 +527,12 @@ module ISM
             end
 
             return false
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "softwareAnyVersionInstalled",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def softwareIsRequestedSoftware(software : ISM::SoftwareInformation, requestedSoftwareVersionNames = Array(String).new) : Bool
@@ -403,6 +541,12 @@ module ISM
             else
                 return requestedSoftwareVersionNames.any? { |entry| entry == software.fullVersionName}
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "softwareIsRequestedSoftware",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
@@ -465,10 +609,22 @@ module ISM
 
             #Just in case something go wrong
             return false
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "softwareIsInstalled",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def softwaresAreCodependent(software1 : ISM::SoftwareInformation, software2 : ISM::SoftwareInformation) : Bool
             return software1.allowCodependencies.includes?(software2.fullName) && software2.allowCodependencies.includes?(software1.fullName) && !software1.passEnabled && !software2.passEnabled
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "softwaresAreCodependent",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getSoftwareStatus(software : ISM::SoftwareInformation) : Symbol
@@ -503,6 +659,12 @@ module ISM
                 #Rebuild case
                 return :rebuild
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getSoftwareStatus",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getAvailableSoftware(userEntry : String) : ISM::AvailableSoftware
@@ -519,6 +681,12 @@ module ISM
             end
 
             return ISM::AvailableSoftware.new
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getAvailableSoftware",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         #Add process to search only by name
@@ -583,6 +751,12 @@ module ISM
 
             #No match found
             return result
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getSoftwareInformation",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def checkEnteredArguments
@@ -611,8 +785,15 @@ module ISM
             if !matchingOption
                 showErrorUnknowArgument
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "checkEnteredArguments",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
+        ###################### RELATED TO NOTIFICATIONS: WILL BE MOVED AWAY #######################
         def printFailedToEnsureSecurityNotification
             puts "#{ISM::Default::CommandLine::FailedToEnsureSecurity.colorize(:red)}"
         end
@@ -1143,10 +1324,18 @@ module ISM
             printErrorNotification(ISM::Default::CommandLine::ErrorUpdateKernelOptionsDatabaseText+software.versionName, error)
         end
 
+        ################################## END OF NOTIFICATIONS ################################
+
         def resetCalculationAnimation
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0
             @reverseAnimation = false
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "resetCalculationAnimation",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def playCalculationAnimation(@text = ISM::Default::CommandLine::CalculationWaitingText)
@@ -1238,6 +1427,12 @@ module ISM
 
                 @calculationStartingTime = Time.monotonic
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "playCalculationAnimation",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def cleanCalculationAnimation
@@ -1259,6 +1454,12 @@ module ISM
             (0..(@text.size-1)).each do |index|
                 print "\033[1D"
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "cleanCalculationAnimation",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getRequestedSoftwares(list : Array(String), allowSearchByNameOnly = false) : Array(ISM::SoftwareInformation)
@@ -1273,8 +1474,15 @@ module ISM
             end
 
             return softwaresList
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getRequestedSoftwares",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
+        ############################### NOTIFICATIONS: MEAN TO BE MOVED AWAY ####################################
         #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
         def showTaskBuildingProcessErrorMessage(taskError : ISM::TaskBuildingProcessError, taskPath : String)
             targetMarkPointFilter = /^#TARGET[0-9]+#\//
@@ -1597,7 +1805,7 @@ module ISM
                     "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
         end
-
+        ############################################### END NOTIFICATIONS ##############################################
         def getUserAgreement : Bool
 
             loop do
@@ -1612,14 +1820,32 @@ module ISM
                 end
 
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getUserAgreement",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def updateInstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
             ISM::Core.setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} @#{port}:#{name}#{passNumber == 0 ? "" : " (Pass#{passNumber})"} /#{version}/")
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "updateInstallationTerminalTitle",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def updateUninstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String)
             ISM::Core.setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::UninstallingText} @#{port}:#{name} /#{version}/")
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "updateUninstallationTerminalTitle",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def cleanBuildingDirectory(path : String)
@@ -1628,8 +1854,15 @@ module ISM
             end
 
             Dir.mkdir_p(path)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "cleanBuildingDirectory",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
+        ############################### NOTIFICATIONS: MEAN TO BE MOVED AWAY ###################################
         def showSeparator
             puts "\n"
             puts "#{ISM::Default::CommandLine::Separator.colorize(:green)}\n"
@@ -1679,12 +1912,19 @@ module ISM
                     "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
             puts
         end
+        ###################################### END NOTIFICATIONS ############################################
 
         def recordInstallationDetails(directoryNumber : UInt128, symlinkNumber : UInt128, fileNumber : UInt128, totalSize : UInt128)
             @totalInstalledDirectoryNumber += directoryNumber
             @totalInstalledSymlinkNumber += symlinkNumber
             @totalInstalledFileNumber += fileNumber
             @totalInstalledSize += totalSize
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "recordInstallationDetails",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getRequiredLibraries : String
@@ -1702,6 +1942,12 @@ module ISM
             end
 
             return requiredLibraries
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getRequiredLibraries",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getRequestedSoftwareFullVersionNames
@@ -1724,6 +1970,12 @@ module ISM
             end
 
             return result
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getRequestedSoftwareFullVersionNames",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getRequiredTargets(neededSoftwares : Array(ISM::SoftwareInformation)) : String
@@ -1804,12 +2056,24 @@ module ISM
                     requiredTargetArrayResult +
                     requiredTargetOptionsResult +
                     indexResult
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getRequiredTargets",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def makeLogDirectory(path : String)
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "makeLogDirectory",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
@@ -1871,7 +2135,7 @@ module ISM
                         rescue error
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(error)
+                            ISM::Core::Error.show(error)
                         end
 
                         #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
@@ -1902,6 +2166,12 @@ module ISM
             showCalculationDoneMessage
 
             runTasksFile(logEnabled: true, softwareList: neededSoftwares)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "startInstallationProcess",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def buildTasksFile
@@ -1940,8 +2210,19 @@ module ISM
 
                 showTaskCompilationFailedMessage
                 showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Filename::Task}.cr")
-                #exitProgram
+
+                rescue error
+                ISM::Core::Error.show(  className: "CommandLine",
+                                        functionName: "buildTasksFile",
+                                        errorTitle: "Task compilation failure",
+                                        error: "Failed to compile the requested task")
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "buildTasksFile",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
@@ -1983,6 +2264,12 @@ module ISM
 
                 end
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "runTasksFile",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareInformation))
@@ -2024,7 +2311,7 @@ module ISM
                         begin
                             target.uninstall
                         rescue error
-                            ISM::Error.show(error)
+                            ISM::Core::Error.show(error)
                         end
 
                         Ism.showEndSoftwareUninstallingMessage(index, limit, port, name, version)
@@ -2044,8 +2331,15 @@ module ISM
             showCalculationDoneMessage
 
             runTasksFile
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "startUninstallationProcess",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
+        ################################# NOTIFICATIONS: MEAN TO BE MOVED AWAY #####################################
         def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
             puts    "#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
@@ -2063,6 +2357,7 @@ module ISM
                     "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
         end
+        ################################ END NOTIFICATIONS ######################################
 
         def synchronizePorts
             @ports.each do |port|
@@ -2077,6 +2372,12 @@ module ISM
             end
 
             cleanCalculationAnimation
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "synchronizePorts",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Hash(String, ISM::SoftwareInformation)
@@ -2185,6 +2486,12 @@ module ISM
             end
 
             return dependencyHash
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getRequiredDependencies",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getDependencyTree(software : ISM::SoftwareInformation, softwareList : Hash(String, ISM::SoftwareInformation), calculatedDependencies = Hash(String, Array(ISM::SoftwareInformation)).new) : Array(ISM::SoftwareInformation)
@@ -2234,6 +2541,12 @@ module ISM
             end
 
             return dependencies.values
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getDependencyTree",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getDependencyTable(softwareList : Hash(String, ISM::SoftwareInformation)) : Hash(String, Array(ISM::SoftwareInformation))
@@ -2362,6 +2675,12 @@ module ISM
             end
 
             return calculatedDependencies
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getDependencyTable",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getSortedDependencies(dependencyTable : Hash(String, Array(ISM::SoftwareInformation))) : Array(ISM::SoftwareInformation)
@@ -2369,6 +2688,12 @@ module ISM
             result = dependencyTable.to_a.sort_by { |k, v| v.size }
 
             return result.map { |entry| entry[1][0]}
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getSortedDependencies",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def generateTasksFile(tasks : String)
@@ -2377,6 +2702,12 @@ module ISM
             end
 
             File.write("#{@settings.rootPath}#{ISM::Default::Filename::Task}.cr", tasks)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "generateTasksFile",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getNeededSoftwares : Array(ISM::SoftwareInformation)
@@ -2385,6 +2716,12 @@ module ISM
             dependencyTable = getDependencyTable(softwareHash)
 
             return getSortedDependencies(dependencyTable)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getNeededSoftwares",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getUnneededSoftwares : Array(ISM::SoftwareInformation)
@@ -2444,6 +2781,12 @@ module ISM
             end
 
             return unneededSoftwares
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getUnneededSoftwares",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def getSoftwaresToUpdate : Array(ISM::SoftwareInformation)
@@ -2505,6 +2848,12 @@ module ISM
             puts
 
             return softwareToUpdate
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getSoftwaresToUpdate",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def addPatch(path : String, softwareVersionName : String) : Bool
@@ -2522,6 +2871,12 @@ module ISM
             end
 
             return true
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "addPatch",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def deletePatch(patchName : String, softwareVersionName : String) : Bool
@@ -2534,6 +2889,12 @@ module ISM
             end
 
             return true
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "deletePatch",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         # setKernelOption(symbol : String, state : Symbol, value = String.new)
@@ -2552,6 +2913,12 @@ module ISM
             end
 
             #return
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "getNeededKernelOptions",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def generateDefaultKernelConfig
@@ -2559,6 +2926,12 @@ module ISM
             path = kernelSourcesPath
 
             ISM::Core.runSystemCommand(requestedCommands, path)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "generateDefaultKernelConfig",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def generateKernelConfig
@@ -2570,6 +2943,12 @@ module ISM
             path = kernelSourcesPath
 
             ISM::Core.runSystemCommand(requestedCommands, path)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "generateKernel",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def installKernel
@@ -2577,26 +2956,62 @@ module ISM
             path = kernelSourcesPath
 
             ISM::Core.runSystemCommand(requestedCommands, path)
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "installKernel",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def mainKernelName : String
             return selectedKernel.versionName.downcase
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "mainKernelName",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def mainKernelHeadersName : String
             return "#{selectedKernel.name.downcase}-headers-#{selectedKernel.version.downcase}"
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "mainKernelHeadersName",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def mainKernelVersion : String
             return selectedKernel.version
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "mainKernelVersion",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def kernelSourcesPath : String
             return "#{@settings.rootPath}usr/src/#{mainKernelName}/"
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "kernelSourcesPath",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def kernelConfigPath : String
             return "#{kernelSourcesPath}/.config"
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "kernelConfigPath",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def setKernelOption(symbol : String, state : Symbol, value = String.new)
@@ -2614,6 +3029,12 @@ module ISM
             end
 
             ISM::Core.runSystemCommand("./#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "setKernelOption",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
     end

@@ -1806,6 +1806,7 @@ module ISM
             Ism.printInformationCodeNotification(message)
         end
 
+        #NEED FIX (Core?)
         def commandIsAvailable(command : String) : Bool
             ISM::Core.runSystemCommand("type #{command} > /dev/null 2>&1")
 

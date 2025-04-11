@@ -22,7 +22,7 @@ begin
 
 #We catch any raised error
 rescue error
-    ISM::Error.show(error)
+    ISM::Core::Error.show(error)
 
 #We ensure that the program exit securely
 ensure
