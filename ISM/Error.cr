@@ -2,13 +2,6 @@ module ISM
 
     module Error
 
-        def self.showWarning(warning : String)
-            puts warning
-            #TO DO: Show that the warning encounter an error itself and raise it too
-            rescue error
-
-        end
-
         def self.show(error : Exception)
             limit = ISM::Default::Error::Title.size
 
@@ -25,12 +18,13 @@ module ISM
             errorText = "\n#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
             help = "\n#{ISM::Default::Error::Help.colorize(:red)}"
 
-            puts
+            puts "\n"
             puts separatorText
             puts title
             puts separatorText
             puts errorText
             puts help
+            puts
 
             #TO DO: Show that the raising error process encounter an error itself and raise it too
             rescue error

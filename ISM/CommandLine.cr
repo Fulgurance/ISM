@@ -1412,30 +1412,71 @@ module ISM
             puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
         end
 
-        def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
+        def showInextricableDependenciesMessage(dependencies : Array(Array(ISM::SoftwareInformation)))
             puts
             puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
             puts "\n"
 
-            dependencies.each do |software|
-                softwareText = "#{software.fullName.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
-                optionsText = "{ "
+            dependencyChains = Array(Array(ISM::SoftwareInformation)).new
 
-                if software.options.empty?
-                    optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
-                end
+            #First we get a list of all codependent software hiddenNames
+            codependentSoftwares = dependencies.map { |list| list[0].hiddenName }
 
-                software.options.each do |option|
-                    if option.active
-                        optionsText += "#{option.name.colorize(:red)}"
-                    else
-                        optionsText += "#{option.name.colorize(:blue)}"
+            #Then for each codependent software, we list the dependency chain that conduct to a codependency
+            codependentSoftwares.each_with_index do |software, softwareIndex|
+                currentHashList = dependencies[softwareIndex]
+
+                #We generate a dependency list that exclude the current software
+                currentDependencyList = currentHashList[1..-1]
+                firstCodependentSoftware = ISM::SoftwareInformation.new
+
+                #First we get which software first generate a codependency with the current software
+                currentDependencyList.each_with_index do |dependency, dependencyIndex|
+                    if codependentSoftwares.includes?(dependency.hiddenName)
+                        chain = currentHashList[0..(dependencyIndex-1)]
+
+                        dependencyChains.push(chain)
+                        break
                     end
-                    optionsText += " "
                 end
-                optionsText += "}"
 
-                puts "\t" + softwareText + " " + optionsText + "\n"
+            end
+
+            #Now we print each chains with in highlight the first and last one
+            dependencyChains.each do |chain|
+
+                chain.each_with_index do |software, index|
+                    color = :magenta
+
+                    case index
+                    when 0
+                        color = :green
+                    when (index == (chain.size - 1))
+                        color = :red
+                    end
+
+                    softwareText = "#{software.fullName.colorize(:magenta)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
+                    optionsText = "{ "
+
+                    if software.options.empty?
+                        optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                    end
+
+                    software.options.each do |option|
+                        if option.active
+                            optionsText += "#{option.name.colorize(:red)}"
+                        else
+                            optionsText += "#{option.name.colorize(:blue)}"
+                        end
+                        optionsText += " "
+                    end
+                    optionsText += "}"
+
+                    puts "\t#{softwareText} #{optionsText}\n"
+                end
+
+                puts "\n"
+
             end
 
             puts "\n"
@@ -2318,7 +2359,7 @@ module ISM
                             #Inextricable dependency case
                             else
                                 showCalculationDoneMessage
-                                showInextricableDependenciesMessage([calculatedDependencies[key1][0],calculatedDependencies[key2][0]])
+                                showInextricableDependenciesMessage([calculatedDependencies[key1],calculatedDependencies[key2]])
 
                                 ISM::Core.exitProgram
                             end
