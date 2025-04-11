@@ -1432,8 +1432,7 @@ module ISM
 
                 #First we get which software first generate a codependency with the current software
                 currentDependencyList.each_with_index do |dependency, dependencyIndex|
-                    #if codependentSoftwares.includes?(dependency.hiddenName)
-                    if dependencies.any? { |entry| entry[0] == dependency }
+                    if dependencies.any? { |entry| (entry[0] == dependency && entry[0].fullName != dependency.fullName) }
                         chain = currentHashList[0..(dependencyIndex-1)]
 
                         dependencyChains.push(chain)
