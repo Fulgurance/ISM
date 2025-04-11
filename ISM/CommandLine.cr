@@ -1412,25 +1412,27 @@ module ISM
             puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
         end
 
-        def showInextricableDependenciesMessage(dependencyList : Array(Array(ISM::SoftwareInformation)))
+        def showInextricableDependenciesMessage(dependencyList : Array(ISM::SoftwareInformation))
             puts
             puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
             puts "\n"
 
             dependencyChains = Array(Array(ISM::SoftwareInformation)).new
 
-            codependentSoftwares = dependencyList.map { |entry| entry[0] }
+            dependencyChains = dependencyList.map { |dependency| dependency.dependencies(allowDeepSearch: true)}
 
-            dependencyList.each_with_index do |list, listIndex|
-
-                list.each_with_index do |dependency, dependencyIndex|
-                    if dependency != list[0] && codependentSoftwares.any? { |entry| entry == dependency}
-                        dependencyChains.push(dependency.dependencies(allowDeepSearch: true).reverse.map { |entry| entry.information})
-                        break
-                    end
-                end
-
-            end
+            # codependentSoftwares = dependencyList.map { |entry| entry[0] }
+            #
+            # dependencyList.each_with_index do |list, listIndex|
+            #
+            #     list.each_with_index do |dependency, dependencyIndex|
+            #         if dependency != list[0] && codependentSoftwares.any? { |entry| entry == dependency}
+            #             dependencyChains.push(dependency.dependencies(allowDeepSearch: true).reverse.map { |entry| entry.information})
+            #             break
+            #         end
+            #     end
+            #
+            # end
 
             #Now we print each chains with in highlight the first and last one
             dependencyChains.each do |chain|
@@ -2349,7 +2351,7 @@ module ISM
                             #Inextricable dependency case
                             else
                                 showCalculationDoneMessage
-                                showInextricableDependenciesMessage([calculatedDependencies[key1],calculatedDependencies[key2]])
+                                showInextricableDependenciesMessage([calculatedDependencies[key1][0],calculatedDependencies[key2][0]])
 
                                 ISM::Core.exitProgram
                             end
