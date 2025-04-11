@@ -35,7 +35,7 @@ module ISM
                 puts errorTitle
                 puts error
                 puts errorText
-                puts code
+                puts errorCode
                 puts help
                 puts "\n"
 
