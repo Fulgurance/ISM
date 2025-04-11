@@ -47,10 +47,6 @@ module ISM
 
         def defaultUrl : String
             return @urls[@mainUrl]
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def sourcesLink : String

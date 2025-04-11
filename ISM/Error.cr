@@ -24,7 +24,7 @@ module ISM
             puts separatorText
             puts errorText
             puts help
-            puts
+            puts "\n"
 
             #TO DO: Show that the raising error process encounter an error itself and raise it too
             rescue error

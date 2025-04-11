@@ -1871,8 +1871,7 @@ module ISM
                         rescue error
                             Ism.uninstallSoftware(target.information)
 
-                            Ism.printSystemCallErrorNotification(error)
-                            Ism.exitProgram
+                            ISM::Error.show(error)
                         end
 
                         #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
@@ -2025,8 +2024,7 @@ module ISM
                         begin
                             target.uninstall
                         rescue error
-                            Ism.printSystemCallErrorNotification(error)
-                            Ism.exitProgram
+                            ISM::Error.show(error)
                         end
 
                         Ism.showEndSoftwareUninstallingMessage(index, limit, port, name, version)
