@@ -342,7 +342,8 @@ module ISM
     end
 
     def == (other : ISM::SoftwareInformation) : Bool
-        return @name == other.name &&
+        return @port == other.port &&
+            @name == other.name &&
             @version == other.version &&
             @options == other.options
     end
