@@ -1424,7 +1424,7 @@ module ISM
             dependencyList.each_with_index do |list, listIndex|
 
                 list.each_with_index do |dependency, dependencyIndex|
-                    if dependency != list[0] && codependentSoftwares.any? { |entry| entry == dependency)}
+                    if dependency != list[0] && codependentSoftwares.any? { |entry| entry == dependency}
                         dependencyChains.push(dependency.dependencies(allowDeepSearch: true).reverse.map { |entry| entry.information})
                         break
                     end
