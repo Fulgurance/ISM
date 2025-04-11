@@ -1412,30 +1412,20 @@ module ISM
             puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
         end
 
-        def showInextricableDependenciesMessage(dependencies : Array(Array(ISM::SoftwareInformation)))
+        def showInextricableDependenciesMessage(dependencyList : Array(Array(ISM::SoftwareInformation)))
             puts
             puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
             puts "\n"
 
             dependencyChains = Array(Array(ISM::SoftwareInformation)).new
 
-            #First we get a list of all codependent software hiddenNames
-            codependentSoftwares = dependencies.map { |list| list[0].hiddenName }
+            codependentSoftwares = dependencyList.map { |entry| entry[0] }
 
-            #Then for each codependent software, we list the dependency chain that conduct to a codependency
-            codependentSoftwares.each_with_index do |software, softwareIndex|
-                currentHashList = dependencies[softwareIndex]
+            dependencyList.each_with_index do |list, listIndex|
 
-                #We generate a dependency list that exclude the current software
-                currentDependencyList = currentHashList[1..-1]
-                firstCodependentSoftware = ISM::SoftwareInformation.new
-
-                #First we get which software first generate a codependency with the current software
-                currentDependencyList.each_with_index do |dependency, dependencyIndex|
-                    if dependencies.any? { |entry| (entry[0] == dependency && entry[0].fullName != dependency.fullName) }
-                        chain = currentHashList[0..(dependencyIndex-1)]
-
-                        dependencyChains.push(chain)
+                list.each_with_index do |dependency, dependencyIndex|
+                    if dependency != list[0] && codependentSoftwares.any? { |entry| entry == dependency && (dependency != list[0])}
+                        list[0..]
                         break
                     end
                 end
