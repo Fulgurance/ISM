@@ -30,7 +30,12 @@ module ISM
                 puts separatorText
                 puts title
                 puts separatorText
+                puts className
+                puts functionName
+                puts errorTitle
+                puts error
                 puts errorText
+                puts code
                 puts help
                 puts "\n"
 
