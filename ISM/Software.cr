@@ -681,7 +681,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( "/usr/bin/mv #{path} #{targetPath}",
+            ISM::Core.runSystemCommand( "/usr/bin/mv #{path} #{newPath}",
                                         shell: false,
                                         chroot: false,
                                         asRoot: asRoot)
@@ -689,7 +689,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( "/usr/bin/mkdir -p #{path} #{targetPath}",
+            ISM::Core.runSystemCommand( "/usr/bin/mkdir -p #{path}",
                                         shell: false,
                                         chroot: false,
                                         asRoot: asRoot)
