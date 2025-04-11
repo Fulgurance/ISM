@@ -116,7 +116,7 @@ module ISM
         def self.filePath : String
             return "/"+ISM::Default::CommandLineSettings::SettingsFilePath
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "filePath",
                                     errorTitle: "Execution failure",
@@ -128,7 +128,7 @@ module ISM
             self.new.to_json(file)
             file.close
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "generateConfiguration",
                                     errorTitle: "Execution failure",
@@ -142,7 +142,7 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "loadConfiguration",
                                     errorTitle: "Execution failure",
@@ -271,7 +271,7 @@ module ISM
             settings.to_json(file)
             file.close
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
@@ -335,7 +335,7 @@ module ISM
                                             ISM::Default::CommandLineSettings::SystemVariant,
                                             ISM::Default::CommandLineSettings::SystemVariantId)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "writeChrootConfiguration",
                                     errorTitle: "Execution failure",
@@ -404,7 +404,7 @@ module ISM
                 writeChrootConfiguration
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "writeSystemConfiguration",
                                     errorTitle: "Execution failure",
@@ -415,7 +415,7 @@ module ISM
         def temporaryPath
             return "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "temporaryPath",
                                     errorTitle: "Execution failure",
@@ -425,7 +425,7 @@ module ISM
         def sourcesPath
             return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "sourcesPath",
                                     errorTitle: "Execution failure",
@@ -435,7 +435,7 @@ module ISM
         def toolsPath
             return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "toolsPath",
                                     errorTitle: "Execution failure",
@@ -451,7 +451,7 @@ module ISM
                 return @systemTargetName
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemTargetName",
                                     errorTitle: "Execution failure",
@@ -465,7 +465,7 @@ module ISM
                 return @systemArchitecture
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemArchitecture",
                                     errorTitle: "Execution failure",
@@ -479,7 +479,7 @@ module ISM
                 return @systemTarget
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemTarget",
                                     errorTitle: "Execution failure",
@@ -493,7 +493,7 @@ module ISM
                 return @systemMakeOptions
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemMakeOptions",
                                     errorTitle: "Execution failure",
@@ -507,7 +507,7 @@ module ISM
                 return @systemBuildOptions
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemBuildOptions",
                                     errorTitle: "Execution failure",
@@ -521,7 +521,7 @@ module ISM
                 return @systemName
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemName",
                                     errorTitle: "Execution failure",
@@ -535,7 +535,7 @@ module ISM
                 return @systemFullName
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemFullName",
                                     errorTitle: "Execution failure",
@@ -549,7 +549,7 @@ module ISM
                 return @systemId
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemId",
                                     errorTitle: "Execution failure",
@@ -563,7 +563,7 @@ module ISM
                 return @systemRelease
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemRelease",
                                     errorTitle: "Execution failure",
@@ -577,7 +577,7 @@ module ISM
                 return @systemCodeName
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemCodeName",
                                     errorTitle: "Execution failure",
@@ -591,7 +591,7 @@ module ISM
                 return @systemDescription
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemDescription",
                                     errorTitle: "Execution failure",
@@ -605,7 +605,7 @@ module ISM
                 return @systemVersion
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemVersion",
                                     errorTitle: "Execution failure",
@@ -619,7 +619,7 @@ module ISM
                 return @systemVersionId
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemVersionId",
                                     errorTitle: "Execution failure",
@@ -633,7 +633,7 @@ module ISM
                 return @systemAnsiColor
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemAnsiColor",
                                     errorTitle: "Execution failure",
@@ -647,7 +647,7 @@ module ISM
                 return @systemCpeName
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemCpeName",
                                     errorTitle: "Execution failure",
@@ -661,7 +661,7 @@ module ISM
                 return @systemHomeUrl
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemHomeUrl",
                                     errorTitle: "Execution failure",
@@ -675,7 +675,7 @@ module ISM
                 return @systemSupportUrl
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemSupportUrl",
                                     errorTitle: "Execution failure",
@@ -689,7 +689,7 @@ module ISM
                 return @systemBugReportUrl
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemBugReportUrl",
                                     errorTitle: "Execution failure",
@@ -703,7 +703,7 @@ module ISM
                 return @systemPrivacyPolicyUrl
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemPrivacyPolicyUrl",
                                     errorTitle: "Execution failure",
@@ -717,7 +717,7 @@ module ISM
                 return @systemBuildId
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemBuildId",
                                     errorTitle: "Execution failure",
@@ -731,7 +731,7 @@ module ISM
                 return @systemVariant
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemVariant",
                                     errorTitle: "Execution failure",
@@ -745,7 +745,7 @@ module ISM
                 return @systemVariantId
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "systemVariantId",
                                     errorTitle: "Execution failure",
@@ -758,7 +758,7 @@ module ISM
         def setInstallByChroot(@installByChroot)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setInstallByChroot",
                                     errorTitle: "Execution failure",
@@ -768,7 +768,7 @@ module ISM
         def setRootPath(@rootPath)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setRootPath",
                                     errorTitle: "Execution failure",
@@ -778,7 +778,7 @@ module ISM
         def setDefaultMirror(@defaultMirror)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setDefaultMirror",
                                     errorTitle: "Execution failure",
@@ -788,7 +788,7 @@ module ISM
         def setBuildKernelOptionsAsModule(@buildKernelOptionsAsModule)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setBuildKernelOptionsAsModule",
                                     errorTitle: "Execution failure",
@@ -800,7 +800,7 @@ module ISM
             writeSystemConfiguration
             setSystemTarget
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemTargetName",
                                     errorTitle: "Execution failure",
@@ -811,7 +811,7 @@ module ISM
             writeSystemConfiguration
             setSystemTarget
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemArchitecture",
                                     errorTitle: "Execution failure",
@@ -822,7 +822,7 @@ module ISM
             @systemTarget = @systemArchitecture + "-" + @systemTargetName + "-" + "linux-gnu"
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemTarget",
                                     errorTitle: "Execution failure",
@@ -841,7 +841,7 @@ module ISM
                 ISM::Core.exitProgram
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemMakeOptions",
                                     errorTitle: "Execution failure",
@@ -851,7 +851,7 @@ module ISM
         def setSystemBuildOptions(@systemBuildOptions)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemBuildOptions",
                                     errorTitle: "Execution failure",
@@ -861,7 +861,7 @@ module ISM
         def setSystemName(@systemName)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemName",
                                     errorTitle: "Execution failure",
@@ -871,7 +871,7 @@ module ISM
         def setSystemFullName(@systemFullName)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemFullName",
                                     errorTitle: "Execution failure",
@@ -881,7 +881,7 @@ module ISM
         def setSystemId(@systemId)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemId",
                                     errorTitle: "Execution failure",
@@ -891,7 +891,7 @@ module ISM
         def setSystemRelease(@systemRelease)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemRelease",
                                     errorTitle: "Execution failure",
@@ -901,7 +901,7 @@ module ISM
         def setSystemCodeName(@systemCodeName)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemCodeName",
                                     errorTitle: "Execution failure",
@@ -911,7 +911,7 @@ module ISM
         def setSystemDescription(@systemDescription)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemDescription",
                                     errorTitle: "Execution failure",
@@ -921,7 +921,7 @@ module ISM
         def setSystemVersion(@systemVersion)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemVersion",
                                     errorTitle: "Execution failure",
@@ -931,7 +931,7 @@ module ISM
         def setSystemVersionId(@systemVersionId)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemVersionId",
                                     errorTitle: "Execution failure",
@@ -941,7 +941,7 @@ module ISM
         def setSystemAnsiColor(@systemAnsiColor)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemAnsiColor",
                                     errorTitle: "Execution failure",
@@ -951,7 +951,7 @@ module ISM
         def setSystemCpeName(@systemCpeName)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemCpeName",
                                     errorTitle: "Execution failure",
@@ -961,7 +961,7 @@ module ISM
         def setSystemHomeUrl(@systemHomeUrl)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemHomeUrl",
                                     errorTitle: "Execution failure",
@@ -971,7 +971,7 @@ module ISM
         def setSystemSupportUrl(@systemSupportUrl)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemSupportUrl",
                                     errorTitle: "Execution failure",
@@ -981,7 +981,7 @@ module ISM
         def setSystemBugReportUrl(@systemBugReportUrl)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemBugReportUrl",
                                     errorTitle: "Execution failure",
@@ -991,7 +991,7 @@ module ISM
         def setSystemPrivacyPolicyUrl(@systemPrivacyPolicyUrl)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemPrivacyPolicyUrl",
                                     errorTitle: "Execution failure",
@@ -1001,7 +1001,7 @@ module ISM
         def setSystemBuildId(@systemBuildId)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemBuildId",
                                     errorTitle: "Execution failure",
@@ -1011,7 +1011,7 @@ module ISM
         def setSystemVariant(@systemVariant)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemVariant",
                                     errorTitle: "Execution failure",
@@ -1021,7 +1021,7 @@ module ISM
         def setSystemVariantId(@systemVariantId)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setSystemVariantId",
                                     errorTitle: "Execution failure",
@@ -1033,7 +1033,7 @@ module ISM
             writeSystemConfiguration
             setChrootTarget
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootTargetName",
                                     errorTitle: "Execution failure",
@@ -1043,7 +1043,7 @@ module ISM
         def setChrootArchitecture(@chrootArchitecture)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootArchitecture",
                                     errorTitle: "Execution failure",
@@ -1054,7 +1054,7 @@ module ISM
             @chrootTarget = @chrootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootTarget",
                                     errorTitle: "Execution failure",
@@ -1073,7 +1073,7 @@ module ISM
                 ISM::Core.exitProgram
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootMakeOptions",
                                     errorTitle: "Execution failure",
@@ -1083,7 +1083,7 @@ module ISM
         def setChrootBuildOptions(@chrootBuildOptions)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootBuildOptions",
                                     errorTitle: "Execution failure",
@@ -1093,7 +1093,7 @@ module ISM
         def setChrootName(@chrootName)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootName",
                                     errorTitle: "Execution failure",
@@ -1104,7 +1104,7 @@ module ISM
         def setChrootFullName(@chrootFullName)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootFullName",
                                     errorTitle: "Execution failure",
@@ -1114,7 +1114,7 @@ module ISM
         def setChrootId(@chrootId)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootId",
                                     errorTitle: "Execution failure",
@@ -1124,7 +1124,7 @@ module ISM
         def setChrootRelease(@chrootRelease)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootRelease",
                                     errorTitle: "Execution failure",
@@ -1134,7 +1134,7 @@ module ISM
         def setChrootCodeName(@chrootCodeName)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootCodeName",
                                     errorTitle: "Execution failure",
@@ -1144,7 +1144,7 @@ module ISM
         def setChrootDescription(@chrootDescription)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootDescription",
                                     errorTitle: "Execution failure",
@@ -1154,7 +1154,7 @@ module ISM
         def setChrootVersion(@chrootVersion)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootVersion",
                                     errorTitle: "Execution failure",
@@ -1164,7 +1164,7 @@ module ISM
         def setChrootVersionId(@chrootVersionId)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootVersionId",
                                     errorTitle: "Execution failure",
@@ -1174,7 +1174,7 @@ module ISM
         def setChrootAnsiColor(@chrootAnsiColor)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootAnsiColor",
                                     errorTitle: "Execution failure",
@@ -1184,7 +1184,7 @@ module ISM
         def setChrootCpeName(@chrootCpeName)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootCpeName",
                                     errorTitle: "Execution failure",
@@ -1194,7 +1194,7 @@ module ISM
         def setChrootHomeUrl(@chrootHomeUrl)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootHomeUrl",
                                     errorTitle: "Execution failure",
@@ -1204,7 +1204,7 @@ module ISM
         def setChrootSupportUrl(@chrootSupportUrl)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootSupportUrl",
                                     errorTitle: "Execution failure",
@@ -1214,7 +1214,7 @@ module ISM
         def setChrootBugReportUrl(@chrootBugReportUrl)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootBugReportUrl",
                                     errorTitle: "Execution failure",
@@ -1224,7 +1224,7 @@ module ISM
         def setChrootPrivacyPolicyUrl(@chrootPrivacyPolicyUrl)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootPrivacyPolicyUrl",
                                     errorTitle: "Execution failure",
@@ -1234,7 +1234,7 @@ module ISM
         def setChrootBuildId(@chrootBuildId)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootBuildId",
                                     errorTitle: "Execution failure",
@@ -1244,7 +1244,7 @@ module ISM
         def setChrootVariant(@chrootVariant)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootVariant",
                                     errorTitle: "Execution failure",
@@ -1254,7 +1254,7 @@ module ISM
         def setChrootVariantId(@chrootVariantId)
             writeSystemConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setChrootVariantId",
                                     errorTitle: "Execution failure",

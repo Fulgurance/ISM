@@ -12,7 +12,7 @@ module ISM
         def self.filePath : String
             return Ism.settings.rootPath+ISM::Default::CommandLineMirrorsSettings::MirrorsSettingsFilePath
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "filePath",
                                     errorTitle: "Execution failure",
@@ -24,7 +24,7 @@ module ISM
             self.new.to_json(file)
             file.close
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "generateConfiguration",
                                     errorTitle: "Execution failure",
@@ -38,7 +38,7 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "loadConfiguration",
                                     errorTitle: "Execution failure",
@@ -50,7 +50,7 @@ module ISM
             to_json(file)
             file.close
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
@@ -60,7 +60,7 @@ module ISM
         def setDefaultMirror(@defaultMirror)
             writeConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "setDefaultMirror",
                                     errorTitle: "Execution failure",
@@ -70,7 +70,7 @@ module ISM
         def sourcesLink : String
             return ISM::Mirror.sourcesLink(@defaultMirror)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineMirrorsSettings",
                                     functionName: "sourcesLink",
                                     errorTitle: "Execution failure",

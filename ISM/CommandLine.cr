@@ -55,7 +55,7 @@ module ISM
         def systemId : String
             return ISM::Default::Core::Security::SystemId
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "systemId",
                                     errorTitle: "Execution failure",
@@ -74,7 +74,7 @@ module ISM
             loadFavouriteGroupsDatabase
             checkEnteredArguments
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "start",
                                     errorTitle: "Execution failure",
@@ -96,7 +96,7 @@ module ISM
 
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadNeededKernelOptions",
                                     errorTitle: "Execution failure",
@@ -126,7 +126,7 @@ module ISM
 
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadKernelOptionDatabase",
                                     errorTitle: "Execution failure",
@@ -165,7 +165,7 @@ module ISM
 
             return software
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadSoftware",
                                     errorTitle: "Execution failure",
@@ -200,7 +200,7 @@ module ISM
 
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadSoftwareDatabase",
                                     errorTitle: "Execution failure",
@@ -221,7 +221,7 @@ module ISM
                 @ports << ISM::Port.loadConfiguration(path)
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadPortsDatabase",
                                     errorTitle: "Execution failure",
@@ -246,7 +246,7 @@ module ISM
                 end
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadMirrorsDatabase",
                                     errorTitle: "Execution failure",
@@ -271,7 +271,7 @@ module ISM
                 end
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadFavouriteGroupsDatabase",
                                     errorTitle: "Execution failure",
@@ -281,7 +281,7 @@ module ISM
         def loadSystemInformationFile
             @systemInformation = ISM::CommandLineSystemInformation.loadConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadSystemInformationFile",
                                     errorTitle: "Execution failure",
@@ -293,7 +293,7 @@ module ISM
             @portsSettings = ISM::CommandLinePortsSettings.loadConfiguration
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadSettingsFiles",
                                     errorTitle: "Execution failure",
@@ -312,7 +312,7 @@ module ISM
                 return ISM::SoftwareInformation.new
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadInstalledSoftware",
                                     errorTitle: "Execution failure",
@@ -344,7 +344,7 @@ module ISM
 
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "loadInstalledSoftwareDatabase",
                                     errorTitle: "Execution failure",
@@ -360,7 +360,7 @@ module ISM
                 return ISM::SoftwareInformation.new
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "selectedKernel",
                                     errorTitle: "Execution failure",
@@ -370,7 +370,7 @@ module ISM
         def kernelIsSelected
             return selectedKernel.isValid
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "kernelIsSelected",
                                     errorTitle: "Execution failure",
@@ -396,7 +396,7 @@ module ISM
 
             return true,String.new
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "inputMatchWithFilter",
                                     errorTitle: "Execution failure",
@@ -406,7 +406,7 @@ module ISM
         def reportMissingDependency(missingDependency : ISM::SoftwareInformation, relatedSoftware : ISM::SoftwareInformation)
             @unavailableDependencySignals.push([relatedSoftware, missingDependency])
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "reportMissingDependency",
                                     errorTitle: "Execution failure",
@@ -417,7 +417,7 @@ module ISM
             softwareInformation.installedFiles = installedFiles
             softwareInformation.writeConfiguration(softwareInformation.installedFilePath)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "addInstalledSoftware",
                                     errorTitle: "Execution failure",
@@ -431,7 +431,7 @@ module ISM
             favouriteGroup.softwares = favouriteGroup.softwares | [fullVersionName]
             favouriteGroup.writeConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "addSoftwareToFavouriteGroup",
                                     errorTitle: "Execution failure",
@@ -447,7 +447,7 @@ module ISM
                 favouriteGroup.writeConfiguration
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "removeSoftwareToFavouriteGroup",
                                     errorTitle: "Execution failure",
@@ -503,7 +503,7 @@ module ISM
                 @installedSoftwares.delete(softwareForRemovalIndex)
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "uninstallSoftware",
                                     errorTitle: "Execution failure",
@@ -522,7 +522,7 @@ module ISM
 
             return false
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "softwareAnyVersionInstalled",
                                     errorTitle: "Execution failure",
@@ -536,7 +536,7 @@ module ISM
                 return requestedSoftwareVersionNames.any? { |entry| entry == software.fullVersionName}
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "softwareIsRequestedSoftware",
                                     errorTitle: "Execution failure",
@@ -604,7 +604,7 @@ module ISM
             #Just in case something go wrong
             return false
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "softwareIsInstalled",
                                     errorTitle: "Execution failure",
@@ -614,7 +614,7 @@ module ISM
         def softwaresAreCodependent(software1 : ISM::SoftwareInformation, software2 : ISM::SoftwareInformation) : Bool
             return software1.allowCodependencies.includes?(software2.fullName) && software2.allowCodependencies.includes?(software1.fullName) && !software1.passEnabled && !software2.passEnabled
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "softwaresAreCodependent",
                                     errorTitle: "Execution failure",
@@ -654,7 +654,7 @@ module ISM
                 return :rebuild
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getSoftwareStatus",
                                     errorTitle: "Execution failure",
@@ -676,7 +676,7 @@ module ISM
 
             return ISM::AvailableSoftware.new
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getAvailableSoftware",
                                     errorTitle: "Execution failure",
@@ -746,7 +746,7 @@ module ISM
             #No match found
             return result
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getSoftwareInformation",
                                     errorTitle: "Execution failure",
@@ -780,7 +780,7 @@ module ISM
                 showErrorUnknowArgument
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "checkEnteredArguments",
                                     errorTitle: "Execution failure",
@@ -1325,7 +1325,7 @@ module ISM
             @frameIndex = 0
             @reverseAnimation = false
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "resetCalculationAnimation",
                                     errorTitle: "Execution failure",
@@ -1422,7 +1422,7 @@ module ISM
                 @calculationStartingTime = Time.monotonic
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "playCalculationAnimation",
                                     errorTitle: "Execution failure",
@@ -1449,7 +1449,7 @@ module ISM
                 print "\033[1D"
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "cleanCalculationAnimation",
                                     errorTitle: "Execution failure",
@@ -1469,7 +1469,7 @@ module ISM
 
             return softwaresList
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getRequestedSoftwares",
                                     errorTitle: "Execution failure",
@@ -1815,7 +1815,7 @@ module ISM
 
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getUserAgreement",
                                     errorTitle: "Execution failure",
@@ -1825,7 +1825,7 @@ module ISM
         def updateInstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
             ISM::Core.setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} @#{port}:#{name}#{passNumber == 0 ? "" : " (Pass#{passNumber})"} /#{version}/")
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "updateInstallationTerminalTitle",
                                     errorTitle: "Execution failure",
@@ -1835,7 +1835,7 @@ module ISM
         def updateUninstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String)
             ISM::Core.setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::UninstallingText} @#{port}:#{name} /#{version}/")
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "updateUninstallationTerminalTitle",
                                     errorTitle: "Execution failure",
@@ -1849,7 +1849,7 @@ module ISM
 
             Dir.mkdir_p(path)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "cleanBuildingDirectory",
                                     errorTitle: "Execution failure",
@@ -1914,7 +1914,7 @@ module ISM
             @totalInstalledFileNumber += fileNumber
             @totalInstalledSize += totalSize
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "recordInstallationDetails",
                                     errorTitle: "Execution failure",
@@ -1937,7 +1937,7 @@ module ISM
 
             return requiredLibraries
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getRequiredLibraries",
                                     errorTitle: "Execution failure",
@@ -1965,7 +1965,7 @@ module ISM
 
             return result
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getRequestedSoftwareFullVersionNames",
                                     errorTitle: "Execution failure",
@@ -2051,7 +2051,7 @@ module ISM
                     requiredTargetOptionsResult +
                     indexResult
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getRequiredTargets",
                                     errorTitle: "Execution failure",
@@ -2063,7 +2063,7 @@ module ISM
                 Dir.mkdir_p(path)
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "makeLogDirectory",
                                     errorTitle: "Execution failure",
@@ -2126,7 +2126,7 @@ module ISM
                             target.install
                             target.recordNeededKernelOptions
                             target.clean
-                        rescue error
+                        rescue exception
                             Ism.uninstallSoftware(target.information)
 
                             ISM::Core::Error.show(error)
@@ -2161,7 +2161,7 @@ module ISM
 
             runTasksFile(logEnabled: true, softwareList: neededSoftwares)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "startInstallationProcess",
                                     errorTitle: "Execution failure",
@@ -2211,7 +2211,7 @@ module ISM
                                         error: "Failed to compile the requested task")
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "buildTasksFile",
                                     errorTitle: "Execution failure",
@@ -2258,7 +2258,7 @@ module ISM
                 end
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "runTasksFile",
                                     errorTitle: "Execution failure",
@@ -2303,7 +2303,7 @@ module ISM
 
                         begin
                             target.uninstall
-                        rescue error
+                        rescue exception
                             ISM::Core::Error.show(error)
                         end
 
@@ -2325,7 +2325,7 @@ module ISM
 
             runTasksFile
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "startUninstallationProcess",
                                     errorTitle: "Execution failure",
@@ -2366,7 +2366,7 @@ module ISM
 
             cleanCalculationAnimation
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "synchronizePorts",
                                     errorTitle: "Execution failure",
@@ -2480,7 +2480,7 @@ module ISM
 
             return dependencyHash
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getRequiredDependencies",
                                     errorTitle: "Execution failure",
@@ -2535,7 +2535,7 @@ module ISM
 
             return dependencies.values
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getDependencyTree",
                                     errorTitle: "Execution failure",
@@ -2669,7 +2669,7 @@ module ISM
 
             return calculatedDependencies
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getDependencyTable",
                                     errorTitle: "Execution failure",
@@ -2682,7 +2682,7 @@ module ISM
 
             return result.map { |entry| entry[1][0]}
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getSortedDependencies",
                                     errorTitle: "Execution failure",
@@ -2696,7 +2696,7 @@ module ISM
 
             File.write("#{@settings.rootPath}#{ISM::Default::Filename::Task}.cr", tasks)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "generateTasksFile",
                                     errorTitle: "Execution failure",
@@ -2710,7 +2710,7 @@ module ISM
 
             return getSortedDependencies(dependencyTable)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getNeededSoftwares",
                                     errorTitle: "Execution failure",
@@ -2775,7 +2775,7 @@ module ISM
 
             return unneededSoftwares
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getUnneededSoftwares",
                                     errorTitle: "Execution failure",
@@ -2842,7 +2842,7 @@ module ISM
 
             return softwareToUpdate
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getSoftwaresToUpdate",
                                     errorTitle: "Execution failure",
@@ -2865,7 +2865,7 @@ module ISM
 
             return true
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "addPatch",
                                     errorTitle: "Execution failure",
@@ -2883,7 +2883,7 @@ module ISM
 
             return true
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "deletePatch",
                                     errorTitle: "Execution failure",
@@ -2907,7 +2907,7 @@ module ISM
 
             #return
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "getNeededKernelOptions",
                                     errorTitle: "Execution failure",
@@ -2920,7 +2920,7 @@ module ISM
 
             ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "generateDefaultKernelConfig",
                                     errorTitle: "Execution failure",
@@ -2937,7 +2937,7 @@ module ISM
 
             ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "generateKernel",
                                     errorTitle: "Execution failure",
@@ -2950,7 +2950,7 @@ module ISM
 
             ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "installKernel",
                                     errorTitle: "Execution failure",
@@ -2960,7 +2960,7 @@ module ISM
         def mainKernelName : String
             return selectedKernel.versionName.downcase
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "mainKernelName",
                                     errorTitle: "Execution failure",
@@ -2970,7 +2970,7 @@ module ISM
         def mainKernelHeadersName : String
             return "#{selectedKernel.name.downcase}-headers-#{selectedKernel.version.downcase}"
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "mainKernelHeadersName",
                                     errorTitle: "Execution failure",
@@ -2980,7 +2980,7 @@ module ISM
         def mainKernelVersion : String
             return selectedKernel.version
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "mainKernelVersion",
                                     errorTitle: "Execution failure",
@@ -2990,7 +2990,7 @@ module ISM
         def kernelSourcesPath : String
             return "#{@settings.rootPath}usr/src/#{mainKernelName}/"
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "kernelSourcesPath",
                                     errorTitle: "Execution failure",
@@ -3000,7 +3000,7 @@ module ISM
         def kernelConfigPath : String
             return "#{kernelSourcesPath}/.config"
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "kernelConfigPath",
                                     errorTitle: "Execution failure",
@@ -3023,7 +3023,7 @@ module ISM
 
             ISM::Core.runSystemCommand("./#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
                                     functionName: "setKernelOption",
                                     errorTitle: "Execution failure",

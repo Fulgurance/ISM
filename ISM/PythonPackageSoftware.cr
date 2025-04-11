@@ -33,6 +33,13 @@ module ISM
                 end
 
             end
+
+            rescue exception
+                ISM::Core::Error.show(  className: "PythonPackageSoftware",
+                                        functionName: "preparePythonPackage",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def prepare
@@ -49,6 +56,13 @@ module ISM
                 end
 
             end
+
+            rescue exception
+                ISM::Core::Error.show(  className: "PythonPackageSoftware",
+                                        functionName: "prepare",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
 
         end
 

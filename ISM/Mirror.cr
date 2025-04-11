@@ -15,12 +15,26 @@ module ISM
 
         def self.filePath(codeName = ISM::Default::Mirror::CodeName) : String
             return Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory+codeName+".json"
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "filePath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.generateConfiguration(path = filePath)
             file = File.open(path,"w")
             self.new.to_json(file)
             file.close
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "generateConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
@@ -29,6 +43,13 @@ module ISM
             end
 
             return from_json(File.read(path))
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "loadConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.sourcesLink(codeName : String) : String
@@ -37,20 +58,48 @@ module ISM
             rescue
                 return String.new
             end
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "sourcesLink",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
             file = File.open(path,"w")
             to_json(file)
             file.close
+
+            rescue exception
+                ISM::Core::Error.show(  className: "writeConfiguration",
+                                        functionName: "filePath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def defaultUrl : String
             return @urls[@mainUrl]
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "defaultUrl",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def sourcesLink : String
             return defaultUrl+ISM::Default::Mirror::SourcesLinkDirectory
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "sourcesLink",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
     end

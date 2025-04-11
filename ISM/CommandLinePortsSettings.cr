@@ -12,7 +12,7 @@ module ISM
         def self.filePath : String
             return Ism.settings.rootPath+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "filePath",
                                     errorTitle: "Execution failure",
@@ -24,7 +24,7 @@ module ISM
             self.new.to_json(file)
             file.close
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "generateConfiguration",
                                     errorTitle: "Execution failure",
@@ -38,7 +38,7 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "loadConfiguration",
                                     errorTitle: "Execution failure",
@@ -50,7 +50,7 @@ module ISM
             to_json(file)
             file.close
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
@@ -60,7 +60,7 @@ module ISM
         def setTargetVersion(@targetVersion)
             writeConfiguration
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLinePortsSettings",
                                     functionName: "setTargetVersion",
                                     errorTitle: "Execution failure",

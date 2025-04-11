@@ -8,14 +8,32 @@ module ISM
             end
 
             STDOUT << "\e]0; #{title}\e\\"
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Core",
+                                    functionName: "setTerminalTitle",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def self.resetTerminalTitle
             self.setTerminalTitle(Ism.initialTerminalTitle)
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Core",
+                                    functionName: "resetTerminalTitle",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def self.exitProgram(code = 0)
             exit code
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Core",
+                                    functionName: "exitProgram",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def self.runSystemCommand(  command : String,
@@ -134,17 +152,12 @@ module ISM
                 ERROR
             end
 
-            #If the process fail, we first check if there is any error code we can ignore and then raise the error properly
-            rescue
-                raise <<-ERROR
-                #{ISM::Default::Error::SystemCommandFailure}
-                command: #{processCommand}
-                path: #{realRootPath}
-                environment: #{environmentCommand}
-                asRoot: #{asSuperuser}
-                chroot: #{viaChroot}
-                shell:  #{shell}
-                ERROR
+            rescue exception
+                ISM::Core::Error.show(  className: "Core",
+                                    functionName: "runSystemCommand",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         #rootPath = (@settings.installByChroot || !@settings.installByChroot && (@settings.rootPath != "/") ? @settings.rootPath : "/")

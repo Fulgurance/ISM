@@ -12,7 +12,7 @@ module ISM
 
         def start
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineOption",
                                     functionName: "start",
                                     errorTitle: "Execution failure",
@@ -27,7 +27,7 @@ module ISM
                         "\t" + "#{argument.description.colorize(:green)}"
             end
 
-            rescue error
+            rescue exception
             ISM::Core::Error.show(  className: "CommandLineOption",
                                     functionName: "showHelp",
                                     errorTitle: "Execution failure",
