@@ -1,37 +1,42 @@
 module ISM
 
-    module Error
+    module Core
 
-        def self.show(  className : String,
-                        functionName : String,
-                        description = String.new,
-                        errorTitle : String,
-                        error : Exception)
-            limit = ISM::Default::Error::Title.size
+        module Error
 
-            separatorText = String.new
+            def self.show(  className : String,
+                            functionName : String,
+                            errorTitle : String,
+                            error : String,
+                            exception = Exception.new,
+                            information = String.new,
+                            errorCode = 1)
+                limit = ISM::Default::Error::Title.size
 
-            (0..limit).each do |index|
-                separatorText += "="
+                separatorText = String.new
+
+                (0..limit).each do |index|
+                    separatorText += "="
+                end
+
+                fullLog = (exception.backtrace.empty? ? exception.backtrace.join("\n") : exception.message)
+
+                title = "#{ISM::Default::Error::Title.colorize(:red)}"
+                separatorText = "#{separatorText.colorize(:red)}"
+                errorText = "\n#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                help = "\n#{ISM::Default::Error::Help.colorize(:red)}"
+
+                puts "\n"
+                puts separatorText
+                puts title
+                puts separatorText
+                puts errorText
+                puts help
+                puts "\n"
+
+                ISM::Core.exitProgram(code: errorCode)
+
             end
-
-            fullLog = (error.backtrace.empty? ? error.backtrace.join("\n") : error.message)
-
-            title = "#{ISM::Default::Error::Title.colorize(:red)}"
-            separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
-            help = "\n#{ISM::Default::Error::Help.colorize(:red)}"
-
-            puts "\n"
-            puts separatorText
-            puts title
-            puts separatorText
-            puts errorText
-            puts help
-            puts "\n"
-
-            #TO DO: Show that the raising error process encounter an error itself and raise it too
-            rescue error
 
         end
 

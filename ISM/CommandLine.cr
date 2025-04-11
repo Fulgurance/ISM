@@ -50,12 +50,6 @@ module ISM
             @red = UInt8.new(55)
             @blue = UInt8.new(55)
             @green = UInt8.new(55)
-
-            rescue error
-            ISM::Core::Error.show(  className: "CommandLine",
-                                    functionName: "Initialize",
-                                    errorTitle: "Initialization failure",
-                                    error: "Failed to initialize the class")
         end
 
         def systemId : String
@@ -2211,7 +2205,6 @@ module ISM
                 showTaskCompilationFailedMessage
                 showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Filename::Task}.cr")
 
-                rescue error
                 ISM::Core::Error.show(  className: "CommandLine",
                                         functionName: "buildTasksFile",
                                         errorTitle: "Task compilation failure",

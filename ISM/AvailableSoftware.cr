@@ -7,12 +7,6 @@ module ISM
         property versions : Array(ISM::SoftwareInformation)
 
         def initialize(@port = String.new, @name = String.new, @versions = Array(ISM::SoftwareInformation).new)
-
-            rescue error
-            ISM::Core::Error.show(  className: "AvailableSoftware",
-                                    functionName: "Initialize",
-                                    errorTitle: "Initialization failure",
-                                    error: "Failed to initialize the class")
         end
 
         def fullName : String

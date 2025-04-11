@@ -22,7 +22,13 @@ begin
 
 #We catch any raised error
 rescue error
-    ISM::Core::Error.show(error)
+    ISM::Core::Error.show(  className: "Main",
+                            functionName: "None",
+                            errorTitle: "Unexpected error occured",
+                            error: "The program stopped due to an unknown error",
+                            exception: error,
+                            information: "This error occur when #{ISM::Default::CommandLine::Name.upcase} is unable to catch the error",
+                            errorCode: 1)
 
 #We ensure that the program exit securely
 ensure

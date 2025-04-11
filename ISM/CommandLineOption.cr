@@ -11,6 +11,12 @@ module ISM
         end
 
         def start
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLineOption",
+                                    functionName: "start",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         def showHelp
@@ -20,6 +26,12 @@ module ISM
                         "\t" + "#{argument.longText.colorize(:white)}" +
                         "\t" + "#{argument.description.colorize(:green)}"
             end
+
+            rescue error
+            ISM::Core::Error.show(  className: "CommandLineOption",
+                                    functionName: "showHelp",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
     end
