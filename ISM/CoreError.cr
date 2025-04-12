@@ -30,13 +30,13 @@ module ISM
                 puts separatorText
                 puts title
                 puts separatorText
-                puts className
-                puts functionName
-                puts errorTitle
-                puts error
-                puts errorText
-                puts errorCode
-                puts help
+                puts "Class: #{className.colorize(:red)}"
+                puts "Function: #{functionName.colorize(:red)}"
+                puts "#{errorTitle.colorize(:red)}"
+                puts "#{error.colorize(:red)}"
+                puts "#{errorText.colorize(:red)}"
+                puts "#{errorCode.colorize(:red)}"
+                puts "#{help.colorize(:red)}"
                 puts "\n"
 
                 ISM::Core.exitProgram(code: errorCode)
