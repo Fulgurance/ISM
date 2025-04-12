@@ -22,7 +22,7 @@ begin
 
 #We catch any raised error
 rescue error
-    ISM::Core::Error.show(  className: "Main",
+    ISM::Core::Error.show(  className: "None",
                             functionName: "None",
                             errorTitle: "Unexpected error occured",
                             error: "The program stopped due to an unknown error",
