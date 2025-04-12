@@ -40,7 +40,7 @@ module ISM
         end
 
         def self.runSystemCommand(  command : String,
-                                    path = ISM::CommandLineSettings.loadConfiguration.installByChroot ? "/" : ISM::CommandLineSettings.loadConfiguration.rootPath,
+                                    path = (ISM::CommandLineSettings.loadConfiguration.installByChroot ? "/" : ISM::CommandLineSettings.loadConfiguration.rootPath),
                                     environment = Hash(String, String).new,
                                     environmentFilePath = String.new,
                                     quiet = false,
@@ -50,13 +50,13 @@ module ISM
                                     input = Process::Redirect::Inherit,
                                     output = Process::Redirect::Inherit,
                                     error = Process::Redirect::Inherit,
-                                    ignoreErrorCodeList = Array(Int32).new)
+                                    ignoreErrorCodeList = Array(Int32).new) : Process::Status
 
             #########################TASKS#########################
 
             #Common variables preparation
             asSuperuser =   (asRoot && ISM::Core::Security.systemHandleUserAccess)
-            viaChroot =     (ISM::CommandLineSettings.loadConfiguration.installByChroot && chroot ? true : false)
+            viaChroot =     ((ISM::CommandLineSettings.loadConfiguration.installByChroot && chroot) ? true : false)
             sudoCommand =   (shell ? "sudo" : "/usr/bin/sudo")
             chrootCommand = (shell ? "chroot" : "/usr/sbin/chroot")
             inputValue =    (quiet ? Process::Redirect::Close : input)
@@ -104,17 +104,17 @@ module ISM
                 process = Process.run(  command: "/usr/bin/sudo",
                                         args: ["/usr/bin/chattr","-f","-i",taskFilePath],
                                         shell: false,
-                                        input: (quiet ? Process::Redirect::Close : input),
-                                        output: (quiet ? Process::Redirect::Close : output),
-                                        error: (quiet ? Process::Redirect::Close : error))
+                                        input: inputValue,
+                                        output: outputValue,
+                                        error: errorValue)
 
                 #Then we delete it
                 process = Process.run(  command: "/usr/bin/sudo",
                                         args: ["/usr/bin/rm",taskFilePath],
                                         shell: false,
-                                        input: (quiet ? Process::Redirect::Close : input),
-                                        output: (quiet ? Process::Redirect::Close : output),
-                                        error: (quiet ? Process::Redirect::Close : error))
+                                        input: inputValue,
+                                        output: outputValue,
+                                        error: errorValue)
             end
 
             #Generate a new task file
@@ -124,27 +124,28 @@ module ISM
             process = Process.run(  command: "/usr/bin/sudo",
                                     args: ["/usr/bin/chmod","+x",taskFilePath],
                                     shell: false,
-                                    input: (quiet ? Process::Redirect::Close : input),
-                                    output: (quiet ? Process::Redirect::Close : output),
-                                    error: (quiet ? Process::Redirect::Close : error))
+                                    input: inputValue,
+                                    output: outputValue,
+                                    error: errorValue)
 
             #We now lock the new task to avoid any modification
             process = Process.run(  command: "/usr/bin/sudo",
                                     args: ["/usr/bin/chattr","-f","+i",taskFilePath],
                                     shell: false,
-                                    input: (quiet ? Process::Redirect::Close : input),
-                                    output: (quiet ? Process::Redirect::Close : output),
-                                    error: (quiet ? Process::Redirect::Close : error))
+                                    input: inputValue,
+                                    output: outputValue,
+                                    error: errorValue)
 
             #We can now run the generated task
             process = Process.run(  command: processCommand,
                                     shell: true,
-                                    input: (quiet ? Process::Redirect::Close : input),
-                                    output: (quiet ? Process::Redirect::Close : output),
-                                    error: (quiet ? Process::Redirect::Close : error))
+                                    input: inputValue,
+                                    output: outputValue,
+                                    error: errorValue)
 
+            raisedError = String.new
             if process.exit_code != 0 && !ignoreErrorCodeList.includes?(process.exit_code)
-                raise <<-ERROR
+                raisedError =  <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
                 command: #{processCommand}
                 path: #{realRootPath}
@@ -153,14 +154,21 @@ module ISM
                 chroot: #{viaChroot}
                 shell:  #{shell}
                 ERROR
+
+                ISM::Core::Error.show(  className: "Core",
+                                        functionName: "runSystemCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the following process:\n#{raisedError}")
             end
+
+            return process
 
             rescue exception
                 ISM::Core::Error.show(  className: "Core",
-                                    functionName: "runSystemCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+                                            functionName: "runSystemCommand",
+                                            errorTitle: "Execution failure",
+                                            error: "Failed to execute the function",
+                                            exception: exception)
         end
 
         #rootPath = (@settings.installByChroot || !@settings.installByChroot && (@settings.rootPath != "/") ? @settings.rootPath : "/")

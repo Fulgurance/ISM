@@ -2171,7 +2171,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Core::Error.show(error)
+                            ISM::Core::Error.show(exception)
                         end
 
                         #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
@@ -2358,7 +2358,7 @@ module ISM
                         begin
                             target.uninstall
                         rescue exception
-                            ISM::Core::Error.show(error)
+                            ISM::Core::Error.show(exception)
                         end
 
                         Ism.showEndSoftwareUninstallingMessage(index, limit, port, name, version)
