@@ -13,6 +13,13 @@ module ISM
 
         def self.loadConfiguration(path = String.new)
             return from_json(File.read(path))
+
+            rescue exception
+            ISM::Core::Error.show(  className: "SoftwareSecurityMap",
+                                    functionName: "loadConfiguration",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def descriptor(path : String, realPath : String) : ISM::SoftwareSecurityDescriptor
@@ -60,6 +67,13 @@ module ISM
                                                         user:   user,
                                                         group:  group,
                                                         mode:   mode)
+
+            rescue exception
+            ISM::Core::Error.show(  className: "SoftwareOption",
+                                    functionName: "descriptor",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
     end
 
