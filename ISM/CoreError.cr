@@ -35,7 +35,7 @@ module ISM
                 puts "#{errorTitle.colorize(:red)}"
                 puts "#{error.colorize(:red)}"
                 puts "#{errorText.colorize(:red)}"
-                puts "#{errorCode.colorize(:red)}"
+                puts "Exit code: #{errorCode.colorize(:red)}"
                 puts "#{help.colorize(:red)}"
                 puts "\n"
 
