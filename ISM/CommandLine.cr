@@ -2171,7 +2171,11 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Core::Error.show(exception)
+                            ISM::Core::Error.show(  className : "None",
+                                                    functionName : "None",
+                                                    errorTitle : "Installation task failed",
+                                                    error : "The current target installation failed",
+                                                    exception: exception)
                         end
 
                         #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
@@ -2358,7 +2362,11 @@ module ISM
                         begin
                             target.uninstall
                         rescue exception
-                            ISM::Core::Error.show(exception)
+                            ISM::Core::Error.show(  className : "None",
+                                                    functionName : "None",
+                                                    errorTitle : "Uninstallation task failed",
+                                                    error : "The current target uninstallation failed",
+                                                    exception: exception)
                         end
 
                         Ism.showEndSoftwareUninstallingMessage(index, limit, port, name, version)
