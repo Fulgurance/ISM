@@ -5,6 +5,7 @@ module ISM
         include JSON::Serializable
 
         #Generic parameters
+        property    binaryTaskMode : Bool
         property    installByChroot : Bool
         property    rootPath : String
         property    defaultMirror : String
@@ -59,6 +60,7 @@ module ISM
         property    chrootVariantId : String
 
         def initialize( #Generic parameters
+                        @binaryTaskMode = ISM::Default::CommandLineSettings::BinaryTaskMode,
                         @installByChroot = ISM::Default::CommandLineSettings::InstallByChroot,
                         @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
@@ -156,6 +158,7 @@ module ISM
                                     path : String,
 
                                     #Generic parameters
+                                    binaryTaskMode : Bool,
                                     installByChroot : Bool,
                                     rootPath : String,
                                     defaultMirror : String,
@@ -216,6 +219,7 @@ module ISM
             end
 
             settings = {#Generic parameters
+                        "binaryTaskMode" => binaryTaskMode,
                         "installByChroot" => installByChroot,
                         "rootPath" => rootPath,
                         "defaultMirror" => defaultMirror,
@@ -286,6 +290,7 @@ module ISM
             self.class.writeConfiguration(  #File path
                                             @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
                                             #Generic parameters
+                                            ISM::Default::CommandLineSettings::BinaryTaskMode,
                                             ISM::Default::CommandLineSettings::InstallByChroot,
                                             ISM::Default::CommandLineSettings::RootPath,
                                             @defaultMirror,
@@ -352,6 +357,7 @@ module ISM
                                             self.class.filePath,
 
                                             #Generic parameters
+                                            @binaryTaskMode,
                                             @installByChroot,
                                             @rootPath,
                                             @defaultMirror,
@@ -786,6 +792,17 @@ module ISM
         #Setter methods
 
         #   Generic
+        def setBinaryTaskMode(@binaryTaskMode)
+            writeSystemConfiguration
+
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLineSettings",
+                                    functionName: "setBinaryTaskMode",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
         def setInstallByChroot(@installByChroot)
             writeSystemConfiguration
 

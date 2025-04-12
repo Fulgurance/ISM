@@ -11,6 +11,8 @@ module ISM
                 Description = "Configure #{ISM::Default::CommandLine::Name.upcase} settings"
                 Options = [ ISM::Option::SettingsShow.new,
                             #Global options
+                            ISM::Option::SettingsEnableBinaryTaskMode.new,
+                            ISM::Option::SettingsDisableBinaryTaskMode.new,
                             ISM::Option::SettingsEnableInstallByChroot.new,
                             ISM::Option::SettingsDisableInstallByChroot.new,
                             ISM::Option::SettingsSetRootPath.new,

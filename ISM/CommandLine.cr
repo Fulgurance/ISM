@@ -2197,11 +2197,17 @@ module ISM
 
             generateTasksFile(tasks)
 
+            if Ism.settings.binaryTaskMode
+                showTaskCompilationTitleMessage
+                buildTasksFile
+                showCalculationDoneMessage
+            end
+
             showTaskCompilationTitleMessage
             buildTasksFile
             showCalculationDoneMessage
 
-            runTasksFile(logEnabled: true, softwareList: neededSoftwares)
+            runTasksFile(asBinary: Ism.settings.binaryTaskMode, logEnabled: true, softwareList: neededSoftwares)
 
             rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
@@ -2262,7 +2268,7 @@ module ISM
                                     exception: exception)
         end
 
-        def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+        def runTasksFile(asBinary = true, logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
             # We first set proper rights for the binary task file:
             #   -owned by root (uid 0 and gid 0)
             #   -enable SUID and SGID bits
@@ -2282,7 +2288,10 @@ module ISM
             logWriter = logEnabled ? IO::MultiWriter.new(STDOUT,logIOMemory) : Process::Redirect::Inherit
 
             # Task execution
-            ISM::Core.runSystemCommand( command: "./#{ISM::Default::Filename::Task}",
+            taskPrefix = (asBinary ? "./" : "crystal ")
+            taskExtension = (asBinary ? "" : ".cr")
+
+            ISM::Core.runSystemCommand( command: "#{taskPrefix}#{ISM::Default::Filename::Task}#{taskExtension}",
                                         output: logWriter,
                                         error: logWriter,
                                         shell: true,
@@ -2363,6 +2372,12 @@ module ISM
                     CODE
 
             generateTasksFile(tasks)
+
+            if Ism.settings.binaryTaskMode
+                showTaskCompilationTitleMessage
+                buildTasksFile
+                showCalculationDoneMessage
+            end
 
             showTaskCompilationTitleMessage
             buildTasksFile
