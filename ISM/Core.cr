@@ -64,7 +64,7 @@ module ISM
             outputValue =   (quiet ? Process::Redirect::Close : output)
             errorValue =    (quiet ? Process::Redirect::Close : error)
             realRootPath =  "#{(viaChroot ? settings.rootPath : "/")}"
-            taskFilePath =  "#{realRootPath}#{ISM::Default::Filename::Task}"
+            taskFilePath =  "#{settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}"
 
             #Exclusive variables preparation
             chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemName}:#{ISM::Default::Core::Security::SystemName}"} #{settings.rootPath}"
