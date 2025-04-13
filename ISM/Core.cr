@@ -53,20 +53,21 @@ module ISM
                                     ignoreErrorCodeList = Array(Int32).new) : Process::Status
 
             #########################TASKS#########################
+            settings = ISM::CommandLineSettings.loadConfiguration
 
             #Common variables preparation
             asSuperuser =   (asRoot && ISM::Core::Security.systemHandleUserAccess)
-            viaChroot =     ((ISM::CommandLineSettings.loadConfiguration.installByChroot && chroot) ? true : false)
+            viaChroot =     ((settings.installByChroot && chroot) ? true : false)
             sudoCommand =   (shell ? "sudo" : "/usr/bin/sudo")
             chrootCommand = (shell ? "chroot" : "/usr/sbin/chroot")
             inputValue =    (quiet ? Process::Redirect::Close : input)
             outputValue =   (quiet ? Process::Redirect::Close : output)
             errorValue =    (quiet ? Process::Redirect::Close : error)
-            realRootPath =  "#{(viaChroot ? ISM::CommandLineSettings.loadConfiguration.rootPath : "/")}"
+            realRootPath =  "#{(viaChroot ? settings.rootPath : "/")}"
             taskFilePath =  "#{realRootPath}#{ISM::Default::Filename::Task}"
 
             #Exclusive variables preparation
-            chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemName}:#{ISM::Default::Core::Security::SystemName}"} #{ISM::CommandLineSettings.loadConfiguration.rootPath}"
+            chrootTaskPrefix =  "HOME=/var/lib/ism #{sudoCommand} #{chrootCommand} #{asSuperuser ? "" : "--userspec=#{ISM::Default::Core::Security::SystemName}:#{ISM::Default::Core::Security::SystemName}"} #{settings.rootPath}"
             taskPrefix =        "#{asSuperuser ? "#{sudoCommand} " : ""}"
 
             #Determine what will prefix the requested command
@@ -143,8 +144,9 @@ module ISM
                                     output: outputValue,
                                     error: errorValue)
 
-            raisedError = String.new
-            if process.exit_code != 0 && !ignoreErrorCodeList.includes?(process.exit_code)
+            return process
+
+            rescue exception
                 raisedError =  <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
                 command: #{processCommand}
@@ -158,17 +160,8 @@ module ISM
                 ISM::Core::Error.show(  className: "Core",
                                         functionName: "runSystemCommand",
                                         errorTitle: "Execution failure",
-                                        error: "Failed to execute the following process:\n#{raisedError}")
-            end
-
-            return process
-
-            rescue exception
-                ISM::Core::Error.show(  className: "Core",
-                                            functionName: "runSystemCommand",
-                                            errorTitle: "Execution failure",
-                                            error: "Failed to execute the function",
-                                            exception: exception)
+                                        error: "Failed to execute the following process:\n#{raisedError}",
+                                        exception: exception)
         end
 
 
@@ -179,7 +172,11 @@ module ISM
                 print character
             end
         end
-        #rootPath = (@settings.installByChroot || !@settings.installByChroot && (@settings.rootPath != "/") ? @settings.rootPath : "/")
+
+        def self.targetedRootPath : String
+            settings = ISM::CommandLineSettings.loadConfiguration
+            return (settings.installByChroot || !settings.installByChroot && (settings.rootPath != "/") ? settings.rootPath : "/")
+        end
 
     end
 

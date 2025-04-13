@@ -1389,10 +1389,16 @@ module ISM
         def runUserAddCommand(arguments : String)
             requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
 
-            ISM::Core.runSystemCommand( command: requestedCommands,
-                                        shell: true,
-                                        asRoot: true,
-                                        ignoreErrorCodeList: [9])
+            process = ISM::Core.runSystemCommand(   command: requestedCommands,
+                                                    shell: true,
+                                                    asRoot: true)
+
+            if !process.success? && process.exit_code != 9
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runUserAddCommand",
+                                        errorTitle: "User creation failed",
+                                        error: "An error occured during the user creation process")
+            end
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -1405,12 +1411,16 @@ module ISM
         def runUserDelCommand(arguments : String)
             requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            process = ISM::Core.runSystemCommand(   command: requestedCommands,
+                                                    shell: true,
+                                                    asRoot: true)
 
-            ISM::Core.runSystemCommand( command: requestedCommands,
-                                        shell: true,
-                                        asRoot: true,
-                                        ignoreErrorCodeList: [9])
+            if !process.success? && process.exit_code != 9
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runUserDelCommand",
+                                        errorTitle: "User deletion failed",
+                                        error: "An error occured during the user deletion process")
+            end
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -1423,12 +1433,16 @@ module ISM
         def runGroupAddCommand(arguments : String)
             requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            process = ISM::Core.runSystemCommand(   command: requestedCommands,
+                                                    shell: true,
+                                                    asRoot: true)
 
-            ISM::Core.runSystemCommand( command: requestedCommands,
-                                        shell: true,
-                                        asRoot: true,
-                                        ignoreErrorCodeList: [9])
+            if !process.success? && process.exit_code != 9
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGroupAddCommand",
+                                        errorTitle: "Group creation failed",
+                                        error: "An error occured during the group creation process")
+            end
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -1441,12 +1455,16 @@ module ISM
         def runGroupDelCommand(arguments : String)
             requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, shell: true, asRoot: true)
+            process = ISM::Core.runSystemCommand(   command: requestedCommands,
+                                                    shell: true,
+                                                    asRoot: true)
 
-            ISM::Core.runSystemCommand( command: requestedCommands,
-                                        shell: true,
-                                        asRoot: true,
-                                        ignoreErrorCodeList: [9])
+            if !process.success? && process.exit_code != 9
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGroupDelCommand",
+                                        errorTitle: "Group deletion failed",
+                                        error: "An error occured during the group deletion process")
+            end
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",

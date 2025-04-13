@@ -33,10 +33,10 @@ module ISM
                 Exit code: #{errorCode.colorize(:red)}
 
                 #{help.colorize(:red)}
-
                 REPORT
 
-                ISM::Core.progressivePrint(errorReport, 2)
+                ISM::Core.progressivePrint( text: "#{errorReport}\n",
+                                            delay: 1)
 
                 ISM::Core.exitProgram(code: errorCode)
 
