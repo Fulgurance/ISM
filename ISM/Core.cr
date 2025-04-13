@@ -39,8 +39,12 @@ module ISM
                                     exception: exception)
         end
 
-        def self.taskFilePath
+        def self.taskFileDirectory : String
             return "#{targetedRootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}"
+        end
+
+        def self.taskFilePath : String
+            return "#{taskFileDirectory}#{ISM::Default::Filename::Task}"
         end
 
         def self.runTasks(tasks, quiet = false, asRoot = false, viaChroot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
@@ -52,6 +56,10 @@ module ISM
 
                 process = Process.run(  command: "sudo rm #{taskFilePath}",
                                         shell: true)
+            end
+
+            if !Dir.exists?(taskFileDirectory)
+                Dir.mkdir_p(taskFileDirectory)
             end
 
             File.write(taskFilePath, tasks)
