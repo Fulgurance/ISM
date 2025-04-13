@@ -67,7 +67,7 @@ module ISM
             systemUserId = ISM::Default::Core::SystemUserId
             systemUserName = ISM::Default::Core::SystemUserName
 
-            noChrootCommand = (asRoot ? "sudo" : "sudo -u #{systemUserName} -g #{systemUserName} -D /var/lib/ism -H /var/lib/ism")
+            noChrootCommand = (asRoot ? "sudo" : "sudo -u #{systemUserName} -g #{systemUserName} -H /var/lib/ism")
             viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{systemUserId}:#{systemUserId}"} #{commandLineSettings.rootPath}"
 
             mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
