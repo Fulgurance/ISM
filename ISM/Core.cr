@@ -47,18 +47,16 @@ module ISM
 
             # We first check if there is any task left
             if File.exists?("#{taskFilePath}")
-                runSystemCommand(   command:    "/usr/bin/chattr -f -i #{taskFilePath}",
-                                    shell:      false,
-                                    chroot:     false,
-                                    asRoot:     true)
+                process = Process.run(  command:    "sudo chattr -f -i #{taskFilePath}",
+                                        shell:      true)
 
-                Process.run(command: "sudo rm #{taskFilePath}",
-                            shell: true)
+                process = Process.run(  command: "sudo rm #{taskFilePath}",
+                                        shell: true)
             end
 
             File.write(taskFilePath, tasks)
 
-            process = Process.run(  command:    "chmod +x #{taskFilePath}",
+            process = Process.run(  command:    "sudo chmod +x #{taskFilePath}",
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
@@ -67,7 +65,7 @@ module ISM
             systemUserId = ISM::Default::Core::SystemUserId
             systemUserName = ISM::Default::Core::SystemUserName
 
-            noChrootCommand = (asRoot ? "sudo" : "sudo -u #{systemUserName} -g #{systemUserName} -H /var/lib/ism")
+            noChrootCommand = (asRoot ? "sudo" : "sudo -u #{systemUserName} -g #{systemUserName}")
             viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{systemUserId}:#{systemUserId}"} #{commandLineSettings.rootPath}"
 
             mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
