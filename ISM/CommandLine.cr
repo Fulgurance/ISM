@@ -2207,10 +2207,6 @@ module ISM
                 showCalculationDoneMessage
             end
 
-            showTaskCompilationTitleMessage
-            buildTasksFile
-            showCalculationDoneMessage
-
             runTasksFile(asBinary: Ism.settings.binaryTaskMode, logEnabled: true, softwareList: neededSoftwares)
 
             rescue exception
@@ -2386,10 +2382,6 @@ module ISM
                 buildTasksFile
                 showCalculationDoneMessage
             end
-
-            showTaskCompilationTitleMessage
-            buildTasksFile
-            showCalculationDoneMessage
 
             runTasksFile
 
