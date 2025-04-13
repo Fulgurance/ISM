@@ -70,7 +70,7 @@ module ISM
 
             mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
 
-            command = "#{mainCommand} ./#{ISM::Default::Filename::Task}"
+            command = "#{mainCommand} #{taskFilePath}"
 
             process = Process.run(  command:    command,
                                     input:      (quiet ? Process::Redirect::Close : input),
