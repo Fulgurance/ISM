@@ -174,7 +174,7 @@ module ISM
 
         def self.progressivePrint(text : String, speed = 10)
             text.each_char do |character|
-                sleep(Time::Span.new(nanoseconds: speed*1000000))
+                sleep(Time::Span.new(nanoseconds: speed * 1000000))
 
                 print character
             end
