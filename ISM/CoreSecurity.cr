@@ -72,11 +72,17 @@ module ISM
                                     #{setLib} && #{setBin} && #{setSbin} && #{setLibexec}
                                     CMD
 
-                ISM::Core.runSystemCommand( command: requestedCommands,
-                                            shell: false,
-                                            asRoot: true,
-                                            chroot: false,
-                                            ignoreErrorCodeList: [1])
+                process = ISM::Core.runSystemCommand(   command: requestedCommands,
+                                                        shell: false,
+                                                        asRoot: true,
+                                                        chroot: false)
+
+                if !process.success? && process.exit_code != 9
+                    ISM::Core::Error.show(  className: "CoreSecurity",
+                                            functionName: "setSystemAccess",
+                                            errorTitle: "Failed to set the system access",
+                                            error: "An error occured while trying to modify the system access")
+                end
 
                 rescue exception
                 ISM::Core::Error.show(  className: "Core::Security",

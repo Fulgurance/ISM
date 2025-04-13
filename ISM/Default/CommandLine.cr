@@ -5,6 +5,7 @@ module ISM
         module CommandLine
 
             Title = "Ingenius System Manager"
+            #TO DO: MIGRATION TO CORE AND CHANGE ACCESSOR IN OTHER CALLS
             Name = "ism"
             FailedToEnsureSecurity = "#{Name.upcase} was unable to ensure the security of the requested tasks. It may result from an internal error or the task haven't the SUID and SGIB bit set."
             NeedSuidBitText = "#{Name.upcase} can't run a command that required superuser access. Make sure that #{Name.upcase} have the SUID and SGID bit set."

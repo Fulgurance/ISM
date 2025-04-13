@@ -4,6 +4,9 @@ module ISM
 
         module Core
 
+            SystemUserId = 250
+            SystemUserName = "ism"
+
         end
 
     end
