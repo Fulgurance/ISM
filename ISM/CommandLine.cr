@@ -2219,13 +2219,13 @@ module ISM
 
         def buildTasksFile
             # We first check if there is any task left
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Filename::Task}")
-                ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}")
+                ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                             shell: false,
                                             chroot: false,
                                             asRoot: true)
 
-                ISM::Core.runSystemCommand( command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+                ISM::Core.runSystemCommand( command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                             shell: false,
                                             chroot: false,
                                             asRoot: true)
@@ -2233,12 +2233,12 @@ module ISM
 
             processResult = IO::Memory.new
 
-            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Filename::Task} -f json"
+            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task} -f json"
 
             Process.run(command: requestedCommands,
                         error: processResult,
                         shell: true,
-                        chdir: "#{@settings.rootPath}") do |process|
+                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}") do |process|
                 loop do
                     playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
                     Fiber.yield
@@ -2252,7 +2252,7 @@ module ISM
                 taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
 
                 showTaskCompilationFailedMessage
-                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Filename::Task}.cr")
+                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr")
 
                 ISM::Core::Error.show(  className: "CommandLine",
                                         functionName: "buildTasksFile",
@@ -2273,12 +2273,12 @@ module ISM
             #   -owned by root (uid 0 and gid 0)
             #   -enable SUID and SGID bits
             #   -set as immutable to don't allow any suppression
-            ISM::Core.runSystemCommand( command: "/usr/bin/chown #{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId} #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/chown #{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId} #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                         shell: false,
                                         chroot: false,
                                         asRoot: true)
 
-            ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                         shell: false,
                                         chroot: false,
                                         asRoot: true)
@@ -2296,7 +2296,7 @@ module ISM
                                         error: logWriter,
                                         shell: true,
                                         chroot: false,
-                                        path: "#{@settings.rootPath}")
+                                        path: "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}")
 
             # Log recording
             if logEnabled
@@ -2760,7 +2760,7 @@ module ISM
                 Dir.mkdir_p("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}")
             end
 
-            File.write("#{@settings.rootPath}#{ISM::Default::Filename::Task}.cr", tasks)
+            File.write("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
 
             rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
