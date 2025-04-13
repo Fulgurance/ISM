@@ -33,6 +33,7 @@ module ISM
                 Exit code: #{errorCode.colorize(:red)}
 
                 #{help.colorize(:red)}
+
                 REPORT
 
                 ISM::Core.progressivePrint(errorReport, 2)
