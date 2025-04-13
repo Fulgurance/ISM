@@ -2301,6 +2301,7 @@ module ISM
 
             # Task execution
             taskPrefix = (asBinary ? "./" : "crystal ")
+            taskExtension = (asBinary ? "" : ".cr")
 
             ISM::Core.runSystemCommand( command: "#{taskPrefix}#{ISM::Default::Filename::Task}#{taskExtension}",
                                         output: logWriter,
