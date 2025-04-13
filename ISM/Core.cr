@@ -95,7 +95,7 @@ module ISM
             cd #{realRootPath} && #{environmentCommand} #{command}
             CODE
 
-            processCommand = "#{prefix}/#{ISM::Default::Filename::Task}"
+            processCommand = "#{prefix}/#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}"
 
             #########################TASKS#########################
 

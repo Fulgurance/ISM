@@ -231,14 +231,14 @@ module ISM
         # Internal use only
         def prepareRootPermissions
             binary = "chown"
-            unlockTask = "chattr -f -i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}"
+            unlockTask = "chattr -f -i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}*"
             setRoot = "#{binary} -R root:root #{Ism.settings.rootPath}"
             setVarIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/var/ism"
             setEtcIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/etc/ism"
             setVarLogIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
             setTmpIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
             setSources = "#{binary} -R ism:ism #{Ism.settings.sourcesPath}"
-            lockTask = "chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}"
+            lockTask = "chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}*"
 
             requestedCommands = "#{unlockTask} && #{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources} && #{lockTask}"
 
