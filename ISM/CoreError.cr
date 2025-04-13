@@ -20,7 +20,7 @@ module ISM
                 help = "#{ISM::Default::Error::Help.colorize(:red)}"
 
                 errorReport = <<-REPORT
-                [ #{title} ]"
+                [ #{title} ]
                 Class: #{className.colorize(:red)}
                 Function: #{functionName.colorize(:red)}
 
