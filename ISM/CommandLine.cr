@@ -2269,16 +2269,28 @@ module ISM
         end
 
         def runTasksFile(asBinary = true, logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
-            # We first set proper rights for the binary task file:
-            #   -owned by root (uid 0 and gid 0)
-            #   -enable SUID and SGID bits
+            # We first set proper rights for the binary and task file:
+            #   -owned by ism (uid 250 and gid 250)
             #   -set as immutable to don't allow any suppression
-            ISM::Core.runSystemCommand( command: "/usr/bin/chown #{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId} #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+
+            if asBinary
+                ISM::Core.runSystemCommand( command: "/usr/bin/chown #{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId} #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                                         shell: false,
                                         chroot: false,
                                         asRoot: true)
 
-            ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+                ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+                                            shell: false,
+                                            chroot: false,
+                                            asRoot: true)
+            end
+
+            ISM::Core.runSystemCommand( command: "/usr/bin/chown #{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId} #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
+                                        shell: false,
+                                        chroot: false,
+                                        asRoot: true)
+
+            ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
                                         shell: false,
                                         chroot: false,
                                         asRoot: true)
@@ -2289,7 +2301,6 @@ module ISM
 
             # Task execution
             taskPrefix = (asBinary ? "./" : "crystal ")
-            taskExtension = (asBinary ? "" : ".cr")
 
             ISM::Core.runSystemCommand( command: "#{taskPrefix}#{ISM::Default::Filename::Task}#{taskExtension}",
                                         output: logWriter,
