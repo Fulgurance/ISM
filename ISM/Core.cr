@@ -171,6 +171,14 @@ module ISM
                                             exception: exception)
         end
 
+
+        def self.progressivePrint(text : String, speed = 10)
+            text.each_char do |character|
+                sleep(Time::Span.new(nanoseconds: speed*1000000))
+
+                print character
+            end
+        end
         #rootPath = (@settings.installByChroot || !@settings.installByChroot && (@settings.rootPath != "/") ? @settings.rootPath : "/")
 
     end

@@ -11,33 +11,31 @@ module ISM
                             exception = Exception.new,
                             information = String.new,
                             errorCode = 1)
-                limit = ISM::Default::Error::Title.size
-
-                separatorText = String.new
-
-                (0..limit).each do |index|
-                    separatorText += "="
-                end
 
                 fullLog = (exception.backtrace.empty? ? exception.backtrace.join("\n") : exception.message)
 
                 title = "#{ISM::Default::Error::Title.colorize(:red)}"
-                separatorText = "#{separatorText.colorize(:red)}"
-                errorText = "\n#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
-                help = "\n#{ISM::Default::Error::Help.colorize(:red)}"
 
-                puts "\n"
-                puts separatorText
-                puts title
-                puts separatorText
-                puts "Class: #{className.colorize(:red)}"
-                puts "Function: #{functionName.colorize(:red)}"
-                puts "#{errorTitle.colorize(:red)}"
-                puts "#{error.colorize(:red)}"
-                puts "Raised error:#{errorText}"
-                puts "Exit code: #{errorCode.colorize(:red)}"
-                puts "#{help.colorize(:red)}"
-                puts "\n"
+                errorText = "#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                help = "#{ISM::Default::Error::Help.colorize(:red)}"
+
+                errorReport = <<-REPORT
+                [ #{title} ]"
+                Class: #{className.colorize(:red)}
+                Function: #{functionName.colorize(:red)}
+
+                #{errorTitle.colorize(:red)}
+                #{error.colorize(:red)}
+
+                Exception:
+                #{errorText}
+
+                Exit code: #{errorCode.colorize(:red)}
+
+                #{help.colorize(:red)}
+                REPORT
+
+                ISM::Core.progressivePrint(errorReport)
 
                 ISM::Core.exitProgram(code: errorCode)
 
