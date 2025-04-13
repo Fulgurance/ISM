@@ -172,9 +172,9 @@ module ISM
         end
 
 
-        def self.progressivePrint(text : String, speed = 10)
+        def self.progressivePrint(text : String, delay = 10)
             text.each_char do |character|
-                sleep(Time::Span.new(nanoseconds: speed * 1000000))
+                sleep(Time::Span.new(nanoseconds: delay * 1000000))
 
                 print character
             end
