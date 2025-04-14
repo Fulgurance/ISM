@@ -207,7 +207,7 @@ module ISM
                                     exception: exception)
         end
 
-        def mainKernelName : String
+        def self.mainKernelName : String
             return selectedKernel.versionName.downcase
 
             rescue exception
@@ -218,7 +218,7 @@ module ISM
                                     exception: exception)
         end
 
-        def mainKernelHeadersName : String
+        def self.mainKernelHeadersName : String
             return "#{selectedKernel.name.downcase}-headers-#{selectedKernel.version.downcase}"
 
             rescue exception
@@ -229,7 +229,7 @@ module ISM
                                     exception: exception)
         end
 
-        def mainKernelVersion : String
+        def self.mainKernelVersion : String
             return ISM::Core.selectedKernel.version
 
             rescue exception
@@ -240,7 +240,7 @@ module ISM
                                     exception: exception)
         end
 
-        def kernelSourcesPath : String
+        def self.kernelSourcesPath : String
             return "#{commandLineSettings.rootPath}usr/src/#{mainKernelName}/"
 
             rescue exception
@@ -251,7 +251,7 @@ module ISM
                                     exception: exception)
         end
 
-        def kernelConfigPath : String
+        def self.kernelConfigPath : String
             return "#{kernelSourcesPath}/.config"
 
             rescue exception
