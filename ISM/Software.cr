@@ -25,7 +25,7 @@ module ISM
 
         #Alias
         def systemHandleUserAccess : Bool
-            return Core::Security.systemHandleUserAccess
+            return ISM::Core::Security.systemHandleUserAccess
         end
 
         #Alias
@@ -483,7 +483,7 @@ module ISM
                                 needUpdateKernelFile = false
 
                                 if selectedKernel.isValid
-                                    installedVersion = SemanticVersion.parse(Ism.mainKernelVersion)
+                                    installedVersion = SemanticVersion.parse(ISM::Core.mainKernelVersion)
                                     availableVersion = SemanticVersion.parse(Ism.getSoftwareInformation(entry).version)
 
                                     if selectedKernel.fullName.downcase == entry.downcase && availableVersion > installedVersion
