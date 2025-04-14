@@ -992,7 +992,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/rm #{path}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/rm -f #{path}",
                                         viaChroot: false,
                                         asRoot: asRoot)
 
@@ -1006,7 +1006,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/mv #{path} #{newPath}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/mv -f #{path} #{newPath}",
                                         viaChroot: false,
                                         asRoot: asRoot)
 
@@ -1034,7 +1034,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/rm -R #{path}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/rm -R -f #{path}",
                                         viaChroot: false,
                                         asRoot: asRoot)
 
