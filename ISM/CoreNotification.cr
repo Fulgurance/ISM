@@ -899,10 +899,10 @@ module ISM
                         "#{title.colorize(:green)}\n" +
                         separatorText +
                         "#{ISM::Default::CommandLine::NewSoftwareNumberDetailText.colorize(:green)}: #{softwareNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                        "#{ISM::Default::CommandLine::NewDirectoryNumberDetailText.colorize(:green)}: #{@totalInstalledDirectoryNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                        "#{ISM::Default::CommandLine::NewSymlinkNumberDetailText.colorize(:green)}: #{@totalInstalledSymlinkNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                        "#{ISM::Default::CommandLine::NewFileNumberDetailText.colorize(:green)}: #{@totalInstalledFileNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                        "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
+                        "#{ISM::Default::CommandLine::NewDirectoryNumberDetailText.colorize(:green)}: #{Ism.totalInstalledDirectoryNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
+                        "#{ISM::Default::CommandLine::NewSymlinkNumberDetailText.colorize(:green)}: #{Ism.totalInstalledSymlinkNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
+                        "#{ISM::Default::CommandLine::NewFileNumberDetailText.colorize(:green)}: #{Ism.totalInstalledFileNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
+                        "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{Ism.totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
                 puts
             end
 
