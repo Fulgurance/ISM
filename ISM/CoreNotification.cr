@@ -410,7 +410,7 @@ module ISM
             end
 
             def self.recordNeededKernelOptions
-                kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : ISM::Core.selectedKernel.name )
+                kernelName = (ISM::Core.selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : ISM::Core.selectedKernel.name )
 
                 ISM::Core::Notification.processNotification(ISM::Default::CommandLine::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
             end
