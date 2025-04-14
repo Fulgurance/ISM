@@ -21,6 +21,7 @@ module ISM
 
                 errorReport = <<-REPORT
                 [ #{title} ]
+
                 Class: #{className.colorize(:red)}
                 Function: #{functionName.colorize(:red)}
 
