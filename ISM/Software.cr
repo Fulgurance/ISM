@@ -2627,7 +2627,7 @@ module ISM
         end
 
         def updateKernelOptionsDatabase
-            ISM::Core::Notification.updateKernelOptionsDatabase(Ism.selectedKernel)
+            ISM::Core::Notification.updateKernelOptionsDatabase(ISM::Core.selectedKernel)
 
             makeDirectoryNoChroot(kernelOptionsDatabasePath)
 
