@@ -91,7 +91,7 @@ module ISM
                 ISM::Core::Notification.errorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
             end
 
-            def printInformationNotificationTitle(name : String, version : String)
+            def self.informationNotificationTitle(name : String, version : String)
                 limit = name.size+version.size+2
                 text = "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
 
