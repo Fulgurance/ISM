@@ -2147,7 +2147,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String))
-            path = "#{Ism.settings.rootPath}#{ISM::Default::Filename::StrippingList}"
+            path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::StrippingList}"
 
             if File.exists?(path)
                 deleteFileNoChroot(path: path, asRoot: true)
