@@ -71,7 +71,7 @@ module ISM
                                     shell:      true)
 
             noChrootCommand = (asRoot ? "sudo" : "")
-            viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{Default::Core::SystemUserId}:#{Default::Core::SystemUserId}"} #{commandLineSettings.rootPath}"
+            viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}"} #{commandLineSettings.rootPath}"
 
             mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
 
@@ -104,7 +104,11 @@ module ISM
 
         #TO DO: USE ALWAYS ABSOLUTE PATH TO AVOID SECURITY ISSUES
         def self.runSystemCommand(command : String, path = commandLineSettings.installByChroot ? "/" : commandLineSettings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false, viaChroot = true, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
-            superuser = (asRoot && Core::Security.systemHandleUserAccess)
+
+            targetedSystemInformationFilePath = (viaChroot ? ISM::CommandLineSystemInformation.filePath : "/#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}")
+            systemHandleUserAccess = ISM::CommandLineSystemInformation.loadConfiguration(targetedSystemInformationFilePath)
+
+            superuser = (asRoot && systemHandleUserAccess)
 
             environmentCommand = String.new
 
