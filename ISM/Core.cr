@@ -39,12 +39,12 @@ module ISM
                                     exception: exception)
         end
 
-        def self.taskFileDirectory : String
-            return "#{targetedRootPath}#{ISM::Default::Path::TemporaryDirectory}"
+        def self.taskFileDirectory(relatedToChroot = false) : String
+            return "#{relatedToChroot ? "/" : targetedRootPath}#{ISM::Default::Path::TemporaryDirectory}"
         end
 
-        def self.taskFilePath : String
-            return "#{taskFileDirectory}#{ISM::Default::Filename::Task}"
+        def self.taskFilePath(relatedToChroot = false) : String
+            return "#{taskFileDirectory(relatedToChroot)}#{ISM::Default::Filename::Task}"
         end
 
         def self.runTasks(tasks, quiet = false, asRoot = false, viaChroot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
@@ -75,7 +75,7 @@ module ISM
 
             mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
 
-            command = "#{mainCommand} #{taskFilePath}"
+            command = "#{mainCommand} #{taskFilePath(relatedToChroot: viaChroot)}"
 
             process = Process.run(  command:    command,
                                     input:      (quiet ? Process::Redirect::Close : input),
