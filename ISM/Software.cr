@@ -69,18 +69,13 @@ module ISM
         end
 
         #Alias
-        def selectedKernel
-            return ISM::Core.selectedKernel
-        end
-
-        #Alias
         def kernelIsSelected
             return ISM::Core.kernelIsSelected
         end
 
         #Alias
         def selectedKernel : ISM::SoftwareInformation
-            return Ism.selectedKernel
+            return ISM::Core.selectedKernel
         end
 
         def initialize(informationPath : String)
