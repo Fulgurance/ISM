@@ -55,17 +55,17 @@ module ISM
 
         #Alias
         def mainKernelHeadersName : String
-            return Ism.mainKernelHeadersName
+            return ISM::Core.mainKernelHeadersName
         end
 
         #Alias
         def mainKernelName : String
-            return Ism.mainKernelName
+            return ISM::Core.mainKernelName
         end
 
         #Alias
         def mainKernelVersion : String
-            return Ism.mainKernelVersion
+            return ISM::Core.mainKernelVersion
         end
 
         #Alias
