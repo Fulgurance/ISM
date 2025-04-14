@@ -1238,7 +1238,7 @@ module ISM
 
                         Ism.updateInstallationTerminalTitle(index, limit, port, name, version, passNumber)
 
-                        Ism.showStartSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
+                        ISM::Core::Notification.startSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
@@ -1274,7 +1274,7 @@ module ISM
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
-                        Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
+                        ISM::Core::Notification.endSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
 
                         if index < limit-1
                             Ism.showSeparator
@@ -1448,7 +1448,7 @@ module ISM
 
                         Ism.updateUninstallationTerminalTitle(index, limit, port, name, version)
 
-                        Ism.showStartSoftwareUninstallingMessage(index, limit, port, name, version)
+                        ISM::Core::Notification.startSoftwareUninstallingMessage(index, limit, port, name, version)
 
                         begin
                             target.uninstall
@@ -1460,7 +1460,7 @@ module ISM
                                                     exception: exception)
                         end
 
-                        Ism.showEndSoftwareUninstallingMessage(index, limit, port, name, version)
+                        ISM::Core::Notification.endSoftwareUninstallingMessage(index, limit, port, name, version)
 
                         if index < limit-1
                             Ism.showSeparator
