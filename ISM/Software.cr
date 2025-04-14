@@ -2685,7 +2685,7 @@ module ISM
 
         def showInformations
             puts
-            Ism.printInformationNotificationTitle(@information.name,@information.version)
+            ISM::Core::Notification.informationNotificationTitle(@information.name,@information.version)
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
