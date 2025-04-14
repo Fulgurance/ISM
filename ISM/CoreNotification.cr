@@ -338,7 +338,7 @@ module ISM
             end
 
             def self.downloadAdditions
-                printSubProcessNotification("#{ISM::Default::CommandLine::DownloadAdditionsText.colorize(:green)}")
+                ISM::Core::Notification.subProcessNotification("#{ISM::Default::CommandLine::DownloadAdditionsText.colorize(:green)}")
             end
 
             def self.check(softwareInformation : ISM::SoftwareInformation)
@@ -346,7 +346,7 @@ module ISM
             end
 
             def self.checkAdditions
-                printSubProcessNotification("#{ISM::Default::CommandLine::CheckAdditionsText.colorize(:green)}")
+                ISM::Core::Notification.subProcessNotification("#{ISM::Default::CommandLine::CheckAdditionsText.colorize(:green)}")
             end
 
             def self.extract(softwareInformation : ISM::SoftwareInformation)
@@ -354,7 +354,7 @@ module ISM
             end
 
             def self.extractAdditions
-                printSubProcessNotification("#{ISM::Default::CommandLine::ExtractAdditionsText.colorize(:green)}")
+                ISM::Core::Notification.subProcessNotification("#{ISM::Default::CommandLine::ExtractAdditionsText.colorize(:green)}")
             end
 
             def self.patch(softwareInformation : ISM::SoftwareInformation)
@@ -362,7 +362,7 @@ module ISM
             end
 
             def self.localPatch(patchName : String)
-                printSubProcessNotification(ISM::Default::CommandLine::LocalPatchText+"#{patchName.colorize(:yellow)}")
+                ISM::Core::Notification.subProcessNotification(ISM::Default::CommandLine::LocalPatchText+"#{patchName.colorize(:yellow)}")
             end
 
             def self.prepare(softwareInformation : ISM::SoftwareInformation)
@@ -386,23 +386,23 @@ module ISM
             end
 
             def self.unlockingSystemAccess
-                printSubProcessNotification(ISM::Default::CommandLine::UnlockingSystemAccessText)
+                ISM::Core::Notification.subProcessNotification(ISM::Default::CommandLine::UnlockingSystemAccessText)
             end
 
             def self.applyingSecurityMap
-                printSubProcessNotification(ISM::Default::CommandLine::ApplyingSecurityMapText)
+                ISM::Core::Notification.subProcessNotification(ISM::Default::CommandLine::ApplyingSecurityMapText)
             end
 
             def self.strippingFiles
-                printSubProcessNotification(ISM::Default::CommandLine::StrippingFilesText)
+                ISM::Core::Notification.subProcessNotification(ISM::Default::CommandLine::StrippingFilesText)
             end
 
             def self.deploy
-                printSubProcessNotification(ISM::Default::CommandLine::DeployText)
+                ISM::Core::Notification.subProcessNotification(ISM::Default::CommandLine::DeployText)
             end
 
             def self.lockingSystemAccess
-                printSubProcessNotification(ISM::Default::CommandLine::LockingSystemAccessText)
+                ISM::Core::Notification.subProcessNotification(ISM::Default::CommandLine::LockingSystemAccessText)
             end
 
             def self.updateKernelOptionsDatabase(softwareInformation : ISM::SoftwareInformation)
