@@ -1258,7 +1258,7 @@ module ISM
                         targets[index].showInformations
                     end
 
-                    Ism.showInstallationDetailsMessage(limit.to_u32)
+                    ISM::Core::Notification.installationDetailsMessage(limit.to_u32)
 
                     CODE
 
