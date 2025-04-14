@@ -2168,11 +2168,14 @@ module ISM
         end
 
         #Special function for the installation process without chroot (Internal use only)
-        def installFile(target : String, path : String, user : String, group : String, mode : String)
-            moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
+        def installFile(target : String, path : String, user : String, group : String, mode : String) : String
+            #moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            return <<-REQUEST
+            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} #{target} #{path}
+            REQUEST
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -2183,11 +2186,14 @@ module ISM
         end
 
         #Special function for the installation process without chroot (Internal use only)
-        def installDirectory(path : String, user : String, group : String, mode : String)
-            makeDirectoryNoChroot(path, asRoot: systemHandleUserAccess)
+        def installDirectory(path : String, user : String, group : String, mode : String) : String
+            #makeDirectoryNoChroot(path, asRoot: systemHandleUserAccess)
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            return <<-REQUEST
+            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mkdir -p" : "/usr/bin/mkdir -p"} #{path}
+            REQUEST
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -2198,8 +2204,11 @@ module ISM
         end
 
         #Special function for the installation process without chroot (Internal use only)
-        def installSymlink(target : String, path : String)
-            moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
+        def installSymlink(target : String, path : String) : String
+            #moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
+            return <<-REQUEST
+            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} #{target} #{path}
+            REQUEST
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -2247,6 +2256,25 @@ module ISM
                                     exception: exception)
         end
 
+        #Special function to improve installation process performance (Internal use only)
+        def performInstallationRequest(request : String)
+            path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::InstallationList}"
+
+            if File.exists?(path)
+                deleteFileNoChroot(path: path, asRoot: true)
+            end
+
+            data = request.join("\n")
+            File.write(path, data)
+
+            ISM::Core.runSystemCommand( command: "/usr/bin/chmod +x #{path}",
+                                        asRoot: systemHandleUserAccess)
+
+            ISM::Core.runSystemCommand( command: path,
+                                        quiet: true,
+                                        asRoot: systemHandleUserAccess)
+        end
+
         #Manage stripping, recording installed files and favourites, libtool archive removal, and mount/remount critical point with read-only/read-write access
         def install(preserveLibtoolArchives = false, stripFiles = true)
             ISM::Core::Notification.install(@information)
@@ -2267,6 +2295,8 @@ module ISM
 
             ISM::Core::Notification.applyingSecurityMap
 
+            requests = String.new
+
             fileList.each do |entry|
 
                 #Don't keep libtool archives by default except if explicitely specified
@@ -2284,29 +2314,31 @@ module ISM
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            installDirectory(   path:   finalDestination,
-                                                user:   securityDescriptor.user,
-                                                group:  securityDescriptor.group,
-                                                mode:   securityDescriptor.mode)
+                            requests = installDirectory(path:   finalDestination,
+                                                        user:   securityDescriptor.user,
+                                                        group:  securityDescriptor.group,
+                                                        mode:   securityDescriptor.mode)
                         end
                     else
                         #TO DO: Pre check if files are the same
                         if !File.exists?(finalDestination)
                             if File.symlink?(entry)
-                                installSymlink( target: entry,
-                                                path:   finalDestination)
+                                requests = installSymlink(  target: entry,
+                                                            path:   finalDestination)
                             else
-                                installFile(target: entry,
-                                            path:   finalDestination,
-                                            user:   securityDescriptor.user,
-                                            group:  securityDescriptor.group,
-                                            mode:   securityDescriptor.mode)
+                                requests = installFile( target: entry,
+                                                        path:   finalDestination,
+                                                        user:   securityDescriptor.user,
+                                                        group:  securityDescriptor.group,
+                                                        mode:   securityDescriptor.mode)
                             end
                         end
                     end
 
                 end
             end
+
+            performInstallationRequest(requests: requests)
 
             #Strip the file if needed
             if stripFiles
