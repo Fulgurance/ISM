@@ -70,11 +70,8 @@ module ISM
                                     error:      (quiet ? Process::Redirect::Close : error),
                                     shell:      true)
 
-            systemUserId = ISM::Default::Core::SystemUserId
-            systemUserName = ISM::Default::Core::SystemUserName
-
-            noChrootCommand = (asRoot ? "sudo" : "sudo -u #{systemUserName} -g #{systemUserName}")
-            viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{systemUserId}:#{systemUserId}"} #{commandLineSettings.rootPath}"
+            noChrootCommand = (asRoot ? "sudo" : "")
+            viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{Default::Core::SystemUserId}:#{Default::Core::SystemUserId}"} #{commandLineSettings.rootPath}"
 
             mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
 
