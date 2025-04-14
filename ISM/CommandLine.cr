@@ -1249,7 +1249,7 @@ module ISM
                         ISM::Core::Notification.endSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
 
                         if index < limit-1
-                            ISM::Core::Notification.showSeparator
+                            ISM::Core::Notification.separator
                         end
 
                     end
@@ -1435,7 +1435,7 @@ module ISM
                         ISM::Core::Notification.endSoftwareUninstallingMessage(index, limit, port, name, version)
 
                         if index < limit-1
-                            ISM::Core::Notification.showSeparator
+                            ISM::Core::Notification.separator
                         end
 
                     end
