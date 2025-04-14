@@ -56,32 +56,84 @@ module ISM
                                         exception: exception)
             end
 
-            def self.setSystemAccess(locked : Bool)
+            def self.setLibSystemAccess(locked : Bool)
                 mode = (locked ? "+" : "-")
+                target = "usr/lib64"
 
-                rootPath = (ISM::CommandLineSettings.loadConfiguration.installByChroot || !ISM::CommandLineSettings.loadConfiguration.installByChroot && (ISM::CommandLineSettings.loadConfiguration.rootPath != "/") ? ISM::CommandLineSettings.loadConfiguration.rootPath : "/")
+                command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
 
-                binary = "/usr/bin/chattr"
-
-                setLib = "#{binary} -R -f #{mode}i #{rootPath}usr/lib64"
-                setBin = "#{binary} -R -f #{mode}i  #{rootPath}usr/bin"
-                setSbin = "#{binary} -R -f #{mode}i  #{rootPath}usr/sbin"
-                setLibexec = "#{binary} -R -f #{mode}i  #{rootPath}usr/libexec"
-
-                requestedCommands = <<-CMD
-                                    #{setLib} && #{setBin} && #{setSbin} && #{setLibexec}
-                                    CMD
-
-                process = ISM::Core.runSystemCommand(   command: requestedCommands,
+                process = ISM::Core.runSystemCommand(   command: command,
                                                         asRoot: true,
                                                         viaChroot: false)
 
                 if !process.success? && process.exit_code != 1
                     ISM::Core::Error.show(  className: "CoreSecurity",
-                                            functionName: "setSystemAccess",
-                                            errorTitle: "Failed to set the system access",
+                                            functionName: "setLibSystemAccess",
+                                            errorTitle: "Failed to set the system access for /#{target}",
                                             error: "An error occured while trying to modify the system access")
                 end
+            end
+
+            def self.setBinSystemAccess(locked : Bool)
+                mode = (locked ? "+" : "-")
+                target = "usr/bin"
+
+                command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+
+                process = ISM::Core.runSystemCommand(   command: command,
+                                                        asRoot: true,
+                                                        viaChroot: false)
+
+                if !process.success? && process.exit_code != 1
+                    ISM::Core::Error.show(  className: "CoreSecurity",
+                                            functionName: "setBinSystemAccess",
+                                            errorTitle: "Failed to set the system access for /#{target}",
+                                            error: "An error occured while trying to modify the system access")
+                end
+            end
+
+            def self.setSbinSystemAccess(locked : Bool)
+                mode = (locked ? "+" : "-")
+                target = "usr/sbin"
+
+                command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+
+                process = ISM::Core.runSystemCommand(   command: command,
+                                                        asRoot: true,
+                                                        viaChroot: false)
+
+                if !process.success? && process.exit_code != 1
+                    ISM::Core::Error.show(  className: "CoreSecurity",
+                                            functionName: "setSbinSystemAccess",
+                                            errorTitle: "Failed to set the system access for /#{target}",
+                                            error: "An error occured while trying to modify the system access")
+                end
+            end
+
+            def self.setLibexecSystemAccess(locked : Bool)
+                mode = (locked ? "+" : "-")
+                target = "usr/libexec"
+
+                command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+
+                process = ISM::Core.runSystemCommand(   command: command,
+                                                        asRoot: true,
+                                                        viaChroot: false)
+
+                if !process.success? && process.exit_code != 1
+                    ISM::Core::Error.show(  className: "CoreSecurity",
+                                            functionName: "setLibexecSystemAccess",
+                                            errorTitle: "Failed to set the system access for /#{target}",
+                                            error: "An error occured while trying to modify the system access")
+                end
+            end
+
+            def self.setSystemAccess(locked : Bool)
+
+                setLibSystemAccess(locked)
+                setBinSystemAccess(locked)
+                setSbinSystemAccess(locked)
+                setLibexecSystemAccess(locked)
 
                 rescue exception
                 ISM::Core::Error.show(  className: "Core::Security",
