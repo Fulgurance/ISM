@@ -2345,7 +2345,7 @@ module ISM
         end
 
         def kernelSourcesPath : String
-            return Ism.kernelSourcesPath
+            return ISM::Core.kernelSourcesPath
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
