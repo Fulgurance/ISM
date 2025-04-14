@@ -105,7 +105,6 @@ module ISM
                                         exception: exception)
         end
 
-        #TO DO: SHELL DELETION ?
         def self.runSystemCommand(command : String, path = commandLineSettings.installByChroot ? "/" : commandLineSettings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false, viaChroot = true, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
             superuser = (asRoot && commandLineSystemInformation.handleUserAccess)
 
