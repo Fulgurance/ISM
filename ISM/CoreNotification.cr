@@ -334,7 +334,7 @@ module ISM
             end
 
             def self.download(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.downloadAdditions
@@ -342,7 +342,7 @@ module ISM
             end
 
             def self.check(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::CheckText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::CheckText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.checkAdditions
@@ -350,7 +350,7 @@ module ISM
             end
 
             def self.extract(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::ExtractText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::ExtractText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.extractAdditions
@@ -358,7 +358,7 @@ module ISM
             end
 
             def self.patch(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::PatchText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::PatchText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.localPatch(patchName : String)
@@ -366,23 +366,23 @@ module ISM
             end
 
             def self.prepare(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::PrepareText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::PrepareText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.configure(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.build(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::BuildText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::BuildText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.prepareInstallation(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.install(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::InstallText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::InstallText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.unlockingSystemAccess
@@ -406,21 +406,21 @@ module ISM
             end
 
             def self.updateKernelOptionsDatabase(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.recordNeededKernelOptions
                 kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
 
-                printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
             end
 
             def self.clean(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::CleanText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::CleanText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.uninstall(softwareInformation : ISM::SoftwareInformation)
-                printProcessNotification(ISM::Default::CommandLine::UninstallText+"#{softwareInformation.name.colorize(:green)}")
+                ISM::Core::Notification.processNotification(ISM::Default::CommandLine::UninstallText+"#{softwareInformation.name.colorize(:green)}")
             end
 
             def self.downloadError(link : String, error = nil)
