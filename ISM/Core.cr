@@ -163,6 +163,8 @@ module ISM
             end
         end
 
+        ##################################
+
         def self.commandLineSettings
             return ISM::CommandLineSettings.loadConfiguration
         end
@@ -173,6 +175,36 @@ module ISM
 
         def self.targetedRootPath : String
             return (commandLineSettings.installByChroot || !commandLineSettings.installByChroot && (commandLineSettings.rootPath != "/") ? commandLineSettings.rootPath : "/")
+        end
+
+        ##################################
+
+        def self.selectedKernel : ISM::SoftwareInformation
+            file = "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}"
+
+            if File.exists?(file)
+                return ISM::SoftwareInformation.loadConfiguration(file)
+            else
+                return ISM::SoftwareInformation.new
+            end
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Core",
+                                    functionName: "selectedKernel",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
+        def self.kernelIsSelected
+            return selectedKernel.isValid
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Core",
+                                    functionName: "kernelIsSelected",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
     end

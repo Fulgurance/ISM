@@ -364,34 +364,6 @@ module ISM
                                     exception: exception)
         end
 
-        def selectedKernel : ISM::SoftwareInformation
-            file = "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}"
-
-            if File.exists?(file)
-                return ISM::SoftwareInformation.loadConfiguration(file)
-            else
-                return ISM::SoftwareInformation.new
-            end
-
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLine",
-                                    functionName: "selectedKernel",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        def kernelIsSelected
-            return selectedKernel.isValid
-
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLine",
-                                    functionName: "kernelIsSelected",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
         def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
             if filter.is_a?(Array(Regex))
                 userInput = input.split(" ")
