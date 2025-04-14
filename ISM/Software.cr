@@ -70,7 +70,7 @@ module ISM
 
         #Alias
         def selectedKernel
-            return ISM::Core.selectedKernel.selectedKernel
+            return ISM::Core.selectedKernel
         end
 
         #Alias
