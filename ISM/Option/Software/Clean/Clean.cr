@@ -11,15 +11,15 @@ module ISM
             end
 
             def start
-                Ism.showCalculationTitleMessage
+                ISM::Core::Notification.calculationTitleMessage
 
                 unneededSoftwares = Ism.getUnneededSoftwares
 
-                Ism.showCalculationDoneMessage
+                ISM::Core::Notification.calculationDoneMessage
 
                 if unneededSoftwares.size > 0
-                    Ism.showSoftwares(unneededSoftwares, :uninstallation)
-                    Ism.showUninstallationQuestion(unneededSoftwares.size)
+                    ISM::Core::Notification.softwares(unneededSoftwares, :uninstallation)
+                    ISM::Core::Notification.uninstallationQuestion(unneededSoftwares.size)
 
                     userAgreement = Ism.getUserAgreement
 
@@ -27,7 +27,7 @@ module ISM
                         Ism.startUninstallationProcess(unneededSoftwares)
                     end
                 else
-                    Ism.showNoCleaningRequiredMessage
+                    ISM::Core::Notification.noCleaningRequiredMessage
                 end
             end
 

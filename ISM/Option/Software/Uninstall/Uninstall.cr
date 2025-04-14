@@ -36,7 +36,7 @@ module ISM
                             end
                         end
 
-                        Ism.showNoMatchFoundMessage(wrongArguments)
+                        ISM::Core::Notification.noMatchFoundMessage(wrongArguments)
 
                         ISM::Core.exitProgram
                     end
@@ -51,7 +51,7 @@ module ISM
                             end
                         end
 
-                        Ism.showNoVersionAvailableMessage(wrongArguments)
+                        ISM::Core::Notification.noVersionAvailableMessage(wrongArguments)
 
                         ISM::Core.exitProgram
                     end
@@ -66,18 +66,18 @@ module ISM
                             end
                         end
 
-                        Ism.showSoftwareNotInstalledMessage(wrongArguments)
+                        ISM::Core::Notification.softwareNotInstalledMessage(wrongArguments)
 
                         ISM::Core.exitProgram
                     end
 
-                    Ism.showCalculationTitleMessage
+                    ISM::Core::Notification.calculationTitleMessage
 
                     unneededSoftwares = Ism.getUnneededSoftwares
 
-                    Ism.showCalculationDoneMessage
-                    Ism.showSoftwares(unneededSoftwares, :uninstallation)
-                    Ism.showUninstallationQuestion(unneededSoftwares.size)
+                    ISM::Core::Notification.calculationDoneMessage
+                    ISM::Core::Notification.softwares(unneededSoftwares, :uninstallation)
+                    ISM::Core::Notification.uninstallationQuestion(unneededSoftwares.size)
 
                     userAgreement = Ism.getUserAgreement
 

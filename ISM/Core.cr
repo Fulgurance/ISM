@@ -40,7 +40,7 @@ module ISM
         end
 
         def self.taskFileDirectory : String
-            return "#{targetedRootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}"
+            return "#{targetedRootPath}#{ISM::Default::Path::TemporaryDirectory}"
         end
 
         def self.taskFilePath : String

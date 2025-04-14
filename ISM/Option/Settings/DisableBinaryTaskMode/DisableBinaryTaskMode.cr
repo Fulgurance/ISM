@@ -13,7 +13,7 @@ module ISM
             def start
                 if ARGV.size == 2
                     Ism.settings.setBinaryTaskMode(false)
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsDisableBinaryTaskMode::SetText)
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsDisableBinaryTaskMode::SetText)
                 end
             end
 

@@ -15,7 +15,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemCodeName(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemCodeName::SetText+ARGV[2])
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetSystemCodeName::SetText+ARGV[2])
                 end
             end
 

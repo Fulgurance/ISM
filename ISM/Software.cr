@@ -981,7 +981,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( "command: /usr/bin/cp -R #{path} #{targetPath}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/cp -R #{path} #{targetPath}",
                                         viaChroot: false,
                                         asRoot: asRoot)
 
@@ -1037,7 +1037,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( "command: /usr/bin/rm -R #{path}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/rm -R #{path}",
                                         viaChroot: false,
                                         asRoot: asRoot)
 

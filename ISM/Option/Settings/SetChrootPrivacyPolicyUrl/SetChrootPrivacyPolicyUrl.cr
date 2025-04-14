@@ -15,7 +15,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootPrivacyPolicyUrl(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootPrivacyPolicyUrl::SetText+ARGV[2])
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetChrootPrivacyPolicyUrl::SetText+ARGV[2])
                 end
             end
 

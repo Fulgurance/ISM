@@ -15,7 +15,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootVariantId(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootVariantId::SetText+ARGV[2])
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetChrootVariantId::SetText+ARGV[2])
                 end
             end
 

@@ -21,7 +21,7 @@ module ISM
                     end
 
                     Ism.settings.setRootPath(path)
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetRootPath::SetText+path)
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetRootPath::SetText+path)
                 end
             end
 

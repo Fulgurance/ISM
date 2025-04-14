@@ -194,7 +194,7 @@ module ISM
                             puts    ISM::Default::Option::SoftwareSearch::LocalPatchesField + localPatchesText
 
                             if index < matchingSoftwaresArray.size-1
-                                Ism.showSeparator
+                                ISM::Core::Notification.separator
                             end
                         end
 

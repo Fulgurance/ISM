@@ -30,12 +30,12 @@ module ISM
                             if matchingSoftware.selectUniqueDependency(dependency.fullName)
                                 matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
 
-                                Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
+                                ISM::Core::Notification.processNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
                                                                 dependencyText +
                                                                 ISM::Default::Option::SoftwareSelectDependency::SetText2 +
                                                                 matchingSoftwareText)
                             else
-                                Ism.printErrorNotification( ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
+                                ISM::Core::Notification.errorNotification( ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
                                                             dependencyText +
                                                             ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound2 +
                                                             matchingSoftwareText,nil)

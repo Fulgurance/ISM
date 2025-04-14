@@ -15,7 +15,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemBuildId(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemBuildId::SetText+ARGV[2])
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetSystemBuildId::SetText+ARGV[2])
                 end
             end
 

@@ -13,7 +13,7 @@ module ISM
             def start
                 if ARGV.size == 2
                     Ism.settings.setInstallByChroot(false)
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsDisableInstallByChroot::SetText)
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsDisableInstallByChroot::SetText)
                 end
             end
 

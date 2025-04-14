@@ -430,8 +430,8 @@ module ISM
 
             end
         else
-            Ism.showCalculationDoneMessage
-            Ism.showMissingSelectedDependenciesMessage(fullName, @version, missingSelectedDependencies)
+            ISM::Core::Notification.calculationDoneMessage
+            ISM::Core::Notification.missingSelectedDependenciesMessage(fullName, @version, missingSelectedDependencies)
 
             ISM::Core.exitProgram
         end

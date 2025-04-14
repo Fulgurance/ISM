@@ -213,7 +213,7 @@ module ISM
                                     shell: true,
                                     chdir: directoryPath)
             else
-                Ism.printErrorNotification(ISM::Default::Port::SynchronizeTextError1+"#{@name.colorize(:red)}"+ISM::Default::Port::SynchronizeTextError2+"#{@url.colorize(:red)}"+ISM::Default::Port::SynchronizeTextError3,nil)
+                ISM::Core::Notification.errorNotification(ISM::Default::Port::SynchronizeTextError1+"#{@name.colorize(:red)}"+ISM::Default::Port::SynchronizeTextError2+"#{@url.colorize(:red)}"+ISM::Default::Port::SynchronizeTextError3,nil)
 
                 self.class.delete(@name)
 

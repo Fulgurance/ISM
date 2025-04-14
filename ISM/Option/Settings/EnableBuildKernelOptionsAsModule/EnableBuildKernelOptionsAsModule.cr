@@ -13,7 +13,7 @@ module ISM
             def start
                 if ARGV.size == 2
                     Ism.settings.setBuildKernelOptionsAsModule(true)
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsEnableBuildKernelOptionsAsModule::SetText)
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsEnableBuildKernelOptionsAsModule::SetText)
                 end
             end
 

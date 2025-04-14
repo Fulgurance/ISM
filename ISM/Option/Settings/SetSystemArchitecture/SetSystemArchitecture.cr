@@ -15,7 +15,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemArchitecture(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemArchitecture::SetText+ARGV[2])
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetSystemArchitecture::SetText+ARGV[2])
                 end
             end
 

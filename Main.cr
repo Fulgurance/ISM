@@ -8,10 +8,10 @@ begin
 
     if ISM::Core::Security.ranAsSuperUser
         tryEscalating = true
-        Ism.printNeedToBeRunAsNormalUserNotification
+        ISM::Core::Notification.needToBeRunAsNormalUserNotification
     elsif !ISM::Core::Security.ranAsMemberOfGroupIsm
         tryEscalating = true
-        Ism.printNeedToBeRunAsMemberOfIsmGroupNotification
+        ISM::Core::Notification.needToBeRunAsMemberOfIsmGroupNotification
     end
 
     if tryEscalating

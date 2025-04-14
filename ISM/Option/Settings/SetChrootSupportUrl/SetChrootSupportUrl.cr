@@ -15,7 +15,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootSupportUrl(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootSupportUrl::SetText+ARGV[2])
+                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetChrootSupportUrl::SetText+ARGV[2])
                 end
             end
 

@@ -737,7 +737,7 @@ module ISM
                 #TO DO
                 #There are more than one match, the user need to specify a port (Ambiguous)
                 if matches.size > 1
-                    showAmbiguousSearchMessage(matches)
+                    ISM::Core::Notification.ambiguousSearchMessage(matches)
                     ISM::Core.exitProgram
                 end
 
@@ -805,7 +805,7 @@ module ISM
             end
 
             if !matchingOption
-                showErrorUnknowArgument
+                ISM::Core::Notification.errorUnknowArgument
             end
 
             rescue exception
@@ -815,539 +815,6 @@ module ISM
                                     error: "Failed to execute the function",
                                     exception: exception)
         end
-
-        ###################### RELATED TO NOTIFICATIONS: WILL BE MOVED AWAY #######################
-        def printFailedToEnsureSecurityNotification
-            puts "#{ISM::Default::CommandLine::FailedToEnsureSecurity.colorize(:red)}"
-        end
-
-        def printNeedSuidBitNotification
-            puts "#{ISM::Default::CommandLine::NeedSuidBitText.colorize(:yellow)}"
-        end
-
-        def printNeedToBeRunAsNormalUserNotification
-            puts "#{ISM::Default::CommandLine::NeedToBeRunAsNormalUserText.colorize(:yellow)}"
-        end
-
-        def printNeedToBeRunAsMemberOfIsmGroupNotification
-            puts "#{ISM::Default::CommandLine::NeedToBeRunAsMemberOfIsmGroupText.colorize(:yellow)}"
-        end
-
-        def showErrorUnknowArgument
-            puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-            puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
-        end
-
-        def printProcessNotification(message : String)
-            puts "#{ISM::Default::CommandLine::ProcessNotificationCharacters.colorize(:green)} #{message}"
-        end
-
-        def printSubProcessNotification(message : String)
-            puts "\t#{ISM::Default::CommandLine::SubProcessNotificationCharacters.colorize(:green)} #{message}"
-        end
-
-        def printErrorNotification(message : String, error)
-            puts
-            puts "[#{"!".colorize(:red)}] #{message.colorize(Colorize::ColorRGB.new(255,100,100))}"
-
-            if typeof(error) == Exception
-                puts "[#{"!".colorize(:red)}] "
-                puts "#{error.colorize(Colorize::ColorRGB.new(255,100,100))}"
-            end
-        end
-
-        def printInternalErrorNotification(error : ISM::TaskBuildingProcessError)
-            limit = ISM::Default::CommandLine::InternalErrorTitle.size
-
-            separatorText = String.new
-
-            (0..limit).each do |index|
-                separatorText += "="
-            end
-
-            title = "#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
-            separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{ISM::Default::CommandLine::TaskBuildingProcessErrorText1}#{error.file}#{ISM::Default::CommandLine::TaskBuildingProcessErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
-            help = "\n#{ISM::Default::CommandLine::TaskBuildingErrorNotificationHelp.colorize(:red)}"
-
-            puts
-            puts separatorText
-            puts title
-            puts separatorText
-            puts errorText
-            puts help
-        end
-
-        def printInstallerImplementationErrorNotification(software : ISM::SoftwareInformation, error : ISM::TaskBuildingProcessError)
-            limit = ISM::Default::CommandLine::InstallerImplementationErrorTitle.size
-            errorText1 = "#{ISM::Default::CommandLine::InstallerImplementationErrorText1.colorize(Colorize::ColorRGB.new(255,100,100))}"
-            softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
-            errorText2 = "#{ISM::Default::CommandLine::InstallerImplementationErrorText2}#{error.line.to_s}:".colorize(Colorize::ColorRGB.new(255,100,100))
-            separatorText = String.new
-
-            (0..limit).each do |index|
-                separatorText += "="
-            end
-
-            title = "#{ISM::Default::CommandLine::InstallerImplementationErrorTitle.colorize(:red)}"
-            separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{errorText1}#{softwareText}#{errorText2}\n\n#{error.message.colorize(:yellow)}"
-            help = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
-
-            puts
-            puts separatorText
-            puts title
-            puts separatorText
-            puts errorText
-            puts help
-        end
-
-        def notifyOfGetFileContentError(filePath : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
-        end
-
-        def printInformationNotificationTitle(name : String, version : String)
-            limit = name.size+version.size+2
-            text = "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
-
-            separatorText = String.new
-
-            (0..limit).each do |index|
-                separatorText += "-"
-            end
-
-            separatorText = "#{separatorText.colorize(:green)}"
-
-            puts
-            puts separatorText
-            puts text
-            puts separatorText
-        end
-
-        def printInformationNotification(message : String)
-            puts "[#{"Info".colorize(:green)}] #{message}"
-        end
-
-        def printInformationCodeNotification(message : String)
-            puts "#{message.colorize(:magenta).back(Colorize::ColorRGB.new(80, 80, 80))}"
-        end
-
-        def printSecurityNotification(command : String ,reason : String, details : String)
-            puts
-            puts "#{ISM::Default::CommandLine::SecurityNotificationTitleText.colorize(:red)}"
-            puts "#{ISM::Default::CommandLine::SecurityNotificationCommandText} #{command.colorize(:magenta)}"
-            puts "#{ISM::Default::CommandLine::SecurityNotificationReasonText} #{reason.colorize(:yellow)}"
-            puts "#{ISM::Default::CommandLine::SecurityNotificationDetailsText} #{details.colorize(:green)}"
-            puts
-        end
-
-        def printChrootSecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::ChrootSecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::ChrootSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::ChrootSecurityNotificationDetailsText)
-        end
-
-        def printPrepareChrootDevConsoleSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::PrepareChrootDevConsoleSecurityNotificationDetailsText)
-        end
-
-        def printPrepareChrootDevNullSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::PrepareChrootDevNullSecurityNotificationDetailsText)
-        end
-
-        def printPrepareChrootDevSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::PrepareChrootDevSecurityNotificationDetailsText)
-        end
-
-        def printPrepareChrootDevPtsSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::PrepareChrootDevPtsSecurityNotificationDetailsText)
-        end
-
-        def printPrepareChrootProcSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::PrepareChrootProcSecurityNotificationDetailsText)
-        end
-
-        def printPrepareChrootSysSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::PrepareChrootSysSecurityNotificationDetailsText)
-        end
-
-        def printPrepareChrootNetworkConfigurationSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::PrepareChrootNetworkConfigurationSecurityNotificationDetailsText)
-        end
-
-        def printPrepareRootPermissionsSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::PrepareRootPermissionsSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::PrepareRootPermissionsSecurityNotificationDetailsText)
-        end
-
-        def printStripInstalledFilesSecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::StripInstalledFilesSecurityNotificationDetailsText)
-        end
-
-        def printInstallFileSecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallFileSecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::InstallFileSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::InstallFileSecurityNotificationDetailsText)
-        end
-
-        def printInstallSymlinkSecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallSymlinkSecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::InstallSymlinkSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::InstallSymlinkSecurityNotificationDetailsText)
-        end
-
-        def printInstallDirectorySecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::InstallDirectorySecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::InstallDirectorySecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::InstallDirectorySecurityNotificationDetailsText)
-        end
-
-        def printUninstallFileSecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::UninstallFileSecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::UninstallFileSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::UninstallFileSecurityNotificationDetailsText)
-        end
-
-        def printUninstallDirectorySecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::UninstallDirectorySecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::UninstallDirectorySecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::UninstallDirectorySecurityNotificationDetailsText)
-        end
-
-        def printGenerateEmptyPasswdFileSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::GenerateEmptyPasswdFileSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::GenerateEmptyPasswdFileSecurityNotificationDetailsText)
-        end
-
-        def printRunLocaledefCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunLocaledefCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunLocaledefCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunDircolorsCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunDircolorsCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunDircolorsCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunLdconfigCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunLdconfigCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunLdconfigCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunPwconvCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunPwconvCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunPwconvCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunGrpconvCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunGrpconvCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunGrpconvCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunUdevadmCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunUdevadmCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunUdevadmCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunZicCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunZicCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunZicCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunInstallCatalogCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunInstallCatalogCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunInstallCatalogCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunXmlCatalogCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunXmlCatalogCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunXmlCatalogCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunInstallInfoCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunInstallInfoCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunInstallInfoCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunMakeCaCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunMakeCaCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunMakeCaCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunGtkQueryImmodules2CommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunGtkQueryImmodules2CommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunGtkQueryImmodules2CommandSecurityNotificationDetailsText)
-        end
-
-        def printRunGtkQueryImmodules3CommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunGtkQueryImmodules3CommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunGtkQueryImmodules3CommandSecurityNotificationDetailsText)
-        end
-
-        def printRunGlibCompileSchemasCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunGlibCompileSchemasCommandSecurityNotificationDetailsText)
-        end
-
-        def printRunAlsactlCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioReasonText,
-                                        details:    ISM::Default::CommandLine::RunAlsactlCommandSecurityNotificatioDetailsText)
-        end
-
-        def printRunDbusUuidgenCommandSecurityNotification(command : String)
-            printSecurityNotification(  command:    command,
-                                        reason:     ISM::Default::CommandLine::RunDbusUuidgenCommandSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::RunDbusUuidgenCommandSecurityNotificationDetailsText)
-        end
-
-        def printLockSystemAccessSecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::LockSystemAccessSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::LockSystemAccessSecurityNotificationDetailsText)
-        end
-
-        def printUnlockSystemAccessSecurityNotification
-            printSecurityNotification(  command:    ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationCommandText,
-                                        reason:     ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationReasonText,
-                                        details:    ISM::Default::CommandLine::UnlockSystemAccessSecurityNotificationDetailsText)
-        end
-
-        def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfDownloadAdditions
-            printSubProcessNotification("#{ISM::Default::CommandLine::DownloadAdditionsText.colorize(:green)}")
-        end
-
-        def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::CheckText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfCheckAdditions
-            printSubProcessNotification("#{ISM::Default::CommandLine::CheckAdditionsText.colorize(:green)}")
-        end
-
-        def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::ExtractText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfExtractAdditions
-            printSubProcessNotification("#{ISM::Default::CommandLine::ExtractAdditionsText.colorize(:green)}")
-        end
-
-        def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PatchText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfLocalPatch(patchName : String)
-            printSubProcessNotification(ISM::Default::CommandLine::LocalPatchText+"#{patchName.colorize(:yellow)}")
-        end
-
-        def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PrepareText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfBuild(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::BuildText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfPrepareInstallation(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::InstallText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfUnlockingSystemAccess
-            printSubProcessNotification(ISM::Default::CommandLine::UnlockingSystemAccessText)
-        end
-
-        def notifyOfApplyingSecurityMap
-            printSubProcessNotification(ISM::Default::CommandLine::ApplyingSecurityMapText)
-        end
-
-        def notifyOfStrippingFiles
-            printSubProcessNotification(ISM::Default::CommandLine::StrippingFilesText)
-        end
-
-        def notifyOfDeploy
-            printSubProcessNotification(ISM::Default::CommandLine::DeployText)
-        end
-
-        def notifyOfLockingSystemAccess
-            printSubProcessNotification(ISM::Default::CommandLine::LockingSystemAccessText)
-        end
-
-        def notifyOfUpdateKernelOptionsDatabase(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfRecordNeededKernelOptions
-            kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
-
-            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
-        end
-
-        def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::CleanText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::UninstallText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfDownloadError(link : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link, error)
-        end
-
-        def notifyOfConnexionError(link : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorConnexionText1 +
-                                    link +
-                                    ISM::Default::CommandLine::ErrorConnexionText2,
-                                    error)
-        end
-
-        def notifyOfCheckError(archive : String, sha512 : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorCheckText1 +
-                                    archive +
-                                    ISM::Default::CommandLine::ErrorCheckText2 +
-                                    sha512, error)
-        end
-
-        def notifyOfExtractError(archivePath : String, destinationPath : String ,error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorExtractText1 +
-                                    archivePath +
-                                    ISM::Default::CommandLine::ErrorExtractText2 +
-                                    destinationPath,
-                                    error)
-        end
-
-        def notifyOfApplyPatchError(patchName : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName, error)
-        end
-
-        def notifyOfCopyFileError(path : String | Enumerable(String), targetPath : String, error = nil)
-            if path.is_a?(Enumerable(String))
-                path = path.join(",")
-            end
-            printErrorNotification(ISM::Default::CommandLine::ErrorCopyFileText1 +
-                                   path +
-                                   ISM::Default::CommandLine::ErrorCopyFileText2 +
-                                   targetPath, error)
-        end
-
-        def notifyOfCopyDirectoryError(path : String, targetPath : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorCopyDirectoryText1 +
-                                   path +
-                                   ISM::Default::CommandLine::ErrorCopyDirectoryText2 +
-                                   targetPath, error)
-        end
-
-        def notifyOfDeleteFileError(path : String | Enumerable(String), error = nil)
-            if path.is_a?(Enumerable(String))
-                path = path.join(",")
-            end
-
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, error)
-        end
-
-        def notifyOfMoveFileError(path : String | Enumerable(String), newPath : String, error = nil)
-            if path.is_a?(Enumerable(String))
-                path = path.join(",")
-            end
-
-            printErrorNotification( ISM::Default::CommandLine::ErrorMoveFileText1 +
-                                    path +
-                                    ISM::Default::CommandLine::ErrorMoveFileText2 +
-                                    newPath, error)
-        end
-
-        def notifyOfMakeDirectoryError(directory : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorMakeDirectoryText+directory, error)
-        end
-
-        def notifyOfDeleteDirectoryError(directory : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory, error)
-        end
-
-        def notifyOfMakeLinkUnknowTypeError(path : String, targetPath : String, linkType : Symbol, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText1 +
-                                    path +
-                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText2 +
-                                    targetPath +
-                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText3 +
-                                    linkType.to_s, error)
-        end
-
-        def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
-
-            argumentText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText1}#{arguments.squeeze(" ")}"
-            pathText = String.new
-            environmentText = String.new
-            environmentFilePathText = String.new
-
-            if !path.empty?
-                pathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText2}#{(Ism.settings.installByChroot ? Ism.settings.rootPath : "")}#{path}".squeeze("/")
-            end
-
-            if !environment.empty?
-                environmentText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText3}#{(environment.map { |key| key.join("=") }).join(" ")}"
-            end
-
-            if !environmentFilePath.empty?
-                environmentFilePathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText4}#{environmentFilePath}"
-            end
-
-            printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
-                                        error)
-        end
-
-        def notifyOfUpdateKernelOptionsDatabaseError(software : ISM::SoftwareInformation, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorUpdateKernelOptionsDatabaseText+software.versionName, error)
-        end
-
-        ################################## END OF NOTIFICATIONS ################################
 
         def resetCalculationAnimation
             @calculationStartingTime = Time.monotonic
@@ -1509,330 +976,6 @@ module ISM
                                     exception: exception)
         end
 
-        ############################### NOTIFICATIONS: MEAN TO BE MOVED AWAY ####################################
-        #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
-        def showTaskBuildingProcessErrorMessage(taskError : ISM::TaskBuildingProcessError, taskPath : String)
-            targetMarkPointFilter = /^#TARGET[0-9]+#\//
-            endTargetSectionMarkPoint = "#END TARGET SECTION"
-
-            taskCodeLines = File.read_lines(taskPath)
-
-            targetStartingLine = 0
-            realLineNumber = 0
-            targetPath = String.new
-            software = ISM::SoftwareInformation.new
-
-            codeLines = taskCodeLines[0..taskError.line-1]
-
-            #Instead to start from zero, start from passed index to gain performance
-            codeLines.reverse_each.with_index do |line, index|
-
-                if line == endTargetSectionMarkPoint
-                    break
-                end
-
-                if targetMarkPointFilter.matches?(line)
-                    targetStartingLine = codeLines.size-index
-                    realLineNumber = taskError.line-targetStartingLine
-                    targetPath = line[line.index("/")..-1]
-
-                    software = ISM::SoftwareInformation.loadConfiguration(targetPath)
-                    break
-                end
-
-            end
-
-            #Not related to target installer implementation
-            if targetStartingLine == 0
-                printInternalErrorNotification(taskError)
-            else
-            #Related to target installer implementation
-                printInstallerImplementationErrorNotification(  software,
-                                                                ISM::TaskBuildingProcessError.new(  file:       targetPath,
-                                                                                                    line:       realLineNumber,
-                                                                                                    column:     taskError.column,
-                                                                                                    size:       taskError.size,
-                                                                                                    message:    taskError.message))
-            end
-        end
-
-        def showNoMatchFoundMessage(wrongArguments : Array(String))
-            puts "#{ISM::Default::CommandLine::NoMatchFound}#{wrongArguments.join(", ").colorize(:green)}"
-            puts ISM::Default::CommandLine::NoMatchFoundAdvice
-            puts
-            puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
-        end
-
-        def showSoftwareNotInstalledMessage(wrongArguments : Array(String))
-            puts  "#{ISM::Default::CommandLine::SoftwareNotInstalled}#{wrongArguments.join(", ").colorize(:green)}"
-            puts
-            puts "#{ISM::Default::CommandLine::NotInstalledText.colorize(:green)}"
-        end
-
-        def showNoVersionAvailableMessage(wrongArguments : Array(String))
-            puts "#{ISM::Default::CommandLine::NoVersionAvailable}#{wrongArguments.join(", ").colorize(:green)}"
-            puts ISM::Default::CommandLine::NoVersionAvailableAdvice
-            puts
-            puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
-        end
-
-
-        def showNoUpdateMessage
-            puts "#{ISM::Default::CommandLine::NoUpdate.colorize(:green)}"
-        end
-
-        def showNoCleaningRequiredMessage
-            puts "#{ISM::Default::CommandLine::NoCleaningRequiredMessage.colorize(:green)}"
-        end
-
-        def showSoftwareNeededMessage(wrongArguments : Array(String))
-            puts ISM::Default::CommandLine::SoftwareNeeded + "#{wrongArguments.join(", ").colorize(:green)}"
-            puts
-            puts "#{ISM::Default::CommandLine::NeededText.colorize(:green)}"
-        end
-
-        def showSkippedUpdatesMessage
-            puts "#{ISM::Default::CommandLine::SkippedUpdatesText.colorize(:yellow)}"
-            puts
-        end
-
-        def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareInformation, allowTitle = true)
-            puts
-
-            if allowTitle
-                puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
-                puts "\n"
-            end
-
-            dependencyText = "#{dependency.fullName.colorize(:magenta)}" + " /" + "#{dependency.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
-
-            optionsText = "{ "
-
-            if dependency.options.empty?
-                optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
-            end
-
-            dependency.options.each do |option|
-                if option.active
-                    optionsText += "#{option.name.colorize(:red)}"
-                else
-                    optionsText += "#{option.name.colorize(:blue)}"
-                end
-                optionsText += " "
-            end
-            optionsText += "}"
-
-            missingDependencyText = "#{ISM::Default::CommandLine::UnavailableText2.colorize(:red)}"
-
-            softwareText = "#{software.fullName.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/"
-
-            puts "\t" + dependencyText + optionsText + missingDependencyText + softwareText + "\n"
-
-            if allowTitle
-                puts "\n"
-            end
-        end
-
-        def showAmbiguousSearchMessage(matches : Array(String))
-            names = String.new
-
-            puts
-            puts "#{ISM::Default::CommandLine::AmbiguousSearchTitle.colorize(:yellow)}"
-            puts "\n"
-
-            matches.each_with_index do |name, index|
-                names += "#{name.colorize(:red)}#{index < matches.size-1 ? ", " : "."}"
-            end
-
-            puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
-        end
-
-        def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
-            dependencyChains = Array(Array(ISM::SoftwareInformation)).new
-
-            #For each codependent software we get first the full tree, and then generate the chain from it (excluding itself)
-            dependencies.each do |dependency|
-                dependencyTree = dependency.dependencies(allowDeepSearch: true).map { |entry| entry.information}
-
-                dependencyTree.each_with_index do |software, softwareIndex|
-                    if software != dependency
-                        dependencyChains.push(dependencyTree[0..softwareIndex])
-                    end
-                end
-            end
-
-            puts
-            puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
-            puts "\n"
-
-            #Now we print each chains with in highlight the first and last one
-            dependencyChains.each do |chain|
-
-                chain.each_with_index do |software, index|
-                    color = :magenta
-
-                    case index
-                    when 0
-                        color = :green
-                    when (chain.size - 1)
-                        color = :red
-                    end
-
-                    softwareText = "#{software.fullName.colorize(color)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
-                    optionsText = "{ "
-
-                    if software.options.empty?
-                        optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
-                    end
-
-                    software.options.each do |option|
-                        if option.active
-                            optionsText += "#{option.name.colorize(:red)}"
-                        else
-                            optionsText += "#{option.name.colorize(:blue)}"
-                        end
-                        optionsText += " "
-                    end
-                    optionsText += "}"
-
-                    puts "\t#{softwareText} #{optionsText}\n"
-                end
-
-                puts "\n"
-
-            end
-
-            puts "\n"
-        end
-
-        def showMissingSelectedDependenciesMessage(fullName : String, version : String, dependencySelection : Array(Array(String)))
-            puts "#{ISM::Default::CommandLine::MissingSelectedDependenciesText.colorize(:yellow)}"
-            puts "\n"
-
-            puts "#{fullName.colorize(:magenta)}" + " /" + "#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
-
-            dependencySelection.each do |selection|
-                dependencySet = selection.map { |entry| "#{(entry[0..entry.index(":")])[0..-2].colorize(:red)}:#{entry.gsub(entry[0..entry.index(":")],"").colorize(:green)}" }
-
-                puts "\t#{ISM::Default::CommandLine::MissingSelectionText.colorize(:magenta)} #{dependencySet.join(" | ")}"
-            end
-
-            puts "\n"
-        end
-
-        def showTaskCompilationTitleMessage
-            puts
-            print "#{ISM::Default::CommandLine::TaskCompilationText}"
-        end
-
-        def showTaskCompilationFailedMessage
-            cleanCalculationAnimation
-            print "#{ISM::Default::CommandLine::TaskCompilationFailedText.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
-        end
-
-        def showCalculationDoneMessage
-            cleanCalculationAnimation
-            print "#{ISM::Default::CommandLine::CalculationDoneText.colorize(:green)}\n"
-        end
-
-        def showCalculationTitleMessage
-            puts
-            print "#{ISM::Default::CommandLine::CalculationTitle}"
-        end
-
-        def showSoftwares(neededSoftwares : Array(ISM::SoftwareInformation), mode = :installation)
-            checkedSoftwares = Array(String).new
-
-            puts "\n"
-
-            neededSoftwares.each_with_index do |software, index|
-                softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
-                optionsText = "{ "
-
-                if software.options.empty?
-                    optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
-                end
-
-                software.options.each do |option|
-                    if option.active
-                        optionsText += "#{option.name.colorize(:red)}"
-                    else
-                        optionsText += "#{option.name.colorize(:blue)}"
-                    end
-                    optionsText += " "
-                end
-
-                optionsText += "}"
-
-                additionalText = ""
-
-                if mode == :installation
-                    additionalText += "(#{(software.type+":").colorize(:light_magenta)} "
-
-                    #Codependency case
-                    if checkedSoftwares.includes?(software.hiddenName)
-                        additionalText += "#{ISM::Default::CommandLine::RebuildDueOfCodependencyText.colorize(:yellow)}"
-                    else
-
-                        status = getSoftwareStatus(software)
-
-                        case status
-                        when :new
-                            additionalText += "#{ISM::Default::CommandLine::NewText.colorize(:yellow)}"
-                        when :additionalVersion
-                            additionalText += "#{ISM::Default::CommandLine::AdditionalVersionText.colorize(:yellow)}"
-                        when :update
-                            additionalText += "#{ISM::Default::CommandLine::UpdateText.colorize(:yellow)}"
-                        when :buildingPhase
-                            additionalText += "#{ISM::Default::CommandLine::BuildingPhaseText.colorize(:yellow)} #{software.getEnabledPassNumber.colorize(:yellow)}"
-                        when :optionUpdate
-                            additionalText += "#{ISM::Default::CommandLine::OptionUpdateText.colorize(:yellow)}"
-                        when :rebuild
-                            additionalText += "#{ISM::Default::CommandLine::RebuildText.colorize(:yellow)}"
-                        end
-                    end
-
-                    additionalText += ")"
-                end
-
-                checkedSoftwares.push(software.hiddenName)
-
-                puts "\t" + softwareText + " " + optionsText + " " + additionalText + "\n"
-            end
-
-            puts "\n"
-        end
-
-        def showInstallationQuestion(softwareNumber : Int32)
-            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::InstallSummaryText + "\n"
-
-            puts "#{summaryText.colorize(:green)}"
-
-            print   "#{ISM::Default::CommandLine::InstallQuestion}" +
-                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
-                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
-        end
-
-        def showUninstallationQuestion(softwareNumber : Int32)
-            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UninstallSummaryText + "\n"
-
-            puts "#{summaryText.colorize(:green)}"
-
-            print   "#{ISM::Default::CommandLine::UninstallQuestion.colorize}" +
-                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
-                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
-        end
-
-        def showUpdateQuestion(softwareNumber : Int32)
-            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UpdateSummaryText + "\n"
-
-            puts "#{summaryText.colorize(:green)}"
-
-            print   "#{ISM::Default::CommandLine::UpdateQuestion.colorize.mode(:underline)}" +
-                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
-                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
-        end
-        ############################################### END NOTIFICATIONS ##############################################
         def getUserAgreement : Bool
 
             loop do
@@ -1892,58 +1035,6 @@ module ISM
                                     error: "Failed to execute the function",
                                     exception: exception)
         end
-
-        ############################### NOTIFICATIONS: MEAN TO BE MOVED AWAY ###################################
-        def showSeparator
-            puts "\n"
-            puts "#{ISM::Default::CommandLine::Separator.colorize(:green)}\n"
-            puts "\n"
-        end
-
-        def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
-            puts
-            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)}#{passNumber == 0 ? "" : " (Pass#{passNumber})".colorize(:yellow)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
-                    " #{ISM::Default::CommandLine::InstalledText} " +
-                    "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
-                    " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
-                    "#{">>".colorize(:light_magenta)}" +
-                    "\n"
-        end
-
-        def showEndSoftwareUninstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
-            puts
-            puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
-                    " #{ISM::Default::CommandLine::UninstalledText} " +
-                    "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
-                    " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
-                    "#{">>".colorize(:light_magenta)}" +
-                    "\n"
-        end
-
-        def showInstallationDetailsMessage(softwareNumber : UInt32)
-            title = ISM::Default::CommandLine::InstallationDetailsText
-            limit = title.size
-
-            separatorText = String.new
-
-            (0..limit).each do |index|
-                separatorText += "="
-            end
-
-            separatorText = "#{separatorText.colorize(:green)}\n"
-
-            puts
-            puts    separatorText +
-                    "#{title.colorize(:green)}\n" +
-                    separatorText +
-                    "#{ISM::Default::CommandLine::NewSoftwareNumberDetailText.colorize(:green)}: #{softwareNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::NewDirectoryNumberDetailText.colorize(:green)}: #{@totalInstalledDirectoryNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::NewSymlinkNumberDetailText.colorize(:green)}: #{@totalInstalledSymlinkNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::NewFileNumberDetailText.colorize(:green)}: #{@totalInstalledFileNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
-            puts
-        end
-        ###################################### END NOTIFICATIONS ############################################
 
         def recordInstallationDetails(directoryNumber : UInt128, symlinkNumber : UInt128, fileNumber : UInt128, totalSize : UInt128)
             @totalInstalledDirectoryNumber += directoryNumber
@@ -2202,9 +1293,9 @@ module ISM
             generateTasksFile(tasks)
 
             if Ism.settings.binaryTaskMode
-                showTaskCompilationTitleMessage
+                ISM::Core::Notification.taskCompilationTitleMessage
                 buildTasksFile
-                showCalculationDoneMessage
+                ISM::Core::Notification.calculationDoneMessage
             end
 
             runTasksFile(asBinary: Ism.settings.binaryTaskMode, logEnabled: true, softwareList: neededSoftwares)
@@ -2248,8 +1339,8 @@ module ISM
             if processResult.to_s != ""
                 taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
 
-                showTaskCompilationFailedMessage
-                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr")
+                ISM::Core::Notification.taskCompilationFailedMessage
+                ISM::Core::Notification.taskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr")
 
                 ISM::Core::Error.show(  className: "CommandLine",
                                         functionName: "buildTasksFile",
@@ -2382,9 +1473,9 @@ module ISM
             generateTasksFile(tasks)
 
             if Ism.settings.binaryTaskMode
-                showTaskCompilationTitleMessage
+                ISM::Core::Notification.taskCompilationTitleMessage
                 buildTasksFile
-                showCalculationDoneMessage
+                ISM::Core::Notification.calculationDoneMessage
             end
 
             runTasksFile
@@ -2396,26 +1487,6 @@ module ISM
                                     error: "Failed to execute the function",
                                     exception: exception)
         end
-
-        ################################# NOTIFICATIONS: MEAN TO BE MOVED AWAY #####################################
-        def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
-            puts    "#{"<<".colorize(:light_magenta)}" +
-                    " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
-                    " / #{limit.to_s.colorize(:light_red)}" +
-                    "] #{ISM::Default::CommandLine::InstallingText} " +
-                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)}#{passNumber == 0 ? "" : " (Pass#{passNumber})".colorize(:yellow)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
-                    "\n\n"
-        end
-
-        def showStartSoftwareUninstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
-            puts    "\n#{"<<".colorize(:light_magenta)}" +
-                    " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
-                    " / #{limit.to_s.colorize(:light_red)}" +
-                    "] #{ISM::Default::CommandLine::UninstallingText} " +
-                    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
-                    "\n\n"
-        end
-        ################################ END NOTIFICATIONS ######################################
 
         def synchronizePorts
             @ports.each do |port|
@@ -2534,8 +1605,8 @@ module ISM
                 else
 
                     @unavailableDependencySignals.each do |softwares|
-                        showCalculationDoneMessage
-                        showUnavailableDependencyMessage(softwares[0],softwares[1])
+                        ISM::Core::Notification.calculationDoneMessage
+                        ISM::Core::Notification.unavailableDependencyMessage(softwares[0],softwares[1])
 
                         ISM::Core.exitProgram
                     end
@@ -2718,8 +1789,8 @@ module ISM
 
                             #Inextricable dependency case
                             else
-                                showCalculationDoneMessage
-                                showInextricableDependenciesMessage([calculatedDependencies[key1][0],calculatedDependencies[key2][0]])
+                                ISM::Core::Notification.calculationDoneMessage
+                                ISM::Core::Notification.inextricableDependenciesMessage([calculatedDependencies[key1][0],calculatedDependencies[key2][0]])
 
                                 ISM::Core.exitProgram
                             end
@@ -2840,8 +1911,8 @@ module ISM
             end
 
             if !wrongArguments.empty?
-                showCalculationDoneMessage
-                showSoftwareNeededMessage(wrongArguments)
+                ISM::Core::Notification.calculationDoneMessage
+                ISM::Core::Notification.softwareNeededMessage(wrongArguments)
                 #exitProgram
             end
 
@@ -2893,18 +1964,18 @@ module ISM
 
             end
 
-            showCalculationDoneMessage
+            ISM::Core::Notification.calculationDoneMessage
 
             #IF THERE IS ANY SKIPPED UPDATES, WE NOTICE THE USER
             if skippedUpdates
-                showSkippedUpdatesMessage
+                ISM::Core::Notification.skippedUpdatesMessage
 
                 #Remove duplicate skipped updates
                 @unavailableDependencySignals.uniq! { |entry| [entry[0].fullVersionName,entry[1].fullVersionName]}
 
                 #Show all skipped updates
                 @unavailableDependencySignals.each do |signal|
-                    showUnavailableDependencyMessage(signal[0], signal[1], allowTitle: false)
+                    ISM::Core::Notification.unavailableDependencyMessage(signal[0], signal[1], allowTitle: false)
                 end
 
             end

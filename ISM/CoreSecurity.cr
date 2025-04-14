@@ -76,7 +76,7 @@ module ISM
                                                         asRoot: true,
                                                         viaChroot: false)
 
-                if !process.success? && process.exit_code != 9
+                if !process.success? && process.exit_code != 1
                     ISM::Core::Error.show(  className: "CoreSecurity",
                                             functionName: "setSystemAccess",
                                             errorTitle: "Failed to set the system access",

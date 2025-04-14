@@ -36,7 +36,7 @@ module ISM
                             end
                         end
 
-                        Ism.showNoMatchFoundMessage(wrongArguments)
+                        ISM::Core::Notification.noMatchFoundMessage(wrongArguments)
 
                         ISM::Core.exitProgram
                     end
@@ -51,18 +51,18 @@ module ISM
                             end
                         end
 
-                        Ism.showNoVersionAvailableMessage(wrongArguments)
+                        ISM::Core::Notification.noVersionAvailableMessage(wrongArguments)
 
                         ISM::Core.exitProgram
                     end
 
-                    Ism.showCalculationTitleMessage
+                    ISM::Core::Notification.calculationTitleMessage
 
                     neededSoftwares = Ism.getNeededSoftwares
 
-                    Ism.showCalculationDoneMessage
-                    Ism.showSoftwares(neededSoftwares)
-                    Ism.showInstallationQuestion(neededSoftwares.size)
+                    ISM::Core::Notification.calculationDoneMessage
+                    ISM::Core::Notification.softwares(neededSoftwares)
+                    ISM::Core::Notification.installationQuestion(neededSoftwares.size)
 
                     userAgreement = Ism.getUserAgreement
 

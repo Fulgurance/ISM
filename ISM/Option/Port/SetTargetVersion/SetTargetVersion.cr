@@ -41,9 +41,9 @@ module ISM
 
                     if validVersion
                         Ism.portsSettings.setTargetVersion(targetVersion)
-                        Ism.printProcessNotification(ISM::Default::Option::PortSetTargetVersion::SetText+targetVersion)
+                        ISM::Core::Notification.processNotification(ISM::Default::Option::PortSetTargetVersion::SetText+targetVersion)
                     else
-                        Ism.printErrorNotification(ISM::Default::Option::PortSetTargetVersion::SetTextError1+"#{targetVersion.colorize(:red)}"+ISM::Default::Option::PortSetTargetVersion::SetTextError2,nil)
+                        ISM::Core::Notification.errorNotification(ISM::Default::Option::PortSetTargetVersion::SetTextError1+"#{targetVersion.colorize(:red)}"+ISM::Default::Option::PortSetTargetVersion::SetTextError2,nil)
                     end
                 end
             end
