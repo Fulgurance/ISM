@@ -207,6 +207,61 @@ module ISM
                                     exception: exception)
         end
 
+        def mainKernelName : String
+            return selectedKernel.versionName.downcase
+
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "mainKernelName",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
+        def mainKernelHeadersName : String
+            return "#{selectedKernel.name.downcase}-headers-#{selectedKernel.version.downcase}"
+
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "mainKernelHeadersName",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
+        def mainKernelVersion : String
+            return ISM::Core.selectedKernel.version
+
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "mainKernelVersion",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
+        def kernelSourcesPath : String
+            return "#{commandLineSettings.rootPath}usr/src/#{mainKernelName}/"
+
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "kernelSourcesPath",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
+        def kernelConfigPath : String
+            return "#{kernelSourcesPath}/.config"
+
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLine",
+                                    functionName: "kernelConfigPath",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
     end
 
 end
