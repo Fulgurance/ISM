@@ -96,8 +96,7 @@ module ISM
             requestedCommands = "mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
             ISM::Core.runSystemCommand( requestedCommands,
-                                        shell:  true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             rescue exception
@@ -113,8 +112,7 @@ module ISM
             requestedCommands = "mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
             ISM::Core.runSystemCommand( requestedCommands,
-                                        shell:  true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             rescue exception
@@ -130,8 +128,7 @@ module ISM
             requestedCommands = "mount --bind /dev #{Ism.settings.rootPath}/dev"
 
             ISM::Core.runSystemCommand( requestedCommands,
-                                        shell:  true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             rescue exception
@@ -147,8 +144,7 @@ module ISM
             requestedCommands = "mount --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
             ISM::Core.runSystemCommand( requestedCommands,
-                                        shell:  true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             rescue exception
@@ -164,8 +160,7 @@ module ISM
             requestedCommands = "mount -t proc proc #{Ism.settings.rootPath}/proc"
 
             ISM::Core.runSystemCommand( requestedCommands,
-                                        shell:  true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             rescue exception
@@ -181,8 +176,7 @@ module ISM
             requestedCommands = "mount -t sysfs sysfs #{Ism.settings.rootPath}/sys"
 
             ISM::Core.runSystemCommand( requestedCommands,
-                                        shell:  true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             rescue exception
@@ -198,8 +192,7 @@ module ISM
             requestedCommands = "cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
             ISM::Core.runSystemCommand( requestedCommands,
-                                        shell:  true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             rescue exception
@@ -243,8 +236,7 @@ module ISM
             requestedCommands = "#{unlockTask} && #{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources} && #{lockTask}"
 
             ISM::Core.runSystemCommand( requestedCommands,
-                                        shell:  true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             rescue exception
@@ -349,7 +341,8 @@ module ISM
         def changeFileModeNoChroot(path : String, mode : String, asRoot = false)
             requestedCommands = "/usr/bin/chmod #{mode} #{path}"
 
-            ISM::Core.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
+            ISM::Core.runSystemCommand( command: requestedCommands,
+                                        asRoot: asRoot)
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -363,7 +356,8 @@ module ISM
         def changeFileOwnerNoChroot(path : String, user : String, group : String, asRoot = false)
             requestedCommands = "/usr/bin/chown #{user}:#{group} #{path}"
 
-            ISM::Core.runSystemCommand(requestedCommands, shell: false, asRoot: asRoot)
+            ISM::Core.runSystemCommand( command: requestedCommands,
+                                        asRoot: asRoot)
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -902,10 +896,9 @@ module ISM
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            ISM::Core.runSystemCommand( "/usr/bin/tar -xf #{archivePath}",
+            ISM::Core.runSystemCommand( command: "/usr/bin/tar -xf #{archivePath}",
                                         quiet: true,
-                                        shell: false,
-                                        chroot: false,
+                                        viaChroot: false,
                                         path: destinationPath)
 
             rescue exception
@@ -942,9 +935,8 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            ISM::Core.runSystemCommand( "/usr/bin/patch -Np1 -i #{patch}",
-                                        shell: false,
-                                        chroot: false,
+            ISM::Core.runSystemCommand( command: "/usr/bin/patch -Np1 -i #{patch}",
+                                        viaChroot: false,
                                         path: mainWorkDirectoryPathNoChroot)
 
             rescue exception
@@ -975,9 +967,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( "/usr/bin/cp #{path} #{targetPath}",
-                                        shell: false,
-                                        chroot: false,
+            ISM::Core.runSystemCommand( command: "/usr/bin/cp #{path} #{targetPath}",
+                                        viaChroot: false,
                                         asRoot: asRoot)
 
             rescue exception
@@ -990,9 +981,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( "/usr/bin/cp -R #{path} #{targetPath}",
-                                        shell: false,
-                                        chroot: false,
+            ISM::Core.runSystemCommand( "command: /usr/bin/cp -R #{path} #{targetPath}",
+                                        viaChroot: false,
                                         asRoot: asRoot)
 
             rescue exception
@@ -1005,9 +995,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( "/usr/bin/rm #{path}",
-                                        shell: false,
-                                        chroot: false,
+            ISM::Core.runSystemCommand( command: "/usr/bin/rm #{path}",
+                                        viaChroot: false,
                                         asRoot: asRoot)
 
             rescue exception
@@ -1020,9 +1009,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( "/usr/bin/mv #{path} #{newPath}",
-                                        shell: false,
-                                        chroot: false,
+            ISM::Core.runSystemCommand( command: "/usr/bin/mv #{path} #{newPath}",
+                                        viaChroot: false,
                                         asRoot: asRoot)
 
             rescue exception
@@ -1035,9 +1023,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( "/usr/bin/mkdir -p #{path}",
-                                        shell: false,
-                                        chroot: false,
+            ISM::Core.runSystemCommand( command: "/usr/bin/mkdir -p #{path}",
+                                        viaChroot: false,
                                         asRoot: asRoot)
 
             rescue exception
@@ -1050,9 +1037,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( "/usr/bin/rm -R #{path}",
-                                        shell: false,
-                                        chroot: false,
+            ISM::Core.runSystemCommand( "command: /usr/bin/rm -R #{path}",
+                                        viaChroot: false,
                                         asRoot: asRoot)
 
             rescue exception
@@ -1390,7 +1376,6 @@ module ISM
             requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
 
             process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    shell: true,
                                                     asRoot: true)
 
             if !process.success? && process.exit_code != 9
@@ -1412,7 +1397,6 @@ module ISM
             requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
 
             process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    shell: true,
                                                     asRoot: true)
 
             if !process.success? && process.exit_code != 9
@@ -1434,7 +1418,6 @@ module ISM
             requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
             process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    shell: true,
                                                     asRoot: true)
 
             if !process.success? && process.exit_code != 9
@@ -1456,7 +1439,6 @@ module ISM
             requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
             process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    shell: true,
                                                     asRoot: true)
 
             if !process.success? && process.exit_code != 9
@@ -2179,7 +2161,9 @@ module ISM
 
             File.write(path, data)
 
-            ISM::Core.runSystemCommand(requestedCommands, quiet: true, shell: false, asRoot: systemHandleUserAccess)
+            ISM::Core.runSystemCommand( command: requestedCommands,
+                                        quiet: true,
+                                        asRoot: systemHandleUserAccess)
 
             #TO DO
             #No exit process because if the file can't be strip, we can just keep going

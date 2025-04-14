@@ -106,8 +106,7 @@ module ISM
         end
 
         #TO DO: SHELL DELETION ?
-        #TO DO: CHANGE CHROOT TO VIACHROOT
-        def self.runSystemCommand(command : String, path = commandLineSettings.installByChroot ? "/" : commandLineSettings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false, shell = true, chroot = true, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
+        def self.runSystemCommand(command : String, path = commandLineSettings.installByChroot ? "/" : commandLineSettings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false, viaChroot = true, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
             superuser = (asRoot && commandLineSystemInformation.handleUserAccess)
 
             environmentCommand = String.new
@@ -133,7 +132,7 @@ module ISM
             process = runTasks( tasks:      command,
                                 quiet:      quiet,
                                 asRoot:     superuser,
-                                viaChroot:  (commandLineSettings.installByChroot && chroot),
+                                viaChroot:  (commandLineSettings.installByChroot && viaChroot),
                                 input:      input,
                                 output:     output,
                                 error:      error)
@@ -145,7 +144,7 @@ module ISM
                 #{ISM::Default::Error::SystemCommandFailure}
                 command: #{command}
                 asRoot: #{asRoot}
-                viaChroot: #{chroot}
+                viaChroot: #{viaChroot}
                 ERROR
 
                 ISM::Core::Error.show(  className: "Core",

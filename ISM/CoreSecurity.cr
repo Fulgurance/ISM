@@ -73,9 +73,8 @@ module ISM
                                     CMD
 
                 process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                        shell: false,
                                                         asRoot: true,
-                                                        chroot: false)
+                                                        viaChroot: false)
 
                 if !process.success? && process.exit_code != 9
                     ISM::Core::Error.show(  className: "CoreSecurity",

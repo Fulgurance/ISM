@@ -2221,13 +2221,11 @@ module ISM
             # We first check if there is any task left
             if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}")
                 ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                                            shell: false,
-                                            chroot: false,
+                                            viaChroot: false,
                                             asRoot: true)
 
                 ISM::Core.runSystemCommand( command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                                            shell: false,
-                                            chroot: false,
+                                            viaChroot: false,
                                             asRoot: true)
             end
 
@@ -2237,7 +2235,6 @@ module ISM
 
             Process.run(command: requestedCommands,
                         error: processResult,
-                        shell: true,
                         chdir: "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}") do |process|
                 loop do
                     playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
@@ -2275,24 +2272,20 @@ module ISM
 
             if asBinary
                 ISM::Core.runSystemCommand( command: "/usr/bin/chown #{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId} #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                                        shell: false,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
                 ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                                            shell: false,
-                                            chroot: false,
+                                            viaChroot: false,
                                             asRoot: true)
             end
 
             ISM::Core.runSystemCommand( command: "/usr/bin/chown #{ISM::Default::Core::Security::SystemId}:#{ISM::Default::Core::Security::SystemId} #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
-                                        shell: false,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
-                                        shell: false,
-                                        chroot: false,
+                                        viaChroot: false,
                                         asRoot: true)
 
             # Log tracing
@@ -2306,8 +2299,7 @@ module ISM
             ISM::Core.runSystemCommand( command: "#{taskPrefix}#{ISM::Default::Filename::Task}#{taskExtension}",
                                         output: logWriter,
                                         error: logWriter,
-                                        shell: true,
-                                        chroot: false,
+                                        viaChroot: false,
                                         path: "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}")
 
             # Log recording
