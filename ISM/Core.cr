@@ -104,7 +104,7 @@ module ISM
 
         #TO DO: USE ALWAYS ABSOLUTE PATH TO AVOID SECURITY ISSUES
         def self.runSystemCommand(command : String, path = commandLineSettings.installByChroot ? "/" : commandLineSettings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false, viaChroot = true, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
-            superuser = (asRoot && commandLineSystemInformation.handleUserAccess)
+            superuser = (asRoot && Core::Security.systemHandleUserAccess)
 
             environmentCommand = String.new
 

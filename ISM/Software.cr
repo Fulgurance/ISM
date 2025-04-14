@@ -25,7 +25,7 @@ module ISM
 
         #Alias
         def systemHandleUserAccess : Bool
-            return Ism.systemInformation.handleUserAccess
+            return Core::Security.systemHandleUserAccess
         end
 
         #Alias

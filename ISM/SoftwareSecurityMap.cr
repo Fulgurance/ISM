@@ -31,7 +31,7 @@ module ISM
             group = String.new
             mode = String.new
 
-            if Ism.systemInformation.handleUserAccess
+            if Core::Security.systemHandleUserAccess
                 #Return the matching descriptor
                 @descriptors.each do |entry|
                     #Special entry for sources path
