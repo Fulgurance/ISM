@@ -590,7 +590,7 @@ module ISM
         end
 
         def download
-            Ism.notifyOfDownload(@information)
+            ISM::Core::Notification.download(@information)
 
             cleanWorkDirectoryPath
 
@@ -610,7 +610,7 @@ module ISM
         end
 
         def downloadAdditions
-            Ism.notifyOfDownloadAdditions
+            ISM::Core::Notification.downloadAdditions
 
             downloadAdditionalSources
             downloadAdditionalSourcesSha512
@@ -780,7 +780,7 @@ module ISM
         end
 
         def check
-            Ism.notifyOfCheck(@information)
+            ISM::Core::Notification.check(@information)
 
             checkSourcesSha512
 
@@ -845,7 +845,7 @@ module ISM
         end
 
         def extract
-            Ism.notifyOfExtract(@information)
+            ISM::Core::Notification.extract(@information)
 
             extractSources
 
@@ -879,7 +879,7 @@ module ISM
         end
 
         def extractAdditions
-            Ism.notifyOfExtractAdditions
+            ISM::Core::Notification.extractAdditions
 
             @additions.each do |link|
                 archiveName = link.lchop(link[0..link.rindex("/")])
@@ -910,7 +910,7 @@ module ISM
         end
         
         def patch
-            Ism.notifyOfPatch(@information)
+            ISM::Core::Notification.patch(@information)
 
             if Dir.exists?("#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}")
                 Dir["#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}/*"].each do |patch|
@@ -921,7 +921,9 @@ module ISM
             if Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}")
                 Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}/*"].each do |patch|
                     patchName = patch.lchop(patch[0..patch.rindex("/")])
-                    Ism.notifyOfLocalPatch(patchName)
+
+                    ISM::Core::Notification.localPatch(patchName)
+
                     applyPatch(patch)
                 end
             end
@@ -948,7 +950,7 @@ module ISM
         end
 
         def prepare
-            Ism.notifyOfPrepare(@information)
+            ISM::Core::Notification.prepare(@information)
 
             #Generate all build directories
             @buildDirectoryNames.keys.each do |key|
@@ -1984,7 +1986,7 @@ module ISM
         end
 
         def configure
-            Ism.notifyOfConfigure(@information)
+            ISM::Core::Notification.configure(@information)
         end
 
         def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, relatedToMainBuild = true)
@@ -2003,7 +2005,7 @@ module ISM
         end
         
         def build
-            Ism.notifyOfBuild(@information)
+            ISM::Core::Notification.build(@information)
         end
 
         def makePerlSource(path = String.new)
@@ -2108,7 +2110,7 @@ module ISM
         end
 
         def prepareInstallation
-            Ism.notifyOfPrepareInstallation(@information)
+            ISM::Core::Notification.prepareInstallation(@information)
         end
 
         def recordInstallationInformation : Tuple(UInt128, UInt128, UInt128, UInt128)
@@ -2252,10 +2254,10 @@ module ISM
 
         #Manage stripping, recording installed files and favourites, libtool archive removal, and mount/remount critical point with read-only/read-write access
         def install(preserveLibtoolArchives = false, stripFiles = true)
-            Ism.notifyOfInstall(@information)
+            ISM::Core::Notification.install(@information)
 
             if systemHandleUserAccess
-                Ism.notifyOfUnlockingSystemAccess
+                ISM::Core::Notification.unlockingSystemAccess
                 ISM::Core::Security.unlockSystemAccess
 
                 #Special case when we are switching to the installation by chroot during cross toolchain construction
@@ -2268,7 +2270,7 @@ module ISM
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
-            Ism.notifyOfApplyingSecurityMap
+            ISM::Core::Notification.applyingSecurityMap
 
             fileList.each do |entry|
 
@@ -2313,7 +2315,7 @@ module ISM
 
             #Strip the file if needed
             if stripFiles
-                Ism.notifyOfStrippingFiles
+                ISM::Core::Notification.strippingFiles
 
                 stripFileListNoChroot(  fileList:   fileList)
             end
@@ -2331,7 +2333,7 @@ module ISM
             Ism.addInstalledSoftware(@information, installedFiles)
 
             if systemHandleUserAccess
-                Ism.notifyOfLockingSystemAccess
+                ISM::Core::Notification.lockingSystemAccess
                 ISM::Core::Security.lockSystemAccess
             end
 
@@ -2344,7 +2346,7 @@ module ISM
         end
 
         def deploy
-            Ism.notifyOfDeploy
+            ISM::Core::Notification.deploy
         end
 
         def kernelSourcesPath : String
@@ -2630,7 +2632,7 @@ module ISM
         end
 
         def updateKernelOptionsDatabase
-            Ism.notifyOfUpdateKernelOptionsDatabase(Ism.selectedKernel)
+            ISM::Core::Notification.updateKernelOptionsDatabase(Ism.selectedKernel)
 
             makeDirectoryNoChroot(kernelOptionsDatabasePath)
 
@@ -2648,7 +2650,7 @@ module ISM
         end
 
         def recordNeededKernelOptions
-            Ism.notifyOfRecordNeededKernelOptions
+            ISM::Core::Notification.recordNeededKernelOptions
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -2659,7 +2661,7 @@ module ISM
         end
         
         def clean
-            Ism.notifyOfClean(@information)
+            ISM::Core::Notification.clean(@information)
 
             cleanWorkDirectoryPath
 
@@ -2699,7 +2701,7 @@ module ISM
         end
 
         def uninstall
-            Ism.notifyOfUninstall(@information)
+            ISM::Core::Notification.uninstall(@information)
 
             Ism.uninstallSoftware(@information)
 
