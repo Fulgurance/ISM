@@ -97,7 +97,7 @@ module ISM
 
             #We generate them and set proper rights (for host and guest if needed)
             mainTree.each do |entry|
-                if !Dir.exists?(directory)
+                if !Dir.exists?(entry)
                     if @settings.rootPath != "/"
                         ISM::Core.runSystemCommand( command: "mkdir -p #{@settings.rootPath}#{entry}",
                                                 asRoot: true,
