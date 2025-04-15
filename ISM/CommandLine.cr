@@ -103,7 +103,7 @@ module ISM
                                                 asRoot: true,
                                                 viaChroot: false)
 
-                        ISM::Core.runSystemCommand( command: "chown -R ism:ism #{@settings.rootPath}#{entry}",
+                        ISM::Core.runSystemCommand( command: "chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{@settings.rootPath}#{entry}",
                                                     asRoot: true,
                                                     viaChroot: false)
                     end
@@ -112,13 +112,14 @@ module ISM
                                                 asRoot: true,
                                                 viaChroot: false)
 
-                    ISM::Core.runSystemCommand( command: "chown -R ism:ism #{entry}",
+                    ISM::Core.runSystemCommand( command: "chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{entry}",
                                                 asRoot: true,
                                                 viaChroot: false)
                 end
             end
 
             #We clean any leftover from previous tasks
+            #Error are bypassed because if there is no leftover, it's not a critical issue
             if @settings.rootPath != "/"
                 ISM::Core.runSystemCommand( command: "chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                             asRoot: true,
