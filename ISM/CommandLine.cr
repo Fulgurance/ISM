@@ -121,18 +121,18 @@ module ISM
             #We clean any leftover from previous tasks
             #Error are bypassed because if there is no leftover, it's not a critical issue
             if @settings.rootPath != "/"
-                ISM::Core.runSystemCommand( command: "chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
+                ISM::Core.runSystemCommand( command: "chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                             asRoot: true,
                                             viaChroot: false)
-                ISM::Core.runSystemCommand( command: "rm #{@settings.rootPath}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
+                ISM::Core.runSystemCommand( command: "rm #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                             asRoot: true,
                                             viaChroot: false)
             end
 
-            ISM::Core.runSystemCommand( command: "chattr -f -i /#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
+            ISM::Core.runSystemCommand( command: "chattr -f -i /#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                             asRoot: true,
                                             viaChroot: false)
-            ISM::Core.runSystemCommand( command: "rm /#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
+            ISM::Core.runSystemCommand( command: "rm /#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                         asRoot: true,
                                         viaChroot: false)
         end
@@ -1340,18 +1340,6 @@ module ISM
         end
 
         def buildTasksFile
-            #TO DO: PROBABLY NOT NECESSARY ANYMORE
-            # We first check if there is any task left
-            # if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}")
-            #     ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-            #                                 viaChroot: false,
-            #                                 asRoot: true)
-            #
-            #     ISM::Core.runSystemCommand( command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-            #                                 viaChroot: false,
-            #                                 asRoot: true)
-            # end
-
             processResult = IO::Memory.new
 
             requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task} -f json"
