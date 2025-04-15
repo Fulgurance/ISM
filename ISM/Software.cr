@@ -1363,7 +1363,8 @@ module ISM
             requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
 
             process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: true)
+                                                    asRoot: true,
+                                                    viaChroot: false)
 
             if !process.success? && process.exit_code != 9
                 ISM::Core::Error.show(  className: "Software",
@@ -1384,7 +1385,8 @@ module ISM
             requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
 
             process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: true)
+                                                    asRoot: true,
+                                                    viaChroot: false)
 
             if !process.success? && process.exit_code != 9
                 ISM::Core::Error.show(  className: "Software",
@@ -1405,7 +1407,8 @@ module ISM
             requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
             process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: true)
+                                                    asRoot: true,
+                                                    viaChroot: false)
 
             if !process.success? && process.exit_code != 9
                 ISM::Core::Error.show(  className: "Software",
@@ -1426,7 +1429,8 @@ module ISM
             requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
             process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: true)
+                                                    asRoot: true,
+                                                    viaChroot: false)
 
             if !process.success? && process.exit_code != 9
                 ISM::Core::Error.show(  className: "Software",

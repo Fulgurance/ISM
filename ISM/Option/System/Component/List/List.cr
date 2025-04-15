@@ -20,9 +20,13 @@ module ISM
                     else
                         puts "\n"
 
-                        Ism.components.each_with_index do |software, index|
+                        Ism.components.each_with_index do |component, index|
 
+                            entry <<-ENTRY
+                            #{component.name}
+                            ENTRY
 
+                            puts entry
 
                         end
                     end
