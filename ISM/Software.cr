@@ -1321,7 +1321,7 @@ module ISM
         end
 
         def deleteFile(path : String)
-            requestedCommands = "rm #{path}"
+            requestedCommands = "rm -f#{path}"
 
             ISM::Core.runSystemCommand(requestedCommands)
 
