@@ -2257,7 +2257,7 @@ module ISM
         end
 
         #Special function to improve installation process performance (Internal use only)
-        def performInstallationRequest(requests : String)
+        def performInstallationRequest(requests : Array(String))
             path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::InstallationList}"
 
             if File.exists?(path)
@@ -2295,7 +2295,7 @@ module ISM
 
             ISM::Core::Notification.applyingSecurityMap
 
-            requests = String.new
+            requests = Array(String).new
 
             fileList.each do |entry|
 
@@ -2314,23 +2314,23 @@ module ISM
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            requests = installDirectory(path:   finalDestination,
-                                                        user:   securityDescriptor.user,
-                                                        group:  securityDescriptor.group,
-                                                        mode:   securityDescriptor.mode)
+                            requests.push(installDirectory( path:   finalDestination,
+                                                            user:   securityDescriptor.user,
+                                                            group:  securityDescriptor.group,
+                                                            mode:   securityDescriptor.mode))
                         end
                     else
                         #TO DO: Pre check if files are the same
                         if !File.exists?(finalDestination)
                             if File.symlink?(entry)
-                                requests = installSymlink(  target: entry,
-                                                            path:   finalDestination)
+                                requests.push(installSymlink(   target: entry,
+                                                                path:   finalDestination))
                             else
-                                requests = installFile( target: entry,
-                                                        path:   finalDestination,
-                                                        user:   securityDescriptor.user,
-                                                        group:  securityDescriptor.group,
-                                                        mode:   securityDescriptor.mode)
+                                requests.push(installFile(  target: entry,
+                                                            path:   finalDestination,
+                                                            user:   securityDescriptor.user,
+                                                            group:  securityDescriptor.group,
+                                                            mode:   securityDescriptor.mode))
                             end
                         end
                     end
