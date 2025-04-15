@@ -14,9 +14,10 @@ module ISM
             MirrorsSettings = "MirrorsSettings.json"
             SelectedKernel = "SelectedKernel.json"
             SecurityMap = "SecurityMap.json"
-            Task = ".ISM.task"
-            InstallationList = ".ISM.installationList"
-            StrippingList = ".ISM.strippingList"
+            TaskPrefix = ".ISM"
+            Task = "#{TaskPrefix}.task"
+            InstallationList = "#{TaskPrefix}.installationList"
+            StrippingList = "#{TaskPrefix}.strippingList"
             UserConfiguration = "passwd"
             GroupConfiguration = "group"
 

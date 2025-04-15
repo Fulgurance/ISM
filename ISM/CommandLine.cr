@@ -66,6 +66,7 @@ module ISM
         end
 
         def start
+            setup
             loadSettingsFiles
             loadSystemInformationFile
             loadKernelOptionDatabase
@@ -83,6 +84,55 @@ module ISM
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
+        end
+
+        def setup
+            #Required directories for ISM
+            mainTree = [ISM::Default::Path::RuntimeDataDirectory,
+                        ISM::Default::Path::TemporaryDirectory,
+                        ISM::Default::Path::SettingsDirectory,
+                        ISM::Default::Path::LogsDirectory,
+                        ISM::Default::Path::LibraryDirectory]
+
+            #We generate them and set proper rights (for host and guest if needed)
+            mainTree.each do |entry|
+                if !Dir.exists?(directory)
+                    if @settings.rootPath != "/"
+                        ISM::Core.runSystemCommand( command: "mkdir -p #{@settings.rootPath}#{entry}",
+                                                asRoot: true,
+                                                viaChroot: false)
+
+                        ISM::Core.runSystemCommand( command: "chown -R ism:ism #{@settings.rootPath}#{entry}",
+                                                    asRoot: true,
+                                                    viaChroot: false)
+                    end
+
+                    ISM::Core.runSystemCommand( command: "mkdir -p #{entry}",
+                                                asRoot: true,
+                                                viaChroot: false)
+
+                    ISM::Core.runSystemCommand( command: "chown -R ism:ism #{entry}",
+                                                asRoot: true,
+                                                viaChroot: false)
+                end
+            end
+
+            #We clean any leftover from previous tasks
+            if @settings.rootPath != "/"
+                ISM::Core.runSystemCommand( command: "chattr -f -i #{@settings.rootPath}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
+                                            asRoot: true,
+                                            viaChroot: false)
+                ISM::Core.runSystemCommand( command: "rm #{@settings.rootPath}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
+                                            asRoot: true,
+                                            viaChroot: false)
+            end
+
+            ISM::Core.runSystemCommand( command: "chattr -f -i /#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
+                                            asRoot: true,
+                                            viaChroot: false)
+            ISM::Core.runSystemCommand( command: "rm /#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
+                                        asRoot: true,
+                                        viaChroot: false)
         end
 
         def loadNeededKernelOptions
