@@ -2168,7 +2168,7 @@ module ISM
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
             return <<-REQUEST
-            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} #{target} #{path}
+            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} -f #{target} #{path}
             REQUEST
 
             rescue exception
@@ -2201,7 +2201,7 @@ module ISM
         def installSymlink(target : String, path : String) : String
             #moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
             return <<-REQUEST
-            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} #{target} #{path}
+            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} -f #{target} #{path}
             REQUEST
 
             rescue exception
