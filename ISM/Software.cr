@@ -1628,7 +1628,7 @@ module ISM
                 ISM::Core::Error.show(  className: "Software",
                                         functionName: "runDbusUuidgenCommand",
                                         errorTitle: "Execution failure",
-                                        error: "Failed to execute the function)
+                                        error: "Failed to execute the function")
             end
         end
 
