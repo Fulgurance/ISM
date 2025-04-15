@@ -90,112 +90,119 @@ module ISM
         def prepareChrootDevConsole
             requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
-            ISM::Core.runSystemCommand( requestedCommands,
-                                        viaChroot: false,
-                                        asRoot: true)
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareChrootDevConsole",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootDevConsole",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         # Internal use only
         def prepareChrootDevNull
             requestedCommands = "/usr/bin/mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
-            ISM::Core.runSystemCommand( requestedCommands,
-                                        viaChroot: false,
-                                        asRoot: true)
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareChrootDevNull",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootDevNull",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         # Internal use only
         def prepareChrootDev
             requestedCommands = "/usr/bin/mount --bind /dev #{Ism.settings.rootPath}/dev"
 
-            ISM::Core.runSystemCommand( requestedCommands,
-                                        viaChroot: false,
-                                        asRoot: true)
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareChrootDev",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootDev",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         # Internal use only
         def prepareChrootDevPts
             requestedCommands = "/usr/bin/mount --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
-            ISM::Core.runSystemCommand( requestedCommands,
-                                        viaChroot: false,
-                                        asRoot: true)
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareChrootDevPts",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootDevPts",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         # Internal use only
         def prepareChrootProc
             requestedCommands = "/usr/bin/mount -t proc proc #{Ism.settings.rootPath}/proc"
 
-            ISM::Core.runSystemCommand( requestedCommands,
-                                        viaChroot: false,
-                                        asRoot: true)
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareChrootProc",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootProc",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         # Internal use only
         def prepareChrootSysfs
             requestedCommands = "/usr/bin/mount -t sysfs sysfs #{Ism.settings.rootPath}/sys"
 
-            ISM::Core.runSystemCommand( requestedCommands,
-                                        viaChroot: false,
-                                        asRoot: true)
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareChrootSysfs",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootSysfs",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         # Internal use only
         def prepareChrootNetworkConfiguration
             requestedCommands = "/usr/bin/cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
-            ISM::Core.runSystemCommand( requestedCommands,
-                                        viaChroot: false,
-                                        asRoot: true)
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareChrootNetworkConfiguration",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootNetworkConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         # Internal use only
@@ -230,16 +237,17 @@ module ISM
 
             requestedCommands = "#{unlockTask} && #{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources} && #{lockTask}"
 
-            ISM::Core.runSystemCommand( requestedCommands,
-                                        viaChroot: false,
-                                        asRoot: true)
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareRootPermissions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareRootPermissions",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         #Special function to improve performance (Internal use only)
@@ -326,35 +334,37 @@ module ISM
         def changeFileModeNoChroot(path : String, mode : String, asRoot = false)
             requestedCommands = "/usr/bin/chmod #{mode} #{path}"
 
-            ISM::Core.runSystemCommand( command: requestedCommands,
-                                        asRoot: asRoot)
+            process = ISM::Core.runSystemCommand(   command: requestedCommands,
+                                                    asRoot: asRoot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "changeFileModeNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "changeFileModeNoChroot",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         #Special function to improve performance (Internal use only)
         def changeFileOwnerNoChroot(path : String, user : String, group : String, asRoot = false)
             requestedCommands = "/usr/bin/chown #{user}:#{group} #{path}"
 
-            ISM::Core.runSystemCommand( command: requestedCommands,
-                                        asRoot: asRoot)
+            process = ISM::Core.runSystemCommand(   command: requestedCommands,
+                                                    asRoot: asRoot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "changeFileOwnerNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "changeFileOwnerNoChroot",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         #Special function to improve performance (Internal use only)
         def workDirectoryPathNoChroot : String
-            return Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
+            return "#{Ism.settings.sourcesPath}#{@information.port}/#{@information.name}/#{@information.version}"
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -881,17 +891,18 @@ module ISM
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            ISM::Core.runSystemCommand( command: "/usr/bin/tar -xf #{archivePath}",
-                                        quiet: true,
-                                        viaChroot: false,
-                                        path: destinationPath)
+            process = ISM::Core.runSystemCommand(   command: "/usr/bin/tar -xf #{archivePath}",
+                                                    quiet: true,
+                                                    viaChroot: false,
+                                                    path: destinationPath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "extractArchive",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "extractArchive",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
         
         def patch
@@ -922,16 +933,17 @@ module ISM
         end
         
         def applyPatch(patch : String)
-            ISM::Core.runSystemCommand( command: "/usr/bin/patch -Np1 -i #{patch}",
-                                        viaChroot: false,
-                                        path: mainWorkDirectoryPathNoChroot)
+            process = ISM::Core.runSystemCommand(   command: "/usr/bin/patch -Np1 -i #{patch}",
+                                                    viaChroot: false,
+                                                    path: mainWorkDirectoryPathNoChroot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "applyPatch",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "applyPatch",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def prepare
@@ -954,116 +966,124 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/cp #{path} #{targetPath}",
-                                        viaChroot: false,
-                                        asRoot: asRoot)
+            process = ISM::Core.runSystemCommand(   command: "/usr/bin/cp #{path} #{targetPath}",
+                                                    viaChroot: false,
+                                                    asRoot: asRoot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "copyFileNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "copyFileNoChroot",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/cp -R #{path} #{targetPath}",
-                                        viaChroot: false,
-                                        asRoot: asRoot)
+            process = ISM::Core.runSystemCommand(   command: "/usr/bin/cp -R #{path} #{targetPath}",
+                                                    viaChroot: false,
+                                                    asRoot: asRoot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "copyDirectoryNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "copyDirectoryNoChroot",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/rm -f #{path}",
-                                        viaChroot: false,
-                                        asRoot: asRoot)
+            process = ISM::Core.runSystemCommand(   command: "/usr/bin/rm -f #{path}",
+                                                    viaChroot: false,
+                                                    asRoot: asRoot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "deleteFileNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "deleteFileNoChroot",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/mv -f #{path} #{newPath}",
-                                        viaChroot: false,
-                                        asRoot: asRoot)
+            process = ISM::Core.runSystemCommand(   command: "/usr/bin/mv -f #{path} #{newPath}",
+                                                    viaChroot: false,
+                                                    asRoot: asRoot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "moveFileNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "moveFileNoChroot",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/mkdir -p #{path}",
-                                        viaChroot: false,
-                                        asRoot: asRoot)
+            process = ISM::Core.runSystemCommand(   command: "/usr/bin/mkdir -p #{path}",
+                                                    viaChroot: false,
+                                                    asRoot: asRoot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "makeDirectoryNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "makeDirectoryNoChroot",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(path : String, asRoot = false)
-            ISM::Core.runSystemCommand( command: "/usr/bin/rm -R -f #{path}",
-                                        viaChroot: false,
-                                        asRoot: asRoot)
+            process = ISM::Core.runSystemCommand(   command: "/usr/bin/rm -R -f #{path}",
+                                                    viaChroot: false,
+                                                    asRoot: asRoot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "deleteDirectoryNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "deleteDirectoryNoChroot",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def fileUpdateContent(path : String, data : String)
             requestedCommands = <<-CMD
-                                grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
-                                CMD
+            grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
+            CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "fileUpdateContent",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "fileUpdateContent",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def fileReplaceText(path : String, text : String, newText : String)
             requestedCommands = <<-CMD
-                                sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/g' #{path}
-                                CMD
+            sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/g' #{path}
+            CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "fileReplaceText",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "fileReplaceText",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def fileReplaceLineContaining(path : String, text : String, newLine : String)
@@ -1071,14 +1091,15 @@ module ISM
                                 sed -i '/#{text.gsub(/([\.\/])/, %q(\\\1))}/c\#{newText.gsub(/([\.\/])/, %q(\\\1))}' #{path}
                                 CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "fileReplaceLineContaining",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "fileReplaceLineContaining",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def fileReplaceTextAtLineNumber(path : String, text : String, newText : String,lineNumber : UInt64)
@@ -1086,14 +1107,15 @@ module ISM
                                 sed -i '#{lineNumber.to_s}s/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' #{path}
                                 CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "fileReplaceTextAtLineNumber",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "fileReplaceTextAtLineNumber",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def fileDeleteLine(path : String, lineNumber : UInt64)
@@ -1101,76 +1123,81 @@ module ISM
                                 sed -i '#{lineNumber.to_s}d' #{path}
                                 CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "fileDeleteLine",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "fileDeleteLine",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def fileWriteData(path : String, data : String)
             requestedCommands = <<-CMD
-                                cat > #{path} <<"EOF"
-                                #{data}
-                                EOF
-                                CMD
+            cat > #{path} <<"EOF"
+            #{data}
+            EOF
+            CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "fileWriteData",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "fileWriteData",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def fileAppendData(path : String, data : String)
             requestedCommands = <<-CMD
-                                echo "#{data}" > "#{path}"
-                                CMD
+            echo "#{data}" > "#{path}"
+            CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "fileAppendData",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "fileAppendData",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def fileAppendDataFromFile(path : String, fromPath : String)
             requestedCommands = <<-CMD
-                                cat "#{fromPath}" >> "#{path}"
-                                CMD
+            cat "#{fromPath}" >> "#{path}"
+            CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "fileAppendDataFromFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "fileAppendDataFromFile",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
             requestedCommands = <<-CMD
-                                find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
-                                CMD
+            find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
+            CMD
 
-            ISM::Core.runSystemCommand(requestedCommands, path)
+            process = ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "replaceTextAllFilesRecursivelyNamed",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "replaceTextAllFilesRecursivelyNamed",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def deleteAllFilesRecursivelyFinishing(path : String, extensions = Array(String).new)
@@ -1182,17 +1209,18 @@ module ISM
             end
 
             requestedCommands = <<-CMD
-                                find #{path} #{extensionCommands} -delete
-                                CMD
+            find #{path} #{extensionCommands} -delete
+            CMD
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "deleteAllFilesRecursivelyFinishing",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "deleteAllFilesRecursivelyFinishing",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def makeLink(target : String, path : String, type : Symbol)
@@ -1219,144 +1247,155 @@ module ISM
 
             requestedCommands = "#{command} '#{target}' #{path}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "makeLink",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "makeLink",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def generateEmptyFile(path : String)
             requestedCommands = "touch #{path}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "generateEmptyFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "generateEmptyFile",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def generateEmptyPasswdFile
             requestedCommands = "touch /usr/bin/passwd"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "generateEmptyPasswdFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "generateEmptyPasswdFile",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def copyFile(path : String, targetPath : String)
             requestedCommands = "cp #{path} #{targetPath}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "copyFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "copyFile",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def copyDirectory(path : String, targetPath : String)
             requestedCommands = "cp -r #{path} #{targetPath}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "copyDirectory",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "copyDirectory",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def moveFile(path : String, newPath : String)
             requestedCommands = "mv #{path} #{newPath}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "moveFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "moveFile",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def makeDirectory(path : String)
             requestedCommands = "mkdir -p #{path}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "makeDirectory",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "makeDirectory",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def deleteDirectory(path : String)
             requestedCommands = "rm -r #{path}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "deleteDirectory",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "deleteDirectory",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def deleteFile(path : String)
             requestedCommands = "rm -f#{path}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "deleteFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "deleteFile",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runChmodCommand(arguments = String.new, path = String.new)
             requestedCommands = "chmod #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runChmodCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runChmodCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runChownCommand(arguments = String.new, path = String.new)
             requestedCommands = "chown #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runChownCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runChownCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runUserAddCommand(arguments : String)
@@ -1372,13 +1411,6 @@ module ISM
                                         errorTitle: "User creation failed",
                                         error: "An error occured during the user creation process")
             end
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runUserAddCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
         end
 
         def runUserDelCommand(arguments : String)
@@ -1394,13 +1426,6 @@ module ISM
                                         errorTitle: "User deletion failed",
                                         error: "An error occured during the user deletion process")
             end
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runUserDelCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
         end
 
         def runGroupAddCommand(arguments : String)
@@ -1416,13 +1441,6 @@ module ISM
                                         errorTitle: "Group creation failed",
                                         error: "An error occured during the group creation process")
             end
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGroupAddCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
         end
 
         def runGroupDelCommand(arguments : String)
@@ -1438,78 +1456,76 @@ module ISM
                                         errorTitle: "Group deletion failed",
                                         error: "An error occured during the group deletion process")
             end
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGroupDelCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
         end
 
         def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "./#{file} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runFile",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runTarCommand(arguments = String.new, path = String.new)
             requestedCommands = "tar #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path)
+            process = ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runTarCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runTarCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
             requestedCommands = "python#{version} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runPythonCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runPythonCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runPipCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
             requestedCommands = "pip#{version} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runPipCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runPipCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runCrystalCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runCrystalCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -1536,40 +1552,43 @@ module ISM
 
             requestedCommands = "cmake #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runCmakeCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runCmakeCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runQmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "qmake #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runQmakeCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runQmakeCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "meson #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runMesonCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runMesonCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -1598,365 +1617,393 @@ module ISM
 
             requestedCommands = "ninja #{prefix} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runNinjaCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runNinjaCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runPwconvCommand(arguments = String.new)
             requestedCommands = "pwconv #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runPwconvCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runPwconvCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runGrpconvCommand(arguments = String.new)
             requestedCommands = "grpconv #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGrpconvCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGrpconvCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runUdevadmCommand(arguments : String)
             requestedCommands = "udevadm #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runUdevadmCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runUdevadmCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runDbusUuidgenCommand(arguments = String.new)
             requestedCommands = "dbus-uuidgen #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runDbusUuidgenCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runDbusUuidgenCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runMakeinfoCommand(arguments : String, path = String.new)
             requestedCommands = "makeinfo #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path)
+            process = ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runMakeinfoCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runMakeinfoCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runInstallInfoCommand(arguments : String)
             requestedCommands = "install-info #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runInstallInfoCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runInstallInfoCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runAutoconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoconf #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runAutoconfCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runAutoconfCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runAutoreconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoreconf #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runAutoreconfCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runAutoreconfCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runLocaledefCommand(arguments : String)
             requestedCommands = "localedef #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runLocaledefCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runLocaledefCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runGunzipCommand(arguments : String, path = String.new)
             requestedCommands = "gunzip #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path)
+            process = ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGunzipCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGunzipCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runMakeCaCommand(arguments : String)
             requestedCommands = "make-ca #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runMakeCaCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runMakeCaCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runInstallCatalogCommand(arguments : String)
             requestedCommands = "install-catalog #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runInstallCatalogCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runInstallCatalogCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runXmlCatalogCommand(arguments : String)
             requestedCommands = "xmlcatalog #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runXmlCatalogCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runXmlCatalogCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runLdconfigCommand(arguments = String.new)
             requestedCommands = "ldconfig #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runLdconfigCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runLdconfigCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGtkQueryImmodules2Command",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGtkQueryImmodules2Command",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runGtkQueryImmodules3Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGtkQueryImmodules3Command",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGtkQueryImmodules3Command",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runGlibCompileSchemasCommand(arguments = String.new)
             requestedCommands = "glib-compile-schemas #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGlibCompileSchemasCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGlibCompileSchemasCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runGdkPixbufQueryLoadersCommand(arguments = String.new)
             requestedCommands = "gdk-pixbuf-query-loaders #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGdkPixbufQueryLoadersCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGdkPixbufQueryLoadersCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runUpdateMimeDatabaseCommand(arguments = String.new)
             requestedCommands = "update-mime-database #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runUpdateMimeDatabaseCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runUpdateMimeDatabaseCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runCargoCommand(arguments : String, path = String.new, environment = Hash(String, String).new)
             requestedCommands = "cargo #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runCargoCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runCargoCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runXargoCommand(arguments : String, path = String.new)
             requestedCommands = "xargo #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path)
+            process = ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runXargoCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runXargoCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runGccCommand(arguments = String.new, path = String.new)
             requestedCommands = "gcc #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path)
+            process = ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGccCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGccCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runRcUpdateCommand(arguments = String.new)
             requestedCommands = "rc-update #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runRcUpdateCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runRcUpdateCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runAlsactlCommand(arguments = String.new)
             requestedCommands = "alsactl #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runAlsactlCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runAlsactlCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runGtkUpdateIconCacheCommand(arguments = String.new)
             requestedCommands = "gtk-update-icon-cache #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runGtkUpdateIconCacheCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runGtkUpdateIconCacheCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runUpdateDesktopDatabaseCommand(arguments = String.new)
             requestedCommands = "update-desktop-database #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runUpdateDesktopDatabaseCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runUpdateDesktopDatabaseCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runZicCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runZicCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def prepareOpenrcServiceInstallation(path : String, name : String)
@@ -1983,14 +2030,15 @@ module ISM
 
             requestedCommands = "#{configureCommand} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "configureSource",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "configureSource",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
         
         def build
@@ -2000,66 +2048,71 @@ module ISM
         def makePerlSource(path = String.new)
             requestedCommands = "perl Makefile.PL"
 
-            ISM::Core.runSystemCommand(requestedCommands, path)
+            process = ISM::Core.runSystemCommand(requestedCommands, path)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "makePerlSource",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "makePerlSource",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runCpanCommand(arguments = String.new)
             requestedCommands = "cpan #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runCpanCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runCpanCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runDircolorsCommand(arguments = String.new)
             requestedCommands = "dircolors #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runDircolorsCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runDircolorsCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runDepmodCommand(arguments = String.new)
             requestedCommands = "depmod #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runDepmodCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runDepmodCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def runSshKeygenCommand(arguments = String.new)
             requestedCommands = "ssh-keygen #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands)
+            process = ISM::Core.runSystemCommand(requestedCommands)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "runSshKeygenCommand",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "runSshKeygenCommand",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
@@ -2088,14 +2141,15 @@ module ISM
 
             requestedCommands = "make #{prefix} #{arguments}"
 
-            ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "makeSource",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            if !process.success
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "makeSource",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
+            end
         end
 
         def prepareInstallation

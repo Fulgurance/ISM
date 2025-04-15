@@ -124,6 +124,7 @@ module ISM
                 ISM::Core.runSystemCommand( command: "chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                             asRoot: true,
                                             viaChroot: false)
+
                 ISM::Core.runSystemCommand( command: "rm #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                             asRoot: true,
                                             viaChroot: false)
@@ -132,6 +133,7 @@ module ISM
             ISM::Core.runSystemCommand( command: "chattr -f -i /#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                             asRoot: true,
                                             viaChroot: false)
+
             ISM::Core.runSystemCommand( command: "rm /#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::TaskPrefix}* > /dev/null 2>&1 || true",
                                         asRoot: true,
                                         viaChroot: false)
