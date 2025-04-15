@@ -2257,14 +2257,14 @@ module ISM
         end
 
         #Special function to improve installation process performance (Internal use only)
-        def performInstallationRequest(request : String)
+        def performInstallationRequest(requests : String)
             path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::InstallationList}"
 
             if File.exists?(path)
                 deleteFileNoChroot(path: path, asRoot: true)
             end
 
-            data = request.join("\n")
+            data = requests.join("\n")
             File.write(path, data)
 
             ISM::Core.runSystemCommand( command: "/usr/bin/chmod +x #{path}",
