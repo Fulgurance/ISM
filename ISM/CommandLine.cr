@@ -108,11 +108,11 @@ module ISM
                                                     viaChroot: false)
                     end
 
-                    ISM::Core.runSystemCommand( command: "mkdir -p #{entry}",
+                    ISM::Core.runSystemCommand( command: "mkdir -p /#{entry}",
                                                 asRoot: true,
                                                 viaChroot: false)
 
-                    ISM::Core.runSystemCommand( command: "chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{entry}",
+                    ISM::Core.runSystemCommand( command: "chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} /#{entry}",
                                                 asRoot: true,
                                                 viaChroot: false)
                 end
