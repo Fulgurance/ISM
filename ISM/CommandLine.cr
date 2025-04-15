@@ -86,6 +86,7 @@ module ISM
                                     exception: exception)
         end
 
+        #TO DO: CLEAN ONLY IF TASKS IS NOT RUNNING (IN FUTUR FOR MULTITASKING)
         def setup
             #Required directories for ISM
             mainTree = [ISM::Default::Path::RuntimeDataDirectory,
