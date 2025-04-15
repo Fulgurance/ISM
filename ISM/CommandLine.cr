@@ -1340,16 +1340,17 @@ module ISM
         end
 
         def buildTasksFile
+            #TO DO: PROBABLY NOT NECESSARY ANYMORE
             # We first check if there is any task left
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}")
-                ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                                            viaChroot: false,
-                                            asRoot: true)
-
-                ISM::Core.runSystemCommand( command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                                            viaChroot: false,
-                                            asRoot: true)
-            end
+            # if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}")
+            #     ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+            #                                 viaChroot: false,
+            #                                 asRoot: true)
+            #
+            #     ISM::Core.runSystemCommand( command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+            #                                 viaChroot: false,
+            #                                 asRoot: true)
+            # end
 
             processResult = IO::Memory.new
 
