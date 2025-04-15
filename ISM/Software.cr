@@ -323,16 +323,6 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        # def changeFileModeNoChroot(path : String, mode : String)
-        #     File.chmod(path, mode.to_i(base: 8))
-        # end
-        #
-        # #Special function to improve performance (Internal use only)
-        # def changeFileOwnerNoChroot(path : String, user : String, group : String)
-        #     File.chown(path, getUserId(user).to_i, getGroupId(group).to_i)
-        # end
-
-        #Special function to improve performance (Internal use only)
         def changeFileModeNoChroot(path : String, mode : String, asRoot = false)
             requestedCommands = "/usr/bin/chmod #{mode} #{path}"
 
@@ -2268,10 +2258,13 @@ module ISM
             File.write(path, data)
 
             ISM::Core.runSystemCommand( command: "/usr/bin/chmod +x #{path}",
+                                        quiet: true,
+                                        viaChroot: false,
                                         asRoot: systemHandleUserAccess)
 
             ISM::Core.runSystemCommand( command: path,
                                         quiet: true,
+                                        viaChroot: false,
                                         asRoot: systemHandleUserAccess)
         end
 
