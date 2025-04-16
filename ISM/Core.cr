@@ -83,8 +83,6 @@ module ISM
                                     error:      (quiet ? Process::Redirect::Close : error),
                                     shell:      true)
 
-            File.delete(taskFilePath)
-
             return process
 
             rescue exception
