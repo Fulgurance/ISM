@@ -814,6 +814,8 @@ module ISM
             digest.file(archive)
             archiveSha512 = digest.hexfinal
 
+            ISM::Core::Notification.checkIntegrity(archive)
+
             #We check first the archive integrity
             if archiveSha512 != sha512
                 ISM::Core::Error.show(  className: "Software",
@@ -822,9 +824,10 @@ module ISM
                                         error: "The checksum do not match with the downloaded file. The file can be corrupted or compromised.")
             end
 
-            #We check now if the authenticity (digital signature)
-            #Need to decide where to store signatures (for port too)
+            ISM::Core::Notification.checkAuthenticity(archive)
 
+            #We check now if the authenticity (digital signature)
+            #TO DO: Need to decide where to store signatures (for port too)
             process = ISM::Core.runSystemCommand(   command: "openssl dgst -sha256 -verify PublicFulguranceDevelopement.key -signature #{archive}.sig #{archive}",
                                                     viaChroot: false,
                                                     asRoot: false)
@@ -1337,7 +1340,7 @@ module ISM
         end
 
         def deleteFile(path : String)
-            requestedCommands = "rm -f#{path}"
+            requestedCommands = "rm -f #{path}"
 
             process = ISM::Core.runSystemCommand(requestedCommands)
 

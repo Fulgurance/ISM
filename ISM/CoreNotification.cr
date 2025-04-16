@@ -349,6 +349,14 @@ module ISM
                 ISM::Core::Notification.subProcessNotification("#{ISM::Default::CommandLine::CheckAdditionsText.colorize(:green)}")
             end
 
+            def self.checkIntegrity(file : String)
+                ISM::Core::Notification.subProcessNotification("#{ISM::Default::CommandLine::CheckAuthenticityText.colorize(:green)}#{}")
+            end
+
+            def self.checkAuthenticity(file : String)
+                ISM::Core::Notification.subProcessNotification("#{ISM::Default::CommandLine::CheckIntegrityText.colorize(:green)}#{file}")
+            end
+
             def self.extract(softwareInformation : ISM::SoftwareInformation)
                 ISM::Core::Notification.processNotification(ISM::Default::CommandLine::ExtractText+"#{softwareInformation.name.colorize(:green)}")
             end
