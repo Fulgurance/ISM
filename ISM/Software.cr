@@ -814,11 +814,27 @@ module ISM
             digest.file(archive)
             archiveSha512 = digest.hexfinal
 
+            #We check first the archive integrity
             if archiveSha512 != sha512
                 ISM::Core::Error.show(  className: "Software",
                                         functionName: "checkFile",
-                                        errorTitle: "Checksum verification failed",
+                                        errorTitle: "integrity verification failed",
                                         error: "The checksum do not match with the downloaded file. The file can be corrupted or compromised.")
+            end
+
+            #We check now if the authenticity (digital signature)
+            #Need to decide where to store signatures (for port too)
+
+            process = ISM::Core.runSystemCommand(   command: "openssl dgst -sha256 -verify PublicFulguranceDevelopement.key -signature #{archive}.sig #{archive}",
+                                                    viaChroot: false,
+                                                    asRoot: false)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "checkFile",
+                                        errorTitle: "Authenticity verification failed",
+                                        error: "The archive signature does not match with the public key. The file can be compromised",
+                                        exception: exception)
             end
 
             rescue exception
