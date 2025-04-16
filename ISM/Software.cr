@@ -805,7 +805,7 @@ module ISM
             digest.file(archive)
             archiveSha512 = digest.hexfinal
 
-            ISM::Core::Notification.checkIntegrity(archive)
+            ISM::Core::Notification.checkIntegrity(ISM::Default::Software::SourcesArchiveBaseName)
 
             #We check first the archive integrity
             if archiveSha512 != sha512
@@ -816,7 +816,7 @@ module ISM
             end
 
             #EXPERIMENTAL
-            #ISM::Core::Notification.checkAuthenticity(archive)
+            #ISM::Core::Notification.checkAuthenticity(ISM::Default::Software::SourcesArchiveBaseName)
 
             #We check now if the authenticity (digital signature)
             #TO DO: Need to decide where to store signatures (for port too)
