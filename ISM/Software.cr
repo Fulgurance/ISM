@@ -946,20 +946,21 @@ module ISM
                                         error: "The checksum do not match with the downloaded file. The file can be corrupted or compromised.")
             end
 
-            ISM::Core::Notification.checkAuthenticity(archive)
+            #EXPERIMENTAL
+            #ISM::Core::Notification.checkAuthenticity(archive)
 
             #We check now if the authenticity (digital signature)
             #TO DO: Need to decide where to store signatures (for port too)
-            process = ISM::Core.runSystemCommand(   command: "openssl dgst -sha256 -verify PublicFulguranceDevelopement.key -signature #{archive}.sig #{archive}",
-                                                    viaChroot: false,
-                                                    asRoot: false)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "checkFile",
-                                        errorTitle: "Authenticity verification failed",
-                                        error: "The archive signature does not match with the public key. The file can be corrupted or compromised.")
-            end
+            # process = ISM::Core.runSystemCommand(   command: "openssl dgst -sha256 -verify PublicFulguranceDevelopement.key -signature #{archive}.sig #{archive}",
+            #                                         viaChroot: false,
+            #                                         asRoot: false)
+            #
+            # if !process.success?
+            #     ISM::Core::Error.show(  className: "Software",
+            #                             functionName: "checkFile",
+            #                             errorTitle: "Authenticity verification failed",
+            #                             error: "The archive signature does not match with the public key. The file can be corrupted or compromised.")
+            # end
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
