@@ -231,95 +231,95 @@ module ISM
         #     end
         # end
 
-        def resetRootPermissions
-            requestedCommands = "/usr/bin/chown -f -R root:root #{Ism.settings.rootPath}"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "resetRootPermissions",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        def resetVarIsmPermissions
-            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/var/ism"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "resetVarIsmPermissions",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        def resetEtcIsmPermissions
-            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/etc/ism"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "resetEtcIsmPermissions",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        def resetVarLogIsmPermissions
-            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "resetVarLogIsmPermissions",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        def resetTmpIsmPermissions
-            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "resetTmpIsmPermissions",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        def resetSourcesPermissions
-            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.sourcesPath}"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "resetSourcesPermissions",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
+        # def resetRootPermissions
+        #     requestedCommands = "/usr/bin/chown -f -R root:root #{Ism.settings.rootPath}"
+        #
+        #     process = ISM::Core.runSystemCommand(   requestedCommands,
+        #                                             viaChroot: false,
+        #                                             asRoot: true)
+        #
+        #     if !process.success?
+        #         ISM::Core::Error.show(  className: "Software",
+        #                                 functionName: "resetRootPermissions",
+        #                                 errorTitle: "Execution failure",
+        #                                 error: "Failed to execute the function")
+        #     end
+        # end
+        #
+        # def resetVarIsmPermissions
+        #     requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/var/ism"
+        #
+        #     process = ISM::Core.runSystemCommand(   requestedCommands,
+        #                                             viaChroot: false,
+        #                                             asRoot: true)
+        #
+        #     if !process.success?
+        #         ISM::Core::Error.show(  className: "Software",
+        #                                 functionName: "resetVarIsmPermissions",
+        #                                 errorTitle: "Execution failure",
+        #                                 error: "Failed to execute the function")
+        #     end
+        # end
+        #
+        # def resetEtcIsmPermissions
+        #     requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/etc/ism"
+        #
+        #     process = ISM::Core.runSystemCommand(   requestedCommands,
+        #                                             viaChroot: false,
+        #                                             asRoot: true)
+        #
+        #     if !process.success?
+        #         ISM::Core::Error.show(  className: "Software",
+        #                                 functionName: "resetEtcIsmPermissions",
+        #                                 errorTitle: "Execution failure",
+        #                                 error: "Failed to execute the function")
+        #     end
+        # end
+        #
+        # def resetVarLogIsmPermissions
+        #     requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
+        #
+        #     process = ISM::Core.runSystemCommand(   requestedCommands,
+        #                                             viaChroot: false,
+        #                                             asRoot: true)
+        #
+        #     if !process.success?
+        #         ISM::Core::Error.show(  className: "Software",
+        #                                 functionName: "resetVarLogIsmPermissions",
+        #                                 errorTitle: "Execution failure",
+        #                                 error: "Failed to execute the function")
+        #     end
+        # end
+        #
+        # def resetTmpIsmPermissions
+        #     requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
+        #
+        #     process = ISM::Core.runSystemCommand(   requestedCommands,
+        #                                             viaChroot: false,
+        #                                             asRoot: true)
+        #
+        #     if !process.success?
+        #         ISM::Core::Error.show(  className: "Software",
+        #                                 functionName: "resetTmpIsmPermissions",
+        #                                 errorTitle: "Execution failure",
+        #                                 error: "Failed to execute the function")
+        #     end
+        # end
+        #
+        # def resetSourcesPermissions
+        #     requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.sourcesPath}"
+        #
+        #     process = ISM::Core.runSystemCommand(   requestedCommands,
+        #                                             viaChroot: false,
+        #                                             asRoot: true)
+        #
+        #     if !process.success?
+        #         ISM::Core::Error.show(  className: "Software",
+        #                                 functionName: "resetSourcesPermissions",
+        #                                 errorTitle: "Execution failure",
+        #                                 error: "Failed to execute the function")
+        #     end
+        # end
 
         # def lockTasks
         #     requestedCommands = "/usr/bin/chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}*"
@@ -339,19 +339,26 @@ module ISM
         # Internal use only
         def prepareRootPermissions
             # unlockTasks
-            resetRootPermissions
-            resetVarIsmPermissions
-            resetEtcIsmPermissions
-            resetVarLogIsmPermissions
-            resetTmpIsmPermissions
-            resetSourcesPermissions
+            # resetRootPermissions
+            # resetVarIsmPermissions
+            # resetEtcIsmPermissions
+            # resetVarLogIsmPermissions
+            # resetTmpIsmPermissions
+            # resetSourcesPermissions
             # lockTasks
+            requestedCommands = "find #{Ism.settings.rootPath} ! -name 'ism' ! -name '.ISM*' -exec chown root:root '{}' \;"
 
-            rescue exception
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+            # rescue exception
             ISM::Core::Error.show(  className: "Software",
                                     functionName: "prepareRootPermissions",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function")
+            end
         end
 
         #Special function to improve performance (Internal use only)
