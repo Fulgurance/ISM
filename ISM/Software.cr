@@ -346,7 +346,10 @@ module ISM
             # resetTmpIsmPermissions
             # resetSourcesPermissions
             # lockTasks
-            requestedCommands = "find #{Ism.settings.rootPath} ! -name 'ism' ! -name '.ISM*' -exec chown root:root '{}' \;"
+
+            #TO DO
+            #Highly experimental. Need to be tested, and probably adapted for sources and tools directories
+            requestedCommands = "find #{Ism.settings.rootPath} ! -name 'ism' ! -name '.ISM*' ! -name 'sources' ! -name 'tools' -exec chown root:root '{}' \;"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
