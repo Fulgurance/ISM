@@ -948,8 +948,7 @@ module ISM
                 ISM::Core::Error.show(  className: "Software",
                                         functionName: "checkFile",
                                         errorTitle: "Authenticity verification failed",
-                                        error: "The archive signature does not match with the public key. The file can be corrupted or compromised.",
-                                        exception: exception)
+                                        error: "The archive signature does not match with the public key. The file can be corrupted or compromised.")
             end
 
             rescue exception
