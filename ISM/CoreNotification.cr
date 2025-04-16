@@ -350,7 +350,7 @@ module ISM
             end
 
             def self.checkIntegrity(file : String)
-                ISM::Core::Notification.subProcessNotification("#{ISM::Default::CommandLine::CheckAuthenticityText.colorize(:green)}#{}")
+                ISM::Core::Notification.subProcessNotification("#{ISM::Default::CommandLine::CheckAuthenticityText.colorize(:green)}#{file}")
             end
 
             def self.checkAuthenticity(file : String)
