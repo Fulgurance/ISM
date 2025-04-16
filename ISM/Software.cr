@@ -216,23 +216,23 @@ module ISM
                                     exception: exception)
         end
 
-        def unlockTasks
-            requestedCommands = "/usr/bin/chattr -f -i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}*"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "unlockTaks",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
+        # def unlockTasks
+        #     requestedCommands = "/usr/bin/chattr -f -i #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}*"
+        #
+        #     process = ISM::Core.runSystemCommand(   requestedCommands,
+        #                                             viaChroot: false,
+        #                                             asRoot: true)
+        #
+        #     if !process.success?
+        #         ISM::Core::Error.show(  className: "Software",
+        #                                 functionName: "unlockTaks",
+        #                                 errorTitle: "Execution failure",
+        #                                 error: "Failed to execute the function")
+        #     end
+        # end
 
         def resetRootPermissions
-            requestedCommands = "/usr/bin/chown -R root:root #{Ism.settings.rootPath}"
+            requestedCommands = "/usr/bin/chown -f -R root:root #{Ism.settings.rootPath}"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
@@ -321,31 +321,31 @@ module ISM
             end
         end
 
-        def lockTasks
-            requestedCommands = "/usr/bin/chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}*"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "lockTaks",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
+        # def lockTasks
+        #     requestedCommands = "/usr/bin/chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}*"
+        #
+        #     process = ISM::Core.runSystemCommand(   requestedCommands,
+        #                                             viaChroot: false,
+        #                                             asRoot: true)
+        #
+        #     if !process.success?
+        #         ISM::Core::Error.show(  className: "Software",
+        #                                 functionName: "lockTaks",
+        #                                 errorTitle: "Execution failure",
+        #                                 error: "Failed to execute the function")
+        #     end
+        # end
 
         # Internal use only
         def prepareRootPermissions
-            unlockTasks
+            # unlockTasks
             resetRootPermissions
             resetVarIsmPermissions
             resetEtcIsmPermissions
             resetVarLogIsmPermissions
             resetTmpIsmPermissions
             resetSourcesPermissions
-            lockTasks
+            # lockTasks
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -2265,7 +2265,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String) : String
-            #moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
+
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
@@ -2283,7 +2283,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String) : String
-            #makeDirectoryNoChroot(path, asRoot: systemHandleUserAccess)
+
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
@@ -2301,7 +2301,6 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String) : String
-            #moveFileNoChroot(target, path, asRoot: systemHandleUserAccess)
             return <<-REQUEST
             #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} -f #{target} #{path}
             REQUEST
