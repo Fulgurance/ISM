@@ -216,19 +216,8 @@ module ISM
                                     exception: exception)
         end
 
-        # Internal use only
-        def prepareRootPermissions
-            binary = "/usr/bin/chown"
-            unlockTask = "/usr/bin/chattr -f -i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}*"
-            setRoot = "#{binary} -R root:root #{Ism.settings.rootPath}"
-            setVarIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/var/ism"
-            setEtcIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/etc/ism"
-            setVarLogIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
-            setTmpIsm = "#{binary} -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
-            setSources = "#{binary} -R ism:ism #{Ism.settings.sourcesPath}"
-            lockTask = "chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}*"
-
-            requestedCommands = "#{unlockTask} && #{setRoot} && #{setVarIsm} && #{setEtcIsm} && #{setVarLogIsm} && #{setTmpIsm} && #{setSources} && #{lockTask}"
+        def unlockTasks
+            requestedCommands = "/usr/bin/chattr -f -i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}*"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
@@ -236,10 +225,133 @@ module ISM
 
             if !process.success?
                 ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareRootPermissions",
+                                        functionName: "unlockTaks",
                                         errorTitle: "Execution failure",
                                         error: "Failed to execute the function")
             end
+        end
+
+        def resetRootPermissions
+            requestedCommands = "/usr/bin/chown -R root:root #{Ism.settings.rootPath}"
+
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "resetRootPermissions",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        def resetVarIsmPermissions
+            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/var/ism"
+
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "resetVarIsmPermissions",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        def resetEtcIsmPermissions
+            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/etc/ism"
+
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "resetEtcIsmPermissions",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        def resetVarLogIsmPermissions
+            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/var/log/ism"
+
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "resetVarLogIsmPermissions",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        def resetTmpIsmPermissions
+            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.rootPath}/tmp/ism"
+
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "resetTmpIsmPermissions",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        def resetSourcesPermissions
+            requestedCommands = "/usr/bin/chown -R ism:ism #{Ism.settings.sourcesPath}"
+
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "resetSourcesPermissions",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        def lockTasks
+            requestedCommands = "/usr/bin/chattr -f +i #{Ism.settings.rootPath}#{ISM::Default::Filename::Task}*"
+
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "lockTaks",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        # Internal use only
+        def prepareRootPermissions
+            unlockTasks
+            resetRootPermissions
+            resetVarIsmPermissions
+            resetEtcIsmPermissions
+            resetVarLogIsmPermissions
+            resetTmpIsmPermissions
+            resetSourcesPermissions
+            lockTasks
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Software",
+                                    functionName: "prepareRootPermissions",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function")
         end
 
         #Special function to improve performance (Internal use only)
@@ -820,7 +932,7 @@ module ISM
             if archiveSha512 != sha512
                 ISM::Core::Error.show(  className: "Software",
                                         functionName: "checkFile",
-                                        errorTitle: "integrity verification failed",
+                                        errorTitle: "Integrity verification failed",
                                         error: "The checksum do not match with the downloaded file. The file can be corrupted or compromised.")
             end
 
@@ -836,7 +948,7 @@ module ISM
                 ISM::Core::Error.show(  className: "Software",
                                         functionName: "checkFile",
                                         errorTitle: "Authenticity verification failed",
-                                        error: "The archive signature does not match with the public key. The file can be compromised",
+                                        error: "The archive signature does not match with the public key. The file can be corrupted or compromised.",
                                         exception: exception)
             end
 
