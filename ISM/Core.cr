@@ -58,15 +58,6 @@ module ISM
                                         shell: true)
             end
 
-            # We check too if there is any script task left
-            if File.exists?("#{taskFilePath}.cr")
-                process = Process.run(  command:    "sudo chattr -f -i #{taskFilePath}.cr",
-                                        shell:      true)
-
-                process = Process.run(  command: "sudo rm #{taskFilePath}.cr",
-                                        shell: true)
-            end
-
             if !Dir.exists?(taskFileDirectory)
                 Dir.mkdir_p(taskFileDirectory)
             end
