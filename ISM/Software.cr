@@ -90,6 +90,13 @@ module ISM
         def prepareChrootDevConsole
             requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
+            #TO DO
+            # if !ISM::Core::Security.stillHaveSudoAccess
+            #     ISM::Core::Notification.securityNotification(   command: requestedCommands,
+            #                                                     reason: "",
+            #                                                     details: String)
+            # end
+
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
                                                     asRoot: true)
