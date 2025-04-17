@@ -118,7 +118,7 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
-            command = <<-CODE
+            commandList = <<-CODE
             #!/bin/bash
 
             if \[ -f "/etc/profile" \]; then
@@ -128,7 +128,7 @@ module ISM
             cd #{path} && #{environmentCommand} #{command}
             CODE
 
-            process = runTasks( tasks:      command,
+            process = runTasks( tasks:      commandList,
                                 quiet:      quiet,
                                 asRoot:     superuser,
                                 viaChroot:  (commandLineSettings.installByChroot && viaChroot),
@@ -141,7 +141,7 @@ module ISM
             rescue exception
                 raisedError =  <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
-                command: #{command}
+                commands: #{commandList}
                 asRoot: #{asRoot}
                 viaChroot: #{viaChroot}
                 ERROR
