@@ -225,11 +225,26 @@ module ISM
 
         # Internal use only
         def prepareRootPermissions
-            requestedCommands = "find #{Ism.settings.rootPath} ! -name 'ism' ! -name '.ISM*' ! -wholename '#{Ism.settings.sourcesPath[0..-2]}' ! -wholename '#{Ism.settings.toolsPath[0..-2]}' -exec chown root:root '{}' \;"
+            #We first get recursively the whole chroot tree
+            rootFileList = Dir.glob(["#{Ism.settings.rootPath}/**/*"], match: :dot_files)
 
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
+            #We exclude the whole ism tree that should keep as owners ism:ism
+            blackList = [   Ism.settings.sourcesPath,
+                            Ism.settings.toolsPath,
+                            ".ISM.",
+                            ISM::Default::Path::RuntimeDataDirectory,
+                            ISM::Default::Path::TemporaryDirectory,
+                            ISM::Default::Path::SettingsDirectory,
+                            ISM::Default::Path::LogsDirectory,
+                            ISM::Default::Path::LibraryDirectory]
+
+            rootFileList.each do |file|
+                if !blackList.any? { |entry| file.includes?(entry)}
+                    runChownCommand("root:root #{file}")
+                else
+                    runChownCommand("#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{file}")
+                end
+            end
 
             if !process.success?
             # rescue exception
@@ -2275,7 +2290,7 @@ module ISM
 
             end
 
-            fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
+            # fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
             ISM::Core::Notification.applyingSecurityMap
