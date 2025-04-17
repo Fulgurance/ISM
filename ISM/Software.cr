@@ -246,13 +246,12 @@ module ISM
                 end
             end
 
-            if !process.success?
-            # rescue exception
+            rescue exception
             ISM::Core::Error.show(  className: "Software",
                                     functionName: "prepareRootPermissions",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
-            end
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         #Special function to improve performance (Internal use only)
@@ -2290,7 +2289,7 @@ module ISM
 
             end
 
-            # fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
+            fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
             ISM::Core::Notification.applyingSecurityMap
