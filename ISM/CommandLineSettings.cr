@@ -10,6 +10,7 @@ module ISM
         property    rootPath : String
         property    defaultMirror : String
         property    buildKernelOptionsAsModule : Bool
+        property    autoDeployServices : Bool
 
         #Host related parameters
         property    systemTargetName : String
@@ -65,6 +66,7 @@ module ISM
                         @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
                         @buildKernelOptionsAsModule = ISM::Default::CommandLineSettings::BuildKernelOptionsAsModule,
+                        @autoDeployServices = ISM::Default::CommandLineSettings::AutoDeployServices,
 
                         #Host related parameters
                         @systemTargetName = ISM::Default::CommandLineSettings::SystemTargetName,
@@ -163,6 +165,7 @@ module ISM
                                     rootPath : String,
                                     defaultMirror : String,
                                     buildKernelOptionsAsModule : Bool,
+                                    autoDeployServices : Bool,
 
                                     #Host related parameters
                                     systemTargetName : String,
@@ -224,6 +227,7 @@ module ISM
                         "rootPath" => rootPath,
                         "defaultMirror" => defaultMirror,
                         "buildKernelOptionsAsModule" => buildKernelOptionsAsModule,
+                        "autoDeployServices" => autoDeployServices,
 
                         #Host related parameters
                         "systemTargetName" => systemTargetName,
@@ -295,6 +299,7 @@ module ISM
                                             ISM::Default::CommandLineSettings::RootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
+                                            @autoDeployServices,
 
                                             #Host related parameters
                                             @chrootTargetName,
@@ -362,6 +367,7 @@ module ISM
                                             @rootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
+                                            @autoDeployServices,
 
                                             #Host related parameters
                                             @systemTargetName,
@@ -842,6 +848,17 @@ module ISM
             rescue exception
             ISM::Core::Error.show(  className: "CommandLineSettings",
                                     functionName: "setBuildKernelOptionsAsModule",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
+        def setAutoDeployServices(@autoDeployServices)
+            writeSystemConfiguration
+
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLineSettings",
+                                    functionName: "setAutoDeployServices",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
