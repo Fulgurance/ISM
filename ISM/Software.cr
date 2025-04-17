@@ -225,7 +225,7 @@ module ISM
 
         # Internal use only
         def prepareRootPermissions
-            requestedCommands = "find #{Ism.settings.rootPath} ! -name 'ism' ! -name '.ISM*' ! -wholename '#{Ism.settings.sourcesPath}' ! -wholename '#{Ism.settings.toolsPath}' -exec chown root:root '{}' \;"
+            requestedCommands = "find #{Ism.settings.rootPath} ! -name 'ism' ! -name '.ISM*' ! -wholename '#{Ism.settings.sourcesPath[0..-2]}' ! -wholename '#{Ism.settings.toolsPath[0..-2]}' -exec chown root:root '{}' \;"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
