@@ -228,35 +228,39 @@ module ISM
             #We first get recursively the whole chroot tree
             rootFileList = Dir.glob(["#{Ism.settings.rootPath}/**/*"], match: :dot_files)
 
-            #We exclude the whole ism tree that should keep as owners ism:ism
-            blackList = [   Ism.settings.sourcesPath,
-                            Ism.settings.toolsPath,
-                            "#{Ism.settings.rootPath}ISM::Default::Path::RuntimeDataDirectory",
-                            "#{Ism.settings.rootPath}ISM::Default::Path::TemporaryDirectory",
-                            "#{Ism.settings.rootPath}ISM::Default::Path::SettingsDirectory",
-                            "#{Ism.settings.rootPath}ISM::Default::Path::LogsDirectory",
-                            "#{Ism.settings.rootPath}ISM::Default::Path::LibraryDirectory"]
+            blackList = "!(#{Ism.settings.sourcesPath}|#{Ism.settings.toolsPath}|#{ISM::Default::Path::RuntimeDataDirectory}|#{ISM::Default::Path::TemporaryDirectory}|#{ISM::Default::Path::SettingsDirectory}|#{ISM::Default::Path::LogsDirectory}|#{ISM::Default::Path::LibraryDirectory})"
 
-            commandList = [ #First we lock the ism tree to make sure the rights do not change and bring an execution error
-                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.sourcesPath}",
-                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.toolsPath}",
-                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
-                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
-                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",
+            command = ["/usr/bin/chown -R root:root #{Ism.settings.rootPath}#{blackList}"]
 
-                            #Then we reset the all system rights with root:root
-                            "/usr/bin/sudo /usr/bin/chown -f -R #{Ism.settings.rootPath}",
-
-                            #And now we unlock again the ism tree
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.sourcesPath}",
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.toolsPath}",
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",]
+            # #We exclude the whole ism tree that should keep as owners ism:ism
+            # blackList = [   Ism.settings.sourcesPath,
+            #                 Ism.settings.toolsPath,
+            #                 "#{Ism.settings.rootPath}ISM::Default::Path::RuntimeDataDirectory",
+            #                 "#{Ism.settings.rootPath}ISM::Default::Path::TemporaryDirectory",
+            #                 "#{Ism.settings.rootPath}ISM::Default::Path::SettingsDirectory",
+            #                 "#{Ism.settings.rootPath}ISM::Default::Path::LogsDirectory",
+            #                 "#{Ism.settings.rootPath}ISM::Default::Path::LibraryDirectory"]
+            #
+            # commandList = [ #First we lock the ism tree to make sure the rights do not change and bring an execution error
+            #                 "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.sourcesPath}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.toolsPath}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",
+            #
+            #                 #Then we reset the all system rights with root:root
+            #                 "/usr/bin/sudo /usr/bin/chown -f -R #{Ism.settings.rootPath}",
+            #
+            #                 #And now we unlock again the ism tree
+            #                 "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.sourcesPath}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.toolsPath}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+            #                 "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",]
 
             # commandList = Array(String).new
             #
@@ -269,8 +273,12 @@ module ISM
             #         end
             #     end
             # end
+            #
+            # runCommandList(commandList: commandList)
 
-            runCommandList(commandList: commandList)
+            ISM::Core.runSystemCommand( command: command,
+                                        asRoot: true,
+                                        viaChroot: false)
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
