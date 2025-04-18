@@ -1300,6 +1300,17 @@ module ISM
                                             asRoot: true)
             end
 
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr")
+
+                ISM::Core.runSystemCommand( command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
+                                            viaChroot: false,
+                                            asRoot: true)
+
+                ISM::Core.runSystemCommand( command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
+                                            viaChroot: false,
+                                            asRoot: true)
+            end
+
             processResult = IO::Memory.new
 
             requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task} -f json"
