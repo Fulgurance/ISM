@@ -52,15 +52,33 @@ module ISM
             # We first check if there is any task left
             if File.exists?("#{taskFilePath}")
                 process = Process.run(  command:    "sudo chattr -f -i #{taskFilePath}",
+                                        input:      (quiet ? Process::Redirect::Close : input),
+                                        output:     (quiet ? Process::Redirect::Close : output),
+                                        error:      (quiet ? Process::Redirect::Close : error),
                                         shell:      true)
 
                 process = Process.run(  command: "sudo rm #{taskFilePath}",
+                                        input:      (quiet ? Process::Redirect::Close : input),
+                                        output:     (quiet ? Process::Redirect::Close : output),
+                                        error:      (quiet ? Process::Redirect::Close : error),
                                         shell: true)
             end
 
             if !Dir.exists?(taskFileDirectory)
                 Dir.mkdir_p(taskFileDirectory)
             end
+
+            process = Process.run(  command: "sudo touch #{taskFilePath}",
+                                    input:      (quiet ? Process::Redirect::Close : input),
+                                    output:     (quiet ? Process::Redirect::Close : output),
+                                    error:      (quiet ? Process::Redirect::Close : error),
+                                    shell: true)
+
+            process = Process.run(  command: "sudo chown #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{taskFilePath}",
+                                    input:      (quiet ? Process::Redirect::Close : input),
+                                    output:     (quiet ? Process::Redirect::Close : output),
+                                    error:      (quiet ? Process::Redirect::Close : error),
+                                    shell: true)
 
             File.write(taskFilePath, tasks)
 
@@ -104,7 +122,7 @@ module ISM
         def self.runSystemCommand(command : String, path = commandLineSettings.installByChroot ? "/" : commandLineSettings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false, viaChroot = true, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
 
             targetedSystemInformationFilePath = (viaChroot ? ISM::CommandLineSystemInformation.filePath : "/#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}")
-            systemHandleUserAccess = ISM::CommandLineSystemInformation.loadConfiguration(targetedSystemInformationFilePath)
+            systemHandleUserAccess = ISM::CommandLineSystemInformation.loadConfiguration(targetedSystemInformationFilePath).handleUserAccess
 
             superuser = (asRoot && systemHandleUserAccess)
 
