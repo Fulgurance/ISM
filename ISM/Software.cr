@@ -230,7 +230,7 @@ module ISM
 
             blackList = "!(#{Ism.settings.sourcesPath}|#{Ism.settings.toolsPath}|#{ISM::Default::Path::RuntimeDataDirectory}|#{ISM::Default::Path::TemporaryDirectory}|#{ISM::Default::Path::SettingsDirectory}|#{ISM::Default::Path::LogsDirectory}|#{ISM::Default::Path::LibraryDirectory})"
 
-            command = ["/usr/bin/chown -R root:root #{Ism.settings.rootPath}#{blackList}"]
+            command = "/usr/bin/chown -R root:root #{Ism.settings.rootPath}#{blackList}"
 
             # #We exclude the whole ism tree that should keep as owners ism:ism
             # blackList = [   Ism.settings.sourcesPath,
