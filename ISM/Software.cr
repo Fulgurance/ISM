@@ -237,14 +237,14 @@ module ISM
                             ISM::Default::Path::LogsDirectory,
                             ISM::Default::Path::LibraryDirectory]
 
-            commandList = String.new
+            commandList = Array(String).new
 
             rootFileList.each do |file|
                 if !file.includes?(".ISM.")
                     if !blackList.any? { |entry| file.includes?(entry)}
-                        commandList += "/usr/bin/sudo /usr/bin/chown root:root \"#{file}\"\n"
+                        commandList.push("/usr/bin/sudo /usr/bin/chown root:root \"#{file}\"")
                     else
-                        commandList += "/usr/bin/sudo /usr/bin/chown #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} \"#{file}\"\n"
+                        commandList.push("/usr/bin/sudo /usr/bin/chown #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} \"#{file}\"")
                     end
                 end
             end
