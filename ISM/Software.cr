@@ -231,20 +231,25 @@ module ISM
             #We exclude the whole ism tree that should keep as owners ism:ism
             blackList = [   Ism.settings.sourcesPath,
                             Ism.settings.toolsPath,
-                            ".ISM.",
                             ISM::Default::Path::RuntimeDataDirectory,
                             ISM::Default::Path::TemporaryDirectory,
                             ISM::Default::Path::SettingsDirectory,
                             ISM::Default::Path::LogsDirectory,
                             ISM::Default::Path::LibraryDirectory]
 
+            commandList = String.new
+
             rootFileList.each do |file|
-                if !blackList.any? { |entry| file.includes?(entry)}
-                    runChownCommand("root:root #{file}")
-                else
-                    runChownCommand("#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{file}")
+                if !file.includes?(".ISM.")
+                    if !blackList.any? { |entry| file.includes?(entry)}
+                        commandList += "/usr/bin/sudo /usr/bin/chown root:root \"#{file}\"\n"
+                    else
+                        commandList += "/usr/bin/sudo /usr/bin/chown #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} \"#{file}\"\n"
+                    end
                 end
             end
+
+            runCommandList(commandList: commandList)
 
             rescue exception
             ISM::Core::Error.show(  className: "Software",
@@ -253,6 +258,8 @@ module ISM
                                     error: "Failed to execute the function",
                                     exception: exception)
         end
+
+        ###############################################################################
 
         #Special function to improve performance (Internal use only)
         def userConfigurationFilePathNoChroot : String
@@ -2253,25 +2260,23 @@ module ISM
         end
 
         #Special function to improve installation process performance (Internal use only)
-        def performInstallationRequest(requests : Array(String))
+        def runCommandList(commandList : Array(String))
             path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::InstallationList}"
 
             if File.exists?(path)
                 deleteFileNoChroot(path: path, asRoot: true)
             end
 
-            data = requests.join("\n")
+            data = commandList.join("\n")
             File.write(path, data)
 
             ISM::Core.runSystemCommand( command: "/usr/bin/chmod +x #{path}",
                                         quiet: true,
-                                        viaChroot: false,
-                                        asRoot: systemHandleUserAccess)
+                                        viaChroot: false)
 
             ISM::Core.runSystemCommand( command: path,
                                         quiet: true,
-                                        viaChroot: false,
-                                        asRoot: systemHandleUserAccess)
+                                        viaChroot: false)
         end
 
         #Manage stripping, recording installed files and favourites, libtool archive removal, and mount/remount critical point with read-only/read-write access
@@ -2294,7 +2299,7 @@ module ISM
 
             ISM::Core::Notification.applyingSecurityMap
 
-            requests = Array(String).new
+            commandList = Array(String).new
 
             fileList.each do |entry|
 
@@ -2313,7 +2318,7 @@ module ISM
 
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            requests.push(installDirectory( path:   finalDestination,
+                            commandList.push(installDirectory( path:   finalDestination,
                                                             user:   securityDescriptor.user,
                                                             group:  securityDescriptor.group,
                                                             mode:   securityDescriptor.mode))
@@ -2322,10 +2327,10 @@ module ISM
                         #TO DO: Pre check if files are the same
                         if !File.exists?(finalDestination)
                             if File.symlink?(entry)
-                                requests.push(installSymlink(   target: entry,
+                                commandList.push(installSymlink(   target: entry,
                                                                 path:   finalDestination))
                             else
-                                requests.push(installFile(  target: entry,
+                                commandList.push(installFile(  target: entry,
                                                             path:   finalDestination,
                                                             user:   securityDescriptor.user,
                                                             group:  securityDescriptor.group,
@@ -2337,7 +2342,7 @@ module ISM
                 end
             end
 
-            performInstallationRequest(requests: requests)
+            runCommandList(commandList: commandList)
 
             #Strip the file if needed
             if stripFiles
