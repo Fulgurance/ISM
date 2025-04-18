@@ -231,23 +231,44 @@ module ISM
             #We exclude the whole ism tree that should keep as owners ism:ism
             blackList = [   Ism.settings.sourcesPath,
                             Ism.settings.toolsPath,
-                            ISM::Default::Path::RuntimeDataDirectory,
-                            ISM::Default::Path::TemporaryDirectory,
-                            ISM::Default::Path::SettingsDirectory,
-                            ISM::Default::Path::LogsDirectory,
-                            ISM::Default::Path::LibraryDirectory]
+                            "#{Ism.settings.rootPath}ISM::Default::Path::RuntimeDataDirectory",
+                            "#{Ism.settings.rootPath}ISM::Default::Path::TemporaryDirectory",
+                            "#{Ism.settings.rootPath}ISM::Default::Path::SettingsDirectory",
+                            "#{Ism.settings.rootPath}ISM::Default::Path::LogsDirectory",
+                            "#{Ism.settings.rootPath}ISM::Default::Path::LibraryDirectory"]
 
-            commandList = Array(String).new
+            commandList = [ #First we lock the ism tree to make sure the rights do not change and bring an execution error
+                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.sourcesPath}",
+                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.toolsPath}",
+                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+                            "/usr/bin/sudo /usr/bin/chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",
 
-            rootFileList.each do |file|
-                if !file.includes?(".ISM.")
-                    if !blackList.any? { |entry| file.includes?(entry)}
-                        commandList.push("/usr/bin/sudo /usr/bin/chown root:root \"#{file}\"")
-                    else
-                        commandList.push("/usr/bin/sudo /usr/bin/chown #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} \"#{file}\"")
-                    end
-                end
-            end
+                            #Then we reset the all system rights with root:root
+                            "/usr/bin/sudo /usr/bin/chown -f -R #{Ism.settings.rootPath}",
+
+                            #And now we unlock again the ism tree
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.sourcesPath}",
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.toolsPath}",
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",]
+
+            # commandList = Array(String).new
+            #
+            # rootFileList.each do |file|
+            #     if !file.includes?(".ISM.")
+            #         if !blackList.any? { |entry| file.includes?(entry)}
+            #             commandList.push("/usr/bin/sudo /usr/bin/chown root:root \"#{file}\"")
+            #         else
+            #             commandList.push("/usr/bin/sudo /usr/bin/chown #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} \"#{file}\"")
+            #         end
+            #     end
+            # end
 
             runCommandList(commandList: commandList)
 
