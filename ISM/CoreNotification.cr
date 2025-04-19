@@ -486,7 +486,7 @@ module ISM
 
                     currentTree.each_with_index do |software, softwareIndex|
                         if softwareIndex != treeIndex && softwareList.any? { |entry| entry == software }
-                            dependencyChains.push(tree)
+                            dependencyChains.push(tree[0..softwareIndex])
                         end
                     end
                 end
