@@ -25,7 +25,7 @@ module ISM
                 Class: #{className.colorize(:red)}
                 Function: #{functionName.colorize(:red)}
 
-                #{errorTitle}
+                #{errorTitle.colorize(:red)}
                 #{error}
 
                 Exception:
