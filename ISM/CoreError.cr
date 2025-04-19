@@ -16,7 +16,7 @@ module ISM
 
                 title = "#{ISM::Default::Error::Title.colorize(:red)}"
 
-                errorText = "#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                errorText = "#{fullLog.colorize(:red)}"
                 help = "#{ISM::Default::Error::Help.colorize(:red)}"
 
                 errorReport = <<-REPORT
@@ -26,7 +26,7 @@ module ISM
                 Function: #{functionName.colorize(:red)}
 
                 #{errorTitle}
-                #{error.colorize(:red)}
+                #{error}
 
                 Exception:
                 #{errorText}
