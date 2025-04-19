@@ -125,8 +125,7 @@ module ISM
                 #{ISM::Default::CommandLine::SecurityNotificationDetailsText} #{details.colorize(:green)}\n"
                 MESSAGE
 
-                ISM::Core.progressivePrint( text: "#{securityMessage}\n",
-                                            delay: 1)
+                puts "#{securityMessage}\n"
             end
 
             def self.download(softwareInformation : ISM::SoftwareInformation)

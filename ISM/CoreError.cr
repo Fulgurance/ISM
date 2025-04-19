@@ -36,8 +36,7 @@ module ISM
                 #{help.colorize(:red)}
                 REPORT
 
-                ISM::Core.progressivePrint( text: "\n#{errorReport}\n",
-                                            delay: 1)
+                puts "\n#{errorReport}\n"
 
                 ISM::Core.exitProgram(code: errorCode)
 
