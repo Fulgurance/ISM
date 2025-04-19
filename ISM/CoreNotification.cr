@@ -484,21 +484,14 @@ module ISM
                     currentSoftware = tree[0]
                     currentTree = tree[1..-1]
 
+                    limiters = softwareList.map { |entry| entry != currentSoftware}
+
                     currentTree.each_with_index do |software, softwareIndex|
-
-                        if softwareIndex != treeIndex
-
-                            softwareList.each_with_index do |entry, entryIndex|
-
-                                if entry == software
-                                    dependencyChains.push(tree[0..entryIndex])
-                                end
-
-                            end
-
+                        if limiters.includes?(software)
+                            dependencyChains.push(tree[0..(softwareIndex+1)])
                         end
-
                     end
+
                 end
 
                 puts
