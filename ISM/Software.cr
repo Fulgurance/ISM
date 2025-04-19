@@ -101,7 +101,7 @@ module ISM
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            if !process.success?
+            if !process.success? && process.exit_code != 17
                 ISM::Core::Error.show(  className: "Software",
                                         functionName: "prepareChrootDevConsole",
                                         errorTitle: "Execution failure",
@@ -117,7 +117,7 @@ module ISM
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            if !process.success?
+            if !process.success? && process.exit_code != 17
                 ISM::Core::Error.show(  className: "Software",
                                         functionName: "prepareChrootDevNull",
                                         errorTitle: "Execution failure",
