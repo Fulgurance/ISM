@@ -226,11 +226,22 @@ module ISM
         # Internal use only
         def prepareRootPermissions
             #We first get recursively the whole chroot tree
-            rootFileList = Dir.glob(["#{Ism.settings.rootPath}/**/*"], match: :dot_files)
+            #rootFileList = Dir.glob(["#{Ism.settings.rootPath}/**/*"], match: :dot_files)
 
-            blackList = "!(#{Ism.settings.sourcesPath}|#{Ism.settings.toolsPath}|#{ISM::Default::Path::RuntimeDataDirectory}|#{ISM::Default::Path::TemporaryDirectory}|#{ISM::Default::Path::SettingsDirectory}|#{ISM::Default::Path::LogsDirectory}|#{ISM::Default::Path::LibraryDirectory})"
+            command = <<-CMD
+            find #{Ism.settings.rootPath}
+            ! -name '.ISM.*'
+            ! -name '#{Ism.settings.sourcesPath}' \
+            ! -name '#{Ism.settings.toolsPath}' \
+            ! -name '#{ISM::Default::Path::RuntimeDataDirectory}' \
+            ! -name '#{ISM::Default::Path::TemporaryDirectory}' \
+            ! -name '#{ISM::Default::Path::SettingsDirectory}' \
+            ! -name '#{ISM::Default::Path::LogsDirectory}' \
+            ! -name '#{ISM::Default::Path::LibraryDirectory}' \
+            -exec chown root:root '{}' \;
+            CMD
 
-            command = "/usr/bin/chown -R root:root #{Ism.settings.rootPath}#{blackList}"
+            #command = "/usr/bin/chown -R root:root #{Ism.settings.rootPath}#{blackList}"
 
             # #We exclude the whole ism tree that should keep as owners ism:ism
             # blackList = [   Ism.settings.sourcesPath,
