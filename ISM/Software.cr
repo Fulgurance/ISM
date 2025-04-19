@@ -233,15 +233,15 @@ module ISM
         def prepareRootPermissions
             #We need to exclude the ism tree and any running task to avoid crashs and unwanted permissions
             command = <<-COMMAND
-            find #{Ism.settings.rootPath}                           \
-            ! -wholename '.ISM.*'                                        \
-            ! -wholename '#{Ism.settings.sourcesPath}'                   \
-            ! -wholename '#{Ism.settings.toolsPath}'                     \
-            ! -wholename '#{ISM::Default::Path::RuntimeDataDirectory}'   \
-            ! -wholename '#{ISM::Default::Path::TemporaryDirectory}'     \
-            ! -wholename '#{ISM::Default::Path::SettingsDirectory}'      \
-            ! -wholename '#{ISM::Default::Path::LogsDirectory}'          \
-            ! -wholename '#{ISM::Default::Path::LibraryDirectory}'       \
+            find #{Ism.settings.rootPath}                                                       \
+            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}.ISM.*'   \
+            ! -path '#{Ism.settings.rootPath}#{Ism.settings.sourcesPath}'                       \
+            ! -path '#{Ism.settings.rootPath}#{Ism.settings.toolsPath}'                         \
+            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}'       \
+            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}'         \
+            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}'          \
+            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}'              \
+            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}'           \
             -exec chown root:root '{}' \;
             COMMAND
 
