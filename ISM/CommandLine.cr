@@ -1914,7 +1914,7 @@ module ISM
                             #Inextricable dependency case
                             else
                                 ISM::Core::Notification.calculationDoneMessage
-                                ISM::Core::Notification.inextricableDependenciesMessage([calculatedDependencies[key1][0],calculatedDependencies[key2][0]])
+                                ISM::Core::Notification.inextricableDependenciesMessage([calculatedDependencies[key1],calculatedDependencies[key2]])
 
                                 ISM::Core.exitProgram
                             end
