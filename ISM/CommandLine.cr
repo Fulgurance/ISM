@@ -1231,7 +1231,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "setup",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"setup".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"setup".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1243,7 +1243,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "download",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"download".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"download".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1255,7 +1255,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "check",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"check".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"check".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1267,7 +1267,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "extract",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"extract".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"extract".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1279,7 +1279,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "patch",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"patch".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"patch".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1291,7 +1291,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "prepare",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"prepare".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"prepare".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1303,7 +1303,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "configure",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"configure".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"configure".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1315,7 +1315,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "build",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"build".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"build".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1327,7 +1327,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "prepareInstallation",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"prepareInstallation".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"prepareInstallation".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1340,7 +1340,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "recordInstallationInformation",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"recordInstallationInformation".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"recordInstallationInformation".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1352,7 +1352,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "install",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"install".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"install".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1364,7 +1364,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "recordNeededKernelOptions",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"recordNeededKernelOptions".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"recordNeededKernelOptions".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1376,7 +1376,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "clean",
                                                     errorTitle: "Installation task failed",
-                                                    error: "The #\{"clean".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"clean".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
@@ -1580,7 +1580,7 @@ module ISM
                             ISM::Core::Error.show(  className: "Software",
                                                     functionName: "uninstall",
                                                     errorTitle: "Uninstallation task failed",
-                                                    error: "The #\{"uninstall".colorize(:green) process failed for #\{coloredFullVersionName}",
+                                                    error: "The #\{"uninstall".colorize(:green)} process failed for #\{coloredFullVersionName}",
                                                     exception: exception)
                         end
 
