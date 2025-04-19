@@ -487,13 +487,10 @@ module ISM
                 dependencyChains.each do |chain|
 
                     chain.each_with_index do |software, index|
-                        color = :magenta
-
-                        case index
-                        when 0
+                        if index == 0
                             color = :green
-                        when (chain.size - 1)
-                            color = :red
+                        else
+                            color = :magenta
                         end
 
                         softwareText = "#{software.fullName.colorize(color)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
