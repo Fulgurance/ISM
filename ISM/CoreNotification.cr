@@ -476,27 +476,8 @@ module ISM
             def self.inextricableDependenciesMessage(treeArrays : Array(Array(ISM::SoftwareInformation)))
                 dependencyChains = Array(Array(ISM::SoftwareInformation)).new
 
-                softwareList = treeArrays.map { |entry| entry[0] }
-
-                #For each codependent software we get first the full tree, and then generate the chain from it (excluding itself)
-                treeArrays.each_with_index do |tree, treeIndex|
-
-                    currentSoftware = tree[0]
-                    currentTree = tree[1..-1]
-
-                    limiters = softwareList.map { |entry| entry != currentSoftware}
-
-                    currentTree.each_with_index do |software, softwareIndex|
-                        if limiters.includes?(software)
-                            dependencyChains.push(tree[0..(softwareIndex+1)])
-                        end
-                    end
-
-                end
-
-                puts
-                puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
-                puts "\n"
+                #TO DO ?
+                dependencyChains = treeArrays
 
                 #Now we print each chains with in highlight the first and last one
                 dependencyChains.each do |chain|
