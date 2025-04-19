@@ -234,14 +234,14 @@ module ISM
             #We need to exclude the ism tree and any running task to avoid crashs and unwanted permissions
             command = <<-COMMAND
             find #{Ism.settings.rootPath}                           \
-            ! -name '.ISM.*'                                        \
-            ! -name '#{Ism.settings.sourcesPath}'                   \
-            ! -name '#{Ism.settings.toolsPath}'                     \
-            ! -name '#{ISM::Default::Path::RuntimeDataDirectory}'   \
-            ! -name '#{ISM::Default::Path::TemporaryDirectory}'     \
-            ! -name '#{ISM::Default::Path::SettingsDirectory}'      \
-            ! -name '#{ISM::Default::Path::LogsDirectory}'          \
-            ! -name '#{ISM::Default::Path::LibraryDirectory}'       \
+            ! -wholename '.ISM.*'                                        \
+            ! -wholename '#{Ism.settings.sourcesPath}'                   \
+            ! -wholename '#{Ism.settings.toolsPath}'                     \
+            ! -wholename '#{ISM::Default::Path::RuntimeDataDirectory}'   \
+            ! -wholename '#{ISM::Default::Path::TemporaryDirectory}'     \
+            ! -wholename '#{ISM::Default::Path::SettingsDirectory}'      \
+            ! -wholename '#{ISM::Default::Path::LogsDirectory}'          \
+            ! -wholename '#{ISM::Default::Path::LibraryDirectory}'       \
             -exec chown root:root '{}' \;
             COMMAND
 
