@@ -101,12 +101,13 @@ module ISM
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            if !process.success? && process.exit_code != 17
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootDevConsole",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            #TO DO: Find a way to keep going only if the node already exists
+            # if !process.success? && process.exit_code != 17
+            #     ISM::Core::Error.show(  className: "Software",
+            #                             functionName: "prepareChrootDevConsole",
+            #                             errorTitle: "Execution failure",
+            #                             error: "Failed to execute the function")
+            # end
         end
 
         # Internal use only
@@ -117,12 +118,13 @@ module ISM
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            if !process.success? && process.exit_code != 17
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootDevNull",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            #TO DO: Find a way to keep going only if the node already exists
+            # if !process.success? && process.exit_code != 17
+            #     ISM::Core::Error.show(  className: "Software",
+            #                             functionName: "prepareChrootDevNull",
+            #                             errorTitle: "Execution failure",
+            #                             error: "Failed to execute the function")
+            # end
         end
 
         # Internal use only
@@ -133,12 +135,13 @@ module ISM
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootDev",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            #TO DO: Find a way to keep going only if the mountpoint already exists
+            # if !process.success?
+            #     ISM::Core::Error.show(  className: "Software",
+            #                             functionName: "prepareChrootDev",
+            #                             errorTitle: "Execution failure",
+            #                             error: "Failed to execute the function")
+            # end
         end
 
         # Internal use only
@@ -149,12 +152,13 @@ module ISM
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootDevPts",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            #TO DO: Find a way to keep going only if the mountpoint already exists
+            # if !process.success?
+            #     ISM::Core::Error.show(  className: "Software",
+            #                             functionName: "prepareChrootDevPts",
+            #                             errorTitle: "Execution failure",
+            #                             error: "Failed to execute the function")
+            # end
         end
 
         # Internal use only
@@ -165,12 +169,13 @@ module ISM
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootProc",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            #TO DO: Find a way to keep going only if the mountpoint already exists
+            # if !process.success?
+            #     ISM::Core::Error.show(  className: "Software",
+            #                             functionName: "prepareChrootProc",
+            #                             errorTitle: "Execution failure",
+            #                             error: "Failed to execute the function")
+            # end
         end
 
         # Internal use only
@@ -181,12 +186,13 @@ module ISM
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootSysfs",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            #TO DO: Find a way to keep going only if the mountpoint already exists
+            # if !process.success?
+            #     ISM::Core::Error.show(  className: "Software",
+            #                             functionName: "prepareChrootSysfs",
+            #                             errorTitle: "Execution failure",
+            #                             error: "Failed to execute the function")
+            # end
         end
 
         # Internal use only
