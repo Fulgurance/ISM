@@ -479,6 +479,10 @@ module ISM
                 #TO DO ?
                 dependencyChains = treeArrays
 
+                puts
+                puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
+                puts "\n"
+
                 #Now we print each chains with in highlight the first and last one
                 dependencyChains.each do |chain|
 
