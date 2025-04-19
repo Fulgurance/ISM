@@ -473,16 +473,20 @@ module ISM
                 puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
             end
 
-            def self.inextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
+            def self.inextricableDependenciesMessage(treeArrays : Array(Array(ISM::SoftwareInformation)))
                 dependencyChains = Array(Array(ISM::SoftwareInformation)).new
 
-                #For each codependent software we get first the full tree, and then generate the chain from it (excluding itself)
-                dependencies.each do |dependency|
-                    dependencyTree = dependency.dependencies(allowDeepSearch: true).map { |entry| entry.information}
+                softwareList = treeArrays.map { |entry| entry[0] }
 
-                    dependencyTree.each_with_index do |software, softwareIndex|
-                        if software != dependency
-                            dependencyChains.push(dependencyTree[0..softwareIndex])
+                #For each codependent software we get first the full tree, and then generate the chain from it (excluding itself)
+                treeArrays.each_with_index do |tree, treeIndex|
+
+                    currentSoftware = tree[0]
+                    currentTree = tree[1..-1]
+
+                    currentTree.each_with_index do |software, softwareIndex|
+                        if softwareIndex != treeIndex && softwareList.any? { |entry| entry == software }
+                            dependencyChains.push(tree)
                         end
                     end
                 end
