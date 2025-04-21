@@ -4,7 +4,7 @@ module ISM
 
         module Option
 
-            module Component
+            module SystemComponent
 
                 ShortText = "-c"
                 LongText = "component"

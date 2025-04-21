@@ -4,13 +4,14 @@ module ISM
 
         module Option
 
-            module ComponantList
+            module ComponentList
 
                 ShortText = "-l"
                 LongText = "list"
                 Description = "List all available components"
                 NoMatchFound = "No match found with the database for "
                 NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                Title = "Available system components:"
 
             end
             

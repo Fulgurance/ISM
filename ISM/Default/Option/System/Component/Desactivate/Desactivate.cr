@@ -4,7 +4,7 @@ module ISM
 
         module Option
 
-            module SoftwareDesactivate
+            module ComponentDesactivate
 
                 ShortText = "-d"
                 LongText = "desactivate"

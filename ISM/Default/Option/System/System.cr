@@ -9,7 +9,7 @@ module ISM
                 ShortText = "-sy"
                 LongText = "system"
                 Description = "Manage the system"
-                Options = Array(ISM::CommandLineOption).new
+                Options = [] of CommandLineOption
 
             end
 

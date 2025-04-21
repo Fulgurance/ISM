@@ -2,13 +2,13 @@ module ISM
 
     module Option
 
-        class Component < ISM::CommandLineOption
+        class SystemComponent < ISM::CommandLineOption
 
             def initialize
-                super(  ISM::Default::Option::Component::ShortText,
-                        ISM::Default::Option::Component::LongText,
-                        ISM::Default::Option::Component::Description,
-                        ISM::Default::Option::Component::Options)
+                super(  ISM::Default::Option::SystemComponent::ShortText,
+                        ISM::Default::Option::SystemComponent::LongText,
+                        ISM::Default::Option::SystemComponent::Description,
+                        ISM::Default::Option::SystemComponent::Options)
             end
 
             def start

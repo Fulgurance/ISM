@@ -19,10 +19,13 @@ module ISM
                         puts ISM::Default::Option::ComponentList::NoMatchFoundAdvice
                     else
                         puts "\n"
+                        puts "#{ISM::Default::Option::ComponentList::Title.colorize(:green)}"
+                        puts
 
                         Ism.components.each_with_index do |component, index|
 
-                            entry <<-ENTRY
+                            #For each component, show if there is anything set or not
+                            entry = <<-ENTRY
                             #{component.name}
                             ENTRY
 

@@ -88,43 +88,45 @@ module ISM
 
         # Internal use only
         def prepareChrootDevConsole
-            requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
+            if !File.exists("#{Ism.settings.rootPath}/dev/console")
+                requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
-            #TO DO
-            # if !ISM::Core::Security.stillHaveSudoAccess
-            #     ISM::Core::Notification.securityNotification(   command: requestedCommands,
-            #                                                     reason: "",
-            #                                                     details: String)
-            # end
+                #TO DO
+                # if !ISM::Core::Security.stillHaveSudoAccess
+                #     ISM::Core::Notification.securityNotification(   command: requestedCommands,
+                #                                                     reason: "",
+                #                                                     details: String)
+                # end
 
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
+                process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                        viaChroot: false,
+                                                        asRoot: true)
 
-            #TO DO: Find a way to keep going only if the node already exists
-            # if !process.success? && process.exit_code != 17
-            #     ISM::Core::Error.show(  className: "Software",
-            #                             functionName: "prepareChrootDevConsole",
-            #                             errorTitle: "Execution failure",
-            #                             error: "Failed to execute the function")
-            # end
+                if !process.success?
+                    ISM::Core::Error.show(  className: "Software",
+                                            functionName: "prepareChrootDevConsole",
+                                            errorTitle: "Execution failure",
+                                            error: "Failed to execute the function")
+                end
+            end
         end
 
         # Internal use only
         def prepareChrootDevNull
-            requestedCommands = "/usr/bin/mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
+            if !File.exists("#{Ism.settings.rootPath}/dev/null")
+                requestedCommands = "/usr/bin/mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
+                process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                        viaChroot: false,
+                                                        asRoot: true)
 
-            #TO DO: Find a way to keep going only if the node already exists
-            # if !process.success? && process.exit_code != 17
-            #     ISM::Core::Error.show(  className: "Software",
-            #                             functionName: "prepareChrootDevNull",
-            #                             errorTitle: "Execution failure",
-            #                             error: "Failed to execute the function")
-            # end
+                if !process.success? && process.exit_code != 17
+                    ISM::Core::Error.show(  className: "Software",
+                                            functionName: "prepareChrootDevNull",
+                                            errorTitle: "Execution failure",
+                                            error: "Failed to execute the function")
+                end
+            end
         end
 
         # Internal use only

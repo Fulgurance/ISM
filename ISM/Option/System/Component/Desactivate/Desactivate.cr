@@ -36,12 +36,12 @@ module ISM
 
                             if match
                                 matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
-                                Ism.printProcessNotification(   ISM::Default::Option::ComponentDesactivate::SetText1 +
+                                ISM::Core::Notification.processNotification(   ISM::Default::Option::ComponentDesactivate::SetText1 +
                                                             "#{matchingOption.name.colorize(:green)}" +
                                                             ISM::Default::Option::ComponentDesactivate::SetText2 +
                                                             matchingSoftwareText)
                             else
-                                Ism.printErrorNotification( ISM::Default::Option::ComponentDesactivate::OptionNoMatchFound1 +
+                                ISM::Core::Notification.errorNotification( ISM::Default::Option::ComponentDesactivate::OptionNoMatchFound1 +
                                                         "#{ARGV[3].colorize(:green)}" +
                                                         ISM::Default::Option::ComponentDesactivate::OptionNoMatchFound2 +
                                                         matchingSoftwareText,nil)

@@ -4,7 +4,7 @@ module ISM
 
         module Option
 
-            module SoftwareActivate
+            module ComponentActivate
 
                 ShortText = "-a"
                 LongText = "activate"
