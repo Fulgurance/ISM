@@ -251,16 +251,16 @@ module ISM
 
             command += "-exec chown root:root '{}' \\;"
 
-            ISM::Core.runSystemCommand( command: command,
-                                        asRoot: true,
-                                        viaChroot: false)
+            process = ISM::Core.runSystemCommand(   command: command,
+                                                    asRoot: true,
+                                                    viaChroot: false)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
                                     functionName: "prepareRootPermissions",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+                                    error: "Failed to execute the function"
+            end
         end
 
         ###############################################################################
