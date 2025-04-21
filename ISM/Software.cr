@@ -250,12 +250,12 @@ module ISM
             chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
             chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.sourcesPath}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.toolsPath}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
             COMMAND
 
             process = ISM::Core.runSystemCommand(   command: command,
