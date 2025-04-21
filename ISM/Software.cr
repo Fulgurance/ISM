@@ -234,14 +234,17 @@ module ISM
         # Internal use only
         def prepareRootPermissions
             #We need to exclude the ism tree and any running task to avoid crashs and unwanted permissions
-            blacklist = [   "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}.ISM.*",
+            blacklist = [   "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::InstallationList}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::CommandList}",
                             "#{Ism.settings.sourcesPath}",
                             "#{Ism.settings.toolsPath}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}"]
-                            #"#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}"] NOT NEEDED FOR NOW
+                            #"#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}"] #NOT NEEDED FOR NOW
 
             command = "find #{Ism.settings.rootPath} \\"
 
@@ -2265,7 +2268,7 @@ module ISM
 
         #Special function to improve installation process performance (Internal use only)
         def runCommandList(commandList : Array(String))
-            path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::InstallationList}"
+            path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::CommandList}"
 
             if File.exists?(path)
                 deleteFileNoChroot(path: path, asRoot: true)

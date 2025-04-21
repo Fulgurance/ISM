@@ -16,7 +16,7 @@ module ISM
             SecurityMap = "SecurityMap.json"
             TaskPrefix = ".ISM"
             Task = "#{TaskPrefix}.task"
-            InstallationList = "#{TaskPrefix}.installationList"
+            CommandList = "#{TaskPrefix}.commandList"
             StrippingList = "#{TaskPrefix}.strippingList"
             UserConfiguration = "passwd"
             GroupConfiguration = "group"
