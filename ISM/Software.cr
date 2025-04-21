@@ -88,7 +88,7 @@ module ISM
 
         # Internal use only
         def prepareChrootDevConsole
-            if !File.exists("#{Ism.settings.rootPath}/dev/console")
+            if !File.exists?("#{Ism.settings.rootPath}/dev/console")
                 requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
                 #TO DO
@@ -113,7 +113,7 @@ module ISM
 
         # Internal use only
         def prepareChrootDevNull
-            if !File.exists("#{Ism.settings.rootPath}/dev/null")
+            if !File.exists?("#{Ism.settings.rootPath}/dev/null")
                 requestedCommands = "/usr/bin/mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
 
                 process = ISM::Core.runSystemCommand(   requestedCommands,
