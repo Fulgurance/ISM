@@ -236,7 +236,6 @@ module ISM
             #We need to exclude the ism tree and any running task to avoid crashs and unwanted permissions
             blacklist = [   "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::InstallationList}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::CommandList}",
                             "#{Ism.settings.sourcesPath}",
                             "#{Ism.settings.toolsPath}",
