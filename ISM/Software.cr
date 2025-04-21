@@ -233,35 +233,30 @@ module ISM
 
         # Internal use only
         def prepareRootPermissions
-            #We need to exclude the ism tree and any running task to avoid crashs and unwanted permissions
-            blacklist = [   "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
-                            #"#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::CommandList}", #NOT NEEDED FOR NOW
-                            "#{Ism.settings.sourcesPath[0..-2]}",
-                            "#{Ism.settings.toolsPath[0..-2]}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory[0..-2]}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory[0..-2]}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory[0..-2]}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory[0..-2]}"]
-                            #"#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}"] #NOT NEEDED FOR NOW
+            command = <<-COMMAND
+            chattr -f +i -R #{Ism.settings.sourcesPath}
+            chattr -f +i -R #{Ism.settings.toolsPath}
+            chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
+            chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
+            chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
+            chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
-            command = "find #{Ism.settings.rootPath} \\"
+            chown -R -f root:root #{Ism.settings.rootPath}
 
-            blacklist.each do |path|
-                command += "! -path '#{path}' \\"
-            end
+            chattr -f -i -R #{Ism.settings.sourcesPath}
+            chattr -f -i -R #{Ism.settings.toolsPath}
+            chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
+            chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
+            chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
+            chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
-            command += "-exec chown -f root:root '{}' \\;"
-
-            #We correct all file permissions as user and group owner root
-            process = ISM::Core.runSystemCommand(   command: command,
-                                                    asRoot: true,
-                                                    viaChroot: false)
-
-            #We ensure that the ism tree is still owned by ism recursively
-            blacklist.each_with_index do |path, index|
-                command += "chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} '#{path}'#{(index < blacklist.size-1) ? " &&" : ""}"
-            end
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.sourcesPath}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.toolsPath}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
+            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
+            COMMAND
 
             process = ISM::Core.runSystemCommand(   command: command,
                                                     asRoot: true,
