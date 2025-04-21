@@ -256,6 +256,8 @@ module ISM
             chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
             chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
             chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
+
+            chmod 0750 #{Ism.settings.rootPath}/root
             chmod 1777 #{Ism.settings.rootPath}/tmp
             chmod 1777 #{Ism.settings.rootPath}/var/tmp
             COMMAND
