@@ -957,6 +957,8 @@ module ISM
 
         def getUserAgreement : Bool
 
+            ISM::Core.showTerminalCursor
+
             loop do
                 userInput = gets.to_s
 
@@ -969,6 +971,8 @@ module ISM
                 end
 
             end
+
+            ISM::Core.hideTerminalCursor
 
             rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
