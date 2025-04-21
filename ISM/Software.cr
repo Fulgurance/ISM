@@ -240,8 +240,8 @@ module ISM
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}"]
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}"]
+                            #"#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}"] NOT NEEDED FOR NOW
 
             command = "find #{Ism.settings.rootPath} \\"
 
@@ -249,7 +249,7 @@ module ISM
                 command += "#{path} \\"
             end
 
-            command += "-exec chown root:root '{}' \\;"
+            command += "-exec chown -f root:root '{}' \\;"
 
             process = ISM::Core.runSystemCommand(   command: command,
                                                     asRoot: true,
