@@ -259,7 +259,7 @@ module ISM
                 ISM::Core::Error.show(  className: "Software",
                                     functionName: "prepareRootPermissions",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function"
+                                    error: "Failed to execute the function")
             end
         end
 
