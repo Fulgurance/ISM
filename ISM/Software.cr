@@ -248,7 +248,7 @@ module ISM
             command = "find #{Ism.settings.rootPath} \\"
 
             blacklist.each do |path|
-                command += "#{path} \\"
+                command += "! -path '#{path}' \\"
             end
 
             command += "-exec chown -f root:root '{}' \\;"

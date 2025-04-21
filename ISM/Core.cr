@@ -3,11 +3,11 @@ module ISM
     module Core
 
         def self.showTerminalCursor
-            STDOUT << "\e[?25l"
+            STDOUT << "\x1B[?25l"
         end
 
         def self.hideTerminalCursor
-            STDOUT << "\e[?25h"
+            STDOUT << "\x1B[?25h"
         end
 
         def self.setTerminalTitle(title : String)
