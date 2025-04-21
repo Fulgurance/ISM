@@ -253,10 +253,21 @@ module ISM
 
             command += "-exec chown -f root:root '{}' \\;"
 
+            #We correct all file permissions as user and group owner root
             process = ISM::Core.runSystemCommand(   command: command,
                                                     asRoot: true,
                                                     viaChroot: false)
 
+            #We ensure that the ism tree is still owned by ism recursively
+            blacklist.each_with_index do |path, index|
+                command += "chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} '#{path}'#{(index < blacklist.size-1) ? " &&" : ""}"
+            end
+
+            process = ISM::Core.runSystemCommand(   command: command,
+                                                    asRoot: true,
+                                                    viaChroot: false)
+
+            #We correct all file permissions as user and group owner ism
             if !process.success?
                 ISM::Core::Error.show(  className: "Software",
                                     functionName: "prepareRootPermissions",
@@ -264,8 +275,6 @@ module ISM
                                     error: "Failed to execute the function")
             end
         end
-
-        ###############################################################################
 
         #Special function to improve performance (Internal use only)
         def userConfigurationFilePathNoChroot : String
