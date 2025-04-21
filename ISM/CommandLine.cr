@@ -961,18 +961,20 @@ module ISM
 
             loop do
                 userInput = gets.to_s
+                result = false
 
                 if userInput.downcase == ISM::Default::CommandLine::YesReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::YesShortReplyOption.downcase
-                    return true
+                    result = true
                 elsif userInput.downcase == ISM::Default::CommandLine::NoReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::NoShortReplyOption.downcase
-                    return false
+                    result = false
                 else
-                    return false
+                    result = false
                 end
 
-            end
+                ISM::Core.hideTerminalCursor
 
-            ISM::Core.hideTerminalCursor
+                return result
+            end
 
             rescue exception
             ISM::Core::Error.show(  className: "CommandLine",
