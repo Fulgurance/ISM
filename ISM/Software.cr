@@ -235,8 +235,8 @@ module ISM
         def prepareRootPermissions
             #We need to exclude the ism tree and any running task to avoid crashs and unwanted permissions
             blacklist = [   "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}.ISM.*",
-                            "#{Ism.settings.rootPath}#{Ism.settings.sourcesPath}",
-                            "#{Ism.settings.rootPath}#{Ism.settings.toolsPath}",
+                            "#{Ism.settings.sourcesPath}",
+                            "#{Ism.settings.toolsPath}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
