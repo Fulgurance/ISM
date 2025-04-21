@@ -237,12 +237,12 @@ module ISM
             blacklist = [   "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}",
                             "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::Task}.cr",
                             #"#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::CommandList}", #NOT NEEDED FOR NOW
-                            "#{Ism.settings.sourcesPath}",
-                            "#{Ism.settings.toolsPath}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}"]
+                            "#{Ism.settings.sourcesPath[0..-2]}",
+                            "#{Ism.settings.toolsPath[0..-2]}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory[0..-2]}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory[0..-2]}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory[0..-2]}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory[0..-2]}"]
                             #"#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}"] #NOT NEEDED FOR NOW
 
             command = "find #{Ism.settings.rootPath} \\"
