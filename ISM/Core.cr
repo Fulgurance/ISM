@@ -2,6 +2,14 @@ module ISM
 
     module Core
 
+        def self.showTerminalCursor
+            STDOUT << "\e[?25l"
+        end
+
+        def self.hideTerminalCursor
+            STDOUT << "\e[?25h"
+        end
+
         def self.setTerminalTitle(title : String)
             if Ism.initialTerminalTitle == ""
                 Ism.initialTerminalTitle = "\e"
