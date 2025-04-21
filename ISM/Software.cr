@@ -102,12 +102,12 @@ module ISM
                                                         viaChroot: false,
                                                         asRoot: true)
 
-                if !process.success?
-                    ISM::Core::Error.show(  className: "Software",
-                                            functionName: "prepareChrootDevConsole",
-                                            errorTitle: "Execution failure",
-                                            error: "Failed to execute the function")
-                end
+                # if !process.success?
+                #     ISM::Core::Error.show(  className: "Software",
+                #                             functionName: "prepareChrootDevConsole",
+                #                             errorTitle: "Execution failure",
+                #                             error: "Failed to execute the function")
+                # end
             end
         end
 
@@ -120,12 +120,12 @@ module ISM
                                                         viaChroot: false,
                                                         asRoot: true)
 
-                if !process.success? && process.exit_code != 17
-                    ISM::Core::Error.show(  className: "Software",
-                                            functionName: "prepareChrootDevNull",
-                                            errorTitle: "Execution failure",
-                                            error: "Failed to execute the function")
-                end
+                # if !process.success? && process.exit_code != 17
+                #     ISM::Core::Error.show(  className: "Software",
+                #                             functionName: "prepareChrootDevNull",
+                #                             errorTitle: "Execution failure",
+                #                             error: "Failed to execute the function")
+                # end
             end
         end
 
@@ -234,18 +234,22 @@ module ISM
         # Internal use only
         def prepareRootPermissions
             #We need to exclude the ism tree and any running task to avoid crashs and unwanted permissions
-            command = <<-COMMAND
-            find #{Ism.settings.rootPath}                                                       \
-            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}.ISM.*'   \
-            ! -path '#{Ism.settings.rootPath}#{Ism.settings.sourcesPath}'                       \
-            ! -path '#{Ism.settings.rootPath}#{Ism.settings.toolsPath}'                         \
-            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}'       \
-            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}'         \
-            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}'          \
-            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}'              \
-            ! -path '#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}'           \
-            -exec chown root:root '{}' \;
-            COMMAND
+            blacklist = [   "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}.ISM.*",
+                            "#{Ism.settings.rootPath}#{Ism.settings.sourcesPath}",
+                            "#{Ism.settings.rootPath}#{Ism.settings.toolsPath}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}"]
+
+            command = "find #{Ism.settings.rootPath} \\"
+
+            blacklist.each do |path|
+                command += "#{path} \\"
+            end
+
+            command += "-exec chown root:root '{}' \\;"
 
             ISM::Core.runSystemCommand( command: command,
                                         asRoot: true,
