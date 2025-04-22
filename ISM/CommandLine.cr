@@ -1218,7 +1218,7 @@ module ISM
                         version = information.version
                         passNumber = information.getEnabledPassNumber
                         fullVersionName = information.fullVersionName
-                        coloredFullVersionName = \"#\{name.colorize(:magenta)} /#\{version.colorize(Colorize::ColorRGB.new(255,100,100))}/\"
+                        coloredFullVersionName = \"#\{information.fullName.colorize(:magenta)} /#\{version.colorize(Colorize::ColorRGB.new(255,100,100))}/\"
 
                         #START INSTALLATION PROCESS
 
