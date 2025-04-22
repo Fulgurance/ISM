@@ -91,23 +91,16 @@ module ISM
             if !File.exists?("#{Ism.settings.rootPath}/dev/console")
                 requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
 
-                #TO DO
-                # if !ISM::Core::Security.stillHaveSudoAccess
-                #     ISM::Core::Notification.securityNotification(   command: requestedCommands,
-                #                                                     reason: "",
-                #                                                     details: String)
-                # end
-
                 process = ISM::Core.runSystemCommand(   requestedCommands,
                                                         viaChroot: false,
                                                         asRoot: true)
 
-                # if !process.success?
-                #     ISM::Core::Error.show(  className: "Software",
-                #                             functionName: "prepareChrootDevConsole",
-                #                             errorTitle: "Execution failure",
-                #                             error: "Failed to execute the function")
-                # end
+                if !process.success?
+                    ISM::Core::Error.show(  className: "Software",
+                                            functionName: "prepareChrootDevConsole",
+                                            errorTitle: "Execution failure",
+                                            error: "Failed to execute the function")
+                end
             end
         end
 
@@ -120,81 +113,77 @@ module ISM
                                                         viaChroot: false,
                                                         asRoot: true)
 
-                # if !process.success? && process.exit_code != 17
-                #     ISM::Core::Error.show(  className: "Software",
-                #                             functionName: "prepareChrootDevNull",
-                #                             errorTitle: "Execution failure",
-                #                             error: "Failed to execute the function")
-                # end
+                if !process.success?
+                    ISM::Core::Error.show(  className: "Software",
+                                            functionName: "prepareChrootDevNull",
+                                            errorTitle: "Execution failure",
+                                            error: "Failed to execute the function")
+                end
             end
         end
 
         # Internal use only
         def prepareChrootDev
-            requestedCommands = "/usr/bin/mount --bind /dev #{Ism.settings.rootPath}/dev"
+            requestedCommands = "/usr/bin/mount -v --bind /dev #{Ism.settings.rootPath}/dev"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            #TO DO: Find a way to keep going only if the mountpoint already exists
-            # if !process.success?
-            #     ISM::Core::Error.show(  className: "Software",
-            #                             functionName: "prepareChrootDev",
-            #                             errorTitle: "Execution failure",
-            #                             error: "Failed to execute the function")
-            # end
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootDev",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
         end
 
         # Internal use only
         def prepareChrootDevPts
-            requestedCommands = "/usr/bin/mount --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
+            requestedCommands = "/usr/bin/mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            #TO DO: Find a way to keep going only if the mountpoint already exists
-            # if !process.success?
-            #     ISM::Core::Error.show(  className: "Software",
-            #                             functionName: "prepareChrootDevPts",
-            #                             errorTitle: "Execution failure",
-            #                             error: "Failed to execute the function")
-            # end
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootDevPts",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
         end
 
         # Internal use only
         def prepareChrootProc
-            requestedCommands = "/usr/bin/mount -t proc proc #{Ism.settings.rootPath}/proc"
+            requestedCommands = "/usr/bin/mount -v -t proc proc #{Ism.settings.rootPath}/proc"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            #TO DO: Find a way to keep going only if the mountpoint already exists
-            # if !process.success?
-            #     ISM::Core::Error.show(  className: "Software",
-            #                             functionName: "prepareChrootProc",
-            #                             errorTitle: "Execution failure",
-            #                             error: "Failed to execute the function")
-            # end
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootProc",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
         end
 
         # Internal use only
         def prepareChrootSysfs
-            requestedCommands = "/usr/bin/mount -t sysfs sysfs #{Ism.settings.rootPath}/sys"
+            requestedCommands = "/usr/bin/mount -v -t sysfs sysfs #{Ism.settings.rootPath}/sys"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
                                                     asRoot: true)
 
-            #TO DO: Find a way to keep going only if the mountpoint already exists
-            # if !process.success?
-            #     ISM::Core::Error.show(  className: "Software",
-            #                             functionName: "prepareChrootSysfs",
-            #                             errorTitle: "Execution failure",
-            #                             error: "Failed to execute the function")
-            # end
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootSysfs",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
         end
 
         # Internal use only
@@ -241,7 +230,7 @@ module ISM
             chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
             chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
-            chown -R -f root:root #{Ism.settings.rootPath}
+            chown -v -f R root:root #{Ism.settings.rootPath}
 
             chattr -f -i -R #{Ism.settings.sourcesPath}
             chattr -f -i -R #{Ism.settings.toolsPath}
@@ -250,16 +239,16 @@ module ISM
             chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
             chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
-            chown -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
+            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}
+            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}
+            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
+            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
+            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
+            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
-            chmod 0750 #{Ism.settings.rootPath}/root
-            chmod 1777 #{Ism.settings.rootPath}/tmp
-            chmod 1777 #{Ism.settings.rootPath}/var/tmp
+            chmod -v 0750 #{Ism.settings.rootPath}/root
+            chmod -v 1777 #{Ism.settings.rootPath}/tmp
+            chmod -v 1777 #{Ism.settings.rootPath}/var/tmp
             COMMAND
 
             process = ISM::Core.runSystemCommand(   command: command,
