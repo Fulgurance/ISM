@@ -223,32 +223,29 @@ module ISM
         # Internal use only
         def prepareRootPermissions
             command = <<-COMMAND
-            chattr -f -i -R #{Ism.settings.rootPath}
-            chown -v -f -R root:root #{Ism.settings.rootPath}
+            /usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}
+            /usr/bin/sudo /usr/bin/chown -v -f -R root:root #{Ism.settings.rootPath}
 
-            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}
-            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}
-            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
-            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
-            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
-            chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
+            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}
+            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}
+            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
+            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
+            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
+            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
-            chmod -v 0750 #{Ism.settings.rootPath}/root
-            chmod -v 1777 #{Ism.settings.rootPath}/tmp
-            chmod -v 1777 #{Ism.settings.rootPath}/var/tmp
+            /usr/bin/sudo /usr/bin/chmod -v 0750 #{Ism.settings.rootPath}/root
+            /usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/tmp
+            /usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/var/tmp
             COMMAND
 
-            process = ISM::Core.runSystemCommand(   command: command,
-                                                    asRoot: true,
-                                                    viaChroot: false)
+            runCommandList(commandList: command)
 
-            #We correct all file permissions as user and group owner ism
-            if !process.success?
+            rescue exception
                 ISM::Core::Error.show(  className: "Software",
                                     functionName: "prepareRootPermissions",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function")
-            end
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         #Special function to improve performance (Internal use only)
