@@ -37,6 +37,7 @@ module ISM
         end
 
         def self.exitProgram(code = 0)
+            showTerminalCursor
             exit code
 
             rescue exception
