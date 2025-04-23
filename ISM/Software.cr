@@ -230,7 +230,7 @@ module ISM
             chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
             chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
-            chown -v -f R root:root #{Ism.settings.rootPath}
+            chown -v -f -R root:root #{Ism.settings.rootPath}
 
             chattr -f -i -R #{Ism.settings.sourcesPath}
             chattr -f -i -R #{Ism.settings.toolsPath}
