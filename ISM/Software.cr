@@ -222,23 +222,22 @@ module ISM
 
         # Internal use only
         def prepareRootPermissions
-            command = <<-COMMAND
-            /usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}
-            /usr/bin/sudo /usr/bin/chown -v -f -R root:root #{Ism.settings.rootPath}
+            commanList = [  #We unlock any immutable file and change the whole tree as root owner
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}",
+                            "/usr/bin/sudo /usr/bin/chown -v -f -R root:root #{Ism.settings.rootPath}",
+                            #Then we restore the permissions for the ism tree
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+                            #We correct the rights for root dir and temporary dirs
+                            "/usr/bin/sudo /usr/bin/chmod -v 0750 #{Ism.settings.rootPath}/root",
+                            "/usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/tmp",
+                            "/usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/var/tmp"]
 
-            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}
-            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}
-            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
-            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
-            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
-            /usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
-
-            /usr/bin/sudo /usr/bin/chmod -v 0750 #{Ism.settings.rootPath}/root
-            /usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/tmp
-            /usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/var/tmp
-            COMMAND
-
-            runCommandList(commandList: command)
+            runCommandList(commandList: commandList)
 
             rescue exception
                 ISM::Core::Error.show(  className: "Software",
