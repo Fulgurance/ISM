@@ -223,21 +223,8 @@ module ISM
         # Internal use only
         def prepareRootPermissions
             command = <<-COMMAND
-            chattr -f +i -R #{Ism.settings.sourcesPath}
-            chattr -f +i -R #{Ism.settings.toolsPath}
-            chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
-            chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
-            chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
-            chattr -f +i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
-
+            chattr -f -i -R #{Ism.settings.rootPath}
             chown -v -f -R root:root #{Ism.settings.rootPath}
-
-            chattr -f -i -R #{Ism.settings.sourcesPath}
-            chattr -f -i -R #{Ism.settings.toolsPath}
-            chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}
-            chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}
-            chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}
-            chattr -f -i -R #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}
 
             chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}
             chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}
