@@ -222,7 +222,7 @@ module ISM
 
         # Internal use only
         def prepareRootPermissions
-            commanList = [  #We unlock any immutable file and change the whole tree as root owner
+            commandList = [  #We unlock any immutable file and change the whole tree as root owner
                             "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}",
                             "/usr/bin/sudo /usr/bin/chown -v -f -R root:root #{Ism.settings.rootPath}",
                             #Then we restore the permissions for the ism tree
