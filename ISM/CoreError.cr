@@ -14,7 +14,7 @@ module ISM
 
                 fullLog = (exception.backtrace.empty? ? exception.backtrace.join("\n") : exception.message)
 
-                title = "#{ISM::Default::Error::Title.colorize(:red)}"
+                title = (className == "Software" ? ISM::Default::Error::InstallerTitle.colorize(:red) : ISM::Default::Error::Title.colorize(:red))
 
                 errorText = "#{fullLog.colorize(:red)}"
                 help = "#{ISM::Default::Error::Help.colorize(:red)}"
