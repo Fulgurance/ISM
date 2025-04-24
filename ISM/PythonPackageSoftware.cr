@@ -10,6 +10,7 @@ module ISM
             makeDirectory(packagesPath)
 
             runPipCommand(  arguments:  "install --root-user-action=ignore --no-dependencies --target \"#{packagesPath}\" '#{@information.name}==#{@information.version}'",
+                            path: "/var/lib/ism",
                             version:    version)
 
             directoryContent(packagesPath, matchHidden: true).each do |filePath|
