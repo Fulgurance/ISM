@@ -2,14 +2,6 @@ module ISM
 
     module Core
 
-        def self.showTerminalCursor
-            STDOUT << "\x1B[?25h"
-        end
-
-        def self.hideTerminalCursor
-            STDOUT << "\x1B[?25l"
-        end
-
         def self.setTerminalTitle(title : String)
             if Ism.initialTerminalTitle == ""
                 Ism.initialTerminalTitle = "\e"
@@ -37,7 +29,6 @@ module ISM
         end
 
         def self.exitProgram(code = 0)
-            showTerminalCursor
             exit code
 
             rescue exception

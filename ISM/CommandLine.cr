@@ -957,8 +957,6 @@ module ISM
 
         def getUserAgreement : Bool
 
-            ISM::Core.showTerminalCursor
-
             loop do
                 userInput = gets.to_s
                 result = false
@@ -970,8 +968,6 @@ module ISM
                 else
                     result = false
                 end
-
-                ISM::Core.hideTerminalCursor
 
                 return result
             end

@@ -18,8 +18,6 @@ begin
         ISM::Core.exitProgram
     end
 
-    ISM::Core.hideTerminalCursor
-
     Ism.start
 
 #We catch any raised error
@@ -39,8 +37,7 @@ ensure
         ISM::Core::Security.lockSystemAccess
     end
 
-    #To finish, we reset the initial terminal title, reset cursor and exit with the error code 1
-    ISM::Core.showTerminalCursor
+    #To finish, we reset the initial terminal title and exit with the error code 1
     ISM::Core.resetTerminalTitle
     ISM::Core.exitProgram(code: 1)
 end
