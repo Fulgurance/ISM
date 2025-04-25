@@ -87,42 +87,6 @@ module ISM
         end
 
         # Internal use only
-        def prepareChrootDevConsole
-            if !File.exists?("#{Ism.settings.rootPath}/dev/console")
-                requestedCommands = "/usr/bin/mknod -m 600 #{Ism.settings.rootPath}/dev/console c 5 1"
-
-                process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                        viaChroot: false,
-                                                        asRoot: true)
-
-                if !process.success?
-                    ISM::Core::Error.show(  className: "Software",
-                                            functionName: "prepareChrootDevConsole",
-                                            errorTitle: "Execution failure",
-                                            error: "Failed to execute the function")
-                end
-            end
-        end
-
-        # Internal use only
-        def prepareChrootDevNull
-            if !File.exists?("#{Ism.settings.rootPath}/dev/null")
-                requestedCommands = "/usr/bin/mknod -m 666 #{Ism.settings.rootPath}/dev/null c 1 3"
-
-                process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                        viaChroot: false,
-                                                        asRoot: true)
-
-                if !process.success?
-                    ISM::Core::Error.show(  className: "Software",
-                                            functionName: "prepareChrootDevNull",
-                                            errorTitle: "Execution failure",
-                                            error: "Failed to execute the function")
-                end
-            end
-        end
-
-        # Internal use only
         def prepareChrootDev
             requestedCommands = "/usr/bin/mount -v --bind /dev #{Ism.settings.rootPath}/dev"
 
@@ -140,7 +104,7 @@ module ISM
 
         # Internal use only
         def prepareChrootDevPts
-            requestedCommands = "/usr/bin/mount -v --bind /dev/pts  #{Ism.settings.rootPath}/dev/pts"
+            requestedCommands = "/usr/bin/mount -v -t devpts devpts -o gid=5,mode=0620 #{Ism.settings.rootPath}/dev/pts"
 
             process = ISM::Core.runSystemCommand(   requestedCommands,
                                                     viaChroot: false,
@@ -187,6 +151,22 @@ module ISM
         end
 
         # Internal use only
+        def prepareChrootTmpfs
+            requestedCommands = "/usr/bin/mount -v -t tmpfs tmpfs #{Ism.settings.rootPath}/run"
+
+            process = ISM::Core.runSystemCommand(   requestedCommands,
+                                                    viaChroot: false,
+                                                    asRoot: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootTmpfs",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        # Internal use only
         def prepareChrootNetworkConfiguration
             requestedCommands = "/usr/bin/cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
@@ -204,12 +184,11 @@ module ISM
 
         # Internal use only
         def prepareChrootFileSystem
-            prepareChrootDevConsole
-            prepareChrootDevNull
             prepareChrootDev
             prepareChrootDevPts
             prepareChrootProc
             prepareChrootSysfs
+            prepareChrootTmpfs
             prepareChrootNetworkConfiguration
 
             rescue exception
