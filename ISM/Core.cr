@@ -137,7 +137,7 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
-            if !(viaChroot && systemHandleUserAccess)
+            if !commandLineSettings.installByChroot
                 commandListPrefix = <<-PREFIX
                 set +h
                 umask 022
