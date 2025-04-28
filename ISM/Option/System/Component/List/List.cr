@@ -11,40 +11,36 @@ module ISM
             end
 
             def start
-                if ARGV.size == 2
-                    showHelp
+                if Ism.components.empty?
+                    puts ISM::Default::Option::ComponentList::NoMatchFound + "#{ARGV[2].colorize(:green)}"
+                    puts ISM::Default::Option::ComponentList::NoMatchFoundAdvice
                 else
-                    if Ism.components.empty?
-                        puts ISM::Default::Option::ComponentList::NoMatchFound + "#{ARGV[2].colorize(:green)}"
-                        puts ISM::Default::Option::ComponentList::NoMatchFoundAdvice
-                    else
-                        puts "\n"
-                        puts "#{ISM::Default::Option::ComponentList::Title.colorize(:green)}"
-                        puts
+                    puts "\n"
+                    puts "#{ISM::Default::Option::ComponentList::Title.colorize(:green)}"
+                    puts
 
-                        Ism.components.each_with_index do |component, index|
-                            status = (Ism.softwareIsInstalled(component) ? ISM::Default::Option::ComponentList::EnabledText.colorize(:green) : ISM::Default::Option::ComponentList::DisabledText.colorize(:red))
-                            enabledOptions = String.new
+                    Ism.components.each_with_index do |component, index|
+                        status = (Ism.softwareIsInstalled(component) ? ISM::Default::Option::ComponentList::EnabledText.colorize(:green) : ISM::Default::Option::ComponentList::DisabledText.colorize(:red))
+                        enabledOptions = String.new
 
-                            component.options.each_with_index do |option, index|
-                                if option.active
+                        component.options.each_with_index do |option, index|
+                            if option.active
 
-                                    enabledOptions += "#{index > 0 ? " " : ""}#{option.name}"
+                                enabledOptions += "#{index > 0 ? " " : ""}#{option.name}"
 
-                                end
                             end
-
-                            #For each component, show if it is enabled and there is anything set
-                            entry = <<-ENTRY
-                            [#{status}] #{component.name} [ #{enabledOptions} ]
-                            ENTRY
-
-                            puts entry
-
                         end
-                    end
 
+                        #For each component, show if it is enabled and there is anything set
+                        entry = <<-ENTRY
+                        [#{status}] #{component.name} [ #{enabledOptions} ]
+                        ENTRY
+
+                        puts entry
+
+                    end
                 end
+
             end
 
         end
