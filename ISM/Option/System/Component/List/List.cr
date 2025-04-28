@@ -31,6 +31,10 @@ module ISM
                             end
                         end
 
+                        component.selectedDependencies.each_with_index do |dependency, index|
+                            enabledOptions += "#{index > 0 ? " " : ""}#{dependency.name}"
+                        end
+
                         #For each component, show if it is enabled and there is anything set
                         entry = <<-ENTRY
                         [#{status}] #{component.name} [ #{enabledOptions} ]
