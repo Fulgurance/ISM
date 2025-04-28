@@ -10,7 +10,6 @@ module ISM
                 LongText = "software"
                 Description = "Install, configure and remove softwares"
                 Options = [ ISM::Option::SoftwareSearch.new,
-                            ISM::Option::SoftwareSynchronize.new,
                             ISM::Option::SoftwareUpdate.new,
                             ISM::Option::SoftwareInstall.new,
                             ISM::Option::SoftwareUninstall.new,
