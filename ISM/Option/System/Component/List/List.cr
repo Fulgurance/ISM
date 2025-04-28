@@ -26,7 +26,7 @@ module ISM
                         component.options.each_with_index do |option, index|
                             if option.active
 
-                                enabledOptions += "#{index > 0 ? " " : ""}#{option.name}"
+                                enabledOptions += "#{index > 0 ? " " : ""}#{option.name.colorize(:green)},"
 
                             end
                         end
@@ -37,7 +37,7 @@ module ISM
 
                         #For each component, show if it is enabled and there is anything set
                         entry = <<-ENTRY
-                        [#{status}] #{component.name} [ #{enabledOptions} ]
+                        (#{status}) #{component.name.colorize(:yellow)}: #{enabledOptions}
                         ENTRY
 
                         puts entry
