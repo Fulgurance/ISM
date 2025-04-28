@@ -12,27 +12,27 @@ module ISM
             end
 
             def start
-                if ARGV.size == 1
+                if ARGV.size == 2
                     showHelp
                 else
                     matchingOption = false
 
                     @options.each_with_index do |argument, index|
-                        if ARGV[1] == argument.shortText || ARGV[1] == argument.longText
+                        if ARGV[2] == argument.shortText || ARGV[2] == argument.longText
                             matchingOption = true
                             @options[index].start
                             break
                         end
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::ComponentActivate::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::ComponentActivate::LongText
+                    if  !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentActivate::ShortText ||
+                        !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentActivate::LongText
                         matchingOption = true
                         @options[-1].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::ComponentDesactivate::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::ComponentDesactivate::LongText
+                    if  !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentDesactivate::ShortText ||
+                        !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentDesactivate::LongText
                         matchingOption = true
                         @options[-2].start
                     end
