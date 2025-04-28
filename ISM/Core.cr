@@ -202,13 +202,13 @@ module ISM
 
             File.write(taskFilePath, chrootTasks)
 
-            process = Process.run(  "sudo chmod +x #{taskFilePath}",
+            process = Process.run(  "/usr/bin/sudo /usr/bin/chmod +x #{taskFilePath}",
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
                                     shell: true)
 
-            command = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}"} #{commandLineSettings.rootPath} ./#{ISM::Default::Filename::Task}"
+            command = "HOME=/var/lib/ism /usr/bin/sudo /usr/sbin/chroot #{asRoot ? "" : "--userspec=#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}"} #{commandLineSettings.rootPath} ./#{taskFilePath(relatedToChroot: true)}"
 
             process = Process.run(  command: command,
                                     input:      (quiet ? Process::Redirect::Close : input),
