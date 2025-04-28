@@ -27,7 +27,7 @@ module ISM
                             enabledOptions = String.new
 
                             component.options.each_with_index do |option, index|
-                                if option.enabled
+                                if option.active
 
                                     enabledOptions += "#{index > 0 ? " " : ""}#{option.name}"
 
