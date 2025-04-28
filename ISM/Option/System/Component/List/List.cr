@@ -23,10 +23,20 @@ module ISM
                         puts
 
                         Ism.components.each_with_index do |component, index|
+                            status = (Ism.softwareIsInstalled(component) ? ISM::Default::Option::ComponentList::EnabledText.colorize(:green) : ISM::Default::Option::ComponentList::DisabledText.colorize(:red))
+                            enabledOptions = String.new
 
-                            #For each component, show if there is anything set or not
+                            component.options.each_with_index do |option, index|
+                                if option.enabled
+
+                                    enabledOptions += "#{index > 0 ? " " : ""}#{option.name}"
+
+                                end
+                            end
+
+                            #For each component, show if it is enabled and there is anything set
                             entry = <<-ENTRY
-                            #{component.name}
+                            [#{status}] #{component.name} [ #{enabledOptions} ]
                             ENTRY
 
                             puts entry

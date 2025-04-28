@@ -12,6 +12,8 @@ module ISM
                 NoMatchFound = "No match found with the database for "
                 NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
                 Title = "Available system components:"
+                EnabledText = "Enabled"
+                DisabledText = "Disabled"
 
             end
             
