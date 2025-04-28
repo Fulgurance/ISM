@@ -28,13 +28,13 @@ module ISM
                     if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::ComponentActivate::ShortText ||
                         !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::ComponentActivate::LongText
                         matchingOption = true
-                        @options[-4].start
+                        @options[-1].start
                     end
 
                     if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::ComponentDesactivate::ShortText ||
                         !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::ComponentDesactivate::LongText
                         matchingOption = true
-                        @options[-3].start
+                        @options[-2].start
                     end
 
                     if !matchingOption
