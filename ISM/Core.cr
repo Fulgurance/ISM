@@ -143,7 +143,7 @@ module ISM
                 umask 022
                 PREFIX
 
-                environmentCommand += "CRYSTAL_WORKERS=$(nproc) LC_ALL=POSIX PATH=/mnt/ism/tools/bin:/usr/bin:/usr/sbin "
+                environmentCommand += "CRYSTAL_WORKERS=$(nproc) LC_ALL=POSIX PATH=#{Ism.settings.toolsPath}:/usr/bin:/usr/sbin "
             end
 
             commandList = <<-CODE
