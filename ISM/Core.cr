@@ -51,13 +51,13 @@ module ISM
 
             # We first check if there is any task left
             if File.exists?("#{taskFilePath}")
-                process = Process.run(  command:    "sudo chattr -f -i #{taskFilePath}",
+                process = Process.run(  command:    "/usr/bin/sudo /usr/bin/chattr -f -i #{taskFilePath}",
                                         input:      (quiet ? Process::Redirect::Close : input),
                                         output:     (quiet ? Process::Redirect::Close : output),
                                         error:      (quiet ? Process::Redirect::Close : error),
                                         shell:      true)
 
-                process = Process.run(  command: "sudo rm #{taskFilePath}",
+                process = Process.run(  command: "/usr/bin/sudo /usr/bin/rm #{taskFilePath}",
                                         input:      (quiet ? Process::Redirect::Close : input),
                                         output:     (quiet ? Process::Redirect::Close : output),
                                         error:      (quiet ? Process::Redirect::Close : error),
@@ -68,13 +68,13 @@ module ISM
                 Dir.mkdir_p(taskFileDirectory)
             end
 
-            process = Process.run(  command: "sudo touch #{taskFilePath}",
+            process = Process.run(  command: "/usr/bin/sudo /usr/bin/touch #{taskFilePath}",
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
                                     shell: true)
 
-            process = Process.run(  command: "sudo chown #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{taskFilePath}",
+            process = Process.run(  command: "/usr/bin/sudo /usr/bin/chown #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{taskFilePath}",
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
@@ -82,14 +82,14 @@ module ISM
 
             File.write(taskFilePath, tasks)
 
-            process = Process.run(  command:    "sudo chmod +x #{taskFilePath}",
+            process = Process.run(  command:    "/usr/bin/sudo /usr/bin/chmod +x #{taskFilePath}",
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
                                     shell:      true)
 
             noChrootCommand = (asRoot ? "sudo" : "")
-            viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}"} #{commandLineSettings.rootPath}"
+            viaChrootCommand = "HOME=/var/lib/ism /usr/bin/sudo /usr/sbin/chroot #{asRoot ? "" : "--userspec=#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}"} #{commandLineSettings.rootPath}"
 
             mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
 
@@ -127,6 +127,7 @@ module ISM
             superuser = (asRoot && systemHandleUserAccess)
 
             environmentCommand = String.new
+            commandListPrefix = String.new
 
             if environmentFilePath != ""
                 environmentCommand = "source \"#{environmentFilePath}\" && "
@@ -136,12 +137,19 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
+            if !viaChroot
+                commandListPrefix = <<-PREFIX
+                set +h
+                umask 022
+                PREFIX
+
+                environmentCommand += "CRYSTAL_WORKERS=$(nproc) LC_ALL=POSIX PATH=/mnt/ism/tools/bin:/usr/bin:/usr/sbin "
+            end
+
             commandList = <<-CODE
             #!/bin/bash
 
-            if \[ -f "/etc/profile" \]; then
-                source /etc/profile
-            fi
+            #{commandListPrefix}
 
             cd #{path} && #{environmentCommand} #{command}
             CODE
