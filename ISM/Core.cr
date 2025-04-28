@@ -137,7 +137,7 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
-            if !viaChroot
+            if !(viaChroot && systemHandleUserAccess)
                 commandListPrefix = <<-PREFIX
                 set +h
                 umask 022
