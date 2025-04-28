@@ -26,13 +26,14 @@ module ISM
                         component.options.each_with_index do |option, index|
                             if option.active
 
-                                enabledOptions += "#{index > 0 ? " " : ""}#{option.name}#{index < (component.options.size-1) ? "," : ""}"
+                                enabledOptions += "#{index > 0 ? " " : ""}#{option.name}#{index < (component.options.size-2) ? "," : ""}"
 
                             end
                         end
 
                         component.selectedDependencies.each_with_index do |dependency, index|
-                            enabledOptions += "#{index > 0 ? " " : ""}#{dependency}"
+                            information = Ism.getSoftwareInformation(dependency)
+                            enabledOptions += "#{index > 0 ? " " : ""}#{information.name}"
                         end
 
                         if enabledOptions.empty?
