@@ -1526,7 +1526,7 @@ module ISM
                 logs.each_with_index do |log, index|
 
                     makeLogDirectory("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{softwareList[index].port}")
-                    File.write("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{softwareList[index].port}/#{softwareList[index].fullVersionName}.log", log)
+                    File.write("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{softwareList[index].port}/#{softwareList[index].hiddenName}.log", log)
 
                 end
             end
