@@ -47,20 +47,14 @@ module ISM
             return "#{taskFileDirectory(relatedToChroot)}#{ISM::Default::Filename::Task}"
         end
 
-        def self.runChrootTasks(chrootTasks, quiet = false, asRoot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
+        def self.runTasks(tasks, quiet = false, asRoot = false, viaChroot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
 
             # We first check if there is any task left
             if File.exists?("#{taskFilePath}")
-                process = Process.run(  command:    "/usr/bin/sudo /usr/bin/chattr -f -i #{taskFilePath}",
-                                        input:      (quiet ? Process::Redirect::Close : input),
-                                        output:     (quiet ? Process::Redirect::Close : output),
-                                        error:      (quiet ? Process::Redirect::Close : error),
+                process = Process.run(  command:    "sudo chattr -f -i #{taskFilePath}",
                                         shell:      true)
 
-                process = Process.run(  command: "/usr/bin/sudo /usr/bin/rm #{taskFilePath}",
-                                        input:      (quiet ? Process::Redirect::Close : input),
-                                        output:     (quiet ? Process::Redirect::Close : output),
-                                        error:      (quiet ? Process::Redirect::Close : error),
+                process = Process.run(  command: "sudo rm #{taskFilePath}",
                                         shell: true)
             end
 
@@ -68,21 +62,28 @@ module ISM
                 Dir.mkdir_p(taskFileDirectory)
             end
 
-            File.write(taskFilePath, chrootTasks)
+            File.write(taskFilePath, tasks)
 
-            process = Process.run(  "/usr/bin/sudo /usr/bin/chmod +x #{taskFilePath}",
+            process = Process.run(  command:    "sudo chmod +x #{taskFilePath}",
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
-                                    shell: true)
+                                    shell:      true)
 
-            command = "HOME=/var/lib/ism /usr/bin/sudo /usr/sbin/chroot #{asRoot ? "" : "--userspec=#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}"} #{commandLineSettings.rootPath} ./#{taskFilePath(relatedToChroot: true)}"
+            noChrootCommand = (asRoot ? "sudo" : "")
+            viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId}"} #{commandLineSettings.rootPath}"
 
-            process = Process.run(  command: command,
+            mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
+
+            command = "#{mainCommand} #{taskFilePath(relatedToChroot: viaChroot)}"
+
+            process = Process.run(  command:    command,
                                     input:      (quiet ? Process::Redirect::Close : input),
                                     output:     (quiet ? Process::Redirect::Close : output),
                                     error:      (quiet ? Process::Redirect::Close : error),
-                                    shell: true)
+                                    shell:      true)
+
+            File.delete(taskFilePath)
 
             return process
 
@@ -91,17 +92,23 @@ module ISM
                 #{ISM::Default::Error::SystemCommandFailure}
                 command: #{command}
                 asRoot: #{asRoot}
+                viaChroot: #{viaChroot}
                 ERROR
 
                 ISM::Core::Error.show(  className: "Core",
-                                        functionName: "runChrootTasks",
+                                        functionName: "runTasks",
                                         errorTitle: "Execution failure",
                                         error: "Failed to execute the following process:\n#{raisedError}",
                                         exception: exception)
         end
 
+        #TO DO: USE ALWAYS ABSOLUTE PATH TO AVOID SECURITY ISSUES
         def self.runSystemCommand(command : String, path = commandLineSettings.installByChroot ? "/" : commandLineSettings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false, asRoot = false, viaChroot = true, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
-            superuser = (asRoot && commandLineSystemInformation.handleUserAccess)
+
+            targetedSystemInformationFilePath = (viaChroot ? ISM::CommandLineSystemInformation.filePath : "/#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}")
+            systemHandleUserAccess = ISM::CommandLineSystemInformation.loadConfiguration(targetedSystemInformationFilePath)
+
+            superuser = (asRoot && systemHandleUserAccess)
 
             environmentCommand = String.new
 
@@ -113,49 +120,32 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
-            if commandLineSettings.installByChroot && viaChroot
-                chrootCommand = <<-CODE
-                #!/bin/bash
+            command = <<-CODE
+            #!/bin/bash
 
-                if \[ -f "/etc/profile" \]; then
-                    source /etc/profile
-                fi
+            if \[ -f "/etc/profile" \]; then
+                source /etc/profile
+            fi
 
-                cd #{path} && #{environmentCommand} #{command}
-                CODE
+            cd #{path} && #{environmentCommand} #{command}
+            CODE
 
-                process = runChrootTasks(chrootCommand, quiet, superuser, input, output, error)
-            else
-                environmentHash = Hash(String, String).new
-
-                #Substitute all environment variables by the real value
-                environment.keys.each do |key|
-                    environmentHash[key] = environment[key].gsub(/\$([A-Z0-9]+)/) do |_, match|
-                        begin
-                            ENV[match[1]]
-                        rescue
-                            #Return empty string if the var don't exist
-                            String.new
-                        end
-                    end
-                end
-
-                process = Process.run(  command:    "#{asRoot ? "sudo" : ""} #{command}",
-                                        input:      (quiet ? Process::Redirect::Close : input),
-                                        output:     (quiet ? Process::Redirect::Close : output),
-                                        error:      (quiet ? Process::Redirect::Close : error),
-                                        shell:      true,
-                                        chdir:      (path.empty? ? nil : path),
-                                        env:        environmentHash)
-            end
+            process = runTasks( tasks:      command,
+                                quiet:      quiet,
+                                asRoot:     superuser,
+                                viaChroot:  (commandLineSettings.installByChroot && viaChroot),
+                                input:      input,
+                                output:     output,
+                                error:      error)
 
             return process
 
             rescue exception
                 raisedError =  <<-ERROR
                 #{ISM::Default::Error::SystemCommandFailure}
-                commands: #{command}
+                command: #{command}
                 asRoot: #{asRoot}
+                viaChroot: #{viaChroot}
                 ERROR
 
                 ISM::Core::Error.show(  className: "Core",
@@ -173,6 +163,8 @@ module ISM
             end
         end
 
+        ##################################
+
         def self.commandLineSettings
             return ISM::CommandLineSettings.loadConfiguration
         end
@@ -184,6 +176,8 @@ module ISM
         def self.targetedRootPath : String
             return (commandLineSettings.installByChroot || !commandLineSettings.installByChroot && (commandLineSettings.rootPath != "/") ? commandLineSettings.rootPath : "/")
         end
+
+        ##################################
 
         def self.selectedKernel : ISM::SoftwareInformation
             file = "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}"
