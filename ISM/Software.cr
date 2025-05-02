@@ -487,7 +487,8 @@ module ISM
             digest.file(archive)
             archiveSha512 = digest.hexfinal
 
-            Ism.notifyOfCheckIntegrity(ISM::Default::Software::SourcesArchiveBaseName)
+            # Ism.notifyOfCheckIntegrity(ISM::Default::Software::SourcesArchiveBaseName)
+            puts "Checking integrity"
 
             #We check first the archive integrity
             if archiveSha512 != sha512
