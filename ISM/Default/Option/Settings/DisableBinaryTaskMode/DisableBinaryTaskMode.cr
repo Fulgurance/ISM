@@ -12,7 +12,7 @@ module ISM
                 SetText = "Disable binary task mode"
 
             end
-
+            
         end
 
     end

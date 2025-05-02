@@ -11,50 +11,53 @@ module ISM
             end
 
             def start
-                print ISM::Default::Option::SoftwareUpdate::UpdateTitle
+                if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                    Ism.printNeedSuperUserAccessNotification
+                else
+                    print ISM::Default::Option::SoftwareUpdate::UpdateTitle
 
-                Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
+                    Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
 
-                #No update
-                if Ism.requestedSoftwares.empty?
-                    ISM::Core::Notification.noUpdateMessage
+                    #No update
+                    if Ism.requestedSoftwares.empty?
+                        Ism.showNoUpdateMessage
+                        Ism.exitProgram
+                    end
 
-                    ISM::Core.exitProgram
-                end
+                    Ism.showCalculationTitleMessage
 
-                ISM::Core::Notification.calculationTitleMessage
+                    neededSoftwares = Ism.getNeededSoftwares
 
-                neededSoftwares = Ism.getNeededSoftwares
+                    Ism.showCalculationDoneMessage
+                    Ism.showSoftwares(neededSoftwares)
+                    Ism.showUpdateQuestion(neededSoftwares.size)
 
-                ISM::Core::Notification.calculationDoneMessage
-                ISM::Core::Notification.softwares(neededSoftwares)
-                ISM::Core::Notification.updateQuestion(neededSoftwares.size)
+                    userAgreement = Ism.getUserAgreement
 
-                userAgreement = Ism.getUserAgreement
+                    if userAgreement
+                        Ism.startInstallationProcess(neededSoftwares)
 
-                if userAgreement
-                    Ism.startInstallationProcess(neededSoftwares)
+                        Ism.requestedSoftwares.clear
 
-                    Ism.requestedSoftwares.clear
+                        #Clean the system and remove unneeded softwares
+                        Ism.showCalculationTitleMessage
 
-                    #Clean the system and remove unneeded softwares
-                    ISM::Core::Notification.calculationTitleMessage
+                        unneededSoftwares = Ism.getUnneededSoftwares
 
-                    unneededSoftwares = Ism.getUnneededSoftwares
+                        Ism.showCalculationDoneMessage
 
-                    ISM::Core::Notification.calculationDoneMessage
+                        if unneededSoftwares.size > 0
+                            Ism.showSoftwares(unneededSoftwares, :uninstallation)
+                            Ism.showUninstallationQuestion(unneededSoftwares.size)
 
-                    if unneededSoftwares.size > 0
-                        ISM::Core::Notification.softwares(unneededSoftwares, :uninstallation)
-                        ISM::Core::Notification.uninstallationQuestion(unneededSoftwares.size)
+                            userAgreement = Ism.getUserAgreement
 
-                        userAgreement = Ism.getUserAgreement
-
-                        if userAgreement
-                            Ism.startUninstallationProcess(unneededSoftwares)
+                            if userAgreement
+                                Ism.startUninstallationProcess(unneededSoftwares)
+                            end
+                        else
+                            Ism.showNoCleaningRequiredMessage
                         end
-                    else
-                        ISM::Core::Notification.noCleaningRequiredMessage
                     end
                 end
             end

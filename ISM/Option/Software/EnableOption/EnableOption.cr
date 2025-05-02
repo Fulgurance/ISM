@@ -14,40 +14,44 @@ module ISM
                 if ARGV.size == 2 || ARGV.size == 3
                     showHelp
                 else
-                    matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
-
-                    if !matchingSoftware.isValid
-                        puts ISM::Default::Option::SoftwareEnableOption::NoMatchFound + "#{ARGV[1].colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareEnableOption::NoMatchFoundAdvice
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
                     else
-                        if ARGV[2] == @shortText || ARGV[2] == @longText
-                            match = false
-                            matchingOption = ISM::SoftwareOption.new
+                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
 
-                            matchingSoftware.options.each do |option|
-                                if ARGV[3] == option.name || ARGV[3] == option.name.downcase
-                                    matchingSoftware.enableOption(option.name)
-                                    matchingOption = option
-                                    match = true
-                                end
-                            end
-
-                            matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
-
-                            if match
-                                matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
-                                ISM::Core::Notification.processNotification(   ISM::Default::Option::SoftwareEnableOption::SetText1 +
-                                                            "#{matchingOption.name.colorize(:green)}" +
-                                                            ISM::Default::Option::SoftwareEnableOption::SetText2 +
-                                                            matchingSoftwareText)
-                            else
-                                ISM::Core::Notification.errorNotification( ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound1 +
-                                                        "#{ARGV[3].colorize(:green)}" +
-                                                        ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound2 +
-                                                        matchingSoftwareText,nil)
-                            end
+                        if !matchingSoftware.isValid
+                            puts ISM::Default::Option::SoftwareEnableOption::NoMatchFound + "#{ARGV[1].colorize(:green)}"
+                            puts ISM::Default::Option::SoftwareEnableOption::NoMatchFoundAdvice
                         else
-                            showHelp
+                            if ARGV[2] == @shortText || ARGV[2] == @longText
+                                match = false
+                                matchingOption = ISM::SoftwareOption.new
+
+                                matchingSoftware.options.each do |option|
+                                    if ARGV[3] == option.name || ARGV[3] == option.name.downcase
+                                        matchingSoftware.enableOption(option.name)
+                                        matchingOption = option
+                                        match = true
+                                    end
+                                end
+
+                                matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
+
+                                if match
+                                    matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
+                                    Ism.printProcessNotification(   ISM::Default::Option::SoftwareEnableOption::SetText1 +
+                                                                "#{matchingOption.name.colorize(:green)}" +
+                                                                ISM::Default::Option::SoftwareEnableOption::SetText2 +
+                                                                matchingSoftwareText)
+                                else
+                                    Ism.printErrorNotification( ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound1 +
+                                                            "#{ARGV[3].colorize(:green)}" +
+                                                            ISM::Default::Option::SoftwareEnableOption::OptionNoMatchFound2 +
+                                                            matchingSoftwareText,nil)
+                                end
+                            else
+                                showHelp
+                            end
                         end
                     end
                 end

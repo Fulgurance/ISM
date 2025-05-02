@@ -8,7 +8,7 @@ module ISM
 
                 ShortText = "-v"
                 LongText = "version"
-                Description = "Show and manage the #{ISM::Default::CommandLine::Name.upcase} version"
+                Description = "Show and manage the ISM version"
                 Options = [ ISM::Option::VersionShow.new,
                             ISM::Option::VersionSwitch.new]
 

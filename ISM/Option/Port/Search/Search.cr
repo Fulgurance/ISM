@@ -37,7 +37,7 @@ module ISM
                             puts availableSoftwareField
 
                             if index < matchingPortArray.size-1
-                                ISM::Core::Notification.separator
+                                Ism.showSeparator
                             end
 
                         end

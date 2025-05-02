@@ -8,7 +8,7 @@ module ISM
 
                 ShortText = "-sw"
                 LongText = "switch"
-                Description = "Switch #{ISM::Default::CommandLine::Name.upcase} to another version"
+                Description = "Switch ISM to another version"
 
             end
             

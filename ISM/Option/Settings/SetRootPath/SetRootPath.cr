@@ -14,14 +14,18 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    path = ARGV[2]
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        path = ARGV[2]
 
-                    if path[-1] != '/'
-                        path = path+"/"
+                        if path[-1] != '/'
+                            path = path+"/"
+                        end
+
+                        Ism.settings.setRootPath(path)
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetRootPath::SetText+path)
                     end
-
-                    Ism.settings.setRootPath(path)
-                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetRootPath::SetText+path)
                 end
             end
 

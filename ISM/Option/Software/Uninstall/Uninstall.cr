@@ -14,75 +14,76 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    userRequest = ARGV[2..-1].uniq
-                    Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest, allowSearchByNameOnly: true)
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        userRequest = ARGV[2..-1].uniq
+                        Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest, allowSearchByNameOnly: true)
 
-                    #No match found
-                    if userRequest.size != Ism.requestedSoftwares.size
-                        wrongArguments = Array(String).new
+                        #No match found
+                        if userRequest.size != Ism.requestedSoftwares.size
+                            wrongArguments = Array(String).new
 
-                        userRequest.each do |request|
-                            exist = false
+                            userRequest.each do |request|
+                                exist = false
 
-                            Ism.requestedSoftwares.each do |software|
-                                if request.downcase == software.fullName.downcase || request.downcase == software.fullVersionName.downcase
-                                    exist = true
-                                    break
+                                Ism.requestedSoftwares.each do |software|
+                                    if request.downcase == software.fullName.downcase || request.downcase == software.fullVersionName.downcase
+                                        exist = true
+                                        break
+                                    end
+                                end
+
+                                if !exist
+                                    wrongArguments.push(request)
                                 end
                             end
 
-                            if !exist
-                                wrongArguments.push(request)
-                            end
+                            Ism.showNoMatchFoundMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        ISM::Core::Notification.noMatchFoundMessage(wrongArguments)
+                        #No available version found
+                        if Ism.requestedSoftwares.any? {|software| software.version == ""}
+                            wrongArguments = Array(String).new
 
-                        ISM::Core.exitProgram
-                    end
-
-                    #No available version found
-                    if Ism.requestedSoftwares.any? {|software| software.version == ""}
-                        wrongArguments = Array(String).new
-
-                        Ism.requestedSoftwares.each do |software|
-                            if software.version == ""
-                                wrongArguments.push(software.versionName)
+                            Ism.requestedSoftwares.each do |software|
+                                if software.version == ""
+                                    wrongArguments.push(software.versionName)
+                                end
                             end
+
+                            Ism.showNoVersionAvailableMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        ISM::Core::Notification.noVersionAvailableMessage(wrongArguments)
+                        #Software not installed yet
+                        if Ism.requestedSoftwares.any? {|software| !Ism.softwareIsInstalled(software)}
+                            wrongArguments = Array(String).new
 
-                        ISM::Core.exitProgram
-                    end
-
-                    #Software not installed yet
-                    if Ism.requestedSoftwares.any? {|software| !Ism.softwareIsInstalled(software)}
-                        wrongArguments = Array(String).new
-
-                        Ism.requestedSoftwares.each do |software|
-                            if !Ism.softwareIsInstalled(software)
-                                wrongArguments.push(software.name)
+                            Ism.requestedSoftwares.each do |software|
+                                if !Ism.softwareIsInstalled(software)
+                                    wrongArguments.push(software.name)
+                                end
                             end
+
+                            Ism.showSoftwareNotInstalledMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        ISM::Core::Notification.softwareNotInstalledMessage(wrongArguments)
+                        Ism.showCalculationTitleMessage
 
-                        ISM::Core.exitProgram
-                    end
+                        unneededSoftwares = Ism.getUnneededSoftwares
 
-                    ISM::Core::Notification.calculationTitleMessage
+                        Ism.showCalculationDoneMessage
+                        Ism.showSoftwares(unneededSoftwares, :uninstallation)
+                        Ism.showUninstallationQuestion(unneededSoftwares.size)
 
-                    unneededSoftwares = Ism.getUnneededSoftwares
+                        userAgreement = Ism.getUserAgreement
 
-                    ISM::Core::Notification.calculationDoneMessage
-                    ISM::Core::Notification.softwares(unneededSoftwares, :uninstallation)
-                    ISM::Core::Notification.uninstallationQuestion(unneededSoftwares.size)
-
-                    userAgreement = Ism.getUserAgreement
-
-                    if userAgreement
-                        Ism.startUninstallationProcess(unneededSoftwares)
+                        if userAgreement
+                            Ism.startUninstallationProcess(unneededSoftwares)
+                        end
                     end
                 end
             end

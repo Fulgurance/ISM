@@ -8,76 +8,6 @@ module ISM
         property buildDirectoryNames : Hash(String,String)
         property additions : Array(String)
 
-        #Alias
-        def recordCrossToolchainAsFullyBuilt
-            Ism.systemInformation.setCrossToolchainFullyBuilt(true)
-        end
-
-        #Alias
-        def recordSystemHandleUserAccess
-            Ism.systemInformation.setHandleUserAccess(true)
-        end
-
-        #Alias
-        def systemId : String
-            return Ism.systemId
-        end
-
-        #Alias
-        def systemHandleUserAccess : Bool
-            return ISM::Core::Security.systemHandleUserAccess
-        end
-
-        #Alias
-        def enableInstallationByChroot
-            Ism.settings.setInstallByChroot(true)
-        end
-
-        #Alias
-        def version : String
-            return @information.version
-        end
-
-        #Alias
-        def name : String
-            return @information.name
-        end
-
-        #Alias
-        def versionName : String
-            return @information.versionName
-        end
-
-        #Alias
-        def passEnabled : Bool
-            return @information.passEnabled
-        end
-
-        #Alias
-        def mainKernelHeadersName : String
-            return ISM::Core.mainKernelHeadersName
-        end
-
-        #Alias
-        def mainKernelName : String
-            return ISM::Core.mainKernelName
-        end
-
-        #Alias
-        def mainKernelVersion : String
-            return ISM::Core.mainKernelVersion
-        end
-
-        #Alias
-        def kernelIsSelected
-            return ISM::Core.kernelIsSelected
-        end
-
-        #Alias
-        def selectedKernel : ISM::SoftwareInformation
-            return ISM::Core.selectedKernel
-        end
-
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.loadConfiguration(informationPath)
             @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
@@ -86,347 +16,112 @@ module ISM
             @additions = Array(String).new
         end
 
-        # Internal use only
-        def prepareChrootDev
-            requestedCommands = "/usr/bin/mount -v --bind /dev #{Ism.settings.rootPath}/dev"
+        def recordCrossToolchainAsFullyBuilt
+            Ism.systemInformation.setCrossToolchainFullyBuilt(true)
 
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootDev",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
-        # Internal use only
-        def prepareChrootDevPts
-            requestedCommands = "/usr/bin/mount -v -t devpts devpts -o gid=5,mode=0620 #{Ism.settings.rootPath}/dev/pts"
+        def version : String
+            return @information.version
 
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootDevPts",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
-        # Internal use only
-        def prepareChrootProc
-            requestedCommands = "/usr/bin/mount -v -t proc proc #{Ism.settings.rootPath}/proc"
+        def name : String
+            return @information.name
 
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootProc",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
-        # Internal use only
-        def prepareChrootSysfs
-            requestedCommands = "/usr/bin/mount -v -t sysfs sysfs #{Ism.settings.rootPath}/sys"
+        def versionName : String
+            return @information.versionName
 
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootSysfs",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
-        # Internal use only
-        def prepareChrootTmpfs
-            requestedCommands = "/usr/bin/mount -v -t tmpfs tmpfs #{Ism.settings.rootPath}/run"
+        def passEnabled : Bool
+            return @information.passEnabled
 
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootTmpfs",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        # Internal use only
-        def prepareChrootNetworkConfiguration
-            requestedCommands = "/usr/bin/cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
-
-            process = ISM::Core.runSystemCommand(   requestedCommands,
-                                                    viaChroot: false,
-                                                    asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "prepareChrootNetworkConfiguration",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        # Internal use only
-        def prepareChrootFileSystem
-            prepareChrootDev
-            prepareChrootDevPts
-            prepareChrootProc
-            prepareChrootSysfs
-            prepareChrootTmpfs
-            prepareChrootNetworkConfiguration
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareChrootFileSystem",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        # Internal use only
-        def prepareRootPermissions
-            commandList = [  #We unlock any immutable file and change the whole tree as root owner
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}",
-                            "/usr/bin/sudo /usr/bin/chown -v -f -R root:root #{Ism.settings.rootPath}",
-                            #Then we restore the permissions for the ism tree
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}/var/lib/ism",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
-                            #We correct the rights for root dir and temporary dirs
-                            "/usr/bin/sudo /usr/bin/chmod -v 0750 #{Ism.settings.rootPath}/root",
-                            "/usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/tmp",
-                            "/usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/var/tmp"]
-
-            runCommandList(commandList: commandList)
-
-            rescue exception
-                ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareRootPermissions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function to improve performance (Internal use only)
-        def userConfigurationFilePathNoChroot : String
-            return "#{Ism.settings.rootPath}/etc/#{ISM::Default::Filename::UserConfiguration}"
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "userConfigurationFilePathNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function to improve performance (Internal use only)
-        def groupConfigurationFilePathNoChroot : String
-            return "#{Ism.settings.rootPath}/etc/#{ISM::Default::Filename::GroupConfiguration}"
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "groupConfigurationFilePathNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function to improve performance (Internal use only)
-        def getUserId(name : String) : String
-            if File.exists?(userConfigurationFilePathNoChroot)
-                configFile = File.read_lines(userConfigurationFilePathNoChroot)
-
-                configFile.each do |line|
-                    if line.starts_with?(name.downcase)
-                        return line.split(":")[2]
-                    end
-                end
-            else
-                begin
-                    #Small hack to check if the string contain a valid number
-                    return name.to_i.to_s
-                rescue
-                end
-            end
-
-            return String.new
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "getUserId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function to improve performance (Internal use only)
-        def getGroupId(name : String) : String
-            if File.exists?(groupConfigurationFilePathNoChroot)
-                configFile = File.read_lines(groupConfigurationFilePathNoChroot)
-
-                configFile.each do |line|
-                    if line.starts_with?(name.downcase)
-                        return line.split(":")[2]
-                    end
-                end
-            else
-                begin
-                    #Small hack to check if the string contain a valid number
-                    return name.to_i.to_s
-                rescue
-                end
-            end
-
-            return String.new
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "getGroupId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function to improve performance (Internal use only)
-        def changeFileModeNoChroot(path : String, mode : String, asRoot = false)
-            requestedCommands = "/usr/bin/chmod #{mode} #{path}"
-
-            process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: asRoot)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "changeFileModeNoChroot",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        #Special function to improve performance (Internal use only)
-        def changeFileOwnerNoChroot(path : String, user : String, group : String, asRoot = false)
-            requestedCommands = "/usr/bin/chown #{user}:#{group} #{path}"
-
-            process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: asRoot)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "changeFileOwnerNoChroot",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def workDirectoryPathNoChroot : String
-            return "#{Ism.settings.sourcesPath}#{@information.port}/#{@information.name}/#{@information.version}"
+            return Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "workDirectoryPathNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def mainWorkDirectoryPathNoChroot : String
             return workDirectoryPathNoChroot+"/"+@mainSourceDirectoryName
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "mainWorkDirectoryPathNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def buildDirectoryPathNoChroot(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPathNoChroot+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "buildDirectoryPathNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
         def builtSoftwareDirectoryPathNoChroot : String
             return "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "builtSoftwareDirectoryPathNoChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def workDirectoryPath : String
             return Ism.settings.installByChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "workDirectoryPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def mainWorkDirectoryPath : String
             return workDirectoryPath+"/"+@mainSourceDirectoryName
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "mainWorkDirectoryPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def buildDirectoryPath(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPath+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "buildDirectoryPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def builtSoftwareDirectoryPath : String
             return Ism.settings.installByChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "builtSoftwareDirectoryPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def directoryContent(path : String, matchHidden = false) : Array(String)
@@ -436,12 +131,9 @@ module ISM
 
             return fileList.map { |file| (Ism.settings.installByChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "directoryContent",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def recordSelectedKernel
@@ -458,7 +150,7 @@ module ISM
                                 needUpdateKernelFile = false
 
                                 if selectedKernel.isValid
-                                    installedVersion = SemanticVersion.parse(ISM::Core.mainKernelVersion)
+                                    installedVersion = SemanticVersion.parse(Ism.mainKernelVersion)
                                     availableVersion = SemanticVersion.parse(Ism.getSoftwareInformation(entry).version)
 
                                     if selectedKernel.fullName.downcase == entry.downcase && availableVersion > installedVersion
@@ -480,12 +172,33 @@ module ISM
                 end
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "recordSelectedKernel",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def mainKernelHeadersName : String
+            return Ism.mainKernelHeadersName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def mainKernelName : String
+            return Ism.mainKernelName
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def mainKernelVersion : String
+            return Ism.mainKernelVersion
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def updateKernelSymlinks
@@ -518,12 +231,9 @@ module ISM
                 end
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "updateKernelSymlinks",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def prepareKernelSourcesInstallation
@@ -548,19 +258,29 @@ module ISM
 
             updateKernelSymlinks
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareKernelSourcesInstallation",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
-        def setup
+        def selectedKernel
+            return Ism.selectedKernel
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def kernelIsSelected
+            return Ism.kernelIsSelected
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def download
-            ISM::Core::Notification.download(@information)
+            Ism.notifyOfDownload(@information)
 
             cleanWorkDirectoryPath
 
@@ -571,26 +291,20 @@ module ISM
                 downloadAdditions
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "download",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadAdditions
-            ISM::Core::Notification.downloadAdditions
+            puts "Downloading additions"
 
             downloadAdditionalSources
             downloadAdditionalSourcesSha512
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "downloadAdditions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadAdditionalSources
@@ -602,12 +316,9 @@ module ISM
                                 ISM::Default::Software::ArchiveExtensionName)
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "downloadAdditionalSources",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadAdditionalSourcesSha512
@@ -620,12 +331,9 @@ module ISM
                                 ISM::Default::Software::ArchiveSha512ExtensionName)
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "downloadAdditionalSourcesSha512",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadSources
@@ -633,12 +341,9 @@ module ISM
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveExtensionName)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "downloadSources",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadSourcesSha512
@@ -669,9 +374,8 @@ module ISM
                         rescue
                             error = "#{ISM::Default::Software::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::Software::DownloadSourceRedirectionErrorText2}"
 
-                            #TO DO
-                            # Ism.notifyOfDownloadError(link, error)
-                            # Ism.exitProgram
+                            Ism.notifyOfDownloadError(link, error)
+                            Ism.exitProgram
                         end
                         break
                     end
@@ -718,39 +422,35 @@ module ISM
                     else
                         error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
 
-                        #TO DO
-                        # Ism.notifyOfDownloadError(link, error)
-                        # Ism.exitProgram
+                        Ism.notifyOfDownloadError(link, error)
+                        Ism.exitProgram
                     end
                 end
             end
 
             puts
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "downloadFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
         
         def getFileContent(filePath : String) : String
             begin
                 content = File.read(filePath)
+            rescue error
+                Ism.notifyOfGetFileContentError(filePath, error)
+                Ism.exitProgram
             end
             return content
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "getFileContent",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def check
-            ISM::Core::Notification.check(@information)
+            Ism.notifyOfCheck(@information)
 
             checkSourcesSha512
 
@@ -758,24 +458,18 @@ module ISM
                 checkAdditionsSha512
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "check",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def checkSourcesSha512
             checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                         sha512:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "checkSourcesSha512",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def checkAdditionsSha512
@@ -786,12 +480,9 @@ module ISM
                             sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "checkAdditionsSha512",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def checkFile(archive : String, sha512 : String)
@@ -799,14 +490,11 @@ module ISM
             digest.file(archive)
             archiveSha512 = digest.hexfinal
 
-            ISM::Core::Notification.checkIntegrity(ISM::Default::Software::SourcesArchiveBaseName)
+            Ism.notifyOfCheckIntegrity(ISM::Default::Software::SourcesArchiveBaseName)
 
             #We check first the archive integrity
             if archiveSha512 != sha512
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "checkFile",
-                                        errorTitle: "Integrity verification failed",
-                                        error: "The checksum do not match with the downloaded file. The file can be corrupted or compromised.")
+                puts "The checksum do not match with the downloaded file. The file can be corrupted or compromised."
             end
 
             #EXPERIMENTAL
@@ -825,16 +513,13 @@ module ISM
             #                             error: "The archive signature does not match with the public key. The file can be corrupted or compromised.")
             # end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "checkFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def extract
-            ISM::Core::Notification.extract(@information)
+            Ism.notifyOfExtract(@information)
 
             extractSources
 
@@ -847,28 +532,22 @@ module ISM
                 copyDirectoryNoChroot(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "extract",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def extractSources
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "extractSources",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def extractAdditions
-            ISM::Core::Notification.extractAdditions
+            puts "Extracting additions"
 
             @additions.each do |link|
                 archiveName = link.lchop(link[0..link.rindex("/")])
@@ -876,30 +555,27 @@ module ISM
                 extractArchive("#{workDirectoryPathNoChroot}/#{archiveName}", workDirectoryPathNoChroot)
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "extractAdditions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def extractArchive(archivePath : String, destinationPath = workDirectoryPathNoChroot)
-            process = ISM::Core.runSystemCommand(   command: "/usr/bin/tar -xf #{archivePath}",
-                                                    quiet: true,
-                                                    viaChroot: false,
-                                                    path: destinationPath)
-
+            process = Process.run(  "tar -xf #{archivePath}",
+                                    shell: true,
+                                    chdir: destinationPath)
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "extractArchive",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfExtractError(archivePath, destinationPath)
+                Ism.exitProgram
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
         
         def patch
-            ISM::Core::Notification.patch(@information)
+            Ism.notifyOfPatch(@information)
 
             if Dir.exists?("#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}")
                 Dir["#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}/*"].each do |patch|
@@ -910,36 +586,33 @@ module ISM
             if Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}")
                 Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}/*"].each do |patch|
                     patchName = patch.lchop(patch[0..patch.rindex("/")])
-
-                    ISM::Core::Notification.localPatch(patchName)
-
+                    Ism.notifyOfLocalPatch(patchName)
                     applyPatch(patch)
                 end
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "patch",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
         
         def applyPatch(patch : String)
-            process = ISM::Core.runSystemCommand(   command: "/usr/bin/patch -Np1 -i #{patch}",
-                                                    viaChroot: false,
-                                                    path: mainWorkDirectoryPathNoChroot)
-
+            process = Process.run(  "patch -Np1 -i #{patch}",
+                                    error: :inherit,
+                                    shell: true,
+                                    chdir: mainWorkDirectoryPathNoChroot)
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "applyPatch",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfApplyPatchError(patch)
+                Ism.exitProgram
             end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def prepare
-            ISM::Core::Notification.prepare(@information)
+            Ism.notifyOfPrepare(@information)
 
             #Generate all build directories
             @buildDirectoryNames.keys.each do |key|
@@ -948,125 +621,106 @@ module ISM
                 end
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepare",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Special function to improve performance (Internal use only)
-        def copyFileNoChroot(path : String, targetPath : String, asRoot = false)
-            process = ISM::Core.runSystemCommand(   command: "/usr/bin/cp #{path} #{targetPath}",
-                                                    viaChroot: false,
-                                                    asRoot: asRoot)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "copyFileNoChroot",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+        def copyFileNoChroot(path : String, targetPath : String)
+            begin
+                FileUtils.cp(path, targetPath)
+            rescue error
+                Ism.notifyOfCopyFileError(path, targetPath, error)
+                Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def copyDirectoryNoChroot(path : String, targetPath : String, asRoot = false)
-            process = ISM::Core.runSystemCommand(   command: "/usr/bin/cp -R #{path} #{targetPath}",
-                                                    viaChroot: false,
-                                                    asRoot: asRoot)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "copyDirectoryNoChroot",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+        def copyDirectoryNoChroot(path : String, targetPath : String)
+            begin
+                FileUtils.cp_r(path, targetPath)
+            rescue error
+                Ism.notifyOfCopyDirectoryError(path, targetPath, error)
+                Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def deleteFileNoChroot(path : String, asRoot = false)
-            process = ISM::Core.runSystemCommand(   command: "/usr/bin/rm -f #{path}",
-                                                    viaChroot: false,
-                                                    asRoot: asRoot)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "deleteFileNoChroot",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+        def deleteFileNoChroot(path : String)
+            begin
+                FileUtils.rm(path)
+            rescue error
+                Ism.notifyOfDeleteFileError(path, error)
+                Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def moveFileNoChroot(path : String, newPath : String, asRoot = false)
-            process = ISM::Core.runSystemCommand(   command: "/usr/bin/mv -f #{path} #{newPath}",
-                                                    viaChroot: false,
-                                                    asRoot: asRoot)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "moveFileNoChroot",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+        def moveFileNoChroot(path : String, newPath : String)
+            begin
+                FileUtils.mv(path, newPath)
+            rescue error
+                Ism.notifyOfMoveFileError(path, newPath, error)
+                Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def makeDirectoryNoChroot(path : String, asRoot = false)
-            process = ISM::Core.runSystemCommand(   command: "/usr/bin/mkdir -p #{path}",
-                                                    viaChroot: false,
-                                                    asRoot: asRoot)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "makeDirectoryNoChroot",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+        def makeDirectoryNoChroot(directory : String)
+            begin
+                FileUtils.mkdir_p(directory)
+            rescue error
+                Ism.notifyOfMakeDirectoryError(directory, error)
+                Ism.exitProgram
             end
         end
 
         #Special function to improve performance (Internal use only)
-        def deleteDirectoryNoChroot(path : String, asRoot = false)
-            process = ISM::Core.runSystemCommand(   command: "/usr/bin/rm -R -f #{path}",
-                                                    viaChroot: false,
-                                                    asRoot: asRoot)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "deleteDirectoryNoChroot",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+        def deleteDirectoryNoChroot(directory : String)
+            begin
+                FileUtils.rm_r(directory)
+            rescue error
+                Ism.notifyOfDeleteDirectoryError(directory, error)
+                Ism.exitProgram
             end
+        end
+
+         #Special function to improve performance (Internal use only)
+        def stripFileListNoChroot(fileList : Array(String))
+            requestedCommands = <<-CMD
+                                strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            #No exit process because if the file can't be strip, we can just keep going
+            rescue
         end
 
         def fileUpdateContent(path : String, data : String)
             requestedCommands = <<-CMD
-            grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
-            CMD
+                                grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
+                                CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "fileUpdateContent",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def fileReplaceText(path : String, text : String, newText : String)
             requestedCommands = <<-CMD
-            sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/g' #{path}
-            CMD
+                                sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/g' #{path}
+                                CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "fileReplaceText",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
@@ -1075,13 +729,11 @@ module ISM
                                 sed -i '/#{text.gsub(/([\.\/])/, %q(\\\1))}/c\#{newText.gsub(/([\.\/])/, %q(\\\1))}' #{path}
                                 CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "fileReplaceLineContaining",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
@@ -1090,13 +742,11 @@ module ISM
                                 sed -i '#{lineNumber.to_s}s/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' #{path}
                                 CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "fileReplaceTextAtLineNumber",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
@@ -1105,75 +755,65 @@ module ISM
                                 sed -i '#{lineNumber.to_s}d' #{path}
                                 CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "fileDeleteLine",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def fileWriteData(path : String, data : String)
             requestedCommands = <<-CMD
-            cat > #{path} <<"EOF"
-            #{data}
-            EOF
-            CMD
+                                cat > #{path} <<"EOF"
+                                #{data}
+                                EOF
+                                CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "fileWriteData",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def fileAppendData(path : String, data : String)
             requestedCommands = <<-CMD
-            echo "#{data}" > "#{path}"
-            CMD
+                                echo "#{data}" > "#{path}"
+                                CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "fileAppendData",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def fileAppendDataFromFile(path : String, fromPath : String)
             requestedCommands = <<-CMD
-            cat "#{fromPath}" >> "#{path}"
-            CMD
+                                cat "#{fromPath}" >> "#{path}"
+                                CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "fileAppendDataFromFile",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def replaceTextAllFilesRecursivelyNamed(path : String, filename : String, text : String, newText : String)
             requestedCommands = <<-CMD
-            find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
-            CMD
+                                find -name #{filename} -exec sed -i 's/#{text.gsub(/([\.\/])/, %q(\\\1))}/#{newText.gsub(/([\.\/])/, %q(\\\1))}/' {} \\;
+                                CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "replaceTextAllFilesRecursivelyNamed",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
@@ -1186,16 +826,14 @@ module ISM
             end
 
             requestedCommands = <<-CMD
-            find #{path} #{extensionCommands} -delete
-            CMD
+                                find #{path} #{extensionCommands} -delete
+                                CMD
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "deleteAllFilesRecursivelyFinishing",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
@@ -1216,275 +854,216 @@ module ISM
 
                 command = "ln -sf"
             else
-                #TO DO
-                # Ism.notifyOfMakeLinkUnknowTypeError(target, path, type)
-                # Ism.exitProgram
+                Ism.notifyOfMakeLinkUnknowTypeError(target, path, type)
+                Ism.exitProgram
             end
 
             requestedCommands = "#{command} '#{target}' #{path}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "makeLink",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def generateEmptyFile(path : String)
             requestedCommands = "touch #{path}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "generateEmptyFile",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
-        end
-
-        def generateEmptyPasswdFile
-            requestedCommands = "touch /usr/bin/passwd"
-
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "generateEmptyPasswdFile",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def copyFile(path : String, targetPath : String)
             requestedCommands = "cp #{path} #{targetPath}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "copyFile",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def copyDirectory(path : String, targetPath : String)
             requestedCommands = "cp -r #{path} #{targetPath}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "copyDirectory",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def moveFile(path : String, newPath : String)
             requestedCommands = "mv #{path} #{newPath}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "moveFile",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def makeDirectory(path : String)
             requestedCommands = "mkdir -p #{path}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "makeDirectory",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def deleteDirectory(path : String)
             requestedCommands = "rm -r #{path}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "deleteDirectory",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def deleteFile(path : String)
-            requestedCommands = "rm -f #{path}"
+            requestedCommands = "rm #{path}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "deleteFile",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runChmodCommand(arguments = String.new, path = String.new)
             requestedCommands = "chmod #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runChmodCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
         def runChownCommand(arguments = String.new, path = String.new)
             requestedCommands = "chown #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runChownCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
         def runUserAddCommand(arguments : String)
-            requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
+            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
 
-            process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: true,
-                                                    viaChroot: false)
+            requestedCommands = "useradd #{prefix.empty? ? arguments : prefix+arguments}"
+
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runUserAddCommand",
-                                        errorTitle: "User creation failed",
-                                        error: "An error occured during the user creation process")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runUserDelCommand(arguments : String)
-            requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
+            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
 
-            process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: true,
-                                                    viaChroot: false)
+            requestedCommands = "userdel #{prefix.empty? ? arguments : prefix+arguments}"
+
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runUserDelCommand",
-                                        errorTitle: "User deletion failed",
-                                        error: "An error occured during the user deletion process")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGroupAddCommand(arguments : String)
-            requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
+            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
 
-            process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: true,
-                                                    viaChroot: false)
+            requestedCommands = "groupadd #{prefix.empty? ? arguments : prefix+arguments}"
+
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGroupAddCommand",
-                                        errorTitle: "Group creation failed",
-                                        error: "An error occured during the group creation process")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGroupDelCommand(arguments : String)
-            requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
+            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
 
-            process = ISM::Core.runSystemCommand(   command: requestedCommands,
-                                                    asRoot: true,
-                                                    viaChroot: false)
+            requestedCommands = "groupdel #{prefix.empty? ? arguments : prefix+arguments}"
+
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success? && process.exit_code != 9
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGroupDelCommand",
-                                        errorTitle: "Group deletion failed",
-                                        error: "An error occured during the group deletion process")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
-            requestedCommands = "./#{file} #{arguments}"
-
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
-
-            if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runFile",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
-            end
+            Ism.runFile(file, arguments, path, environment, environmentFilePath)
         end
 
         def runTarCommand(arguments = String.new, path = String.new)
             requestedCommands = "tar #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runTarCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
         def runPythonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
             requestedCommands = "python#{version} #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runPythonCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
         def runPipCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, version = String.new)
             requestedCommands = "pip#{version} #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runPipCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
         def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment)
+            process = Ism.runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runCrystalCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
@@ -1512,39 +1091,33 @@ module ISM
 
             requestedCommands = "cmake #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runCmakeCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
         def runQmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "qmake #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runQmakeCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
         def runMesonCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "meson #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runMesonCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
@@ -1574,364 +1147,308 @@ module ISM
 
             requestedCommands = "ninja #{prefix} #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runNinjaCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
         def runPwconvCommand(arguments = String.new)
             requestedCommands = "pwconv #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runPwconvCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGrpconvCommand(arguments = String.new)
             requestedCommands = "grpconv #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGrpconvCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runUdevadmCommand(arguments : String)
             requestedCommands = "udevadm #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runUdevadmCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runDbusUuidgenCommand(arguments = String.new)
             requestedCommands = "dbus-uuidgen #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runDbusUuidgenCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runMakeinfoCommand(arguments : String, path = String.new)
             requestedCommands = "makeinfo #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runMakeinfoCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
         def runInstallInfoCommand(arguments : String)
             requestedCommands = "install-info #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runInstallInfoCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runAutoconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoconf #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runAutoconfCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
         def runAutoreconfCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "autoreconf #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runAutoreconfCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
         def runLocaledefCommand(arguments : String)
             requestedCommands = "localedef #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runLocaledefCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGunzipCommand(arguments : String, path = String.new)
             requestedCommands = "gunzip #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGunzipCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
         def runMakeCaCommand(arguments : String)
             requestedCommands = "make-ca #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runMakeCaCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runInstallCatalogCommand(arguments : String)
             requestedCommands = "install-catalog #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runInstallCatalogCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runXmlCatalogCommand(arguments : String)
             requestedCommands = "xmlcatalog #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runXmlCatalogCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runLdconfigCommand(arguments = String.new)
             requestedCommands = "ldconfig #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runLdconfigCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGtkQueryImmodules2Command",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGtkQueryImmodules3Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGtkQueryImmodules3Command",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGlibCompileSchemasCommand(arguments = String.new)
             requestedCommands = "glib-compile-schemas #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGlibCompileSchemasCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGdkPixbufQueryLoadersCommand(arguments = String.new)
             requestedCommands = "gdk-pixbuf-query-loaders #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGdkPixbufQueryLoadersCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runUpdateMimeDatabaseCommand(arguments = String.new)
             requestedCommands = "update-mime-database #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runUpdateMimeDatabaseCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runCargoCommand(arguments : String, path = String.new, environment = Hash(String, String).new)
             requestedCommands = "cargo #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment)
+            process = Ism.runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runCargoCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment)
+                Ism.exitProgram
             end
         end
 
         def runXargoCommand(arguments : String, path = String.new)
             requestedCommands = "xargo #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runXargoCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
         def runGccCommand(arguments = String.new, path = String.new)
             requestedCommands = "gcc #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGccCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
         def runRcUpdateCommand(arguments = String.new)
             requestedCommands = "rc-update #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runRcUpdateCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runAlsactlCommand(arguments = String.new)
             requestedCommands = "alsactl #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runAlsactlCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runGtkUpdateIconCacheCommand(arguments = String.new)
             requestedCommands = "gtk-update-icon-cache #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runGtkUpdateIconCacheCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runUpdateDesktopDatabaseCommand(arguments = String.new)
             requestedCommands = "update-desktop-database #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runUpdateDesktopDatabaseCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runZicCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path)
+                Ism.exitProgram
             end
         end
 
@@ -1942,16 +1459,17 @@ module ISM
             moveFile(path,"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{name}")
             runChmodCommand("+x #{name}","#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "prepareOpenrcServiceInstallation",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def configure
-            ISM::Core::Notification.configure(@information)
+            Ism.notifyOfConfigure(@information)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, relatedToMainBuild = true)
@@ -1959,82 +1477,70 @@ module ISM
 
             requestedCommands = "#{configureCommand} #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "configureSource",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
         
         def build
-            ISM::Core::Notification.build(@information)
+            Ism.notifyOfBuild(@information)
         end
 
         def makePerlSource(path = String.new)
             requestedCommands = "perl Makefile.PL"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "makePerlSource",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands)
+                Ism.exitProgram
             end
         end
 
         def runCpanCommand(arguments = String.new)
             requestedCommands = "cpan #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runCpanCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
             end
         end
 
         def runDircolorsCommand(arguments = String.new)
             requestedCommands = "dircolors #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, asRoot: true)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runDircolorsCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
             end
         end
 
         def runDepmodCommand(arguments = String.new)
             requestedCommands = "depmod #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runDepmodCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
             end
         end
 
         def runSshKeygenCommand(arguments = String.new)
             requestedCommands = "ssh-keygen #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "runSshKeygenCommand",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(arguments)
+                Ism.exitProgram
             end
         end
 
@@ -2064,21 +1570,24 @@ module ISM
 
             requestedCommands = "make #{prefix} #{arguments}"
 
-            process = ISM::Core.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
+            process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Core::Error.show(  className: "Software",
-                                        functionName: "makeSource",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function")
+                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                Ism.exitProgram
             end
         end
 
         def prepareInstallation
-            ISM::Core::Notification.prepareInstallation(@information)
+            Ism.notifyOfPrepareInstallation(@information)
         end
 
         def recordInstallationInformation : Tuple(UInt128, UInt128, UInt128, UInt128)
+            directoryNumber = UInt128.new(0)
+            symlinkNumber = UInt128.new(0)
+            fileNumber = UInt128.new(0)
+            totalSize = UInt128.new(0)
+
             filesList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
 
             directoryNumber = UInt128.new(0)
@@ -2107,165 +1616,16 @@ module ISM
 
             return directoryNumber, symlinkNumber, fileNumber, totalSize
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "recordInstallationInformation",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
-        #Special function to improve performance (Internal use only)
-        def stripFileListNoChroot(fileList : Array(String))
-            path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::StrippingList}"
-
-            if File.exists?(path)
-                deleteFileNoChroot(path: path, asRoot: true)
-            end
-
-            data = fileList.join("\n")
-            requestedCommands = "/usr/bin/xargs --arg-file=\'#{path}\' /usr/bin/strip --strip-unneeded || true"
-
-            File.write(path, data)
-
-            ISM::Core.runSystemCommand( command: requestedCommands,
-                                        quiet: true,
-                                        asRoot: systemHandleUserAccess)
-
-            #TO DO
-            #No exit process because if the file can't be strip, we can just keep going
-            rescue
-        end
-
-        #Special function for the installation process without chroot (Internal use only)
-        def installFile(target : String, path : String, user : String, group : String, mode : String) : String
-
-            #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
-            # changeFileModeNoChroot(path, mode, asRoot: true)
-            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
-            return <<-REQUEST
-            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} -f #{target} #{path}
-            REQUEST
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "installFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function for the installation process without chroot (Internal use only)
-        def installDirectory(path : String, user : String, group : String, mode : String) : String
-
-            #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
-            # changeFileModeNoChroot(path, mode, asRoot: true)
-            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
-            return <<-REQUEST
-            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mkdir -p" : "/usr/bin/mkdir -p"} #{path}
-            REQUEST
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "installDirectory",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function for the installation process without chroot (Internal use only)
-        def installSymlink(target : String, path : String) : String
-            return <<-REQUEST
-            #{systemHandleUserAccess ? "/usr/bin/sudo /usr/bin/mv" : "/usr/bin/mv"} -f #{target} #{path}
-            REQUEST
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "installSymlink",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function for the installation process (Internal use only)
-        def updateSystemCache
-            if commandIsAvailable("ldconfig") && systemHandleUserAccess
-                runLdconfigCommand
-            end
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "updateSystemCache",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function for the uninstallation process without chroot (Internal use only)
-        def uninstallFile(path : String)
-            deleteFileNoChroot(path, asRoot: true)
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "uninstallFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function for the uninstallation process without chroot (Internal use only)
-        def uninstallDirectory(path : String)
-            deleteDirectoryNoChroot(path, asRoot: true)
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "uninstallDirectory",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Special function to improve installation process performance (Internal use only)
-        def runCommandList(commandList : Array(String))
-            path = "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}#{ISM::Default::Filename::CommandList}"
-
-            if File.exists?(path)
-                deleteFileNoChroot(path: path, asRoot: true)
-            end
-
-            data = commandList.join("\n")
-            File.write(path, data)
-
-            ISM::Core.runSystemCommand( command: "/usr/bin/chmod +x #{path}",
-                                        quiet: true,
-                                        viaChroot: false)
-
-            ISM::Core.runSystemCommand( command: path,
-                                        quiet: true,
-                                        viaChroot: false)
-        end
-
-        #Manage stripping, recording installed files and favourites, libtool archive removal, and mount/remount critical point with read-only/read-write access
         def install(preserveLibtoolArchives = false, stripFiles = true)
-            ISM::Core::Notification.install(@information)
-
-            if systemHandleUserAccess
-                ISM::Core::Notification.unlockingSystemAccess
-                ISM::Core::Security.unlockSystemAccess
-
-                #Special case when we are switching to the installation by chroot during cross toolchain construction
-                if !Ism.settings.installByChroot && !Ism.systemInformation.crossToolchainFullyBuilt
-                    prepareRootPermissions
-                end
-
-            end
+            Ism.notifyOfInstall(@information)
 
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
-
-            ISM::Core::Notification.applyingSecurityMap
-
-            commandList = Array(String).new
 
             fileList.each do |entry|
 
@@ -2279,49 +1639,21 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
-                    securityDescriptor = @information.securityMap.descriptor(   path:  recordedFilePath,
-                                                                                realPath:   entry)
-
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            commandList.push(installDirectory( path:   finalDestination,
-                                                            user:   securityDescriptor.user,
-                                                            group:  securityDescriptor.group,
-                                                            mode:   securityDescriptor.mode))
+                            makeDirectoryNoChroot(finalDestination)
                         end
                     else
-                        #TO DO: Pre check if files are the same
-                        if !File.exists?(finalDestination)
-                            if File.symlink?(entry)
-                                commandList.push(installSymlink(   target: entry,
-                                                                path:   finalDestination))
-                            else
-                                commandList.push(installFile(  target: entry,
-                                                            path:   finalDestination,
-                                                            user:   securityDescriptor.user,
-                                                            group:  securityDescriptor.group,
-                                                            mode:   securityDescriptor.mode))
-                            end
-                        end
+                        moveFileNoChroot(entry,finalDestination)
                     end
 
                 end
             end
 
-            runCommandList(commandList: commandList)
-
             #Strip the file if needed
             if stripFiles
-                ISM::Core::Notification.strippingFiles
-
-                stripFileListNoChroot(  fileList:   fileList)
+                stripFileListNoChroot(fileList)
             end
-
-            #Update library cache
-            updateSystemCache
-
-            #Run post installation process
-            deploy
 
             if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
                 Ism.addSoftwareToFavouriteGroup(@information.fullVersionName)
@@ -2329,87 +1661,57 @@ module ISM
 
             Ism.addInstalledSoftware(@information, installedFiles)
 
-            if systemHandleUserAccess
-                ISM::Core::Notification.lockingSystemAccess
-                ISM::Core::Security.lockSystemAccess
-            end
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "install",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        def deploy
-            ISM::Core::Notification.deploy
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelSourcesPath : String
-            return ISM::Core.kernelSourcesPath
+            return Ism.kernelSourcesPath
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "kernelSourcesPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelSourcesArchitecturePath : String
             return "#{kernelSourcesPath}arch/"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "kernelSourcesArchitecturePath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelKconfigFilePath : String
             return "#{kernelSourcesPath}Kconfig"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "kernelKconfigFilePath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelArchitectureKconfigFilePath : String
             return "#{kernelSourcesArchitecturePath}Kconfig"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "kernelArchitectureKconfigFilePath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelConfigFilePath : String
             return "#{kernelSourcesPath}.config"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "kernelConfigFilePath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelOptionsDatabasePath : String
-            return "#{Ism.settings.rootPath}#{ISM::Default::Path::KernelOptionsDirectory}#{mainKernelName}"
+            return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+mainKernelName
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "kernelOptionsDatabasePath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Return an array splitted, except when there are conditions between parenthesis
@@ -2425,12 +1727,9 @@ module ISM
 
             return conditions.split(" && ")
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "getConditionArray",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def parseKconfigConditions(conditions : String)
@@ -2460,12 +1759,9 @@ module ISM
 
             return dependencies,singleChoiceDependencies,blockers
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "parseKconfigConditions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
@@ -2514,12 +1810,9 @@ module ISM
 
             return result
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "getFullKernelKconfigFile",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def generateKernelOptionsFiles(kconfigContent : Array(String))
@@ -2620,54 +1913,43 @@ module ISM
                 end
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "generateKernelOptionsFiles",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def updateKernelOptionsDatabase
-            ISM::Core::Notification.updateKernelOptionsDatabase(ISM::Core.selectedKernel)
+            Ism.notifyOfUpdateKernelOptionsDatabase(Ism.selectedKernel)
 
             makeDirectoryNoChroot(kernelOptionsDatabasePath)
 
-            #TO DO
             begin
                 generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
                 generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
             rescue error
                 deleteDirectoryNoChroot(kernelOptionsDatabasePath)
 
-                #TO DO
-                # Ism.notifyOfUpdateKernelOptionsDatabaseError(Ism.selectedKernel, error)
-                # Ism.exitProgram
+                Ism.notifyOfUpdateKernelOptionsDatabaseError(Ism.selectedKernel, error)
+                Ism.exitProgram
             end
         end
 
         def recordNeededKernelOptions
-            ISM::Core::Notification.recordNeededKernelOptions
+            Ism.notifyOfRecordNeededKernelOptions
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "recordNeededKernelOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
         
         def clean
-            ISM::Core::Notification.clean(@information)
+            Ism.notifyOfClean(@information)
 
             cleanWorkDirectoryPath
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "clean",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def cleanWorkDirectoryPath
@@ -2677,48 +1959,36 @@ module ISM
 
             makeDirectoryNoChroot(workDirectoryPathNoChroot)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "cleanWorkDirectoryPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def showInformations
             puts
-            ISM::Core::Notification.informationNotificationTitle(@information.name,@information.version)
+            Ism.printInformationNotificationTitle(@information.name,@information.version)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "showInformations",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def uninstall
-            ISM::Core::Notification.uninstall(@information)
+            Ism.notifyOfUninstall(@information)
 
             Ism.uninstallSoftware(@information)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "uninstall",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def option(optionName : String) : Bool
             return @information.option(optionName)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "option",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def dependency(fullName : String) : ISM::SoftwareInformation
@@ -2730,119 +2000,64 @@ module ISM
 
             return ISM::SoftwareInformation.new
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "dependency",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def isGreatestVersion : Bool
             return Ism.getSoftwareInformation(@information.fullName).version <= @information.version
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "isGreatestVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def majorVersion : Int32
             return SemanticVersion.parse(@information.version).major
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "majorVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
         end
 
         def minorVersion : Int32
             return SemanticVersion.parse(@information.version).minor
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "minorVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def patchVersion : Int32
             return SemanticVersion.parse(@information.version).patch
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "patchVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #Internal use only
-        def dependencyVersion(fullName : String) : SemanticVersion
-            return SemanticVersion.parse(dependency(fullName).version)
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "dependencyVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "dependencyMajorVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyMinorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).minor
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "dependencyMinorVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyPatchVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).patch
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "dependencyPatchVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        def softwareVersion(fullName : String) : SemanticVersion
-            if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
-                return dependencyVersion(fullName)
-            else
-                return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version)
-            end
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "softwareVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def softwareMajorVersion(fullName : String) : Int32
@@ -2852,12 +2067,9 @@ module ISM
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).major
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "softwareMajorVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def softwareMinorVersion(fullName : String) : Int32
@@ -2867,12 +2079,9 @@ module ISM
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).minor
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "softwareMinorVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def softwarePatchVersion(fullName : String) : Int32
@@ -2882,92 +2091,65 @@ module ISM
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).patch
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "softwarePatchVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def softwareIsInstalled(softwareName : String) : Bool
             return Ism.softwareAnyVersionInstalled(softwareName)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "softwareIsInstalled",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def architecture(architecture : String) : Bool
             return Ism.settings.systemArchitecture == architecture
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "architecture",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def selectedKernel : ISM::SoftwareInformation
+            return Ism.selectedKernel
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def kernelSelected : Bool
             return selectedKernel.isValid
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "kernelSelected",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def isCurrentKernel : Bool
             return selectedKernel.versionName == @information.versionName
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "isCurrentKernel",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def showInfo(message : String)
             Ism.printInformationNotification(message)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "showInfo",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def showInfoCode(message : String)
             Ism.printInformationCodeNotification(message)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "showInfoCode",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        #NEED FIX (Core?)
-        def commandIsAvailable(command : String) : Bool
-            process = ISM::Core.runSystemCommand("type #{command} > /dev/null 2>&1")
-
-            return (process.exit_code == 0)
-
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "commandIsAvailable",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

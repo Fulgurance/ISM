@@ -24,13 +24,6 @@ module ISM
                         error.line_number.to_s}".colorize(:yellow)
                 return self.new
             end
-
-            rescue exception
-                ISM::Core::Error.show(  className: "NeededKernelOption",
-                                        functionName: "loadConfiguration",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function",
-                                        exception: exception)
         end
 
         def writeConfiguration(path : String)
@@ -44,12 +37,9 @@ module ISM
             to_json(file)
             file.close
 
-            rescue exception
-                ISM::Core::Error.show(  className: "NeededKernelOption",
-                                        functionName: "writeConfiguration",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function",
-                                        exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

@@ -7,8 +7,7 @@ module ISM
             FileLoadProcessSyntaxErrorText1 = "Syntax errors detected during file load process "
             FileLoadProcessSyntaxErrorText2 = " at line number "
             ArchiveExtensionName = ".tar.xz"
-            ArchiveSha512ExtensionName = ".sha512"
-            SystemComponentSoftwareClassName = "SystemComponentSoftware"
+            ArchiveMd5sumExtensionName = ".md5sum"
 
         end
 

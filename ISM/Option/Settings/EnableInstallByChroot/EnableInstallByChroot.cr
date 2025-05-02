@@ -12,8 +12,12 @@ module ISM
 
             def start
                 if ARGV.size == 2
-                    Ism.settings.setInstallByChroot(true)
-                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsEnableInstallByChroot::SetText)
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        Ism.settings.setInstallByChroot(true)
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsEnableInstallByChroot::SetText)
+                    end
                 end
             end
 

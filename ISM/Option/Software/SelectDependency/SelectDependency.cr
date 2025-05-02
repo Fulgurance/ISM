@@ -14,34 +14,38 @@ module ISM
                 if ARGV.size == 2 || ARGV.size == 3
                     showHelp
                 else
-                    matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
-
-                    if matchingSoftware.fullName == ""
-                        puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFound + "#{ARGV[1].colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFoundAdvice
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
                     else
-                        if ARGV[2] == @shortText || ARGV[2] == @longText
+                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
 
-                            dependency = Ism.getSoftwareInformation(ARGV[3].downcase, allowSearchByNameOnly: true)
-
-                            dependencyText = "#{("@"+dependency.port).colorize(:red)}:#{dependency.name.colorize(:green)}"
-                            matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
-
-                            if matchingSoftware.selectUniqueDependency(dependency.fullName)
-                                matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
-
-                                ISM::Core::Notification.processNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
-                                                                dependencyText +
-                                                                ISM::Default::Option::SoftwareSelectDependency::SetText2 +
-                                                                matchingSoftwareText)
-                            else
-                                ISM::Core::Notification.errorNotification( ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
-                                                            dependencyText +
-                                                            ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound2 +
-                                                            matchingSoftwareText,nil)
-                            end
+                        if matchingSoftware.fullName == ""
+                            puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFound + "#{ARGV[1].colorize(:green)}"
+                            puts ISM::Default::Option::SoftwareSelectDependency::NoMatchFoundAdvice
                         else
-                            showHelp
+                            if ARGV[2] == @shortText || ARGV[2] == @longText
+
+                                dependency = Ism.getSoftwareInformation(ARGV[3].downcase, allowSearchByNameOnly: true)
+
+                                dependencyText = "#{("@"+dependency.port).colorize(:red)}:#{dependency.name.colorize(:green)}"
+                                matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
+
+                                if matchingSoftware.selectUniqueDependency(dependency.fullName)
+                                    matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
+
+                                    Ism.printProcessNotification(   ISM::Default::Option::SoftwareSelectDependency::SetText1 +
+                                                                    dependencyText +
+                                                                    ISM::Default::Option::SoftwareSelectDependency::SetText2 +
+                                                                    matchingSoftwareText)
+                                else
+                                    Ism.printErrorNotification( ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound1 +
+                                                                dependencyText +
+                                                                ISM::Default::Option::SoftwareSelectDependency::DependencyNoMatchFound2 +
+                                                                matchingSoftwareText,nil)
+                                end
+                            else
+                                showHelp
+                            end
                         end
                     end
                 end

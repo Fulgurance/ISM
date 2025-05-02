@@ -23,13 +23,6 @@ module ISM
                 moveFileNoChroot(entry,builtSoftwareDirectoryPathNoChroot+filename)
 
             end
-
-            rescue exception
-                ISM::Core::Error.show(  className: "PackagedSoftware",
-                                        functionName: "prepareInstallation",
-                                        errorTitle: "Execution failure",
-                                        error: "Failed to execute the function",
-                                        exception: exception)
         end
 
     end

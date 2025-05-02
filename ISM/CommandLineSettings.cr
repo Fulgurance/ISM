@@ -5,12 +5,12 @@ module ISM
         include JSON::Serializable
 
         #Generic parameters
+        property    secureMode : Bool
         property    binaryTaskMode : Bool
         property    installByChroot : Bool
         property    rootPath : String
         property    defaultMirror : String
         property    buildKernelOptionsAsModule : Bool
-        property    autoDeployServices : Bool
 
         #Host related parameters
         property    systemTargetName : String
@@ -61,12 +61,12 @@ module ISM
         property    chrootVariantId : String
 
         def initialize( #Generic parameters
+                        @secureMode = ISM::Default::CommandLineSettings::SecureMode,
                         @binaryTaskMode = ISM::Default::CommandLineSettings::BinaryTaskMode,
                         @installByChroot = ISM::Default::CommandLineSettings::InstallByChroot,
                         @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
                         @buildKernelOptionsAsModule = ISM::Default::CommandLineSettings::BuildKernelOptionsAsModule,
-                        @autoDeployServices = ISM::Default::CommandLineSettings::AutoDeployServices,
 
                         #Host related parameters
                         @systemTargetName = ISM::Default::CommandLineSettings::SystemTargetName,
@@ -120,12 +120,9 @@ module ISM
         def self.filePath : String
             return "/"+ISM::Default::CommandLineSettings::SettingsFilePath
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "filePath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def self.generateConfiguration(path = filePath)
@@ -133,12 +130,9 @@ module ISM
             self.new.to_json(file)
             file.close
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "generateConfiguration",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def self.loadConfiguration(path = filePath)
@@ -148,24 +142,21 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "loadConfiguration",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def self.writeConfiguration(#File path
                                     path : String,
 
                                     #Generic parameters
+                                    secureMode : Bool,
                                     binaryTaskMode : Bool,
                                     installByChroot : Bool,
                                     rootPath : String,
                                     defaultMirror : String,
                                     buildKernelOptionsAsModule : Bool,
-                                    autoDeployServices : Bool,
 
                                     #Host related parameters
                                     systemTargetName : String,
@@ -222,12 +213,12 @@ module ISM
             end
 
             settings = {#Generic parameters
+                        "secureMode" => secureMode,
                         "binaryTaskMode" => binaryTaskMode,
                         "installByChroot" => installByChroot,
                         "rootPath" => rootPath,
                         "defaultMirror" => defaultMirror,
                         "buildKernelOptionsAsModule" => buildKernelOptionsAsModule,
-                        "autoDeployServices" => autoDeployServices,
 
                         #Host related parameters
                         "systemTargetName" => systemTargetName,
@@ -282,24 +273,21 @@ module ISM
             settings.to_json(file)
             file.close
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "writeConfiguration",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def writeChrootConfiguration
             self.class.writeConfiguration(  #File path
                                             @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
                                             #Generic parameters
+                                            ISM::Default::CommandLineSettings::SecureMode,
                                             ISM::Default::CommandLineSettings::BinaryTaskMode,
                                             ISM::Default::CommandLineSettings::InstallByChroot,
                                             ISM::Default::CommandLineSettings::RootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
-                                            @autoDeployServices,
 
                                             #Host related parameters
                                             @chrootTargetName,
@@ -349,12 +337,9 @@ module ISM
                                             ISM::Default::CommandLineSettings::SystemVariant,
                                             ISM::Default::CommandLineSettings::SystemVariantId)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "writeChrootConfiguration",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def writeSystemConfiguration
@@ -362,12 +347,12 @@ module ISM
                                             self.class.filePath,
 
                                             #Generic parameters
+                                            @secureMode,
                                             @binaryTaskMode,
                                             @installByChroot,
                                             @rootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
-                                            @autoDeployServices,
 
                                             #Host related parameters
                                             @systemTargetName,
@@ -421,46 +406,34 @@ module ISM
                 writeChrootConfiguration
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "writeSystemConfiguration",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Generic methods
         def temporaryPath
             return "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "temporaryPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def sourcesPath
             return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "sourcesPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def toolsPath
             return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "toolsPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Host/Chroot methods
@@ -472,12 +445,9 @@ module ISM
                 return @systemTargetName
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemTargetName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemArchitecture(relatedToChroot = true) : String
@@ -487,12 +457,9 @@ module ISM
                 return @systemArchitecture
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemArchitecture",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemTarget(relatedToChroot = true) : String
@@ -502,12 +469,9 @@ module ISM
                 return @systemTarget
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemTarget",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemMakeOptions(relatedToChroot = true) : String
@@ -517,12 +481,9 @@ module ISM
                 return @systemMakeOptions
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemMakeOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemBuildOptions(relatedToChroot = true) : String
@@ -532,12 +493,9 @@ module ISM
                 return @systemBuildOptions
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemBuildOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemName(relatedToChroot = true) : String
@@ -547,12 +505,9 @@ module ISM
                 return @systemName
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemFullName(relatedToChroot = true) : String
@@ -562,12 +517,9 @@ module ISM
                 return @systemFullName
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemFullName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemId(relatedToChroot = true) : String
@@ -577,12 +529,9 @@ module ISM
                 return @systemId
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemRelease(relatedToChroot = true) : String
@@ -592,12 +541,9 @@ module ISM
                 return @systemRelease
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemRelease",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemCodeName(relatedToChroot = true) : String
@@ -607,12 +553,9 @@ module ISM
                 return @systemCodeName
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemCodeName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemDescription(relatedToChroot = true) : String
@@ -622,12 +565,9 @@ module ISM
                 return @systemDescription
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemDescription",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemVersion(relatedToChroot = true) : String
@@ -637,12 +577,9 @@ module ISM
                 return @systemVersion
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemVersionId(relatedToChroot = true) : String
@@ -652,12 +589,9 @@ module ISM
                 return @systemVersionId
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemVersionId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemAnsiColor(relatedToChroot = true) : String
@@ -667,12 +601,9 @@ module ISM
                 return @systemAnsiColor
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemAnsiColor",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemCpeName(relatedToChroot = true) : String
@@ -682,12 +613,9 @@ module ISM
                 return @systemCpeName
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemCpeName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemHomeUrl(relatedToChroot = true) : String
@@ -697,12 +625,9 @@ module ISM
                 return @systemHomeUrl
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemHomeUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemSupportUrl(relatedToChroot = true) : String
@@ -712,12 +637,9 @@ module ISM
                 return @systemSupportUrl
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemSupportUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemBugReportUrl(relatedToChroot = true) : String
@@ -727,12 +649,9 @@ module ISM
                 return @systemBugReportUrl
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemBugReportUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemPrivacyPolicyUrl(relatedToChroot = true) : String
@@ -742,12 +661,9 @@ module ISM
                 return @systemPrivacyPolicyUrl
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemPrivacyPolicyUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemBuildId(relatedToChroot = true) : String
@@ -757,12 +673,9 @@ module ISM
                 return @systemBuildId
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemBuildId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemVariant(relatedToChroot = true) : String
@@ -772,12 +685,9 @@ module ISM
                 return @systemVariant
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemVariant",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def systemVariantId(relatedToChroot = true) : String
@@ -787,81 +697,60 @@ module ISM
                 return @systemVariantId
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "systemVariantId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #Setter methods
 
         #   Generic
+        def setSecureMode(@secureMode)
+            writeSystemConfiguration
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         def setBinaryTaskMode(@binaryTaskMode)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setBinaryTaskMode",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setInstallByChroot(@installByChroot)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setInstallByChroot",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setRootPath(@rootPath)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setRootPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setDefaultMirror(@defaultMirror)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setDefaultMirror",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setBuildKernelOptionsAsModule(@buildKernelOptionsAsModule)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setBuildKernelOptionsAsModule",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-        end
-
-        def setAutoDeployServices(@autoDeployServices)
-            writeSystemConfiguration
-
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setAutoDeployServices",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #   Host
@@ -869,36 +758,27 @@ module ISM
             writeSystemConfiguration
             setSystemTarget
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemTargetName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemArchitecture(@systemArchitecture)
             writeSystemConfiguration
             setSystemTarget
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemArchitecture",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemTarget
             @systemTarget = @systemArchitecture + "-" + @systemTargetName + "-" + "linux-gnu"
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemTarget",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemMakeOptions(@systemMakeOptions)
@@ -909,214 +789,156 @@ module ISM
             else
                 puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
-
-                ISM::Core.exitProgram
+                Ism.exitProgram
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemMakeOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemBuildOptions(@systemBuildOptions)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemBuildOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemName(@systemName)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemFullName(@systemFullName)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemFullName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemId(@systemId)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemRelease(@systemRelease)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemRelease",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemCodeName(@systemCodeName)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemCodeName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemDescription(@systemDescription)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemDescription",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemVersion(@systemVersion)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemVersionId(@systemVersionId)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemVersionId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemAnsiColor(@systemAnsiColor)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemAnsiColor",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemCpeName(@systemCpeName)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemCpeName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemHomeUrl(@systemHomeUrl)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemHomeUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemSupportUrl(@systemSupportUrl)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemSupportUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemBugReportUrl(@systemBugReportUrl)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemBugReportUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemPrivacyPolicyUrl(@systemPrivacyPolicyUrl)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemPrivacyPolicyUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemBuildId(@systemBuildId)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemBuildId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemVariant(@systemVariant)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemVariant",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setSystemVariantId(@systemVariantId)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setSystemVariantId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         #   Chroot
@@ -1124,35 +946,26 @@ module ISM
             writeSystemConfiguration
             setChrootTarget
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootTargetName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootArchitecture(@chrootArchitecture)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootArchitecture",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootTarget
             @chrootTarget = @chrootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootTarget",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootMakeOptions(@chrootMakeOptions)
@@ -1163,215 +976,157 @@ module ISM
             else
                 puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
                 puts "#{ISM::Default::CommandLineSettings::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
-
-                ISM::Core.exitProgram
+                Ism.exitProgram
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootMakeOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootBuildOptions(@chrootBuildOptions)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootBuildOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootName(@chrootName)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
 
         def setChrootFullName(@chrootFullName)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootFullName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootId(@chrootId)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootRelease(@chrootRelease)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootRelease",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootCodeName(@chrootCodeName)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootCodeName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootDescription(@chrootDescription)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootDescription",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootVersion(@chrootVersion)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootVersionId(@chrootVersionId)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootVersionId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootAnsiColor(@chrootAnsiColor)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootAnsiColor",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootCpeName(@chrootCpeName)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootCpeName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootHomeUrl(@chrootHomeUrl)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootHomeUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootSupportUrl(@chrootSupportUrl)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootSupportUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootBugReportUrl(@chrootBugReportUrl)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootBugReportUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootPrivacyPolicyUrl(@chrootPrivacyPolicyUrl)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootPrivacyPolicyUrl",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootBuildId(@chrootBuildId)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootBuildId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootVariant(@chrootVariant)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootVariant",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def setChrootVariantId(@chrootVariantId)
             writeSystemConfiguration
 
-            rescue exception
-            ISM::Core::Error.show(  className: "CommandLineSettings",
-                                    functionName: "setChrootVariantId",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

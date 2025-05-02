@@ -13,13 +13,7 @@ module ISM
             PortsSettings = "PortsSettings.json"
             MirrorsSettings = "MirrorsSettings.json"
             SelectedKernel = "SelectedKernel.json"
-            SecurityMap = "SecurityMap.json"
-            TaskPrefix = ".ISM"
-            Task = "#{TaskPrefix}.task"
-            CommandList = "#{TaskPrefix}.commandList"
-            StrippingList = "#{TaskPrefix}.strippingList"
-            UserConfiguration = "passwd"
-            GroupConfiguration = "group"
+            Task = ".ISM.task"
 
         end
 

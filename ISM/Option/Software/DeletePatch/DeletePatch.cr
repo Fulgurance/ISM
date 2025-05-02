@@ -14,28 +14,32 @@ module ISM
                 if ARGV.size == 2 || ARGV.size == 3
                     showHelp
                 else
-                    matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
-
-                    if matchingSoftware.name == ""
-                        puts ISM::Default::Option::SoftwareDeletePatch::NoMatchFound + "#{ARGV[1].colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareDeletePatch::NoMatchFoundAdvice
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
                     else
-                        if ARGV[2] == @shortText || ARGV[2] == @longText
-                            patchName = ARGV[3]
+                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
 
-                            if Ism.deletePatch(patchName,matchingSoftware.versionName)
-                                ISM::Core::Notification.processNotification(   ISM::Default::Option::SoftwareDeletePatch::Text1 +
-                                                            patchName +
-                                                            ISM::Default::Option::SoftwareDeletePatch::Text2 +
-                                                            matchingSoftware.name)
-                            else
-                                ISM::Core::Notification.errorNotification( ISM::Default::Option::SoftwareDeletePatch::NoFileFound1 +
-                                                        patchName +
-                                                        ISM::Default::Option::SoftwareDeletePatch::NoFileFound2 +
-                                                        matchingSoftware.name,nil)
-                            end
+                        if matchingSoftware.name == ""
+                            puts ISM::Default::Option::SoftwareDeletePatch::NoMatchFound + "#{ARGV[1].colorize(:green)}"
+                            puts ISM::Default::Option::SoftwareDeletePatch::NoMatchFoundAdvice
                         else
-                            showHelp
+                            if ARGV[2] == @shortText || ARGV[2] == @longText
+                                patchName = ARGV[3]
+
+                                if Ism.deletePatch(patchName,matchingSoftware.versionName)
+                                    Ism.printProcessNotification(   ISM::Default::Option::SoftwareDeletePatch::Text1 +
+                                                                patchName +
+                                                                ISM::Default::Option::SoftwareDeletePatch::Text2 +
+                                                                matchingSoftware.name)
+                                else
+                                    Ism.printErrorNotification( ISM::Default::Option::SoftwareDeletePatch::NoFileFound1 +
+                                                            patchName +
+                                                            ISM::Default::Option::SoftwareDeletePatch::NoFileFound2 +
+                                                            matchingSoftware.name,nil)
+                                end
+                            else
+                                showHelp
+                            end
                         end
                     end
                 end

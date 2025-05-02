@@ -12,8 +12,12 @@ module ISM
 
             def start
                 if ARGV.size == 2
-                    Ism.settings.setBuildKernelOptionsAsModule(false)
-                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsDisableBuildKernelOptionsAsModule::SetText)
+                    if !Ism.ranAsSuperUser
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        Ism.settings.setBuildKernelOptionsAsModule(false)
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsDisableBuildKernelOptionsAsModule::SetText)
+                    end
                 end
             end
 

@@ -24,12 +24,16 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    port = convertUrlToPort(ARGV[2])
-
-                    if port.open
-                        ISM::Core::Notification.processNotification(ISM::Default::Option::PortOpen::OpenText+"#{("@#{port.name}").colorize(Colorize::ColorRGB.new(255,100,100))}")
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
                     else
-                        ISM::Core::Notification.errorNotification(ISM::Default::Option::PortOpen::OpenTextError1+"#{port.name.colorize(:red)}"+ISM::Default::Option::PortOpen::OpenTextError2,nil)
+                        port = convertUrlToPort(ARGV[2])
+
+                        if port.open
+                            Ism.printProcessNotification(ISM::Default::Option::PortOpen::OpenText+"#{("@#{port.name}").colorize(Colorize::ColorRGB.new(255,100,100))}")
+                        else
+                            Ism.printErrorNotification(ISM::Default::Option::PortOpen::OpenTextError1+"#{port.name.colorize(:red)}"+ISM::Default::Option::PortOpen::OpenTextError2,nil)
+                        end
                     end
                 end
             end

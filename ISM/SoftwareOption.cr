@@ -22,34 +22,25 @@ module ISM
         def == (other : ISM::SoftwareOption) : Bool
             return @name == other.name && @active == other.active
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareOption",
-                                    functionName: "self == other",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def self.isPassName(optionName : String) : Bool
             return optionName.starts_with?(/Pass[0-9]/)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareOption",
-                                    functionName: "isPassName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def isPass : Bool
             return self.class.isPassName(@name)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareOption",
-                                    functionName: "isPass",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
@@ -63,12 +54,9 @@ module ISM
 
             return result
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareOption",
-                                    functionName: "dependencies",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

@@ -8,9 +8,11 @@ module ISM
 
                 ShortText = "-se"
                 LongText = "settings"
-                Description = "Configure #{ISM::Default::CommandLine::Name.upcase} settings"
+                Description = "Configure ISM settings"
                 Options = [ ISM::Option::SettingsShow.new,
                             #Global options
+                            ISM::Option::SettingsEnableSecureMode.new,
+                            ISM::Option::SettingsDisableSecureMode.new,
                             ISM::Option::SettingsEnableBinaryTaskMode.new,
                             ISM::Option::SettingsDisableBinaryTaskMode.new,
                             ISM::Option::SettingsEnableInstallByChroot.new,
@@ -19,8 +21,6 @@ module ISM
                             ISM::Option::SettingsSetDefaultMirror.new,
                             ISM::Option::SettingsEnableBuildKernelOptionsAsModule.new,
                             ISM::Option::SettingsDisableBuildKernelOptionsAsModule.new,
-                            ISM::Option::SettingsEnableAutoDeployServices.new,
-                            ISM::Option::SettingsDisableAutoDeployServices.new,
                             #Host options
                             ISM::Option::SettingsSetSystemTargetName.new,
                             ISM::Option::SettingsSetSystemArchitecture.new,

@@ -12,13 +12,17 @@ module ISM
 
             def start
                 if ARGV.size == 2
-                    Ism.settings.setBinaryTaskMode(true)
-                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsEnableBinaryTaskMode::SetText)
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        Ism.settings.setBinaryTaskMode(true)
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsEnableBinaryTaskMode::SetText)
+                    end
                 end
             end
 
         end
-
+        
     end
 
 end

@@ -19,12 +19,9 @@ module ISM
         def type : String
             return information.type
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "type",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def getEnabledPass : String
@@ -36,12 +33,9 @@ module ISM
 
             return String.new
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "getEnabledPass",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def passEnabled : Bool
@@ -53,46 +47,34 @@ module ISM
 
             return false
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "passEnabled",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                    Ism.printSystemCallErrorNotification(error)
+                    Ism.exitProgram
         end
 
         def fullName : String
             return "@#{@port}:#{@name}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "fullName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def fullVersionName : String
             return "#{fullName}-#{version}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "fullVersionName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def hiddenName : String
             passName = getEnabledPass
             return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "hiddenName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def version=(@version)
@@ -101,34 +83,25 @@ module ISM
         def versionName
             return @name+"-"+version
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "versionName",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def version
             return Ism.getAvailableSoftware(fullName).greatestVersion(@version).version
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "version",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def requiredVersion : String
             return @version
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "requiredVersion",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def information : ISM::SoftwareInformation
@@ -147,12 +120,9 @@ module ISM
 
             return dependencyInformation
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "information",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def installedFiles
@@ -164,56 +134,41 @@ module ISM
                 end
             end
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "installedFiles",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
             return information.dependencies(allowDeepSearch)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "dependencies",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def builtSoftwareDirectoryPath : String
             return information.builtSoftwareDirectoryPath
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "builtSoftwareDirectoryPath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def requireFilePath : String
             return information.requireFilePath
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "requireFilePath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def filePath : String
             return information.filePath
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "filePath",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def == (other : ISM::SoftwareDependency) : Bool
@@ -221,12 +176,9 @@ module ISM
             version == other.version &&
             @options == other.options
 
-            rescue exception
-            ISM::Core::Error.show(  className: "SoftwareDependency",
-                                    functionName: "self == other",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
     end

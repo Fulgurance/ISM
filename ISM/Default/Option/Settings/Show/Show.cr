@@ -9,16 +9,16 @@ module ISM
                 ShortText = "-s"
                 LongText = "show"
                 Description = "Show the current settings"
-                TitleText = "Current #{ISM::Default::CommandLine::Name.upcase} settings"
+                TitleText = "Current ISM settings"
 
                 #Generic titles
                 ToolsPathText = "Tools path"
                 SourcesPathText = "Sources path"
+                SecureModeText = "Secure mode"
                 BinaryTaskModeText = "Binary task mode"
                 InstallByChrootText = "Install by chroot"
                 RootPathText = "Root path"
                 DefaultMirrorText = "Default mirror"
-                AutoDeployServicesText = "Automatically deploy services"
 
                 #Host titles
                 SystemTargetNameText = "System target name"

@@ -36,15 +36,17 @@ module ISM
 
                             if match
                                 matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
-                                ISM::Core::Notification.processNotification(   ISM::Default::Option::ComponentDesactivate::SetText1 +
-                                                            "#{matchingOption.name.colorize(:green)}" +
-                                                            ISM::Default::Option::ComponentDesactivate::SetText2 +
-                                                            matchingSoftwareText)
+                                # ISM::Core::Notification.processNotification(   ISM::Default::Option::ComponentDesactivate::SetText1 +
+                                #                             "#{matchingOption.name.colorize(:green)}" +
+                                #                             ISM::Default::Option::ComponentDesactivate::SetText2 +
+                                #                             matchingSoftwareText)
+                                puts "Done"
                             else
-                                ISM::Core::Notification.errorNotification( ISM::Default::Option::ComponentDesactivate::OptionNoMatchFound1 +
-                                                        "#{ARGV[3].colorize(:green)}" +
-                                                        ISM::Default::Option::ComponentDesactivate::OptionNoMatchFound2 +
-                                                        matchingSoftwareText,nil)
+                                # ISM::Core::Notification.errorNotification( ISM::Default::Option::ComponentDesactivate::OptionNoMatchFound1 +
+                                #                         "#{ARGV[3].colorize(:green)}" +
+                                #                         ISM::Default::Option::ComponentDesactivate::OptionNoMatchFound2 +
+                                #                         matchingSoftwareText,nil)
+                                puts "Failed"
                             end
                         else
                             showHelp

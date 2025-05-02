@@ -14,8 +14,12 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    Ism.settings.setChrootBuildOptions(ARGV[2])
-                    ISM::Core::Notification.processNotification(ISM::Default::Option::SettingsSetChrootBuildOptions::SetText+ARGV[2])
+                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
+                        Ism.printNeedSuperUserAccessNotification
+                    else
+                        Ism.settings.setChrootBuildOptions(ARGV[2])
+                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootBuildOptions::SetText+ARGV[2])
+                    end
                 end
             end
 
