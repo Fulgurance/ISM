@@ -2196,7 +2196,7 @@ module ISM
 
         #NEED FIX (Core?)
         def commandIsAvailable(command : String) : Bool
-            process = ISM::Core.runSystemCommand("type #{command} > /dev/null 2>&1")
+            process = Ism.runSystemCommand("type #{command} > /dev/null 2>&1")
 
             return (process.exit_code == 0)
 
