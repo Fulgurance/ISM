@@ -2090,6 +2090,18 @@ module ISM
                 Ism.exitProgram
         end
 
+        def softwareVersion(fullName : String) : SemanticVersion
+            if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
+                return dependencyVersion(fullName)
+            else
+                return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version)
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
         def softwareMajorVersion(fullName : String) : Int32
             if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
                 return dependencyMajorVersion(fullName)
