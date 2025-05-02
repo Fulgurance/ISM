@@ -1674,7 +1674,7 @@ module ISM
         end
 
         def updateSystemCache
-            if commandIsAvailable("ldconfig")# && systemHandleUserAccess
+            if commandIsAvailable("ldconfig") && Ism.settings.installByChroot
                 runLdconfigCommand
             end
 
