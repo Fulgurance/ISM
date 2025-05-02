@@ -351,12 +351,9 @@ module ISM
                             ISM::Default::Software::SourcesArchiveBaseName,
                             ISM::Default::Software::ArchiveSha512ExtensionName)
 
-            rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "downloadSourcesSha512",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
         end
 
         def downloadFile(link : String, filename : String, fileExtensionName : String)
