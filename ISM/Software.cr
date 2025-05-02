@@ -969,11 +969,9 @@ module ISM
         end
 
         def runUserAddCommand(arguments : String)
-            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
+            requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
 
-            requestedCommands = "useradd #{prefix.empty? ? arguments : prefix+arguments}"
-
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Process.run(requestedCommands, shell: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -982,11 +980,9 @@ module ISM
         end
 
         def runUserDelCommand(arguments : String)
-            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
+            requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            requestedCommands = "userdel #{prefix.empty? ? arguments : prefix+arguments}"
-
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Process.run(requestedCommands, shell: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -995,11 +991,9 @@ module ISM
         end
 
         def runGroupAddCommand(arguments : String)
-            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
+            requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
-            requestedCommands = "groupadd #{prefix.empty? ? arguments : prefix+arguments}"
-
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Process.run(requestedCommands, shell: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
@@ -1008,11 +1002,9 @@ module ISM
         end
 
         def runGroupDelCommand(arguments : String)
-            prefix = option("Pass1") ? "-R #{Ism.settings.rootPath} " : String.new
+            requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            requestedCommands = "groupdel #{prefix.empty? ? arguments : prefix+arguments}"
-
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand(requestedCommands, shell: true)
 
             if !process.success? && process.exit_code != 9
                 Ism.notifyOfRunSystemCommandError(requestedCommands)
