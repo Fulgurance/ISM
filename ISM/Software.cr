@@ -2032,6 +2032,15 @@ module ISM
         end
 
         #Internal use only
+        def dependencyVersion(fullName : String) : SemanticVersion
+            return SemanticVersion.parse(dependency(fullName).version)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        #Internal use only
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
 
@@ -2144,6 +2153,17 @@ module ISM
 
         def showInfoCode(message : String)
             Ism.printInformationCodeNotification(message)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        #NEED FIX (Core?)
+        def commandIsAvailable(command : String) : Bool
+            process = ISM::Core.runSystemCommand("type #{command} > /dev/null 2>&1")
+
+            return (process.exit_code == 0)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
