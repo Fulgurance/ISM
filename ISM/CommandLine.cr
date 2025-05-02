@@ -53,6 +53,14 @@ module ISM
             @green = UInt8.new(55)
         end
 
+        def systemId : String
+            return 250
+
+            rescue error
+                    printSystemCallErrorNotification(error)
+                    exitProgram
+        end
+
         def ranAsSuperUser : Bool
             return (LibC.getuid == 0)
 
