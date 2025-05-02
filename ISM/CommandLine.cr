@@ -54,7 +54,7 @@ module ISM
         end
 
         def systemId : String
-            return 250
+            return "250"
 
             rescue error
                     printSystemCallErrorNotification(error)
