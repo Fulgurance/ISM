@@ -279,6 +279,9 @@ module ISM
                 Ism.exitProgram
         end
 
+        def setup
+        end
+
         def download
             Ism.notifyOfDownload(@information)
 
@@ -1653,6 +1656,12 @@ module ISM
                 stripFileListNoChroot(fileList)
             end
 
+            #Update library cache
+            updateSystemCache
+
+            #Run post installation process
+            deploy
+
             if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
                 Ism.addSoftwareToFavouriteGroup(@information.fullVersionName)
             end
@@ -1662,6 +1671,20 @@ module ISM
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
+        end
+
+        def updateSystemCache
+            if commandIsAvailable("ldconfig")# && systemHandleUserAccess
+                runLdconfigCommand
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def deploy
+            puts "Deploying"
         end
 
         def kernelSourcesPath : String
