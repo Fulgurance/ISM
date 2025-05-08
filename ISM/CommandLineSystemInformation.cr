@@ -9,16 +9,21 @@ module ISM
         include JSON::Serializable
 
         property crossToolchainFullyBuilt : Bool
+        property handleUserAccess : Bool
 
-        def initialize(@crossToolchainFullyBuilt = false)
+        def initialize( @crossToolchainFullyBuilt = false,
+                        @handleUserAccess = false)
         end
 
         def self.filePath : String
-            return Ism.settings.rootPath+Default::FilePath
+            return "#{(Ism.settings.installByChroot || !Ism.settings.installByChroot && (Ism.settings.rootPath != "/") ? Ism.settings.rootPath : "/")}#{Default::FilePath}"
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLineSystemInformation",
+                                    functionName: "filePath",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.generateConfiguration(path = filePath)
@@ -26,9 +31,12 @@ module ISM
             self.new.to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLineSystemInformation",
+                                    functionName: "generateConfiguration",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
@@ -38,9 +46,12 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLineSystemInformation",
+                                    functionName: "loadConfiguration",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
@@ -48,17 +59,34 @@ module ISM
             to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLineSystemInformation",
+                                    functionName: "writeConfiguration",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
         def setCrossToolchainFullyBuilt(@crossToolchainFullyBuilt)
             writeConfiguration
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLineSystemInformation",
+                                    functionName: "setCrossToolchainFullyBuilt",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
+        def setHandleUserAccess(@handleUserAccess)
+            writeConfiguration
+
+            rescue exception
+            ISM::Core::Error.show(  className: "CommandLineSystemInformation",
+                                    functionName: "setHandleUserAccess",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
         end
 
     end
