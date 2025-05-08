@@ -7,7 +7,7 @@ module ISM
             module Default
                 Title = "Internal error"
                 InstallerTitle = "Installer failure"
-                Help = "#{CommandLine::Name.upcase} raised that error because the ran script did not call properly a system command or the system command itself need to be fix."
+                Help = "#{CommandLine::Default::Name.upcase} raised that error because the ran script did not call properly a system command or the system command itself need to be fix."
                 SystemCommandFailure = "The following system command failed to run: "
             end
 
