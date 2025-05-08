@@ -4,11 +4,27 @@ module ISM
 
         class Software < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-so"
+                LongText = "software"
+                Description = "Install, configure and remove softwares"
+                Options = [ ISM::Option::SoftwareSearch.new,
+                            ISM::Option::SoftwareUpdate.new,
+                            ISM::Option::SoftwareInstall.new,
+                            ISM::Option::SoftwareUninstall.new,
+                            ISM::Option::SoftwareClean.new,
+                            ISM::Option::SoftwareSelectDependency.new,
+                            ISM::Option::SoftwareEnableOption.new,
+                            ISM::Option::SoftwareDisableOption.new,
+                            ISM::Option::SoftwareAddPatch.new,
+                            ISM::Option::SoftwareDeletePatch.new]
+            end
+
             def initialize
-                super(  ISM::Default::Option::Software::ShortText,
-                        ISM::Default::Option::Software::LongText,
-                        ISM::Default::Option::Software::Description,
-                        ISM::Default::Option::Software::Options)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description,
+                        Default::Options)
             end
 
             def start
@@ -25,41 +41,41 @@ module ISM
                         end
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareEnableOption::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareEnableOption::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareEnableOption::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareEnableOption::Default::LongText
                         matchingOption = true
                         @options[-4].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDisableOption::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDisableOption::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareDisableOption::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareDisableOption::Default::LongText
                         matchingOption = true
                         @options[-3].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareSelectDependency::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareSelectDependency::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareSelectDependency::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareSelectDependency::Default::LongText
                         matchingOption = true
                         @options[-5].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareAddPatch::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareAddPatch::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareAddPatch::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareAddPatch::Default::LongText
                         matchingOption = true
                         @options[-2].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDeletePatch::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDeletePatch::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareDeletePatch::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == SoftwareDeletePatch::Default::LongText
                         matchingOption = true
                         @options[-1].start
                     end
 
                     if !matchingOption
-                        puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[1].colorize(:white)}"
-                        puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                        puts "#{CommandLine::Default::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[1].colorize(:white)}"
+                        puts    "#{CommandLine::Default::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                                "#{CommandLine::Default::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                                "#{CommandLine::Default::ErrorUnknowArgumentHelp3.colorize(:white)}"
                     end
                 end
             end

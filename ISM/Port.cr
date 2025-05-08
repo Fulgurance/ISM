@@ -2,6 +2,12 @@ module ISM
 
     class Port
 
+        module Default
+            SynchronizeTextError1 = "The port "
+            SynchronizeTextError2 = " located at "
+            SynchronizeTextError3 = " does not exist anymore. #{CommandLine::Default::Name.upcase} deleted it."
+        end
+
         include JSON::Serializable
 
         property name : String
@@ -11,7 +17,7 @@ module ISM
         end
 
         def self.filePathPrefix : String
-            return Ism.settings.rootPath+ISM::Default::Path::PortsDirectory
+            return Ism.settings.rootPath+Path::PortsDirectory
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -19,7 +25,7 @@ module ISM
         end
 
         def self.directoryPathPrefix : String
-            return Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory
+            return Ism.settings.rootPath+Path::SoftwaresDirectory
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -167,7 +173,7 @@ module ISM
                                     shell: true,
                                     chdir: directoryPath)
             else
-                Ism.printErrorNotification(ISM::Default::Port::SynchronizeTextError1+"#{@name.colorize(:red)}"+ISM::Default::Port::SynchronizeTextError2+"#{@url.colorize(:red)}"+ISM::Default::Port::SynchronizeTextError3,nil)
+                Ism.printErrorNotification(Default::SynchronizeTextError1+"#{@name.colorize(:red)}"+Default::SynchronizeTextError2+"#{@url.colorize(:red)}"+Default::SynchronizeTextError3,nil)
 
                 self.class.delete(@name)
 

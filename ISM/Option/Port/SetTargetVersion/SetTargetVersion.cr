@@ -4,10 +4,21 @@ module ISM
 
         class PortSetTargetVersion < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-stv"
+                LongText = "settargetversion"
+                Description = "Set the target version for all ports, based on a ISM version"
+                SetTitle = "ISM start to set the target version: "
+                SetWaitingText = "Setting the target version"
+                SetText = "Setting the default target version to "
+                SetTextError1 = "Impossible to target the given version:  "
+                SetTextError2 = ". This version doesn't exist."
+            end
+
             def initialize
-                super(  ISM::Default::Option::PortSetTargetVersion::ShortText,
-                        ISM::Default::Option::PortSetTargetVersion::LongText,
-                        ISM::Default::Option::PortSetTargetVersion::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -21,13 +32,13 @@ module ISM
                         validVersion = false
 
                         if !Ism.ports.empty?
-                            print ISM::Default::Option::PortSetTargetVersion::SetTitle
-                            text = ISM::Default::Option::PortSetTargetVersion::SetWaitingText
+                            print Default::SetTitle
+                            text = Default::SetWaitingText
 
                             Ism.ports.each do |port|
                                 process = Process.new(  "git switch --detach #{targetVersion}",
                                                         shell: true,
-                                                        chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
+                                                        chdir: Ism.settings.rootPath+Path::SoftwaresDirectory+port.name)
 
                                 until process.terminated?
                                     Ism.playCalculationAnimation(text: text)
@@ -46,9 +57,9 @@ module ISM
 
                         if validVersion
                             Ism.portsSettings.setTargetVersion(targetVersion)
-                            Ism.printProcessNotification(ISM::Default::Option::PortSetTargetVersion::SetText+targetVersion)
+                            Ism.printProcessNotification(Default::SetText+targetVersion)
                         else
-                            Ism.printErrorNotification(ISM::Default::Option::PortSetTargetVersion::SetTextError1+"#{targetVersion.colorize(:red)}"+ISM::Default::Option::PortSetTargetVersion::SetTextError2,nil)
+                            Ism.printErrorNotification(Default::SetTextError1+"#{targetVersion.colorize(:red)}"+Default::SetTextError2,nil)
                         end
                     end
                 end

@@ -4,11 +4,22 @@ module ISM
 
         class Port < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-p"
+                LongText = "port"
+                Description = "Manage #{CommandLine::Default::Name.upcase} ports"
+                Options = [ ISM::Option::PortOpen.new,
+                            ISM::Option::PortClose.new,
+                            ISM::Option::PortSynchronize.new,
+                            ISM::Option::PortSetTargetVersion.new,
+                            ISM::Option::PortSearch.new]
+            end
+
             def initialize
-                super(  ISM::Default::Option::Port::ShortText,
-                        ISM::Default::Option::Port::LongText,
-                        ISM::Default::Option::Port::Description,
-                        ISM::Default::Option::Port::Options)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description,
+                        Default::Options)
             end
 
             def start
@@ -26,10 +37,10 @@ module ISM
                     end
     
                     if !matchingOption
-                        puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                        puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                        puts "#{CommandLine::Default::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
+                        puts    "#{CommandLine::Default::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                                "#{CommandLine::Default::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                                "#{CommandLine::Default::ErrorUnknowArgumentHelp3.colorize(:white)}"
                     end
                 end
             end

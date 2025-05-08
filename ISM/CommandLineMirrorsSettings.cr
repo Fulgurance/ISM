@@ -2,15 +2,20 @@ module ISM
 
     class CommandLineMirrorsSettings
 
+        module Default
+            Mirror = "Uk"
+            FilePath = "#{Path::SettingsDirectory}#{Filename::MirrorsSettings}"
+        end
+
         include JSON::Serializable
 
         property defaultMirror : String
 
-        def initialize(@defaultMirror = ISM::Default::CommandLineMirrorsSettings::DefaultMirror)
+        def initialize(@defaultMirror = Default::Mirror)
         end
 
         def self.filePath : String
-            return Ism.settings.rootPath+ISM::Default::CommandLineMirrorsSettings::MirrorsSettingsFilePath
+            return Ism.settings.rootPath+Default::FilePath
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)

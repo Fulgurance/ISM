@@ -4,10 +4,17 @@ module ISM
 
         class SettingsSetSystemTargetName < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-sstn"
+                LongText = "setsystemtargetname"
+                Description = "Set the default machine target for the compiler"
+                SetText = "Setting system target name to the value "
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemTargetName::ShortText,
-                        ISM::Default::Option::SettingsSetSystemTargetName::LongText,
-                        ISM::Default::Option::SettingsSetSystemTargetName::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,7 +25,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setSystemTargetName(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemTargetName::SetText+ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
             end

@@ -4,10 +4,17 @@ module ISM
 
         class SettingsSetSystemFullName < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-ssfn"
+                LongText = "setsystemfullname"
+                Description = "Set the full name of the future installed system"
+                SetText = "Setting the full system name to the value "
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemFullName::ShortText,
-                        ISM::Default::Option::SettingsSetSystemFullName::LongText,
-                        ISM::Default::Option::SettingsSetSystemFullName::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,7 +25,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setSystemFullName(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemFullName::SetText+ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
             end

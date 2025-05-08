@@ -2,19 +2,26 @@ module ISM
 
     class Mirror
 
+        module Default
+            CodeName = "Uk"
+            Urls = ["ism-mirror.co.uk"]
+            MainUrl = 0
+            SourcesLinkDirectory = "/sources/"
+        end
+
         include JSON::Serializable
 
         property codeName : String
         property urls : Array(String)
         property mainUrl : Int32
 
-        def initialize( @codeName = ISM::Default::Mirror::CodeName,
-                        @urls = ISM::Default::Mirror::Urls,
-                        @mainUrl = ISM::Default::Mirror::MainUrl)
+        def initialize( @codeName = Default::CodeName,
+                        @urls = Default::Urls,
+                        @mainUrl = Default::MainUrl)
         end
 
-        def self.filePath(codeName = ISM::Default::Mirror::CodeName) : String
-            return Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory+codeName+".json"
+        def self.filePath(codeName = Default::CodeName) : String
+            return Ism.settings.rootPath+Path::MirrorsDirectory+codeName+".json"
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -70,7 +77,7 @@ module ISM
         end
 
         def sourcesLink : String
-            return defaultUrl+ISM::Default::Mirror::SourcesLinkDirectory
+            return defaultUrl+Default::SourcesLinkDirectory
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)

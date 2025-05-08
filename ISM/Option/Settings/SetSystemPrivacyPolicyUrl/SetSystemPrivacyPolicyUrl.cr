@@ -4,10 +4,17 @@ module ISM
 
         class SettingsSetSystemPrivacyPolicyUrl < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-ssppu"
+                LongText = "setsystemprivacypolicyurl"
+                Description = "Set the privacy policy url of the future installed system"
+                SetText = "Setting the system privacy policy url to the value "
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemPrivacyPolicyUrl::ShortText,
-                        ISM::Default::Option::SettingsSetSystemPrivacyPolicyUrl::LongText,
-                        ISM::Default::Option::SettingsSetSystemPrivacyPolicyUrl::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,7 +25,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setSystemPrivacyPolicyUrl(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemPrivacyPolicyUrl::SetText+ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
             end

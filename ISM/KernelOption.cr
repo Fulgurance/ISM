@@ -1,7 +1,12 @@
 module ISM
 
-  class KernelOption
-    
+    class KernelOption
+
+    module Default
+        FileLoadProcessSyntaxErrorText1 = "Syntax errors detected during file load process "
+        FileLoadProcessSyntaxErrorText2 = " at line number "
+    end
+
     include JSON::Serializable
 
     property name : String
@@ -23,9 +28,9 @@ module ISM
         begin
             return from_json(File.read(path))
         rescue error : JSON::ParseException
-            puts    "#{ISM::Default::KernelOption::FileLoadProcessSyntaxErrorText1 +
+            puts    "#{Default::FileLoadProcessSyntaxErrorText1 +
                     path +
-                    ISM::Default::KernelOption::FileLoadProcessSyntaxErrorText2 +
+                    Default::FileLoadProcessSyntaxErrorText2 +
                     error.line_number.to_s}".colorize(:yellow)
             return self.new
         end
@@ -47,6 +52,6 @@ module ISM
                 Ism.exitProgram
     end
 
-  end
+    end
 
 end

@@ -4,10 +4,17 @@ module ISM
 
         class SettingsDisableBinaryTaskMode < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-dbtm"
+                LongText = "disablebinarytaskmode"
+                Description = "Disable compilation for ism tasks. Task will be interpreted and will start directly, but speed process will be slower."
+                SetText = "Disable binary task mode"
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsDisableBinaryTaskMode::ShortText,
-                        ISM::Default::Option::SettingsDisableBinaryTaskMode::LongText,
-                        ISM::Default::Option::SettingsDisableBinaryTaskMode::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -16,7 +23,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setBinaryTaskMode(false)
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsDisableBinaryTaskMode::SetText)
+                        Ism.printProcessNotification(Default::SetText)
                     end
                 end
             end

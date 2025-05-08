@@ -4,10 +4,17 @@ module ISM
 
         class SettingsDisableBuildKernelOptionsAsModule < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-dbkoam"
+                LongText = "disablebuildkerneloptionsasmodule"
+                Description = "Disable the building of the kernel options as loadable modules as a priority"
+                SetText = "Disabling building kernel options as module as a priority"
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsDisableBuildKernelOptionsAsModule::ShortText,
-                        ISM::Default::Option::SettingsDisableBuildKernelOptionsAsModule::LongText,
-                        ISM::Default::Option::SettingsDisableBuildKernelOptionsAsModule::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -16,7 +23,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setBuildKernelOptionsAsModule(false)
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsDisableBuildKernelOptionsAsModule::SetText)
+                        Ism.printProcessNotification(Default::SetText)
                     end
                 end
             end

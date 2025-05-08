@@ -4,11 +4,19 @@ module ISM
 
         class Version < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-v"
+                LongText = "version"
+                Description = "Show and manage the ISM version"
+                Options = [ ISM::Option::VersionShow.new,
+                            ISM::Option::VersionSwitch.new]
+            end
+
             def initialize
-                super(  ISM::Default::Option::Version::ShortText,
-                        ISM::Default::Option::Version::LongText,
-                        ISM::Default::Option::Version::Description,
-                        ISM::Default::Option::Version::Options)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description,
+                        Default::Options)
             end
 
             def start
@@ -26,10 +34,10 @@ module ISM
                     end
 
                     if !matchingOption
-                        puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-                        puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                        puts "#{CommandLine::Default::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
+                        puts    "#{CommandLine::Default::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                                "#{CommandLine::Default::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                                "#{CommandLine::Default::ErrorUnknowArgumentHelp3.colorize(:white)}"
                     end
                 end
             end

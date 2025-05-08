@@ -4,10 +4,17 @@ module ISM
 
         class SettingsDisableInstallByChroot < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-dibc"
+                LongText = "disableinstallbychroot"
+                Description = "Disable softwares install by chroot"
+                SetText = "Disabling softwares install by chroot"
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsDisableInstallByChroot::ShortText,
-                        ISM::Default::Option::SettingsDisableInstallByChroot::LongText,
-                        ISM::Default::Option::SettingsDisableInstallByChroot::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -16,7 +23,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setInstallByChroot(false)
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsDisableInstallByChroot::SetText)
+                        Ism.printProcessNotification(Default::SetText)
                     end
                 end
             end

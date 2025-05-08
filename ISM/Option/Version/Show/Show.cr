@@ -4,21 +4,27 @@ module ISM
 
         class VersionShow < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-s"
+                LongText = "show"
+                Description = "Show the current ISM version"
+            end
+
             def initialize
-                super(  ISM::Default::Option::VersionShow::ShortText,
-                        ISM::Default::Option::VersionShow::LongText,
-                        ISM::Default::Option::VersionShow::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
-                puts ISM::Default::CommandLine::Title
+                puts CommandLine::Default::Title
 
                 processResult = IO::Memory.new
 
                 process = Process.run(  "git describe --all",
                                         output: processResult,
                                         shell: true,
-                                        chdir: "/"+ISM::Default::Path::LibraryDirectory)
+                                        chdir: "/"+Path::LibraryDirectory)
                 currentVersion = processResult.to_s.strip
                 currentVersion = currentVersion.lchop(currentVersion[0..currentVersion.rindex("/")])
 
@@ -27,7 +33,7 @@ module ISM
                 process = Process.run(  "git describe --tags",
                                         output: processResult,
                                         shell: true,
-                                        chdir: "/"+ISM::Default::Path::LibraryDirectory)
+                                        chdir: "/"+Path::LibraryDirectory)
                 currentTag = processResult.to_s.strip
 
                 processResult.clear
@@ -40,7 +46,7 @@ module ISM
                     process = Process.run(  "git rev-parse HEAD",
                                             output: processResult,
                                             shell: true,
-                                            chdir: "/"+ISM::Default::Path::LibraryDirectory)
+                                            chdir: "/"+Path::LibraryDirectory)
 
                     currentVersion = currentVersion+"-"+processResult.to_s.strip
                 end

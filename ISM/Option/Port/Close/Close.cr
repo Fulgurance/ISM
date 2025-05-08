@@ -4,10 +4,19 @@ module ISM
 
         class PortClose < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-c"
+                LongText = "close"
+                Description = "Close the specified port"
+                CloseText = "Closing port "
+                NoMatchFoundText1 = "The port "
+                NoMatchFoundText2 = " is not open"
+            end
+
             def initialize
-                super(  ISM::Default::Option::PortClose::ShortText,
-                        ISM::Default::Option::PortClose::LongText,
-                        ISM::Default::Option::PortClose::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,10 +27,10 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         if ISM::Port.exists(ARGV[2])
-                            Ism.printProcessNotification(ISM::Default::Option::PortClose::CloseText+ARGV[2])
+                            Ism.printProcessNotification(Default::CloseText+ARGV[2])
                             ISM::Port.delete(ARGV[2])
                         else
-                            Ism.printErrorNotification(ISM::Default::Option::PortClose::NoMatchFoundText1+ARGV[2]+ISM::Default::Option::PortClose::NoMatchFoundText2,nil)
+                            Ism.printErrorNotification(Default::NoMatchFoundText1+ARGV[2]+Default::NoMatchFoundText2,nil)
                         end
                     end
                 end

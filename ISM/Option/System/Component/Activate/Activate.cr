@@ -4,10 +4,25 @@ module ISM
 
         class ComponentActivate < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-a"
+                LongText = "activate"
+                Description = "Activate a specific system component\n\t\t\t\tNeed to be use like this:\n\t\t\t\tism system component [componentname] activate [optionname]"
+                ShowHelpDescription = "Activate a specific system component"
+                ShowHelpExampleText1 = "Need to be use like this:"
+                ShowHelpExampleText2 = "ism system component [componentname] activate [optionname]"
+                NoMatchFound = "No match found with the database for "
+                NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                SetText1 = "Enabling the option "
+                SetText2 = " for the component "
+                OptionNoMatchFound1 = "No matching option named "
+                OptionNoMatchFound2 = " found for the component "
+            end
+
             def initialize
-                super(  ISM::Default::Option::ComponentActivate::ShortText,
-                        ISM::Default::Option::ComponentActivate::LongText,
-                        ISM::Default::Option::ComponentActivate::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -17,8 +32,8 @@ module ISM
                     matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
 
                     if !matchingSoftware.isValid
-                        puts ISM::Default::Option::ComponentActivate::NoMatchFound + "#{ARGV[1].colorize(:green)}"
-                        puts ISM::Default::Option::ComponentActivate::NoMatchFoundAdvice
+                        puts Default::NoMatchFound + "#{ARGV[1].colorize(:green)}"
+                        puts Default::NoMatchFoundAdvice
                     else
                         if ARGV[2] == @shortText || ARGV[2] == @longText
                             match = false
@@ -36,15 +51,15 @@ module ISM
 
                             if match
                                 matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
-                                # ISM::Core::Notification.processNotification(   ISM::Default::Option::ComponentActivate::SetText1 +
+                                # ISM::Core::Notification.processNotification(   Default::SetText1 +
                                 #                             "#{matchingOption.name.colorize(:green)}" +
-                                #                             ISM::Default::Option::ComponentActivate::SetText2 +
+                                #                             Default::SetText2 +
                                 #                             matchingSoftwareText)
                                 puts "Done"
                             else
-                                # ISM::Core::Notification.errorNotification( ISM::Default::Option::ComponentActivate::OptionNoMatchFound1 +
+                                # ISM::Core::Notification.errorNotification( Default::OptionNoMatchFound1 +
                                 #                         "#{ARGV[3].colorize(:green)}" +
-                                #                         ISM::Default::Option::ComponentActivate::OptionNoMatchFound2 +
+                                #                         Default::OptionNoMatchFound2 +
                                 #                         matchingSoftwareText,nil)
                                 puts "Failed"
                             end
@@ -57,9 +72,9 @@ module ISM
             end
 
             def showHelp
-                puts    ISM::Default::Option::ComponentActivate::ShowHelpDescription +
-                        "\n\n\t" + ISM::Default::Option::ComponentActivate::ShowHelpExampleText1 +
-                        "\n\t" + "#{ISM::Default::Option::ComponentActivate::ShowHelpExampleText2.colorize(:green)}"
+                puts    Default::ShowHelpDescription +
+                        "\n\n\t" + Default::ShowHelpExampleText1 +
+                        "\n\t" + "#{Default::ShowHelpExampleText2.colorize(:green)}"
             end
 
         end

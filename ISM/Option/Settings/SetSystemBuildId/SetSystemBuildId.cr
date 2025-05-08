@@ -4,10 +4,17 @@ module ISM
 
         class SettingsSetSystemBuildId < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-ssbi"
+                LongText = "setsystembuildid"
+                Description = "Set the build id of the future installed system"
+                SetText = "Setting the system build id to the value "
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemBuildId::ShortText,
-                        ISM::Default::Option::SettingsSetSystemBuildId::LongText,
-                        ISM::Default::Option::SettingsSetSystemBuildId::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,7 +25,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setSystemBuildId(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemBuildId::SetText+ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
             end

@@ -4,10 +4,23 @@ module ISM
 
         class PortSynchronize < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-sy"
+                LongText = "synchronize"
+                Description = "Synchronize the port database"
+                SynchronizationTitle = "#{CommandLine::Default::Name.upcase} start to synchronizing: "
+                SynchronizationDoneText = "Done !"
+                SynchronizedText = "The database is synchronized"
+                NewPortsText = "New added ports:"
+                DeletedPortsText = "Deleted ports:"
+                TotalSynchronizedPortsText = "Synchronized ports:"
+                TotalAvailableSoftwaresText = "Available softwares:"
+            end
+
             def initialize
-                super(  ISM::Default::Option::PortSynchronize::ShortText,
-                        ISM::Default::Option::PortSynchronize::LongText,
-                        ISM::Default::Option::PortSynchronize::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -20,14 +33,14 @@ module ISM
                 end
 
                 puts
-                print ISM::Default::Option::PortSynchronize::SynchronizationTitle
+                print Default::SynchronizationTitle
 
                 Ism.synchronizePorts
 
                 newPortList = Array(String).new
 
-                Dir.glob("#{Ism.settings.rootPath+ISM::Default::Path::PortsDirectory}/*").each do |port|
-                    name = port.sub(Ism.settings.rootPath+ISM::Default::Path::PortsDirectory,"")[0..-6]
+                Dir.glob("#{Ism.settings.rootPath+Path::PortsDirectory}/*").each do |port|
+                    name = port.sub(Ism.settings.rootPath+Path::PortsDirectory,"")[0..-6]
 
                     newPortList.push(name)
                 end
@@ -47,15 +60,15 @@ module ISM
                     end
                 end
 
-                print "#{ISM::Default::Option::PortSynchronize::SynchronizationDoneText.colorize(:green)}\n"
-                puts "#{ISM::Default::Option::PortSynchronize::SynchronizedText.colorize(:green)}"
+                print "#{Default::SynchronizationDoneText.colorize(:green)}\n"
+                puts "#{Default::SynchronizedText.colorize(:green)}"
 
                 puts
 
-                puts "#{ISM::Default::Option::PortSynchronize::NewPortsText.colorize(:green)} #{newPortNumber > 0 ? "#{"+".colorize(:red)}" : ""}#{newPortNumber > 0 ? newPortNumber.colorize(:red) : newPortNumber}"
-                puts "#{ISM::Default::Option::PortSynchronize::DeletedPortsText.colorize(:green)} #{deletedPortNumber > 0 ? "#{"-".colorize(:blue)}" : ""}#{deletedPortNumber > 0 ? deletedPortNumber.colorize(:blue) : deletedPortNumber}"
-                puts "#{ISM::Default::Option::PortSynchronize::TotalSynchronizedPortsText.colorize(:green)} #{Ism.ports.size}"
-                puts "#{ISM::Default::Option::PortSynchronize::TotalAvailableSoftwaresText.colorize(:green)} #{Ism.softwares.size}"
+                puts "#{Default::NewPortsText.colorize(:green)} #{newPortNumber > 0 ? "#{"+".colorize(:red)}" : ""}#{newPortNumber > 0 ? newPortNumber.colorize(:red) : newPortNumber}"
+                puts "#{Default::DeletedPortsText.colorize(:green)} #{deletedPortNumber > 0 ? "#{"-".colorize(:blue)}" : ""}#{deletedPortNumber > 0 ? deletedPortNumber.colorize(:blue) : deletedPortNumber}"
+                puts "#{Default::TotalSynchronizedPortsText.colorize(:green)} #{Ism.ports.size}"
+                puts "#{Default::TotalAvailableSoftwaresText.colorize(:green)} #{Ism.softwares.size}"
             end
 
         end

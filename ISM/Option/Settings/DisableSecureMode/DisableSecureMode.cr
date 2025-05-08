@@ -4,10 +4,17 @@ module ISM
 
         class SettingsDisableSecureMode < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-dsm"
+                LongText = "disablesecuremode"
+                Description = "Disable the secure mode which requires superuser rights"
+                SetText = "Disabling secure mode"
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsDisableSecureMode::ShortText,
-                        ISM::Default::Option::SettingsDisableSecureMode::LongText,
-                        ISM::Default::Option::SettingsDisableSecureMode::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -16,7 +23,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setSecureMode(false)
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsDisableSecureMode::SetText)
+                        Ism.printProcessNotification(Default::SetText)
                     end
                 end
             end

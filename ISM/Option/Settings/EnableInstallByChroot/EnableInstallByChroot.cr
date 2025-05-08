@@ -4,10 +4,17 @@ module ISM
 
         class SettingsEnableInstallByChroot < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-eibc"
+                LongText = "enableinstallbychroot"
+                Description = "Enable softwares install by chroot"
+                SetText = "Enabling softwares install by chroot"
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsEnableInstallByChroot::ShortText,
-                        ISM::Default::Option::SettingsEnableInstallByChroot::LongText,
-                        ISM::Default::Option::SettingsEnableInstallByChroot::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -16,7 +23,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setInstallByChroot(true)
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsEnableInstallByChroot::SetText)
+                        Ism.printProcessNotification(Default::SetText)
                     end
                 end
             end

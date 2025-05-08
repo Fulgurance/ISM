@@ -2,15 +2,20 @@ module ISM
 
     class CommandLinePortsSettings
 
+        module Default
+            TargetVersion = "master"
+            FilePath = "#{Path::SettingsDirectory}#{Filename::PortsSettings}"
+        end
+
         include JSON::Serializable
 
         property targetVersion : String
 
-        def initialize(@targetVersion = ISM::Default::CommandLinePortsSettings::TargetVersion)
+        def initialize(@targetVersion = Default::TargetVersion)
         end
 
         def self.filePath : String
-            return Ism.settings.rootPath+ISM::Default::CommandLinePortsSettings::PortsSettingsFilePath
+            return Ism.settings.rootPath+Default::FilePath
         end
 
         def self.generateConfiguration(path = filePath)

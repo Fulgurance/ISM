@@ -2,6 +2,10 @@ module ISM
 
     class CommandLineSystemInformation
 
+        module Default
+            FilePath = "#{Path::SettingsDirectory}#{Filename::SystemInformation}"
+        end
+
         include JSON::Serializable
 
         property crossToolchainFullyBuilt : Bool
@@ -10,7 +14,7 @@ module ISM
         end
 
         def self.filePath : String
-            return Ism.settings.rootPath+ISM::Default::CommandLineSystemInformation::SystemInformationFilePath
+            return Ism.settings.rootPath+Default::FilePath
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)

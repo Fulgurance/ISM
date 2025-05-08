@@ -2,6 +2,10 @@ module ISM
 
     class FavouriteGroup
 
+        module Default
+            Name = "Default"
+        end
+
         def_clone
 
         include JSON::Serializable
@@ -9,11 +13,11 @@ module ISM
         property name : String
         property softwares : Array(String)
 
-        def initialize(@name = ISM::Default::FavouriteGroup::Name, @softwares = Array(String).new)
+        def initialize(@name = Default::Name, @softwares = Array(String).new)
         end
 
-        def self.filePath(name = ISM::Default::FavouriteGroup::Name) : String
-            return Ism.settings.rootPath+ISM::Default::Path::FavouriteGroupsDirectory+name+".json"
+        def self.filePath(name = Default::Name) : String
+            return Ism.settings.rootPath+Path::FavouriteGroupsDirectory+name+".json"
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)

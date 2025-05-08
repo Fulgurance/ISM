@@ -4,10 +4,17 @@ module ISM
 
         class SettingsSetSystemVersion < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-ssv"
+                LongText = "setsystemversion"
+                Description = "Set the version of the future installed system"
+                SetText = "Setting the system version to the value "
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemVersion::ShortText,
-                        ISM::Default::Option::SettingsSetSystemVersion::LongText,
-                        ISM::Default::Option::SettingsSetSystemVersion::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,7 +25,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setSystemVersion(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemVersion::SetText+ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
             end

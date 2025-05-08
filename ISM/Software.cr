@@ -2,6 +2,33 @@ module ISM
 
     class Software
 
+        module Default
+            SourcesArchiveBaseName = "Sources"
+            PatchesArchiveBaseName = "Patches"
+            MainBuildDirectoryEntry = "MainBuild"
+            ArchiveExtensionName = ".tar.xz"
+            ArchiveSha512ExtensionName = "#{ArchiveExtensionName}.sha512"
+            ArchiveSignatureExtensionName = "#{ArchiveExtensionName}.sig"
+            SourcesArchiveName = "#{SourcesArchiveBaseName}#{ArchiveExtensionName}"
+            SourcesSha512ArchiveName = "#{SourcesArchiveBaseName}#{ArchiveSha512ExtensionName}"
+            SourcesSignatureArchiveName = "#{SourcesArchiveBaseName}#{ArchiveSignatureExtensionName}"
+            SourcesDirectoryName = "Sources"
+            PatchesDirectoryName = "Patches"
+            DownloadSourceRedirectionErrorText1 = "Got status "
+            DownloadSourceRedirectionErrorText2 = " but no location was sent"
+            DownloadSourceCodeErrorText = "Received HTTP status code "
+            KconfigKeywords = { :config => "config",
+                                :bool => "bool",
+                                :dependsOn => "depends on",
+                                :endif => "endif",
+                                :if => "if",
+                                :menuconfig => "menuconfig",
+                                :tristate => "tristate",
+                                :select => "select",
+                                :source => "source",
+                                :help => "help"}
+        end
+
         property information : ISM::SoftwareInformation
         property mainSourceDirectoryName : String
         property buildDirectory : Bool
@@ -10,9 +37,9 @@ module ISM
 
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.loadConfiguration(informationPath)
-            @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
+            @mainSourceDirectoryName = Default::SourcesDirectoryName
             @buildDirectory = false
-            @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
+            @buildDirectoryNames = { Default::MainBuildDirectoryEntry => "mainBuild" }
             @additions = Array(String).new
         end
 
@@ -79,7 +106,7 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def buildDirectoryPathNoChroot(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
+        def buildDirectoryPathNoChroot(entry = Default::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPathNoChroot+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
 
             rescue error
@@ -97,7 +124,7 @@ module ISM
         end
 
         def workDirectoryPath : String
-            return Ism.settings.installByChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
+            return Ism.settings.installByChroot ? "/#{Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -112,7 +139,7 @@ module ISM
                 Ism.exitProgram
         end
 
-        def buildDirectoryPath(entry = ISM::Default::Software::MainBuildDirectoryEntry) : String
+        def buildDirectoryPath(entry = Default::MainBuildDirectoryEntry) : String
             return mainWorkDirectoryPath+"/"+"#{@buildDirectory ? @buildDirectoryNames[entry] : ""}"
 
             rescue error
@@ -166,7 +193,7 @@ module ISM
 
                                 #Record kernel as default if it's a newer version of the selected one OR if none are selected
                                 if needUpdateKernelFile
-                                    dependency.information.writeConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+                                    dependency.information.writeConfiguration("#{Ism.settings.rootPath}#{Path::SettingsDirectory}#{Filename::SelectedKernel}")
                                 end
 
                             end
@@ -316,11 +343,11 @@ module ISM
 
         def downloadAdditionalSources
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(Default::ArchiveExtensionName,"")
 
                 downloadFile(   link,
                                 archiveName,
-                                ISM::Default::Software::ArchiveExtensionName)
+                                Default::ArchiveExtensionName)
             end
 
             rescue error
@@ -330,12 +357,12 @@ module ISM
 
         def downloadAdditionalSourcesSha512
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
-                sha512Link = "#{link.gsub(ISM::Default::Software::ArchiveExtensionName,"")}#{ISM::Default::Software::ArchiveSha512ExtensionName}"
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(Default::ArchiveExtensionName,"")
+                sha512Link = "#{link.gsub(Default::ArchiveExtensionName,"")}#{Default::ArchiveSha512ExtensionName}"
 
                 downloadFile(   sha512Link,
                                 archiveName,
-                                ISM::Default::Software::ArchiveSha512ExtensionName)
+                                Default::ArchiveSha512ExtensionName)
             end
 
             rescue error
@@ -345,8 +372,8 @@ module ISM
 
         def downloadSources
             downloadFile(   @information.sourcesLink,
-                            ISM::Default::Software::SourcesArchiveBaseName,
-                            ISM::Default::Software::ArchiveExtensionName)
+                            Default::SourcesArchiveBaseName,
+                            Default::ArchiveExtensionName)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -355,8 +382,8 @@ module ISM
 
         def downloadSourcesSha512
             downloadFile(   @information.sourcesSha512Link,
-                            ISM::Default::Software::SourcesArchiveBaseName,
-                            ISM::Default::Software::ArchiveSha512ExtensionName)
+                            Default::SourcesArchiveBaseName,
+                            Default::ArchiveSha512ExtensionName)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -376,7 +403,7 @@ module ISM
                         begin
                             link = response.headers["location"]
                         rescue
-                            error = "#{ISM::Default::Software::DownloadSourceRedirectionErrorText1}#{response.status_code}#{ISM::Default::Software::DownloadSourceRedirectionErrorText2}"
+                            error = "#{Default::DownloadSourceRedirectionErrorText1}#{response.status_code}#{Default::DownloadSourceRedirectionErrorText2}"
 
                             Ism.notifyOfDownloadError(link, error)
                             Ism.exitProgram
@@ -424,7 +451,7 @@ module ISM
 
                         downloaded = true
                     else
-                        error = "#{ISM::Default::Software::DownloadSourceCodeErrorText}#{response.status_code}"
+                        error = "#{Default::DownloadSourceCodeErrorText}#{response.status_code}"
 
                         Ism.notifyOfDownloadError(link, error)
                         Ism.exitProgram
@@ -468,8 +495,8 @@ module ISM
         end
 
         def checkSourcesSha512
-            checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
-                        sha512:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
+            checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{Default::SourcesArchiveName}",
+                        sha512:     getFileContent(workDirectoryPathNoChroot+"/"+Default::SourcesSha512ArchiveName).strip)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -478,10 +505,10 @@ module ISM
 
         def checkAdditionsSha512
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(Default::ArchiveExtensionName,"")
 
-                checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
-                            sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
+                checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{Default::ArchiveExtensionName}",
+                            sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{Default::ArchiveSha512ExtensionName}").strip)
             end
 
             rescue error
@@ -494,7 +521,7 @@ module ISM
             digest.file(archive)
             archiveSha512 = digest.hexfinal
 
-            # Ism.notifyOfCheckIntegrity(ISM::Default::Software::SourcesArchiveBaseName)
+            # Ism.notifyOfCheckIntegrity(Default::SourcesArchiveBaseName)
             puts "Checking integrity"
 
             #We check first the archive integrity
@@ -503,7 +530,7 @@ module ISM
             end
 
             #EXPERIMENTAL
-            #ISM::Core::Notification.checkAuthenticity(ISM::Default::Software::SourcesArchiveBaseName)
+            #ISM::Core::Notification.checkAuthenticity(Default::SourcesArchiveBaseName)
 
             #We check now if the authenticity (digital signature)
             #TO DO: Need to decide where to store signatures (for port too)
@@ -533,8 +560,8 @@ module ISM
             end
 
             #Copy of the current available patches from the port
-            if Dir.exists?(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName)
-                copyDirectoryNoChroot(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
+            if Dir.exists?(@information.mainDirectoryPath+"/"+Default::PatchesDirectoryName)
+                copyDirectoryNoChroot(@information.mainDirectoryPath+"/"+Default::PatchesDirectoryName,workDirectoryPathNoChroot+"/"+Default::PatchesDirectoryName)
             end
 
             rescue error
@@ -543,8 +570,8 @@ module ISM
         end
 
         def extractSources
-            extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
-            moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
+            extractArchive(workDirectoryPathNoChroot+"/"+Default::SourcesArchiveName, workDirectoryPathNoChroot)
+            moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+Default::SourcesDirectoryName)
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -582,14 +609,14 @@ module ISM
         def patch
             Ism.notifyOfPatch(@information)
 
-            if Dir.exists?("#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}")
-                Dir["#{workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName}/*"].each do |patch|
+            if Dir.exists?("#{workDirectoryPathNoChroot+"/"+Default::PatchesDirectoryName}")
+                Dir["#{workDirectoryPathNoChroot+"/"+Default::PatchesDirectoryName}/*"].each do |patch|
                     applyPatch(patch)
                 end
             end
 
-            if Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}")
-                Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}/*"].each do |patch|
+            if Dir.exists?(Ism.settings.rootPath+Path::PatchesDirectory+"/#{@information.versionName}")
+                Dir[Ism.settings.rootPath+Path::PatchesDirectory+"/#{@information.versionName}/*"].each do |patch|
                     patchName = patch.lchop(patch[0..patch.rindex("/")])
                     Ism.notifyOfLocalPatch(patchName)
                     applyPatch(patch)
@@ -1724,7 +1751,7 @@ module ISM
         end
 
         def kernelOptionsDatabasePath : String
-            return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+mainKernelName
+            return Ism.settings.rootPath+Path::KernelOptionsDirectory+mainKernelName
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -1789,7 +1816,7 @@ module ISM
 
             loop do
 
-                if !result.any? {|line| line.lstrip.starts_with?(ISM::Default::Software::KconfigKeywords[:source])}
+                if !result.any? {|line| line.lstrip.starts_with?(Default::KconfigKeywords[:source])}
                     break
                 end
 
@@ -1798,11 +1825,11 @@ module ISM
                 result.each do |line|
                     text = line.lstrip
 
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && !text.includes?("Kconfig.include")
+                    if text.starts_with?(Default::KconfigKeywords[:source]) && !text.includes?("Kconfig.include")
 
                         mainArchitecture = (Ism.settings.installByChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemArchitecture).gsub(/_.*/,"")
 
-                        path = kernelSourcesPath+text.sub(ISM::Default::Software::KconfigKeywords[:source],"").strip
+                        path = kernelSourcesPath+text.sub(Default::KconfigKeywords[:source],"").strip
                         path = path.gsub("\"","")
                         path = path.gsub("$(SRCARCH)","#{mainArchitecture}")
                         path = path.gsub("$(HEADER_ARCH)","#{mainArchitecture}")
@@ -1814,7 +1841,7 @@ module ISM
                             nextResult += Array(String).new
                         end
 
-                    elsif text.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && text.includes?("Kconfig.include")
+                    elsif text.starts_with?(Default::KconfigKeywords[:source]) && text.includes?("Kconfig.include")
                         nextResult += Array(String).new
                     else
                         nextResult.push(line)
@@ -1849,55 +1876,55 @@ module ISM
                 text = line.lstrip
                 currentLignAligmentSize = (line.size - text.size)
 
-                if !underHelpSection && text.starts_with?(ISM::Default::Software::KconfigKeywords[:help])
+                if !underHelpSection && text.starts_with?(Default::KconfigKeywords[:help])
 
                     underHelpSection = true
                     lastHelpAlignmentSize = (line.size - text.size)
 
                 elsif !underHelpSection
 
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:menuconfig])
+                    if text.starts_with?(Default::KconfigKeywords[:menuconfig])
                         lastMenuConfigIndex = index
-                        lastMenuConfigContent = text.sub(ISM::Default::Software::KconfigKeywords[:menuconfig],"").lstrip
+                        lastMenuConfigContent = text.sub(Default::KconfigKeywords[:menuconfig],"").lstrip
 
                         kernelOption = ISM::KernelOption.new
-                        kernelOption.name = text.sub(ISM::Default::Software::KconfigKeywords[:menuconfig],"").lstrip
+                        kernelOption.name = text.sub(Default::KconfigKeywords[:menuconfig],"").lstrip
                     end
 
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:config])
+                    if text.starts_with?(Default::KconfigKeywords[:config])
                         kernelOption = ISM::KernelOption.new
-                        kernelOption.name = text.sub(ISM::Default::Software::KconfigKeywords[:config],"").lstrip
+                        kernelOption.name = text.sub(Default::KconfigKeywords[:config],"").lstrip
                     end
 
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:bool])
+                    if text.starts_with?(Default::KconfigKeywords[:bool])
                         kernelOption.tristate = false
                     end
 
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:tristate])
+                    if text.starts_with?(Default::KconfigKeywords[:tristate])
                         kernelOption.tristate = true
                     end
 
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:dependsOn])
+                    if text.starts_with?(Default::KconfigKeywords[:dependsOn])
 
-                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.sub(ISM::Default::Software::KconfigKeywords[:dependsOn],"").lstrip)
-
-                        kernelOption.dependencies += newDependencies
-                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
-                        kernelOption.blockers += newBlockers
-                    end
-
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:select])
-
-                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.sub(ISM::Default::Software::KconfigKeywords[:select],"").lstrip)
+                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.sub(Default::KconfigKeywords[:dependsOn],"").lstrip)
 
                         kernelOption.dependencies += newDependencies
                         kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
                         kernelOption.blockers += newBlockers
                     end
 
-                    if text.starts_with?(ISM::Default::Software::KconfigKeywords[:if])
+                    if text.starts_with?(Default::KconfigKeywords[:select])
+
+                        newDependencies,newSingleChoiceDependencies,newBlockers = parseKconfigConditions(text.sub(Default::KconfigKeywords[:select],"").lstrip)
+
+                        kernelOption.dependencies += newDependencies
+                        kernelOption.singleChoiceDependencies += newSingleChoiceDependencies
+                        kernelOption.blockers += newBlockers
+                    end
+
+                    if text.starts_with?(Default::KconfigKeywords[:if])
                         lastIfIndex = index
-                        lastIfContent = text.sub(ISM::Default::Software::KconfigKeywords[:if],"").lstrip
+                        lastIfContent = text.sub(Default::KconfigKeywords[:if],"").lstrip
                     end
                 else
                     if currentLignAligmentSize <= lastHelpAlignmentSize
@@ -1926,7 +1953,7 @@ module ISM
 
             kernelOptions.each do |option|
                 if !option.name.empty?
-                    option.writeConfiguration(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
+                    option.writeConfiguration(Ism.settings.rootPath+Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
                 end
             end
 

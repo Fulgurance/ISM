@@ -4,11 +4,20 @@ module ISM
 
         class SystemComponent < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-c"
+                LongText = "component"
+                Description = "Manage and configure system component"
+                Options = [ ISM::Option::ComponentList.new,
+                            ISM::Option::ComponentActivate.new,
+                            ISM::Option::ComponentDesactivate.new]
+            end
+
             def initialize
-                super(  ISM::Default::Option::SystemComponent::ShortText,
-                        ISM::Default::Option::SystemComponent::LongText,
-                        ISM::Default::Option::SystemComponent::Description,
-                        ISM::Default::Option::SystemComponent::Options)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description,
+                        Default::Options)
             end
 
             def start
@@ -25,23 +34,23 @@ module ISM
                         end
                     end
 
-                    if  !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentActivate::ShortText ||
-                        !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentActivate::LongText
+                    if  !matchingOption && ARGV.size > 3 && ARGV[3] == ComponentActivate::Default::ShortText ||
+                        !matchingOption && ARGV.size > 3 && ARGV[3] == ComponentActivate::Default::LongText
                         matchingOption = true
                         @options[-1].start
                     end
 
-                    if  !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentDesactivate::ShortText ||
-                        !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentDesactivate::LongText
+                    if  !matchingOption && ARGV.size > 3 && ARGV[3] == ComponentDesactivate::Default::ShortText ||
+                        !matchingOption && ARGV.size > 3 && ARGV[3] == ComponentDesactivate::Default::LongText
                         matchingOption = true
                         @options[-2].start
                     end
 
                     if !matchingOption
-                        puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[1].colorize(:white)}"
-                        puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                        puts "#{CommandLine::Default::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[1].colorize(:white)}"
+                        puts    "#{CommandLine::Default::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                                "#{CommandLine::Default::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                                "#{CommandLine::Default::ErrorUnknowArgumentHelp3.colorize(:white)}"
                     end
                 end
             end

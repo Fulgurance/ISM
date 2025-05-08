@@ -2,6 +2,14 @@ module ISM
 
   class SoftwareInformation
 
+    module Default
+        FileLoadProcessSyntaxErrorText1 = "Syntax errors detected during file load process "
+        FileLoadProcessSyntaxErrorText2 = " at line number "
+        ArchiveExtensionName = ".tar.xz"
+        ArchiveSha512ExtensionName = ".sha512"
+        SystemComponentSoftwareClassName = "SystemComponentSoftware"
+    end
+
     def_clone
 
     include JSON::Serializable
@@ -41,9 +49,9 @@ module ISM
         begin
             return from_json(File.read(path))
         rescue error : JSON::ParseException
-            puts    "#{ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText1 +
+            puts    "#{Default::FileLoadProcessSyntaxErrorText1 +
                     path +
-                    ISM::Default::SoftwareInformation::FileLoadProcessSyntaxErrorText2 +
+                    Default::FileLoadProcessSyntaxErrorText2 +
                     error.line_number.to_s}".colorize(:yellow)
             return self.new
         end
@@ -150,7 +158,7 @@ module ISM
     end
 
     def builtSoftwareDirectoryPath
-        return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
+        return "#{Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -159,7 +167,7 @@ module ISM
 
     def mainDirectoryPath : String
         return Ism.settings.rootPath +
-               ISM::Default::Path::SoftwaresDirectory +
+               Path::SoftwaresDirectory +
                @port + "/" +
                @name + "/" +
                @version + "/"
@@ -170,7 +178,7 @@ module ISM
     end
 
     def filePath : String
-        return mainDirectoryPath + ISM::Default::Filename::Information
+        return mainDirectoryPath + Filename::Information
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -187,11 +195,11 @@ module ISM
 
     def settingsFilePath : String
         return  Ism.settings.rootPath +
-                ISM::Default::Path::SettingsSoftwaresDirectory +
+                Path::SettingsSoftwaresDirectory +
                 @port + "/" +
                 @name + "/" +
                 @version + "/" +
-                ISM::Default::Filename::SoftwareSettings
+                Filename::SoftwareSettings
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -200,7 +208,7 @@ module ISM
 
     def installedDirectoryPath : String
         return Ism.settings.rootPath +
-               ISM::Default::Path::InstalledSoftwaresDirectory +
+               Path::InstalledSoftwaresDirectory +
                @port + "/" +
                @name + "/"
 
@@ -211,11 +219,11 @@ module ISM
 
     def installedFilePath : String
         return Ism.settings.rootPath +
-               ISM::Default::Path::InstalledSoftwaresDirectory +
+               Path::InstalledSoftwaresDirectory +
                @port + "/" +
                @name + "/" +
                @version + "/" +
-               ISM::Default::Filename::Information
+               Filename::Information
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -405,7 +413,7 @@ module ISM
     end
 
     def archiveExtensionName : String
-        return ISM::Default::SoftwareInformation::ArchiveExtensionName
+        return Default::ArchiveExtensionName
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -413,7 +421,7 @@ module ISM
     end
 
     def archiveSha512ExtensionName : String
-        return ISM::Default::SoftwareInformation::ArchiveSha512ExtensionName
+        return Default::ArchiveSha512ExtensionName
 
         rescue error
                 Ism.printSystemCallErrorNotification(error)

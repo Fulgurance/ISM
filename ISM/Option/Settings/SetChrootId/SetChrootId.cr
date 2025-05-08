@@ -4,10 +4,17 @@ module ISM
 
         class SettingsSetChrootId < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-sci"
+                LongText = "setchrootid"
+                Description = "Set the id of the future chroot installed system"
+                SetText = "Setting chroot system id to the value "
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootId::ShortText,
-                        ISM::Default::Option::SettingsSetChrootId::LongText,
-                        ISM::Default::Option::SettingsSetChrootId::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,7 +25,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setChrootId(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootId::SetText+ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
             end

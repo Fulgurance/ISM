@@ -4,10 +4,17 @@ module ISM
 
         class SettingsSetSystemVariantId < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-ssvi"
+                LongText = "setsystemvariantid"
+                Description = "Set the variant id of the future installed system"
+                SetText = "Setting the system variant id to the value "
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemVariantId::ShortText,
-                        ISM::Default::Option::SettingsSetSystemVariantId::LongText,
-                        ISM::Default::Option::SettingsSetSystemVariantId::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,7 +25,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setSystemVariantId(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemVariantId::SetText+ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
             end

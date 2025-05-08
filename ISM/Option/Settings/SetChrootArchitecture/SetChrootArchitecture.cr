@@ -4,10 +4,17 @@ module ISM
 
         class SettingsSetChrootArchitecture < ISM::CommandLineOption
 
+            module Default
+                ShortText = "-sca"
+                LongText = "setchrootarchitecture"
+                Description = "Set the default chroot target architecture for the compiler"
+                SetText = "Setting chroot architecture to the value "
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootArchitecture::ShortText,
-                        ISM::Default::Option::SettingsSetChrootArchitecture::LongText,
-                        ISM::Default::Option::SettingsSetChrootArchitecture::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -18,7 +25,7 @@ module ISM
                         Ism.printNeedSuperUserAccessNotification
                     else
                         Ism.settings.setChrootArchitecture(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootArchitecture::SetText+ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
             end
