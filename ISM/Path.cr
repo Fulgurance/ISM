@@ -9,7 +9,7 @@ module ISM
         RuntimeDataDirectory = "var/#{IsmDirectory}"
         TemporaryDirectory = "tmp/#{IsmDirectory}"
         LogsDirectory = "var/log/#{IsmDirectory}"
-        LibraryDirectory = "usr/share/#{IsmDirectory}"
+        LibraryDirectory = "usr/lib/#{IsmDirectory}"
         SettingsDirectory = "#{RuntimeDataDirectory}settings/"
         PortsDirectory = "#{RuntimeDataDirectory}ports/"
         KernelOptionsDirectory = "#{RuntimeDataDirectory}kerneloptions/"
