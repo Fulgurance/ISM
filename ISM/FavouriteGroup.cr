@@ -19,9 +19,12 @@ module ISM
         def self.filePath(name = Default::Name) : String
             return Ism.settings.rootPath+Path::FavouriteGroupsDirectory+name+".json"
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "FavouriteGroup",
+                                        functionName: "filePath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.generateConfiguration(path = filePath)
@@ -29,9 +32,12 @@ module ISM
             self.new.to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "FavouriteGroup",
+                                        functionName: "generateConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
@@ -41,9 +47,12 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "FavouriteGroup",
+                                        functionName: "loadConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
@@ -51,9 +60,12 @@ module ISM
             to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "FavouriteGroup",
+                                        functionName: "writeConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
     end
