@@ -16,6 +16,10 @@ module ISM
             @additions = Array(String).new
         end
 
+        def systemId
+            return "250"
+        end
+
         def recordCrossToolchainAsFullyBuilt
             Ism.systemInformation.setCrossToolchainFullyBuilt(true)
 
