@@ -23,9 +23,12 @@ module ISM
         def self.filePath(codeName = Default::CodeName) : String
             return Ism.settings.rootPath+Path::MirrorsDirectory+codeName+".json"
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "filePath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.generateConfiguration(path = filePath)
@@ -33,9 +36,12 @@ module ISM
             self.new.to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "generateConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
@@ -45,9 +51,12 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "loadConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.sourcesLink(codeName : String) : String
@@ -56,6 +65,13 @@ module ISM
             rescue
                 return String.new
             end
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "sourcesLink",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
@@ -63,25 +79,34 @@ module ISM
             to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "writeConfiguration",
+                                        functionName: "filePath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def defaultUrl : String
             return @urls[@mainUrl]
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "defaultUrl",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def sourcesLink : String
-            return defaultUrl+Default::SourcesLinkDirectory
+            return defaultUrl+ISM::Default::Mirror::SourcesLinkDirectory
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Mirror",
+                                        functionName: "sourcesLink",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
     end

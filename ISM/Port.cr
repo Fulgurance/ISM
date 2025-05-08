@@ -19,17 +19,23 @@ module ISM
         def self.filePathPrefix : String
             return Ism.settings.rootPath+Path::PortsDirectory
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "filePathPrefix",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.directoryPathPrefix : String
             return Ism.settings.rootPath+Path::SoftwaresDirectory
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "directoryPathPrefix",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.exists(name : String) : Bool
@@ -43,9 +49,12 @@ module ISM
 
             return false
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "exists",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.delete(name : String)
@@ -59,65 +68,89 @@ module ISM
                 end
             end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "delete",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.filePath(name : String) : String
             return filePathPrefix+name+".json"
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "filePath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.directoryPath(name : String) : String
             return directoryPathPrefix+name
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "directoryPath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
             return from_json(File.read(path))
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "loadConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def self.softwareNumber(name : String) : Int32
             return Dir.glob("#{self.directoryPath(name)}/*").size
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "softwareNumber",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def filePath : String
             return self.class.filePathPrefix+@name+".json"
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "filePath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def directoryPath : String
             return self.class.directoryPathPrefix+@name
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "directoryPath",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def softwareNumber
             return self.class.softwareNumber(@name)
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "softwareNumber",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def writeConfiguration
@@ -125,18 +158,28 @@ module ISM
             to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "writeConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def isAvailable : Bool
-            process = Process.new(  "git ls-remote",
+            process = Process.new(  "git ls-remote #{url}",
                                     shell: true,
                                     chdir: directoryPath)
             result = process.wait
 
             return result.success?
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "isAvailable",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def open : Bool
@@ -158,9 +201,12 @@ module ISM
                 return false
             end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "open",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
         def synchronize : Process
@@ -182,9 +228,12 @@ module ISM
                                     chdir: directoryPath)
             end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Core::Error.show(  className: "Port",
+                                        functionName: "synchronize",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function",
+                                        exception: exception)
         end
 
     end
