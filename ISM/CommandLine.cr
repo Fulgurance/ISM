@@ -533,7 +533,7 @@ module ISM
                 exitProgram
         end
 
-        def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
+        def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = FavouriteGroup::Default::Name)
             path = ISM::FavouriteGroup.filePath(favouriteGroupName)
 
             favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
@@ -545,7 +545,7 @@ module ISM
                 exitProgram
         end
 
-        def removeSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
+        def removeSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = FavouriteGroup::Default::Name)
             path = ISM::FavouriteGroup.filePath(favouriteGroupName)
 
             if File.exists?(path)
