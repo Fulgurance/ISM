@@ -99,7 +99,7 @@ module ISM
         end
 
         def sourcesLink : String
-            return defaultUrl+ISM::Default::Mirror::SourcesLinkDirectory
+            return defaultUrl+Default::SourcesLinkDirectory
 
             rescue exception
                 ISM::Core::Error.show(  className: "Mirror",
