@@ -1786,7 +1786,7 @@ module ISM
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
 
-            if systemHandleUserAccess
+            if Ism.systemInformation.handleUserAccess
                 #ISM::Core::Notification.unlockingSystemAccess
                 #ISM::Core::Security.unlockSystemAccess
             end
