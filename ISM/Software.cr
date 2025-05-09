@@ -43,16 +43,153 @@ module ISM
             @additions = Array(String).new
         end
 
+        # Internal use only
+        def prepareChrootDev
+            requestedCommands = "/usr/bin/sudo /usr/bin/mount -v --bind /dev #{Ism.settings.rootPath}/dev"
+
+            process = Process.run(  command: requestedCommands,
+                                    shell: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootDev",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        # Internal use only
+        def prepareChrootDevPts
+            requestedCommands = "/usr/bin/sudo /usr/bin/mount -v -t devpts devpts -o gid=5,mode=0620 #{Ism.settings.rootPath}/dev/pts"
+
+            process = Process.run(  command: requestedCommands,
+                                    shell: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootDevPts",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        # Internal use only
+        def prepareChrootProc
+            requestedCommands = "/usr/bin/sudo /usr/bin/mount -v -t proc proc #{Ism.settings.rootPath}/proc"
+
+            process = Process.run(  command: requestedCommands,
+                                    shell: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootProc",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        # Internal use only
+        def prepareChrootSysfs
+            requestedCommands = "/usr/bin/sudo /usr/bin/mount -v -t sysfs sysfs #{Ism.settings.rootPath}/sys"
+
+            process = Process.run(  command: requestedCommands,
+                                    shell: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootSysfs",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        # Internal use only
+        def prepareChrootTmpfs
+            requestedCommands = "/usr/bin/sudo /usr/bin/mount -v -t tmpfs tmpfs #{Ism.settings.rootPath}/run"
+
+            process = Process.run(  command: requestedCommands,
+                                    shell: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootTmpfs",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        # Internal use only
+        def prepareChrootNetworkConfiguration
+            requestedCommands = "/usr/bin/sudo /usr/bin/cp /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
+
+            process = Process.run(  command: requestedCommands,
+                                    shell: true)
+
+            if !process.success?
+                ISM::Core::Error.show(  className: "Software",
+                                        functionName: "prepareChrootNetworkConfiguration",
+                                        errorTitle: "Execution failure",
+                                        error: "Failed to execute the function")
+            end
+        end
+
+        # Internal use only
+        def prepareChrootFileSystem
+            prepareChrootDev
+            prepareChrootDevPts
+            prepareChrootProc
+            prepareChrootSysfs
+            prepareChrootTmpfs
+            prepareChrootNetworkConfiguration
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Software",
+                                    functionName: "prepareChrootFileSystem",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
+        def prepareRootPermissions
+            commandList = [  #We unlock any immutable file and change the whole tree as root owner
+                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}",
+                            "/usr/bin/sudo /usr/bin/chown -v -f -R root:root #{Ism.settings.rootPath}",
+                            #Then we restore the permissions for the ism tree
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}/var/lib/ism",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+                            #We correct the rights for root dir and temporary dirs
+                            "/usr/bin/sudo /usr/bin/chmod -v 0750 #{Ism.settings.rootPath}/root",
+                            "/usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/tmp",
+                            "/usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/var/tmp"]
+
+            commandList.each do |command|
+                Process.run(command: command,
+                            shell: true)
+            end
+
+            rescue exception
+                ISM::Core::Error.show(  className: "Software",
+                                    functionName: "prepareRootPermissions",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
         def systemId
             return ISM::Core::Security::Default::SystemId
         end
 
         def recordCrossToolchainAsFullyBuilt
             Ism.systemInformation.setCrossToolchainFullyBuilt(true)
+        end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+        def recordSystemHandleUserAccess
+            Ism.systemInformation.setHandleUserAccess(true)
         end
 
         def version : String
