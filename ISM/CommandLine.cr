@@ -1292,7 +1292,7 @@ module ISM
             environmentFilePathText = String.new
 
             if !path.empty?
-                pathText = "#{Default::ErrorRunSystemCommandText2}#{(Ism.settings.installByChroot ? Ism.settings.rootPath : "")}#{path}".squeeze("/")
+                pathText = "#{Default::ErrorRunSystemCommandText2}#{((Ism.settings.rootPath != "/") ? Ism.settings.rootPath : "")}#{path}".squeeze("/")
             end
 
             if !environment.empty?
@@ -2935,7 +2935,7 @@ module ISM
                 exitProgram
         end
 
-        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
+        def runSystemCommand(command : String, path = @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             environmentCommand = String.new
@@ -2948,7 +2948,7 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
-            if @settings.installByChroot
+            if @systemInformation.handleUserAccess && @settings.rootPath != "/"
                 chrootCommand = <<-CODE
                 #!/bin/bash
 

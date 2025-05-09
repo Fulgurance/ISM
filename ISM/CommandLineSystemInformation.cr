@@ -16,7 +16,10 @@ module ISM
         end
 
         def self.filePath : String
-            return "#{(Ism.systemInformation.handleUserAccess || !Ism.systemInformation.handleUserAccess && (Ism.settings.rootPath != "/") ? Ism.settings.rootPath : "/")}#{Default::FilePath}"
+            #return "#{(Ism.systemInformation.handleUserAccess || !Ism.systemInformation.handleUserAccess && (Ism.settings.rootPath != "/") ? Ism.settings.rootPath : "/")}#{Default::FilePath}"
+            #Experimental
+
+            return "#{Ism.settings.rootPath}#{Default::FilePath}"
 
             rescue exception
             ISM::Core::Error.show(  className: "CommandLineSystemInformation",
