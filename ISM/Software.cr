@@ -1783,6 +1783,19 @@ module ISM
                 Ism.exitProgram
         end
 
+        #Special function for the uninstallation process without chroot (Internal use only)
+        def uninstallDirectory(path : String)
+            Process.run(command: "sudo rm -rf #{path}",
+                        shell: true)
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Software",
+                                    functionName: "uninstallDirectory",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
 
