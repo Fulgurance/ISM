@@ -29,38 +29,34 @@ module ISM
                 if ARGV.size == 2 || ARGV.size == 3
                     showHelp
                 else
-                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
-                        Ism.printNeedSuperUserAccessNotification
+                    matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
+
+                    if matchingSoftware.fullName == ""
+                        puts Default::NoMatchFound + "#{ARGV[1].colorize(:green)}"
+                        puts Default::NoMatchFoundAdvice
                     else
-                        matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
+                        if ARGV[2] == @shortText || ARGV[2] == @longText
 
-                        if matchingSoftware.fullName == ""
-                            puts Default::NoMatchFound + "#{ARGV[1].colorize(:green)}"
-                            puts Default::NoMatchFoundAdvice
-                        else
-                            if ARGV[2] == @shortText || ARGV[2] == @longText
+                            dependency = Ism.getSoftwareInformation(ARGV[3].downcase, allowSearchByNameOnly: true)
 
-                                dependency = Ism.getSoftwareInformation(ARGV[3].downcase, allowSearchByNameOnly: true)
+                            dependencyText = "#{("@"+dependency.port).colorize(:red)}:#{dependency.name.colorize(:green)}"
+                            matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
 
-                                dependencyText = "#{("@"+dependency.port).colorize(:red)}:#{dependency.name.colorize(:green)}"
-                                matchingSoftwareText = "#{("@"+matchingSoftware.port).colorize(:red)}:#{matchingSoftware.name.colorize(:green)}"
+                            if matchingSoftware.selectUniqueDependency(dependency.fullName)
+                                matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
 
-                                if matchingSoftware.selectUniqueDependency(dependency.fullName)
-                                    matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
-
-                                    Ism.printProcessNotification(   Default::SetText1 +
-                                                                    dependencyText +
-                                                                    Default::SetText2 +
-                                                                    matchingSoftwareText)
-                                else
-                                    Ism.printErrorNotification( Default::DependencyNoMatchFound1 +
+                                Ism.printProcessNotification(   Default::SetText1 +
                                                                 dependencyText +
-                                                                Default::DependencyNoMatchFound2 +
-                                                                matchingSoftwareText,nil)
-                                end
+                                                                Default::SetText2 +
+                                                                matchingSoftwareText)
                             else
-                                showHelp
+                                Ism.printErrorNotification( Default::DependencyNoMatchFound1 +
+                                                            dependencyText +
+                                                            Default::DependencyNoMatchFound2 +
+                                                            matchingSoftwareText,nil)
                             end
+                        else
+                            showHelp
                         end
                     end
                 end

@@ -197,14 +197,6 @@ module ISM
                 exitProgram
         end
 
-        def secureModeEnabled
-            return @settings.secureMode
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
-        end
-
         def start
             loadSettingsFiles
             loadSystemInformationFile

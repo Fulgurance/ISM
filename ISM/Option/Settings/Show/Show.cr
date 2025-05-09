@@ -77,9 +77,7 @@ module ISM
             def start
                 puts "#{Default::TitleText}:".colorize(:yellow)
 
-                puts "\t#{Default::SecureModeText}: #{Ism.settings.secureMode.colorize(:green)}"
                 puts "\t#{Default::BinaryTaskModeText}: #{Ism.settings.binaryTaskMode.colorize(:green)}"
-                puts "\t#{Default::InstallByChrootText}: #{Ism.settings.installByChroot.colorize(:green)}"
                 puts "\t#{Default::RootPathText}: #{Ism.settings.rootPath.colorize(:green)}"
                 puts "\t#{Default::DefaultMirrorText}: #{Ism.settings.defaultMirror.colorize(:green)}"
 
