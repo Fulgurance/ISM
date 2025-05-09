@@ -416,6 +416,10 @@ module ISM
         end
 
         def loadSettingsFiles
+            if !Dir.exists?(@settings.rootPath+Path::SettingsDirectory)
+                Dir.mkdir_p(@settings.rootPath+Path::SettingsDirectory)
+            end
+
             @settings = ISM::CommandLineSettings.loadConfiguration
             @portsSettings = ISM::CommandLinePortsSettings.loadConfiguration
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
