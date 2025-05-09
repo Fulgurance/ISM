@@ -135,6 +135,7 @@ module ISM
 
         # Internal use only
         def prepareChrootFileSystem
+            prepareRootPermissions
             prepareChrootDev
             prepareChrootDevPts
             prepareChrootProc
@@ -152,16 +153,16 @@ module ISM
 
         def prepareRootPermissions
             commandList = [  #We unlock any immutable file and change the whole tree as root owner
-                            "/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}",
+                            #"/usr/bin/sudo /usr/bin/chattr -f -i -R #{Ism.settings.rootPath}",
                             "/usr/bin/sudo /usr/bin/chown -v -f -R root:root #{Ism.settings.rootPath}",
                             #Then we restore the permissions for the ism tree
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}/var/lib/ism",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.sourcesPath}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.toolsPath}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "/usr/bin/sudo /usr/bin/chown -v -R #{ISM::Default::Core::SystemUserId}:#{ISM::Default::Core::SystemUserId} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{systemId}:#{systemId} #{Ism.settings.rootPath}/var/lib/ism",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{systemId}:#{systemId} #{Ism.settings.sourcesPath}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{systemId}:#{systemId} #{Ism.settings.toolsPath}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{systemId}:#{systemId} #{Ism.settings.rootPath}#{Path::RuntimeDataDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{systemId}:#{systemId} #{Ism.settings.rootPath}#{Path::TemporaryDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{systemId}:#{systemId} #{Ism.settings.rootPath}#{Path::SettingsDirectory}",
+                            "/usr/bin/sudo /usr/bin/chown -v -R #{systemId}:#{systemId} #{Ism.settings.rootPath}#{Path::LogsDirectory}",
                             #We correct the rights for root dir and temporary dirs
                             "/usr/bin/sudo /usr/bin/chmod -v 0750 #{Ism.settings.rootPath}/root",
                             "/usr/bin/sudo /usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/tmp",
@@ -1784,6 +1785,11 @@ module ISM
 
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
+
+            if systemHandleUserAccess
+                #ISM::Core::Notification.unlockingSystemAccess
+                #ISM::Core::Security.unlockSystemAccess
+            end
 
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
