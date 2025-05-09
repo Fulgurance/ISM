@@ -2935,7 +2935,7 @@ module ISM
                 exitProgram
         end
 
-        def runSystemCommand(command : String, path = @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
+        def runSystemCommand(command : String, path = "/", environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             environmentCommand = String.new
