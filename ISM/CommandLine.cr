@@ -2161,12 +2161,14 @@ module ISM
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
-                    Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
 
                     limit = targets.size
 
                     targets.each_with_index do |target, index|
+
+                        #Always update system information cache
+                        Ism.loadSystemInformationFile
 
                         information = target.information
                         port = information.port
