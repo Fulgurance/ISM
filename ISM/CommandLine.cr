@@ -852,7 +852,7 @@ module ISM
         end
 
         def printSubProcessNotification(message : String)
-            puts "\t| #{message}"
+            puts "\t#{"|".colorize(:green)} #{message}"
         end
 
         def printErrorNotification(message : String, error)
