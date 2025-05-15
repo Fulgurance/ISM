@@ -265,6 +265,10 @@ module ISM
         end
 
         def loadSystemInformationFile
+            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::SettingsDirectory)
+                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::SettingsDirectory)
+            end
+
             @systemInformation = ISM::CommandLineSystemInformation.loadConfiguration
 
             rescue error
@@ -273,6 +277,10 @@ module ISM
         end
 
         def loadSettingsFiles
+            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::SettingsDirectory)
+                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::SettingsDirectory)
+            end
+
             @settings = ISM::CommandLineSettings.loadConfiguration
             @portsSettings = ISM::CommandLinePortsSettings.loadConfiguration
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
