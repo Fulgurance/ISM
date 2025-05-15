@@ -1610,7 +1610,7 @@ module ISM
         def updateSystemCache
             Ism.notifyOfUpdateSystemCache
 
-            if commandIsAvailable("ldconfig") && systemHandleUserAccess
+            if commandIsAvailable("ldconfig") && Ism.settings.installByChroot
                 runLdconfigCommand
             end
 
