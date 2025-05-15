@@ -1580,13 +1580,6 @@ module ISM
 
         def configure
             Ism.notifyOfConfigure(@information)
-
-            rescue exception
-                ISM::Error.show(className: "Software",
-                                functionName: "configure",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
         end
 
         def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, relatedToMainBuild = true)
@@ -1614,8 +1607,10 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "makePerlSource",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function")
             end
         end
 
@@ -1625,8 +1620,10 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "runCpanCommand",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function")
             end
         end
 
@@ -1636,8 +1633,10 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "runDircolorsCommand",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function")
             end
         end
 
@@ -1647,8 +1646,10 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "runDepmodCommand",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function")
             end
         end
 
@@ -1658,8 +1659,10 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(arguments)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "runSshKeygenCommand",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function")
             end
         end
 
@@ -1692,8 +1695,10 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "makeSource",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function")
             end
         end
 
@@ -1735,9 +1740,12 @@ module ISM
 
             return directoryNumber, symlinkNumber, fileNumber, totalSize
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "recordInstallationInformation",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def updateSystemCache
@@ -1748,11 +1756,11 @@ module ISM
             end
 
             rescue exception
-            ISM::Error.show(className: "Software",
-                            functionName: "updateSystemCache",
-                            errorTitle: "Execution failure",
-                            error: "Failed to execute the function",
-                            exception: exception)
+                ISM::Error.show(className: "Software",
+                                functionName: "updateSystemCache",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def deploy
@@ -1805,57 +1813,36 @@ module ISM
 
             Ism.addInstalledSoftware(@information, installedFiles)
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "install",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def kernelSourcesPath : String
             return Ism.kernelSourcesPath
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelSourcesArchitecturePath : String
             return "#{kernelSourcesPath}arch/"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelKconfigFilePath : String
             return "#{kernelSourcesPath}Kconfig"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelArchitectureKconfigFilePath : String
             return "#{kernelSourcesArchitecturePath}Kconfig"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelConfigFilePath : String
             return "#{kernelSourcesPath}.config"
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelOptionsDatabasePath : String
             return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+mainKernelName
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Return an array splitted, except when there are conditions between parenthesis
@@ -1871,9 +1858,12 @@ module ISM
 
             return conditions.split(" && ")
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "getConditionArray",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def parseKconfigConditions(conditions : String)
@@ -1903,9 +1893,12 @@ module ISM
 
             return dependencies,singleChoiceDependencies,blockers
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "parseKconfigConditions",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getFullKernelKconfigFile(kconfigPath : String) : Array(String)
@@ -1954,9 +1947,12 @@ module ISM
 
             return result
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "getFullKernelKconfigFile",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def generateKernelOptionsFiles(kconfigContent : Array(String))
@@ -2057,9 +2053,12 @@ module ISM
                 end
             end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "generateKernelOptionsFiles",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def updateKernelOptionsDatabase
@@ -2080,20 +2079,12 @@ module ISM
 
         def recordNeededKernelOptions
             Ism.notifyOfRecordNeededKernelOptions
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
         
         def clean
             Ism.notifyOfClean(@information)
 
             cleanWorkDirectoryPath
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def cleanWorkDirectoryPath
@@ -2103,36 +2094,27 @@ module ISM
 
             makeDirectoryNoChroot(workDirectoryPathNoChroot)
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "cleanWorkDirectoryPath",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def showInformations
             puts
             Ism.printInformationNotificationTitle(@information.name,@information.version)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def uninstall
             Ism.notifyOfUninstall(@information)
 
             Ism.uninstallSoftware(@information)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def option(optionName : String) : Bool
             return @information.option(optionName)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def dependency(fullName : String) : ISM::SoftwareInformation
@@ -2144,17 +2126,16 @@ module ISM
 
             return ISM::SoftwareInformation.new
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "dependency",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def isGreatestVersion : Bool
             return Ism.getSoftwareInformation(@information.fullName).version <= @information.version
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def majorVersion : Int32
@@ -2163,57 +2144,30 @@ module ISM
 
         def minorVersion : Int32
             return SemanticVersion.parse(@information.version).minor
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def patchVersion : Int32
             return SemanticVersion.parse(@information.version).patch
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyVersion(fullName : String) : SemanticVersion
             return SemanticVersion.parse(dependency(fullName).version)
-
-            rescue exception
-                ISM::Error.show(className: "Software",
-                                functionName: "dependencyVersion",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
         end
 
         #Internal use only
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyMinorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).minor
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         #Internal use only
         def dependencyPatchVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).patch
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def softwareVersion(fullName : String) : SemanticVersion
@@ -2238,9 +2192,12 @@ module ISM
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).major
             end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "softwareMajorVersion",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def softwareMinorVersion(fullName : String) : Int32
@@ -2250,9 +2207,12 @@ module ISM
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).minor
             end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "softwareMinorVersion",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def softwarePatchVersion(fullName : String) : Int32
@@ -2262,65 +2222,40 @@ module ISM
                 return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version).patch
             end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "softwarePatchVersion",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def softwareIsInstalled(softwareName : String) : Bool
             return Ism.softwareAnyVersionInstalled(softwareName)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def architecture(architecture : String) : Bool
             return Ism.settings.systemArchitecture == architecture
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def selectedKernel : ISM::SoftwareInformation
             return Ism.selectedKernel
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def kernelSelected : Bool
             return selectedKernel.isValid
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def isCurrentKernel : Bool
             return selectedKernel.versionName == @information.versionName
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def showInfo(message : String)
             Ism.printInformationNotification(message)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def showInfoCode(message : String)
             Ism.printInformationCodeNotification(message)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def commandIsAvailable(command : String) : Bool
