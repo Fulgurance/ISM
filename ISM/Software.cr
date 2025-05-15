@@ -16,6 +16,10 @@ module ISM
             @additions = Array(String).new
         end
 
+        def systemId : String
+            return ISM::Default::CommandLine::Id.to_s
+        end
+
         def recordCrossToolchainAsFullyBuilt
             Ism.systemInformation.setCrossToolchainFullyBuilt(true)
 
@@ -2013,6 +2017,18 @@ module ISM
         end
 
         #Internal use only
+        def dependencyVersion(fullName : String) : SemanticVersion
+            return SemanticVersion.parse(dependency(fullName).version)
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "dependencyVersion",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        #Internal use only
         def dependencyMajorVersion(fullName : String) : Int32
             return SemanticVersion.parse(dependency(fullName).version).major
 
@@ -2037,6 +2053,21 @@ module ISM
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
+        end
+
+        def softwareVersion(fullName : String) : SemanticVersion
+            if @information.dependencies(unsorted: true).any? { |entry| entry.fullName == fullName}
+                return dependencyVersion(fullName)
+            else
+                return SemanticVersion.parse(Ism.getSoftwareInformation(fullName).version)
+            end
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "softwareVersion",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def softwareMajorVersion(fullName : String) : Int32
@@ -2129,6 +2160,19 @@ module ISM
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
+        end
+
+        def commandIsAvailable(command : String) : Bool
+            process = Ism.runSystemCommand("type #{command} > /dev/null 2>&1")
+
+            return (process.exit_code == 0)
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "commandIsAvailable",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
     end

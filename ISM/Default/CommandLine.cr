@@ -6,6 +6,7 @@ module ISM
 
             Title = "Ingenius System Manager"
             Name = "ism"
+            Id = 250
             NeedSuperUserAccessText = "ISM need superuser access to run this command"
             ErrorUnknowArgument = "ISM error: unknow argument "
             ErrorUnknowArgumentHelp1 = "Use "
