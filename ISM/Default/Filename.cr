@@ -5,6 +5,7 @@ module ISM
         module Filename
 
             IsmBinary = "ism"
+            TraceLog = "TraceLog.log"
             RequiredLibraries = "RequiredLibraries.cr"
             SystemInformation = "SystemInformation.json"
             Information = "Information.json"
