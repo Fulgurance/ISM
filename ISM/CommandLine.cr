@@ -7,6 +7,7 @@ module ISM
         property neededKernelOptions : Array(ISM::NeededKernelOption)
         property options : Array(ISM::CommandLineOption)
         property settings : ISM::CommandLineSettings
+        property components : Array(ISM::SoftwareInformation)
         property kernels : Array(ISM::AvailableKernel)
         property softwares : Array(ISM::AvailableSoftware)
         property installedSoftwares : Array(ISM::SoftwareInformation)
@@ -30,6 +31,7 @@ module ISM
             @text = ISM::Default::CommandLine::CalculationWaitingText
             @options = ISM::Default::CommandLine::Options
             @settings = ISM::CommandLineSettings.new
+            @components = Array(ISM::SoftwareInformation).new
             @kernels = Array(ISM::AvailableKernel).new
             @softwares = Array(ISM::AvailableSoftware).new
             @installedSoftwares = Array(ISM::SoftwareInformation).new
@@ -190,7 +192,12 @@ module ISM
 
                     versionDirectories.each do |versionDirectory|
 
-                        softwaresInformations << loadSoftware(portDirectory,softwareDirectory,versionDirectory)
+                        loadedSoftware = loadSoftware(portDirectory,softwareDirectory,versionDirectory)
+                        softwaresInformations << loadedSoftware
+
+                        if loadedSoftware.type == "ComponentSoftware"
+                            @components << loadedSoftware
+                        end
 
                     end
 
