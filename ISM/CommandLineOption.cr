@@ -21,9 +21,12 @@ module ISM
                         "\t" + "#{argument.description.colorize(:green)}"
             end
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLineOption",
+                                functionName: "showHelp",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
     end

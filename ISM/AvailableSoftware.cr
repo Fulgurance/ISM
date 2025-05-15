@@ -12,49 +12,67 @@ module ISM
         def fullName : String
             return "@#{@port}:#{@name}"
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "fullName",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         private def includeComparators(request : String) : Bool
             return request.includes?("<") || request.includes?(">")
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "includeComparators",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         private def greaterComparator(request : String) : Bool
             return request[0] == '>' && request[1] != '='
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "greaterComparator",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         private def lessComparator(request : String) : Bool
             return request[0] == '<' && request[1] != '='
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "lessComparator",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         private def greaterOrEqualComparator(request : String) : Bool
             return request[0..1] == ">="
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "greaterOrEqualComparator",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         private def lessOrEqualComparator(request : String) : Bool
             return request[0..1] == "<="
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "lessOrEqualComparator",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         private def intervalComparator(request : String) : Bool
@@ -72,9 +90,12 @@ module ISM
 
             return (separator && comparators)
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "intervalComparator",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getVersionByCondition(condition : String, returnMaximum = true) : ISM::SoftwareInformation
@@ -139,9 +160,12 @@ module ISM
 
             return temp.empty? ? ISM::SoftwareInformation.new : (returnMaximum ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "getVersionByCondition",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def greatestVersion(condition=String.new) : ISM::SoftwareInformation
@@ -161,9 +185,12 @@ module ISM
 
             return ISM::SoftwareInformation.new
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "greatestVersion",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
     end

@@ -30,17 +30,23 @@ module ISM
         def self.isPassName(optionName : String) : Bool
             return optionName.starts_with?(/Pass[0-9]/)
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "SoftwareOption",
+                                functionName: "isPassName",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def isPass : Bool
             return self.class.isPassName(@name)
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "SoftwareOption",
+                                functionName: "isPass",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def dependencies(allowDeepSearch = false) : Array(ISM::SoftwareDependency)
@@ -54,9 +60,12 @@ module ISM
 
             return result
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "SoftwareOption",
+                                functionName: "dependencies",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
     end

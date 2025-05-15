@@ -56,17 +56,23 @@ module ISM
         def ranAsSuperUser : Bool
             return (LibC.getuid == 0)
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "ranAsSuperUser",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def secureModeEnabled
             return @settings.secureMode
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "secureModeEnabled",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def start
@@ -80,6 +86,13 @@ module ISM
             loadMirrorsDatabase
             loadFavouriteGroupsDatabase
             checkEnteredArguments
+
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "start",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadNeededKernelOptions
@@ -95,9 +108,12 @@ module ISM
 
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadNeededKernelOptions",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadKernelOptionDatabase
@@ -121,9 +137,12 @@ module ISM
 
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadKernelOptionDatabase",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
@@ -169,9 +188,12 @@ module ISM
 
             return software
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadSoftware",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadSoftwareDatabase
@@ -207,9 +229,12 @@ module ISM
 
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadSoftwareDatabase",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadPortsDatabase
@@ -224,9 +249,12 @@ module ISM
                 @ports << ISM::Port.loadConfiguration(path)
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadPortsDatabase",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadMirrorsDatabase
@@ -245,9 +273,12 @@ module ISM
                 end
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadMirrorsDatabase",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadFavouriteGroupsDatabase
@@ -266,9 +297,12 @@ module ISM
                 end
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadFavouriteGroupsDatabase",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadSystemInformationFile
@@ -278,9 +312,12 @@ module ISM
 
             @systemInformation = ISM::CommandLineSystemInformation.loadConfiguration
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadSystemInformationFile",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadSettingsFiles
@@ -292,9 +329,12 @@ module ISM
             @portsSettings = ISM::CommandLinePortsSettings.loadConfiguration
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadSettingsFiles",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
@@ -309,9 +349,12 @@ module ISM
                 return ISM::SoftwareInformation.new
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadInstalledSoftware",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadInstalledSoftwareDatabase
@@ -339,9 +382,12 @@ module ISM
 
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadInstalledSoftwareDatabase",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def selectedKernel : ISM::SoftwareInformation
@@ -359,9 +405,12 @@ module ISM
         def kernelIsSelected
             return selectedKernel.isValid
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "selectedKernel",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
@@ -383,26 +432,35 @@ module ISM
 
             return true,String.new
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "inputMatchWithFilter",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def reportMissingDependency(missingDependency : ISM::SoftwareInformation, relatedSoftware : ISM::SoftwareInformation)
             @unavailableDependencySignals.push([relatedSoftware, missingDependency])
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "reportMissingDependency",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
             softwareInformation.installedFiles = installedFiles
             softwareInformation.writeConfiguration(softwareInformation.installedFilePath)
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "addInstalledSoftware",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
@@ -412,9 +470,12 @@ module ISM
             favouriteGroup.softwares = favouriteGroup.softwares | [fullVersionName]
             favouriteGroup.writeConfiguration
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "addSoftwareToFavouriteGroup",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def removeSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
@@ -426,9 +487,12 @@ module ISM
                 favouriteGroup.writeConfiguration
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "removeSoftwareToFavouriteGroup",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def uninstallSoftware(software : ISM::SoftwareInformation)
@@ -480,9 +544,12 @@ module ISM
                 @installedSoftwares.delete(softwareForRemovalIndex)
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "uninstallSoftware",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def softwareAnyVersionInstalled(fullName : String) : Bool
@@ -497,9 +564,12 @@ module ISM
 
             return false
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "softwareAnyVersionInstalled",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def softwareIsRequestedSoftware(software : ISM::SoftwareInformation, requestedSoftwareVersionNames = Array(String).new) : Bool
@@ -509,9 +579,12 @@ module ISM
                 return requestedSoftwareVersionNames.any? { |entry| entry == software.fullVersionName}
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "softwareIsRequestedSoftware",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
@@ -575,17 +648,23 @@ module ISM
             #Just in case something go wrong
             return false
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "softwareIsInstalled",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def softwaresAreCodependent(software1 : ISM::SoftwareInformation, software2 : ISM::SoftwareInformation) : Bool
             return software1.allowCodependencies.includes?(software2.fullName) && software2.allowCodependencies.includes?(software1.fullName) && !software1.passEnabled && !software2.passEnabled
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "softwaresAreCodependent",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getSoftwareStatus(software : ISM::SoftwareInformation) : Symbol
@@ -621,9 +700,12 @@ module ISM
                 return :rebuild
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getSoftwareStatus",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getAvailableSoftware(userEntry : String) : ISM::AvailableSoftware
@@ -641,9 +723,12 @@ module ISM
 
             return ISM::AvailableSoftware.new
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getAvailableSoftware",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         #Add process to search only by name
@@ -708,9 +793,12 @@ module ISM
             #No match found
             return result
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getSoftwareInformation",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def checkEnteredArguments
@@ -740,17 +828,16 @@ module ISM
                 showErrorUnknowArgument
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "checkEnteredArguments",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def printNeedSuperUserAccessNotification
             puts "#{ISM::Default::CommandLine::NeedSuperUserAccessText.colorize(:yellow)}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showErrorUnknowArgument
@@ -758,39 +845,24 @@ module ISM
             puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
                     "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
                     "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printProcessNotification(message : String)
             puts "#{ISM::Default::CommandLine::ProcessNotificationCharacters.colorize(:green)} #{message}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printSubProcessNotification(message : String)
             puts "\t| #{message}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printErrorNotification(message : String, error)
             puts
             puts "[#{"!".colorize(:red)}] #{message.colorize(Colorize::ColorRGB.new(255,100,100))}"
+
             if typeof(error) == Exception
                 puts "[#{"!".colorize(:red)}] "
                 puts "#{error.colorize(Colorize::ColorRGB.new(255,100,100))}"
             end
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printInternalErrorNotification(error : ISM::TaskBuildingProcessError)
@@ -813,10 +885,6 @@ module ISM
             puts separatorText
             puts errorText
             puts help
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printInstallerImplementationErrorNotification(software : ISM::SoftwareInformation, error : ISM::TaskBuildingProcessError)
@@ -841,18 +909,10 @@ module ISM
             puts separatorText
             puts errorText
             puts help
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfGetFileContentError(filePath : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printSystemCallErrorNotification(error : Exception)
@@ -877,10 +937,6 @@ module ISM
             puts separatorText
             puts errorText
             puts help
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printInformationNotificationTitle(name : String, version : String)
@@ -899,172 +955,88 @@ module ISM
             puts separatorText
             puts text
             puts separatorText
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printInformationNotification(message : String)
             puts "[#{"Info".colorize(:green)}] #{message}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def printInformationCodeNotification(message : String)
             puts "#{message.colorize(:magenta).back(Colorize::ColorRGB.new(80, 80, 80))}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfDownloadAdditions
             printProcessNotification(ISM::Default::CommandLine::DownloadAdditionsText)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::CheckText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfCheckAdditions
             printProcessNotification(ISM::Default::CommandLine::CheckAdditionsText)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::ExtractText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfExtractAdditions
             printProcessNotification(ISM::Default::CommandLine::ExtractAdditionsText)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::PatchText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfLocalPatch(patchName : String)
             printSubProcessNotification(ISM::Default::CommandLine::LocalPatchText+"#{patchName.colorize(:yellow)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::PrepareText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfBuild(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::BuildText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfPrepareInstallation(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::InstallText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfUpdateKernelOptionsDatabase(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfRecordNeededKernelOptions
             kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
 
             printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::CleanText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::UninstallText+"#{softwareInformation.name.colorize(:green)}")
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfDownloadError(link : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfConnexionError(link : String, error = nil)
@@ -1072,10 +1044,6 @@ module ISM
                                     link +
                                     ISM::Default::CommandLine::ErrorConnexionText2,
                                     error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfCheckError(archive : String, sha512 : String, error = nil)
@@ -1083,10 +1051,6 @@ module ISM
                                     archive +
                                     ISM::Default::CommandLine::ErrorCheckText2 +
                                     sha512, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfExtractError(archivePath : String, destinationPath : String ,error = nil)
@@ -1095,32 +1059,21 @@ module ISM
                                     ISM::Default::CommandLine::ErrorExtractText2 +
                                     destinationPath,
                                     error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfApplyPatchError(patchName : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfCopyFileError(path : String | Enumerable(String), targetPath : String, error = nil)
             if path.is_a?(Enumerable(String))
                 path = path.join(",")
+
             end
             printErrorNotification(ISM::Default::CommandLine::ErrorCopyFileText1 +
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyFileText2 +
                                    targetPath, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfCopyDirectoryError(path : String, targetPath : String, error = nil)
@@ -1128,35 +1081,25 @@ module ISM
                                    path +
                                    ISM::Default::CommandLine::ErrorCopyDirectoryText2 +
                                    targetPath, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfDeleteFileError(path : String | Enumerable(String), error = nil)
             if path.is_a?(Enumerable(String))
                 path = path.join(",")
             end
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, error)
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, error)
         end
 
         def notifyOfMoveFileError(path : String | Enumerable(String), newPath : String, error = nil)
             if path.is_a?(Enumerable(String))
                 path = path.join(",")
             end
+
             printErrorNotification( ISM::Default::CommandLine::ErrorMoveFileText1 +
                                     path +
                                     ISM::Default::CommandLine::ErrorMoveFileText2 +
                                     newPath, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfMakeDirectoryError(directory : String, error = nil)
@@ -1165,10 +1108,6 @@ module ISM
 
         def notifyOfDeleteDirectoryError(directory : String, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfMakeLinkUnknowTypeError(path : String, targetPath : String, linkType : Symbol, error = nil)
@@ -1178,10 +1117,6 @@ module ISM
                                     targetPath +
                                     ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText3 +
                                     linkType.to_s, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
@@ -1205,18 +1140,10 @@ module ISM
 
             printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
                                         error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def notifyOfUpdateKernelOptionsDatabaseError(software : ISM::SoftwareInformation, error = nil)
             printErrorNotification(ISM::Default::CommandLine::ErrorUpdateKernelOptionsDatabaseText+software.versionName, error)
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def resetCalculationAnimation
@@ -1319,9 +1246,12 @@ module ISM
                 @calculationStartingTime = Time.monotonic
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "playCalculationAnimation",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def cleanCalculationAnimation
@@ -1344,9 +1274,12 @@ module ISM
                 print "\033[1D"
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "cleanCalculationAnimation",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getRequestedSoftwares(list : Array(String), allowSearchByNameOnly = false) : Array(ISM::SoftwareInformation)
@@ -1362,9 +1295,12 @@ module ISM
 
             return softwaresList
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getRequestedSoftwares",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def setTerminalTitle(title : String)
@@ -1373,17 +1309,23 @@ module ISM
             end
             STDOUT << "\e]0; #{title}\e\\"
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "setTerminalTitle",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def resetTerminalTitle
             setTerminalTitle(@initialTerminalTitle)
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "resetTerminalTitle",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def exitProgram(code = 0)
@@ -1435,10 +1377,6 @@ module ISM
                                                                                                     size:       taskError.size,
                                                                                                     message:    taskError.message))
             end
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showNoMatchFoundMessage(wrongArguments : Array(String))
@@ -1446,20 +1384,12 @@ module ISM
             puts ISM::Default::CommandLine::NoMatchFoundAdvice
             puts
             puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showSoftwareNotInstalledMessage(wrongArguments : Array(String))
             puts ISM::Default::CommandLine::SoftwareNotInstalled + "#{wrongArguments.join(", ").colorize(:green)}"
             puts
             puts "#{ISM::Default::CommandLine::NotInstalledText.colorize(:green)}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showNoVersionAvailableMessage(wrongArguments : Array(String))
@@ -1467,46 +1397,26 @@ module ISM
             puts ISM::Default::CommandLine::NoVersionAvailableAdvice
             puts
             puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
 
         def showNoUpdateMessage
             puts "#{ISM::Default::CommandLine::NoUpdate.colorize(:green)}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showNoCleaningRequiredMessage
             puts "#{ISM::Default::CommandLine::NoCleaningRequiredMessage.colorize(:green)}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showSoftwareNeededMessage(wrongArguments : Array(String))
             puts ISM::Default::CommandLine::SoftwareNeeded + "#{wrongArguments.join(", ").colorize(:green)}"
             puts
             puts "#{ISM::Default::CommandLine::NeededText.colorize(:green)}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showSkippedUpdatesMessage
             puts "#{ISM::Default::CommandLine::SkippedUpdatesText.colorize(:yellow)}"
             puts
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareInformation, allowTitle = true)
@@ -1544,10 +1454,6 @@ module ISM
             if allowTitle
                 puts "\n"
             end
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showAmbiguousSearchMessage(matches : Array(String))
@@ -1562,10 +1468,6 @@ module ISM
             end
 
             puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
@@ -1595,10 +1497,6 @@ module ISM
             end
 
             puts "\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showMissingSelectedDependenciesMessage(fullName : String, version : String, dependencySelection : Array(Array(String)))
@@ -1614,46 +1512,26 @@ module ISM
             end
 
             puts "\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showTaskCompilationTitleMessage
             puts
             print "#{ISM::Default::CommandLine::TaskCompilationText}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showTaskCompilationFailedMessage
             cleanCalculationAnimation
             print "#{ISM::Default::CommandLine::TaskCompilationFailedText.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showCalculationDoneMessage
             cleanCalculationAnimation
             print "#{ISM::Default::CommandLine::CalculationDoneText.colorize(:green)}\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showCalculationTitleMessage
             puts
             print "#{ISM::Default::CommandLine::CalculationTitle}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showSoftwares(neededSoftwares : Array(ISM::SoftwareInformation), mode = :installation)
@@ -1717,10 +1595,6 @@ module ISM
             end
 
             puts "\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showInstallationQuestion(softwareNumber : Int32)
@@ -1731,10 +1605,6 @@ module ISM
             print   "#{ISM::Default::CommandLine::InstallQuestion}" +
                     "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showUninstallationQuestion(softwareNumber : Int32)
@@ -1745,10 +1615,6 @@ module ISM
             print   "#{ISM::Default::CommandLine::UninstallQuestion.colorize}" +
                     "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showUpdateQuestion(softwareNumber : Int32)
@@ -1759,10 +1625,6 @@ module ISM
             print   "#{ISM::Default::CommandLine::UpdateQuestion.colorize.mode(:underline)}" +
                     "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
                     "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def getUserAgreement : Bool
@@ -1780,25 +1642,34 @@ module ISM
 
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getUserAgreement",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def updateInstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
             setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} @#{port}:#{name}#{passNumber == 0 ? "" : " (Pass#{passNumber})"} /#{version}/")
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "updateInstallationTerminalTitle",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def updateUninstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String)
             setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::UninstallingText} @#{port}:#{name} /#{version}/")
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "updateUninstallationTerminalTitle",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def cleanBuildingDirectory(path : String)
@@ -1808,19 +1679,18 @@ module ISM
 
             Dir.mkdir_p(path)
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "cleanBuildingDirectory",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def showSeparator
             puts "\n"
             puts "#{ISM::Default::CommandLine::Separator.colorize(:green)}\n"
             puts "\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
@@ -1831,10 +1701,6 @@ module ISM
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
                     "#{">>".colorize(:light_magenta)}" +
                     "\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showEndSoftwareUninstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
@@ -1845,10 +1711,6 @@ module ISM
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
                     "#{">>".colorize(:light_magenta)}" +
                     "\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showInstallationDetailsMessage(softwareNumber : UInt32)
@@ -1872,10 +1734,6 @@ module ISM
                     "#{ISM::Default::CommandLine::NewFileNumberDetailText.colorize(:green)}: #{@totalInstalledFileNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
                     "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
             puts
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def recordInstallationDetails(directoryNumber : UInt128, symlinkNumber : UInt128, fileNumber : UInt128, totalSize : UInt128)
@@ -1884,9 +1742,12 @@ module ISM
             @totalInstalledFileNumber += fileNumber
             @totalInstalledSize += totalSize
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "recordInstallationDetails",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getRequiredLibraries : String
@@ -1905,9 +1766,12 @@ module ISM
 
             return requiredLibraries
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getRequiredDependencies",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getRequestedSoftwareFullVersionNames
@@ -1931,9 +1795,12 @@ module ISM
 
             return result
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getRequestedSoftwareFullVersionNames",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getRequiredTargets(neededSoftwares : Array(ISM::SoftwareInformation)) : String
@@ -2015,9 +1882,12 @@ module ISM
                     requiredTargetOptionsResult +
                     indexResult
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getRequiredTargets",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def makeLogDirectory(path : String)
@@ -2025,9 +1895,12 @@ module ISM
                 Dir.mkdir_p(path)
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "makeLogDirectory",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
@@ -2052,6 +1925,7 @@ module ISM
                     limit = targets.size
 
                     targets.each_with_index do |target, index|
+                        Ism.loadSystemInformationFile
 
                         information = target.information
                         port = information.port
@@ -2090,7 +1964,7 @@ module ISM
                             end
 
                             Ism.printSystemCallErrorNotification(error)
-                            Ism.exitProgram
+                            Ism.exitProgram(code: 1)
                         end
 
                         #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
@@ -2124,9 +1998,12 @@ module ISM
 
             runTasksFile(asBinary: Ism.settings.binaryTaskMode, logEnabled: true, softwareList: neededSoftwares)
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "startInstallationProcess",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def buildTasksFile
@@ -2150,12 +2027,15 @@ module ISM
 
                 showTaskCompilationFailedMessage
                 showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
-                exitProgram
+                exitProgram(code: 1)
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "buildTasksFile",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def runTasksFile(asBinary = true, logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
@@ -2185,12 +2065,15 @@ module ISM
             end
 
             if !process.success?
-                exitProgram
+                exitProgram(code: 1)
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "runTasksFile",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareInformation))
@@ -2208,6 +2091,7 @@ module ISM
 
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
+                    Ism.loadSystemInformationFile
                     Ism.loadSettingsFiles
                     Ism.loadSoftwareDatabase
                     Ism.loadInstalledSoftwareDatabase
@@ -2255,9 +2139,12 @@ module ISM
 
             runTasksFile
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "startUninstallationProcess",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def showStartSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
@@ -2267,10 +2154,6 @@ module ISM
                     "] #{ISM::Default::CommandLine::InstallingText} " +
                     "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)}#{passNumber == 0 ? "" : " (Pass#{passNumber})".colorize(:yellow)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def showStartSoftwareUninstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
@@ -2280,10 +2163,6 @@ module ISM
                     "] #{ISM::Default::CommandLine::UninstallingText} " +
                     "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def synchronizePorts
@@ -2300,9 +2179,12 @@ module ISM
 
             cleanCalculationAnimation
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "synchronizePorts",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Hash(String, ISM::SoftwareInformation)
@@ -2411,9 +2293,12 @@ module ISM
 
             return dependencyHash
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getRequiredDependencies",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getDependencyTree(software : ISM::SoftwareInformation, softwareList : Hash(String, ISM::SoftwareInformation), calculatedDependencies = Hash(String, Array(ISM::SoftwareInformation)).new) : Array(ISM::SoftwareInformation)
@@ -2464,9 +2349,12 @@ module ISM
 
             return dependencies.values
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getDependencyTree",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getDependencyTable(softwareList : Hash(String, ISM::SoftwareInformation)) : Hash(String, Array(ISM::SoftwareInformation))
@@ -2595,9 +2483,12 @@ module ISM
 
             return calculatedDependencies
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getDependencyTable",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getSortedDependencies(dependencyTable : Hash(String, Array(ISM::SoftwareInformation))) : Array(ISM::SoftwareInformation)
@@ -2606,17 +2497,23 @@ module ISM
 
             return result.map { |entry| entry[1][0]}
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getSortedDependencies",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def generateTasksFile(tasks : String)
             File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "generateTasksFile",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getNeededSoftwares : Array(ISM::SoftwareInformation)
@@ -2626,9 +2523,12 @@ module ISM
 
             return getSortedDependencies(dependencyTable)
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getNeededSoftwares",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getUnneededSoftwares : Array(ISM::SoftwareInformation)
@@ -2689,9 +2589,12 @@ module ISM
 
             return unneededSoftwares
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getUnneededSoftwares",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def getSoftwaresToUpdate : Array(ISM::SoftwareInformation)
@@ -2754,9 +2657,12 @@ module ISM
 
             return softwareToUpdate
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getSoftwaresToUpdate",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def addPatch(path : String, softwareVersionName : String) : Bool
@@ -2775,9 +2681,12 @@ module ISM
 
             return true
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "addPatch",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def deletePatch(patchName : String, softwareVersionName : String) : Bool
@@ -2791,9 +2700,12 @@ module ISM
 
             return true
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "deletePatch",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def runChrootTasks(chrootTasks, quiet = false) : Process::Status
@@ -2815,9 +2727,12 @@ module ISM
 
             return process
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "runChrootTasks",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
@@ -2870,9 +2785,12 @@ module ISM
 
             return process
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "runSystemCommand",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
@@ -2885,9 +2803,12 @@ module ISM
                 exitProgram
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "runFile",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         # setKernelOption(symbol : String, state : Symbol, value = String.new)
@@ -2907,9 +2828,12 @@ module ISM
 
             #return
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "getNeededKernelOptions",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def generateDefaultKernelConfig
@@ -2923,9 +2847,12 @@ module ISM
                 exitProgram
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "generateDefaultKernelConfig",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def generateKernelConfig
@@ -2943,9 +2870,12 @@ module ISM
                 exitProgram
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "generateKernel",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def installKernel
@@ -2959,49 +2889,32 @@ module ISM
                 exitProgram
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "installKernel",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def mainKernelName : String
             return selectedKernel.versionName.downcase
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def mainKernelHeadersName : String
             return "#{selectedKernel.name.downcase}-headers-#{selectedKernel.version.downcase}"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def mainKernelVersion : String
             return selectedKernel.version
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def kernelSourcesPath : String
             return "#{@settings.rootPath}usr/src/#{mainKernelName}/"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def kernelConfigPath : String
             return "#{kernelSourcesPath}/.config"
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def setKernelOption(symbol : String, state : Symbol, value = String.new)
@@ -3020,9 +2933,12 @@ module ISM
 
             runFile("#{kernelSourcesPath}/config",arguments,"#{kernelSourcesPath}/scripts")
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "setKernelOption",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
     end

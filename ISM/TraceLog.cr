@@ -13,11 +13,11 @@ module ISM
             end
 
             rescue exception
-            ISM::Error.show(className: "Core::Tracelog",
-                            functionName: "makeLogDirectory",
-                            errorTitle: "Execution failure",
-                            error: "Failed to execute the function",
-                            exception: exception)
+                ISM::Error.show(className: "Tracelog",
+                                functionName: "makeLogDirectory",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def self.record(accessor : String,
@@ -42,11 +42,11 @@ module ISM
             File.write("#{logDirectoryPath}#{ISM::Default::Filename::TraceLog}", record, mode: "a")
 
             rescue exception
-            ISM::Error.show(className: "Tracelog",
-                            functionName: "record",
-                            errorTitle: "Execution failure",
-                            error: "Failed to execute the function",
-                            exception: exception)
+                ISM::Error.show(className: "Tracelog",
+                                functionName: "record",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
     end

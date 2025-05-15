@@ -11,10 +11,6 @@ module ISM
 
         def self.filePath : String
             return Ism.settings.rootPath+ISM::Default::CommandLineMirrorsSettings::MirrorsSettingsFilePath
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def self.generateConfiguration(path = filePath)
@@ -22,9 +18,12 @@ module ISM
             self.new.to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLineMirrorsSettings",
+                                functionName: "generateConfiguration",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def self.loadConfiguration(path = filePath)
@@ -34,9 +33,12 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLineMirrorsSettings",
+                                functionName: "loadConfiguration",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
@@ -44,25 +46,27 @@ module ISM
             to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLineMirrorsSettings",
+                                functionName: "writeConfiguration",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def setDefaultMirror(@defaultMirror)
             writeConfiguration
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "CommandLineMirrorsSettings",
+                                functionName: "setDefaultMirror",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def sourcesLink : String
             return ISM::Mirror.sourcesLink(@defaultMirror)
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
     end

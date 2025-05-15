@@ -24,9 +24,12 @@ module ISM
 
             return from_json(File.read(path))
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "PatchInformation",
+                                functionName: "loadConfiguration",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def writeConfiguration(path = self.class.filePath)
@@ -34,9 +37,12 @@ module ISM
             to_json(file)
             file.close
 
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
+            rescue exception
+                ISM::Error.show(className: "PatchInformation",
+                                functionName: "writeConfiguration",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
     end
