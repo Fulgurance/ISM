@@ -1014,11 +1014,11 @@ module ISM
         end
 
         def notifyOfDeploy
-            printSubProcessNotification(ISM::Default::CommandLine::DeployText+"#{patchName.colorize(:green)}")
+            printSubProcessNotification(ISM::Default::CommandLine::DeployText)
         end
 
         def notifyOfUpdateSystemCache
-            printSubProcessNotification(ISM::Default::CommandLine::UpdateSystemCacheText+"#{patchName.colorize(:green)}")
+            printSubProcessNotification(ISM::Default::CommandLine::UpdateSystemCacheText)
         end
 
         def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
