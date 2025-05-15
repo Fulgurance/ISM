@@ -1478,33 +1478,51 @@ module ISM
             puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
         end
 
-        def showInextricableDependenciesMessage(dependencies : Array(ISM::SoftwareInformation))
-            puts
-            puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
-            puts "\n"
+        def showInextricableDependenciesMessage(treeArrays : Array(Array(ISM::SoftwareInformation)))
+            dependencyChains = Array(Array(ISM::SoftwareInformation)).new
 
-            dependencies.each do |software|
-                softwareText = "#{software.fullName.colorize(:magenta)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
-                optionsText = "{ "
+                #TO DO ?
+                dependencyChains = treeArrays
 
-                if software.options.empty?
-                    optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
-                end
+                puts
+                puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
+                puts "\n"
 
-                software.options.each do |option|
-                    if option.active
-                        optionsText += "#{option.name.colorize(:red)}"
-                    else
-                        optionsText += "#{option.name.colorize(:blue)}"
+                #Now we print each chains with in highlight the first and last one
+                dependencyChains.each do |chain|
+
+                    chain.each_with_index do |software, index|
+                        if index == 0
+                            color = :green
+                        else
+                            color = :magenta
+                        end
+
+                        softwareText = "#{software.fullName.colorize(color)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/ "
+                        optionsText = "{ "
+
+                        if software.options.empty?
+                            optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                        end
+
+                        software.options.each do |option|
+                            if option.active
+                                optionsText += "#{option.name.colorize(:red)}"
+                            else
+                                optionsText += "#{option.name.colorize(:blue)}"
+                            end
+                            optionsText += " "
+                        end
+                        optionsText += "}"
+
+                        puts "\t#{softwareText} #{optionsText}\n"
                     end
-                    optionsText += " "
+
+                    puts "\n"
+
                 end
-                optionsText += "}"
 
-                puts "\t" + softwareText + " " + optionsText + "\n"
-            end
-
-            puts "\n"
+                puts "\n"
         end
 
         def showMissingSelectedDependenciesMessage(fullName : String, version : String, dependencySelection : Array(Array(String)))
@@ -2608,7 +2626,7 @@ module ISM
                             #Inextricable dependency case
                             else
                                 showCalculationDoneMessage
-                                showInextricableDependenciesMessage([calculatedDependencies[key1][0],calculatedDependencies[key2][0]])
+                                showInextricableDependenciesMessage([calculatedDependencies[key1],calculatedDependencies[key2]])
                                 exitProgram
                             end
 
