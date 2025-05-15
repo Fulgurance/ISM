@@ -128,6 +128,7 @@ module ISM
             Options = [ ISM::Option::Help.new,
                         ISM::Option::Version.new,
                         ISM::Option::Software.new,
+                        ISM::Option::System.new,
                         ISM::Option::Port.new,
                         ISM::Option::Settings.new]
 
