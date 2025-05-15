@@ -6,12 +6,14 @@ module ISM
         property mainSourceDirectoryName : String
         property buildDirectory : Bool
         property buildDirectoryNames : Hash(String,String)
+        property additions : Array(String)
 
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.loadConfiguration(informationPath)
             @mainSourceDirectoryName = ISM::Default::Software::SourcesDirectoryName
             @buildDirectory = false
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
+            @additions = Array(String).new
         end
 
         def recordCrossToolchainAsFullyBuilt
@@ -285,6 +287,50 @@ module ISM
             downloadSources
             downloadSourcesMd5sum
 
+            if !@additions.empty?
+                downloadAdditions
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def downloadAdditions
+            Ism.notifyOfDownloadAdditions
+
+            downloadAdditionalSources
+            downloadAdditionalSourcesSha512
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def downloadAdditionalSources
+            @additions.each do |link|
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+
+                downloadFile(   link,
+                                archiveName,
+                                ISM::Default::Software::ArchiveExtensionName)
+            end
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def downloadAdditionalSourcesSha512
+            @additions.each do |link|
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+                sha512Link = "#{link.gsub(ISM::Default::Software::ArchiveExtensionName,"")}#{ISM::Default::Software::ArchiveSha512ExtensionName}"
+
+                downloadFile(   sha512Link,
+                                archiveName,
+                                ISM::Default::Software::ArchiveSha512ExtensionName)
+            end
+
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
@@ -405,6 +451,10 @@ module ISM
 
             checkSourcesMd5sum
 
+            if !@additions.empty?
+                checkAdditionsSha512
+            end
+
             rescue error
                 Ism.printSystemCallErrorNotification(error)
                 Ism.exitProgram
@@ -413,6 +463,19 @@ module ISM
         def checkSourcesMd5sum
             checkFile(  workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName,
                         getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesMd5sumArchiveName).strip)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def checkAdditionsSha512
+            @additions.each do |link|
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+
+                checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
+                            sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
+            end
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
@@ -439,6 +502,10 @@ module ISM
 
             extractSources
 
+            if !@additions.empty?
+                extractAdditions
+            end
+
             #Copy of the current available patches from the port
             if Dir.exists?(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName)
                 copyDirectoryNoChroot(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
@@ -452,6 +519,20 @@ module ISM
         def extractSources
             extractArchive(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesArchiveName, workDirectoryPathNoChroot)
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesDirectoryName)
+
+            rescue error
+                Ism.printSystemCallErrorNotification(error)
+                Ism.exitProgram
+        end
+
+        def extractAdditions
+            Ism.notifyOfExtractAdditions
+
+            @additions.each do |link|
+                archiveName = link.lchop(link[0..link.rindex("/")])
+
+                extractArchive("#{workDirectoryPathNoChroot}/#{archiveName}", workDirectoryPathNoChroot)
+            end
 
             rescue error
                 Ism.printSystemCallErrorNotification(error)
