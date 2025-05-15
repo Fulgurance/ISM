@@ -47,13 +47,6 @@ module ISM
                     error.line_number.to_s}".colorize(:yellow)
             return self.new
         end
-
-        rescue exception
-                ISM::Error.show(className: "SoftwareInformation",
-                                functionName: "loadConfiguration",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
     end
 
     def writeConfiguration(path : String)
