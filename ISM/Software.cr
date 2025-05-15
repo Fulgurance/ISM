@@ -16,6 +16,10 @@ module ISM
             @additions = Array(String).new
         end
 
+        def autoDeployServices
+            return Ism.settings.autoDeployServices
+        end
+
         def systemId : String
             return ISM::Default::CommandLine::Id.to_s
         end
