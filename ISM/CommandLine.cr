@@ -2792,6 +2792,16 @@ module ISM
                                         env: environmentHash)
             end
 
+            #TRACELOG-------------------------------------------------------------
+            ISM::TraceLog.record(   accessor:   "CommandLine",
+                                    function:   "runSystemCommand",
+                                    message:    <<-TEXT
+                                    Running command:
+                                    #{@installByChroot ? chrootCommand : command}
+                                    TEXT
+            )
+            #-------------------------------------------------------------TRACELOG
+
             return process
 
             rescue exception
