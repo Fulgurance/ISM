@@ -1054,11 +1054,11 @@ module ISM
                 exitProgram
         end
 
-        def notifyOfCheckError(archive : String, md5sum : String, error = nil)
+        def notifyOfCheckError(archive : String, sha512 : String, error = nil)
             printErrorNotification( ISM::Default::CommandLine::ErrorCheckText1 +
                                     archive +
                                     ISM::Default::CommandLine::ErrorCheckText2 +
-                                    md5sum, error)
+                                    sha512, error)
 
             rescue error
                 printSystemCallErrorNotification(error)
