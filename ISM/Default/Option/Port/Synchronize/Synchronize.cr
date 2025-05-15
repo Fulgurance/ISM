@@ -4,12 +4,12 @@ module ISM
 
         module Option
 
-            module SoftwareSynchronize
+            module PortSynchronize
 
                 ShortText = "-sy"
                 LongText = "synchronize"
-                Description = "Synchronize the software database"
-                SynchronizationTitle = "ISM start to synchronizing: "
+                Description = "Synchronize the port database"
+                SynchronizationTitle = "#{ISM::Default::CommandLine::Name.upcase} start to synchronizing: "
                 SynchronizationDoneText = "Done !"
                 SynchronizedText = "The database is synchronized"
                 NewPortsText = "New added ports:"
