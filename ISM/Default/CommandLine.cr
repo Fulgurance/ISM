@@ -29,7 +29,7 @@ module ISM
             CheckText = "Checking "
             CheckAdditionsText = "Checking additions"
             ExtractText = "Extracting "
-            ExtractAdditions = "Extracting additions"
+            ExtractAdditionsText = "Extracting additions"
             PatchText = "Patching "
             LocalPatchText = "Applying local patch added by the user "
             PrepareText =  "Preparing " 
