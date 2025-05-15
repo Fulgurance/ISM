@@ -37,6 +37,8 @@ module ISM
             ConfigureText = "Configuring "
             BuildText = "Building "
             PrepareInstallationText = "Preparing installation for "
+            Deploy = "Deploying"
+            UpdateSystemCacheText = "Updating system caches"
             InstallText = "Installing "
             RecordNeededKernelOptionsText = "Recording needed kernel options for "
             CleanText = "Cleaning "

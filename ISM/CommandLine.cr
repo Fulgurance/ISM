@@ -1013,6 +1013,14 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
         end
 
+        def notifyOfDeploy
+            printSubProcessNotification(ISM::Default::CommandLine::DeployText+"#{patchName.colorize(:green)}")
+        end
+
+        def notifyOfUpdateSystemCache
+            printSubProcessNotification(ISM::Default::CommandLine::UpdateSystemCacheText+"#{patchName.colorize(:green)}")
+        end
+
         def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
             printProcessNotification(ISM::Default::CommandLine::InstallText+"#{softwareInformation.name.colorize(:green)}")
         end
@@ -1943,6 +1951,7 @@ module ISM
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
                         begin
+                            target.setup
                             target.download
                             target.check
                             target.extract

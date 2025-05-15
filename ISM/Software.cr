@@ -283,6 +283,9 @@ module ISM
                 Ism.exitProgram
         end
 
+        def setup
+        end
+
         def download
             Ism.notifyOfDownload(@information)
 
@@ -1604,6 +1607,25 @@ module ISM
                 Ism.exitProgram
         end
 
+        def updateSystemCache
+            Ism.notifyOfUpdateSystemCache
+
+            if commandIsAvailable("ldconfig") && systemHandleUserAccess
+                runLdconfigCommand
+            end
+
+            rescue exception
+            ISM::Error.show(className: "Software",
+                            functionName: "updateSystemCache",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+        end
+
+        def deploy
+            Ism.notifyOfDeploy
+        end
+
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
 
@@ -1637,6 +1659,12 @@ module ISM
             if stripFiles
                 stripFileListNoChroot(fileList)
             end
+
+            #Update library cache
+            updateSystemCache
+
+            #Run post installation process
+            deploy
 
             if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
                 Ism.addSoftwareToFavouriteGroup(@information.fullVersionName)
