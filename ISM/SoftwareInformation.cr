@@ -401,6 +401,7 @@ module ISM
 
     def archiveSha512ExtensionName : String
         return ISM::Default::SoftwareInformation::ArchiveSha512ExtensionName
+    end
 
     def sourcesLink : String
         return Ism.mirrorsSettings.sourcesLink+archiveName
