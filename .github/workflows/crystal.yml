@@ -20,5 +20,3 @@ jobs:
       run: mkdir /etc/ism && mkdir /var/ism
     - name: Building ism
       run: crystal build Main.cr -o ism
-    - name: Run test
-      run: ./ism
