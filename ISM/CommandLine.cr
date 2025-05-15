@@ -1941,6 +1941,7 @@ module ISM
                         version = information.version
                         passNumber = information.getEnabledPassNumber
                         fullVersionName = information.fullVersionName
+                        coloredFullVersionName = \"#\{information.fullName.colorize(:magenta)} /#\{version.colorize(Colorize::ColorRGB.new(255,100,100))}/\"
 
                         #START INSTALLATION PROCESS
 
@@ -1950,30 +1951,162 @@ module ISM
 
                         Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
 
+                        #Setup
                         begin
                             target.setup
-                            target.download
-                            target.check
-                            target.extract
-                            target.patch
-                            target.prepare
-                            target.configure
-                            target.build
-                            target.prepareInstallation
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
 
+                            ISM::Error.show(className: "Software",
+                                            functionName: "setup",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"setup".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.download
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "download",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"download".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.check
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "check",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"check".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.extract
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "extract",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"extract".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.patch
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "patch",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"patch".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.prepare
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "prepare",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"prepare".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.configure
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "configure",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"configure".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.build
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "build",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"build".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.prepareInstallation
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "prepareInstallation",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"prepareInstallation".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
                             directoryNumber, symlinkNumber, fileNumber, totalSize = target.recordInstallationInformation
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
 
+                            ISM::Error.show(className: "Software",
+                                            functionName: "recordInstallationInformation",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"recordInstallationInformation".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
                             target.install
-                            target.recordNeededKernelOptions
-                            target.clean
-                        rescue error
-                            if File.exists?(target.information.installedFilePath)
-                                Ism.uninstallSoftware(target.information)
-                            end
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
 
-                            Ism.printSystemCallErrorNotification(error)
-                            Ism.exitProgram(code: 1)
+                            ISM::Error.show(className: "Software",
+                                            functionName: "install",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"install".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.recordNeededKernelOptions
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "recordNeededKernelOptions",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"recordNeededKernelOptions".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
+                        end
+
+                        begin
+                            target.clean
+                        rescue exception
+                            Ism.uninstallSoftware(target.information)
+
+                            ISM::Error.show(className: "Software",
+                                            functionName: "clean",
+                                            errorTitle: "Installation task failed",
+                                            error: "The #\{"clean".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
                         end
 
                         #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
