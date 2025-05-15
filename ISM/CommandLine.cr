@@ -1386,9 +1386,9 @@ module ISM
                 exitProgram
         end
 
-        def exitProgram
+        def exitProgram(code = 0)
             resetTerminalTitle
-            exit 1
+            exit code
         end
 
         #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
