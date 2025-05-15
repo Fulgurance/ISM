@@ -26,7 +26,7 @@ module ISM
                         component.options.each_with_index do |option, index|
                             if option.active
 
-                                enabledOptions += "#{index > 0 ? " " : ""}#{option.name}#{index < (component.options.size-2) ? "," : ""}"
+                                enabledOptions += "#{index > 0 ? " " : ""}#{option.name}#{index < (component.options.size-1) ? "," : ""}"
 
                             end
                         end
