@@ -2880,16 +2880,32 @@ module ISM
             return "#{taskRelativeDirectoryPath}#{ISM::Default::Filename::Task}"
         end
 
-        def taskAbsoluteDirectoryPath
+        def taskAbsoluteDirectoryPath : String
             return "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}"
         end
 
-        def taskAbsoluteFilePath
+        def taskAbsoluteFilePath : String
             return "#{taskAbsoluteDirectoryPath}#{ISM::Default::Filename::Task}"
         end
 
-        # def runTasks(tasks, quiet = false, asRoot = false, viaChroot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
-        def runTasks(tasks, quiet = false, viaChroot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
+        def hostSystemInformation : ISM::CommandLineSystemInformation
+            filePath = "/#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}"
+
+            return ISM::CommandLineSystemInformation.loadConfiguration(filePath)
+        end
+
+        def targetSystemInformation : ISM::CommandLineSystemInformation
+            filePath = "#{@settings.rootPath}#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}"
+
+            return ISM::CommandLineSystemInformation.loadConfiguration(filePath)
+        end
+
+        def runTasks(   tasks : String,
+                        asRoot = false,
+                        viaChroot = false,
+                        quiet = false) : Process::Status
+            quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
+
             # We first check if there is any task left
             if File.exists?("#{taskAbsoluteFilePath}")
                 process = Process.run(  command: "sudo rm #{taskAbsoluteFilePath}",
@@ -2903,23 +2919,23 @@ module ISM
             File.write(taskAbsoluteFilePath, tasks)
 
             process = Process.run(  command:    "sudo chmod +x #{taskAbsoluteFilePath}",
-                                    input:      (quiet ? Process::Redirect::Close : input),
-                                    output:     (quiet ? Process::Redirect::Close : output),
-                                    error:      (quiet ? Process::Redirect::Close : error),
+                                    input:      quietMode,
+                                    output:     quietMode,
+                                    error:      quietMode,
                                     shell:      true)
 
-            # noChrootCommand = (asRoot ? "sudo" : "")
-            # viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{ISM::Default::CommandLine::SystemUserId}:#{ISM::Default::CommandLine::SystemUserId}"} #{@settings.rootPath}"
+            if viaChroot
+                superuser = "--userspec=#{ISM::Default::CommandLine::SystemUserId}:#{ISM::Default::CommandLine::SystemUserId}"
 
-            # mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
-            #
-            # command = "#{mainCommand} #{taskRelativeFilePath}"
-            command = (viaChroot ? "HOME=/var/lib/ism sudo chroot #{@settings.rootPath} #{taskRelativeFilePath}" : taskAbsoluteFilePath)
+                command = "HOME=/var/lib/ism sudo chroot #{superuser} #{@settings.rootPath} #{taskRelativeFilePath}"
+            else
+                command = "#{asRoot ? "sudo" : ""} #{taskAbsoluteFilePath}"
+            end
 
             process = Process.run(  command:    command,
-                                    input:      (quiet ? Process::Redirect::Close : input),
-                                    output:     (quiet ? Process::Redirect::Close : output),
-                                    error:      (quiet ? Process::Redirect::Close : error),
+                                    input:      quietMode,
+                                    output:     quietMode,
+                                    error:      quietMode,
                                     shell:      true)
 
             return process
@@ -2938,8 +2954,15 @@ module ISM
                                 exception: exception)
         end
 
-        def runSystemCommand(command : String, path = "/", environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
+        def runSystemCommand(   command : String,
+                                path = "/", environment = Hash(String, String).new,
+                                environmentFilePath = String.new,
+                                quiet = false,
+                                asRoot = false,
+                                viaChroot = true) : Process::Status
+
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
+            rootMode = false
 
             environmentCommand = String.new
             profile = String.new
@@ -2952,12 +2975,14 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
-            if @settings.installByChroot || !@settings.installByChroot && @settings.rootPath == "/"
+            if targetSystemInformation.handleChroot || !targetSystemInformation.handleChroot && @settings.rootPath == "/"
                 profile = <<-PROFILE
                 if \[ -f "/etc/profile" \]; then
                     source /etc/profile
                 fi
                 PROFILE
+
+                rootMode = asRoot
             else
                 profile = <<-PROFILE
                 umask 022
@@ -2975,7 +3000,8 @@ module ISM
             TASKS
 
             process = runTasks( tasks: tasks,
-                                viaChroot: @settings.installByChroot,
+                                asRoot: rootMode,
+                                viaChroot: targetSystemInformation.handleChroot,
                                 quiet: quiet)
 
             #TRACELOG-------------------------------------------------------------

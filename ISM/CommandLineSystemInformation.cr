@@ -5,8 +5,10 @@ module ISM
         include JSON::Serializable
 
         property crossToolchainFullyBuilt : Bool
+        property handleChroot : Bool
 
-        def initialize(@crossToolchainFullyBuilt = false)
+        def initialize( @crossToolchainFullyBuilt = false,
+                        @handleChroot = false)
         end
 
         def self.filePath : String
@@ -60,6 +62,17 @@ module ISM
             rescue exception
                 ISM::Error.show(className: "CommandLineSystemInformation",
                                 functionName: "setCrossToolchainFullyBuilt",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def setHandleChroot(@handleChroot)
+            writeConfiguration
+
+            rescue exception
+                ISM::Error.show(className: "CommandLineSystemInformation",
+                                functionName: "setHandleChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)

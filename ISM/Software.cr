@@ -615,7 +615,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String)
-            FileUtils.cp(path, targetPath)
+            Ism.runSystemCommand(command: "cp #{path} #{targetPath}")
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -627,7 +627,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String)
-            FileUtils.cp_r(path, targetPath)
+            Ism.runSystemCommand(command: "cp -R #{path} #{targetPath}")
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -639,7 +639,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String)
-            FileUtils.rm(path)
+            Ism.runSystemCommand(command: "rm #{path}")
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -651,7 +651,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String)
-            FileUtils.mv(path, newPath)
+            Ism.runSystemCommand(command: "mv #{path} #{newPath}")
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -662,8 +662,8 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def makeDirectoryNoChroot(directory : String)
-            FileUtils.mkdir_p(directory)
+        def makeDirectoryNoChroot(path : String)
+            Ism.runSystemCommand(command: "mkdir -p #{path}")
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -674,8 +674,9 @@ module ISM
         end
 
         #Special function to improve performance (Internal use only)
-        def deleteDirectoryNoChroot(directory : String)
-            FileUtils.rm_r(directory)
+        def deleteDirectoryNoChroot(path : String)
+            Ism.runSystemCommand(   command: "rm -r #{path}",
+                                    viaChroot: false)
 
             rescue exception
                 ISM::Error.show(className: "Software",
