@@ -2870,7 +2870,7 @@ module ISM
 
         #Relative to chroot
         def taskRelativeDirectoryPath : String
-            root = ((viaChroot || @settings.installByChroot && @settings.rootPath != "/") ? "/" : @settings.rootPath)
+            root = ((@settings.installByChroot || !@settings.installByChroot && @settings.rootPath != "/") ? "/" : @settings.rootPath)
 
             return "#{root}#{ISM::Default::Path::TemporaryDirectory}"
         end
