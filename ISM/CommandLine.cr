@@ -2868,37 +2868,81 @@ module ISM
                                 exception: exception)
         end
 
-        def runChrootTasks(chrootTasks, quiet = false) : Process::Status
-            quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
+        #Relative to chroot
+        def taskRelativeDirectoryPath : String
+            root = ((viaChroot || @settings.installByChroot && @settings.rootPath != "/") ? "/" : @settings.rootPath)
 
-            File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
+            return "#{root}#{ISM::Default::Path::TemporaryDirectory}"
+        end
 
-            process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
-                                    output: quietMode,
-                                    error: quietMode,
-                                    shell: true)
+        #Relative to chroot
+        def taskRelativeFilePath : String
+            return "#{taskRelativeDirectoryPath}#{ISM::Default::Filename::Task}"
+        end
 
-            process = Process.run(  "chroot #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
-                                    output: quietMode,
-                                    error: quietMode,
-                                    shell: true)
+        def taskAbsoluteDirectoryPath
+            return "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}"
+        end
 
-            File.delete(@settings.rootPath+ISM::Default::Filename::Task)
+        def taskAbsoluteFilePath
+            return "#{taskAbsoluteDirPath}#{ISM::Default::Filename::Task}"
+        end
+
+        # def runTasks(tasks, quiet = false, asRoot = false, viaChroot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
+        def runTasks(tasks, quiet = false, viaChroot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
+            # We first check if there is any task left
+            if File.exists?("#{taskAbsoluteFilePath}")
+                process = Process.run(  command: "sudo rm #{taskAbsoluteFilePath}",
+                                        shell: true)
+            end
+
+            if !Dir.exists?(taskAbsoluteDirectoryPath)
+                Dir.mkdir_p(taskAbsoluteDirectoryPath)
+            end
+
+            File.write(taskAbsoluteFilePath, tasks)
+
+            process = Process.run(  command:    "sudo chmod +x #{taskAbsoluteFilePath}",
+                                    input:      (quiet ? Process::Redirect::Close : input),
+                                    output:     (quiet ? Process::Redirect::Close : output),
+                                    error:      (quiet ? Process::Redirect::Close : error),
+                                    shell:      true)
+
+            # noChrootCommand = (asRoot ? "sudo" : "")
+            # viaChrootCommand = "HOME=/var/lib/ism sudo chroot #{asRoot ? "" : "--userspec=#{ISM::Default::CommandLine::SystemUserId}:#{ISM::Default::CommandLine::SystemUserId}"} #{@settings.rootPath}"
+
+            # mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
+            #
+            # command = "#{mainCommand} #{taskRelativeFilePath}"
+            command = (viaChroot ? "HOME=/var/lib/ism sudo chroot #{@settings.rootPath} #{taskRelativeFilePath}" : taskRelativeFilePath)
+
+            process = Process.run(  command:    command,
+                                    input:      (quiet ? Process::Redirect::Close : input),
+                                    output:     (quiet ? Process::Redirect::Close : output),
+                                    error:      (quiet ? Process::Redirect::Close : error),
+                                    shell:      true)
 
             return process
 
             rescue exception
+                raisedError =  <<-ERROR
+                System command failure
+                command: #{command}
+                viaChroot: #{viaChroot}
+                ERROR
+
                 ISM::Error.show(className: "CommandLine",
-                                functionName: "runChrootTasks",
+                                functionName: "runTasks",
                                 errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
+                                error: "Failed to execute the following process:\n#{raisedError}",
                                 exception: exception)
         end
 
-        def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
+        def runSystemCommand(command : String, path = "/", environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
             quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
 
             environmentCommand = String.new
+            profile = String.new
 
             if environmentFilePath != ""
                 environmentCommand = "source \"#{environmentFilePath}\" && "
@@ -2908,40 +2952,31 @@ module ISM
                 environmentCommand += "#{key}=\"#{environment[key]}\" "
             end
 
-            if @settings.installByChroot
-                chrootCommand = <<-CODE
-                #!/bin/bash
-
+            if @settings.installByChroot || !@settings.installByChroot && @settings.rootPath == "/"
+                profile = <<-PROFILE
                 if \[ -f "/etc/profile" \]; then
                     source /etc/profile
                 fi
-
-                cd #{path} && #{environmentCommand} #{command}
-                CODE
-
-                process = runChrootTasks(chrootCommand, quiet)
+                PROFILE
             else
-                environmentHash = Hash(String, String).new
-
-                #Substitute all environment variables by the real value
-                environment.keys.each do |key|
-                    environmentHash[key] = environment[key].gsub(/\$([A-Z0-9]+)/) do |_, match|
-                        begin
-                            ENV[match[1]]
-                        rescue
-                            #Return empty string if the var don't exist
-                            String.new
-                        end
-                    end
-                end
-
-                process = Process.run(  command,
-                                        output: quietMode,
-                                        error: quietMode,
-                                        shell: true,
-                                        chdir: (path == "" ? nil : path),
-                                        env: environmentHash)
+                profile = <<-PROFILE
+                umask 022
+                LC_ALL=POSIX
+                PATH=#{@settings.toolsPath}/bin:/usr/bin:/usr/sbin
+                PROFILE
             end
+
+            tasks = <<-TASKS
+            #!/bin/bash
+
+            #{profile}
+
+            cd #{path} && #{environmentCommand} #{command}
+            TASKS
+
+            process = runTasks( tasks: tasks,
+                                viaChroot: @settings.installByChroot,
+                                quiet: quiet)
 
             #TRACELOG-------------------------------------------------------------
             ISM::TraceLog.record(   accessor:   "CommandLine",
@@ -2962,6 +2997,101 @@ module ISM
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
+
+        # def runChrootTasks(chrootTasks, quiet = false) : Process::Status
+        #     quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
+        #
+        #     File.write(@settings.rootPath+ISM::Default::Filename::Task, chrootTasks)
+        #
+        #     process = Process.run(  "chmod +x #{@settings.rootPath}#{ISM::Default::Filename::Task}",
+        #                             output: quietMode,
+        #                             error: quietMode,
+        #                             shell: true)
+        #
+        #     process = Process.run(  "chroot #{@settings.rootPath} ./#{ISM::Default::Filename::Task}",
+        #                             output: quietMode,
+        #                             error: quietMode,
+        #                             shell: true)
+        #
+        #     File.delete(@settings.rootPath+ISM::Default::Filename::Task)
+        #
+        #     return process
+        #
+        #     rescue exception
+        #         ISM::Error.show(className: "CommandLine",
+        #                         functionName: "runChrootTasks",
+        #                         errorTitle: "Execution failure",
+        #                         error: "Failed to execute the function",
+        #                         exception: exception)
+        # end
+
+        # def runSystemCommand(command : String, path = @settings.installByChroot ? "/" : @settings.rootPath, environment = Hash(String, String).new, environmentFilePath = String.new, quiet = false) : Process::Status
+        #     quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
+        #
+        #     environmentCommand = String.new
+        #
+        #     if environmentFilePath != ""
+        #         environmentCommand = "source \"#{environmentFilePath}\" && "
+        #     end
+        #
+        #     environment.keys.each do |key|
+        #         environmentCommand += "#{key}=\"#{environment[key]}\" "
+        #     end
+        #
+        #     if @settings.installByChroot
+        #         chrootCommand = <<-CODE
+        #         #!/bin/bash
+        #
+        #         if \[ -f "/etc/profile" \]; then
+        #             source /etc/profile
+        #         fi
+        #
+        #         cd #{path} && #{environmentCommand} #{command}
+        #         CODE
+        #
+        #         process = runChrootTasks(chrootCommand, quiet)
+        #     else
+        #         environmentHash = Hash(String, String).new
+        #
+        #         #Substitute all environment variables by the real value
+        #         environment.keys.each do |key|
+        #             environmentHash[key] = environment[key].gsub(/\$([A-Z0-9]+)/) do |_, match|
+        #                 begin
+        #                     ENV[match[1]]
+        #                 rescue
+        #                     #Return empty string if the var don't exist
+        #                     String.new
+        #                 end
+        #             end
+        #         end
+        #
+        #         process = Process.run(  command,
+        #                                 output: quietMode,
+        #                                 error: quietMode,
+        #                                 shell: true,
+        #                                 chdir: (path == "" ? nil : path),
+        #                                 env: environmentHash)
+        #     end
+        #
+        #     #TRACELOG-------------------------------------------------------------
+        #     ISM::TraceLog.record(   accessor:   "CommandLine",
+        #                             function:   "runSystemCommand",
+        #                             message:    <<-TEXT
+        #                             Running command:
+        #                             #{Ism.settings.installByChroot ? chrootCommand : command}
+        #                             TEXT
+        #     )
+        #     #-------------------------------------------------------------TRACELOG
+        #
+        #     return process
+        #
+        #     rescue exception
+        #         ISM::Error.show(className: "CommandLine",
+        #                         functionName: "runSystemCommand",
+        #                         errorTitle: "Execution failure",
+        #                         error: "Failed to execute the function",
+        #                         exception: exception)
+        # end
 
         def runFile(file : String, arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
             requestedCommands = "./#{file} #{arguments}"
