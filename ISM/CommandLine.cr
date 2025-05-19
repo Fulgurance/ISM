@@ -2885,7 +2885,7 @@ module ISM
         end
 
         def taskAbsoluteFilePath
-            return "#{taskAbsoluteDirPath}#{ISM::Default::Filename::Task}"
+            return "#{taskAbsoluteDirectoryPath}#{ISM::Default::Filename::Task}"
         end
 
         # def runTasks(tasks, quiet = false, asRoot = false, viaChroot = false, input = Process::Redirect::Inherit, output = Process::Redirect::Inherit, error = Process::Redirect::Inherit) : Process::Status
