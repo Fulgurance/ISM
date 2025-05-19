@@ -28,6 +28,10 @@ module ISM
             Ism.systemInformation.setCrossToolchainFullyBuilt(true)
         end
 
+        def recordHandleChroot
+            Ism.systemInformation.setHandleChroot(true)
+        end
+
         def version : String
             return @information.version
         end
