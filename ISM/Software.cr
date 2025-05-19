@@ -979,10 +979,11 @@ module ISM
             end
         end
 
-        def runChmodCommand(arguments = String.new, path = String.new)
+        def runChmodCommand(arguments = String.new)
             requestedCommands = "chmod #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -992,10 +993,11 @@ module ISM
             end
         end
 
-        def runChownCommand(arguments = String.new, path = String.new)
+        def runChownCommand(arguments = String.new)
             requestedCommands = "chown #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1008,8 +1010,9 @@ module ISM
         def runUserAddCommand(arguments : String)
             requestedCommands = "useradd -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Process.run(  command: requestedCommands,
-                                    shell: true)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true,
+                                            viaChroot: false)
 
             if !process.success? && process.exit_code != 9
                 ISM::Error.show(className: "Software",
@@ -1022,8 +1025,9 @@ module ISM
         def runUserDelCommand(arguments : String)
             requestedCommands = "userdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Process.run(  command: requestedCommands,
-                                    shell: true)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true,
+                                            viaChroot: false)
 
             if !process.success? && process.exit_code != 9
                 ISM::Error.show(className: "Software",
@@ -1036,8 +1040,9 @@ module ISM
         def runGroupAddCommand(arguments : String)
             requestedCommands = "groupadd -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Process.run(  command: requestedCommands,
-                                    shell: true)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true,
+                                            viaChroot: false)
 
             if !process.success? && process.exit_code != 9
                 ISM::Error.show(className: "Software",
@@ -1050,8 +1055,9 @@ module ISM
         def runGroupDelCommand(arguments : String)
             requestedCommands = "groupdel -R #{Ism.settings.rootPath} #{arguments}"
 
-            process = Process.run(  command: requestedCommands,
-                                    shell: true)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true,
+                                            viaChroot: false)
 
             if !process.success? && process.exit_code != 9
                 ISM::Error.show(className: "Software",
@@ -1216,7 +1222,8 @@ module ISM
         def runPwconvCommand(arguments = String.new)
             requestedCommands = "pwconv #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1229,7 +1236,8 @@ module ISM
         def runGrpconvCommand(arguments = String.new)
             requestedCommands = "grpconv #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1242,7 +1250,8 @@ module ISM
         def runUdevadmCommand(arguments : String)
             requestedCommands = "udevadm #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1255,7 +1264,8 @@ module ISM
         def runDbusUuidgenCommand(arguments = String.new)
             requestedCommands = "dbus-uuidgen #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1281,7 +1291,8 @@ module ISM
         def runInstallInfoCommand(arguments : String)
             requestedCommands = "install-info #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1320,7 +1331,8 @@ module ISM
         def runLocaledefCommand(arguments : String)
             requestedCommands = "localedef #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1346,7 +1358,8 @@ module ISM
         def runMakeCaCommand(arguments : String)
             requestedCommands = "make-ca #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1359,7 +1372,8 @@ module ISM
         def runInstallCatalogCommand(arguments : String)
             requestedCommands = "install-catalog #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1372,7 +1386,8 @@ module ISM
         def runXmlCatalogCommand(arguments : String)
             requestedCommands = "xmlcatalog #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1385,7 +1400,8 @@ module ISM
         def runLdconfigCommand(arguments = String.new)
             requestedCommands = "ldconfig #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1398,7 +1414,8 @@ module ISM
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1411,7 +1428,8 @@ module ISM
         def runGtkQueryImmodules3Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-3.0 #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1424,7 +1442,8 @@ module ISM
         def runGlibCompileSchemasCommand(arguments = String.new)
             requestedCommands = "glib-compile-schemas #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1502,7 +1521,8 @@ module ISM
         def runRcUpdateCommand(arguments = String.new)
             requestedCommands = "rc-update #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1515,7 +1535,8 @@ module ISM
         def runAlsactlCommand(arguments = String.new)
             requestedCommands = "alsactl #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1554,7 +1575,8 @@ module ISM
         def runZicCommand(arguments : String, path = String.new)
             requestedCommands = "zic #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands, path)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1618,7 +1640,8 @@ module ISM
         def runCpanCommand(arguments = String.new)
             requestedCommands = "cpan #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
@@ -1631,7 +1654,8 @@ module ISM
         def runDircolorsCommand(arguments = String.new)
             requestedCommands = "dircolors #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
