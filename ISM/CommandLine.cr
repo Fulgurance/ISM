@@ -2925,7 +2925,7 @@ module ISM
                                     shell:      true)
 
             if viaChroot
-                superuser = "--userspec=#{ISM::Default::CommandLine::SystemId.to_s}:#{ISM::Default::CommandLine::SystemId.to_s}"
+                superuser = "--userspec=#{ISM::Default::CommandLine::Id.to_s}:#{ISM::Default::CommandLine::Id.to_s}"
 
                 command = "HOME=/var/lib/ism sudo chroot #{superuser} #{@settings.rootPath} #{taskRelativeFilePath}"
             else
