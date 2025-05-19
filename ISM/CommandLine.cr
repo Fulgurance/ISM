@@ -2983,7 +2983,7 @@ module ISM
                                     function:   "runSystemCommand",
                                     message:    <<-TEXT
                                     Running command:
-                                    #{Ism.settings.installByChroot ? chrootCommand : command}
+                                    #{tasks}
                                     TEXT
             )
             #-------------------------------------------------------------TRACELOG
