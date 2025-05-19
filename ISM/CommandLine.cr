@@ -2914,7 +2914,7 @@ module ISM
             # mainCommand = (viaChroot ? viaChrootCommand : noChrootCommand)
             #
             # command = "#{mainCommand} #{taskRelativeFilePath}"
-            command = (viaChroot ? "HOME=/var/lib/ism sudo chroot #{@settings.rootPath} #{taskRelativeFilePath}" : taskRelativeFilePath)
+            command = (viaChroot ? "HOME=/var/lib/ism sudo chroot #{@settings.rootPath} #{taskRelativeFilePath}" : taskAbsoluteFilePath)
 
             process = Process.run(  command:    command,
                                     input:      (quiet ? Process::Redirect::Close : input),
