@@ -7,7 +7,8 @@ module ISM
             Title = "Ingenius System Manager"
             Name = "ism"
             Id = 250
-            NeedSuperUserAccessText = "ISM need superuser access to run this command"
+            RanAsSuperUserText = "ISM can't be run as root. Operation aborted."
+            NotRanAsMemberOfIsmGroupText = "The current user is not in the #{Name} group (id: #{Id.to_s}). Operation aborted."
             ErrorUnknowArgument = "ISM error: unknow argument "
             ErrorUnknowArgumentHelp1 = "Use "
             ErrorUnknowArgumentHelp2 = "ism --help "

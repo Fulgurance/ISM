@@ -64,6 +64,23 @@ module ISM
                                 exception: exception)
         end
 
+        def ranAsMemberOfIsmGroup : Bool
+            processResult = IO::Memory.new
+
+            Process.run(    command: "id -G",
+                            output: processResult,
+                            shell: true)
+
+            return processResult.to_s.strip.split(" ").includes?(ISM::Default::Core::Security::SystemId)
+
+            rescue exception
+            ISM::Error.show(className: "Core::Security",
+                            functionName: "ranAsMemberOfGroupIsm",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+        end
+
         def start
             loadSettingsFiles
             loadSystemInformationFile
@@ -825,8 +842,12 @@ module ISM
                                 exception: exception)
         end
 
-        def printNeedSuperUserAccessNotification
-            puts "#{ISM::Default::CommandLine::NeedSuperUserAccessText.colorize(:yellow)}"
+        def printRanAsSuperUserErrorNotification
+            puts "#{ISM::Default::CommandLine::RanAsSuperUserText.colorize(:yellow)}"
+        end
+
+        def printNotRanAsMemberOfIsmGroupErrorNotification
+            puts "#{ISM::Default::CommandLine::NotRanAsMemberOfIsmGroupText.colorize(:yellow)}"
         end
 
         def showErrorUnknowArgument

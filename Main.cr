@@ -3,7 +3,15 @@ require "./RequiredLibraries"
 Ism = ISM::CommandLine.new
 
 begin
-    Ism.start
+    if Ism.ranAsSuperUser
+        Ism.printRanAsSuperUserErrorNotification
+        Ism.exitProgram(code: 1)
+    elsif !Ism.ranAsMemberOfIsmGroup
+        Ism.printNotRanAsMemberOfIsmGroupErrorNotification
+        Ism.exitProgram(code: 1)
+    else
+        Ism.start
+    end
 rescue error
     ISM::Error.show(className: "None",
                     functionName: "None",
