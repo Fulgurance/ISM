@@ -3021,6 +3021,8 @@ module ISM
                                     message:    <<-TEXT
                                     Running command:
                                     #{tasks}
+                                    asRoot: #{rootMode}
+                                    viaChroot: #{targetSystemInformation.handleChroot && viaChroot}
                                     TEXT
             )
             #-------------------------------------------------------------TRACELOG
