@@ -3012,7 +3012,7 @@ module ISM
 
             process = runTasks( tasks: tasks,
                                 asRoot: rootMode,
-                                viaChroot: targetSystemInformation.handleChroot,
+                                viaChroot: targetSystemInformation.handleChroot && viaChroot,
                                 quiet: quiet)
 
             #TRACELOG-------------------------------------------------------------
