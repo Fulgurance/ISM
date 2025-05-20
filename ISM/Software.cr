@@ -1796,6 +1796,62 @@ module ISM
             Ism.notifyOfDeploy
         end
 
+        #Special function for the installation process without chroot (Internal use only)
+        def installFile(target : String, path : String, user : String, group : String, mode : String) : String
+
+            #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
+            # changeFileModeNoChroot(path, mode, asRoot: true)
+            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            requestedCommands = "/usr/bin/mv -f #{target} #{path}"
+
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    asRoot: true,
+                                    viaChroot: false)
+
+            rescue exception
+            ISM::Error.show(className: "Software",
+                            functionName: "installFile",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+        end
+
+        #Special function for the installation process without chroot (Internal use only)
+        def installDirectory(path : String, user : String, group : String, mode : String) : String
+
+            #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
+            # changeFileModeNoChroot(path, mode, asRoot: true)
+            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            requestedCommands = "/usr/bin/mkdir -p #{path}"
+
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    asRoot: true,
+                                    viaChroot: false)
+
+            rescue exception
+            ISM::Error.show(className: "Software",
+                            functionName: "installDirectory",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+        end
+
+        #Special function for the installation process without chroot (Internal use only)
+        def installSymlink(target : String, path : String) : String
+            requestedCommands = "/usr/bin/mv -f #{target} #{path}"
+
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    asRoot: true,
+                                    viaChroot: false)
+
+            rescue exception
+            ISM::Core::Error.show(  className: "Software",
+                                    functionName: "installSymlink",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+        end
+
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
 
@@ -1814,12 +1870,27 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
+                    securityDescriptor = @information.securityMap.descriptor(   path:  recordedFilePath,
+                                                                                realPath:   entry)
+
                     if File.directory?(entry) && !File.symlink?(entry)
                         if !Dir.exists?(finalDestination)
-                            makeDirectoryNoChroot(finalDestination)
+                            installDirectory(   path:   finalDestination,
+                                                user:   securityDescriptor.user,
+                                                group:  securityDescriptor.group,
+                                                mode:   securityDescriptor.mode)
                         end
                     else
-                        moveFileNoChroot(entry,finalDestination)
+                        if File.symlink?(entry)
+                            installSymlink( target: entry,
+                                            path:   finalDestination)
+                        else
+                            installFile(target: entry,
+                                        path:   finalDestination,
+                                        user:   securityDescriptor.user,
+                                        group:  securityDescriptor.group,
+                                        mode:   securityDescriptor.mode)
+                        end
                     end
 
                 end
