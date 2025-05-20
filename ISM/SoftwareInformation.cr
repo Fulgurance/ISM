@@ -517,6 +517,28 @@ module ISM
                                 exception: exception)
     end
 
+    def securityMapFilePath : String
+        return mainDirectoryPath + ISM::Default::Filename::SecurityMap
+
+        rescue exception
+            ISM::Error.show(className: "SoftwareInformation",
+                            functionName: "securityMapFilePath",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+    end
+
+    def securityMap : ISM::SoftwareSecurityMap
+        return ISM::SoftwareSecurityMap.loadConfiguration(securityMapFilePath)
+
+        rescue exception
+            ISM::Error.show(className: "SoftwareInformation",
+                            functionName: "securityMap",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+    end
+
   end
 
 end
