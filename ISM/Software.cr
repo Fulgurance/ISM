@@ -235,12 +235,10 @@ module ISM
             Ism.notifyOfSetupChrootPermissions
 
             commandList = [ #We first lock the ism tree to avoid any permission changes
-                            "/usr/bin/chattr +i #{Ism.settings.rootPath}/var/lib/ism",
                             "/usr/bin/chattr +i #{Ism.settings.sourcesPath}",
                             "/usr/bin/chattr +i #{Ism.settings.toolsPath}",
                             "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
                             "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",
                             "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
                             "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
                             #Second we set the whole tree as owner root
