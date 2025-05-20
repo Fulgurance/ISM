@@ -234,21 +234,30 @@ module ISM
         def setupChrootPermissions
             Ism.notifyOfSetupChrootPermissions
 
-            commandList = [ #First we set the whole tree as owner root
-                            "/usr/bin/chown -v -f -R root:root #{Ism.settings.rootPath}",
-                            #Then we restore the permissions for the ism tree
-                            "/usr/bin/chown -v -R #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}/var/lib/ism",
-                            "/usr/bin/chown -v -R #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.sourcesPath}",
-                            "/usr/bin/chown -v -R #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.toolsPath}",
-                            "/usr/bin/chown -v -R #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
-                            "/usr/bin/chown -v -R #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "/usr/bin/chown -v -R #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",
-                            "/usr/bin/chown -v -R #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "/usr/bin/chown -v -R #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+            commandList = [ #We first lock the ism tree to avoid any permission changes
+                            "/usr/bin/chattr +i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}/var/lib/ism",
+                            "/usr/bin/chattr +i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.sourcesPath}",
+                            "/usr/bin/chattr +i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.toolsPath}",
+                            "/usr/bin/chattr +i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+                            "/usr/bin/chattr +i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+                            "/usr/bin/chattr +i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",
+                            "/usr/bin/chattr +i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+                            "/usr/bin/chattr +i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
+                            #Second we set the whole tree as owner root
+                            "/usr/bin/chown -f -R root:root #{Ism.settings.rootPath}",
+                            #Then we unlock the ism tree
+                            "/usr/bin/chattr -i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}/var/lib/ism",
+                            "/usr/bin/chattr -i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.sourcesPath}",
+                            "/usr/bin/chattr -i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.toolsPath}",
+                            "/usr/bin/chattr -i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+                            "/usr/bin/chattr -i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+                            "/usr/bin/chattr -i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::LibraryDirectory}",
+                            "/usr/bin/chattr -i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+                            "/usr/bin/chattr -i #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
                             #Finally, we correct the rights for root dir and temporary dirs
-                            "/usr/bin/chmod -v 0750 #{Ism.settings.rootPath}/root",
-                            "/usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/tmp",
-                            "/usr/bin/chmod -v 1777 #{Ism.settings.rootPath}/var/tmp"]
+                            "/usr/bin/chmod 0750 #{Ism.settings.rootPath}/root",
+                            "/usr/bin/chmod 1777 #{Ism.settings.rootPath}/tmp",
+                            "/usr/bin/chmod 1777 #{Ism.settings.rootPath}/var/tmp"]
 
             commandList.each do |command|
                 process = Ism.runSystemCommand( command: command,
