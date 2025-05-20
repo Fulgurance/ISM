@@ -58,8 +58,8 @@ module ISM
                 mode = (directory ? @defaultConfiguration.directoryMode : @defaultConfiguration.fileMode)
             else
                 #Set everything with default ism user, group and mode for directory and file
-                user = ISM::Default::Core::Security::SystemId
-                group = ISM::Default::Core::Security::SystemId
+                user = ISM::Default::CommandLine::Id.to_s
+                group = ISM::Default::CommandLine::Id.to_s
                 mode = (directory ? ISM::Default::SoftwareSecurityMap::DirectoryMode : ISM::Default::SoftwareSecurityMap::FileMode)
             end
 
