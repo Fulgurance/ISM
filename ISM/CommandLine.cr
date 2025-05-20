@@ -979,6 +979,30 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
         end
 
+        def notifyOfSetupChrootPermissions
+            printSubProcessNotification(ISM::Default::CommandLine::SetupChrootPermissionsText)
+        end
+
+        def notifyOfPrepareChrootProc
+            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootProcText)
+        end
+
+        def notifyOfPrepareChrootSys
+            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootSysText)
+        end
+
+        def notifyOfPrepareChrootDev
+            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootProcDev)
+        end
+
+        def notifyOfPrepareChrootRun
+            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootRunText)
+        end
+
+        def notifyOfPrepareChrootNetwork
+            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootNetworkText)
+        end
+
         def notifyOfDownloadAdditions
             printProcessNotification(ISM::Default::CommandLine::DownloadAdditionsText)
         end
