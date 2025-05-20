@@ -3030,7 +3030,7 @@ module ISM
             if command.is_a?(String)
                 requestedCommands = "cd #{path} && #{environmentCommand} #{command}"
             else
-                requestedCommands = command.map { |entry| "cd #{path} && #{environmentCommand} #{entry}\n"}
+                requestedCommands = command.map { |entry| "cd #{path} && #{environmentCommand} #{entry} \n"}
             end
 
             tasks = <<-TASKS
