@@ -619,7 +619,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String)
-            Ism.runSystemCommand(command: "cp #{path} #{targetPath}")
+            Ism.runSystemCommand(   command: "cp #{path} #{targetPath}",
+                                    viaChroot: false)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -631,7 +632,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String)
-            Ism.runSystemCommand(command: "cp -R #{path} #{targetPath}")
+            Ism.runSystemCommand(   command: "cp -R #{path} #{targetPath}",
+                                    viaChroot: false)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -643,7 +645,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String)
-            Ism.runSystemCommand(command: "rm #{path}")
+            Ism.runSystemCommand(   command: "rm #{path}",
+                                    viaChroot: false)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -655,7 +658,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String)
-            Ism.runSystemCommand(command: "mv #{path} #{newPath}")
+            Ism.runSystemCommand(   command: "mv #{path} #{newPath}",
+                                    viaChroot: false)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -667,7 +671,8 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(path : String)
-            Ism.runSystemCommand(command: "mkdir -p #{path}")
+            Ism.runSystemCommand(   command: "mkdir -p #{path}",
+                                    viaChroot: false)
 
             rescue exception
                 ISM::Error.show(className: "Software",
