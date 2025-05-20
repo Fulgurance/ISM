@@ -1845,11 +1845,11 @@ module ISM
                                     viaChroot: false)
 
             rescue exception
-            ISM::Core::Error.show(  className: "Software",
-                                    functionName: "installSymlink",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+            ISM::Error.show(className: "Software",
+                            functionName: "installSymlink",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
         end
 
         def install(preserveLibtoolArchives = false, stripFiles = true)
