@@ -140,7 +140,8 @@ module ISM
                         ISM::Option::Software.new,
                         ISM::Option::System.new,
                         ISM::Option::Port.new,
-                        ISM::Option::Settings.new]
+                        ISM::Option::Settings.new,
+                        ISM::Option::Tools.new]
 
         end
 
