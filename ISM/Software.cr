@@ -1595,7 +1595,7 @@ module ISM
 
             makeDirectory("#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
             moveFile(path,"#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{name}")
-            runChmodCommand("+x #{name}","#{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}")
+            runChmodCommand("+x #{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{name}")
 
             rescue exception
                 ISM::Error.show(className: "Software",
