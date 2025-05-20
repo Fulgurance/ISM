@@ -250,11 +250,9 @@ module ISM
                             "/usr/bin/chmod 1777 #{Ism.settings.rootPath}/tmp",
                             "/usr/bin/chmod 1777 #{Ism.settings.rootPath}/var/tmp"]
 
-            commandList.each do |command|
-                process = Ism.runSystemCommand( command: command,
-                                                viaChroot: false,
-                                                asRoot: true)
-            end
+            process = Ism.runSystemCommand( command: commandList,
+                                            viaChroot: false,
+                                            asRoot: true)
 
             rescue exception
                 ISM::Error.show(className: "Software",

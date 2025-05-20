@@ -2989,7 +2989,7 @@ module ISM
                                 exception: exception)
         end
 
-        def runSystemCommand(   command : String,
+        def runSystemCommand(   command : String | Array(String),
                                 path = "/", environment = Hash(String, String).new,
                                 environmentFilePath = String.new,
                                 quiet = false,
@@ -3001,6 +3001,7 @@ module ISM
 
             environmentCommand = String.new
             profile = String.new
+            requestedCommands = String.new
 
             if environmentFilePath != ""
                 environmentCommand = "source \"#{environmentFilePath}\" && "
@@ -3026,12 +3027,18 @@ module ISM
                 PROFILE
             end
 
+            if command.is_a?(String)
+                requestedCommands = "cd #{path} && #{environmentCommand} #{command}"
+            else
+                requestedCommands = command.map { |entry| "cd #{path} && #{environmentCommand} #{entry}\n"}
+            end
+
             tasks = <<-TASKS
             #!/bin/bash
 
             #{profile}
 
-            cd #{path} && #{environmentCommand} #{command}
+            #{requestedCommands}
             TASKS
 
             process = runTasks( tasks: tasks,
