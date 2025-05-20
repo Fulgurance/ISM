@@ -234,21 +234,28 @@ module ISM
         def setupChrootPermissions
             Ism.notifyOfSetupChrootPermissions
 
-            commandList = [ #We first lock the ism tree to avoid any permission changes
-                            "/usr/bin/chattr +i #{Ism.settings.sourcesPath}",
-                            "/usr/bin/chattr +i #{Ism.settings.toolsPath}",
-                            "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
-                            "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "/usr/bin/chattr +i #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}",
-                            #Second we set the whole tree as owner root
-                            "/usr/bin/chown -f -R root:root #{Ism.settings.rootPath}",
-                            #Then we remove the immutable bit from the tree
-                            "/usr/bin/chattr -i -R -f #{Ism.settings.rootPath}",
-                            #Finally, we correct the rights for root dir and temporary dirs
-                            "/usr/bin/chmod 0750 #{Ism.settings.rootPath}/root",
-                            "/usr/bin/chmod 1777 #{Ism.settings.rootPath}/tmp",
-                            "/usr/bin/chmod 1777 #{Ism.settings.rootPath}/var/tmp"]
+            commandList = Array(String).new
+
+            chrootTree = Dir.glob(Ism.settings.sourcesPath, match: File::MatchOptions.glob_default)
+
+            blackList = [   Ism.settings.sourcesPath,
+                            Ism.settings.toolsPath,
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
+                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}"]
+
+            chrootTree.each do |filePath|
+                blackList.each do |exception|
+                    if !filePath.includes?(exception)
+                        commandList.push("/usr/bin/chown 0:0 #{filePath}")
+                    end
+                end
+            end
+
+            commandList.push("/usr/bin/chmod 0750 #{Ism.settings.rootPath}/root")
+            commandList.push("/usr/bin/chmod 1777 #{Ism.settings.rootPath}/tmp")
+            commandList.push("/usr/bin/chmod 1777 #{Ism.settings.rootPath}/var/tmp")
 
             process = Ism.runSystemCommand( command: commandList,
                                             viaChroot: false,
