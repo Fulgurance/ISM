@@ -256,12 +256,12 @@ module ISM
                                                 asRoot: true)
             end
 
-            if !process.success?
+            rescue exception
                 ISM::Error.show(className: "Software",
-                                functionName: "setupChrootPermissions",
+                                functionName: "prepareChrootPermissions",
                                 errorTitle: "Execution failure",
-                                error: "Failed to execute the function")
-            end
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         # Internal use only
