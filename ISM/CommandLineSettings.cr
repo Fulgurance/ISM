@@ -5,9 +5,7 @@ module ISM
         include JSON::Serializable
 
         #Generic parameters
-        property    secureMode : Bool
         property    binaryTaskMode : Bool
-        property    installByChroot : Bool
         property    rootPath : String
         property    defaultMirror : String
         property    buildKernelOptionsAsModule : Bool
@@ -62,9 +60,7 @@ module ISM
         property    chrootVariantId : String
 
         def initialize( #Generic parameters
-                        @secureMode = ISM::Default::CommandLineSettings::SecureMode,
                         @binaryTaskMode = ISM::Default::CommandLineSettings::BinaryTaskMode,
-                        @installByChroot = ISM::Default::CommandLineSettings::InstallByChroot,
                         @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
                         @buildKernelOptionsAsModule = ISM::Default::CommandLineSettings::BuildKernelOptionsAsModule,
@@ -155,9 +151,7 @@ module ISM
                                     path : String,
 
                                     #Generic parameters
-                                    secureMode : Bool,
                                     binaryTaskMode : Bool,
-                                    installByChroot : Bool,
                                     rootPath : String,
                                     defaultMirror : String,
                                     buildKernelOptionsAsModule : Bool,
@@ -218,9 +212,7 @@ module ISM
             end
 
             settings = {#Generic parameters
-                        "secureMode" => secureMode,
                         "binaryTaskMode" => binaryTaskMode,
-                        "installByChroot" => installByChroot,
                         "rootPath" => rootPath,
                         "defaultMirror" => defaultMirror,
                         "buildKernelOptionsAsModule" => buildKernelOptionsAsModule,
@@ -291,9 +283,7 @@ module ISM
             self.class.writeConfiguration(  #File path
                                             @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
                                             #Generic parameters
-                                            ISM::Default::CommandLineSettings::SecureMode,
                                             ISM::Default::CommandLineSettings::BinaryTaskMode,
-                                            ISM::Default::CommandLineSettings::InstallByChroot,
                                             ISM::Default::CommandLineSettings::RootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
@@ -360,9 +350,7 @@ module ISM
                                             self.class.filePath,
 
                                             #Generic parameters
-                                            @secureMode,
                                             @binaryTaskMode,
-                                            @installByChroot,
                                             @rootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
@@ -776,34 +764,12 @@ module ISM
         #Setter methods
 
         #   Generic
-        def setSecureMode(@secureMode)
-            writeSystemConfiguration
-
-            rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
-                                functionName: "setSecureMode",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
         def setBinaryTaskMode(@binaryTaskMode)
             writeSystemConfiguration
 
             rescue exception
                 ISM::Error.show(className: "CommandLineSettings",
                                 functionName: "setBinaryTaskMode",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
-        def setInstallByChroot(@installByChroot)
-            writeSystemConfiguration
-
-            rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
-                                functionName: "setInstallByChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)

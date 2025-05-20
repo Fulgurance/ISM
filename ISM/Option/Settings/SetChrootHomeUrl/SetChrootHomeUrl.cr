@@ -14,12 +14,8 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
-                        Ism.printNeedSuperUserAccessNotification
-                    else
-                        Ism.settings.setChrootHomeUrl(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootHomeUrl::SetText+ARGV[2])
-                    end
+                    Ism.settings.setChrootHomeUrl(ARGV[2])
+                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootHomeUrl::SetText+ARGV[2])
                 end
             end
 

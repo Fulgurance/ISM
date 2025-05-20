@@ -14,12 +14,8 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
-                        Ism.printNeedSuperUserAccessNotification
-                    else
-                        Ism.settings.setChrootCodeName(ARGV[2])
-                        Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootCodeName::SetText+ARGV[2])
-                    end
+                    Ism.settings.setChrootCodeName(ARGV[2])
+                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootCodeName::SetText+ARGV[2])
                 end
             end
 

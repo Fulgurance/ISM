@@ -14,15 +14,11 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
-                        Ism.printNeedSuperUserAccessNotification
+                    if ISM::Port.exists(ARGV[2])
+                        Ism.printProcessNotification(ISM::Default::Option::PortClose::CloseText+ARGV[2])
+                        ISM::Port.delete(ARGV[2])
                     else
-                        if ISM::Port.exists(ARGV[2])
-                            Ism.printProcessNotification(ISM::Default::Option::PortClose::CloseText+ARGV[2])
-                            ISM::Port.delete(ARGV[2])
-                        else
-                            Ism.printErrorNotification(ISM::Default::Option::PortClose::NoMatchFoundText1+ARGV[2]+ISM::Default::Option::PortClose::NoMatchFoundText2,nil)
-                        end
+                        Ism.printErrorNotification(ISM::Default::Option::PortClose::NoMatchFoundText1+ARGV[2]+ISM::Default::Option::PortClose::NoMatchFoundText2,nil)
                     end
                 end
             end

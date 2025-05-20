@@ -11,27 +11,23 @@ module ISM
             end
 
             def start
-                if !Ism.ranAsSuperUser && Ism.secureModeEnabled
-                    Ism.printNeedSuperUserAccessNotification
-                else
-                    Ism.showCalculationTitleMessage
+                Ism.showCalculationTitleMessage
 
-                    unneededSoftwares = Ism.getUnneededSoftwares
+                unneededSoftwares = Ism.getUnneededSoftwares
 
-                    Ism.showCalculationDoneMessage
+                Ism.showCalculationDoneMessage
 
-                    if unneededSoftwares.size > 0
-                        Ism.showSoftwares(unneededSoftwares, :uninstallation)
-                        Ism.showUninstallationQuestion(unneededSoftwares.size)
+                if unneededSoftwares.size > 0
+                    Ism.showSoftwares(unneededSoftwares, :uninstallation)
+                    Ism.showUninstallationQuestion(unneededSoftwares.size)
 
-                        userAgreement = Ism.getUserAgreement
+                    userAgreement = Ism.getUserAgreement
 
-                        if userAgreement
-                            Ism.startUninstallationProcess(unneededSoftwares)
-                        end
-                    else
-                        Ism.showNoCleaningRequiredMessage
+                    if userAgreement
+                        Ism.startUninstallationProcess(unneededSoftwares)
                     end
+                else
+                    Ism.showNoCleaningRequiredMessage
                 end
             end
 

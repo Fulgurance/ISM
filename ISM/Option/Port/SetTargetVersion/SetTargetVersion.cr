@@ -14,42 +14,38 @@ module ISM
                 if ARGV.size == 2
                     showHelp
                 else
-                    if !Ism.ranAsSuperUser && Ism.secureModeEnabled
-                        Ism.printNeedSuperUserAccessNotification
-                    else
-                        targetVersion = ARGV[2]
-                        validVersion = false
+                    targetVersion = ARGV[2]
+                    validVersion = false
 
-                        if !Ism.ports.empty?
-                            print ISM::Default::Option::PortSetTargetVersion::SetTitle
-                            text = ISM::Default::Option::PortSetTargetVersion::SetWaitingText
+                    if !Ism.ports.empty?
+                        print ISM::Default::Option::PortSetTargetVersion::SetTitle
+                        text = ISM::Default::Option::PortSetTargetVersion::SetWaitingText
 
-                            Ism.ports.each do |port|
-                                process = Process.new(  "git switch --detach #{targetVersion}",
-                                                        shell: true,
-                                                        chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
+                        Ism.ports.each do |port|
+                            process = Process.new(  "git switch --detach #{targetVersion}",
+                                                    shell: true,
+                                                    chdir: Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory+port.name)
 
-                                until process.terminated?
-                                    Ism.playCalculationAnimation(text: text)
-                                    sleep(Time::Span.new(seconds: 0))
-                                end
+                            until process.terminated?
+                                Ism.playCalculationAnimation(text: text)
+                                sleep(Time::Span.new(seconds: 0))
+                            end
 
-                                validVersion = !process.error?
+                            validVersion = !process.error?
 
-                                if !validVersion
-                                    break
-                                end
+                            if !validVersion
+                                break
                             end
                         end
+                    end
 
-                        puts
+                    puts
 
-                        if validVersion
-                            Ism.portsSettings.setTargetVersion(targetVersion)
-                            Ism.printProcessNotification(ISM::Default::Option::PortSetTargetVersion::SetText+targetVersion)
-                        else
-                            Ism.printErrorNotification(ISM::Default::Option::PortSetTargetVersion::SetTextError1+"#{targetVersion.colorize(:red)}"+ISM::Default::Option::PortSetTargetVersion::SetTextError2,nil)
-                        end
+                    if validVersion
+                        Ism.portsSettings.setTargetVersion(targetVersion)
+                        Ism.printProcessNotification(ISM::Default::Option::PortSetTargetVersion::SetText+targetVersion)
+                    else
+                        Ism.printErrorNotification(ISM::Default::Option::PortSetTargetVersion::SetTextError1+"#{targetVersion.colorize(:red)}"+ISM::Default::Option::PortSetTargetVersion::SetTextError2,nil)
                     end
                 end
             end
