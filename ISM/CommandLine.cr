@@ -1145,7 +1145,7 @@ module ISM
             environmentFilePathText = String.new
 
             if !path.empty?
-                pathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText2}#{(@systemInformation.handleChroot ? @settings.rootPath : "")}#{path}".squeeze("/")
+                pathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText2}#{(targetSystemInformation.handleChroot ? @settings.rootPath : "")}#{path}".squeeze("/")
             end
 
             if !environment.empty?
@@ -2880,7 +2880,7 @@ module ISM
 
         #Relative to chroot
         def taskRelativeDirectoryPath : String
-            root = ((@systemInformation.handleChroot || !@systemInformation.handleChroot && @settings.rootPath != "/") ? "/" : @settings.rootPath)
+            root = ((targetSystemInformation.handleChroot || !targetSystemInformation.handleChroot && @settings.rootPath != "/") ? "/" : @settings.rootPath)
 
             return "#{root}#{ISM::Default::Path::TemporaryDirectory}"
         end

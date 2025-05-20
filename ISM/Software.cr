@@ -69,7 +69,7 @@ module ISM
         end
 
         def workDirectoryPath : String
-            return Ism.systemInformation.handleChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
+            return Ism.targetSystemInformation.handleChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
         end
 
         def mainWorkDirectoryPath : String
@@ -81,15 +81,15 @@ module ISM
         end
 
         def builtSoftwareDirectoryPath : String
-            return Ism.systemInformation.handleChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
+            return Ism.targetSystemInformation.handleChroot ? "/#{@information.builtSoftwareDirectoryPath}" : "#{Ism.settings.rootPath}#{@information.builtSoftwareDirectoryPath}"
         end
 
         def directoryContent(path : String, matchHidden = false) : Array(String)
             path = "#{path}/*"
 
-            fileList = Dir.glob((Ism.systemInformation.handleChroot ? Ism.settings.rootPath+path : path), match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
+            fileList = Dir.glob((Ism.targetSystemInformation.handleChroot ? Ism.settings.rootPath+path : path), match: (matchHidden ? File::MatchOptions.glob_default : File::MatchOptions::None))
 
-            return fileList.map { |file| (Ism.systemInformation.handleChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
+            return fileList.map { |file| (Ism.targetSystemInformation.handleChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -870,7 +870,7 @@ module ISM
             when :symbolicLink
                 command = "ln -s"
             when :symbolicLinkByOverwrite
-                symlinkRealPath = (Ism.systemInformation.handleChroot ? "#{Ism.settings.rootPath}/#{path}" : "/#{path}")
+                symlinkRealPath = (Ism.targetSystemInformation.handleChroot ? "#{Ism.settings.rootPath}/#{path}" : "/#{path}")
 
                 if File.symlink?(symlinkRealPath)
                     deleteFileNoChroot(symlinkRealPath)
@@ -1129,7 +1129,7 @@ module ISM
 
         def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
-            if Ism.systemInformation.handleChroot
+            if Ism.targetSystemInformation.handleChroot
 
                 if !environment.has_key?("CFLAGS")
                     environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
@@ -1189,7 +1189,7 @@ module ISM
 
         def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
-            if Ism.systemInformation.handleChroot
+            if Ism.targetSystemInformation.handleChroot
                 prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
 
                 if !environment.has_key?("CFLAGS")
@@ -1697,7 +1697,7 @@ module ISM
 
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
-            if Ism.systemInformation.handleChroot
+            if Ism.targetSystemInformation.handleChroot
                 prefix = "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
 
                 if !environment.has_key?("CFLAGS")
@@ -1780,7 +1780,7 @@ module ISM
         def updateSystemCache
             Ism.notifyOfUpdateSystemCache
 
-            if commandIsAvailable("ldconfig") && Ism.systemInformation.handleChroot
+            if commandIsAvailable("ldconfig") && Ism.targetSystemInformation.handleChroot
                 runLdconfigCommand
             end
 
@@ -2020,7 +2020,7 @@ module ISM
 
                     if text.starts_with?(ISM::Default::Software::KconfigKeywords[:source]) && !text.includes?("Kconfig.include")
 
-                        mainArchitecture = (Ism.systemInformation.handleChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemArchitecture).gsub(/_.*/,"")
+                        mainArchitecture = (Ism.targetSystemInformation.handleChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemArchitecture).gsub(/_.*/,"")
 
                         path = kernelSourcesPath+text.sub(ISM::Default::Software::KconfigKeywords[:source],"").strip
                         path = path.gsub("\"","")
