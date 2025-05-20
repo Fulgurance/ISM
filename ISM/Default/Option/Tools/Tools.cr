@@ -4,12 +4,12 @@ module ISM
 
         module Option
 
-            module Software
+            module Tools
 
                 ShortText = "-t"
                 LongText = "tools"
                 Description = "Development tools for ISM"
-                Options = []
+                Options = [] of ISM::CommandLineOption
                 
             end
             
