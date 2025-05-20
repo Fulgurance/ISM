@@ -71,7 +71,7 @@ module ISM
                             output: processResult,
                             shell: true)
 
-            return processResult.to_s.strip.split(" ").includes?(ISM::Default::Core::Security::SystemId)
+            return processResult.to_s.strip.split(" ").includes?(ISM::Default::CommandLine::Id)
 
             rescue exception
             ISM::Error.show(className: "Core::Security",
