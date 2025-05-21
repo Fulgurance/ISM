@@ -3268,7 +3268,7 @@ module ISM
             mode = (locked ? "+" : "-")
             target = "usr/lib64"
 
-            command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+            command = "/usr/bin/chattr -R -f #{mode}i #{@settings.rootPath}#{target}"
 
             process = runSystemCommand( command: command,
                                         asRoot: true,
@@ -3286,7 +3286,7 @@ module ISM
             mode = (locked ? "+" : "-")
             target = "usr/bin"
 
-            command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+            command = "/usr/bin/chattr -R -f #{mode}i #{@settings.rootPath}#{target}"
 
             process = runSystemCommand( command: command,
                                         asRoot: true,
@@ -3304,7 +3304,7 @@ module ISM
             mode = (locked ? "+" : "-")
             target = "usr/sbin"
 
-            command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+            command = "/usr/bin/chattr -R -f #{mode}i #{@settings.rootPath}#{target}"
 
             process = runSystemCommand( command: command,
                                         asRoot: true,
@@ -3322,7 +3322,7 @@ module ISM
             mode = (locked ? "+" : "-")
             target = "usr/libexec"
 
-            command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+            command = "/usr/bin/chattr -R -f #{mode}i #{@settings.rootPath}#{target}"
 
             process = runSystemCommand( command: command,
                                         asRoot: true,
