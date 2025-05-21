@@ -360,12 +360,16 @@ module ISM
         end
 
         def prepareChrootFileSystem
+            Ism.unlockSystemAccess
+
             setupChrootPermissions
             prepareChrootProc
             prepareChrootSys
             prepareChrootDev
             prepareChrootRun
             prepareChrootNetwork
+
+            Ism.lockSystemAccess
 
             rescue exception
                 ISM::Error.show(className: "Software",
