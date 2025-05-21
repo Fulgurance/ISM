@@ -19,6 +19,7 @@ module ISM
                 InstallByChrootText = "Install by chroot"
                 RootPathText = "Root path"
                 DefaultMirrorText = "Default mirror"
+                AutoDeployServicesText = "Auto deploy services"
 
                 #Host titles
                 SystemTargetNameText = "System target name"
