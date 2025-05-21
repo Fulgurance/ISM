@@ -3205,6 +3205,115 @@ module ISM
                                 exception: exception)
         end
 
+        def setLibSystemAccess(locked : Bool)
+            mode = (locked ? "+" : "-")
+            target = "usr/lib64"
+
+            command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+
+            process = runSystemCommand( command: command,
+                                        asRoot: true,
+                                        viaChroot: false)
+
+            if !process.success? && process.exit_code != 1
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "setLibSystemAccess",
+                                errorTitle: "Failed to set the system access for /#{target}",
+                                error: "An error occured while trying to modify the system access")
+            end
+        end
+
+        def setBinSystemAccess(locked : Bool)
+            mode = (locked ? "+" : "-")
+            target = "usr/bin"
+
+            command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+
+            process = runSystemCommand( command: command,
+                                        asRoot: true,
+                                        viaChroot: false)
+
+            if !process.success? && process.exit_code != 1
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "setBinSystemAccess",
+                                errorTitle: "Failed to set the system access for /#{target}",
+                                error: "An error occured while trying to modify the system access")
+            end
+        end
+
+        def setSbinSystemAccess(locked : Bool)
+            mode = (locked ? "+" : "-")
+            target = "usr/sbin"
+
+            command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+
+            process = runSystemCommand( command: command,
+                                        asRoot: true,
+                                        viaChroot: false)
+
+            if !process.success? && process.exit_code != 1
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "setSbinSystemAccess",
+                                errorTitle: "Failed to set the system access for /#{target}",
+                                error: "An error occured while trying to modify the system access")
+            end
+        end
+
+        def setLibexecSystemAccess(locked : Bool)
+            mode = (locked ? "+" : "-")
+            target = "usr/libexec"
+
+            command = "/usr/bin/chattr -R -f #{mode}i #{ISM::Core.targetedRootPath}#{target}"
+
+            process = runSystemCommand( command: command,
+                                        asRoot: true,
+                                        viaChroot: false)
+
+            if !process.success? && process.exit_code != 1
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "setLibexecSystemAccess",
+                                errorTitle: "Failed to set the system access for /#{target}",
+                                error: "An error occured while trying to modify the system access")
+            end
+        end
+
+        def setSystemAccess(locked : Bool)
+
+            setLibSystemAccess(locked)
+            setBinSystemAccess(locked)
+            setSbinSystemAccess(locked)
+            setLibexecSystemAccess(locked)
+
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "setSystemAccess",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def lockSystemAccess
+            setSystemAccess(locked: true)
+
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "lockSystemAccess",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def unlockSystemAccess
+            setSystemAccess(locked: false)
+
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "unlockSystemAccess",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
     end
 
 end
