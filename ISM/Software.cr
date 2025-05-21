@@ -2008,7 +2008,7 @@ module ISM
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
 
-            if Ism.handleChroot
+            if Ism.settings.handleChroot
                 Ism.unlockSystemAccess
             end
 
@@ -2070,7 +2070,7 @@ module ISM
 
             Ism.addInstalledSoftware(@information, installedFiles)
 
-            if Ism.handleChroot
+            if Ism.settings.handleChroot
                 Ism.lockSystemAccess
             end
 
