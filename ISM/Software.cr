@@ -2004,6 +2004,10 @@ module ISM
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
 
+            if Ism.handleChroot
+                Ism.unlockSystemAccess
+            end
+
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
@@ -2061,6 +2065,10 @@ module ISM
             end
 
             Ism.addInstalledSoftware(@information, installedFiles)
+
+            if Ism.handleChroot
+                Ism.lockSystemAccess
+            end
 
             rescue exception
                 ISM::Error.show(className: "Software",

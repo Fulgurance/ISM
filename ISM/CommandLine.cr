@@ -2189,6 +2189,29 @@ module ISM
         end
 
         def buildTasksFile
+            # We first check if there is any task left
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}")
+
+                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                    viaChroot: false,
+                                    asRoot: true)
+
+                runSystemCommand(   command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                    viaChroot: false,
+                                    asRoot: true)
+            end
+
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
+
+                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                                    viaChroot: false,
+                                    asRoot: true)
+
+                runSystemCommand(   command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                                    viaChroot: false,
+                                    asRoot: true)
+            end
+
             processResult = IO::Memory.new
 
             Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
@@ -2221,6 +2244,27 @@ module ISM
         end
 
         def runTasksFile(asBinary = true, logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+            # We first set proper rights for the binary and task file:
+            #   -owned by ism (uid 250 and gid 250)
+            #   -set as immutable to don't allow any suppression
+
+            if asBinary
+                runSystemCommand(   command: "/usr/bin/chown #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                    viaChroot: false,
+                                    asRoot: true)
+
+                runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                    viaChroot: false,
+                                    asRoot: true)
+            end
+
+            runSystemCommand(   command: "/usr/bin/chown #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                                viaChroot: false,
+                                asRoot: true)
+
+            runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                                viaChroot: false,
+                                asRoot: true)
 
             command = (asBinary ? "./#{ISM::Default::Filename::Task}" : "crystal #{ISM::Default::Filename::Task}.cr")
 
@@ -2677,7 +2721,7 @@ module ISM
 
             result = dependencyTable.to_a.sort_by { |k, v| v.size }
 
-            return result.map { |entry| entry[1][0]}
+            return result.map { |entry| entry[1][0] }
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
@@ -2688,6 +2732,21 @@ module ISM
         end
 
         def generateTasksFile(tasks : String)
+            if !Dir.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+                Dir.mkdir_p("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+            end
+
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
+
+                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                                    viaChroot: false,
+                                    asRoot: true)
+
+                runSystemCommand(   command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                                    viaChroot: false,
+                                    asRoot: true)
+            end
+
             File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
 
             rescue exception
