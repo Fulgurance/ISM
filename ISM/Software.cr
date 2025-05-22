@@ -236,7 +236,7 @@ module ISM
 
             commandList = Array(String).new
 
-            chrootTree = Dir.glob(Ism.settings.rootPath, match: File::MatchOptions.glob_default)
+            chrootTree = Dir.glob("#{Ism.settings.rootPath}/**/*", match: File::MatchOptions.glob_default)
 
             blackList = [   Ism.settings.sourcesPath,
                             Ism.settings.toolsPath,
