@@ -1932,6 +1932,74 @@ module ISM
             Ism.notifyOfDeploy
         end
 
+        #Special function for the installation process without chroot (Internal use only)
+        def installFile(target : String, path : String, user : String, group : String, mode : String) : Process::Status
+
+            #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
+            # changeFileModeNoChroot(path, mode, asRoot: true)
+            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            requestedCommands = "/usr/bin/mv -f #{target} #{path}"
+
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    asRoot: true,
+                                    viaChroot: false)
+
+            rescue exception
+            ISM::Error.show(className: "Software",
+                            functionName: "installFile",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+        end
+
+        #Special function for the installation process without chroot (Internal use only)
+        def installDirectory(path : String, user : String, group : String, mode : String) : Process::Status
+
+            #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
+            # changeFileModeNoChroot(path, mode, asRoot: true)
+            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
+            requestedCommands = "/usr/bin/mkdir -p #{path}"
+
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    asRoot: true,
+                                    viaChroot: false)
+
+            rescue exception
+            ISM::Error.show(className: "Software",
+                            functionName: "installDirectory",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+        end
+
+        #Special function for the installation process without chroot (Internal use only)
+        def installSymlink(target : String, path : String) : Process::Status
+            requestedCommands = "/usr/bin/mv -f #{target} #{path}"
+
+            Ism.runSystemCommand(   command: requestedCommands,
+                                    asRoot: true,
+                                    viaChroot: false)
+
+            rescue exception
+            ISM::Error.show(className: "Software",
+                            functionName: "installSymlink",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+        end
+
+        #Special function to improve performance (Internal use only)
+        def stripFileListNoChroot(fileList : Array(String))
+            requestedCommands = <<-CMD
+                                strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
+                                CMD
+
+            process = Process.run(requestedCommands, shell: true)
+
+            #No exit process because if the file can't be strip, we can just keep going
+            rescue
+        end
+
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
 
@@ -1944,7 +2012,7 @@ module ISM
 
             fileList.each do |entry|
 
-                #We record the installed files related to the given options
+                #Don't keep libtool archives by default except if explicitely specified
                 if File.directory?(entry) || entry[-3..-1] != ".la" || preserveLibtoolArchives
 
                     finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
@@ -1954,28 +2022,35 @@ module ISM
                         installedFiles << recordedFilePath
                     end
 
-                    #TO DO: Set security map
-                    # securityDescriptor = @information.securityMap.descriptor(   path:  recordedFilePath,
-                    #                                                             realPath:   entry)
+                    securityDescriptor = @information.securityMap.descriptor(   path:  recordedFilePath,
+                                                                                realPath:   entry)
+
+                    if File.directory?(entry) && !File.symlink?(entry)
+                        if !Dir.exists?(finalDestination)
+                            installDirectory(   path:   finalDestination,
+                                                user:   securityDescriptor.user,
+                                                group:  securityDescriptor.group,
+                                                mode:   securityDescriptor.mode)
+                        end
+                    else
+                        if File.symlink?(entry)
+                            installSymlink( target: entry,
+                                            path:   finalDestination)
+                        else
+                            installFile(target: entry,
+                                        path:   finalDestination,
+                                        user:   securityDescriptor.user,
+                                        group:  securityDescriptor.group,
+                                        mode:   securityDescriptor.mode)
+                        end
+                    end
+
                 end
             end
 
-            if !fileList.empty?
-                deleteLibtoolArchives = "#{!preserveLibtoolArchives ? "-name \*.la -delete -o" : ""}"
-                stripFiles = "#{stripFiles ? "-exec strip --strip-unneeded \"{}\" \\;" : ""}"
-                installFiles = "-exec cp -R \"{}\" #{Ism.settings.rootPath} \\;"
-                requestedCommands = "find #{builtSoftwareDirectoryPathNoChroot}* #{deleteLibtoolArchives} #{stripFiles} #{installFiles}"
-
-                process = Ism.runSystemCommand( command: requestedCommands,
-                                                viaChroot: false,
-                                                asRoot: true)
-
-                if !process.success?
-                    ISM::Error.show(className: "Software",
-                                    functionName: "install",
-                                    errorTitle: "Copy failed",
-                                    error: "Failed to install the files to the targeted system")
-                end
+            #Strip the file if needed
+            if stripFiles
+                stripFileListNoChroot(fileList)
             end
 
             #Update library cache
