@@ -1776,12 +1776,12 @@ module ISM
         def showInstallationDetailsMessage(softwareNumber : UInt32)
             title = ISM::Default::CommandLine::InstallationDetailsText
 
-            puts    "[ #{title.colorize(:green)} ]\n" +
+            puts    "\n[ #{title.colorize(:green)} ]\n\n" +
                     "#{ISM::Default::CommandLine::NewSoftwareNumberDetailText.colorize(:green)}: #{softwareNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
                     "#{ISM::Default::CommandLine::NewDirectoryNumberDetailText.colorize(:green)}: #{@totalInstalledDirectoryNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
                     "#{ISM::Default::CommandLine::NewSymlinkNumberDetailText.colorize(:green)}: #{@totalInstalledSymlinkNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
                     "#{ISM::Default::CommandLine::NewFileNumberDetailText.colorize(:green)}: #{@totalInstalledFileNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n\n\n"
+                    "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n\n"
         end
 
         def recordInstallationDetails(directoryNumber : UInt128, symlinkNumber : UInt128, fileNumber : UInt128, totalSize : UInt128)
@@ -3138,18 +3138,12 @@ module ISM
         # state = :enable, :disable, :module, :string, :value
 
         def getNeededKernelOptions : Array(ISM::NeededKernelOption)
+            standardOptions = Hash(String,ISM::NeededKernelOption).new
+            specialOptions = Hash(String,ISM::NeededKernelOption).new
 
-            #1 - We perform a first pass to record the options that don't need any special requirements
-            @neededKernelOptions.each do |option|
-
-                if option.singleChoiceDependencies.empty? && option.blockers.empty?
-                    #(option.tristate && @settings.buildKernelOptionsAsModule ? true : false)
-
-                end
-
-            end
-
-            #return
+            #@neededKernelOptions
+            #Create first a big array of all required options ?
+            #To improve speed, pre record all option in a hash ?
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
