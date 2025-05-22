@@ -1963,7 +1963,7 @@ module ISM
             deleteLibtoolArchives = "#{!preserveLibtoolArchives ? "-name \*.la -delete -o" : ""}"
             stripFiles = "#{stripFiles ? "-exec strip --strip-unneeded \"{}\" \\;" : ""}"
             installFiles = "-exec cp -R \"{}\" #{Ism.settings.rootPath} \\;"
-            requestedCommands = "find #{builtSoftwareDirectoryPathNoChroot}/**/* #{deleteLibtoolArchives} #{stripFiles} #{installFiles}"
+            requestedCommands = "find #{builtSoftwareDirectoryPathNoChroot}* #{deleteLibtoolArchives} #{stripFiles} #{installFiles}"
 
             process = Ism.runSystemCommand( command: requestedCommands,
                                             viaChroot: false,
