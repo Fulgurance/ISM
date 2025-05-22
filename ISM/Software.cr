@@ -1960,20 +1960,22 @@ module ISM
                 end
             end
 
-            deleteLibtoolArchives = "#{!preserveLibtoolArchives ? "-name \*.la -delete -o" : ""}"
-            stripFiles = "#{stripFiles ? "-exec strip --strip-unneeded \"{}\" \\;" : ""}"
-            installFiles = "-exec cp -R \"{}\" #{Ism.settings.rootPath} \\;"
-            requestedCommands = "find #{builtSoftwareDirectoryPathNoChroot}* #{deleteLibtoolArchives} #{stripFiles} #{installFiles}"
+            if !fileList.empty?
+                deleteLibtoolArchives = "#{!preserveLibtoolArchives ? "-name \*.la -delete -o" : ""}"
+                stripFiles = "#{stripFiles ? "-exec strip --strip-unneeded \"{}\" \\;" : ""}"
+                installFiles = "-exec cp -R \"{}\" #{Ism.settings.rootPath} \\;"
+                requestedCommands = "find #{builtSoftwareDirectoryPathNoChroot}* #{deleteLibtoolArchives} #{stripFiles} #{installFiles}"
 
-            process = Ism.runSystemCommand( command: requestedCommands,
-                                            viaChroot: false,
-                                            asRoot: true)
+                process = Ism.runSystemCommand( command: requestedCommands,
+                                                viaChroot: false,
+                                                asRoot: true)
 
-            if !process.success?
-                ISM::Error.show(className: "Software",
-                                functionName: "install",
-                                errorTitle: "Copy failed",
-                                error: "Failed to install the files to the targeted system")
+                if !process.success?
+                    ISM::Error.show(className: "Software",
+                                    functionName: "install",
+                                    errorTitle: "Copy failed",
+                                    error: "Failed to install the files to the targeted system")
+                end
             end
 
             #Update library cache
