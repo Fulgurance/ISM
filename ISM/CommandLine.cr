@@ -3094,17 +3094,17 @@ module ISM
                                 quiet: quiet)
 
             #TO DO: Need a fix to pass the setup permissions transition
-            #TRACELOG-------------------------------------------------------------
-            # ISM::TraceLog.record(   accessor:   "CommandLine",
-            #                         function:   "runSystemCommand",
-            #                         message:    <<-TEXT
-            #                         Running command:
-            #                         #{tasks}
-            #                         asRoot: #{rootMode}
-            #                         viaChroot: #{targetSystemInformation.handleChroot && viaChroot}
-            #                         TEXT
-            # )
-            #-------------------------------------------------------------TRACELOG
+            TRACELOG-------------------------------------------------------------
+            ISM::TraceLog.record(   accessor:   "CommandLine",
+                                    function:   "runSystemCommand",
+                                    message:    <<-TEXT
+                                    Running command:
+                                    #{tasks}
+                                    asRoot: #{rootMode}
+                                    viaChroot: #{targetSystemInformation.handleChroot && viaChroot}
+                                    TEXT
+            )
+            -------------------------------------------------------------TRACELOG
 
             return process
 
