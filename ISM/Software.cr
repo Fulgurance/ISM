@@ -236,23 +236,18 @@ module ISM
 
             commandList = Array(String).new
 
-            chrootTree = Dir.glob("#{Ism.settings.rootPath}/**/*", match: File::MatchOptions.glob_default)
+            setUpRoot = <<-COMMAND
+            find #{Ism.settings.rootPath} \
+            -path #{Ism.settings.sourcesPath} -prune \
+            -o -path #{Ism.settings.toolsPath} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory} -prune \
+            -o -exec chown root:root {} +
+            COMMAND
 
-            blackList = [   Ism.settings.sourcesPath,
-                            Ism.settings.toolsPath,
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}",
-                            "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}"]
-
-            chrootTree.each do |filePath|
-                blackList.each do |exception|
-                    if !filePath.includes?(exception)
-                        commandList.push("/usr/bin/chown 0:0 #{filePath}")
-                    end
-                end
-            end
-
+            commandList.push(setUpRoot)
             commandList.push("/usr/bin/chmod 0750 #{Ism.settings.rootPath}/root")
             commandList.push("/usr/bin/chmod 1777 #{Ism.settings.rootPath}/tmp")
             commandList.push("/usr/bin/chmod 1777 #{Ism.settings.rootPath}/var/tmp")
