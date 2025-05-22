@@ -238,12 +238,12 @@ module ISM
 
             setUpRoot = <<-COMMAND
             find #{Ism.settings.rootPath} \
-            -path #{Ism.settings.sourcesPath} -prune \
-            -o -path #{Ism.settings.toolsPath} -prune \
-            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory} -prune \
-            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory} -prune \
-            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory} -prune \
-            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory} -prune \
+            -path #{Ism.settings.sourcesPath[0..-2]} -prune \
+            -o -path #{Ism.settings.toolsPath[0..-2]} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory[0..-2]} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory[0..-2]} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory[0..-2]} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory[0..-2]} -prune \
             -o -exec chown root:root {} +
             COMMAND
 
