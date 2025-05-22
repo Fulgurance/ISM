@@ -244,7 +244,7 @@ module ISM
             -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory[0..-2]} -prune \
             -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory[0..-2]} -prune \
             -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory[0..-2]} -prune \
-            -o -exec chown root:root {} +
+            -o -exec chown --no-dereference root:root {} +
             COMMAND
 
             commandList.push(setUpRoot)
