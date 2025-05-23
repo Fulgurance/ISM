@@ -807,6 +807,10 @@ module ISM
                                 exception: exception)
         end
 
+        def softwareIsGreatestVersion(information : ISM::SoftwareInformation)
+            return !(@installedSoftwares.any? { |entry| entry.version > information.version})
+        end
+
         def checkEnteredArguments
             matchingOption = false
 
