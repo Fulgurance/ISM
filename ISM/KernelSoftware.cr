@@ -2,14 +2,9 @@ module ISM
 
     class KernelSoftware < ISM::Software
 
-        def prepareInstallation
+        def deploy
             super
 
-            prepareKernelSourcesInstallation
-        end
-
-        def install
-            super(stripFiles: false)
         end
 
     end
