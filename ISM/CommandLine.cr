@@ -3153,8 +3153,9 @@ module ISM
                                 exception: exception)
         end
 
-        def generateDefaultKernelConfig
-            requestedCommands = "make #{@settings.systemMakeOptions} defconfig"
+        #Build by default all modules. Will change in the future
+        def generateKernelConfiguration
+            requestedCommands = "make #{@settings.systemMakeOptions} allmodconfig"
             path = kernelSourcesPath
 
             process = runSystemCommand(requestedCommands, path)
@@ -3172,11 +3173,7 @@ module ISM
                                 exception: exception)
         end
 
-        def generateKernelConfig
-
-        end
-
-        def generateKernel
+        def buildKernel
             requestedCommands = "make #{@settings.systemMakeOptions} mrproper && make #{@settings.systemMakeOptions} modules_prepare && make #{@settings.systemMakeOptions} && make #{@settings.systemMakeOptions} modules_install && make #{@settings.systemMakeOptions} install"
             path = kernelSourcesPath
 

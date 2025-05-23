@@ -5,6 +5,9 @@ module ISM
         def deploy
             super
 
+            generateKernelConfiguration
+            buildKernel
+            installKernel
         end
 
     end
