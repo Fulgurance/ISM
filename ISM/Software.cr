@@ -1938,7 +1938,7 @@ module ISM
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
-            requestedCommands = "/usr/bin/mv -f #{target} #{path}"
+            requestedCommands = "/usr/bin/mv -f \"#{target}\" \"#{path}\""
 
             Ism.runSystemCommand(   command: requestedCommands,
                                     asRoot: true,
@@ -1974,7 +1974,7 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String) : Process::Status
-            requestedCommands = "/usr/bin/mv -f #{target} #{path}"
+            requestedCommands = "/usr/bin/mv -f \"#{target}\" \"#{path}\""
 
             Ism.runSystemCommand(   command: requestedCommands,
                                     asRoot: true,
