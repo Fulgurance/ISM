@@ -10,10 +10,6 @@ module ISM
 
         def install
             super(stripFiles: false)
-
-            recordSelectedKernel
-            updateKernelSymlinks
-            updateKernelOptionsDatabase
         end
 
     end
