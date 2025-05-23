@@ -231,6 +231,18 @@ module ISM
             return Ism.kernelIsSelected
         end
 
+        def generateKernelConfiguration
+            return Ism.generateKernelConfiguration
+        end
+
+        def buildKernel
+            return Ism.buildKernel
+        end
+
+        def installKernel
+            return Ism.installKernel
+        end
+
         def setupChrootPermissions
             Ism.notifyOfSetupChrootPermissions
 
