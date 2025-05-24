@@ -3205,7 +3205,7 @@ module ISM
             path = kernelSourcesPath
 
             process = runSystemCommand( command: requestedCommands,
-                                        asRoot: true
+                                        asRoot: true,
                                         path: path)
 
             if !process.success?
