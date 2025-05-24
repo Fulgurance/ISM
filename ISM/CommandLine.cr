@@ -3157,6 +3157,27 @@ module ISM
                                 exception: exception)
         end
 
+        def cleanKernelSources
+            requestedCommands = "make #{@settings.systemMakeOptions} mrproper"
+            path = kernelSourcesPath
+
+            process = runSystemCommand( command: requestedCommands,
+                                        asRoot: true,
+                                        path: path)
+
+            if !process.success?
+                notifyOfRunSystemCommandError(requestedCommands, path)
+                exitProgram
+            end
+
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "cleanKernelSources",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
         #Build by default all modules. Will change in the future
         def generateKernelConfiguration
             requestedCommands = "make #{@settings.systemMakeOptions} allmodconfig"
@@ -3180,7 +3201,7 @@ module ISM
         end
 
         def buildKernel
-            requestedCommands = "make #{@settings.systemMakeOptions} mrproper && make #{@settings.systemMakeOptions} modules_prepare && make #{@settings.systemMakeOptions} && make #{@settings.systemMakeOptions} modules_install && make #{@settings.systemMakeOptions} install"
+            requestedCommands = "make #{@settings.systemMakeOptions} modules_prepare && make #{@settings.systemMakeOptions} && make #{@settings.systemMakeOptions} modules_install && make #{@settings.systemMakeOptions} install"
             path = kernelSourcesPath
 
             process = runSystemCommand( command: requestedCommands,
