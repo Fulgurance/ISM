@@ -3222,7 +3222,7 @@ module ISM
         end
 
         def installKernel
-            requestedCommands = "mv System.map /boot/System.map-linux-#{mainKernelVersion} && mv vmlinuz /boot/vmlinuz-linux-#{mainKernelVersion} && cp .config /boot/config-linux-#{mainKernelVersion}"
+            requestedCommands = "mv System.map /boot/System.map-linux-#{mainKernelVersion} && mv vmlinux /boot/vmlinuz-linux-#{mainKernelVersion} && cp .config /boot/config-linux-#{mainKernelVersion}"
             path = kernelSourcesPath
 
             process = runSystemCommand( command: requestedCommands,
