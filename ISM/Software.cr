@@ -231,6 +231,10 @@ module ISM
             return Ism.kernelIsSelected
         end
 
+        def cleanKernelSources
+            return Ism.cleanKernelSources
+        end
+
         def generateKernelConfiguration
             return Ism.generateKernelConfiguration
         end
