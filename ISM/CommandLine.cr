@@ -3162,7 +3162,9 @@ module ISM
             requestedCommands = "make #{@settings.systemMakeOptions} allmodconfig"
             path = kernelSourcesPath
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand( command: requestedCommands,
+                                        asRoot: true,
+                                        path: path)
 
             if !process.success?
                 notifyOfRunSystemCommandError(requestedCommands, path)
@@ -3181,7 +3183,9 @@ module ISM
             requestedCommands = "make #{@settings.systemMakeOptions} mrproper && make #{@settings.systemMakeOptions} modules_prepare && make #{@settings.systemMakeOptions} && make #{@settings.systemMakeOptions} modules_install && make #{@settings.systemMakeOptions} install"
             path = kernelSourcesPath
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand( command: requestedCommands,
+                                        asRoot: true,
+                                        path: path)
 
             if !process.success?
                 notifyOfRunSystemCommandError(requestedCommands, path)
@@ -3200,7 +3204,9 @@ module ISM
             requestedCommands = "mv System.map /boot/System.map-linux-#{mainKernelVersion} && mv vmlinuz /boot/vmlinuz-linux-#{mainKernelVersion} && cp .config /boot/config-linux-#{mainKernelVersion}"
             path = kernelSourcesPath
 
-            process = runSystemCommand(requestedCommands, path)
+            process = runSystemCommand( command: requestedCommands,
+                                        asRoot: true
+                                        path: path)
 
             if !process.success?
                 notifyOfRunSystemCommandError(requestedCommands, path)
