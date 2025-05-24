@@ -1,6 +1,6 @@
 module ISM
 
-    class KernelSoftware < ISM::Software
+    class KernelSoftware < ISM::VirtualSoftware
 
         def deploy
             super
