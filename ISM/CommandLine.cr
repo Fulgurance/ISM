@@ -3228,7 +3228,7 @@ module ISM
         end
 
         def kernelSourcesPath : String
-            return "#{@settings.rootPath}usr/src/#{mainKernelName}/"
+            return "/usr/src/#{mainKernelName}/"
         end
 
         def kernelConfigPath : String
