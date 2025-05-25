@@ -3079,9 +3079,9 @@ module ISM
             end
 
             if command.is_a?(String)
-                requestedCommands = "cd #{path} && #{environmentCommand} #{command}"
+                requestedCommands = "cd #{path} && HOME=/var/lib/ism #{environmentCommand} #{command}"
             else
-                requestedCommands = command.map { |entry| "cd #{path} && #{environmentCommand} #{entry}"}.join("\n")
+                requestedCommands = command.map { |entry| "cd #{path} && HOME=/var/lib/ism #{environmentCommand} #{entry}"}.join("\n")
             end
 
             tasks = <<-TASKS
