@@ -74,7 +74,7 @@ module ISM
             return processResult.to_s.strip.split(" ").includes?(ISM::Default::CommandLine::Id.to_s)
 
             rescue exception
-            ISM::Error.show(className: "Core::Security",
+            ISM::Error.show(className: "CommandLine",
                             functionName: "ranAsMemberOfGroupIsm",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
