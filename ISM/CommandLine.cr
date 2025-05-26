@@ -3222,7 +3222,8 @@ module ISM
         end
 
         def installKernel
-            requestedCommands = "mv System.map /boot/System.map-linux-#{mainKernelVersion} && mv vmlinux /boot/vmlinuz-linux-#{mainKernelVersion} && cp .config /boot/config-linux-#{mainKernelVersion}"
+            root = (@systemInformation.handleChroot && @settings.rootPath != "/" ? "/" : @settings.rootPath)
+            requestedCommands = "mv System.map #{root}boot/System.map-linux-#{mainKernelVersion} && mv vmlinux #{root}boot/vmlinuz-linux-#{mainKernelVersion} && cp .config #{root}boot/config-linux-#{mainKernelVersion}"
             path = kernelSourcesPath
 
             process = runSystemCommand( command: requestedCommands,
@@ -3255,7 +3256,8 @@ module ISM
         end
 
         def kernelSourcesPath : String
-            return "/usr/src/#{mainKernelName}/"
+            root = (@systemInformation.handleChroot && @settings.rootPath != "/" ? "/" : @settings.rootPath)
+            return "#{root}usr/src/#{mainKernelName}/"
         end
 
         def kernelConfigPath : String
