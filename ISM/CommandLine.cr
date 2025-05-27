@@ -808,7 +808,7 @@ module ISM
         end
 
         def softwareIsGreatestVersion(information : ISM::SoftwareInformation)
-            return !@softwares.any? { |entry| entry.greatestVersion > information && softwareIsInstalled(entry)}
+            return !@softwares.any? { |entry| entry.greatestVersion.version > information.version && softwareIsInstalled(entry)}
         end
 
         def checkEnteredArguments
