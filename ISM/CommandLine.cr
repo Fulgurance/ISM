@@ -74,11 +74,11 @@ module ISM
             return processResult.to_s.strip.split(" ").includes?(ISM::Default::CommandLine::Id.to_s)
 
             rescue exception
-            ISM::Error.show(className: "CommandLine",
-                            functionName: "ranAsMemberOfGroupIsm",
-                            errorTitle: "Execution failure",
-                            error: "Failed to execute the function",
-                            exception: exception)
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "ranAsMemberOfGroupIsm",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def start
@@ -808,7 +808,7 @@ module ISM
         end
 
         def softwareIsGreatestVersion(information : ISM::SoftwareInformation)
-            return !@softwares.any? { |entry| entry.greatestVersion.version > information.version && softwareIsInstalled(entry.greatestVersion)}
+            return !@softwares.any? { |entry| entry.greatestVersion.fullName == information.fullName && entry.greatestVersion.version > information.version && softwareIsInstalled(entry.greatestVersion)}
         end
 
         def checkEnteredArguments
