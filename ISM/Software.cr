@@ -778,8 +778,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyFileNoChroot(path : String, targetPath : String)
-            Ism.runSystemCommand(   command: "cp #{path} #{targetPath}",
-                                    viaChroot: false)
+            FileUtils.cp(path, targetPath)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -791,8 +790,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def copyDirectoryNoChroot(path : String, targetPath : String)
-            Ism.runSystemCommand(   command: "cp -R #{path} #{targetPath}",
-                                    viaChroot: false)
+            FileUtils.cp_r(path, targetPath)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -804,8 +802,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteFileNoChroot(path : String)
-            Ism.runSystemCommand(   command: "rm #{path}",
-                                    viaChroot: false)
+            FileUtils.rm(path)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -817,8 +814,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def moveFileNoChroot(path : String, newPath : String)
-            Ism.runSystemCommand(   command: "mv #{path} #{newPath}",
-                                    viaChroot: false)
+            FileUtils.mv(path, newPath)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -830,8 +826,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(path : String)
-            Ism.runSystemCommand(   command: "mkdir -p #{path}",
-                                    viaChroot: false)
+            FileUtils.mkdir_p(directory)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -843,8 +838,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(path : String)
-            Ism.runSystemCommand(   command: "rm -r #{path}",
-                                    viaChroot: false)
+            FileUtils.rm_r(directory)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -1951,14 +1945,15 @@ module ISM
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String) : Process::Status
 
+
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
-            requestedCommands = "/usr/bin/mv -f \"#{target}\" \"#{path}\""
+            condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
-            Ism.runSystemCommand(   command: requestedCommands,
-                                    asRoot: true,
-                                    viaChroot: false)
+            Ism.runAsSuperUser(validCondition: condition) {
+                moveFileNoChroot(target,path)
+            }
 
             rescue exception
             ISM::Error.show(className: "Software",
@@ -1974,11 +1969,11 @@ module ISM
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
             # changeFileOwnerNoChroot(path, user, group, asRoot: true)
-            requestedCommands = "/usr/bin/mkdir -p #{path}"
+            condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
-            Ism.runSystemCommand(   command: requestedCommands,
-                                    asRoot: true,
-                                    viaChroot: false)
+            Ism.runAsSuperUser(validCondition: condition) {
+                makeDirectoryNoChroot(path)
+            }
 
             rescue exception
             ISM::Error.show(className: "Software",
@@ -1990,11 +1985,11 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String) : Process::Status
-            requestedCommands = "/usr/bin/mv -f \"#{target}\" \"#{path}\""
+            condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
-            Ism.runSystemCommand(   command: requestedCommands,
-                                    asRoot: true,
-                                    viaChroot: false)
+            Ism.runAsSuperUser(validCondition: condition) {
+                moveFileNoChroot(target,path)
+            }
 
             rescue exception
             ISM::Error.show(className: "Software",
@@ -2007,8 +2002,8 @@ module ISM
         #Special function to improve performance (Internal use only)
         def stripFileListNoChroot(fileList : Array(String))
             requestedCommands = <<-CMD
-                                strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
-                                CMD
+            strip --strip-unneeded #{fileList.join("\" || true\nstrip --strip-unneeded \"")} || true
+            CMD
 
             process = Process.run(requestedCommands, shell: true)
 

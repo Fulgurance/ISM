@@ -3140,7 +3140,6 @@ module ISM
                                 viaChroot: targetSystemInformation.handleChroot && viaChroot,
                                 quiet: quiet)
 
-            #TO DO: Need a fix to pass the setup permissions transition
             #TRACELOG-------------------------------------------------------------
             ISM::TraceLog.record(   accessor:   "CommandLine",
                                     function:   "runSystemCommand",
