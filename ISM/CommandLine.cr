@@ -53,6 +53,43 @@ module ISM
             @green = UInt8.new(55)
         end
 
+        def runAsSuperUser(validCondition = true, &)
+            if validCondition
+                uidResult = LibC.setresuid( realId: 0,
+                                            effectiveId: 0,
+                                            savedId: 0)
+                gidResult = LibC.setresgid( realId: 0,
+                                            effectiveId: 0,
+                                            savedId: 0)
+
+                if uidResult.negative? || gidResult.negative?
+                    ISM::Error.show(className: "CommandLine",
+                                    functionName: "runAsSuperUser",
+                                    errorTitle: "Privilege escalation failure",
+                                    error: "It mean probably that the uid and gid bit are not set.")
+                end
+            end
+
+            begin
+                yield
+            ensure
+                #We ensure we exit without superuser access
+                LibC.setresuid( realId: ISM::Default::CommandLine::Id,
+                                effectiveId: ISM::Default::CommandLine::Id,
+                                savedId: 0)
+                LibC.setresgid( realId: ISM::Default::CommandLine::Id,
+                                effectiveId: ISM::Default::CommandLine::Id,
+                                savedId: 0)
+            end
+
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "runAsSuperUser",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
         def ranAsSuperUser : Bool
             return (LibC.getuid == 0)
 
@@ -2993,8 +3030,10 @@ module ISM
 
             # We first check if there is any task left
             if File.exists?("#{taskAbsoluteFilePath}")
-                process = Process.run(  command: "sudo rm #{taskAbsoluteFilePath}",
-                                        shell: true)
+                process = runAsSuperUser {
+                    Process.run(command: "rm #{taskAbsoluteFilePath}",
+                                shell: true)
+                }
             end
 
             if !Dir.exists?(taskAbsoluteDirectoryPath)
@@ -3003,26 +3042,30 @@ module ISM
 
             File.write(taskAbsoluteFilePath, tasks)
 
-            process = Process.run(  command:    "sudo chmod +x #{taskAbsoluteFilePath}",
-                                    input:      quietMode,
-                                    output:     quietMode,
-                                    error:      quietMode,
-                                    shell:      true)
+            process = runAsSuperUser {
+                Process.run(command:    "chmod +x #{taskAbsoluteFilePath}",
+                            input:      quietMode,
+                            output:     quietMode,
+                            error:      quietMode,
+                            shell:      true)
+            }
 
             if viaChroot
                 user = (asRoot ? "0" : ISM::Default::CommandLine::Id.to_s)
                 userspec = "--userspec=#{user}:#{user}"
 
-                command = "HOME=/var/lib/ism sudo chroot #{userspec} #{@settings.rootPath} #{taskRelativeFilePath}"
+                command = "HOME=/var/lib/ism chroot #{userspec} #{@settings.rootPath} #{taskRelativeFilePath}"
             else
-                command = "#{asRoot ? "sudo" : ""} #{taskAbsoluteFilePath}"
+                command = "#{taskAbsoluteFilePath}"
             end
 
-            process = Process.run(  command:    command,
-                                    input:      quietMode,
-                                    output:     quietMode,
-                                    error:      quietMode,
-                                    shell:      true)
+            process = runAsSuperUser(validCondition: (viaChroot || asRoot)) {
+                Process.run(command:    command,
+                            input:      quietMode,
+                            output:     quietMode,
+                            error:      quietMode,
+                            shell:      true)
+            }
 
             return process
 
