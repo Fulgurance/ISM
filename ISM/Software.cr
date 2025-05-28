@@ -1943,7 +1943,7 @@ module ISM
         end
 
         #Special function for the installation process without chroot (Internal use only)
-        def installFile(target : String, path : String, user : String, group : String, mode : String) : Process::Status
+        def installFile(target : String, path : String, user : String, group : String, mode : String)
 
 
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
@@ -1964,7 +1964,7 @@ module ISM
         end
 
         #Special function for the installation process without chroot (Internal use only)
-        def installDirectory(path : String, user : String, group : String, mode : String) : Process::Status
+        def installDirectory(path : String, user : String, group : String, mode : String)
 
             #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
             # changeFileModeNoChroot(path, mode, asRoot: true)
@@ -1984,7 +1984,7 @@ module ISM
         end
 
         #Special function for the installation process without chroot (Internal use only)
-        def installSymlink(target : String, path : String) : Process::Status
+        def installSymlink(target : String, path : String)
             condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
             Ism.runAsSuperUser(validCondition: condition) {

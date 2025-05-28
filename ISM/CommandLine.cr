@@ -2228,29 +2228,6 @@ module ISM
         end
 
         def buildTasksFile
-            # We first check if there is any task left
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}")
-
-                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                    viaChroot: false,
-                                    asRoot: true)
-
-                runSystemCommand(   command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                    viaChroot: false,
-                                    asRoot: true)
-            end
-
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
-
-                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
-                                    viaChroot: false,
-                                    asRoot: true)
-
-                runSystemCommand(   command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
-                                    viaChroot: false,
-                                    asRoot: true)
-            end
-
             processResult = IO::Memory.new
 
             Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
@@ -2287,25 +2264,22 @@ module ISM
             #   -owned by root (uid 0 and gid 0)
             #   -suid bit set
             #   -set as immutable to don't allow any suppression
-            runSystemCommand(   command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                viaChroot: false,
-                                asRoot: true)
+            runAsSuperUser {
+                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                            shell: true)
 
-            runSystemCommand(   command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                viaChroot: false,
-                                asRoot: true)
+                Process.run(command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                            shell: true)
 
-            runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                viaChroot: false,
-                                asRoot: true)
+                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                            shell: true)
 
-            runSystemCommand(   command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
-                                viaChroot: false,
-                                asRoot: true)
+                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                            shell: true)
 
-            runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
-                                viaChroot: false,
-                                asRoot: true)
+                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                            shell: true)
+            }
 
             command = "./#{ISM::Default::Filename::Task}"
 
@@ -2776,14 +2750,13 @@ module ISM
             end
 
             if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
+                runAsSuperUser {
+                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                                shell: true)
 
-                runSystemCommand(   command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
-                                    viaChroot: false,
-                                    asRoot: true)
-
-                runSystemCommand(   command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
-                                    viaChroot: false,
-                                    asRoot: true)
+                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                                shell: true)
+                }
             end
 
             File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
