@@ -1726,6 +1726,7 @@ module ISM
             requestedCommands = "zic #{arguments}"
 
             process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true,
                                             path: path)
 
             if !process.success?
