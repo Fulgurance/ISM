@@ -826,7 +826,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def makeDirectoryNoChroot(path : String)
-            FileUtils.mkdir_p(directory)
+            FileUtils.mkdir_p(path)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -838,7 +838,7 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def deleteDirectoryNoChroot(path : String)
-            FileUtils.rm_r(directory)
+            FileUtils.rm_r(path)
 
             rescue exception
                 ISM::Error.show(className: "Software",
