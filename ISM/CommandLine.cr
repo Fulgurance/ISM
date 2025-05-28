@@ -57,10 +57,10 @@ module ISM
             if validCondition
                 uidResult = LibC.setresuid( realId: 0,
                                             effectiveId: 0,
-                                            savedId: 0)
+                                            savedId: 1000)
                 gidResult = LibC.setresgid( realId: 0,
                                             effectiveId: 0,
-                                            savedId: 0)
+                                            savedId: 1000)
 
                 if uidResult.negative? || gidResult.negative?
                     ISM::Error.show(className: "CommandLine",
