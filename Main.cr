@@ -12,7 +12,6 @@ begin
     else
         #We set uid and gid bit to allow any time privilege escalations
         LibC.setuid(id: 0)
-        LibC.setgid(id: 0)
         #We ensure for now all will be run as ism user
         #If superuser access is needed, call: runAsSuperUser (to avoid security issues)
         LibC.setresuid( realId: ISM::Default::CommandLine::Id,
