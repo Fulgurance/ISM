@@ -1775,7 +1775,9 @@ module ISM
 
         def cleanBuildingDirectory(path : String)
             if Dir.exists?(path)
-                FileUtils.rm_r(path)
+                runAsSuperUser {
+                    FileUtils.rm_r(path)
+                }
             end
 
             Dir.mkdir_p(path)
