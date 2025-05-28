@@ -2213,13 +2213,11 @@ module ISM
 
             generateTasksFile(tasks)
 
-            if Ism.settings.binaryTaskMode
-                showTaskCompilationTitleMessage
-                buildTasksFile
-                showCalculationDoneMessage
-            end
+            showTaskCompilationTitleMessage
+            buildTasksFile
+            showCalculationDoneMessage
 
-            runTasksFile(asBinary: Ism.settings.binaryTaskMode, logEnabled: true, softwareList: neededSoftwares)
+            runTasksFile(logEnabled: true, softwareList: neededSoftwares)
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
@@ -2284,22 +2282,24 @@ module ISM
                                 exception: exception)
         end
 
-        def runTasksFile(asBinary = true, logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+        def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
             # We first set proper rights for the binary and task file:
-            #   -owned by ism (uid 250 and gid 250)
+            #   -owned by root (uid 0 and gid 0)
+            #   -suid bit set
             #   -set as immutable to don't allow any suppression
+            runSystemCommand(   command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                viaChroot: false,
+                                asRoot: true)
 
-            if asBinary
-                runSystemCommand(   command: "/usr/bin/chown #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                    viaChroot: false,
-                                    asRoot: true)
+            runSystemCommand(   command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                viaChroot: false,
+                                asRoot: true)
 
-                runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
-                                    viaChroot: false,
-                                    asRoot: true)
-            end
+            runSystemCommand(   command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                viaChroot: false,
+                                asRoot: true)
 
-            runSystemCommand(   command: "/usr/bin/chown #{ISM::Default::CommandLine::Id}:#{ISM::Default::CommandLine::Id} #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+            runSystemCommand(   command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
                                 viaChroot: false,
                                 asRoot: true)
 
@@ -2307,7 +2307,7 @@ module ISM
                                 viaChroot: false,
                                 asRoot: true)
 
-            command = (asBinary ? "./#{ISM::Default::Filename::Task}" : "crystal #{ISM::Default::Filename::Task}.cr")
+            command = "./#{ISM::Default::Filename::Task}"
 
             logIOMemory = IO::Memory.new
 
@@ -2398,11 +2398,9 @@ module ISM
 
             generateTasksFile(tasks)
 
-            if Ism.settings.binaryTaskMode
-                showTaskCompilationTitleMessage
-                buildTasksFile
-                showCalculationDoneMessage
-            end
+            showTaskCompilationTitleMessage
+            buildTasksFile
+            showCalculationDoneMessage
 
             runTasksFile
 

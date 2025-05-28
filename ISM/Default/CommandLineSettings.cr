@@ -12,8 +12,6 @@ module ISM
             ErrorChrootMakeOptionsInvalidValueAdviceText = "The input value must be of the form -jX where X is the number of jobs to run simultaneously"
 
             #Generic parameters
-            SecureMode = true
-            BinaryTaskMode = false
             InstallByChroot = false
             RootPath = "/"
             DefaultMirror = "Uk"

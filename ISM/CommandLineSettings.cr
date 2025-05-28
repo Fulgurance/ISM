@@ -5,7 +5,6 @@ module ISM
         include JSON::Serializable
 
         #Generic parameters
-        property    binaryTaskMode : Bool
         property    rootPath : String
         property    defaultMirror : String
         property    buildKernelOptionsAsModule : Bool
@@ -60,7 +59,6 @@ module ISM
         property    chrootVariantId : String
 
         def initialize( #Generic parameters
-                        @binaryTaskMode = ISM::Default::CommandLineSettings::BinaryTaskMode,
                         @rootPath = ISM::Default::CommandLineSettings::RootPath,
                         @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
                         @buildKernelOptionsAsModule = ISM::Default::CommandLineSettings::BuildKernelOptionsAsModule,
@@ -151,7 +149,6 @@ module ISM
                                     path : String,
 
                                     #Generic parameters
-                                    binaryTaskMode : Bool,
                                     rootPath : String,
                                     defaultMirror : String,
                                     buildKernelOptionsAsModule : Bool,
@@ -212,7 +209,6 @@ module ISM
             end
 
             settings = {#Generic parameters
-                        "binaryTaskMode" => binaryTaskMode,
                         "rootPath" => rootPath,
                         "defaultMirror" => defaultMirror,
                         "buildKernelOptionsAsModule" => buildKernelOptionsAsModule,
@@ -283,7 +279,6 @@ module ISM
             self.class.writeConfiguration(  #File path
                                             @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
                                             #Generic parameters
-                                            ISM::Default::CommandLineSettings::BinaryTaskMode,
                                             ISM::Default::CommandLineSettings::RootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
@@ -350,7 +345,6 @@ module ISM
                                             self.class.filePath,
 
                                             #Generic parameters
-                                            @binaryTaskMode,
                                             @rootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
@@ -764,17 +758,6 @@ module ISM
         #Setter methods
 
         #   Generic
-        def setBinaryTaskMode(@binaryTaskMode)
-            writeSystemConfiguration
-
-            rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
-                                functionName: "setBinaryTaskMode",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
         def setRootPath(@rootPath)
             writeSystemConfiguration
 

@@ -11,8 +11,6 @@ module ISM
                 Description = "Configure ISM settings"
                 Options = [ ISM::Option::SettingsShow.new,
                             #Global options
-                            ISM::Option::SettingsEnableBinaryTaskMode.new,
-                            ISM::Option::SettingsDisableBinaryTaskMode.new,
                             ISM::Option::SettingsSetRootPath.new,
                             ISM::Option::SettingsSetDefaultMirror.new,
                             ISM::Option::SettingsEnableBuildKernelOptionsAsModule.new,
