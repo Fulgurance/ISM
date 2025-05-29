@@ -2230,6 +2230,16 @@ module ISM
         end
 
         def buildTasksFile
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}")
+                runAsSuperUser {
+                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                shell: true)
+
+                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                                shell: true)
+                }
+            end
+
             processResult = IO::Memory.new
 
             Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
