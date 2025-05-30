@@ -2024,6 +2024,7 @@ module ISM
                         version = information.version
                         passNumber = information.getEnabledPassNumber
                         fullVersionName = information.fullVersionName
+                        builtSoftwareDirectoryPath = \"#\{Ism.settings.rootPath\}#\{ISM::Default::Path::BuiltSoftwaresDirectory\}#\{information.port\}/#\{information.name\}/\"
                         coloredFullVersionName = \"#\{information.fullName.colorize(:magenta)} /#\{version.colorize(Colorize::ColorRGB.new(255,100,100))}/\"
 
                         #START INSTALLATION PROCESS
@@ -2032,7 +2033,7 @@ module ISM
 
                         Ism.showStartSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
 
-                        Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
+                        Ism.cleanBuildingDirectory(builtSoftwareDirectoryPath)
 
                         #Setup
                         begin
@@ -2195,7 +2196,7 @@ module ISM
                         #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
                         Ism.installedSoftwares.push(target.information)
 
-                        Ism.cleanBuildingDirectory(Ism.settings.rootPath+target.information.builtSoftwareDirectoryPath)
+                        Ism.cleanBuildingDirectory(builtSoftwareDirectoryPath)
 
                         Ism.showEndSoftwareInstallingMessage(index, limit, port, name, version, passNumber)
 
