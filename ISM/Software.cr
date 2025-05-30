@@ -2357,7 +2357,9 @@ module ISM
 
         def cleanWorkDirectoryPath
             if Dir.exists?(workDirectoryPathNoChroot)
-                deleteDirectoryNoChroot(workDirectoryPathNoChroot)
+                runAsSuperUser {
+                    deleteDirectoryNoChroot(workDirectoryPathNoChroot)
+                }
             end
 
             makeDirectoryNoChroot(workDirectoryPathNoChroot)
