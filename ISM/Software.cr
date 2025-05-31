@@ -397,7 +397,9 @@ module ISM
         def reportResult
             puts "-----------"
             puts LibC.getuid
-            Process.run("ls -la /sources")
+            Process.run("ls -la /sources", shell: true, input: Process::Redirect::Inherit,
+                                                        output: Process::Redirect::Inherit,
+                                                        error: )Process::Redirect::Inherit)
         end
         #######################
 
