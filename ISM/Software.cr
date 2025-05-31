@@ -393,44 +393,13 @@ module ISM
         def setup
         end
 
-        ###TEMPORARY DEBUG CODE
-        def reportResult
-            puts "-----------"
-            puts LibC.getuid
-            Process.run("ls -la /sources", shell: true, input: Process::Redirect::Inherit,
-                                                        output: Process::Redirect::Inherit,
-                                                        error: Process::Redirect::Inherit)
-        end
-        #######################
-
         def download
             Ism.notifyOfDownload(@information)
 
-            ###TEMPORARY DEBUG CODE
-            puts 1
-            reportResult
-            #######################
-
             cleanWorkDirectoryPath
 
-            ###TEMPORARY DEBUG CODE
-            puts 2
-            reportResult
-            #######################
-
             downloadSources
-
-            ###TEMPORARY DEBUG CODE
-            puts 3
-            reportResult
-            #######################
-
             downloadSourcesSha512
-
-            ###TEMPORARY DEBUG CODE
-            puts 4
-            reportResult
-            #######################
 
             if !@additions.empty?
                 downloadAdditions
@@ -618,17 +587,7 @@ module ISM
         def check
             Ism.notifyOfCheck(@information)
 
-            ###TEMPORARY DEBUG CODE
-            puts 5
-            reportResult
-            #######################
-
             checkSourcesSha512
-
-            ###TEMPORARY DEBUG CODE
-            puts 6
-            reportResult
-            #######################
 
             if !@additions.empty?
                 checkAdditionsSha512
@@ -691,36 +650,16 @@ module ISM
         def extract
             Ism.notifyOfExtract(@information)
 
-            ###TEMPORARY DEBUG CODE
-            puts 7
-            reportResult
-            #######################
-
             extractSources
-
-            ###TEMPORARY DEBUG CODE
-            puts 8
-            reportResult
-            #######################
 
             if !@additions.empty?
                 extractAdditions
             end
 
-            ###TEMPORARY DEBUG CODE
-            puts 9
-            reportResult
-            #######################
-
             #Copy of the current available patches from the port
             if Dir.exists?(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName)
                 copyDirectoryNoChroot(@information.mainDirectoryPath+"/"+ISM::Default::Software::PatchesDirectoryName,workDirectoryPathNoChroot+"/"+ISM::Default::Software::PatchesDirectoryName)
             end
-
-            ###TEMPORARY DEBUG CODE
-            puts 10
-            reportResult
-            #######################
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -2410,11 +2349,11 @@ module ISM
         end
 
         def cleanWorkDirectoryPath
-            if Dir.exists?(workDirectoryPathNoChroot)
-                Ism.runAsSuperUser {
+            Ism.runAsSuperUser {
+                if Dir.exists?(workDirectoryPathNoChroot)
                     deleteDirectoryNoChroot(workDirectoryPathNoChroot)
-                }
-            end
+                end
+            }
 
             makeDirectoryNoChroot(workDirectoryPathNoChroot)
 
