@@ -1789,16 +1789,26 @@ module ISM
             reportResult
             #######################
 
-            if Dir.exists?(path)
-                runAsSuperUser {
+            # if Dir.exists?(path)
+            #     runAsSuperUser {
+            #         FileUtils.rm_r(path)
+            #     }
+            #
+            #     ###TEMPORARY DEBUG CODE
+            #     puts "b"
+            #     reportResult
+            #     #######################
+            # end
+            runAsSuperUser {
+                if Dir.exists?(path)
                     FileUtils.rm_r(path)
-                }
 
-                ###TEMPORARY DEBUG CODE
-                puts "b"
-                reportResult
-                #######################
-            end
+                    ###TEMPORARY DEBUG CODE
+                    puts "b"
+                    reportResult
+                    #######################
+                end
+            }
 
             ###TEMPORARY DEBUG CODE
             puts "c"
