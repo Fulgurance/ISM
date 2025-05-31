@@ -1773,14 +1773,44 @@ module ISM
                                 exception: exception)
         end
 
+        ###TEMPORARY DEBUG CODE
+        def reportResult
+            puts "-----------"
+            puts LibC.getuid
+            Process.run("ls -la /sources", shell: true, input: Process::Redirect::Inherit,
+                                                        output: Process::Redirect::Inherit,
+                                                        error: Process::Redirect::Inherit)
+        end
+        #######################
+
         def cleanBuildingDirectory(path : String)
+            ###TEMPORARY DEBUG CODE
+            puts "a"
+            reportResult
+            #######################
+
             if Dir.exists?(path)
                 runAsSuperUser {
                     FileUtils.rm_r(path)
                 }
+
+                ###TEMPORARY DEBUG CODE
+                puts "b"
+                reportResult
+                #######################
             end
 
+            ###TEMPORARY DEBUG CODE
+            puts "c"
+            reportResult
+            #######################
+
             Dir.mkdir_p(path)
+
+            ###TEMPORARY DEBUG CODE
+            puts "d"
+            reportResult
+            #######################
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
