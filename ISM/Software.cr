@@ -763,17 +763,14 @@ module ISM
             process = Process.run(  "tar -xf #{archivePath}",
                                     shell: true,
                                     chdir: destinationPath)
-            if !process.success?
-                Ism.notifyOfExtractError(archivePath, destinationPath)
-                Ism.exitProgram
-            end
 
-            rescue exception
+            if !process.success?
                 ISM::Error.show(className: "Software",
                                 functionName: "extractArchive",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
+            end
         end
         
         def patch
@@ -807,16 +804,12 @@ module ISM
                                     shell: true,
                                     chdir: mainWorkDirectoryPathNoChroot)
             if !process.success?
-                Ism.notifyOfApplyPatchError(patch)
-                Ism.exitProgram
-            end
-
-            rescue exception
                 ISM::Error.show(className: "Software",
                                 functionName: "applyPatch",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
+            end
         end
 
         def prepare
