@@ -3161,7 +3161,7 @@ module ISM
 
             process = runTasks( tasks: tasks,
                                 asRoot: rootMode,
-                                viaChroot: targetSystemInformation.handleChroot && viaChroot,
+                                viaChroot: targetSystemInformation.handleChroot && viaChroot && @settings.rootPath != "/",
                                 quiet: quiet)
 
             #TRACELOG-------------------------------------------------------------
