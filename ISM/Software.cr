@@ -16,6 +16,10 @@ module ISM
             @additions = Array(String).new
         end
 
+        def autoBuildKernel
+            return Ism.settings.autoBuildKernel
+        end
+
         def autoDeployServices
             return Ism.settings.autoDeployServices
         end
