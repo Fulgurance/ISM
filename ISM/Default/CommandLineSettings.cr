@@ -16,6 +16,7 @@ module ISM
             RootPath = "/"
             DefaultMirror = "Uk"
             BuildKernelOptionsAsModule = true
+            AutoBuildKernel = true
             AutoDeployServices = true
 
             #Host related parameters

@@ -15,6 +15,8 @@ module ISM
                             ISM::Option::SettingsSetDefaultMirror.new,
                             ISM::Option::SettingsEnableBuildKernelOptionsAsModule.new,
                             ISM::Option::SettingsDisableBuildKernelOptionsAsModule.new,
+                            ISM::Option::SettingsEnableAutoBuildKernel.new,
+                            ISM::Option::SettingsDisableAutoBuildKernel.new,
                             ISM::Option::SettingsEnableAutoDeployServices.new,
                             ISM::Option::SettingsDisableAutoDeployServices.new,
                             #Host options
