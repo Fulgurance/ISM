@@ -5,10 +5,12 @@ module ISM
         def deploy
             super
 
-            cleanKernelSources
-            generateKernelConfiguration
-            buildKernel
-            installKernel
+            if autoBuildKernel
+                cleanKernelSources
+                generateKernelConfiguration
+                buildKernel
+                installKernel
+            end
         end
 
     end
