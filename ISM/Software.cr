@@ -711,8 +711,7 @@ module ISM
                 ISM::Error.show(className: "Software",
                                 functionName: "extractArchive",
                                 errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
+                                error: "Failed to execute the function")
             end
         end
         
@@ -750,8 +749,7 @@ module ISM
                 ISM::Error.show(className: "Software",
                                 functionName: "applyPatch",
                                 errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
+                                error: "Failed to execute the function")
             end
         end
 
