@@ -19,6 +19,8 @@ module ISM
                 InstallByChrootText = "Install by chroot"
                 RootPathText = "Root path"
                 DefaultMirrorText = "Default mirror"
+                AutoBuildKernel = "Auto build the kernel"
+                BuildKernelOptionsAsModule = "Build kernel options as module"
                 AutoDeployServicesText = "Auto deploy services"
 
                 #Host titles

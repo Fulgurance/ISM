@@ -15,6 +15,8 @@ module ISM
 
                 puts "\t#{ISM::Default::Option::SettingsShow::RootPathText}: #{Ism.settings.rootPath.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::DefaultMirrorText}: #{Ism.settings.defaultMirror.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::BuildKernelOptionsAsModule}: #{Ism.settings.buildKernelOptionsAsModule.colorize(:green)}"
+                puts "\t#{ISM::Default::Option::SettingsShow::AutoBuildKernel}: #{Ism.settings.autoBuildKernel.colorize(:green)}"
                 puts "\t#{ISM::Default::Option::SettingsShow::AutoDeployServicesText}: #{Ism.settings.autoDeployServices.colorize(:green)}"
 
                 puts "\t#{ISM::Default::Option::SettingsShow::SystemTargetNameText}: #{Ism.settings.systemTargetName(false).colorize(:green)}"
