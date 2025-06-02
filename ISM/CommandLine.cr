@@ -102,13 +102,18 @@ module ISM
         end
 
         def ranAsMemberOfIsmGroup : Bool
-            processResult = IO::Memory.new
+            groupSystemFile = File.read_lines("/etc/group")
 
-            Process.run(    command: "id -G",
-                            output: processResult,
-                            shell: true)
+            groupSystemFile.each do |line|
+                userName = System::User.find_by(id: LibC.getuid.to_s).name
 
-            return processResult.to_s.strip.split(" ").includes?(ISM::Default::CommandLine::Id.to_s)
+                if line.starts_with?(userName) && line.includes?(ISM::Default::CommandLine::Name)
+                    return true
+                end
+            end
+
+            return false
+
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
