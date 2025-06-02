@@ -102,8 +102,8 @@ module ISM
         end
 
         def ranAsMemberOfIsmGroup : Bool
-            runAsSuperUser {
-                groupSystemFile = File.read_lines("/etc/group")
+            groupSystemFile = runAsSuperUser {
+                File.read_lines("/etc/group")
             }
 
             groupSystemFile.each do |line|
