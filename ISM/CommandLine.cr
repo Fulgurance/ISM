@@ -102,7 +102,9 @@ module ISM
         end
 
         def ranAsMemberOfIsmGroup : Bool
-            groupSystemFile = File.read_lines("/etc/group")
+            runAsSuperUser {
+                groupSystemFile = File.read_lines("/etc/group")
+            }
 
             groupSystemFile.each do |line|
                 userName = System::User.find_by(id: LibC.getuid.to_s).name
