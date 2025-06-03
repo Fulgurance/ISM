@@ -572,12 +572,8 @@ module ISM
         end
         
         def getFileContent(filePath : String) : String
-            begin
-                content = File.read(filePath)
-            rescue error
-                Ism.notifyOfGetFileContentError(filePath, error)
-                Ism.exitProgram
-            end
+            content = File.read(filePath)
+
             return content
 
             rescue exception
@@ -639,8 +635,11 @@ module ISM
             archiveSha512 = digest.hexfinal
 
             if archiveSha512 != sha512
-                Ism.notifyOfCheckError(archive, sha512)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "checkFile",
+                                errorTitle: "Integrity test failed",
+                                error: "The SHA512 value of the file does not match",
+                                exception: exception)
             end
 
             rescue exception
@@ -1019,8 +1018,10 @@ module ISM
 
                 command = "ln -sf"
             else
-                Ism.notifyOfMakeLinkUnknowTypeError(target, path, type)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "makeLink",
+                                errorTitle: "Unknown link type",
+                                error: "The requested link type does not exist")
             end
 
             requestedCommands = "#{command} '#{target}' #{path}"
@@ -1028,8 +1029,10 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                Ism.notifyOfRunSystemCommandError(requestedCommands)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "makeLink",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function")
             end
         end
 
@@ -2335,8 +2338,11 @@ module ISM
             rescue error
                 deleteDirectoryNoChroot(kernelOptionsDatabasePath)
 
-                Ism.notifyOfUpdateKernelOptionsDatabaseError(Ism.selectedKernel, error)
-                Ism.exitProgram
+                ISM::Error.show(className: "Software",
+                                functionName: "updateKernelOptionsDatabase",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
             end
         end
 
