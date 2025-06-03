@@ -1943,15 +1943,12 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-
-
-            #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
-            # changeFileModeNoChroot(path, mode, asRoot: true)
-            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
             condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
             Ism.runAsSuperUser(validCondition: condition) {
                 moveFileNoChroot(target,path)
+                changeFileModeNoChroot(path, mode)
+                changeFileOwnerNoChroot(path, user, group)
             }
 
             rescue exception
@@ -1964,14 +1961,12 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-
-            #TEMPORARY DISABLED UNTIL SECURITYMAP ARE SET PROPERLY
-            # changeFileModeNoChroot(path, mode, asRoot: true)
-            # changeFileOwnerNoChroot(path, user, group, asRoot: true)
             condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
             Ism.runAsSuperUser(validCondition: condition) {
                 makeDirectoryNoChroot(path)
+                changeFileModeNoChroot(path, mode)
+                changeFileOwnerNoChroot(path, user, group)
             }
 
             rescue exception
