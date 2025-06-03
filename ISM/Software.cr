@@ -638,8 +638,7 @@ module ISM
                 ISM::Error.show(className: "Software",
                                 functionName: "checkFile",
                                 errorTitle: "Integrity test failed",
-                                error: "The SHA512 value of the file does not match",
-                                exception: exception)
+                                error: "The SHA512 value of the file does not match")
             end
 
             rescue exception
