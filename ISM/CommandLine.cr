@@ -109,7 +109,7 @@ module ISM
             groupSystemFile.each do |line|
                 userName = System::User.find_by(id: LibC.getuid.to_s).name
 
-                if line.starts_with?(userName) && line.includes?(ISM::Default::CommandLine::Name)
+                if line.starts_with?(ISM::Default::CommandLine::Name) && (line.includes?(userName) || userName == ISM::Default::CommandLine::Name)
                     return true
                 end
             end
