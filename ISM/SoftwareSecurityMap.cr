@@ -31,37 +31,29 @@ module ISM
             group = String.new
             mode = String.new
 
-            if Ism.targetSystemInformation.handleChroot
-                #Return the matching descriptor
-                @descriptors.each do |entry|
-                    #Special entry for sources path
-                    if entry.target == ISM::Default::SoftwareSecurityDescriptor::SourcesPathEntryName && path == "/#{ISM::Default::Path::SourcesDirectory}"[0..-2]
-                        return entry
-                    end
-
-                    #Special entry for tools path
-                    if entry.target == ISM::Default::SoftwareSecurityDescriptor::ToolsPathEntryName && path == "/#{ISM::Default::Path::ToolsDirectory}"[0..-2]
-                        return entry
-                    end
-
-                    if entry.target == path
-                        return entry
-                    end
+            #Return the matching descriptor
+            @descriptors.each do |entry|
+                #Special entry for sources path
+                if entry.target == ISM::Default::SoftwareSecurityDescriptor::SourcesPathEntryName && path == "/#{ISM::Default::Path::SourcesDirectory}"[0..-2]
+                    return entry
                 end
 
-                #TO DO: ADD ADDITIONAL STEP TO CHECK IF THERE IS ANY PARENT DIRECTORY THAT WE SHOULD INHERIT RECURSIVELY OF THE RIGHTS
+                #Special entry for tools path
+                if entry.target == ISM::Default::SoftwareSecurityDescriptor::ToolsPathEntryName && path == "/#{ISM::Default::Path::ToolsDirectory}"[0..-2]
+                    return entry
+                end
 
-
-                #Apply default the default configuration for directory and file
-                user = (directory ? @defaultConfiguration.directoryUser : @defaultConfiguration.fileUser)
-                group = (directory ? @defaultConfiguration.directoryGroup : @defaultConfiguration.fileGroup)
-                mode = (directory ? @defaultConfiguration.directoryMode : @defaultConfiguration.fileMode)
-            else
-                #Set everything with default ism user, group and mode for directory and file
-                user = ISM::Default::CommandLine::Id.to_s
-                group = ISM::Default::CommandLine::Id.to_s
-                mode = (directory ? ISM::Default::SoftwareSecurityMap::DirectoryMode : ISM::Default::SoftwareSecurityMap::FileMode)
+                if entry.target == path
+                    return entry
+                end
             end
+
+            #TO DO: ADD ADDITIONAL STEP TO CHECK IF THERE IS ANY PARENT DIRECTORY THAT WE SHOULD INHERIT RECURSIVELY OF THE RIGHTS
+
+            #Apply default the default configuration for directory and file
+            user = (directory ? @defaultConfiguration.directoryUser : @defaultConfiguration.fileUser)
+            group = (directory ? @defaultConfiguration.directoryGroup : @defaultConfiguration.fileGroup)
+            mode = (directory ? @defaultConfiguration.directoryMode : @defaultConfiguration.fileMode)
 
             return ISM::SoftwareSecurityDescriptor.new( target: path,
                                                         user:   user,

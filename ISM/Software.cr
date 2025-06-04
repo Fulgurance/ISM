@@ -1976,8 +1976,11 @@ module ISM
 
             Ism.runAsSuperUser(validCondition: condition) {
                 moveFileNoChroot(target,path)
-                changeFileModeNoChroot(path, mode)
-                changeFileOwnerNoChroot(path, user, group)
+
+                if Ism.targetSystemInformation.handleChroot
+                    changeFileModeNoChroot(path, mode)
+                    changeFileOwnerNoChroot(path, user, group)
+                end
             }
 
             rescue exception
@@ -1994,8 +1997,11 @@ module ISM
 
             Ism.runAsSuperUser(validCondition: condition) {
                 makeDirectoryNoChroot(path)
-                changeFileModeNoChroot(path, mode)
-                changeFileOwnerNoChroot(path, user, group)
+
+                if Ism.targetSystemInformation.handleChroot
+                    changeFileModeNoChroot(path, mode)
+                    changeFileOwnerNoChroot(path, user, group)
+                end
             }
 
             rescue exception
