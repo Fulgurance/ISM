@@ -856,9 +856,12 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def changeFileOwnerNoChroot(path : String, user : String, group : String)
+            uid = (user.to_i? ? System::User.find_by(id: user).id.to_i : System::User.find_by(name: user).id.to_i)
+            gid = (group.to_i? ? System::Group.find_by(id: group).id.to_i : System::Group.find_by(name: group).id.to_i)
+
             File.chown( path: path,
-                        uid: System::User.find_by(name: user).id.to_i,
-                        gid: System::Group.find_by(name: group).id.to_i)
+                        uid: uid,
+                        gid: gid)
 
             rescue exception
                 ISM::Error.show(className: "Software",
