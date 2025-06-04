@@ -2356,7 +2356,7 @@ module ISM
             begin
                 generateKernelOptionsFiles(getFullKernelKconfigFile(kernelKconfigFilePath))
                 generateKernelOptionsFiles(getFullKernelKconfigFile(kernelArchitectureKconfigFilePath))
-            rescue error
+            rescue exception
                 deleteDirectoryNoChroot(kernelOptionsDatabasePath)
 
                 ISM::Error.show(className: "Software",
