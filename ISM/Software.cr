@@ -841,6 +841,33 @@ module ISM
                                 exception: exception)
         end
 
+        #Special function to improve performance (Internal use only)
+        def changeFileModeNoChroot(path : String, mode : String)
+            File.chmod( path: path,
+                        permissions: mode.to_i(8))
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "changeFileModeNoChroot",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        #Special function to improve performance (Internal use only)
+        def changeFileOwnerNoChroot(path : String, user : String, group : String)
+            File.chown( path: path,
+                        uid: System::User.find_by(name: user).id,
+                        gid: System::Group.find_by(name: group).id)
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "changeFileOwnerNoChroot",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
         def fileUpdateContent(path : String, data : String)
             requestedCommands = <<-CMD
             grep -q '#{data}' '#{path}' || echo "#{data}" >> '#{path}'
