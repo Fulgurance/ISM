@@ -1974,15 +1974,12 @@ module ISM
         def installFile(target : String, path : String, user : String, group : String, mode : String)
             condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
-            Ism.runAsSuperUser(validCondition: condition) {
-                moveFileNoChroot(target,path)
-
-                #GENERATE ISSUES FOR NOW
-                # if Ism.targetSystemInformation.handleChroot
-                #     changeFileModeNoChroot(path, mode)
-                #     changeFileOwnerNoChroot(path, user, group)
-                # end
-            }
+            moveFileNoChroot(target,path)
+            #GENERATE ISSUES FOR NOW
+            # if Ism.targetSystemInformation.handleChroot
+            #     changeFileModeNoChroot(path, mode)
+            #     changeFileOwnerNoChroot(path, user, group)
+            # end
 
             rescue exception
             ISM::Error.show(className: "Software",
@@ -1996,15 +1993,13 @@ module ISM
         def installDirectory(path : String, user : String, group : String, mode : String)
             condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
-            Ism.runAsSuperUser(validCondition: condition) {
-                makeDirectoryNoChroot(path)
+            makeDirectoryNoChroot(path)
 
-                #GENERATE ISSUES FOR NOW
-                # if Ism.targetSystemInformation.handleChroot
-                #     changeFileModeNoChroot(path, mode)
-                #     changeFileOwnerNoChroot(path, user, group)
-                # end
-            }
+            #GENERATE ISSUES FOR NOW
+            # if Ism.targetSystemInformation.handleChroot
+            #     changeFileModeNoChroot(path, mode)
+            #     changeFileOwnerNoChroot(path, user, group)
+            # end
 
             rescue exception
             ISM::Error.show(className: "Software",
@@ -2018,9 +2013,7 @@ module ISM
         def installSymlink(target : String, path : String)
             condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
-            Ism.runAsSuperUser(validCondition: condition) {
-                moveFileNoChroot(target,path)
-            }
+            moveFileNoChroot(target,path)
 
             rescue exception
             ISM::Error.show(className: "Software",
@@ -2060,43 +2053,45 @@ module ISM
             end
             #############################################
 
-            fileList.each do |entry|
+            Ism.runAsSuperUser(validCondition: condition) {
+                fileList.each do |entry|
 
-                #Don't keep libtool archives by default except if explicitely specified
-                if File.directory?(entry) || entry[-3..-1] != ".la" || preserveLibtoolArchives
+                    #Don't keep libtool archives by default except if explicitely specified
+                    if File.directory?(entry) || entry[-3..-1] != ".la" || preserveLibtoolArchives
 
-                    finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
-                    recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
+                        finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
+                        recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
 
-                    if !File.exists?(finalDestination) || Ism.softwareIsInstalled(@information) && ISM::SoftwareInformation.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
-                        installedFiles << recordedFilePath
-                    end
-
-                    securityDescriptor = @information.securityMap.descriptor(   path:  recordedFilePath,
-                                                                                realPath:   entry)
-
-                    if File.directory?(entry) && !File.symlink?(entry)
-                        if !Dir.exists?(finalDestination)
-                            installDirectory(   path:   finalDestination,
-                                                user:   securityDescriptor.user,
-                                                group:  securityDescriptor.group,
-                                                mode:   securityDescriptor.mode)
+                        if !File.exists?(finalDestination) || Ism.softwareIsInstalled(@information) && ISM::SoftwareInformation.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
+                            installedFiles << recordedFilePath
                         end
-                    else
-                        if File.symlink?(entry)
-                            installSymlink( target: entry,
-                                            path:   finalDestination)
+
+                        securityDescriptor = @information.securityMap.descriptor(   path:  recordedFilePath,
+                                                                                    realPath:   entry)
+
+                        if File.directory?(entry) && !File.symlink?(entry)
+                            if !Dir.exists?(finalDestination)
+                                installDirectory(   path:   finalDestination,
+                                                    user:   securityDescriptor.user,
+                                                    group:  securityDescriptor.group,
+                                                    mode:   securityDescriptor.mode)
+                            end
                         else
-                            installFile(target: entry,
-                                        path:   finalDestination,
-                                        user:   securityDescriptor.user,
-                                        group:  securityDescriptor.group,
-                                        mode:   securityDescriptor.mode)
+                            if File.symlink?(entry)
+                                installSymlink( target: entry,
+                                                path:   finalDestination)
+                            else
+                                installFile(target: entry,
+                                            path:   finalDestination,
+                                            user:   securityDescriptor.user,
+                                            group:  securityDescriptor.group,
+                                            mode:   securityDescriptor.mode)
+                            end
                         end
-                    end
 
+                    end
                 end
-            end
+            }
 
             #Strip the file if needed
             if stripFiles
