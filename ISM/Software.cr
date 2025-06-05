@@ -2052,6 +2052,12 @@ module ISM
             fileList = Dir.glob(["#{builtSoftwareDirectoryPathNoChroot}/**/*"], match: :dot_files)
             installedFiles = Array(String).new
 
+            ################TEMPORARY FIX################
+            runSystemCommand(   command: "chown -R root:root #{builtSoftwareDirectoryPathNoChroot}",
+                                asRoot: true,
+                                viaChroot: false)
+            #############################################
+
             fileList.each do |entry|
 
                 #Don't keep libtool archives by default except if explicitely specified
