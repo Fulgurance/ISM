@@ -2054,9 +2054,9 @@ module ISM
 
             ################TEMPORARY FIX################
             if Ism.targetSystemInformation.handleChroot
-                runSystemCommand(   command: "chown -R root:root #{builtSoftwareDirectoryPathNoChroot}",
-                                    asRoot: true,
-                                    viaChroot: false)
+                Ism.runSystemCommand(   command: "chown -R root:root #{builtSoftwareDirectoryPathNoChroot}",
+                                        asRoot: true,
+                                        viaChroot: false)
             end
             #############################################
 
