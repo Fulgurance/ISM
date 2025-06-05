@@ -1972,8 +1972,6 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installFile(target : String, path : String, user : String, group : String, mode : String)
-            condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
-
             moveFileNoChroot(target,path)
             #GENERATE ISSUES FOR NOW
             # if Ism.targetSystemInformation.handleChroot
@@ -1991,8 +1989,6 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installDirectory(path : String, user : String, group : String, mode : String)
-            condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
-
             makeDirectoryNoChroot(path)
 
             #GENERATE ISSUES FOR NOW
@@ -2011,8 +2007,6 @@ module ISM
 
         #Special function for the installation process without chroot (Internal use only)
         def installSymlink(target : String, path : String)
-            condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
-
             moveFileNoChroot(target,path)
 
             rescue exception
@@ -2037,6 +2031,8 @@ module ISM
 
         def install(preserveLibtoolArchives = false, stripFiles = true)
             Ism.notifyOfInstall(@information)
+
+            condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
             if Ism.targetSystemInformation.handleChroot
                 Ism.unlockSystemAccess
