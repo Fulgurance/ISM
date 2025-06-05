@@ -2053,9 +2053,11 @@ module ISM
             installedFiles = Array(String).new
 
             ################TEMPORARY FIX################
-            runSystemCommand(   command: "chown -R root:root #{builtSoftwareDirectoryPathNoChroot}",
-                                asRoot: true,
-                                viaChroot: false)
+            if Ism.targetSystemInformation.handleChroot
+                runSystemCommand(   command: "chown -R root:root #{builtSoftwareDirectoryPathNoChroot}",
+                                    asRoot: true,
+                                    viaChroot: false)
+            end
             #############################################
 
             fileList.each do |entry|
