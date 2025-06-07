@@ -146,15 +146,17 @@ module ISM
         end
 
         def loadNeededKernelOptions
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
+            path = @settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory
+
+            if !Dir.exists?(path)
+                Dir.mkdir_p(path)
             end
 
-            neededKernelOptions = Dir.children(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory)
+            neededKernelOptions = Dir.children(path)
 
             neededKernelOptions.each do |option|
 
-                @neededKernelOptions << ISM::NeededKernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory+"/"+option)
+                @neededKernelOptions << ISM::NeededKernelOption.loadConfiguration("#{path}/#{option}")
 
             end
 
@@ -167,20 +169,22 @@ module ISM
         end
 
         def loadKernelOptionDatabase
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+            path = @settings.rootPath+ISM::Default::Path::KernelOptionsDirectory
+
+            if !Dir.exists?(path)
+                Dir.mkdir_p(path)
             end
 
-            availableKernels = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory)
+            availableKernels = Dir.children(path)
 
             availableKernels.each do |kernelDirectory|
 
-                kernelOptionFiles = Dir.children(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelDirectory)
+                kernelOptionFiles = Dir.children("#{path}/#{kernelDirectory}")
 
                 availableKernel = ISM::AvailableKernel.new(kernelDirectory)
 
                 kernelOptionFiles.each do |kernelOptionFile|
-                    availableKernel.options << ISM::KernelOption.loadConfiguration(@settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+kernelDirectory+"/"+kernelOptionFile)
+                    availableKernel.options << ISM::KernelOption.loadConfiguration("#{path}/#{kernelDirectory}/#{kernelOptionFile}")
                 end
 
                 @kernels << availableKernel
