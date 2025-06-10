@@ -1065,6 +1065,14 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::CheckText+"#{softwareInformation.name.colorize(:green)}")
         end
 
+        def notifyOfCheckIntegrity
+            printProcessNotification(ISM::Default::CommandLine::CheckIntegrityText)
+        end
+
+        def notifyOfCheckAuthenticity
+            printProcessNotification(ISM::Default::CommandLine::CheckAuthenticityText)
+        end
+
         def notifyOfCheckAdditions
             printProcessNotification(ISM::Default::CommandLine::CheckAdditionsText)
         end
