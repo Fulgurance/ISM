@@ -680,8 +680,10 @@ module ISM
         end
 
         def checkSourcesSignature
-            checkAuthenticity(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
-                                signature:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSignatureArchiveName).strip)
+            #TO DO: link to public signature
+            # checkAuthenticity(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
+            #                     archiveSignature:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSignatureArchiveName).strip,
+            #                     publicSignature: )
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -743,15 +745,16 @@ module ISM
                                 exception: exception)
         end
 
-        def checkAuthenticity(archive : String, signature : String)
-            #TO DO
+        def checkAuthenticity(archive : String, archiveSignature : String, publicSignature : String)
+            process = Ism.runSystemCommand("openssl -sha256 -verify #{publicSignature} -signature #{archiveSignature} #{archive}")
 
-            rescue exception
+
+            if !process.success?
                 ISM::Error.show(className: "Software",
                                 functionName: "checkAuthenticity",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
+                                errorTitle: "Authenticity test failed",
+                                error: "The file signature does not match with the public key. The file can be compromise")
+            end
         end
 
         def extract
