@@ -36,6 +36,8 @@ module ISM
             DownloadAdditionsText = "Downloading additions"
             CheckText = "Checking "
             CheckAdditionsText = "Checking additions"
+            CheckIntegrityText = "Checking file integrity"
+            CheckAuthenticityText = "Checking file authenticity"
             ExtractText = "Extracting "
             ExtractAdditionsText = "Extracting additions"
             PatchText = "Patching "
