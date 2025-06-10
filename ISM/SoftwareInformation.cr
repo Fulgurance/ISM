@@ -384,6 +384,10 @@ module ISM
         return archiveName+archiveSha512ExtensionName
     end
 
+    def archiveSignatureName : String
+        return archiveName+archiveSignatureExtensionName
+    end
+
     def archiveBaseName : String
         return versionName
     end
@@ -396,12 +400,20 @@ module ISM
         return ISM::Default::SoftwareInformation::ArchiveSha512ExtensionName
     end
 
+    def archiveSignatureExtensionName : String
+        return ISM::Default::SoftwareInformation::ArchiveSignatureExtensionName
+    end
+
     def sourcesLink : String
         return Ism.mirrorsSettings.sourcesLink+archiveName
     end
 
     def sourcesSha512Link : String
         return Ism.mirrorsSettings.sourcesLink+archiveSha512Name
+    end
+
+    def sourcesSignatureLink : String
+        return Ism.mirrorsSettings.sourcesLink+archiveSignatureName
     end
 
     def toSoftwareDependency : ISM::SoftwareDependency

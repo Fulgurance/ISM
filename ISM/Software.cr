@@ -466,6 +466,26 @@ module ISM
                                 exception: exception)
         end
 
+        ##############TO DO##############(SIGNATURE CHECK)
+        def downloadAdditionalSourcesSignature
+            @additions.each do |link|
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+                signatureLink = "#{link.gsub(ISM::Default::Software::ArchiveExtensionName,"")}#{ISM::Default::Software::ArchiveSignatureExtensionName}"
+
+                downloadFile(   signatureLink,
+                                archiveName,
+                                ISM::Default::Software::ArchiveSignatureExtensionName)
+            end
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "downloadAdditionalSourcesSignature",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+        ##################################
+
         def downloadSources
             downloadFile(   @information.sourcesLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
@@ -491,6 +511,21 @@ module ISM
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
+
+        ##############TO DO##############(SIGNATURE CHECK)
+        def downloadSourcesSignature
+            downloadFile(   @information.sourcesSignatureLink,
+                            ISM::Default::Software::SourcesArchiveBaseName,
+                            ISM::Default::Software::ArchiveSignatureExtensionName)
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "downloadSourcesSha512",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+        ##################################
 
         def downloadFile(link : String, filename : String, fileExtensionName : String)
             originalLink = link
@@ -587,11 +622,8 @@ module ISM
         def check
             Ism.notifyOfCheck(@information)
 
-            checkSourcesSha512
-
-            if !@additions.empty?
-                checkAdditionsSha512
-            end
+            checkSourcesIntegrity
+            checkSourcesAuthenticity
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -601,9 +633,43 @@ module ISM
                                 exception: exception)
         end
 
+        def checkSourcesIntegrity
+            Ism.notifyOfCheckIntegrity
+
+            checkSourcesSha512
+
+            if !@additions.empty?
+                checkAdditionsSha512
+            end
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "checkSourcesIntegrity",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def checkSourcesAuthenticity
+            Ism.notifyOfCheckAuthenticity
+
+            checkSourcesSignature
+
+            if !@additions.empty?
+                checkAdditionsSignature
+            end
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "checkSourcesAuthenticity",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
         def checkSourcesSha512
-            checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
-                        sha512:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
+            checkIntegrity( archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
+                            sha512:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -613,12 +679,24 @@ module ISM
                                 exception: exception)
         end
 
+        def checkSourcesSignature
+            checkAuthenticity(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
+                                signature:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSignatureArchiveName).strip)
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "checkSourcesSignature",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
         def checkAdditionsSha512
             @additions.each do |link|
                 archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
 
-                checkFile(  archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
-                            sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
+                checkIntegrity( archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
+                                sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
             end
 
             rescue exception
@@ -629,21 +707,48 @@ module ISM
                                 exception: exception)
         end
 
-        def checkFile(archive : String, sha512 : String)
+        def checkAdditionsSignature
+            @additions.each do |link|
+                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+
+                checkIntegrity( archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
+                                sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSignatureExtensionName}").strip)
+            end
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "checkAdditionsSignature",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def checkIntegrity(archive : String, sha512 : String)
             digest = Digest::SHA512.new
             digest.file(archive)
             archiveSha512 = digest.hexfinal
 
             if archiveSha512 != sha512
                 ISM::Error.show(className: "Software",
-                                functionName: "checkFile",
+                                functionName: "checkIntegrity",
                                 errorTitle: "Integrity test failed",
                                 error: "The SHA512 value of the file does not match")
             end
 
             rescue exception
                 ISM::Error.show(className: "Software",
-                                functionName: "checkFile",
+                                functionName: "checkIntegrity",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def checkAuthenticity(archive : String, signature : String)
+            #TO DO
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "checkAuthenticity",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
