@@ -2150,7 +2150,7 @@ module ISM
             installedFiles = Array(String).new
 
             ################TEMPORARY FIX################
-            if Ism.targetSystemInformation.handleChroot
+            if Ism.targetSystemInformation.handleChroot && Dir.exists?(builtSoftwareDirectoryPathNoChroot)
                 Ism.runSystemCommand(   command: "chown -R root:root #{builtSoftwareDirectoryPathNoChroot}",
                                         asRoot: true,
                                         viaChroot: false)
