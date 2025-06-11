@@ -5,7 +5,7 @@ module ISM
         def install
             super
 
-            runDepmodCommand
+            runDepmodCommand("-w #{mainKernelVersion}")
         end
 
     end

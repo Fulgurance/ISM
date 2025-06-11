@@ -1954,7 +1954,8 @@ module ISM
         def runDepmodCommand(arguments = String.new)
             requestedCommands = "depmod #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: "Software",
