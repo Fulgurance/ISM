@@ -2,7 +2,7 @@ module ISM
 
     class PackagedFirmware < ISM::PackagedSoftware
 
-        def install
+        def deploy
             super
 
             runDepmodCommand("-w #{mainKernelVersion}")
