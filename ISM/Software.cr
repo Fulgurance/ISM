@@ -1898,12 +1898,13 @@ module ISM
 
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
-            rescue exception
+            if !process.success?
                 ISM::Error.show(className: "Software",
                                 functionName: "configureSource",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
+            end
         end
         
         def build
