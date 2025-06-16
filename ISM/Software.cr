@@ -2210,7 +2210,7 @@ module ISM
             #Run post installation process
             deploy
 
-            if Ism.softwareIsRequestedSoftware(@information, Ism.requestedSoftwares.map { |entry| entry.fullVersionName}) && !Ism.softwareIsInstalled(@information)
+            if Ism.softwareIsRequestedSoftware(@information) && !Ism.softwareIsInstalled(@information)
                 Ism.addSoftwareToFavouriteGroup(@information.fullVersionName)
             end
 

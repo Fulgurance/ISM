@@ -628,12 +628,8 @@ module ISM
                                 exception: exception)
         end
 
-        def softwareIsRequestedSoftware(software : ISM::SoftwareInformation, requestedSoftwareVersionNames = Array(String).new) : Bool
-            if requestedSoftwareVersionNames.empty?
-                return @requestedSoftwares.any? { |entry| entry.fullVersionName == software.fullVersionName}
-            else
-                return requestedSoftwareVersionNames.any? { |entry| entry == software.fullVersionName}
-            end
+        def softwareIsRequestedSoftware(software : ISM::SoftwareInformation) : Bool
+            return requestedSoftwareVersionNames.any? { |entry| entry == software.fullVersionName}
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
@@ -2034,6 +2030,7 @@ module ISM
                     Ism = ISM::CommandLine.new
                     Ism.loadSettingsFiles
                     Ism.loadSoftwareDatabase
+                    Ism.requestedSoftwares = requestedSoftwareFullVersionNames.map { |entry| Ism.getSoftwareInformation(entry)}
 
                     limit = targets.size
 
