@@ -629,7 +629,7 @@ module ISM
         end
 
         def softwareIsRequestedSoftware(software : ISM::SoftwareInformation) : Bool
-            return @requestedSoftware.any? { |entry| entry.fullVersionName == software.fullVersionName}
+            return @requestedSoftwares.any? { |entry| entry.fullVersionName == software.fullVersionName}
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
