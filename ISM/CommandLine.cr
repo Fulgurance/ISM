@@ -1062,11 +1062,11 @@ module ISM
         end
 
         def notifyOfCheckIntegrity
-            printProcessNotification(ISM::Default::CommandLine::CheckIntegrityText)
+            printSubProcessNotification(ISM::Default::CommandLine::CheckIntegrityText)
         end
 
         def notifyOfCheckAuthenticity
-            printProcessNotification(ISM::Default::CommandLine::CheckAuthenticityText)
+            printSubProcessNotification(ISM::Default::CommandLine::CheckAuthenticityText)
         end
 
         def notifyOfCheckAdditions
