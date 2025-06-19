@@ -1410,7 +1410,7 @@ module ISM
 
         def runCmakeCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
-            if Ism.targetSystemInformation.handleChroot
+            if Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath != "/"
 
                 if !environment.has_key?("CFLAGS")
                     environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
@@ -1470,7 +1470,7 @@ module ISM
 
         def runNinjaCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
-            if Ism.targetSystemInformation.handleChroot
+            if Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath != "/"
                 prefix =    "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
 
                 if !environment.has_key?("CFLAGS")
@@ -1980,7 +1980,7 @@ module ISM
 
         def makeSource(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, makeOptions = String.new, buildOptions = String.new)
 
-            if Ism.targetSystemInformation.handleChroot
+            if Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath != "/"
                 prefix = "#{makeOptions == "" ? Ism.settings.chrootMakeOptions : makeOptions}"
 
                 if !environment.has_key?("CFLAGS")
