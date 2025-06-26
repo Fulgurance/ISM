@@ -8,6 +8,7 @@ module ISM
             FileLoadProcessSyntaxErrorText2 = " at line number "
             ArchiveExtensionName = ".tar.xz"
             ArchiveSha512ExtensionName = ".sha512"
+            ArchiveSignatureExtensionName = ".sig"
             SystemComponentSoftwareClassName = "SystemComponentSoftware"
 
         end
