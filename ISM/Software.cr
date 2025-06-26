@@ -748,7 +748,7 @@ module ISM
 
                 checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                                     archiveSignature:   "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesSignatureArchiveName}",
-                                    publicSignature:    "#{workDirectoryPathNoChroot}/#{fileName}")
+                                    publicSignature:    "#{workDirectoryPathNoChroot}/#{fileName}#{PublicKeyExtensionName}")
             end
 
             rescue exception
