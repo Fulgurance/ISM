@@ -6,13 +6,9 @@ module ISM
 
         property name : String
         property url : String
-        property publicKeyUrl : String
-        property description : String
 
         def initialize( @name = String.new,
-                        @url = String.new,
-                        @publicKeyUrl = String.new,
-                        @description = String.new)
+                        @url = String.new)
         end
 
         def self.filePathPrefix : String
