@@ -743,7 +743,7 @@ module ISM
         end
 
         def checkAdditionsSignature
-            @additions.each do |link, index|
+            @additions.each do |link|
                 fileName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
 
                 checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
