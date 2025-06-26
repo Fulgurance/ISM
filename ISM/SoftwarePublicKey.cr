@@ -1,6 +1,6 @@
 module ISM
 
-    class SoftwareSignature
+    class SoftwarePublicKey
 
         include JSON::Serializable
 
@@ -17,7 +17,7 @@ module ISM
             return from_json(File.read(path))
 
             rescue exception
-            ISM::Error.show(className: "SoftwareSignature",
+            ISM::Error.show(className: "SoftwarePublicKey",
                             functionName: "loadConfiguration",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",

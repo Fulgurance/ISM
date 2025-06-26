@@ -5,14 +5,17 @@ module ISM
         module Software
 
             SourcesArchiveBaseName = "Sources"
+            SourcesPublicKeyBaseFileName = "PublicKey"
             PatchesArchiveBaseName = "Patches"
             MainBuildDirectoryEntry = "MainBuild"
+            PublicKeyExtensionName = ".cert"
             ArchiveExtensionName = ".tar.xz"
             ArchiveSha512ExtensionName = "#{ArchiveExtensionName}.sha512"
             ArchiveSignatureExtensionName = "#{ArchiveExtensionName}.sig"
             SourcesArchiveName = "#{SourcesArchiveBaseName}#{ArchiveExtensionName}"
             SourcesSha512ArchiveName = "#{SourcesArchiveBaseName}#{ArchiveSha512ExtensionName}"
             SourcesSignatureArchiveName = "#{SourcesArchiveBaseName}#{ArchiveSignatureExtensionName}"
+            SourcesPublicKeyFileName = "#{SourcesPublicKeyBaseFileName}#{PublicKeyExtensionName}"
             SourcesDirectoryName = "Sources/"
             PatchesDirectoryName = "Patches/"
             DownloadSourceRedirectionErrorText1 = "Got status "

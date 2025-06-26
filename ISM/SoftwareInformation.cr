@@ -416,6 +416,10 @@ module ISM
         return Ism.mirrorsSettings.sourcesLink+archiveSignatureName
     end
 
+    def sourcesPublicKeyLink : String
+        return publicKey.url
+    end
+
     def toSoftwareDependency : ISM::SoftwareDependency
         softwareDependency = ISM::SoftwareDependency.new
 
@@ -551,23 +555,23 @@ module ISM
                             exception: exception)
     end
 
-    def signatureFilePath : String
-        return mainDirectoryPath + ISM::Default::Filename::Signature
+    def publicKeyFilePath : String
+        return mainDirectoryPath + ISM::Default::Filename::PublicKey
 
         rescue exception
             ISM::Error.show(className: "SoftwareInformation",
-                            functionName: "signatureFilePath",
+                            functionName: "publicKeyFilePath",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
                             exception: exception)
     end
 
-    def signature : ISM::SoftwareSignature
-        return ISM::SoftwareSignature.loadConfiguration(signatureFilePath)
+    def publicKey : ISM::SoftwarePublicKey
+        return ISM::SoftwarePublicKey.loadConfiguration(publicKeyFilePath)
 
         rescue exception
             ISM::Error.show(className: "SoftwareInformation",
-                            functionName: "signature",
+                            functionName: "publicKey",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
                             exception: exception)

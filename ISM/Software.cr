@@ -7,6 +7,7 @@ module ISM
         property buildDirectory : Bool
         property buildDirectoryNames : Hash(String,String)
         property additions : Array(String)
+        property additionsPublicKeys : Array(String)
 
         def initialize(informationPath : String)
             @information = ISM::SoftwareInformation.loadConfiguration(informationPath)
@@ -14,6 +15,7 @@ module ISM
             @buildDirectory = false
             @buildDirectoryNames = { ISM::Default::Software::MainBuildDirectoryEntry => "mainBuild" }
             @additions = Array(String).new
+            @additionsPublicKeys = Array(String).new
         end
 
         def autoBuildKernel
@@ -404,6 +406,8 @@ module ISM
 
             downloadSources
             downloadSourcesSha512
+            downloadSourcesSignature
+            downloadAdditionalSourcesPublicKey
 
             if !@additions.empty?
                 downloadAdditions
@@ -422,6 +426,8 @@ module ISM
 
             downloadAdditionalSources
             downloadAdditionalSourcesSha512
+            downloadAdditionalSourcesSignature
+            downloadAdditionalSourcesPublicKey
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -450,11 +456,11 @@ module ISM
 
         def downloadAdditionalSourcesSha512
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+                fileName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
                 sha512Link = "#{link.gsub(ISM::Default::Software::ArchiveExtensionName,"")}#{ISM::Default::Software::ArchiveSha512ExtensionName}"
 
                 downloadFile(   sha512Link,
-                                archiveName,
+                                fileName,
                                 ISM::Default::Software::ArchiveSha512ExtensionName)
             end
 
@@ -466,14 +472,13 @@ module ISM
                                 exception: exception)
         end
 
-        ##############TO DO##############(SIGNATURE CHECK)
         def downloadAdditionalSourcesSignature
             @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+                fileName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
                 signatureLink = "#{link.gsub(ISM::Default::Software::ArchiveExtensionName,"")}#{ISM::Default::Software::ArchiveSignatureExtensionName}"
 
                 downloadFile(   signatureLink,
-                                archiveName,
+                                fileName,
                                 ISM::Default::Software::ArchiveSignatureExtensionName)
             end
 
@@ -484,7 +489,23 @@ module ISM
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
-        ##################################
+
+        def downloadAdditionalSourcesPublicKey
+            @additionsPublicKeys.each do |link|
+                fileName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::PublicKeyExtensionName,"")
+
+                downloadFile(   link,
+                                fileName,
+                                ISM::Default::Software::PublicKeyExtensionName)
+            end
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "downloadAdditionalSourcesSignature",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
 
         def downloadSources
             downloadFile(   @information.sourcesLink,
@@ -512,7 +533,6 @@ module ISM
                                 exception: exception)
         end
 
-        ##############TO DO##############(SIGNATURE CHECK)
         def downloadSourcesSignature
             downloadFile(   @information.sourcesSignatureLink,
                             ISM::Default::Software::SourcesArchiveBaseName,
@@ -525,7 +545,20 @@ module ISM
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
-        ##################################
+
+        def downloadSourcesPublicKey
+            downloadFile(   @information.sourcesPublicKeyLink,
+                            ISM::Default::Software::SourcesPublicKeyBaseFileName,
+                            ISM::Default::Software::PublicKeyExtensionName)
+
+            rescue exception
+                ISM::Error.show(className: "Software",
+                                functionName: "downloadSourcesSha512",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
 
         def downloadFile(link : String, filename : String, fileExtensionName : String)
             originalLink = link
@@ -680,10 +713,9 @@ module ISM
         end
 
         def checkSourcesSignature
-            #TO DO: link to public signature
-            # checkAuthenticity(  archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
-            #                     archiveSignature:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSignatureArchiveName).strip,
-            #                     publicSignature: )
+            checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
+                                archiveSignature:   "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesSignatureArchiveName}",
+                                publicSignature:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesPublicKeyFileName}")
 
             rescue exception
                 ISM::Error.show(className: "Software",
@@ -710,11 +742,13 @@ module ISM
         end
 
         def checkAdditionsSignature
-            @additions.each do |link|
-                archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+            @additions.each_with_index do |link, index|
+                link = @additionsPublicKeys[index]
+                fileName = link.lchop(link[0..link.rindex("/")])
 
-                checkIntegrity( archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
-                                sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSignatureExtensionName}").strip)
+                checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
+                                    archiveSignature:   "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesSignatureArchiveName}",
+                                    publicSignature:    "#{workDirectoryPathNoChroot}/#{fileName}")
             end
 
             rescue exception
