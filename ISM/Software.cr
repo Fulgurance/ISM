@@ -491,8 +491,9 @@ module ISM
         end
 
         def downloadAdditionalSourcesPublicKey
-            @additionsPublicKeys.each do |link|
-                fileName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::PublicKeyExtensionName,"")
+            @additionsPublicKeys.each_with_index do |link, index|
+                additionLink = @additions[index]
+                fileName = additionLink.lchop(additionLink[0..additionLink.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
 
                 downloadFile(   link,
                                 fileName,
@@ -742,9 +743,8 @@ module ISM
         end
 
         def checkAdditionsSignature
-            @additions.each_with_index do |link, index|
-                link = @additionsPublicKeys[index]
-                fileName = link.lchop(link[0..link.rindex("/")])
+            @additions.each do |link, index|
+                fileName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
 
                 checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                                     archiveSignature:   "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesSignatureArchiveName}",
@@ -780,7 +780,7 @@ module ISM
         end
 
         def checkAuthenticity(archive : String, archiveSignature : String, publicSignature : String)
-            process = Ism.runSystemCommand("openssl dgst -sha512 -verify #{publicSignature} -signature #{archiveSignature} #{archive}")
+            process = Ism.runSystemCommand("openssl dgst -sha512 -verify #{publicSignature} -signature #{archiveSignature} #{archive} > /dev/null 2>&1")
 
 
             if !process.success?
