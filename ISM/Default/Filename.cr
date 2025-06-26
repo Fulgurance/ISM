@@ -15,6 +15,7 @@ module ISM
             MirrorsSettings = "MirrorsSettings.json"
             SelectedKernel = "SelectedKernel.json"
             SecurityMap = "SecurityMap.json"
+            Signature = "Signature.json"
             Task = ".ISM.task"
 
         end

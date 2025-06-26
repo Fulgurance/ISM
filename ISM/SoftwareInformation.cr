@@ -551,6 +551,28 @@ module ISM
                             exception: exception)
     end
 
+    def signatureFilePath : String
+        return mainDirectoryPath + ISM::Default::Filename::Signature
+
+        rescue exception
+            ISM::Error.show(className: "SoftwareInformation",
+                            functionName: "signatureFilePath",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+    end
+
+    def signature : ISM::SoftwareSignature
+        return ISM::SoftwareSignature.loadConfiguration(signatureFilePath)
+
+        rescue exception
+            ISM::Error.show(className: "SoftwareInformation",
+                            functionName: "signature",
+                            errorTitle: "Execution failure",
+                            error: "Failed to execute the function",
+                            exception: exception)
+    end
+
   end
 
 end
