@@ -407,7 +407,7 @@ module ISM
             downloadSources
             downloadSourcesSha512
             downloadSourcesSignature
-            downloadAdditionalSourcesPublicKey
+            downloadSourcesPublicKey
 
             if !@additions.empty?
                 downloadAdditions
