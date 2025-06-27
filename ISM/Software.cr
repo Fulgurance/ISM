@@ -702,6 +702,8 @@ module ISM
         end
 
         def checkSourcesSha512
+            Ism.notifyOfCheckIntegrityFile("#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}")
+
             checkIntegrity( archive:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                             sha512:     getFileContent(workDirectoryPathNoChroot+"/"+ISM::Default::Software::SourcesSha512ArchiveName).strip)
 
@@ -714,6 +716,8 @@ module ISM
         end
 
         def checkSourcesSignature
+            Ism.notifyOfCheckAuthenticityFile("#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}")
+
             checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                                 archiveSignature:   "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesSignatureArchiveName}",
                                 publicSignature:    "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesPublicKeyFileName}")
@@ -730,6 +734,8 @@ module ISM
             @additions.each do |link|
                 archiveName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
 
+                Ism.notifyOfCheckIntegrityFile("#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}")
+
                 checkIntegrity( archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveExtensionName}",
                                 sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{ISM::Default::Software::ArchiveSha512ExtensionName}").strip)
             end
@@ -745,6 +751,8 @@ module ISM
         def checkAdditionsSignature
             @additions.each do |link|
                 fileName = link.lchop(link[0..link.rindex("/")]).gsub(ISM::Default::Software::ArchiveExtensionName,"")
+
+                Ism.notifyOfCheckAuthenticityFile("#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}")
 
                 checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesArchiveName}",
                                     archiveSignature:   "#{workDirectoryPathNoChroot}/#{ISM::Default::Software::SourcesSignatureArchiveName}",
