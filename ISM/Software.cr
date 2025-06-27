@@ -780,7 +780,10 @@ module ISM
         end
 
         def checkAuthenticity(archive : String, archiveSignature : String, publicSignature : String)
-            process = Ism.runSystemCommand("openssl dgst -sha512 -verify #{publicSignature} -signature #{archiveSignature} #{archive} > /dev/null 2>&1")
+            requestedCommands = "openssl dgst -sha512 -verify #{publicSignature} -signature #{archiveSignature} #{archive} > /dev/null 2>&1"
+
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            viaChroot: false)
 
 
             if !process.success?
