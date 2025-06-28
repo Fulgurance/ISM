@@ -23,8 +23,10 @@ Ingenius System Manager
         -h      help    Display the help how to use ISM
         -v      version Show and manage the ISM version
         -so     software        Install, configure and remove softwares
+        -sy     system  Manage the system
         -p      port    Manage ISM ports
         -se     settings        Configure ISM settings
+        -t      tools   Development tools for ISM
 ```
 
 ```
@@ -38,7 +40,6 @@ Show and manage the ISM version
 user $ ism software
 Install, configure and remove softwares
         -se     search  Search specific(s) software(s)
-        -sy     synchronize     Synchronize the software database
         -u      update  Performs a software update
         -i      install Install specific(s) software(s)
         -ui     uninstall       Uninstall specific(s) software(s)
@@ -65,6 +66,7 @@ user $ ism port
 Manage ISM ports
         -o      open    Open the specified port
         -c      close   Close the specified port
+        -sy     synchronize     Synchronize the port database
         -stv    settargetversion        Set the target version for all ports, based on a ISM version
         -s      search  Search a specified port in the database
 ```
@@ -73,12 +75,14 @@ Manage ISM ports
 user $ ism settings
 Configure ISM settings
         -s      show    Show the current settings
-        -esm    enablesecuremode        Enable the secure mode which requires superuser rights
-        -dsm    disablesecuremode       Disable the secure mode which requires superuser rights
-        -eibc   enableinstallbychroot   Enable softwares install by chroot
-        -dibc   disableinstallbychroot  Disable softwares install by chroot
         -srp    setrootpath     Set the default root path where to install softwares
         -sdm    setdefaultmirror        Set the default mirror for ISM
+        -ebkoam enablebuildkerneloptionsasmodule        Enable the building of the kernel options as loadable modules as a priority
+        -dbkoam disablebuildkerneloptionsasmodule       Disable the building of the kernel options as loadable modules as a priority
+        -eabk   enableautobuildkernel   Enable automatic kernel building
+        -dabk   disableautobuildkernel  Disable automatic kernel building
+        -eads   enableautodeployservices        Enable service automatic deployement
+        -dads   disableautodeployservices       Disable service automatic deployement
         -sstn   setsystemtargetname     Set the default machine target for the compiler
         -ssa    setsystemarchitecture   Set the default system architecture for the compiler
         -ssmo   setsystemmakeoptions    Set the default parallel make jobs number for the compiler
@@ -90,6 +94,7 @@ Configure ISM settings
         -sscn   setsystemcodename       Set the code name of the future installed system
         -ssd    setsystemdescription    Set the description of the future installed system
         -ssv    setsystemversion        Set the version of the future installed system
+        -ssvi   setsystemversionid      Set the version ID of the future installed system
         -ssac   setsystemansicolor      Set the ANSI color of the future installed system
         -sscpen setsystemcpename        Set the CPE name of the future installed system
         -sshu   setsystemhomeurl        Set the home url of the future installed system
@@ -110,6 +115,7 @@ Configure ISM settings
         -sccn   setchrootcodename       Set the code name of the future chroot installed system
         -scd    setchrootdescription    Set the description of the future chroot installed system
         -scv    setchrootversion        Set the version of the future chroot installed system
+        -scvi   setchrootversionid      Set the version ID of the future chroot installed system
         -scac   setchrootansicolor      Set the ANSI color of the future chroot installed system
         -sccpen setchrootcpename        Set the CPE name of the future chroot installed system
         -schu   setchroothomeurl        Set the home url of the future chroot installed system
@@ -121,6 +127,14 @@ Configure ISM settings
         -scvi   setchrootvariantid      Set the variant id of the future chroot installed system
 ```
 
+```
+user $ ism system
+Manage the system
+        -c      component       Manage and configure system component
+        -l      lock    Lock the system access
+        -u      unlock  Unlock the system access
+```
+        
 ## About
 The project is actually quite advanced now and most of the functionnalities are implemented yet. It is actually possible to install a full desktop environment with the provided ports.
 
