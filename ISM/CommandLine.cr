@@ -1070,11 +1070,11 @@ module ISM
         end
 
         def notifyOfCheckIntegrityFile(file : String)
-            printSubProcessNotification(ISM::Default::CommandLine::CheckIntegrityFileText+"#{file.colorize(:green)}")
+            printSubProcessNotification(ISM::Default::CommandLine::CheckIntegrityFileText+" #{file.colorize(:green)}")
         end
 
         def notifyOfCheckAuthenticityFile(file : String)
-            printSubProcessNotification(ISM::Default::CommandLine::CheckAuthenticityFileText+"#{file.colorize(:green)}")
+            printSubProcessNotification(ISM::Default::CommandLine::CheckAuthenticityFileText+" #{file.colorize(:green)}")
         end
 
         def notifyOfCheckAdditions
