@@ -553,6 +553,10 @@ module ISM
 
         def uninstallSoftware(software : ISM::SoftwareInformation)
 
+            if targetSystemInformation.handleChroot
+                unlockSystemAccess
+            end
+
             requestedVersion = ISM::SoftwareInformation.new
             otherVersions = Array(ISM::SoftwareInformation).new
             protectedFiles = Array(String).new
@@ -598,6 +602,10 @@ module ISM
 
                 #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
                 @installedSoftwares.delete(softwareForRemovalIndex)
+
+                if targetSystemInformation.handleChroot
+                    lockSystemAccess
+                end
             end
 
             rescue exception
