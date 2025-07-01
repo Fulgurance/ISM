@@ -48,6 +48,7 @@ module ISM
             ConfigureText = "Configuring "
             BuildText = "Building "
             PrepareInstallationText = "Preparing installation for "
+            StripFilesText = "Stripping files"
             DeployText = "Deploying"
             UpdateSystemCacheText = "Updating system caches"
             InstallText = "Installing "

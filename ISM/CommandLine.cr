@@ -1121,6 +1121,10 @@ module ISM
             printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
         end
 
+        def notifyOfStripFiles
+            printSubProcessNotification(ISM::Default::CommandLine::StripFilesText)
+        end
+
         def notifyOfDeploy
             printSubProcessNotification(ISM::Default::CommandLine::DeployText)
         end

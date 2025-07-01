@@ -2207,6 +2207,13 @@ module ISM
             end
             #############################################
 
+            #Strip the file if needed
+            if stripFiles
+                Ism.notifyOfStripFiles
+
+                stripFileListNoChroot(fileList)
+            end
+
             Ism.runAsSuperUser(validCondition: condition) {
                 fileList.each do |entry|
 
@@ -2246,11 +2253,6 @@ module ISM
                     end
                 end
             }
-
-            #Strip the file if needed
-            if stripFiles
-                stripFileListNoChroot(fileList)
-            end
 
             #Update library cache
             updateSystemCache
