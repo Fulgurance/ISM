@@ -2179,7 +2179,9 @@ module ISM
                 requestedCommands.push("strip --strip-unneeded #{file} || true")
             end
 
-            process = Process.run(requestedCommands, shell: true)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: false,
+                                            viaChroot: false)
 
             #No exit process because if the file can't be strip, we can just keep going
             rescue
