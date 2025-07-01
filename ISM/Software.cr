@@ -2176,7 +2176,7 @@ module ISM
             requestedCommands = Array(String).new
 
             fileList.each do |file|
-                requestedCommands.push("strip --strip-unneeded #{file} || true")
+                requestedCommands.push("strip --strip-unneeded #{file} || true > /dev/null 2>&1")
             end
 
             process = Ism.runSystemCommand( command: requestedCommands,
