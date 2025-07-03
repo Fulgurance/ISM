@@ -12,7 +12,6 @@ module ISM
         property softwares : Array(ISM::AvailableSoftware)
         property installedSoftwares : Array(ISM::SoftwareInformation)
         property ports : Array(ISM::Port)
-        property portsSettings : ISM::CommandLinePortsSettings
         property mirrors : Array(ISM::Mirror)
         property mirrorsSettings : ISM::CommandLineMirrorsSettings
         property favouriteGroups : Array(ISM::FavouriteGroup)
@@ -36,7 +35,6 @@ module ISM
             @softwares = Array(ISM::AvailableSoftware).new
             @installedSoftwares = Array(ISM::SoftwareInformation).new
             @ports = Array(ISM::Port).new
-            @portsSettings = ISM::CommandLinePortsSettings.new
             @mirrors = Array(ISM::Mirror).new
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.new
             @favouriteGroups = Array(ISM::FavouriteGroup).new
@@ -382,7 +380,6 @@ module ISM
             end
 
             @settings = ISM::CommandLineSettings.loadConfiguration
-            @portsSettings = ISM::CommandLinePortsSettings.loadConfiguration
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
 
             rescue exception

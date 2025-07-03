@@ -161,7 +161,7 @@ module ISM
                         chdir: directoryPath)
 
             if isAvailable
-                return Process.new( "git pull origin #{Ism.portsSettings.targetVersion}",
+                return Process.new( "git pull origin master",
                                     shell: true,
                                     chdir: directoryPath)
             else

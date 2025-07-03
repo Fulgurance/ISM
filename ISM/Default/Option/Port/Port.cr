@@ -12,7 +12,6 @@ module ISM
                 Options = [ ISM::Option::PortOpen.new,
                             ISM::Option::PortClose.new,
                             ISM::Option::PortSynchronize.new,
-                            ISM::Option::PortSetTargetVersion.new,
                             ISM::Option::PortSearch.new]
 
             end
