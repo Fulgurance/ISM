@@ -2180,7 +2180,7 @@ module ISM
             end
 
             process = Ism.runSystemCommand( command: requestedCommands,
-                                            asRoot: false,
+                                            asRoot: true,
                                             viaChroot: false)
 
             #No exit process because if the file can't be strip, we can just keep going
