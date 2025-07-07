@@ -859,7 +859,15 @@ module ISM
         end
 
         def softwareIsGreatestVersion(information : ISM::SoftwareInformation)
-            return !@softwares.any? { |entry| entry.greatestVersion.fullName == information.fullName && entry.greatestVersion.version > information.version && softwareIsInstalled(entry.greatestVersion)}
+            @softwares.each do |availableSoftware|
+                software = availableSoftware.greatestVersion
+
+                if information.fullName == software.fullName && softwareIsInstalled(software) && software.version > information.version
+                    return false
+                end
+            end
+
+            return true
         end
 
         def checkEnteredArguments
