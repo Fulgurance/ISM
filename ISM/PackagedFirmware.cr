@@ -5,7 +5,7 @@ module ISM
         def deploy
             super
 
-            runDepmodCommand("-w #{mainKernelVersion}")
+            runDepmodCommand("#{mainKernelVersion}")
         end
 
     end
