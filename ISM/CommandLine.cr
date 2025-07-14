@@ -1544,6 +1544,10 @@ module ISM
             puts
         end
 
+        def showUnconfiguredSystemComponentMessage(component : ISM::SoftwareInformation)
+            puts "#{ISM::Default::CommandLine::UnconfiguredSystemComponentText1.colorize(:yellow)}#{component.fullName}#{ISM::Default::CommandLine::UnconfiguredSystemComponentText2.colorize(:yellow)}"
+        end
+
         def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareInformation, allowTitle = true)
             puts
 
@@ -2483,12 +2487,22 @@ module ISM
                                 exception: exception)
         end
 
-        def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false) : Hash(String, ISM::SoftwareInformation)
+        def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false, skipSystemComponents = false) : Hash(String, ISM::SoftwareInformation)
 
             dependencyHash = Hash(String, ISM::SoftwareInformation).new
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
             nextDependencies = Array(ISM::SoftwareDependency).new
             invalidDependencies = Array(ISM::SoftwareInformation).new
+
+            if !skipSystemComponents
+                @components.each do |component|
+                    if !@component.isConfigured
+                        showCalculationDoneMessage
+                        showUnconfiguredSystemComponentMessage(component)
+                        exitProgram
+                    end
+                end
+            end
 
             loop do
 
@@ -2868,7 +2882,7 @@ module ISM
             softwareInformationList = getRequestedSoftwares(softwareList)
 
             #Then we check the needed dependencies for that list
-            requiredSoftwares = getRequiredDependencies(softwareInformationList, allowDeepSearch: true)
+            requiredSoftwares = getRequiredDependencies(softwareInformationList, allowDeepSearch: true, skipSystemComponents: false)
 
             #Checking if the requested softwares for removal are not require
             @requestedSoftwares.each do |software|

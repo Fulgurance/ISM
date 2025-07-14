@@ -104,6 +104,24 @@ module ISM
 
     def isSystemComponent : Bool
         return (type == ISM::Default::SoftwareInformation::SystemComponentSoftwareClassName)
+
+        rescue exception
+                ISM::Error.show(className: "SoftwareInformation",
+                                functionName: "isSystemComponent",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+    end
+
+    def isConfigured : Bool
+        return File.exists?(settingsFilePath)
+
+        rescue exception
+                ISM::Error.show(className: "SoftwareInformation",
+                                functionName: "isConfigured",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
     end
 
     def getEnabledPass : String
