@@ -1546,7 +1546,7 @@ module ISM
 
         def showUnconfiguredSystemComponentMessage(component : ISM::SoftwareInformation)
             puts
-            puts "#{ISM::Default::CommandLine::UnconfiguredSystemComponentText1.colorize(:magenta)}#{component.fullName.colorize(:green)}#{ISM::Default::CommandLine::UnconfiguredSystemComponentText2.colorize(:magenta)}"
+            puts "#{ISM::Default::CommandLine::UnconfiguredSystemComponentText1.colorize(:yellow)}#{component.fullName.colorize(:green)}#{ISM::Default::CommandLine::UnconfiguredSystemComponentText2.colorize(:yellow)}"
         end
 
         def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareInformation, allowTitle = true)
