@@ -59,6 +59,16 @@ module ISM
         end
 
         def fullVersionName : String
+            if fullName.ends_with?(ISM::Default::SoftwareDependency::ChoiceKeyword)
+                baseFullName = fullName.gsub(ISM::Default::SoftwareDependency::ChoiceKeyword,"")
+                baseInformation = Ism.getSoftwareInformation(baseFullName)
+
+                dependencyFullName = baseInformation.selectedDependencies[1]
+                dependencyInformation = Ism.getSoftwareInformation(dependencyFullName)
+
+                return dependencyInformation.fullVersionName
+            end
+
             return "#{fullName}-#{version}"
         end
 
