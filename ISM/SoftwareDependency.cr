@@ -63,7 +63,7 @@ module ISM
                 baseFullName = fullName.gsub(ISM::Default::SoftwareDependency::ChoiceKeyword,"")
                 baseInformation = Ism.getSoftwareInformation(baseFullName)
 
-                dependencyFullName = baseInformation.selectedDependencies[1]
+                dependencyFullName = baseInformation.selectedDependencies[0]
                 dependencyInformation = Ism.getSoftwareInformation(dependencyFullName)
 
                 return dependencyInformation.fullVersionName
@@ -74,7 +74,7 @@ module ISM
 
         def hiddenName : String
             passName = getEnabledPass
-            return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
+            return "#{fullVersionName}#{passName == "" ? "" : "-#{passName}"}"
         end
 
         def version=(@version)
