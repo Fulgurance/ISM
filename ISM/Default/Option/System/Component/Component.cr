@@ -10,6 +10,8 @@ module ISM
                 LongText = "component"
                 Description = "Manage and configure system component"
                 Options = [ ISM::Option::ComponentList.new,
+                            ISM::Option::ComponentSetup.new,
+                            ISM::Option::ComponentSetupAll.new,
                             ISM::Option::ComponentActivate.new,
                             ISM::Option::ComponentDesactivate.new]
                 
