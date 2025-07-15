@@ -10,6 +10,7 @@ module ISM
             ArchiveSha512ExtensionName = ".sha512"
             ArchiveSignatureExtensionName = ".sig"
             SystemComponentSoftwareClassName = "SystemComponentSoftware"
+            ChoiceKeyword = "::CHOICE"
 
         end
 
