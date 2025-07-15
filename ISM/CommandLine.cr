@@ -788,8 +788,30 @@ module ISM
                                 exception: exception)
         end
 
-        #Add process to search only by name
-        def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false) : ISM::SoftwareInformation
+        def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false, allowChoiceKeyword = true) : ISM::SoftwareInformation
+
+            #We check first if the software is a special dependency
+
+            # realDependencies = Array(ISM::SoftwareDependency).new
+            # specialDependencies = Array(ISM::SoftwareDependency).new
+            #
+            # @dependencies.each do |dependency|
+            #     if dependency.fullName.ends_with?(ISM::Default::SoftwareInformation::ChoiceKeyword)
+            #         specialDependencies.push(dependency)
+            #     else
+            #         realDependencies.push(dependency)
+            #     end
+            # end
+            #
+            # specialDependencies.each do |dependency|
+            #     baseFullName = dependency.fullName.gsub(ISM::Default::SoftwareInformation::ChoiceKeyword,"")
+            #     baseInformation = Ism.getSoftwareInformation(baseFullName)
+            #
+            #     dependencyFullName = baseInformation.selectedDependencies[1]
+            #     dependencyInformation = Ism.getSoftwareInformation(dependencyFullName)
+            #
+            #     realDependencies.push(dependencyInformation.toSoftwareDependency)
+            # end
 
             entry = String.new
             matches = Array(String).new
@@ -826,6 +848,11 @@ module ISM
 
             if entry == ""
                 entry = userEntry
+            end
+
+            #We check and modify entry if there is a choice keyword (special internal case)
+            if allowChoiceKeyword && entry.ends_with?(ISM::Default::SoftwareInformation::ChoiceKeyword)
+                entry = entry.gsub(ISM::Default::SoftwareInformation::ChoiceKeyword,"")
             end
 
             availableSoftware = getAvailableSoftware(entry)
@@ -1411,7 +1438,7 @@ module ISM
             softwaresList = Array(ISM::SoftwareInformation).new
 
             list.each do |entry|
-                software = getSoftwareInformation(entry, allowSearchByNameOnly)
+                software = getSoftwareInformation(entry, allowSearchByNameOnly, allowChoiceKeyword = false)
 
                 if software.isValid
                     softwaresList << software

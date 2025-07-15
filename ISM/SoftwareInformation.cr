@@ -319,32 +319,9 @@ module ISM
     end
 
     def dependencies(allowDeepSearch = false, unsorted = false) : Array(ISM::SoftwareDependency)
-        #Check if there is any special dependencies
-
-        realDependencies = Array(ISM::SoftwareDependency).new
-        specialDependencies = Array(ISM::SoftwareDependency).new
-
-        @dependencies.each do |dependency|
-            if dependency.fullName.ends_with?(ISM::Default::SoftwareInformation::ChoiceKeyword)
-                specialDependencies.push(dependency)
-            else
-                realDependencies.push(dependency)
-            end
-        end
-
-        specialDependencies.each do |dependency|
-            baseFullName = dependency.fullName.gsub(ISM::Default::SoftwareInformation::ChoiceKeyword,"")
-            baseInformation = Ism.getSoftwareInformation(baseFullName)
-
-            dependencyFullName = baseInformation.selectedDependencies[1]
-            dependencyInformation = Ism.getSoftwareInformation(dependencyFullName)
-
-            realDependencies.push(dependencyInformation.toSoftwareDependency)
-        end
-
         #Now we can sort everything if needed
         if unsorted
-            return realDependencies
+            return @dependencies
         end
 
         dependenciesArray = Array(ISM::SoftwareDependency).new
@@ -383,10 +360,10 @@ module ISM
         end
 
         if allowDeepSearch
-            return realDependencies.reject { |entry| dependencyIsUnique(entry.fullName) && !uniqueDependencyIsEnabled(entry.fullName)} + dependenciesArray
+            return @dependencies.reject { |entry| dependencyIsUnique(entry.fullName) && !uniqueDependencyIsEnabled(entry.fullName)} + dependenciesArray
         else
             #REJECT INSTALLED DEPENDENCIES AND UNIQUE DEPENDENCIES NOT SELECTIONED
-            return realDependencies.reject { |entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.fullName) && !uniqueDependencyIsEnabled(entry.fullName)} + dependenciesArray.reject { |entry| entry.passEnabled && Ism.systemInformation.crossToolchainFullyBuilt}
+            return @dependencies.reject { |entry| Ism.softwareIsInstalled(entry.information) || dependencyIsUnique(entry.fullName) && !uniqueDependencyIsEnabled(entry.fullName)} + dependenciesArray.reject { |entry| entry.passEnabled && Ism.systemInformation.crossToolchainFullyBuilt}
         end
 
         rescue exception
