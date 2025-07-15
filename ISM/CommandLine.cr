@@ -2496,7 +2496,7 @@ module ISM
 
             if !skipSystemComponents
                 @components.each do |component|
-                    if !@component.isConfigured
+                    if !component.isConfigured
                         showCalculationDoneMessage
                         showUnconfiguredSystemComponentMessage(component)
                         exitProgram
