@@ -14,7 +14,7 @@ module ISM
                 if ARGV.size == 3
                     showHelp
                 else
-                    userRequest = ARGV[4]
+                    userRequest = ARGV[3]
                     matchingComponent = ISM::SoftwareInformation.new
 
                     Ism.components.each do |component|
