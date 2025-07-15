@@ -87,8 +87,15 @@ module ISM
         end
 
         def information : ISM::SoftwareInformation
+            softwareName = fullVersionName
+            baseInformation = Ism.getSoftwareInformation(softwareName)
 
-            dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
+            #Case when the name request the selected choice as dependency
+            if fullVersionName.ends_with(ISM::SoftwareDependency::ChoiceKeyword)
+                softwareName = baseInformation.selectedDependencies[1]
+            end
+
+            dependencyInformation = Ism.getSoftwareInformation(softwareName)
 
             if dependencyInformation.isValid
 
