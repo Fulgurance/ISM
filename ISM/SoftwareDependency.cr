@@ -59,6 +59,7 @@ module ISM
         end
 
         def fullVersionName : String
+            #Special case when depend of user choice, to make sure information return the right software
             if fullName.ends_with?(ISM::Default::SoftwareDependency::ChoiceKeyword)
                 baseFullName = fullName.gsub(ISM::Default::SoftwareDependency::ChoiceKeyword,"")
                 baseInformation = Ism.getSoftwareInformation(baseFullName)
