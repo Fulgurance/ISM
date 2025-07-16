@@ -4,7 +4,7 @@ module ISM
 
         module SoftwareDependency
 
-            ChoiceKeyword = "::CHOICE"
+            ChoiceKeyword = ":CHOICE"
 
         end
 
