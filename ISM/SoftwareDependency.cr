@@ -64,6 +64,12 @@ module ISM
                 baseFullName = fullName.gsub(ISM::Default::SoftwareDependency::ChoiceKeyword,"")
                 baseInformation = Ism.getSoftwareInformation(baseFullName)
 
+                if baseInformation.selectedDependencies.empty?
+                    Ism.showCalculationDoneMessage
+                    Ism.showMissingSelectedDependenciesMessage(baseFullName, @version, baseInformation.getMissingSelectedDependencies)
+                    Ism.exitProgram
+                end
+
                 dependencyFullName = baseInformation.selectedDependencies[0]
                 dependencyInformation = Ism.getSoftwareInformation(dependencyFullName)
 
