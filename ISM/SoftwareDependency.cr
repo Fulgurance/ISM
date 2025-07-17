@@ -66,7 +66,7 @@ module ISM
 
         def hiddenName : String
             passName = getEnabledPass
-            return "#{fullVersionName}#{passName == "" ? "" : "-#{passName}"}"
+            return "#{interpretedIdentifier}#{passName == "" ? "" : "-#{passName}"}"
         end
 
         def version=(@version)
