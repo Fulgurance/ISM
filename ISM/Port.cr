@@ -161,7 +161,7 @@ module ISM
                         chdir: directoryPath)
 
             if isAvailable
-                return Process.new( "git pull origin master",
+                return Process.new( "git pull --depth 1 origin master",
                                     shell: true,
                                     chdir: directoryPath)
             else
