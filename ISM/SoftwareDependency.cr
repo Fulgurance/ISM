@@ -64,11 +64,6 @@ module ISM
             return "#{fullName}-#{version}"
         end
 
-        def hiddenName : String
-            passName = getEnabledPass
-            return "#{interpretedIdentifier}#{passName == "" ? "" : "-#{passName}"}"
-        end
-
         def version=(@version)
         end
 
@@ -108,7 +103,14 @@ module ISM
                 return dependencyInformation.fullVersionName
             end
 
+            #If there is no special case, we simply return the fullVersionName
             return fullVersionName
+        end
+
+        #Unique identifier for dependency calculation
+        def hiddenName : String
+            passName = getEnabledPass
+            return "#{interpretedIdentifier}#{passName == "" ? "" : "-#{passName}"}"
         end
 
         def information : ISM::SoftwareInformation
