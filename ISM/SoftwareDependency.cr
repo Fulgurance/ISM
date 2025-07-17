@@ -54,28 +54,13 @@ module ISM
                                 exception: exception)
         end
 
+
+
         def fullName : String
             return "@#{@port}:#{@name}"
         end
 
         def fullVersionName : String
-            #Special case when depend of user choice, to make sure information return the right software
-            if fullName.ends_with?(ISM::Default::SoftwareDependency::ChoiceKeyword)
-                baseFullName = fullName.gsub(ISM::Default::SoftwareDependency::ChoiceKeyword,"")
-                baseInformation = Ism.getSoftwareInformation(baseFullName)
-
-                if baseInformation.selectedDependencies.empty?
-                    Ism.showCalculationDoneMessage
-                    Ism.showMissingSelectedDependenciesMessage(baseFullName, @version, baseInformation.getMissingSelectedDependencies)
-                    Ism.exitProgram
-                end
-
-                dependencyFullName = baseInformation.selectedDependencies[0]
-                dependencyInformation = Ism.getSoftwareInformation(dependencyFullName)
-
-                return dependencyInformation.fullVersionName
-            end
-
             return "#{fullName}-#{version}"
         end
 
@@ -103,9 +88,32 @@ module ISM
             return @version
         end
 
-         def information : ISM::SoftwareInformation
+        #This special function is required by the function information to interpret the dependency descriptors
+        def interpretedIdentifier : String
 
-            dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
+            #Special case when it depend of user choice
+            if fullName.ends_with?(ISM::Default::SoftwareDependency::ChoiceKeyword)
+                baseFullName = fullName.gsub(ISM::Default::SoftwareDependency::ChoiceKeyword,"")
+                baseInformation = Ism.getSoftwareInformation(baseFullName)
+
+                if baseInformation.selectedDependencies.empty?
+                    Ism.showCalculationDoneMessage
+                    Ism.showMissingSelectedDependenciesMessage(baseFullName, @version, baseInformation.getMissingSelectedDependencies)
+                    Ism.exitProgram
+                end
+
+                dependencyFullName = baseInformation.selectedDependencies[0]
+                dependencyInformation = Ism.getSoftwareInformation(dependencyFullName)
+
+                return dependencyInformation.fullVersionName
+            end
+
+            return fullVersionName
+        end
+
+        def information : ISM::SoftwareInformation
+
+            dependencyInformation = Ism.getSoftwareInformation(interpretedIdentifier)
 
             if dependencyInformation.isValid
 
