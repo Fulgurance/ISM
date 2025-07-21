@@ -788,60 +788,82 @@ module ISM
                                 exception: exception)
         end
 
-        def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false) : ISM::SoftwareInformation
+        def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false, searchComponentsOnly = false) : ISM::SoftwareInformation
             entry = String.new
             matches = Array(String).new
             result = ISM::SoftwareInformation.new
 
             if allowSearchByNameOnly
 
-                #Check first if the user entry if by name only or not, and if it is valid
-                @softwares.each do |availableSoftware|
+                if searchComponentsOnly
+                    #For now, by default, we can search only component by fullName or name, not by fullVersionName
+                    @components.each do |component|
+                        if component.name.downcase == userEntry.downcase
+                            matches.push(component.name)
+                        end
+                    end
 
-                    #Check if the user request a specific version or not
-                    if availableSoftware.name.downcase == userEntry.downcase
-                        matches.push(availableSoftware.fullName)
-                    else
-                        availableSoftware.versions.each do |software|
-                            if software.versionName.downcase == userEntry.downcase
-                                matches.push(software.fullVersionName)
+                else
+
+                    #Check first if the user entry if by name only or not, and if it is valid
+                    @softwares.each do |availableSoftware|
+
+                        #Check if the user request a specific version or not
+                        if availableSoftware.name.downcase == userEntry.downcase
+                            matches.push(availableSoftware.fullName)
+                        else
+                            availableSoftware.versions.each do |software|
+                                if software.versionName.downcase == userEntry.downcase
+                                    matches.push(software.fullVersionName)
+                                end
                             end
                         end
                     end
-                end
 
-                #There are more than one match, the user need to specify a port (Ambiguous)
-                if matches.size > 1
-                    showAmbiguousSearchMessage(matches)
-                    exitProgram
                 end
+            end
 
-                #If there is only one match, it mean the user enter by name only, we record the fullName
-                if !matches.empty? && matches.size == 1
-                    entry = matches[0]
-                end
+            #There are more than one match, the user need to specify a port (Ambiguous)
+            if matches.size > 1
+                showAmbiguousSearchMessage(matches)
+                exitProgram
+            end
+
+            #If there is only one match, it mean the user enter by name only, we record the fullName
+            if !matches.empty? && matches.size == 1
+                entry = matches[0]
             end
 
             if entry == ""
                 entry = userEntry
             end
 
-            availableSoftware = getAvailableSoftware(entry)
-            versions = availableSoftware.versions
+            if searchComponentsOnly
+                @components.each do |component|
+                    if component.fullVersionName.downcase == entry.downcase
 
-            if !versions.empty?
+                        return loadSoftware(component.port, component.name, component.version)
 
-                versions.each do |software|
-                    if software.fullVersionName.downcase == entry.downcase
-
-                        result = loadSoftware(software.port, software.name, software.version)
-
-                        break
                     end
                 end
+            else
+                availableSoftware = getAvailableSoftware(entry)
+                versions = availableSoftware.versions
 
-                if !result.isValid
-                    return availableSoftware.greatestVersion
+                if !versions.empty?
+
+                    versions.each do |software|
+                        if software.fullVersionName.downcase == entry.downcase
+
+                            result = loadSoftware(software.port, software.name, software.version)
+
+                            break
+                        end
+                    end
+
+                    if !result.isValid
+                        return availableSoftware.greatestVersion
+                    end
                 end
             end
 

@@ -2734,10 +2734,9 @@ module ISM
         end
 
         def component(name : String) : ISM::SoftwareInformation
-            Ism.getSoftwareInformation( userEntry: name,
-                                        allowSearchByNameOnly: true)
-
-            return ISM::SoftwareInformation.new
+            return Ism.getSoftwareInformation(  userEntry: name,
+                                                allowSearchByNameOnly: true,
+                                                searchComponentsOnly: true)
         end
 
     end
