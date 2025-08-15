@@ -882,12 +882,12 @@ module ISM
             @softwares.each do |availableSoftware|
                 software = availableSoftware.greatestVersion
 
-                if information.fullName == software.fullName && softwareIsInstalled(software) && software.version > information.version
-                    return false
+                if information.fullName == software.fullName && software.version >= information.version
+                    return true
                 end
             end
 
-            return true
+            return false
         end
 
         def checkEnteredArguments
