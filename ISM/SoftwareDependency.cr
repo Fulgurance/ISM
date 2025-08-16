@@ -83,39 +83,15 @@ module ISM
             return @version
         end
 
-        #This special function is required by the function information to interpret the dependency descriptors
-        def interpretedIdentifier : String
-
-            #Special case when it depend of user choice
-            if fullName.ends_with?(ISM::Default::SoftwareDependency::ChoiceKeyword)
-                baseFullName = fullName.gsub(ISM::Default::SoftwareDependency::ChoiceKeyword,"")
-                baseInformation = Ism.getSoftwareInformation(baseFullName)
-
-                if baseInformation.selectedDependencies.empty?
-                    Ism.showCalculationDoneMessage
-                    Ism.showMissingSelectedDependenciesMessage(baseFullName, @version, baseInformation.getMissingSelectedDependencies)
-                    Ism.exitProgram
-                end
-
-                dependencyFullName = baseInformation.selectedDependencies[0]
-                dependencyInformation = Ism.getSoftwareInformation(dependencyFullName)
-
-                return dependencyInformation.fullVersionName
-            end
-
-            #If there is no special case, we simply return the fullVersionName
-            return fullVersionName
-        end
-
         #Unique identifier for dependency calculation
         def hiddenName : String
             passName = getEnabledPass
-            return "#{interpretedIdentifier}#{passName == "" ? "" : "-#{passName}"}"
+            return "@#{@port}:#{versionName}#{passName == "" ? "" : "-#{passName}"}"
         end
 
         def information : ISM::SoftwareInformation
 
-            dependencyInformation = Ism.getSoftwareInformation(interpretedIdentifier)
+            dependencyInformation = Ism.getSoftwareInformation(fullVersionName)
 
             if dependencyInformation.isValid
 
