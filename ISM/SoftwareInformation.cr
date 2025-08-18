@@ -335,7 +335,7 @@ module ISM
                 if passEnabled
                     if option.active
                         if option.isPass
-                            return option.dependencies(allowDeepSearch)
+                            return option.dependencies(allowDeepSearch).reject { |entry| dependencyIsUnique(entry.fullName) && !uniqueDependencyIsEnabled(entry.fullName)}
                         else
                             dependenciesArray += option.dependencies(allowDeepSearch)
                         end
