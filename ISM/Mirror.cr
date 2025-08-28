@@ -23,7 +23,7 @@ module ISM
         end
 
         def self.filePath(codeName = Default::CodeName) : String
-            return Ism.settings.rootPath+ISM::Default::Path::MirrorsDirectory+codeName+".json"
+            return Ism.settings.rootPath+Path::MirrorsDirectory+codeName+".json"
         end
 
         def self.generateConfiguration(path = filePath)

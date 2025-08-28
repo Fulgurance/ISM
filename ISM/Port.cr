@@ -20,11 +20,11 @@ module ISM
         end
 
         def self.filePathPrefix : String
-            return Ism.settings.rootPath+ISM::Default::Path::PortsDirectory
+            return Ism.settings.rootPath+Path::PortsDirectory
         end
 
         def self.directoryPathPrefix : String
-            return Ism.settings.rootPath+ISM::Default::Path::SoftwaresDirectory
+            return Ism.settings.rootPath+Path::SoftwaresDirectory
         end
 
         def self.exists(name : String) : Bool

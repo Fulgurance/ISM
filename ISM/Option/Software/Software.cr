@@ -43,32 +43,32 @@ module ISM
                         end
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareEnableOption::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareEnableOption::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareEnableOption::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareEnableOption::Default::LongText
                         matchingOption = true
                         @options[-4].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDisableOption::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDisableOption::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareDisableOption::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareDisableOption::Default::LongText
                         matchingOption = true
                         @options[-3].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareSelectDependency::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareSelectDependency::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareSelectDependency::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareSelectDependency::Default::LongText
                         matchingOption = true
                         @options[-5].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareAddPatch::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareAddPatch::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareAddPatch::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareAddPatch::Default::LongText
                         matchingOption = true
                         @options[-2].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDeletePatch::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == ISM::Default::Option::SoftwareDeletePatch::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareDeletePatch::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareDeletePatch::Default::LongText
                         matchingOption = true
                         @options[-1].start
                     end

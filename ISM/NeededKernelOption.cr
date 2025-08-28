@@ -25,9 +25,9 @@ module ISM
             begin
                 return from_json(File.read(path))
             rescue error : JSON::ParseException
-                puts    "#{ISM::Default::NeededKernelOption::FileLoadProcessSyntaxErrorText1 +
+                puts    "#{Default::FileLoadProcessSyntaxErrorText1 +
                         path +
-                        ISM::Default::NeededKernelOption::FileLoadProcessSyntaxErrorText2 +
+                        Default::FileLoadProcessSyntaxErrorText2 +
                         error.line_number.to_s}".colorize(:yellow)
                 return self.new
             end

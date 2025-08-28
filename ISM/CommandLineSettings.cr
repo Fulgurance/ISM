@@ -484,15 +484,15 @@ module ISM
 
         #Generic methods
         def temporaryPath
-            return "#{@rootPath}#{ISM::Default::Path::TemporaryDirectory}"
+            return "#{@rootPath}#{Path::TemporaryDirectory}"
         end
 
         def sourcesPath
-            return "#{@rootPath}#{ISM::Default::Path::SourcesDirectory}"
+            return "#{@rootPath}#{Path::SourcesDirectory}"
         end
 
         def toolsPath
-            return "#{@rootPath}#{ISM::Default::Path::ToolsDirectory}"
+            return "#{@rootPath}#{Path::ToolsDirectory}"
         end
 
         #Host/Chroot methods

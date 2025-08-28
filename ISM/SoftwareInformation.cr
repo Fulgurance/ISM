@@ -182,12 +182,12 @@ module ISM
         end
 
         def builtSoftwareDirectoryPath
-            return "#{ISM::Default::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
+            return "#{Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
         end
 
         def mainDirectoryPath : String
             return Ism.settings.rootPath +
-                ISM::Default::Path::SoftwaresDirectory +
+                Path::SoftwaresDirectory +
                 @port + "/" +
                 @name + "/" +
                 @version + "/"
@@ -203,7 +203,7 @@ module ISM
 
         def settingsFilePath : String
             return  Ism.settings.rootPath +
-                    ISM::Default::Path::SettingsSoftwaresDirectory +
+                    Path::SettingsSoftwaresDirectory +
                     @port + "/" +
                     @name + "/" +
                     @version + "/" +
@@ -212,14 +212,14 @@ module ISM
 
         def installedDirectoryPath : String
             return Ism.settings.rootPath +
-                ISM::Default::Path::InstalledSoftwaresDirectory +
+                Path::InstalledSoftwaresDirectory +
                 @port + "/" +
                 @name + "/"
         end
 
         def installedFilePath : String
             return Ism.settings.rootPath +
-                ISM::Default::Path::InstalledSoftwaresDirectory +
+                Path::InstalledSoftwaresDirectory +
                 @port + "/" +
                 @name + "/" +
                 @version + "/" +

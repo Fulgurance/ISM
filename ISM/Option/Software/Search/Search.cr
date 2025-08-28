@@ -207,7 +207,7 @@ module ISM
 
                             localPatchesText = String.new
 
-                            Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{greatestVersion.versionName}/*"].each do |patch|
+                            Dir[Ism.settings.rootPath+Path::PatchesDirectory+"/#{greatestVersion.versionName}/*"].each do |patch|
                                 patchName = patch.lchop(patch[0..patch.rindex("/")])
 
                                 localPatchesText += "#{"\n\t| ".colorize(:green)}#{patchName.colorize(Colorize::ColorRGB.new(255,100,100))}"

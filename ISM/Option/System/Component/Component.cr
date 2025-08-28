@@ -44,8 +44,8 @@ module ISM
                         @options[-1].start
                     end
 
-                    if  !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentDesactivate::ShortText ||
-                        !matchingOption && ARGV.size > 3 && ARGV[3] == ISM::Default::Option::ComponentDesactivate::LongText
+                    if  !matchingOption && ARGV.size > 3 && ARGV[3] == Option::ComponentDesactivate::Default::ShortText ||
+                        !matchingOption && ARGV.size > 3 && ARGV[3] == Option::ComponentDesactivate::Default::LongText
                         matchingOption = true
                         @options[-2].start
                     end

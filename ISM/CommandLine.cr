@@ -293,7 +293,7 @@ module ISM
         end
 
         def loadNeededKernelOptions
-            path = @settings.rootPath+ISM::Default::Path::NeededKernelOptionsDirectory
+            path = @settings.rootPath+Path::NeededKernelOptionsDirectory
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -316,7 +316,7 @@ module ISM
         end
 
         def loadKernelOptionDatabase
-            path = @settings.rootPath+ISM::Default::Path::KernelOptionsDirectory
+            path = @settings.rootPath+Path::KernelOptionsDirectory
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -348,13 +348,13 @@ module ISM
 
         def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
             software = ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
-                                                                    ISM::Default::Path::SoftwaresDirectory +
+                                                                    Path::SoftwaresDirectory +
                                                                     port + "/" +
                                                                     name + "/" +
                                                                     version + "/" +
                                                                     Filename::Information)
 
-            settingsFilePath = "#{@settings.rootPath}#{ISM::Default::Path::SettingsSoftwaresDirectory}#{port}/#{name}/#{version}/#{Filename::SoftwareSettings}"
+            settingsFilePath = "#{@settings.rootPath}#{Path::SettingsSoftwaresDirectory}#{port}/#{name}/#{version}/#{Filename::SoftwareSettings}"
 
             if File.exists?(settingsFilePath)
 
@@ -390,7 +390,7 @@ module ISM
         end
 
         def loadSoftwareDatabase
-            path = "#{@settings.rootPath}#{ISM::Default::Path::SoftwaresDirectory}"
+            path = "#{@settings.rootPath}#{Path::SoftwaresDirectory}"
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -431,7 +431,7 @@ module ISM
         end
 
         def loadPortsDatabase
-            path = "#{@settings.rootPath}#{ISM::Default::Path::PortsDirectory}"
+            path = "#{@settings.rootPath}#{Path::PortsDirectory}"
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -453,7 +453,7 @@ module ISM
         end
 
         def loadMirrorsDatabase
-            path = "#{@settings.rootPath}#{ISM::Default::Path::MirrorsDirectory}"
+            path = "#{@settings.rootPath}#{Path::MirrorsDirectory}"
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -479,7 +479,7 @@ module ISM
         end
 
         def loadFavouriteGroupsDatabase
-            path = "#{@settings.rootPath}#{ISM::Default::Path::FavouriteGroupsDirectory}"
+            path = "#{@settings.rootPath}#{Path::FavouriteGroupsDirectory}"
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -505,7 +505,7 @@ module ISM
         end
 
         def loadSystemInformationFile
-            path = "#{@settings.rootPath}#{ISM::Default::Path::SettingsDirectory}"
+            path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -522,7 +522,7 @@ module ISM
         end
 
         def loadSettingsFiles
-            path = "#{@settings.rootPath}#{ISM::Default::Path::SettingsDirectory}"
+            path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -547,7 +547,7 @@ module ISM
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
             begin
                 return ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
-                                                                    ISM::Default::Path::InstalledSoftwaresDirectory +
+                                                                    Path::InstalledSoftwaresDirectory +
                                                                     port + "/" +
                                                                     name + "/" +
                                                                     version + "/" +
@@ -565,7 +565,7 @@ module ISM
         end
 
         def loadInstalledSoftwareDatabase
-            path = "#{@settings.rootPath}#{ISM::Default::Path::InstalledSoftwaresDirectory}"
+            path = "#{@settings.rootPath}#{Path::InstalledSoftwaresDirectory}"
 
             if !Dir.exists?(path)
                 Dir.mkdir_p(path)
@@ -598,8 +598,8 @@ module ISM
         end
 
         def selectedKernel : ISM::SoftwareInformation
-            if File.exists?("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{Filename::SelectedKernel}")
-                return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{Filename::SelectedKernel}")
+            if File.exists?("#{Ism.settings.rootPath}#{Path::SettingsDirectory}#{Filename::SelectedKernel}")
+                return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{Path::SettingsDirectory}#{Filename::SelectedKernel}")
             else
                 return ISM::SoftwareInformation.new
             end
@@ -2066,12 +2066,12 @@ module ISM
         end
 
         def getRequiredLibraries : String
-            requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{Filename::RequiredLibraries}")
+            requireFileContent = File.read_lines("/#{Path::LibraryDirectory}#{Filename::RequiredLibraries}")
             requiredLibraries = String.new
 
             requireFileContent.each do |line|
                 if line.includes?("require \".")
-                    newLine = line.gsub("require \".","{{ read_file(\"/#{ISM::Default::Path::LibraryDirectory}")+"\n"
+                    newLine = line.gsub("require \".","{{ read_file(\"/#{Path::LibraryDirectory}")+"\n"
                     newLine = newLine.insert(-3,".cr")+").id }}"+"\n"
                     requiredLibraries += newLine
                 else
@@ -2249,7 +2249,7 @@ module ISM
                         version = information.version
                         passNumber = information.getEnabledPassNumber
                         fullVersionName = information.fullVersionName
-                        builtSoftwareDirectoryPath = \"#\{Ism.settings.rootPath\}#\{ISM::Default::Path::BuiltSoftwaresDirectory\}#\{information.port\}/#\{information.name\}/\"
+                        builtSoftwareDirectoryPath = \"#\{Ism.settings.rootPath\}#\{Path::BuiltSoftwaresDirectory\}#\{information.port\}/#\{information.name\}/\"
                         coloredFullVersionName = \"#\{information.fullName.colorize(:magenta)} /#\{version.colorize(Colorize::ColorRGB.new(255,100,100))}/\"
 
                         #START INSTALLATION PROCESS
@@ -2456,22 +2456,22 @@ module ISM
         end
 
         def buildTasksFile
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}")
+            if File.exists?("#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}")
                 runAsSuperUser {
-                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
+                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                                 shell: true)
 
-                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
+                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                                 shell: true)
                 }
             end
 
             processResult = IO::Memory.new
 
-            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task} -f json",
+            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{Filename::Task}.cr -o #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task} -f json",
                         error: processResult,
                         shell: true,
-                        chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
+                        chdir: "#{@settings.rootPath}#{Path::RuntimeDataDirectory}") do |process|
                 loop do
                     playCalculationAnimation(Default::CompilationWaitingText)
                     Fiber.yield
@@ -2485,7 +2485,7 @@ module ISM
                 taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
 
                 showTaskCompilationFailedMessage
-                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr")
+                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr")
                 exitProgram(code: 1)
             end
 
@@ -2503,19 +2503,19 @@ module ISM
             #   -suid bit set
             #   -set as immutable to don't allow any suppression
             runAsSuperUser {
-                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
+                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                             shell: true)
 
-                Process.run(command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
+                Process.run(command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                             shell: true)
 
-                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
+                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                             shell: true)
 
-                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr",
+                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                             shell: true)
 
-                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr",
+                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                             shell: true)
             }
 
@@ -2529,7 +2529,7 @@ module ISM
                                     output: logWriter,
                                     error: logWriter,
                                     shell: true,
-                                    chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+                                    chdir: "#{@settings.rootPath}#{Path::RuntimeDataDirectory}")
 
             if logEnabled
 
@@ -2537,8 +2537,8 @@ module ISM
 
                 logs.each_with_index do |log, index|
 
-                    makeLogDirectory("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{softwareList[index].port}")
-                    File.write("#{@settings.rootPath}#{ISM::Default::Path::LogsDirectory}#{softwareList[index].port}/#{softwareList[index].versionName}.log", log)
+                    makeLogDirectory("#{@settings.rootPath}#{Path::LogsDirectory}#{softwareList[index].port}")
+                    File.write("#{@settings.rootPath}#{Path::LogsDirectory}#{softwareList[index].port}/#{softwareList[index].versionName}.log", log)
 
                 end
             end
@@ -2993,21 +2993,21 @@ module ISM
         end
 
         def generateTasksFile(tasks : String)
-            if !Dir.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
-                Dir.mkdir_p("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
+            if !Dir.exists?("#{@settings.rootPath}#{Path::RuntimeDataDirectory}")
+                Dir.mkdir_p("#{@settings.rootPath}#{Path::RuntimeDataDirectory}")
             end
 
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr")
+            if File.exists?("#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr")
                 runAsSuperUser {
-                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr",
+                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                                 shell: true)
 
-                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr",
+                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                                 shell: true)
                 }
             end
 
-            File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr", tasks)
+            File.write("#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr", tasks)
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
@@ -3167,15 +3167,15 @@ module ISM
         end
 
         def addPatch(path : String, softwareVersionName : String) : Bool
-            if !Dir.exists?(@settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}")
-                Dir.mkdir_p(@settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}")
+            if !Dir.exists?(@settings.rootPath+Path::PatchesDirectory+"/#{softwareVersionName}")
+                Dir.mkdir_p(@settings.rootPath+Path::PatchesDirectory+"/#{softwareVersionName}")
             end
 
             patchFileName = path.lchop(path[0..path.rindex("/")])
 
             begin
                 FileUtils.cp(   path,
-                                @settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}/#{patchFileName}")
+                                @settings.rootPath+Path::PatchesDirectory+"/#{softwareVersionName}/#{patchFileName}")
             rescue
                 return false
             end
@@ -3191,7 +3191,7 @@ module ISM
         end
 
         def deletePatch(patchName : String, softwareVersionName : String) : Bool
-            path = @settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{softwareVersionName}/#{patchName}"
+            path = @settings.rootPath+Path::PatchesDirectory+"/#{softwareVersionName}/#{patchName}"
 
             begin
                 FileUtils.rm(path)
@@ -3213,7 +3213,7 @@ module ISM
         def taskRelativeDirectoryPath : String
             root = ((targetSystemInformation.handleChroot || !targetSystemInformation.handleChroot && @settings.rootPath != "/") ? "/" : @settings.rootPath)
 
-            return "#{root}#{ISM::Default::Path::TemporaryDirectory}"
+            return "#{root}#{Path::TemporaryDirectory}"
         end
 
         #Relative to chroot
@@ -3222,7 +3222,7 @@ module ISM
         end
 
         def taskAbsoluteDirectoryPath : String
-            return "#{@settings.rootPath}#{ISM::Default::Path::TemporaryDirectory}"
+            return "#{@settings.rootPath}#{Path::TemporaryDirectory}"
         end
 
         def taskAbsoluteFilePath : String

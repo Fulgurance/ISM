@@ -4,7 +4,7 @@ module ISM
 
         module Default
 
-            SystemInformationFilePath = "#{Path::Default::SettingsDirectory}#{Filename::Default::SystemInformation}"
+            SystemInformationFilePath = "#{Path::SettingsDirectory}#{Filename::SystemInformation}"
 
         end
 

@@ -14,9 +14,9 @@ module ISM
             end
 
             def initialize
-                super(  DefaultShortText,
-                        DefaultLongText,
-                        DefaultDescription)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -24,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemCodeName(ARGV[2])
-                    Ism.printProcessNotification(DefaultSetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 
