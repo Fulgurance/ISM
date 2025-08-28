@@ -8,9 +8,7 @@ module ISM
 
         def self.makeLogDirectory
 
-            if !Dir.exists?(logDirectoryPath)
-                Dir.mkdir_p(logDirectoryPath)
-            end
+            Ism.createSystemDirectory(logDirectoryPath)
 
             rescue exception
                 ISM::Error.show(className: "Tracelog",

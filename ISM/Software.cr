@@ -52,12 +52,12 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def changeFileModeNoChroot(path : String, mode : String)
-            changeFileMode(path,mode)
+            Ism.changeFileMode(path,mode)
         end
 
         #Special function to improve performance (Internal use only)
         def changeFileOwnerNoChroot(path : String, user : String, group : String)
-            changeFileOwner(path,user,group)
+            Ism.changeFileOwner(path,user,group)
         end
 
         def autoBuildKernel
