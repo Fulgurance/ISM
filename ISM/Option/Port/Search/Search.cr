@@ -4,10 +4,23 @@ module ISM
 
         class PortSearch < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-s"
+                LongText = "search"
+                Description = "Search a specified port in the database"
+                NoMatchFound = "No match found with the database for "
+                NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                NameText = "Name:"
+                UrlText = "Url:"
+                AvailableSoftwareText = "Available softwares:"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::PortSearch::ShortText,
-                        ISM::Default::Option::PortSearch::LongText,
-                        ISM::Default::Option::PortSearch::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -23,14 +36,14 @@ module ISM
                     end
 
                     if matchingPortArray.empty?
-                        puts ISM::Default::Option::PortSearch::NoMatchFound + "#{ARGV[2].colorize(:green)}"
-                        puts ISM::Default::Option::PortSearch::NoMatchFoundAdvice
+                        puts Default::NoMatchFound + "#{ARGV[2].colorize(:green)}"
+                        puts Default::NoMatchFoundAdvice
                     else
                         matchingPortArray.each_with_index do |port, index|
 
-                            nameField = "#{ISM::Default::Option::PortSearch::NameText.colorize(:green)} #{port.name.colorize(Colorize::ColorRGB.new(255,100,100))}"
-                            urlField = "#{ISM::Default::Option::PortSearch::UrlText.colorize(:green)} #{port.url}"
-                            availableSoftwareField = "#{ISM::Default::Option::PortSearch::AvailableSoftwareText.colorize(:green)} #{port.softwareNumber}"
+                            nameField = "#{Default::NameText.colorize(:green)} #{port.name.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                            urlField = "#{Default::UrlText.colorize(:green)} #{port.url}"
+                            availableSoftwareField = "#{Default::AvailableSoftwareText.colorize(:green)} #{port.softwareNumber}"
 
                             puts nameField
                             puts urlField

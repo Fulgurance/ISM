@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootBugReportUrl < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scbru"
+                LongText = "setchrootbugreporturl"
+                Description = "Set the bug report url of the future chroot installed system"
+                SetText = "Setting the chroot system bug report url to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootBugReportUrl::ShortText,
-                        ISM::Default::Option::SettingsSetChrootBugReportUrl::LongText,
-                        ISM::Default::Option::SettingsSetChrootBugReportUrl::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootBugReportUrl(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootBugReportUrl::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

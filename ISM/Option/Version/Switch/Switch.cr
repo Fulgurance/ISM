@@ -4,10 +4,18 @@ module ISM
 
         class VersionSwitch < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-sw"
+                LongText = "switch"
+                Description = "Switch ISM to another version"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::VersionSwitch::ShortText,
-                        ISM::Default::Option::VersionSwitch::LongText,
-                        ISM::Default::Option::VersionSwitch::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start

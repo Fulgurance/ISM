@@ -4,10 +4,18 @@ module ISM
 
         class SoftwareClean < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-c"
+                LongText = "clean"
+                Description = "Clean the system by remove unneeded softwares"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SoftwareClean::ShortText,
-                        ISM::Default::Option::SoftwareClean::LongText,
-                        ISM::Default::Option::SoftwareClean::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start

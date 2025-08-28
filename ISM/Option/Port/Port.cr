@@ -4,11 +4,23 @@ module ISM
 
         class Port < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-p"
+                LongText = "port"
+                Description = "Manage #{CommandLine::Default::Name.upcase} ports"
+                Options = [ ISM::Option::PortOpen.new,
+                            ISM::Option::PortClose.new,
+                            ISM::Option::PortSynchronize.new,
+                            ISM::Option::PortSearch.new]
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::Port::ShortText,
-                        ISM::Default::Option::Port::LongText,
-                        ISM::Default::Option::Port::Description,
-                        ISM::Default::Option::Port::Options)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description,
+                        Default::Options)
             end
 
             def start

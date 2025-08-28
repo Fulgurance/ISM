@@ -4,10 +4,18 @@ module ISM
 
         class SoftwareUninstall < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ui"
+                LongText = "uninstall"
+                Description = "Uninstall specific(s) software(s)"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SoftwareUninstall::ShortText,
-                        ISM::Default::Option::SoftwareUninstall::LongText,
-                        ISM::Default::Option::SoftwareUninstall::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start

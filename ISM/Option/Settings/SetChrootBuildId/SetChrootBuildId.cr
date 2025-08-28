@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootBuildId < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scbi"
+                LongText = "setchrootbuildid"
+                Description = "Set the build id of the future chroot installed system"
+                SetText = "Setting chroot system build id to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootBuildId::ShortText,
-                        ISM::Default::Option::SettingsSetChrootBuildId::LongText,
-                        ISM::Default::Option::SettingsSetChrootBuildId::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootBuildId(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootBuildId::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

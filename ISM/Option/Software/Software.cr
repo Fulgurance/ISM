@@ -4,11 +4,29 @@ module ISM
 
         class Software < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-so"
+                LongText = "software"
+                Description = "Install, configure and remove softwares"
+                Options = [ ISM::Option::SoftwareSearch.new,
+                            ISM::Option::SoftwareUpdate.new,
+                            ISM::Option::SoftwareInstall.new,
+                            ISM::Option::SoftwareUninstall.new,
+                            ISM::Option::SoftwareClean.new,
+                            ISM::Option::SoftwareSelectDependency.new,
+                            ISM::Option::SoftwareEnableOption.new,
+                            ISM::Option::SoftwareDisableOption.new,
+                            ISM::Option::SoftwareAddPatch.new,
+                            ISM::Option::SoftwareDeletePatch.new]
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::Software::ShortText,
-                        ISM::Default::Option::Software::LongText,
-                        ISM::Default::Option::Software::Description,
-                        ISM::Default::Option::Software::Options)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description,
+                        Default::Options)
             end
 
             def start

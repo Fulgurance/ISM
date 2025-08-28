@@ -4,23 +4,36 @@ module ISM
 
         class ComponentList < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-l"
+                LongText = "list"
+                Description = "List all available components"
+                NoMatchFound = "No match found with the database for "
+                NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                Title = "Available system components:"
+                EnabledText = "Enabled"
+                DisabledText = "Disabled"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::ComponentList::ShortText,
-                        ISM::Default::Option::ComponentList::LongText,
-                        ISM::Default::Option::ComponentList::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
                 if Ism.components.empty?
-                    puts ISM::Default::Option::ComponentList::NoMatchFound + "#{ARGV[2].colorize(:green)}"
-                    puts ISM::Default::Option::ComponentList::NoMatchFoundAdvice
+                    puts Default::NoMatchFound + "#{ARGV[2].colorize(:green)}"
+                    puts Default::NoMatchFoundAdvice
                 else
                     puts "\n"
-                    puts "#{ISM::Default::Option::ComponentList::Title.colorize(:green)}"
+                    puts "#{Default::Title.colorize(:green)}"
                     puts
 
                     Ism.components.each_with_index do |component, index|
-                        status = (Ism.softwareIsInstalled(component) ? ISM::Default::Option::ComponentList::EnabledText.colorize(:green) : ISM::Default::Option::ComponentList::DisabledText.colorize(:red))
+                        status = (Ism.softwareIsInstalled(component) ? Default::EnabledText.colorize(:green) : Default::DisabledText.colorize(:red))
                         enabledOptions = String.new
 
                         component.options.each_with_index do |option, index|

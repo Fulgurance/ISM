@@ -4,10 +4,21 @@ module ISM
 
         class PortOpen < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-o"
+                LongText = "open"
+                Description = "Open the specified port"
+                OpenText = "Opening port "
+                OpenTextError1 = "Failed to open the port: "
+                OpenTextError2 = ". The given port doesn't exist."
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::PortOpen::ShortText,
-                        ISM::Default::Option::PortOpen::LongText,
-                        ISM::Default::Option::PortOpen::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def convertUrlToPort(url : String) : ISM::Port
@@ -27,9 +38,9 @@ module ISM
                     port = convertUrlToPort(ARGV[2])
 
                     if port.open
-                        Ism.printProcessNotification(ISM::Default::Option::PortOpen::OpenText+"#{("@#{port.name}").colorize(Colorize::ColorRGB.new(255,100,100))}")
+                        Ism.printProcessNotification(Default::OpenText+"#{("@#{port.name}").colorize(Colorize::ColorRGB.new(255,100,100))}")
                     else
-                        Ism.printErrorNotification(ISM::Default::Option::PortOpen::OpenTextError1+"#{port.name.colorize(:red)}"+ISM::Default::Option::PortOpen::OpenTextError2,nil)
+                        Ism.printErrorNotification(Default::OpenTextError1+"#{port.name.colorize(:red)}"+Default::OpenTextError2,nil)
                     end
                 end
             end

@@ -4,10 +4,18 @@ module ISM
 
         class Help < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-h"
+                LongText = "help"
+                Description = "Display the help how to use ISM"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::Help::ShortText,
-                        ISM::Default::Option::Help::LongText,
-                        ISM::Default::Option::Help::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start

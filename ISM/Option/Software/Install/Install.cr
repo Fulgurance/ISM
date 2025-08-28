@@ -4,10 +4,18 @@ module ISM
 
         class SoftwareInstall < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-i"
+                LongText = "install"
+                Description = "Install specific(s) software(s)"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SoftwareInstall::ShortText,
-                        ISM::Default::Option::SoftwareInstall::LongText,
-                        ISM::Default::Option::SoftwareInstall::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start

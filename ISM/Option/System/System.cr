@@ -4,11 +4,22 @@ module ISM
 
         class System < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-sy"
+                LongText = "system"
+                Description = "Manage the system"
+                Options = [ ISM::Option::SystemComponent.new,
+                            ISM::Option::SystemLock.new,
+                            ISM::Option::SystemUnlock.new]
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::System::ShortText,
-                        ISM::Default::Option::System::LongText,
-                        ISM::Default::Option::System::Description,
-                        ISM::Default::Option::System::Options)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description,
+                        Default::Options)
             end
 
             def start

@@ -4,14 +4,23 @@ module ISM
 
         class SoftwareUpdate < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-u"
+                LongText = "update"
+                Description = "Performs a software update"
+                UpdateTitle = "Checking avaible updates: "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SoftwareUpdate::ShortText,
-                        ISM::Default::Option::SoftwareUpdate::LongText,
-                        ISM::Default::Option::SoftwareUpdate::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
-                print ISM::Default::Option::SoftwareUpdate::UpdateTitle
+                print Default::UpdateTitle
 
                 Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
 

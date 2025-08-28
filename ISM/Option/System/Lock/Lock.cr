@@ -4,16 +4,25 @@ module ISM
 
         class SystemLock < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-l"
+                LongText = "lock"
+                Description = "Lock the system access"
+                SetText = "Locking manually system access"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SystemLock::ShortText,
-                        ISM::Default::Option::SystemLock::LongText,
-                        ISM::Default::Option::SystemLock::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
                 if ARGV.size == 2
                     Ism.setSystemAccess(locked: true)
-                    Ism.printProcessNotification(ISM::Default::Option::SystemLock::SetText)
+                    Ism.printProcessNotification(Default::SetText)
                 end
             end
 

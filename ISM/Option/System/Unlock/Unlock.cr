@@ -4,16 +4,25 @@ module ISM
 
         class SystemUnlock < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-u"
+                LongText = "unlock"
+                Description = "Unlock the system access"
+                SetText = "Unlocking manually system access"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SystemUnlock::ShortText,
-                        ISM::Default::Option::SystemUnlock::LongText,
-                        ISM::Default::Option::SystemUnlock::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
                 if ARGV.size == 2
                     Ism.setSystemAccess(locked: false)
-                    Ism.printProcessNotification(ISM::Default::Option::SystemUnlock::SetText)
+                    Ism.printProcessNotification(Default::SetText)
                 end
             end
 

@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootBuildOptions < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scbo"
+                LongText = "setchrootbuildoptions"
+                Description = "Set the default chroot CPU flags for the compiler"
+                SetText = "Setting chroot buildOptions to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootBuildOptions::ShortText,
-                        ISM::Default::Option::SettingsSetChrootBuildOptions::LongText,
-                        ISM::Default::Option::SettingsSetChrootBuildOptions::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootBuildOptions(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootBuildOptions::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

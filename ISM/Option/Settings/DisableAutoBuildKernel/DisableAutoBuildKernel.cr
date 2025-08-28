@@ -4,16 +4,25 @@ module ISM
 
         class SettingsDisableAutoBuildKernel < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-dabk"
+                LongText = "disableautobuildkernel"
+                Description = "Disable automatic kernel building"
+                SetText = "Disabling automatic kernel building"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsDisableAutoBuildKernel::ShortText,
-                        ISM::Default::Option::SettingsDisableAutoBuildKernel::LongText,
-                        ISM::Default::Option::SettingsDisableAutoBuildKernel::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
                 if ARGV.size == 2
                     Ism.settings.setAutoBuildKernel(false)
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsDisableAutoBuildKernel::SetText)
+                    Ism.printProcessNotification(Default::SetText)
                 end
             end
 

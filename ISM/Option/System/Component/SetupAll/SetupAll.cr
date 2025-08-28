@@ -4,14 +4,23 @@ module ISM
 
         class ComponentSetupAll < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-sa"
+                LongText = "setupall"
+                Description = "Setup all components with their default values. Overwrite existing configuration."
+                Text = "Setting up all components with default values. The base is ready."
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::ComponentSetupAll::ShortText,
-                        ISM::Default::Option::ComponentSetupAll::LongText,
-                        ISM::Default::Option::ComponentSetupAll::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
-                Ism.printProcessNotification(ISM::Default::Option::ComponentSetupAll::Text)
+                Ism.printProcessNotification(Default::Text)
 
                 Ism.components.each do |component|
                     component.writeConfiguration(component.settingsFilePath)

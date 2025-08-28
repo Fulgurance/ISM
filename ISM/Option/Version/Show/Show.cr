@@ -4,10 +4,18 @@ module ISM
 
         class VersionShow < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-s"
+                LongText = "show"
+                Description = "Show the current ISM version"
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::VersionShow::ShortText,
-                        ISM::Default::Option::VersionShow::LongText,
-                        ISM::Default::Option::VersionShow::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start

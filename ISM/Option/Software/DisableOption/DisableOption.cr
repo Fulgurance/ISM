@@ -4,10 +4,27 @@ module ISM
 
         class SoftwareDisableOption < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-do"
+                LongText = "disableoption"
+                Description = "Disable a specific software option\n\t\t\t\tNeed to be use like this:\n\t\t\t\tism software [softwarename] disableoption [optionname]"
+                ShowHelpDescription = "Disable a specific software option"
+                ShowHelpExampleText1 = "Need to be use like this:"
+                ShowHelpExampleText2 = "ism software [softwarename] disableoption [optionname]"
+                NoMatchFound = "No match found with the database for "
+                NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                SetText1 = "Disabling the option "
+                SetText2 = " for the software "
+                OptionNoMatchFound1 = "No matching option named "
+                OptionNoMatchFound2 = " found for the software "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SoftwareDisableOption::ShortText,
-                        ISM::Default::Option::SoftwareDisableOption::LongText,
-                        ISM::Default::Option::SoftwareDisableOption::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -17,8 +34,8 @@ module ISM
                     matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
 
                     if !matchingSoftware.isValid
-                        puts ISM::Default::Option::SoftwareDisableOption::NoMatchFound + "#{ARGV[1].colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareDisableOption::NoMatchFoundAdvice
+                        puts Default::NoMatchFound + "#{ARGV[1].colorize(:green)}"
+                        puts Default::NoMatchFoundAdvice
                     else
                         if ARGV[2] == @shortText || ARGV[2] == @longText
                             match = false
@@ -36,14 +53,14 @@ module ISM
 
                             if match
                                 matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
-                                Ism.printProcessNotification(   ISM::Default::Option::SoftwareDisableOption::SetText1 +
+                                Ism.printProcessNotification(   Default::SetText1 +
                                                             "#{matchingOption.name.colorize(:green)}" +
-                                                            ISM::Default::Option::SoftwareDisableOption::SetText2 +
+                                                            Default::SetText2 +
                                                             matchingSoftwareText)
                             else
-                                Ism.printErrorNotification( ISM::Default::Option::SoftwareDisableOption::OptionNoMatchFound1 +
+                                Ism.printErrorNotification( Default::OptionNoMatchFound1 +
                                                         "#{ARGV[3].colorize(:green)}" +
-                                                        ISM::Default::Option::SoftwareDisableOption::OptionNoMatchFound2 +
+                                                        Default::OptionNoMatchFound2 +
                                                         matchingSoftwareText,nil)
                             end
                         else
@@ -55,9 +72,9 @@ module ISM
             end
 
             def showHelp
-                puts    ISM::Default::Option::SoftwareDisableOption::ShowHelpDescription +
-                        "\n\n\t" + ISM::Default::Option::SoftwareDisableOption::ShowHelpExampleText1 +
-                        "\t" + "#{ISM::Default::Option::SoftwareDisableOption::ShowHelpExampleText2.colorize(:green)}"
+                puts    Default::ShowHelpDescription +
+                        "\n\n\t" + Default::ShowHelpExampleText1 +
+                        "\t" + "#{Default::ShowHelpExampleText2.colorize(:green)}"
             end
 
         end

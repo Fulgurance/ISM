@@ -4,10 +4,20 @@ module ISM
 
         class ComponentSetup < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-s"
+                LongText = "setup"
+                Description = "Setup a single component with default values. Overwrite existing configuration."
+                Text1 = "Setting up "
+                Text2 = ". The component is ready."
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::ComponentSetup::ShortText,
-                        ISM::Default::Option::ComponentSetup::LongText,
-                        ISM::Default::Option::ComponentSetup::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -32,9 +42,9 @@ module ISM
 
                     matchingComponent.writeConfiguration(matchingComponent.settingsFilePath)
 
-                    Ism.printProcessNotification(   ISM::Default::Option::ComponentSetup::Text1 +
+                    Ism.printProcessNotification(   Default::Text1 +
                                                     "#{("@"+matchingComponent.port).colorize(:red)}:#{matchingComponent.name.colorize(:green)}" +
-                                                    ISM::Default::Option::ComponentSetup::Text2)
+                                                    Default::Text2)
                 end
 
             end

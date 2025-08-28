@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootAnsiColor < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scac"
+                LongText = "setchrootansicolor"
+                Description = "Set the ANSI color of the future chroot installed system"
+                SetText = "Setting chroot system ANSI color to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootAnsiColor::ShortText,
-                        ISM::Default::Option::SettingsSetChrootAnsiColor::LongText,
-                        ISM::Default::Option::SettingsSetChrootAnsiColor::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootAnsiColor(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootAnsiColor::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

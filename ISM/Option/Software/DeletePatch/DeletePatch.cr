@@ -4,10 +4,27 @@ module ISM
 
         class SoftwareDeletePatch < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-dp"
+                LongText = "deletepatch"
+                Description = "Delete a local patch for a specific software\n\t\t\t\tNeed to be use like this:\n\t\t\t\tism software [softwarename-softwareversion] deletepatch [patchpath]"
+                ShowHelpDescription = "Delete a local patch for a specific software"
+                ShowHelpExampleText1 = "Need to be use like this:"
+                ShowHelpExampleText2 = "ism software [softwarename-softwareversion] deletepatch [patchpath]"
+                NoMatchFound = "No match found with the database for "
+                NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                Text1 = "Deleting patch "
+                Text2 = " for the software "
+                NoFileFound1 = "The patch "
+                NoFileFound2 = " doesn't exist for the software "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SoftwareDeletePatch::ShortText,
-                        ISM::Default::Option::SoftwareDeletePatch::LongText,
-                        ISM::Default::Option::SoftwareDeletePatch::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -17,21 +34,21 @@ module ISM
                     matchingSoftware = Ism.getSoftwareInformation(ARGV[1].downcase, allowSearchByNameOnly: true)
 
                     if matchingSoftware.name == ""
-                        puts ISM::Default::Option::SoftwareDeletePatch::NoMatchFound + "#{ARGV[1].colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareDeletePatch::NoMatchFoundAdvice
+                        puts Default::NoMatchFound + "#{ARGV[1].colorize(:green)}"
+                        puts Default::NoMatchFoundAdvice
                     else
                         if ARGV[2] == @shortText || ARGV[2] == @longText
                             patchName = ARGV[3]
 
                             if Ism.deletePatch(patchName,matchingSoftware.versionName)
-                                Ism.printProcessNotification(   ISM::Default::Option::SoftwareDeletePatch::Text1 +
+                                Ism.printProcessNotification(   Default::Text1 +
                                                             patchName +
-                                                            ISM::Default::Option::SoftwareDeletePatch::Text2 +
+                                                            Default::Text2 +
                                                             matchingSoftware.name)
                             else
-                                Ism.printErrorNotification( ISM::Default::Option::SoftwareDeletePatch::NoFileFound1 +
+                                Ism.printErrorNotification( Default::NoFileFound1 +
                                                         patchName +
-                                                        ISM::Default::Option::SoftwareDeletePatch::NoFileFound2 +
+                                                        Default::NoFileFound2 +
                                                         matchingSoftware.name,nil)
                             end
                         else
@@ -43,9 +60,9 @@ module ISM
             end
 
             def showHelp
-                puts    ISM::Default::Option::SoftwareDeletePatch::ShowHelpDescription +
-                        "\n\n\t" + ISM::Default::Option::SoftwareDeletePatch::ShowHelpExampleText1 +
-                        "\n\t" + "#{ISM::Default::Option::SoftwareDeletePatch::ShowHelpExampleText2.colorize(:green)}"
+                puts    Default::ShowHelpDescription +
+                        "\n\n\t" + Default::ShowHelpExampleText1 +
+                        "\n\t" + "#{Default::ShowHelpExampleText2.colorize(:green)}"
             end
 
         end

@@ -4,11 +4,20 @@ module ISM
 
         class Tools < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-t"
+                LongText = "tools"
+                Description = "Development tools for ISM"
+                Options = [] of ISM::CommandLineOption
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::Tools::ShortText,
-                        ISM::Default::Option::Tools::LongText,
-                        ISM::Default::Option::Tools::Description,
-                        ISM::Default::Option::Tools::Options)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description,
+                        Default::Options)
             end
 
             def start

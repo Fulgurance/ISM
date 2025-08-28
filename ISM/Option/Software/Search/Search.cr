@@ -4,10 +4,33 @@ module ISM
 
         class SoftwareSearch < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-se"
+                LongText = "search"
+                Description = "Search specific(s) software(s)"
+                NoMatchFound = "No match found with the database for "
+                NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+                None = "None"
+                TypeField = "Type: "
+                PortField = "Port: "
+                NameField = "Name: "
+                DescriptionField = "Description: "
+                AvailablesArchitecturesField = "Available(s) architecture(s): "
+                WebsiteField = "Website: "
+                AvailablesVersionsField = "Available(s) Version(s): "
+                InstalledVersionField = "Installed Version(s): "
+                UniqueDependenciesField = "Unique dependencies setted: "
+                OptionsField = "Current options setted: "
+                OptionSelectorField = "Selector"
+                LocalPatchesField = "Current local patches: "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SoftwareSearch::ShortText,
-                        ISM::Default::Option::SoftwareSearch::LongText,
-                        ISM::Default::Option::SoftwareSearch::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -24,24 +47,24 @@ module ISM
                     end
 
                     if matchingSoftwaresArray.empty?
-                        puts ISM::Default::Option::SoftwareSearch::NoMatchFound + "#{ARGV[2].colorize(:green)}"
-                        puts ISM::Default::Option::SoftwareSearch::NoMatchFoundAdvice
+                        puts Default::NoMatchFound + "#{ARGV[2].colorize(:green)}"
+                        puts Default::NoMatchFoundAdvice
                     else
                         puts "\n"
 
                         matchingSoftwaresArray.each_with_index do |software, index|
                             greatestVersion = software.greatestVersion
 
-                            puts    ISM::Default::Option::SoftwareSearch::TypeField +
+                            puts    Default::TypeField +
                                         "#{(greatestVersion.type).colorize(:magenta)}"
 
-                            puts    ISM::Default::Option::SoftwareSearch::PortField +
+                            puts    Default::PortField +
                                         "#{("@"+greatestVersion.port).colorize(Colorize::ColorRGB.new(255,100,100))}"
 
-                            puts    ISM::Default::Option::SoftwareSearch::NameField +
+                            puts    Default::NameField +
                                         "#{greatestVersion.name.colorize(:green)}"
 
-                            puts    ISM::Default::Option::SoftwareSearch::DescriptionField +
+                            puts    Default::DescriptionField +
                                         "#{greatestVersion.description.colorize(:green)}"
 
                             architecturesText = ""
@@ -52,12 +75,12 @@ module ISM
                                 end
                             end
                             if architecturesText.empty?
-                                architecturesText = ISM::Default::Option::SoftwareSearch::None
+                                architecturesText = Default::None
                             end
-                            puts    ISM::Default::Option::SoftwareSearch::AvailablesArchitecturesField +
+                            puts    Default::AvailablesArchitecturesField +
                                         "#{architecturesText.colorize(Colorize::ColorRGB.new(255,170,0))}"
 
-                            puts    ISM::Default::Option::SoftwareSearch::WebsiteField +
+                            puts    Default::WebsiteField +
                                         "#{greatestVersion.website.colorize(:green)}"
 
                             versionsText = ""
@@ -67,7 +90,7 @@ module ISM
                                         versionsText += " | "
                                 end
                             end
-                            puts    ISM::Default::Option::SoftwareSearch::AvailablesVersionsField +
+                            puts    Default::AvailablesVersionsField +
                                         "#{versionsText}"
 
                             installedVersionText = ""
@@ -103,10 +126,10 @@ module ISM
                             end
 
                             if installedVersionText.empty?
-                                installedVersionText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}"
+                                installedVersionText = "#{Default::None.colorize(:green)}"
                             end
 
-                            puts    ISM::Default::Option::SoftwareSearch::InstalledVersionField +
+                            puts    Default::InstalledVersionField +
                                         "#{installedVersionText.colorize(:green)}"
 
                             optionsText = String.new
@@ -145,14 +168,14 @@ module ISM
 
                             end
 
-                            puts    ISM::Default::Option::SoftwareSearch::UniqueDependenciesField +
-                                    (uniqueDependenciesSettedText.empty? ? "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}" : uniqueDependenciesSettedText)
+                            puts    Default::UniqueDependenciesField +
+                                    (uniqueDependenciesSettedText.empty? ? "#{Default::None.colorize(:green)}" : uniqueDependenciesSettedText)
 
                             uniqueGroupText = String.new
 
                             greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
 
-                                uniqueGroupText += "\n[#{ISM::Default::Option::SoftwareSearch::OptionSelectorField.colorize(Colorize::ColorRGB.new(255,100,100))}] ("
+                                uniqueGroupText += "\n[#{Default::OptionSelectorField.colorize(Colorize::ColorRGB.new(255,100,100))}] ("
 
                                 uniqueOptionGroup.each_with_index do |uniqueOption, index|
                                     uniqueGroupText += "#{uniqueOption.colorize(:green)}"
@@ -175,12 +198,12 @@ module ISM
                             end
 
                             if optionsText.empty? && uniqueGroupText.empty?
-                                optionSettedText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}"
+                                optionSettedText = "#{Default::None.colorize(:green)}"
                             else
                                 optionSettedText = optionsText+uniqueGroupText
                             end
 
-                            puts    ISM::Default::Option::SoftwareSearch::OptionsField + optionSettedText
+                            puts    Default::OptionsField + optionSettedText
 
                             localPatchesText = String.new
 
@@ -191,10 +214,10 @@ module ISM
                             end
 
                             if localPatchesText.empty?
-                                localPatchesText = "#{ISM::Default::Option::SoftwareSearch::None.colorize(:green)}"
+                                localPatchesText = "#{Default::None.colorize(:green)}"
                             end
 
-                            puts    ISM::Default::Option::SoftwareSearch::LocalPatchesField + localPatchesText
+                            puts    Default::LocalPatchesField + localPatchesText
 
                             if index < matchingSoftwaresArray.size-1
                                 Ism.showSeparator
