@@ -587,9 +587,7 @@ module ISM
         def loadInstalledSoftwareDatabase
             path = "#{@settings.rootPath}#{Path::InstalledSoftwaresDirectory}"
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             portDirectories = Dir.children(path)
 
