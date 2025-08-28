@@ -50,6 +50,16 @@ module ISM
             @additionsPublicKeys = Array(String).new
         end
 
+        #Special function to improve performance (Internal use only)
+        def changeFileModeNoChroot(path : String, mode : String)
+            changeFileMode(path,mode)
+        end
+
+        #Special function to improve performance (Internal use only)
+        def changeFileOwnerNoChroot(path : String, user : String, group : String)
+            changeFileOwner(path,user,group)
+        end
+
         def autoBuildKernel
             return Ism.settings.autoBuildKernel
         end
@@ -1021,36 +1031,6 @@ module ISM
             rescue exception
                 ISM::Error.show(className: "Software",
                                 functionName: "deleteDirectoryNoChroot",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
-        #Special function to improve performance (Internal use only)
-        def changeFileModeNoChroot(path : String, mode : String)
-            File.chmod( path: path,
-                        permissions: mode.to_i(8))
-
-            rescue exception
-                ISM::Error.show(className: "Software",
-                                functionName: "changeFileModeNoChroot",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
-        #Special function to improve performance (Internal use only)
-        def changeFileOwnerNoChroot(path : String, user : String, group : String)
-            uid = (user.to_i? ? System::User.find_by(id: user).id.to_i : System::User.find_by(name: user).id.to_i)
-            gid = (group.to_i? ? System::Group.find_by(id: group).id.to_i : System::Group.find_by(name: group).id.to_i)
-
-            File.chown( path: path,
-                        uid: uid,
-                        gid: gid)
-
-            rescue exception
-                ISM::Error.show(className: "Software",
-                                functionName: "changeFileOwnerNoChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)

@@ -272,6 +272,34 @@ module ISM
                                 exception: exception)
         end
 
+        def changeFileMode(path : String, mode : String)
+            File.chmod( path: path,
+                        permissions: mode.to_i(8))
+
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "changeFileMode",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def changeFileOwner(path : String, user : String, group : String)
+            uid = (user.to_i? ? System::User.find_by(id: user).id.to_i : System::User.find_by(name: user).id.to_i)
+            gid = (group.to_i? ? System::Group.find_by(id: group).id.to_i : System::Group.find_by(name: group).id.to_i)
+
+            File.chown( path: path,
+                        uid: uid,
+                        gid: gid)
+
+            rescue exception
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "changeFileOwner",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
         def start
             loadSettingsFiles
             loadSystemInformationFile
@@ -292,12 +320,23 @@ module ISM
                                 exception: exception)
         end
 
+        #This function ensure that the generated directory is owned by ism user:group
+        def createSystemDirectory(path : String)
+            runAsSuperUser {
+                if !Dir.exists?(path)
+                    Dir.mkdir_p(path)
+                end
+
+                changeFileOwner(path: path,
+                                user: Default::Name,
+                                group: Default::Name)
+            }
+        end
+
         def loadNeededKernelOptions
             path = @settings.rootPath+Path::NeededKernelOptionsDirectory
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             neededKernelOptions = Dir.children(path)
 
@@ -318,9 +357,7 @@ module ISM
         def loadKernelOptionDatabase
             path = @settings.rootPath+Path::KernelOptionsDirectory
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             availableKernels = Dir.children(path)
 
@@ -392,9 +429,7 @@ module ISM
         def loadSoftwareDatabase
             path = "#{@settings.rootPath}#{Path::SoftwaresDirectory}"
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             portDirectories = Dir.children(path)
 
@@ -433,9 +468,7 @@ module ISM
         def loadPortsDatabase
             path = "#{@settings.rootPath}#{Path::PortsDirectory}"
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             portsFiles = Dir.children(path)
 
@@ -455,9 +488,7 @@ module ISM
         def loadMirrorsDatabase
             path = "#{@settings.rootPath}#{Path::MirrorsDirectory}"
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             mirrorsFiles = Dir.children(path)
 
@@ -481,9 +512,7 @@ module ISM
         def loadFavouriteGroupsDatabase
             path = "#{@settings.rootPath}#{Path::FavouriteGroupsDirectory}"
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             favouriteGroupsFiles = Dir.children(path)
 
@@ -507,9 +536,7 @@ module ISM
         def loadSystemInformationFile
             path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             @systemInformation = ISM::CommandLineSystemInformation.loadConfiguration
 
@@ -524,24 +551,17 @@ module ISM
         def loadSettingsFiles
             path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
 
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
+            createSystemDirectory(path)
 
             @settings = ISM::CommandLineSettings.loadConfiguration
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
 
             rescue exception
-                case exception.class
-                when File::AccessDeniedError
-
-                else
-                    ISM::Error.show(className: "CommandLine",
-                                    functionName: "loadSettingsFiles",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-                end
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "loadSettingsFiles",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
