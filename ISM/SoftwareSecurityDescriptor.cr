@@ -2,6 +2,13 @@ module ISM
 
     class SoftwareSecurityDescriptor
 
+        module Default
+
+            SourcesPathEntryName = "Sources"
+            ToolsPathEntryName = "Tools"
+
+        end
+
         def_clone
 
         include JSON::Serializable

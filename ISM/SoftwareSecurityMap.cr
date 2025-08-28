@@ -2,6 +2,13 @@ module ISM
 
     class SoftwareSecurityMap
 
+        module Default
+
+            FileMode = "0644"
+            DirectoryMode = "0755"
+
+        end
+
         include JSON::Serializable
 
         property defaultConfiguration : ISM::SoftwareSecurityDefaultConfiguration
@@ -34,12 +41,12 @@ module ISM
             #Return the matching descriptor
             @descriptors.each do |entry|
                 #Special entry for sources path
-                if entry.target == ISM::Default::SoftwareSecurityDescriptor::SourcesPathEntryName && path == "/#{ISM::Default::Path::SourcesDirectory}"[0..-2]
+                if entry.target == SoftwareSecurityDescriptor::Default::SourcesPathEntryName && path == "/#{ISM::Default::Path::SourcesDirectory}"[0..-2]
                     return entry
                 end
 
                 #Special entry for tools path
-                if entry.target == ISM::Default::SoftwareSecurityDescriptor::ToolsPathEntryName && path == "/#{ISM::Default::Path::ToolsDirectory}"[0..-2]
+                if entry.target == SoftwareSecurityDescriptor::Default::ToolsPathEntryName && path == "/#{ISM::Default::Path::ToolsDirectory}"[0..-2]
                     return entry
                 end
 

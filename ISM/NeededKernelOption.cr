@@ -2,6 +2,13 @@ module ISM
 
     class NeededKernelOption
 
+        module Default
+
+            FileLoadProcessSyntaxErrorText1 = "Syntax errors detected during file load process "
+            FileLoadProcessSyntaxErrorText2 = " at line number "
+
+        end
+
         include JSON::Serializable
 
         property name : String

@@ -2,6 +2,155 @@ module ISM
 
     class CommandLine
 
+        module Default
+
+            Title = "Ingenius System Manager"
+            Name = "ism"
+            Id = 250
+            RanAsSuperUserText = "ISM can't be run as root. Operation aborted."
+            NotRanAsMemberOfIsmGroupText = "The current user is not in the #{Name} group (id: #{Id.to_s}). Operation aborted."
+            ErrorUnknowArgument = "ISM error: unknow argument "
+            ErrorUnknowArgumentHelp1 = "Use "
+            ErrorUnknowArgumentHelp2 = "ism --help "
+            ErrorUnknowArgumentHelp3 = "to know how to use ISM"
+            ProcessNotificationCharacters = "■"
+            InternalErrorTitle = "Internal error"
+            TaskBuildingProcessErrorText1 = "The ISM task at "
+            TaskBuildingProcessErrorText2 = " encountered an error at line number "
+            InstallerImplementationErrorTitle = "Software installer implementation error"
+            InstallerImplementationErrorText1 = "The installer for the software "
+            InstallerImplementationErrorText2 = " encountered an error at line number "
+            InstallerImplementationErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean the related installer need to be fix."
+            TaskBuildingErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean probably the task building process need to be fix."
+            SystemCallErrorNotificationHelp = "ISM raised that error because the ran script did not call properly a system command or the system command itself need to be fix."
+            TaskCompilationText = "Task compilation in process: "
+            CompilationWaitingText = "Compiling the requested task"
+            TaskCompilationFailedText = "Failed !"
+            SetupChrootPermissionsText = "Setting default permissions for the targeted system"
+            PrepareChrootProcText = "Mounting /proc in the targeted system"
+            PrepareChrootSysText = "Mounting /sys in the targeted system"
+            PrepareChrootProcDev = "Mounting /dev in the targeted system"
+            PrepareChrootRunText = "Mounting /run in the targeted system"
+            PrepareChrootNetworkText = "Copying network details in the targeted system"
+            DownloadText = "Downloading "
+            DownloadAdditionsText = "Downloading additions"
+            CheckText = "Checking "
+            CheckAdditionsText = "Checking additions"
+            CheckIntegrityText = "Checking files integrity"
+            CheckAuthenticityText = "Checking files authenticity"
+            CheckIntegrityFileText = "Checking integrity for"
+            CheckAuthenticityFileText = "Checking authenticity for"
+            ExtractText = "Extracting "
+            ExtractAdditionsText = "Extracting additions"
+            PatchText = "Patching "
+            LocalPatchText = "Applying local patch added by the user "
+            PrepareText =  "Preparing "
+            ConfigureText = "Configuring "
+            BuildText = "Building "
+            PrepareInstallationText = "Preparing installation for "
+            StripFilesText = "Stripping files"
+            DeployText = "Deploying"
+            UpdateSystemCacheText = "Updating system caches"
+            InstallText = "Installing "
+            RecordNeededKernelOptionsText = "Recording needed kernel options for "
+            CleanText = "Cleaning "
+            FuturKernelText = "future kernel (not installed yet)"
+            UpdateKernelOptionsDatabaseText = "Updating kernel options database for "
+            UninstallText = "Uninstalling "
+            ErrorDownloadText = "Failed to download from "
+            ErrorConnexionText1 = "Failed to connect to "
+            ErrorConnexionText2 = ". The connexion is unaivalable"
+            ErrorCheckText1 = "Failed check because the sha512 digest of "
+            ErrorCheckText2 = " doesn't match with the given sha512 value "
+            ErrorExtractText1 = "Failed to extract the archive located at "
+            ErrorExtractText2 = " to "
+            ErrorApplyPatchText = "Failed to apply the patch "
+            ErrorUpdateUserFileText = "Failed to update the user file with the data: "
+            ErrorUpdateGroupFileText = "Failed to update the group file with the data: "
+            ErrorCopyFileText1 = "Failed to copy the file from "
+            ErrorCopyFileText2 = " to "
+            ErrorCopyDirectoryText1 = "Failed to copy the directory from "
+            ErrorCopyDirectoryText2 = " to "
+            ErrorDeleteFileText = "Failed to delete the file "
+            ErrorMoveFileText1 = "Failed to move "
+            ErrorMoveFileText2 = " to "
+            ErrorMakeDirectoryText = "Failed to make directory "
+            ErrorDeleteDirectoryText = "Failed to delete directory "
+            ErrorMakeLinkUnknowTypeText1 = "Failed to make symbolic link from "
+            ErrorMakeLinkUnknowTypeText2 = " to "
+            ErrorMakeLinkUnknowTypeText3 = ". Unknow link type: "
+            ErrorGetFileContentText = "Failed to get file content from "
+            ErrorRunSystemCommandText1 = "Failed to run "
+            ErrorRunSystemCommandText2 = " in "
+            ErrorRunSystemCommandText3 = " with given environment "
+            ErrorRunSystemCommandText4 = " with the loaded environment file "
+            ErrorRunSystemCommandUnknownError = "ISM encountered an error with the last executed command, but was not able to record it. The reason is unknown."
+            ErrorUpdateKernelOptionsDatabaseText = "Failed to update the option database for the kernel "
+            AmbiguousSearchTitle = "The searched software name is ambiguous."
+            AmbiguousSearchText = "ISM is unable to find the requested software because there are multiple entry in the database for this name:"
+            InextricableText = "ISM stopped due to an inextricable problem of dependencies with these softwares:"
+            MissingSelectedDependenciesText = "ISM stopped due to missing unique dependencies not selected yet:"
+            MissingSelectionText = "One of these unique dependencies need to be selected:"
+            SkippedUpdatesText = "ISM will skip some updates due to missing dependencies:"
+            UnconfiguredSystemComponentText1 = "The system component "
+            UnconfiguredSystemComponentText2 = " is not configured yet. Operation aborted. Please set this component first."
+            UnavailableText1 = "ISM stopped due to some missing dependencies for the requested softwares:"
+            UnavailableText2 = " is missing for "
+            NoUpdate = "System up to date."
+            NoCleaningRequiredMessage = "No cleaning required. Task complete."
+            CalculationTitle = "ISM start to calculate dependencies: "
+            CalculationWaitingText = "Checking dependency tree"
+            SynchronizationWaitingText = "Synchronization with the online database"
+            CodependencyExtensionText = "Codependency"
+            CalculationDoneText = "Done !"
+            Separator = "============"
+            NoOptionText = "no option"
+            NewText = "New!"
+            AdditionalVersionText = "Additional Version"
+            UpdateText = "Update"
+            BuildingPhaseText = "Building Phase"
+            OptionUpdateText = "Option Update"
+            RebuildText = "Rebuild"
+            RebuildDueOfCodependencyText = "Rebuild due of codependency"
+            InstallSummaryText = " new softwares will be install"
+            InstallQuestion = "Would you like to install these softwares ?"
+            UpdateSummaryText = " softwares will be build for the system update"
+            UpdateQuestion = "Would you like to build these softwares ?"
+            UninstallSummaryText = " softwares will be uninstall including unneeded dependencies"
+            UninstallQuestion = "Would you like to uninstall these softwares ?"
+            YesReplyOption = "yes"
+            NoReplyOption = "no"
+            YesShortReplyOption = "y"
+            NoShortReplyOption = "n"
+            InstallingText = "Installing"
+            UninstallingText = "Uninstalling"
+            InstallationDetailsText = "Installation Complete"
+            NewSoftwareNumberDetailText = "New software number"
+            NewDirectoryNumberDetailText = "New directory number"
+            NewSymlinkNumberDetailText = "New symlink number"
+            NewFileNumberDetailText = "New file number"
+            InstalledSizeDetailText = "Total size"
+            DoesntExistText = "Some requested softwares doesn't exist. Task cancelled."
+            NoMatchFound = "No match found with the database for "
+            NoMatchFoundAdvice = "Maybe it's needed of refresh the database?"
+            SoftwareNotInstalled = "The following requested softwares are not installed yet: "
+            NotInstalledText = "Some requested softwares are not installed. Task cancelled."
+            NoVersionAvailable = "Some requested versions are not available: "
+            NoVersionAvailableAdvice = "Maybe it's needed of refresh the database?"
+            SoftwareNeeded = "The following requested softwares are required for the system: "
+            NeededText = "Some requested softwares are actually needed. Task cancelled."
+            InstalledText = "is installed"
+            UninstalledText = "is uninstalled"
+
+            Options = [ ISM::Option::Help.new,
+                        ISM::Option::Version.new,
+                        ISM::Option::Software.new,
+                        ISM::Option::System.new,
+                        ISM::Option::Port.new,
+                        ISM::Option::Settings.new,
+                        ISM::Option::Tools.new]
+        end
+
         property systemInformation : ISM::CommandLineSystemInformation
         property requestedSoftwares : Array(ISM::SoftwareInformation)
         property neededKernelOptions : Array(ISM::NeededKernelOption)
@@ -27,8 +176,8 @@ module ISM
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0
             @reverseAnimation = false
-            @text = ISM::Default::CommandLine::CalculationWaitingText
-            @options = ISM::Default::CommandLine::Options
+            @text = Default::CalculationWaitingText
+            @options = Default::Options
             @settings = ISM::CommandLineSettings.new
             @components = Array(ISM::SoftwareInformation).new
             @kernels = Array(ISM::AvailableKernel).new
@@ -55,10 +204,10 @@ module ISM
             if validCondition
                 uidResult = LibC.setresuid( realId: 0,
                                             effectiveId: 0,
-                                            savedId: ISM::Default::CommandLine::Id)
+                                            savedId: Default::Id)
                 gidResult = LibC.setresgid( realId: 0,
                                             effectiveId: 0,
-                                            savedId: ISM::Default::CommandLine::Id)
+                                            savedId: Default::Id)
 
                 if uidResult.negative? || gidResult.negative?
                     ISM::Error.show(className: "CommandLine",
@@ -72,11 +221,11 @@ module ISM
                 yield
             ensure
                 #We ensure we exit without superuser access
-                LibC.setresuid( realId: ISM::Default::CommandLine::Id,
-                                effectiveId: ISM::Default::CommandLine::Id,
+                LibC.setresuid( realId: Default::Id,
+                                effectiveId: Default::Id,
                                 savedId: 0)
-                LibC.setresgid( realId: ISM::Default::CommandLine::Id,
-                                effectiveId: ISM::Default::CommandLine::Id,
+                LibC.setresgid( realId: Default::Id,
+                                effectiveId: Default::Id,
                                 savedId: 0)
             end
 
@@ -107,7 +256,7 @@ module ISM
             groupSystemFile.each do |line|
                 userName = System::User.find_by(id: LibC.getuid.to_s).username
 
-                if line.starts_with?(ISM::Default::CommandLine::Name) && (line.includes?(userName) || userName == ISM::Default::CommandLine::Name)
+                if line.starts_with?(Default::Name) && (line.includes?(userName) || userName == Default::Name)
                     return true
                 end
             end
@@ -203,9 +352,9 @@ module ISM
                                                                     port + "/" +
                                                                     name + "/" +
                                                                     version + "/" +
-                                                                    ISM::Default::Filename::Information)
+                                                                    Filename::Information)
 
-            settingsFilePath = "#{@settings.rootPath}#{ISM::Default::Path::SettingsSoftwaresDirectory}#{port}/#{name}/#{version}/#{ISM::Default::Filename::SoftwareSettings}"
+            settingsFilePath = "#{@settings.rootPath}#{ISM::Default::Path::SettingsSoftwaresDirectory}#{port}/#{name}/#{version}/#{Filename::SoftwareSettings}"
 
             if File.exists?(settingsFilePath)
 
@@ -383,11 +532,16 @@ module ISM
             @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLine",
-                                functionName: "loadSettingsFiles",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
+                case exception.class
+                when File::AccessDeniedError
+
+                else
+                    ISM::Error.show(className: "CommandLine",
+                                    functionName: "loadSettingsFiles",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+                end
         end
 
         def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
@@ -397,7 +551,7 @@ module ISM
                                                                     port + "/" +
                                                                     name + "/" +
                                                                     version + "/" +
-                                                                    ISM::Default::Filename::Information)
+                                                                    Filename::Information)
             rescue
                 return ISM::SoftwareInformation.new
             end
@@ -444,8 +598,8 @@ module ISM
         end
 
         def selectedKernel : ISM::SoftwareInformation
-            if File.exists?("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
-                return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{ISM::Default::Filename::SelectedKernel}")
+            if File.exists?("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{Filename::SelectedKernel}")
+                return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory}#{Filename::SelectedKernel}")
             else
                 return ISM::SoftwareInformation.new
             end
@@ -516,7 +670,7 @@ module ISM
                                 exception: exception)
         end
 
-        def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
+        def addSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = FavouriteGroup::Default::Name)
             path = ISM::FavouriteGroup.filePath(favouriteGroupName)
 
             favouriteGroup = ISM::FavouriteGroup.loadConfiguration(path)
@@ -531,7 +685,7 @@ module ISM
                                 exception: exception)
         end
 
-        def removeSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = ISM::Default::FavouriteGroup::Name)
+        def removeSoftwareToFavouriteGroup(fullVersionName : String, favouriteGroupName = FavouriteGroup::Default::Name)
             path = ISM::FavouriteGroup.filePath(favouriteGroupName)
 
             if File.exists?(path)
@@ -894,7 +1048,7 @@ module ISM
             matchingOption = false
 
             terminalTitleArguments = (ARGV.empty? ? "" : ARGV.join(" "))
-            setTerminalTitle("#{ISM::Default::CommandLine::Name} #{terminalTitleArguments}")
+            setTerminalTitle("#{Default::Name} #{terminalTitleArguments}")
 
             if ARGV.empty?
                 matchingOption = true
@@ -926,22 +1080,22 @@ module ISM
         end
 
         def printRanAsSuperUserErrorNotification
-            puts "#{ISM::Default::CommandLine::RanAsSuperUserText.colorize(:yellow)}"
+            puts "#{Default::RanAsSuperUserText.colorize(:yellow)}"
         end
 
         def printNotRanAsMemberOfIsmGroupErrorNotification
-            puts "#{ISM::Default::CommandLine::NotRanAsMemberOfIsmGroupText.colorize(:yellow)}"
+            puts "#{Default::NotRanAsMemberOfIsmGroupText.colorize(:yellow)}"
         end
 
         def showErrorUnknowArgument
-            puts "#{ISM::Default::CommandLine::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-            puts    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                    "#{ISM::Default::CommandLine::ErrorUnknowArgumentHelp3.colorize(:white)}"
+            puts "#{Default::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
+            puts    "#{Default::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                    "#{Default::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                    "#{Default::ErrorUnknowArgumentHelp3.colorize(:white)}"
         end
 
         def printProcessNotification(message : String)
-            puts "#{ISM::Default::CommandLine::ProcessNotificationCharacters.colorize(:green)} #{message}"
+            puts "#{Default::ProcessNotificationCharacters.colorize(:green)} #{message}"
         end
 
         def printSubProcessNotification(message : String)
@@ -959,7 +1113,7 @@ module ISM
         end
 
         def printInternalErrorNotification(error : ISM::TaskBuildingProcessError)
-            limit = ISM::Default::CommandLine::InternalErrorTitle.size
+            limit = Default::InternalErrorTitle.size
 
             separatorText = String.new
 
@@ -967,10 +1121,10 @@ module ISM
                 separatorText += "="
             end
 
-            title = "#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
+            title = "#{Default::InternalErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{ISM::Default::CommandLine::TaskBuildingProcessErrorText1}#{error.file}#{ISM::Default::CommandLine::TaskBuildingProcessErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
-            help = "\n#{ISM::Default::CommandLine::TaskBuildingErrorNotificationHelp.colorize(:red)}"
+            errorText = "\n#{Default::TaskBuildingProcessErrorText1}#{error.file}#{Default::TaskBuildingProcessErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
+            help = "\n#{Default::TaskBuildingErrorNotificationHelp.colorize(:red)}"
 
             puts
             puts separatorText
@@ -981,20 +1135,20 @@ module ISM
         end
 
         def printInstallerImplementationErrorNotification(software : ISM::SoftwareInformation, error : ISM::TaskBuildingProcessError)
-            limit = ISM::Default::CommandLine::InstallerImplementationErrorTitle.size
-            errorText1 = "#{ISM::Default::CommandLine::InstallerImplementationErrorText1.colorize(Colorize::ColorRGB.new(255,100,100))}"
+            limit = Default::InstallerImplementationErrorTitle.size
+            errorText1 = "#{Default::InstallerImplementationErrorText1.colorize(Colorize::ColorRGB.new(255,100,100))}"
             softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
-            errorText2 = "#{ISM::Default::CommandLine::InstallerImplementationErrorText2}#{error.line.to_s}:".colorize(Colorize::ColorRGB.new(255,100,100))
+            errorText2 = "#{Default::InstallerImplementationErrorText2}#{error.line.to_s}:".colorize(Colorize::ColorRGB.new(255,100,100))
             separatorText = String.new
 
             (0..limit).each do |index|
                 separatorText += "="
             end
 
-            title = "#{ISM::Default::CommandLine::InstallerImplementationErrorTitle.colorize(:red)}"
+            title = "#{Default::InstallerImplementationErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
             errorText = "\n#{errorText1}#{softwareText}#{errorText2}\n\n#{error.message.colorize(:yellow)}"
-            help = "\n#{ISM::Default::CommandLine::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
+            help = "\n#{Default::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
 
             puts
             puts separatorText
@@ -1005,11 +1159,11 @@ module ISM
         end
 
         def notifyOfGetFileContentError(filePath : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorGetFileContentText+filePath, error)
+            printErrorNotification(Default::ErrorGetFileContentText+filePath, error)
         end
 
         def printSystemCallErrorNotification(error : Exception)
-            limit = ISM::Default::CommandLine::InternalErrorTitle.size
+            limit = Default::InternalErrorTitle.size
 
             separatorText = String.new
 
@@ -1019,10 +1173,10 @@ module ISM
 
             fullLog = (error.backtrace? ? error.backtrace.join("\n") : error.message)
 
-            title = "#{ISM::Default::CommandLine::InternalErrorTitle.colorize(:red)}"
+            title = "#{Default::InternalErrorTitle.colorize(:red)}"
             separatorText = "#{separatorText.colorize(:red)}"
             errorText = "\n#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
-            help = "\n#{ISM::Default::CommandLine::SystemCallErrorNotificationHelp.colorize(:red)}"
+            help = "\n#{Default::SystemCallErrorNotificationHelp.colorize(:red)}"
 
             puts
             puts separatorText
@@ -1059,155 +1213,155 @@ module ISM
         end
 
         def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::DownloadText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::DownloadText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfSetupChrootPermissions
-            printSubProcessNotification(ISM::Default::CommandLine::SetupChrootPermissionsText)
+            printSubProcessNotification(Default::SetupChrootPermissionsText)
         end
 
         def notifyOfPrepareChrootProc
-            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootProcText)
+            printSubProcessNotification(Default::PrepareChrootProcText)
         end
 
         def notifyOfPrepareChrootSys
-            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootSysText)
+            printSubProcessNotification(Default::PrepareChrootSysText)
         end
 
         def notifyOfPrepareChrootDev
-            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootProcDev)
+            printSubProcessNotification(Default::PrepareChrootProcDev)
         end
 
         def notifyOfPrepareChrootRun
-            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootRunText)
+            printSubProcessNotification(Default::PrepareChrootRunText)
         end
 
         def notifyOfPrepareChrootNetwork
-            printSubProcessNotification(ISM::Default::CommandLine::PrepareChrootNetworkText)
+            printSubProcessNotification(Default::PrepareChrootNetworkText)
         end
 
         def notifyOfDownloadAdditions
-            printProcessNotification(ISM::Default::CommandLine::DownloadAdditionsText)
+            printProcessNotification(Default::DownloadAdditionsText)
         end
 
         def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::CheckText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::CheckText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfCheckIntegrity
-            printSubProcessNotification("#{ISM::Default::CommandLine::CheckIntegrityText.colorize(:green)}")
+            printSubProcessNotification("#{Default::CheckIntegrityText.colorize(:green)}")
         end
 
         def notifyOfCheckAuthenticity
-            printSubProcessNotification("#{ISM::Default::CommandLine::CheckAuthenticityText.colorize(:green)}")
+            printSubProcessNotification("#{Default::CheckAuthenticityText.colorize(:green)}")
         end
 
         def notifyOfCheckIntegrityFile(file : String)
-            printSubProcessNotification(ISM::Default::CommandLine::CheckIntegrityFileText+" #{file.colorize(:green)}")
+            printSubProcessNotification(Default::CheckIntegrityFileText+" #{file.colorize(:green)}")
         end
 
         def notifyOfCheckAuthenticityFile(file : String)
-            printSubProcessNotification(ISM::Default::CommandLine::CheckAuthenticityFileText+" #{file.colorize(:green)}")
+            printSubProcessNotification(Default::CheckAuthenticityFileText+" #{file.colorize(:green)}")
         end
 
         def notifyOfCheckAdditions
-            printProcessNotification(ISM::Default::CommandLine::CheckAdditionsText)
+            printProcessNotification(Default::CheckAdditionsText)
         end
 
         def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::ExtractText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::ExtractText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfExtractAdditions
-            printProcessNotification(ISM::Default::CommandLine::ExtractAdditionsText)
+            printProcessNotification(Default::ExtractAdditionsText)
         end
 
         def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PatchText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::PatchText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfLocalPatch(patchName : String)
-            printSubProcessNotification(ISM::Default::CommandLine::LocalPatchText+"#{patchName.colorize(:yellow)}")
+            printSubProcessNotification(Default::LocalPatchText+"#{patchName.colorize(:yellow)}")
         end
 
         def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PrepareText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::PrepareText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfBuild(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::BuildText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::BuildText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfPrepareInstallation(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfStripFiles
-            printSubProcessNotification(ISM::Default::CommandLine::StripFilesText)
+            printSubProcessNotification(Default::StripFilesText)
         end
 
         def notifyOfDeploy
-            printSubProcessNotification(ISM::Default::CommandLine::DeployText)
+            printSubProcessNotification(Default::DeployText)
         end
 
         def notifyOfUpdateSystemCache
-            printSubProcessNotification(ISM::Default::CommandLine::UpdateSystemCacheText)
+            printSubProcessNotification(Default::UpdateSystemCacheText)
         end
 
         def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::InstallText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::InstallText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfUpdateKernelOptionsDatabase(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfRecordNeededKernelOptions
-            kernelName = (selectedKernel.name == "" ? ISM::Default::CommandLine::FuturKernelText : selectedKernel.name )
+            kernelName = (selectedKernel.name == "" ? Default::FuturKernelText : selectedKernel.name )
 
-            printProcessNotification(ISM::Default::CommandLine::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
+            printProcessNotification(Default::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
         end
 
         def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::CleanText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::CleanText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
-            printProcessNotification(ISM::Default::CommandLine::UninstallText+"#{softwareInformation.name.colorize(:green)}")
+            printProcessNotification(Default::UninstallText+"#{softwareInformation.name.colorize(:green)}")
         end
 
         def notifyOfDownloadError(link : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDownloadText+link, error)
+            printErrorNotification(Default::ErrorDownloadText+link, error)
         end
 
         def notifyOfConnexionError(link : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorConnexionText1 +
+            printErrorNotification( Default::ErrorConnexionText1 +
                                     link +
-                                    ISM::Default::CommandLine::ErrorConnexionText2,
+                                    Default::ErrorConnexionText2,
                                     error)
         end
 
         def notifyOfCheckError(archive : String, sha512 : String, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorCheckText1 +
+            printErrorNotification( Default::ErrorCheckText1 +
                                     archive +
-                                    ISM::Default::CommandLine::ErrorCheckText2 +
+                                    Default::ErrorCheckText2 +
                                     sha512, error)
         end
 
         def notifyOfExtractError(archivePath : String, destinationPath : String ,error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorExtractText1 +
+            printErrorNotification( Default::ErrorExtractText1 +
                                     archivePath +
-                                    ISM::Default::CommandLine::ErrorExtractText2 +
+                                    Default::ErrorExtractText2 +
                                     destinationPath,
                                     error)
         end
 
         def notifyOfApplyPatchError(patchName : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorApplyPatchText+patchName, error)
+            printErrorNotification(Default::ErrorApplyPatchText+patchName, error)
         end
 
         def notifyOfCopyFileError(path : String | Enumerable(String), targetPath : String, error = nil)
@@ -1215,16 +1369,16 @@ module ISM
                 path = path.join(",")
 
             end
-            printErrorNotification(ISM::Default::CommandLine::ErrorCopyFileText1 +
+            printErrorNotification(Default::ErrorCopyFileText1 +
                                    path +
-                                   ISM::Default::CommandLine::ErrorCopyFileText2 +
+                                   Default::ErrorCopyFileText2 +
                                    targetPath, error)
         end
 
         def notifyOfCopyDirectoryError(path : String, targetPath : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorCopyDirectoryText1 +
+            printErrorNotification(Default::ErrorCopyDirectoryText1 +
                                    path +
-                                   ISM::Default::CommandLine::ErrorCopyDirectoryText2 +
+                                   Default::ErrorCopyDirectoryText2 +
                                    targetPath, error)
         end
 
@@ -1233,7 +1387,7 @@ module ISM
                 path = path.join(",")
             end
 
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteFileText+path, error)
+            printErrorNotification(Default::ErrorDeleteFileText+path, error)
         end
 
         def notifyOfMoveFileError(path : String | Enumerable(String), newPath : String, error = nil)
@@ -1241,46 +1395,46 @@ module ISM
                 path = path.join(",")
             end
 
-            printErrorNotification( ISM::Default::CommandLine::ErrorMoveFileText1 +
+            printErrorNotification( Default::ErrorMoveFileText1 +
                                     path +
-                                    ISM::Default::CommandLine::ErrorMoveFileText2 +
+                                    Default::ErrorMoveFileText2 +
                                     newPath, error)
         end
 
         def notifyOfMakeDirectoryError(directory : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorMakeDirectoryText+directory, error)
+            printErrorNotification(Default::ErrorMakeDirectoryText+directory, error)
         end
 
         def notifyOfDeleteDirectoryError(directory : String, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorDeleteDirectoryText+directory, error)
+            printErrorNotification(Default::ErrorDeleteDirectoryText+directory, error)
         end
 
         def notifyOfMakeLinkUnknowTypeError(path : String, targetPath : String, linkType : Symbol, error = nil)
-            printErrorNotification( ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText1 +
+            printErrorNotification( Default::ErrorMakeLinkUnknowTypeText1 +
                                     path +
-                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText2 +
+                                    Default::ErrorMakeLinkUnknowTypeText2 +
                                     targetPath +
-                                    ISM::Default::CommandLine::ErrorMakeLinkUnknowTypeText3 +
+                                    Default::ErrorMakeLinkUnknowTypeText3 +
                                     linkType.to_s, error)
         end
 
         def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
 
-            argumentText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText1}#{arguments.squeeze(" ")}"
+            argumentText = "#{Default::ErrorRunSystemCommandText1}#{arguments.squeeze(" ")}"
             pathText = String.new
             environmentText = String.new
             environmentFilePathText = String.new
 
             if !path.empty?
-                pathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText2}#{(targetSystemInformation.handleChroot ? @settings.rootPath : "")}#{path}".squeeze("/")
+                pathText = "#{Default::ErrorRunSystemCommandText2}#{(targetSystemInformation.handleChroot ? @settings.rootPath : "")}#{path}".squeeze("/")
             end
 
             if !environment.empty?
-                environmentText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText3}#{(environment.map { |key| key.join("=") }).join(" ")}"
+                environmentText = "#{Default::ErrorRunSystemCommandText3}#{(environment.map { |key| key.join("=") }).join(" ")}"
             end
 
             if !environmentFilePath.empty?
-                environmentFilePathText = "#{ISM::Default::CommandLine::ErrorRunSystemCommandText4}#{environmentFilePath}"
+                environmentFilePathText = "#{Default::ErrorRunSystemCommandText4}#{environmentFilePath}"
             end
 
             printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
@@ -1288,7 +1442,7 @@ module ISM
         end
 
         def notifyOfUpdateKernelOptionsDatabaseError(software : ISM::SoftwareInformation, error = nil)
-            printErrorNotification(ISM::Default::CommandLine::ErrorUpdateKernelOptionsDatabaseText+software.versionName, error)
+            printErrorNotification(Default::ErrorUpdateKernelOptionsDatabaseText+software.versionName, error)
         end
 
         def resetCalculationAnimation
@@ -1301,7 +1455,7 @@ module ISM
                 exitProgram
         end
 
-        def playCalculationAnimation(@text = ISM::Default::CommandLine::CalculationWaitingText)
+        def playCalculationAnimation(@text = Default::CalculationWaitingText)
             currentTime = Time.monotonic
 
             if (currentTime - @calculationStartingTime).milliseconds > 40
@@ -1525,42 +1679,42 @@ module ISM
         end
 
         def showNoMatchFoundMessage(wrongArguments : Array(String))
-            puts ISM::Default::CommandLine::NoMatchFound + "#{wrongArguments.join(", ").colorize(:green)}"
-            puts ISM::Default::CommandLine::NoMatchFoundAdvice
+            puts Default::NoMatchFound + "#{wrongArguments.join(", ").colorize(:green)}"
+            puts Default::NoMatchFoundAdvice
             puts
-            puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
+            puts "#{Default::DoesntExistText.colorize(:green)}"
         end
 
         def showSoftwareNotInstalledMessage(wrongArguments : Array(String))
-            puts ISM::Default::CommandLine::SoftwareNotInstalled + "#{wrongArguments.join(", ").colorize(:green)}"
+            puts Default::SoftwareNotInstalled + "#{wrongArguments.join(", ").colorize(:green)}"
             puts
-            puts "#{ISM::Default::CommandLine::NotInstalledText.colorize(:green)}"
+            puts "#{Default::NotInstalledText.colorize(:green)}"
         end
 
         def showNoVersionAvailableMessage(wrongArguments : Array(String))
-            puts ISM::Default::CommandLine::NoVersionAvailable + "#{wrongArguments.join(", ").colorize(:green)}"
-            puts ISM::Default::CommandLine::NoVersionAvailableAdvice
+            puts Default::NoVersionAvailable + "#{wrongArguments.join(", ").colorize(:green)}"
+            puts Default::NoVersionAvailableAdvice
             puts
-            puts "#{ISM::Default::CommandLine::DoesntExistText.colorize(:green)}"
+            puts "#{Default::DoesntExistText.colorize(:green)}"
         end
 
 
         def showNoUpdateMessage
-            puts "#{ISM::Default::CommandLine::NoUpdate.colorize(:green)}"
+            puts "#{Default::NoUpdate.colorize(:green)}"
         end
 
         def showNoCleaningRequiredMessage
-            puts "#{ISM::Default::CommandLine::NoCleaningRequiredMessage.colorize(:green)}"
+            puts "#{Default::NoCleaningRequiredMessage.colorize(:green)}"
         end
 
         def showSoftwareNeededMessage(wrongArguments : Array(String))
-            puts ISM::Default::CommandLine::SoftwareNeeded + "#{wrongArguments.join(", ").colorize(:green)}"
+            puts Default::SoftwareNeeded + "#{wrongArguments.join(", ").colorize(:green)}"
             puts
-            puts "#{ISM::Default::CommandLine::NeededText.colorize(:green)}"
+            puts "#{Default::NeededText.colorize(:green)}"
         end
 
         def showSkippedUpdatesMessage
-            puts "#{ISM::Default::CommandLine::SkippedUpdatesText.colorize(:yellow)}"
+            puts "#{Default::SkippedUpdatesText.colorize(:yellow)}"
             puts
         end
 
@@ -1568,14 +1722,14 @@ module ISM
             componentText = "#{("@"+component.port).colorize(:red)}:#{component.name.colorize(:green)}"
 
             puts
-            puts "#{ISM::Default::CommandLine::UnconfiguredSystemComponentText1.colorize(:yellow)}#{componentText}#{ISM::Default::CommandLine::UnconfiguredSystemComponentText2.colorize(:yellow)}"
+            puts "#{Default::UnconfiguredSystemComponentText1.colorize(:yellow)}#{componentText}#{Default::UnconfiguredSystemComponentText2.colorize(:yellow)}"
         end
 
         def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareInformation, allowTitle = true)
             puts
 
             if allowTitle
-                puts "#{ISM::Default::CommandLine::UnavailableText1.colorize(:yellow)}"
+                puts "#{Default::UnavailableText1.colorize(:yellow)}"
                 puts "\n"
             end
 
@@ -1584,7 +1738,7 @@ module ISM
             optionsText = "{ "
 
             if dependency.options.empty?
-                optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                optionsText += "#{"#{Default::NoOptionText} ".colorize(:dark_gray)}"
             end
 
             dependency.options.each do |option|
@@ -1597,7 +1751,7 @@ module ISM
             end
             optionsText += "}"
 
-            missingDependencyText = "#{ISM::Default::CommandLine::UnavailableText2.colorize(:red)}"
+            missingDependencyText = "#{Default::UnavailableText2.colorize(:red)}"
 
             softwareText = "#{software.fullName.colorize(:green)}" + " /" + "#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/"
 
@@ -1612,14 +1766,14 @@ module ISM
             names = String.new
 
             puts
-            puts "#{ISM::Default::CommandLine::AmbiguousSearchTitle.colorize(:yellow)}"
+            puts "#{Default::AmbiguousSearchTitle.colorize(:yellow)}"
             puts "\n"
 
             matches.each_with_index do |name, index|
                 names += "#{name.colorize(:red)}#{index < matches.size-1 ? ", " : "."}"
             end
 
-            puts "#{ISM::Default::CommandLine::AmbiguousSearchText.colorize(:green)} #{names}"
+            puts "#{Default::AmbiguousSearchText.colorize(:green)} #{names}"
         end
 
         def showInextricableDependenciesMessage(treeArrays : Array(Array(ISM::SoftwareInformation)))
@@ -1629,7 +1783,7 @@ module ISM
                 dependencyChains = treeArrays
 
                 puts
-                puts "#{ISM::Default::CommandLine::InextricableText.colorize(:yellow)}"
+                puts "#{Default::InextricableText.colorize(:yellow)}"
                 puts "\n"
 
                 #Now we print each chains with in highlight the first and last one
@@ -1646,7 +1800,7 @@ module ISM
                         optionsText = "{ "
 
                         if software.options.empty?
-                            optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                            optionsText += "#{"#{Default::NoOptionText} ".colorize(:dark_gray)}"
                         end
 
                         software.options.each do |option|
@@ -1670,7 +1824,7 @@ module ISM
         end
 
         def showMissingSelectedDependenciesMessage(fullName : String, version : String, dependencySelection : Array(Array(String)))
-            puts "#{ISM::Default::CommandLine::MissingSelectedDependenciesText.colorize(:yellow)}"
+            puts "#{Default::MissingSelectedDependenciesText.colorize(:yellow)}"
             puts "\n"
 
             puts "#{fullName.colorize(:magenta)}" + " /" + "#{version.colorize(Colorize::ColorRGB.new(255,100,100))}" + "/ "
@@ -1678,7 +1832,7 @@ module ISM
             dependencySelection.each do |selection|
                 dependencySet = selection.map { |entry| "#{(entry[0..entry.index(":")])[0..-2].colorize(:red)}:#{entry.gsub(entry[0..entry.index(":")],"").colorize(:green)}" }
 
-                puts "\t#{ISM::Default::CommandLine::MissingSelectionText.colorize(:magenta)} #{dependencySet.join(" | ")}"
+                puts "\t#{Default::MissingSelectionText.colorize(:magenta)} #{dependencySet.join(" | ")}"
             end
 
             puts "\n"
@@ -1686,22 +1840,22 @@ module ISM
 
         def showTaskCompilationTitleMessage
             puts
-            print "#{ISM::Default::CommandLine::TaskCompilationText}"
+            print "#{Default::TaskCompilationText}"
         end
 
         def showTaskCompilationFailedMessage
             cleanCalculationAnimation
-            print "#{ISM::Default::CommandLine::TaskCompilationFailedText.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
+            print "#{Default::TaskCompilationFailedText.colorize(Colorize::ColorRGB.new(255,100,100))}\n"
         end
 
         def showCalculationDoneMessage
             cleanCalculationAnimation
-            print "#{ISM::Default::CommandLine::CalculationDoneText.colorize(:green)}\n"
+            print "#{Default::CalculationDoneText.colorize(:green)}\n"
         end
 
         def showCalculationTitleMessage
             puts
-            print "#{ISM::Default::CommandLine::CalculationTitle}"
+            print "#{Default::CalculationTitle}"
         end
 
         def showSoftwares(neededSoftwares : Array(ISM::SoftwareInformation), mode = :installation)
@@ -1714,7 +1868,7 @@ module ISM
                 optionsText = "{ "
 
                 if software.options.empty?
-                    optionsText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                    optionsText += "#{"#{Default::NoOptionText} ".colorize(:dark_gray)}"
                 end
 
                 software.options.each do |option|
@@ -1735,24 +1889,24 @@ module ISM
 
                     #Codependency case
                     if checkedSoftwares.includes?(software.hiddenName)
-                        additionalText += "#{ISM::Default::CommandLine::RebuildDueOfCodependencyText.colorize(:yellow)}"
+                        additionalText += "#{Default::RebuildDueOfCodependencyText.colorize(:yellow)}"
                     else
 
                         status = getSoftwareStatus(software)
 
                         case status
                         when :new
-                            additionalText += "#{ISM::Default::CommandLine::NewText.colorize(:yellow)}"
+                            additionalText += "#{Default::NewText.colorize(:yellow)}"
                         when :additionalVersion
-                            additionalText += "#{ISM::Default::CommandLine::AdditionalVersionText.colorize(:yellow)}"
+                            additionalText += "#{Default::AdditionalVersionText.colorize(:yellow)}"
                         when :update
-                            additionalText += "#{ISM::Default::CommandLine::UpdateText.colorize(:yellow)}"
+                            additionalText += "#{Default::UpdateText.colorize(:yellow)}"
                         when :buildingPhase
-                            additionalText += "#{ISM::Default::CommandLine::BuildingPhaseText.colorize(:yellow)} #{software.getEnabledPassNumber.colorize(:yellow)}"
+                            additionalText += "#{Default::BuildingPhaseText.colorize(:yellow)} #{software.getEnabledPassNumber.colorize(:yellow)}"
                         when :optionUpdate
-                            additionalText += "#{ISM::Default::CommandLine::OptionUpdateText.colorize(:yellow)}"
+                            additionalText += "#{Default::OptionUpdateText.colorize(:yellow)}"
                         when :rebuild
-                            additionalText += "#{ISM::Default::CommandLine::RebuildText.colorize(:yellow)}"
+                            additionalText += "#{Default::RebuildText.colorize(:yellow)}"
                         end
                     end
 
@@ -1768,33 +1922,33 @@ module ISM
         end
 
         def showInstallationQuestion(softwareNumber : Int32)
-            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::InstallSummaryText + "\n"
+            summaryText = softwareNumber.to_s + Default::InstallSummaryText + "\n"
 
             puts "#{summaryText.colorize(:green)}"
 
-            print   "#{ISM::Default::CommandLine::InstallQuestion}" +
-                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
-                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
+            print   "#{Default::InstallQuestion}" +
+                    "[" + "#{Default::YesReplyOption.colorize(:green)}" +
+                    "/" + "#{Default::NoReplyOption.colorize(:red)}" + "]"
         end
 
         def showUninstallationQuestion(softwareNumber : Int32)
-            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UninstallSummaryText + "\n"
+            summaryText = softwareNumber.to_s + Default::UninstallSummaryText + "\n"
 
             puts "#{summaryText.colorize(:green)}"
 
-            print   "#{ISM::Default::CommandLine::UninstallQuestion.colorize}" +
-                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
-                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
+            print   "#{Default::UninstallQuestion.colorize}" +
+                    "[" + "#{Default::YesReplyOption.colorize(:green)}" +
+                    "/" + "#{Default::NoReplyOption.colorize(:red)}" + "]"
         end
 
         def showUpdateQuestion(softwareNumber : Int32)
-            summaryText = softwareNumber.to_s + ISM::Default::CommandLine::UpdateSummaryText + "\n"
+            summaryText = softwareNumber.to_s + Default::UpdateSummaryText + "\n"
 
             puts "#{summaryText.colorize(:green)}"
 
-            print   "#{ISM::Default::CommandLine::UpdateQuestion.colorize.mode(:underline)}" +
-                    "[" + "#{ISM::Default::CommandLine::YesReplyOption.colorize(:green)}" +
-                    "/" + "#{ISM::Default::CommandLine::NoReplyOption.colorize(:red)}" + "]"
+            print   "#{Default::UpdateQuestion.colorize.mode(:underline)}" +
+                    "[" + "#{Default::YesReplyOption.colorize(:green)}" +
+                    "/" + "#{Default::NoReplyOption.colorize(:red)}" + "]"
         end
 
         def getUserAgreement : Bool
@@ -1802,9 +1956,9 @@ module ISM
             loop do
                 userInput = gets.to_s
 
-                if userInput.downcase == ISM::Default::CommandLine::YesReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::YesShortReplyOption.downcase
+                if userInput.downcase == Default::YesReplyOption.downcase || userInput.downcase == Default::YesShortReplyOption.downcase
                     return true
-                elsif userInput.downcase == ISM::Default::CommandLine::NoReplyOption.downcase || userInput.downcase == ISM::Default::CommandLine::NoShortReplyOption.downcase
+                elsif userInput.downcase == Default::NoReplyOption.downcase || userInput.downcase == Default::NoShortReplyOption.downcase
                     return false
                 else
                     return false
@@ -1821,7 +1975,7 @@ module ISM
         end
 
         def updateInstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
-            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::InstallingText} @#{port}:#{name}#{passNumber == 0 ? "" : " (Pass#{passNumber})"} /#{version}/")
+            setTerminalTitle("#{Default::Name} [#{(index+1)} / #{limit}]: #{Default::InstallingText} @#{port}:#{name}#{passNumber == 0 ? "" : " (Pass#{passNumber})"} /#{version}/")
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
@@ -1832,7 +1986,7 @@ module ISM
         end
 
         def updateUninstallationTerminalTitle(index : Int32, limit : Int32, port : String, name : String, version : String)
-            setTerminalTitle("#{ISM::Default::CommandLine::Name} [#{(index+1)} / #{limit}]: #{ISM::Default::CommandLine::UninstallingText} @#{port}:#{name} /#{version}/")
+            setTerminalTitle("#{Default::Name} [#{(index+1)} / #{limit}]: #{Default::UninstallingText} @#{port}:#{name} /#{version}/")
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
@@ -1862,14 +2016,14 @@ module ISM
 
         def showSeparator
             puts "\n"
-            puts "#{ISM::Default::CommandLine::Separator.colorize(:green)}\n"
+            puts "#{Default::Separator.colorize(:green)}\n"
             puts "\n"
         end
 
         def showEndSoftwareInstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String, passNumber = 0)
             puts
             puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)}#{passNumber == 0 ? "" : " (Pass#{passNumber})".colorize(:yellow)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
-                    " #{ISM::Default::CommandLine::InstalledText} " +
+                    " #{Default::InstalledText} " +
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
                     "#{">>".colorize(:light_magenta)}" +
@@ -1879,7 +2033,7 @@ module ISM
         def showEndSoftwareUninstallingMessage(index : Int32, limit : Int32, port : String, name : String, version : String)
             puts
             puts    "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
-                    " #{ISM::Default::CommandLine::UninstalledText} " +
+                    " #{Default::UninstalledText} " +
                     "["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / "+"#{limit.to_s.colorize(:light_red)}"+"] " +
                     "#{">>".colorize(:light_magenta)}" +
@@ -1887,14 +2041,14 @@ module ISM
         end
 
         def showInstallationDetailsMessage(softwareNumber : UInt32)
-            title = ISM::Default::CommandLine::InstallationDetailsText
+            title = Default::InstallationDetailsText
 
             puts    "\n[ #{title.colorize(:green)} ]\n\n" +
-                    "#{ISM::Default::CommandLine::NewSoftwareNumberDetailText.colorize(:green)}: #{softwareNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::NewDirectoryNumberDetailText.colorize(:green)}: #{@totalInstalledDirectoryNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::NewSymlinkNumberDetailText.colorize(:green)}: #{@totalInstalledSymlinkNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::NewFileNumberDetailText.colorize(:green)}: #{@totalInstalledFileNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
-                    "#{ISM::Default::CommandLine::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n\n"
+                    "#{Default::NewSoftwareNumberDetailText.colorize(:green)}: #{softwareNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
+                    "#{Default::NewDirectoryNumberDetailText.colorize(:green)}: #{@totalInstalledDirectoryNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
+                    "#{Default::NewSymlinkNumberDetailText.colorize(:green)}: #{@totalInstalledSymlinkNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
+                    "#{Default::NewFileNumberDetailText.colorize(:green)}: #{@totalInstalledFileNumber.colorize(Colorize::ColorRGB.new(255,100,100))}\n" +
+                    "#{Default::InstalledSizeDetailText.colorize(:green)}: #{@totalInstalledSize.humanize_bytes.colorize(Colorize::ColorRGB.new(255,100,100))}\n\n"
         end
 
         def recordInstallationDetails(directoryNumber : UInt128, symlinkNumber : UInt128, fileNumber : UInt128, totalSize : UInt128)
@@ -1912,7 +2066,7 @@ module ISM
         end
 
         def getRequiredLibraries : String
-            requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{ISM::Default::Filename::RequiredLibraries}")
+            requireFileContent = File.read_lines("/#{ISM::Default::Path::LibraryDirectory}#{Filename::RequiredLibraries}")
             requiredLibraries = String.new
 
             requireFileContent.each do |line|
@@ -2302,24 +2456,24 @@ module ISM
         end
 
         def buildTasksFile
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}")
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}")
                 runAsSuperUser {
-                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
                                 shell: true)
 
-                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
                                 shell: true)
                 }
             end
 
             processResult = IO::Memory.new
 
-            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{ISM::Default::Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task} -f json",
+            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{Filename::Task}.cr -o #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task} -f json",
                         error: processResult,
                         shell: true,
                         chdir: "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}") do |process|
                 loop do
-                    playCalculationAnimation(ISM::Default::CommandLine::CompilationWaitingText)
+                    playCalculationAnimation(Default::CompilationWaitingText)
                     Fiber.yield
                     break if process.terminated?
                 end
@@ -2331,7 +2485,7 @@ module ISM
                 taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
 
                 showTaskCompilationFailedMessage
-                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
+                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr")
                 exitProgram(code: 1)
             end
 
@@ -2349,23 +2503,23 @@ module ISM
             #   -suid bit set
             #   -set as immutable to don't allow any suppression
             runAsSuperUser {
-                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
                             shell: true)
 
-                Process.run(command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                Process.run(command: "/usr/bin/chmod ugo+s #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
                             shell: true)
 
-                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}",
+                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}",
                             shell: true)
 
-                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                             shell: true)
 
-                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                Process.run(command: "/usr/bin/chattr -f +i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                             shell: true)
             }
 
-            command = "./#{ISM::Default::Filename::Task}"
+            command = "./#{Filename::Task}"
 
             logIOMemory = IO::Memory.new
 
@@ -2379,7 +2533,7 @@ module ISM
 
             if logEnabled
 
-                logs = logIOMemory.to_s.split("#{ISM::Default::CommandLine::Separator.colorize(:green)}\n")
+                logs = logIOMemory.to_s.split("#{Default::Separator.colorize(:green)}\n")
 
                 logs.each_with_index do |log, index|
 
@@ -2474,7 +2628,7 @@ module ISM
             puts    "#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
-                    "] #{ISM::Default::CommandLine::InstallingText} " +
+                    "] #{Default::InstallingText} " +
                     "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)}#{passNumber == 0 ? "" : " (Pass#{passNumber})".colorize(:yellow)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
         end
@@ -2483,7 +2637,7 @@ module ISM
             puts    "\n#{"<<".colorize(:light_magenta)}" +
                     " ["+"#{(index+1).to_s.colorize(Colorize::ColorRGB.new(255,170,0))}" +
                     " / #{limit.to_s.colorize(:light_red)}" +
-                    "] #{ISM::Default::CommandLine::UninstallingText} " +
+                    "] #{Default::UninstallingText} " +
                     "#{"@#{port}".colorize(:red)}:#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/" +
                     "\n\n"
         end
@@ -2494,7 +2648,7 @@ module ISM
                 synchronization = port.synchronize
 
                 until synchronization.terminated?
-                    playCalculationAnimation(ISM::Default::CommandLine::SynchronizationWaitingText)
+                    playCalculationAnimation(Default::SynchronizationWaitingText)
                     sleep(Time::Span.new(seconds: 0))
                 end
 
@@ -2729,7 +2883,7 @@ module ISM
                                 #-------------------
                                 #If it's related to an optional codependency:
                                 #   Clone and delete codependencies from clone list with different name (ex: name-codependency) (disable options if it relative to the options)
-                                if !key1.includes?("-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !key2.includes?("-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !calculatedDependencies.has_key?(key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}") && !calculatedDependencies.has_key?(key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}")
+                                if !key1.includes?("-#{Default::CodependencyExtensionText}") && !key2.includes?("-#{Default::CodependencyExtensionText}") && !calculatedDependencies.has_key?(key1+"-#{Default::CodependencyExtensionText}") && !calculatedDependencies.has_key?(key2+"-#{Default::CodependencyExtensionText}")
 
                                     #RELATED TO OPTION OR DIRECT DEPENDENCY ?
                                     key1HaveOptionalCodependency = calculatedDependencies[key1][0].option(calculatedDependencies[key2][0].name)
@@ -2737,9 +2891,9 @@ module ISM
 
                                     #--------------------------------------------------------------------
                                     if key1HaveOptionalCodependency
-                                        calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key1].clone
+                                        calculatedDependencies[key1+"-#{Default::CodependencyExtensionText}"] = calculatedDependencies[key1].clone
 
-                                        calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
+                                        calculatedDependencies[key1+"-#{Default::CodependencyExtensionText}"].each do |dependency|
                                             playCalculationAnimation
 
                                             if dependency.hiddenName == key2
@@ -2747,7 +2901,7 @@ module ISM
                                             end
                                         end
 
-                                        calculatedDependencies[key1+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"][0].options.each do |option|
+                                        calculatedDependencies[key1+"-#{Default::CodependencyExtensionText}"][0].options.each do |option|
                                             playCalculationAnimation
 
                                             option.dependencies.each do |dependency|
@@ -2767,9 +2921,9 @@ module ISM
                                     #--------------------------------------------------------------------
                                     if key2HaveOptionalCodependency
 
-                                        calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"] = calculatedDependencies[key2].clone
+                                        calculatedDependencies[key2+"-#{Default::CodependencyExtensionText}"] = calculatedDependencies[key2].clone
 
-                                        calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"].each do |dependency|
+                                        calculatedDependencies[key2+"-#{Default::CodependencyExtensionText}"].each do |dependency|
                                             playCalculationAnimation
 
                                             if dependency.hiddenName == key1
@@ -2777,7 +2931,7 @@ module ISM
                                             end
                                         end
 
-                                        calculatedDependencies[key2+"-#{ISM::Default::CommandLine::CodependencyExtensionText}"][0].options.each do |option|
+                                        calculatedDependencies[key2+"-#{Default::CodependencyExtensionText}"][0].options.each do |option|
                                             playCalculationAnimation
 
                                             option.dependencies.each do |dependency|
@@ -2843,17 +2997,17 @@ module ISM
                 Dir.mkdir_p("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}")
             end
 
-            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr")
+            if File.exists?("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr")
                 runAsSuperUser {
-                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                    Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                                 shell: true)
 
-                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr",
+                    Process.run(command: "/usr/bin/rm #{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                                 shell: true)
                 }
             end
 
-            File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{ISM::Default::Filename::Task}.cr", tasks)
+            File.write("#{@settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory}#{Filename::Task}.cr", tasks)
 
             rescue exception
                 ISM::Error.show(className: "CommandLine",
@@ -3064,7 +3218,7 @@ module ISM
 
         #Relative to chroot
         def taskRelativeFilePath : String
-            return "#{taskRelativeDirectoryPath}#{ISM::Default::Filename::Task}"
+            return "#{taskRelativeDirectoryPath}#{Filename::Task}"
         end
 
         def taskAbsoluteDirectoryPath : String
@@ -3072,17 +3226,17 @@ module ISM
         end
 
         def taskAbsoluteFilePath : String
-            return "#{taskAbsoluteDirectoryPath}#{ISM::Default::Filename::Task}"
+            return "#{taskAbsoluteDirectoryPath}#{Filename::Task}"
         end
 
         def hostSystemInformation : ISM::CommandLineSystemInformation
-            filePath = "/#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}"
+            filePath = "/#{CommandLineSystemInformation::Default::SystemInformationFilePath}"
 
             return ISM::CommandLineSystemInformation.loadConfiguration(filePath)
         end
 
         def targetSystemInformation : ISM::CommandLineSystemInformation
-            filePath = "#{@settings.rootPath}#{ISM::Default::CommandLineSystemInformation::SystemInformationFilePath}"
+            filePath = "#{@settings.rootPath}#{CommandLineSystemInformation::Default::SystemInformationFilePath}"
 
             return ISM::CommandLineSystemInformation.loadConfiguration(filePath)
         end
@@ -3116,7 +3270,7 @@ module ISM
             }
 
             if viaChroot
-                user = (asRoot ? "0" : ISM::Default::CommandLine::Id.to_s)
+                user = (asRoot ? "0" : Default::Id.to_s)
                 userspec = "--userspec=#{user}:#{user}"
 
                 command = "HOME=/var/lib/ism chroot #{userspec} #{@settings.rootPath} #{taskRelativeFilePath}"

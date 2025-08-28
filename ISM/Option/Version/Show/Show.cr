@@ -11,7 +11,7 @@ module ISM
             end
 
             def start
-                puts ISM::Default::CommandLine::Title
+                puts CommandLine::Default::Title
 
                 processResult = IO::Memory.new
 

@@ -11,7 +11,7 @@ module ISM
             end
 
             def start
-                puts ISM::Default::CommandLine::Title
+                puts CommandLine::Default::Title
                 Ism.options.each do |argument|
                     puts    "\t" + "#{argument.shortText.colorize(:white)}" +
                             "\t" + "#{argument.longText.colorize(:white)}" +

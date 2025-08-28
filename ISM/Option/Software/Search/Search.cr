@@ -74,12 +74,15 @@ module ISM
                             Ism.installedSoftwares.each_with_index do |installed, index|
                                 if software.fullName == installed.fullName
                                     installedVersionText += "#{"\n\t| ".colorize(:green)}"
+
+                                    #TO DO
+                                    #.colorize(Colorize::ColorRGB.new(255,100,100)).back(:green).bold
                                     installedVersionText += "#{installed.version.colorize(Colorize::ColorRGB.new(255,100,100))}"
 
                                     installedVersionText += " { "
 
                                     if installed.options.empty?
-                                        installedVersionText += "#{"#{ISM::Default::CommandLine::NoOptionText} ".colorize(:dark_gray)}"
+                                        installedVersionText += "#{"#{CommandLine::Default::NoOptionText} ".colorize(:dark_gray)}"
                                     end
 
                                     installed.options.each do |option|

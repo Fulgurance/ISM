@@ -3,7 +3,7 @@ module ISM
     module TraceLog
 
         def self.logDirectoryPath
-            return "#{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory}"
+            return "#{Ism.settings.rootPath}#{Path::LogsDirectory}"
         end
 
         def self.makeLogDirectory
@@ -39,7 +39,7 @@ module ISM
 
             makeLogDirectory
 
-            File.write("#{logDirectoryPath}#{ISM::Default::Filename::TraceLog}", record, mode: "a")
+            File.write("#{logDirectoryPath}#{Filename::TraceLog}", record, mode: "a")
 
             rescue exception
                 ISM::Error.show(className: "Tracelog",

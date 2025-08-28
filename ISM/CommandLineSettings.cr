@@ -2,6 +2,72 @@ module ISM
 
     class CommandLineSettings
 
+        module Default
+
+            #Class related
+            MakeOptionsFilter = /-j[0-9]/
+            SettingsFilePath = "#{Path::SettingsDirectory}#{Filename::Settings}"
+            ErrorInvalidValueText = "Invalid value detected: "
+            ErrorMakeOptionsInvalidValueAdviceText = "The input value must be of the form -jX where X is the number of jobs to run simultaneously"
+            ErrorChrootMakeOptionsInvalidValueAdviceText = "The input value must be of the form -jX where X is the number of jobs to run simultaneously"
+
+            #Generic parameters
+            RootPath = "/"
+            DefaultMirror = "Uk"
+            BuildKernelOptionsAsModule = true
+            AutoBuildKernel = true
+            AutoDeployServices = true
+
+            #Host related parameters
+            SystemTargetName = "unknown"
+            SystemArchitecture = "x86_64"
+            SystemTarget = "#{SystemArchitecture}-#{SystemTargetName}-linux-gnu"
+            SystemMakeOptions = "-j1"
+            SystemBuildOptions = "-march=native -O2 -pipe"
+            SystemName = "Unknown"
+            SystemFullName ="Unknown Linux System"
+            SystemId = "?"
+            SystemRelease = "?"
+            SystemCodeName = "?"
+            SystemDescription = "None"
+            SystemVersion = "?"
+            SystemVersionId = "?"
+            SystemAnsiColor = "?"
+            SystemCpeName = "Unknown"
+            SystemHomeUrl = "None"
+            SystemSupportUrl = "None"
+            SystemBugReportUrl = "None"
+            SystemPrivacyPolicyUrl = "None"
+            SystemBuildId = "?"
+            SystemVariant = "None"
+            SystemVariantId = "None"
+
+            #Chroot related parameters
+            ChrootTargetName = "#{SystemTargetName}"
+            ChrootArchitecture = "#{SystemArchitecture}"
+            ChrootTarget = "#{SystemTarget}"
+            ChrootMakeOptions = "#{SystemMakeOptions}"
+            ChrootBuildOptions = "#{SystemBuildOptions}"
+            ChrootName = "#{SystemName}"
+            ChrootFullName = "#{SystemFullName}"
+            ChrootId = "#{SystemId}"
+            ChrootRelease = "#{SystemRelease}"
+            ChrootCodeName = "#{SystemCodeName}"
+            ChrootDescription = "#{SystemDescription}"
+            ChrootVersion = "#{SystemVersion}"
+            ChrootVersionId = "#{SystemVersionId}"
+            ChrootAnsiColor = "#{SystemAnsiColor}"
+            ChrootCpeName = "#{SystemCpeName}"
+            ChrootHomeUrl = "#{SystemHomeUrl}"
+            ChrootSupportUrl = "#{SystemSupportUrl}"
+            ChrootBugReportUrl = "#{SystemBugReportUrl}"
+            ChrootPrivacyPolicyUrl = "#{SystemPrivacyPolicyUrl}"
+            ChrootBuildId = "#{SystemBuildId}"
+            ChrootVariant = "#{SystemVariant}"
+            ChrootVariantId = "#{SystemVariantId}"
+
+        end
+
         include JSON::Serializable
 
         #Generic parameters
@@ -60,63 +126,63 @@ module ISM
         property    chrootVariantId : String
 
         def initialize( #Generic parameters
-                        @rootPath = ISM::Default::CommandLineSettings::RootPath,
-                        @defaultMirror = ISM::Default::CommandLineSettings::DefaultMirror,
-                        @buildKernelOptionsAsModule = ISM::Default::CommandLineSettings::BuildKernelOptionsAsModule,
-                        @autoBuildKernel = ISM::Default::CommandLineSettings::AutoBuildKernel,
-                        @autoDeployServices = ISM::Default::CommandLineSettings::AutoDeployServices,
+                        @rootPath = Default::RootPath,
+                        @defaultMirror = Default::DefaultMirror,
+                        @buildKernelOptionsAsModule = Default::BuildKernelOptionsAsModule,
+                        @autoBuildKernel = Default::AutoBuildKernel,
+                        @autoDeployServices = Default::AutoDeployServices,
 
                         #Host related parameters
-                        @systemTargetName = ISM::Default::CommandLineSettings::SystemTargetName,
-                        @systemArchitecture = ISM::Default::CommandLineSettings::SystemArchitecture,
-                        @systemTarget = ISM::Default::CommandLineSettings::SystemTarget,
-                        @systemMakeOptions = ISM::Default::CommandLineSettings::SystemMakeOptions,
-                        @systemBuildOptions = ISM::Default::CommandLineSettings::SystemBuildOptions,
-                        @systemName = ISM::Default::CommandLineSettings::SystemName,
-                        @systemFullName = ISM::Default::CommandLineSettings::SystemFullName,
-                        @systemId = ISM::Default::CommandLineSettings::SystemId,
-                        @systemRelease = ISM::Default::CommandLineSettings::SystemRelease,
-                        @systemCodeName = ISM::Default::CommandLineSettings::SystemCodeName,
-                        @systemDescription = ISM::Default::CommandLineSettings::SystemDescription,
-                        @systemVersion = ISM::Default::CommandLineSettings::SystemVersion,
-                        @systemVersionId = ISM::Default::CommandLineSettings::SystemVersionId,
-                        @systemAnsiColor = ISM::Default::CommandLineSettings::SystemAnsiColor,
-                        @systemCpeName = ISM::Default::CommandLineSettings::SystemCpeName,
-                        @systemHomeUrl = ISM::Default::CommandLineSettings::SystemHomeUrl,
-                        @systemSupportUrl = ISM::Default::CommandLineSettings::SystemSupportUrl,
-                        @systemBugReportUrl = ISM::Default::CommandLineSettings::SystemBugReportUrl,
-                        @systemPrivacyPolicyUrl = ISM::Default::CommandLineSettings::SystemPrivacyPolicyUrl,
-                        @systemBuildId = ISM::Default::CommandLineSettings::SystemBuildId,
-                        @systemVariant = ISM::Default::CommandLineSettings::SystemVariant,
-                        @systemVariantId = ISM::Default::CommandLineSettings::SystemVariantId,
+                        @systemTargetName = Default::SystemTargetName,
+                        @systemArchitecture = Default::SystemArchitecture,
+                        @systemTarget = Default::SystemTarget,
+                        @systemMakeOptions = Default::SystemMakeOptions,
+                        @systemBuildOptions = Default::SystemBuildOptions,
+                        @systemName = Default::SystemName,
+                        @systemFullName = Default::SystemFullName,
+                        @systemId = Default::SystemId,
+                        @systemRelease = Default::SystemRelease,
+                        @systemCodeName = Default::SystemCodeName,
+                        @systemDescription = Default::SystemDescription,
+                        @systemVersion = Default::SystemVersion,
+                        @systemVersionId = Default::SystemVersionId,
+                        @systemAnsiColor = Default::SystemAnsiColor,
+                        @systemCpeName = Default::SystemCpeName,
+                        @systemHomeUrl = Default::SystemHomeUrl,
+                        @systemSupportUrl = Default::SystemSupportUrl,
+                        @systemBugReportUrl = Default::SystemBugReportUrl,
+                        @systemPrivacyPolicyUrl = Default::SystemPrivacyPolicyUrl,
+                        @systemBuildId = Default::SystemBuildId,
+                        @systemVariant = Default::SystemVariant,
+                        @systemVariantId = Default::SystemVariantId,
 
                         #Chroot related parameters
-                        @chrootTargetName = ISM::Default::CommandLineSettings::ChrootTargetName,
-                        @chrootArchitecture = ISM::Default::CommandLineSettings::ChrootArchitecture,
-                        @chrootTarget = ISM::Default::CommandLineSettings::ChrootTarget,
-                        @chrootMakeOptions = ISM::Default::CommandLineSettings::ChrootMakeOptions,
-                        @chrootBuildOptions = ISM::Default::CommandLineSettings::ChrootBuildOptions,
-                        @chrootName = ISM::Default::CommandLineSettings::ChrootName,
-                        @chrootFullName = ISM::Default::CommandLineSettings::ChrootFullName,
-                        @chrootId = ISM::Default::CommandLineSettings::ChrootId,
-                        @chrootRelease = ISM::Default::CommandLineSettings::ChrootRelease,
-                        @chrootCodeName = ISM::Default::CommandLineSettings::ChrootCodeName,
-                        @chrootDescription = ISM::Default::CommandLineSettings::ChrootDescription,
-                        @chrootVersion = ISM::Default::CommandLineSettings::ChrootVersion,
-                        @chrootVersionId = ISM::Default::CommandLineSettings::ChrootVersionId,
-                        @chrootAnsiColor = ISM::Default::CommandLineSettings::ChrootAnsiColor,
-                        @chrootCpeName = ISM::Default::CommandLineSettings::ChrootCpeName,
-                        @chrootHomeUrl = ISM::Default::CommandLineSettings::ChrootHomeUrl,
-                        @chrootSupportUrl = ISM::Default::CommandLineSettings::ChrootSupportUrl,
-                        @chrootBugReportUrl = ISM::Default::CommandLineSettings::ChrootBugReportUrl,
-                        @chrootPrivacyPolicyUrl = ISM::Default::CommandLineSettings::ChrootPrivacyPolicyUrl,
-                        @chrootBuildId = ISM::Default::CommandLineSettings::ChrootBuildId,
-                        @chrootVariant = ISM::Default::CommandLineSettings::ChrootVariant,
-                        @chrootVariantId = ISM::Default::CommandLineSettings::ChrootVariantId)
+                        @chrootTargetName = Default::ChrootTargetName,
+                        @chrootArchitecture = Default::ChrootArchitecture,
+                        @chrootTarget = Default::ChrootTarget,
+                        @chrootMakeOptions = Default::ChrootMakeOptions,
+                        @chrootBuildOptions = Default::ChrootBuildOptions,
+                        @chrootName = Default::ChrootName,
+                        @chrootFullName = Default::ChrootFullName,
+                        @chrootId = Default::ChrootId,
+                        @chrootRelease = Default::ChrootRelease,
+                        @chrootCodeName = Default::ChrootCodeName,
+                        @chrootDescription = Default::ChrootDescription,
+                        @chrootVersion = Default::ChrootVersion,
+                        @chrootVersionId = Default::ChrootVersionId,
+                        @chrootAnsiColor = Default::ChrootAnsiColor,
+                        @chrootCpeName = Default::ChrootCpeName,
+                        @chrootHomeUrl = Default::ChrootHomeUrl,
+                        @chrootSupportUrl = Default::ChrootSupportUrl,
+                        @chrootBugReportUrl = Default::ChrootBugReportUrl,
+                        @chrootPrivacyPolicyUrl = Default::ChrootPrivacyPolicyUrl,
+                        @chrootBuildId = Default::ChrootBuildId,
+                        @chrootVariant = Default::ChrootVariant,
+                        @chrootVariantId = Default::ChrootVariantId)
         end
 
         def self.filePath : String
-            return "/"+ISM::Default::CommandLineSettings::SettingsFilePath
+            return "/"+Default::SettingsFilePath
         end
 
         def self.generateConfiguration(path = filePath)
@@ -281,9 +347,9 @@ module ISM
 
         def writeChrootConfiguration
             self.class.writeConfiguration(  #File path
-                                            @rootPath+ISM::Default::CommandLineSettings::SettingsFilePath,
+                                            @rootPath+Default::SettingsFilePath,
                                             #Generic parameters
-                                            ISM::Default::CommandLineSettings::RootPath,
+                                            Default::RootPath,
                                             @defaultMirror,
                                             @buildKernelOptionsAsModule,
                                             @autoBuildKernel,
@@ -314,28 +380,28 @@ module ISM
                                             @chrootVariantId,
 
                                             #Chroot related parameters
-                                            ISM::Default::CommandLineSettings::SystemTargetName ,
-                                            ISM::Default::CommandLineSettings::SystemArchitecture,
-                                            ISM::Default::CommandLineSettings::SystemTarget,
-                                            ISM::Default::CommandLineSettings::SystemMakeOptions,
-                                            ISM::Default::CommandLineSettings::SystemBuildOptions,
-                                            ISM::Default::CommandLineSettings::SystemName,
-                                            ISM::Default::CommandLineSettings::SystemFullName,
-                                            ISM::Default::CommandLineSettings::SystemId,
-                                            ISM::Default::CommandLineSettings::SystemRelease,
-                                            ISM::Default::CommandLineSettings::SystemCodeName,
-                                            ISM::Default::CommandLineSettings::SystemDescription,
-                                            ISM::Default::CommandLineSettings::SystemVersion,
-                                            ISM::Default::CommandLineSettings::SystemVersionId,
-                                            ISM::Default::CommandLineSettings::SystemAnsiColor,
-                                            ISM::Default::CommandLineSettings::SystemCpeName,
-                                            ISM::Default::CommandLineSettings::SystemHomeUrl,
-                                            ISM::Default::CommandLineSettings::SystemSupportUrl,
-                                            ISM::Default::CommandLineSettings::SystemBugReportUrl,
-                                            ISM::Default::CommandLineSettings::SystemPrivacyPolicyUrl,
-                                            ISM::Default::CommandLineSettings::SystemBuildId,
-                                            ISM::Default::CommandLineSettings::SystemVariant,
-                                            ISM::Default::CommandLineSettings::SystemVariantId)
+                                            Default::SystemTargetName ,
+                                            Default::SystemArchitecture,
+                                            Default::SystemTarget,
+                                            Default::SystemMakeOptions,
+                                            Default::SystemBuildOptions,
+                                            Default::SystemName,
+                                            Default::SystemFullName,
+                                            Default::SystemId,
+                                            Default::SystemRelease,
+                                            Default::SystemCodeName,
+                                            Default::SystemDescription,
+                                            Default::SystemVersion,
+                                            Default::SystemVersionId,
+                                            Default::SystemAnsiColor,
+                                            Default::SystemCpeName,
+                                            Default::SystemHomeUrl,
+                                            Default::SystemSupportUrl,
+                                            Default::SystemBugReportUrl,
+                                            Default::SystemPrivacyPolicyUrl,
+                                            Default::SystemBuildId,
+                                            Default::SystemVariant,
+                                            Default::SystemVariantId)
 
             rescue exception
                 ISM::Error.show(className: "CommandLineSettings",
@@ -857,13 +923,13 @@ module ISM
         end
 
         def setSystemMakeOptions(@systemMakeOptions)
-            match,invalidValue = Ism.inputMatchWithFilter(@systemMakeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
+            match,invalidValue = Ism.inputMatchWithFilter(@systemMakeOptions,Default::MakeOptionsFilter)
 
             if match
                 writeSystemConfiguration
             else
-                puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
-                puts "#{ISM::Default::CommandLineSettings::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
+                puts "#{Default::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
+                puts "#{Default::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
                 Ism.exitProgram
             end
 
@@ -1110,13 +1176,13 @@ module ISM
         end
 
         def setChrootMakeOptions(@chrootMakeOptions)
-            match,invalidValue = Ism.inputMatchWithFilter(@chrootMakeOptions,ISM::Default::CommandLineSettings::MakeOptionsFilter)
+            match,invalidValue = Ism.inputMatchWithFilter(@chrootMakeOptions,Default::MakeOptionsFilter)
 
             if match
                 writeSystemConfiguration
             else
-                puts "#{ISM::Default::CommandLineSettings::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
-                puts "#{ISM::Default::CommandLineSettings::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
+                puts "#{Default::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
+                puts "#{Default::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
                 Ism.exitProgram
             end
 

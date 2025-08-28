@@ -2,6 +2,12 @@ module ISM
 
     class FavouriteGroup
 
+        module Default
+
+            Name = "Default"
+
+        end
+
         def_clone
 
         include JSON::Serializable

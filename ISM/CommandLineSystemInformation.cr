@@ -2,6 +2,12 @@ module ISM
 
     class CommandLineSystemInformation
 
+        module Default
+
+            SystemInformationFilePath = "#{Path::Default::SettingsDirectory}#{Filename::Default::SystemInformation}"
+
+        end
+
         include JSON::Serializable
 
         property crossToolchainFullyBuilt : Bool
@@ -12,7 +18,7 @@ module ISM
         end
 
         def self.filePath : String
-            return Ism.settings.rootPath+ISM::Default::CommandLineSystemInformation::SystemInformationFilePath
+            return Ism.settings.rootPath+Default::SystemInformationFilePath
         end
 
         def self.generateConfiguration(path = filePath)

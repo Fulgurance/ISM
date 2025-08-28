@@ -21,26 +21,26 @@ module ISM
                     process = Process.run(  "git describe --all",
                                             output: processResult,
                                             shell: true,
-                                            chdir: "/"+ISM::Default::Path::LibraryDirectory)
+                                            chdir: "/"+Path::LibraryDirectory)
                     previousVersion = processResult.to_s.strip
                     previousVersion = previousVersion.lchop(previousVersion[0..previousVersion.rindex("/")])
 
                     process = Process.run(  "git switch --detach #{currentVersion}",
                                             shell: true,
-                                            chdir: "/"+ISM::Default::Path::LibraryDirectory)
+                                            chdir: "/"+Path::LibraryDirectory)
                     if !process.success?
                         process = Process.run(  "git switch #{currentVersion}",
                                                 shell: true,
-                                                chdir: "/"+ISM::Default::Path::LibraryDirectory)
+                                                chdir: "/"+Path::LibraryDirectory)
                     end
 
-                    process = Process.run(  "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release Main.cr -o #{Ism.settings.rootPath+ISM::Default::Path::BinaryDirectory+ISM::Default::Filename::IsmBinary}",
+                    process = Process.run(  "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release Main.cr -o #{Ism.settings.rootPath+Path::BinaryDirectory+Filename::IsmBinary}",
                                             shell: true,
-                                            chdir: "/"+ISM::Default::Path::LibraryDirectory)
+                                            chdir: "/"+Path::LibraryDirectory)
 
                     process = Process.run(  "git update-ref -d /refs/heads/#{previousVersion}",
                                             shell: true,
-                                            chdir: "/"+ISM::Default::Path::LibraryDirectory)
+                                            chdir: "/"+Path::LibraryDirectory)
                 end
             end
 

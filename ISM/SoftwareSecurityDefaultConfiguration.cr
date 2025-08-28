@@ -2,6 +2,17 @@ module ISM
 
     class SoftwareSecurityDefaultConfiguration
 
+        module Default
+
+            FileUser = "root"
+            FileGroup = "root"
+            FileMode = "0644"
+            DirectoryUser = "root"
+            DirectoryGroup = "root"
+            DirectoryMode = "0755"
+
+        end
+
         def_clone
 
         include JSON::Serializable
@@ -13,12 +24,12 @@ module ISM
         property directoryGroup : String
         property directoryMode : String
 
-        def initialize( @fileUser = ISM::Default::SoftwareSecurityDefaultConfiguration::FileUser,
-                        @fileGroup = ISM::Default::SoftwareSecurityDefaultConfiguration::FileGroup,
-                        @fileMode = ISM::Default::SoftwareSecurityDefaultConfiguration::FileMode,
-                        @directoryUser = ISM::Default::SoftwareSecurityDefaultConfiguration::DirectoryUser,
-                        @directoryGroup = ISM::Default::SoftwareSecurityDefaultConfiguration::DirectoryGroup,
-                        @directoryMode = ISM::Default::SoftwareSecurityDefaultConfiguration::DirectoryMode)
+        def initialize( @fileUser = Default::FileUser,
+                        @fileGroup = Default::FileGroup,
+                        @fileMode = Default::FileMode,
+                        @directoryUser = Default::DirectoryUser,
+                        @directoryGroup = Default::DirectoryGroup,
+                        @directoryMode = Default::DirectoryMode)
         end
 
     end

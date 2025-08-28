@@ -2,6 +2,15 @@ module ISM
 
     module Error
 
+        module Default
+
+            Title = "Internal error"
+            InstallerTitle = "Installer failure"
+            Help = "#{CommandLine::Default::Name.upcase} raised that error because the ran script did not call properly a system command or the system command itself need to be fix."
+            SystemCommandFailure = "The following system command failed to run: "
+
+        end
+
         def self.show(  className : String,
                         functionName : String,
                         errorTitle : String,
@@ -12,10 +21,10 @@ module ISM
 
             fullLog = (exception.backtrace.empty? ? exception.backtrace.join("\n") : exception.message)
 
-            title = (className == "Software" ? ISM::Default::Error::InstallerTitle.colorize(:red) : ISM::Default::Error::Title.colorize(:red))
+            title = (className == "Software" ? Default::InstallerTitle.colorize(:red) : Default::Title.colorize(:red))
 
             errorText = "#{fullLog.colorize(:red)}"
-            help = "#{ISM::Default::Error::Help.colorize(:red)}"
+            help = "#{Default::Help.colorize(:red)}"
 
             errorReport = <<-REPORT
             [ #{title} ]
