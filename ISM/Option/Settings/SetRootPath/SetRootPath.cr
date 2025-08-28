@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetRootPath < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-srp"
+                LongText = "setrootpath"
+                Description = "Set the default root path where to install softwares"
+                SetText = "Setting rootPath to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetRootPath::ShortText,
-                        ISM::Default::Option::SettingsSetRootPath::LongText,
-                        ISM::Default::Option::SettingsSetRootPath::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -21,7 +30,7 @@ module ISM
                     end
 
                     Ism.settings.setRootPath(path)
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetRootPath::SetText+path)
+                    Ism.printProcessNotification(Default::SetText+path)
                 end
             end
 

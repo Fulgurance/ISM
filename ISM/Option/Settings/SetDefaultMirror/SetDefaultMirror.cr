@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetDefaultMirror < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-sdm"
+                LongText = "setdefaultmirror"
+                Description = "Set the default mirror for ISM"
+                SetText = "Setting the default mirror to "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetDefaultMirror::ShortText,
-                        ISM::Default::Option::SettingsSetDefaultMirror::LongText,
-                        ISM::Default::Option::SettingsSetDefaultMirror::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setDefaultMirror(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetDefaultMirror::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

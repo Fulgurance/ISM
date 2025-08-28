@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemBugReportUrl < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ssbru"
+                LongText = "setsystembugreporturl"
+                Description = "Set the bug report url of the future installed system"
+                SetText = "Setting the system bug report url to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemBugReportUrl::ShortText,
-                        ISM::Default::Option::SettingsSetSystemBugReportUrl::LongText,
-                        ISM::Default::Option::SettingsSetSystemBugReportUrl::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemBugReportUrl(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemBugReportUrl::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

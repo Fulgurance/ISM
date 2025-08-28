@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemVariant < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ssv"
+                LongText = "setsystemvariant"
+                Description = "Set the variant of the future installed system"
+                SetText = "Setting the system variant to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemVariant::ShortText,
-                        ISM::Default::Option::SettingsSetSystemVariant::LongText,
-                        ISM::Default::Option::SettingsSetSystemVariant::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemVariant(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemVariant::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

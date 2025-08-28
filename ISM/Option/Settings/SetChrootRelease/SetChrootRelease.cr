@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootRelease < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scr"
+                LongText = "setchrootrelease"
+                Description = "Set the release of the future chroot installed system"
+                SetText = "Setting chroot system release to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootRelease::ShortText,
-                        ISM::Default::Option::SettingsSetChrootRelease::LongText,
-                        ISM::Default::Option::SettingsSetChrootRelease::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootRelease(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootRelease::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

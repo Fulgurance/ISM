@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootFullName < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scfn"
+                LongText = "setchrootfullname"
+                Description = "Set the full name of the future chroot installed system"
+                SetText = "Setting chroot system full name to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootFullName::ShortText,
-                        ISM::Default::Option::SettingsSetChrootFullName::LongText,
-                        ISM::Default::Option::SettingsSetChrootFullName::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootFullName(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootFullName::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

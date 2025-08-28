@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemId < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ssi"
+                LongText = "setsystemid"
+                Description = "Set the id of the future installed system"
+                SetText = "Setting the system id to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemId::ShortText,
-                        ISM::Default::Option::SettingsSetSystemId::LongText,
-                        ISM::Default::Option::SettingsSetSystemId::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemId(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemId::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

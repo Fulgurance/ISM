@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemDescription < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ssd"
+                LongText = "setsystemdescription"
+                Description = "Set the description of the future installed system"
+                SetText = "Setting the system description to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemDescription::ShortText,
-                        ISM::Default::Option::SettingsSetSystemDescription::LongText,
-                        ISM::Default::Option::SettingsSetSystemDescription::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemDescription(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemDescription::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

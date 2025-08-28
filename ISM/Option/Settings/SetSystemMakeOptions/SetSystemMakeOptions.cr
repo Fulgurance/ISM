@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemMakeOptions < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ssmo"
+                LongText = "setsystemmakeoptions"
+                Description = "Set the default parallel make jobs number for the compiler"
+                SetText = "Setting makeOptions to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemMakeOptions::ShortText,
-                        ISM::Default::Option::SettingsSetSystemMakeOptions::LongText,
-                        ISM::Default::Option::SettingsSetSystemMakeOptions::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemMakeOptions(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemMakeOptions::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

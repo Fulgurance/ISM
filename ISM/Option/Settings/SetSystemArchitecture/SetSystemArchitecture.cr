@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemArchitecture < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ssa"
+                LongText = "setsystemarchitecture"
+                Description = "Set the default system architecture for the compiler"
+                SetText = "Setting system architecture to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemArchitecture::ShortText,
-                        ISM::Default::Option::SettingsSetSystemArchitecture::LongText,
-                        ISM::Default::Option::SettingsSetSystemArchitecture::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemArchitecture(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemArchitecture::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

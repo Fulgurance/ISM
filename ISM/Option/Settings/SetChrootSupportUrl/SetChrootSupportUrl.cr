@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootSupportUrl < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scsu"
+                LongText = "setchrootsupporturl"
+                Description = "Set the support url of the future chroot installed system"
+                SetText = "Setting the chroot system support url to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootSupportUrl::ShortText,
-                        ISM::Default::Option::SettingsSetChrootSupportUrl::LongText,
-                        ISM::Default::Option::SettingsSetChrootSupportUrl::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootSupportUrl(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootSupportUrl::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootHomeUrl < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-schu"
+                LongText = "setchroothomeurl"
+                Description = "Set the home url of the future chroot installed system"
+                SetText = "Setting the chroot system home url to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootHomeUrl::ShortText,
-                        ISM::Default::Option::SettingsSetChrootHomeUrl::LongText,
-                        ISM::Default::Option::SettingsSetChrootHomeUrl::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootHomeUrl(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootHomeUrl::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

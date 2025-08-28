@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootMakeOptions < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scmo"
+                LongText = "setchrootmakeoptions"
+                Description = "Set the default chroot parallel make jobs number for the compiler"
+                SetText = "Setting chroot makeOptions to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootMakeOptions::ShortText,
-                        ISM::Default::Option::SettingsSetChrootMakeOptions::LongText,
-                        ISM::Default::Option::SettingsSetChrootMakeOptions::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootMakeOptions(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootMakeOptions::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

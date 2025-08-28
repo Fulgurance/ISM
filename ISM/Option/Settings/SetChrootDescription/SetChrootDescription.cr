@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootDescription < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scd"
+                LongText = "setchrootdescription"
+                Description = "Set the description of the future chroot installed system"
+                SetText = "Setting chroot system description to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootDescription::ShortText,
-                        ISM::Default::Option::SettingsSetChrootDescription::LongText,
-                        ISM::Default::Option::SettingsSetChrootDescription::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootDescription(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootDescription::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

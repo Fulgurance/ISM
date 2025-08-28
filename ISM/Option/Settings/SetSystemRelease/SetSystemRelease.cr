@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemRelease < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ssr"
+                LongText = "setsystemrelease"
+                Description = "Set the release of the future installed system"
+                SetText = "Setting the system release to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemRelease::ShortText,
-                        ISM::Default::Option::SettingsSetSystemRelease::LongText,
-                        ISM::Default::Option::SettingsSetSystemRelease::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemRelease(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemRelease::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

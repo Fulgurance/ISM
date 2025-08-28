@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootVariantId < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-scvi"
+                LongText = "setchrootvariantid"
+                Description = "Set the variant id of the future chroot installed system"
+                SetText = "Setting chroot system variant id to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootVariantId::ShortText,
-                        ISM::Default::Option::SettingsSetChrootVariantId::LongText,
-                        ISM::Default::Option::SettingsSetChrootVariantId::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootVariantId(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootVariantId::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

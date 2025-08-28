@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetChrootTargetName < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-sctn"
+                LongText = "setchroottargetname"
+                Description = "Set the default chroot machine target for the compiler"
+                SetText = "Setting chroot targetName to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetChrootTargetName::ShortText,
-                        ISM::Default::Option::SettingsSetChrootTargetName::LongText,
-                        ISM::Default::Option::SettingsSetChrootTargetName::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setChrootTargetName(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetChrootTargetName::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

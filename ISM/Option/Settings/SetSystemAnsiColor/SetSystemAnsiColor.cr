@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemAnsiColor < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-ssac"
+                LongText = "setsystemansicolor"
+                Description = "Set the ANSI color of the future installed system"
+                SetText = "Setting the system ANSI color to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemAnsiColor::ShortText,
-                        ISM::Default::Option::SettingsSetSystemAnsiColor::LongText,
-                        ISM::Default::Option::SettingsSetSystemAnsiColor::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemAnsiColor(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemAnsiColor::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

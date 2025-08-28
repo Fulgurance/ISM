@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemCodeName < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-sscn"
+                LongText = "setsystemcodename"
+                Description = "Set the code name of the future installed system"
+                SetText = "Setting the system code name to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemCodeName::ShortText,
-                        ISM::Default::Option::SettingsSetSystemCodeName::LongText,
-                        ISM::Default::Option::SettingsSetSystemCodeName::Description)
+                super(  DefaultShortText,
+                        DefaultLongText,
+                        DefaultDescription)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemCodeName(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemCodeName::SetText+ARGV[2])
+                    Ism.printProcessNotification(DefaultSetText+ARGV[2])
                 end
             end
 

@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemHomeUrl < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-sshu"
+                LongText = "setsystemhomeurl"
+                Description = "Set the home url of the future installed system"
+                SetText = "Setting the system home url to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemHomeUrl::ShortText,
-                        ISM::Default::Option::SettingsSetSystemHomeUrl::LongText,
-                        ISM::Default::Option::SettingsSetSystemHomeUrl::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemHomeUrl(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemHomeUrl::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 

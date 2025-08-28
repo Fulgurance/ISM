@@ -4,10 +4,19 @@ module ISM
 
         class SettingsSetSystemSupportUrl < ISM::CommandLineOption
 
+            module Default
+
+                ShortText = "-sssu"
+                LongText = "setsystemsupporturl"
+                Description = "Set the support url of the future installed system"
+                SetText = "Setting the system support url to the value "
+
+            end
+
             def initialize
-                super(  ISM::Default::Option::SettingsSetSystemSupportUrl::ShortText,
-                        ISM::Default::Option::SettingsSetSystemSupportUrl::LongText,
-                        ISM::Default::Option::SettingsSetSystemSupportUrl::Description)
+                super(  Default::ShortText,
+                        Default::LongText,
+                        Default::Description)
             end
 
             def start
@@ -15,7 +24,7 @@ module ISM
                     showHelp
                 else
                     Ism.settings.setSystemSupportUrl(ARGV[2])
-                    Ism.printProcessNotification(ISM::Default::Option::SettingsSetSystemSupportUrl::SetText+ARGV[2])
+                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
             end
 
