@@ -9,9 +9,9 @@ module ISM
                 ShortText = "-sy"
                 LongText = "system"
                 Description = "Manage the system"
-                Options = [ ISM::Option::SystemComponent.new,
-                            ISM::Option::SystemLock.new,
-                            ISM::Option::SystemUnlock.new]
+                Options = [ Option::System::Component.new,
+                            Option::System::Lock.new,
+                            Option::System::Unlock.new]
 
             end
 

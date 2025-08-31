@@ -2,28 +2,32 @@ module ISM
 
     module Option
 
-        class SettingsEnableAutoDeployServices < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class EnableAutoDeployServices < ISM::CommandLineOption
 
-                ShortText = "-eads"
-                LongText = "enableautodeployservices"
-                Description = "Enable service automatic deployement"
-                SetText = "Enabling service automatic deployement"
+                module Default
 
-            end
+                    ShortText = "-eads"
+                    LongText = "enableautodeployservices"
+                    Description = "Enable service automatic deployement"
+                    SetText = "Enabling service automatic deployement"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    Ism.settings.setAutoDeployServices(true)
-                    Ism.printProcessNotification(Default::SetText)
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        Ism.settings.setAutoDeployServices(true)
+                        Ism.printProcessNotification(Default::SetText)
+                    end
+                end
+
             end
 
         end

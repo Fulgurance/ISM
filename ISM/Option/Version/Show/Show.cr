@@ -2,60 +2,64 @@ module ISM
 
     module Option
 
-        class VersionShow < ISM::CommandLineOption
+        class Version
 
-            module Default
+            class Show < ISM::CommandLineOption
 
-                ShortText = "-s"
-                LongText = "show"
-                Description = "Show the current ISM version"
+                module Default
 
-            end
+                    ShortText = "-s"
+                    LongText = "show"
+                    Description = "Show the current ISM version"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
+                end
 
-            def start
-                puts CommandLine::Default::Title
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
 
-                processResult = IO::Memory.new
+                def start
+                    puts CommandLine::Default::Title
 
-                process = Process.run(  "git describe --all",
-                                        output: processResult,
-                                        shell: true,
-                                        chdir: "/"+Path::LibraryDirectory)
-                currentVersion = processResult.to_s.strip
-                currentVersion = currentVersion.lchop(currentVersion[0..currentVersion.rindex("/")])
+                    processResult = IO::Memory.new
 
-                processResult.clear
-
-                process = Process.run(  "git describe --tags",
-                                        output: processResult,
-                                        shell: true,
-                                        chdir: "/"+Path::LibraryDirectory)
-                currentTag = processResult.to_s.strip
-
-                processResult.clear
-
-                snapshot = (currentVersion == currentTag)
-
-                versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
-
-                if !snapshot
-                    process = Process.run(  "git rev-parse HEAD",
+                    process = Process.run(  "git describe --all",
                                             output: processResult,
                                             shell: true,
                                             chdir: "/"+Path::LibraryDirectory)
+                    currentVersion = processResult.to_s.strip
+                    currentVersion = currentVersion.lchop(currentVersion[0..currentVersion.rindex("/")])
 
-                    currentVersion = currentVersion+"-"+processResult.to_s.strip
+                    processResult.clear
+
+                    process = Process.run(  "git describe --tags",
+                                            output: processResult,
+                                            shell: true,
+                                            chdir: "/"+Path::LibraryDirectory)
+                    currentTag = processResult.to_s.strip
+
+                    processResult.clear
+
+                    snapshot = (currentVersion == currentTag)
+
+                    versionPrefix = snapshot ? "Version (snapshot): " : "Version (branch): "
+
+                    if !snapshot
+                        process = Process.run(  "git rev-parse HEAD",
+                                                output: processResult,
+                                                shell: true,
+                                                chdir: "/"+Path::LibraryDirectory)
+
+                        currentVersion = currentVersion+"-"+processResult.to_s.strip
+                    end
+
+                    version = versionPrefix + "#{currentVersion.colorize(:green)}"
+
+                    puts version
+
                 end
-
-                version = versionPrefix + "#{currentVersion.colorize(:green)}"
-
-                puts version
 
             end
 

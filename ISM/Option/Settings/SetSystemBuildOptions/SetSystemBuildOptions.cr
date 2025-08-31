@@ -2,30 +2,34 @@ module ISM
 
     module Option
 
-        class SettingsSetSystemBuildOptions < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class SetSystemBuildOptions < ISM::CommandLineOption
 
-                ShortText = "-ssbo"
-                LongText = "setsystembuildoptions"
-                Description = "Set the default CPU flags for the compiler"
-                SetText = "Setting system build options to the value "
+                module Default
 
-            end
+                    ShortText = "-ssbo"
+                    LongText = "setsystembuildoptions"
+                    Description = "Set the default CPU flags for the compiler"
+                    SetText = "Setting system build options to the value "
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    Ism.settings.setSystemBuildOptions(ARGV[2])
-                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        Ism.settings.setSystemBuildOptions(ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
+                    end
+                end
+
             end
 
         end

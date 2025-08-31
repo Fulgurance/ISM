@@ -2,30 +2,34 @@ module ISM
 
     module Option
 
-        class SettingsSetChrootCpeName < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class SetChrootCpeName < ISM::CommandLineOption
 
-                ShortText = "-sccpen"
-                LongText = "setchrootcpename"
-                Description = "Set the CPE name of the future chroot installed system"
-                SetText = "Setting chroot system cpe name to the value "
+                module Default
 
-            end
+                    ShortText = "-sccpen"
+                    LongText = "setchrootcpename"
+                    Description = "Set the CPE name of the future chroot installed system"
+                    SetText = "Setting chroot system cpe name to the value "
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    Ism.settings.setChrootCpeName(ARGV[2])
-                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        Ism.settings.setChrootCpeName(ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
+                    end
+                end
+
             end
 
         end

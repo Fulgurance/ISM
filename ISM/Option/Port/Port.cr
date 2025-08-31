@@ -9,10 +9,10 @@ module ISM
                 ShortText = "-p"
                 LongText = "port"
                 Description = "Manage #{CommandLine::Default::Name.upcase} ports"
-                Options = [ ISM::Option::PortOpen.new,
-                            ISM::Option::PortClose.new,
-                            ISM::Option::PortSynchronize.new,
-                            ISM::Option::PortSearch.new]
+                Options = [ Option::Port::Open.new,
+                            Option::Port::Close.new,
+                            Option::Port::Synchronize.new,
+                            Option::Port::Search.new]
 
             end
 

@@ -2,28 +2,32 @@ module ISM
 
     module Option
 
-        class SettingsEnableBuildKernelOptionsAsModule < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class EnableBuildKernelOptionsAsModule < ISM::CommandLineOption
 
-                ShortText = "-ebkoam"
-                LongText = "enablebuildkerneloptionsasmodule"
-                Description = "Enable the building of the kernel options as loadable modules as a priority"
-                SetText = "Enabling building kernel options as module as a priority"
+                module Default
 
-            end
+                    ShortText = "-ebkoam"
+                    LongText = "enablebuildkerneloptionsasmodule"
+                    Description = "Enable the building of the kernel options as loadable modules as a priority"
+                    SetText = "Enabling building kernel options as module as a priority"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    Ism.settings.setBuildKernelOptionsAsModule(true)
-                    Ism.printProcessNotification(Default::SetText)
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        Ism.settings.setBuildKernelOptionsAsModule(true)
+                        Ism.printProcessNotification(Default::SetText)
+                    end
+                end
+
             end
 
         end

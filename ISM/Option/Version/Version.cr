@@ -9,8 +9,8 @@ module ISM
                 ShortText = "-v"
                 LongText = "version"
                 Description = "Show and manage the ISM version"
-                Options = [ ISM::Option::VersionShow.new,
-                            ISM::Option::VersionSwitch.new]
+                Options = [ Option::Version::Show.new,
+                            Option::Version::Switch.new]
 
             end
 

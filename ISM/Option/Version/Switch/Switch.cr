@@ -2,54 +2,58 @@ module ISM
 
     module Option
 
-        class VersionSwitch < ISM::CommandLineOption
+        class Version
 
-            module Default
+            class Switch < ISM::CommandLineOption
 
-                ShortText = "-sw"
-                LongText = "switch"
-                Description = "Switch ISM to another version"
+                module Default
 
-            end
+                    ShortText = "-sw"
+                    LongText = "switch"
+                    Description = "Switch ISM to another version"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
+                end
 
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    currentVersion = ARGV[2]
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
 
-                    processResult = IO::Memory.new
+                def start
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        currentVersion = ARGV[2]
 
-                    process = Process.run(  "git describe --all",
-                                            output: processResult,
-                                            shell: true,
-                                            chdir: "/"+Path::LibraryDirectory)
-                    previousVersion = processResult.to_s.strip
-                    previousVersion = previousVersion.lchop(previousVersion[0..previousVersion.rindex("/")])
+                        processResult = IO::Memory.new
 
-                    process = Process.run(  "git switch --detach #{currentVersion}",
-                                            shell: true,
-                                            chdir: "/"+Path::LibraryDirectory)
-                    if !process.success?
-                        process = Process.run(  "git switch #{currentVersion}",
+                        process = Process.run(  "git describe --all",
+                                                output: processResult,
+                                                shell: true,
+                                                chdir: "/"+Path::LibraryDirectory)
+                        previousVersion = processResult.to_s.strip
+                        previousVersion = previousVersion.lchop(previousVersion[0..previousVersion.rindex("/")])
+
+                        process = Process.run(  "git switch --detach #{currentVersion}",
+                                                shell: true,
+                                                chdir: "/"+Path::LibraryDirectory)
+                        if !process.success?
+                            process = Process.run(  "git switch #{currentVersion}",
+                                                    shell: true,
+                                                    chdir: "/"+Path::LibraryDirectory)
+                        end
+
+                        process = Process.run(  "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release Main.cr -o #{Ism.settings.rootPath+Path::BinaryDirectory+Filename::IsmBinary}",
+                                                shell: true,
+                                                chdir: "/"+Path::LibraryDirectory)
+
+                        process = Process.run(  "git update-ref -d /refs/heads/#{previousVersion}",
                                                 shell: true,
                                                 chdir: "/"+Path::LibraryDirectory)
                     end
-
-                    process = Process.run(  "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release Main.cr -o #{Ism.settings.rootPath+Path::BinaryDirectory+Filename::IsmBinary}",
-                                            shell: true,
-                                            chdir: "/"+Path::LibraryDirectory)
-
-                    process = Process.run(  "git update-ref -d /refs/heads/#{previousVersion}",
-                                            shell: true,
-                                            chdir: "/"+Path::LibraryDirectory)
                 end
+
             end
 
         end

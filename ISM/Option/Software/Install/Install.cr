@@ -2,80 +2,84 @@ module ISM
 
     module Option
 
-        class SoftwareInstall < ISM::CommandLineOption
+        class Software
 
-            module Default
+            class Install < ISM::CommandLineOption
 
-                ShortText = "-i"
-                LongText = "install"
-                Description = "Install specific(s) software(s)"
+                module Default
 
-            end
+                    ShortText = "-i"
+                    LongText = "install"
+                    Description = "Install specific(s) software(s)"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
+                end
 
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    userRequest = ARGV[2..-1].uniq
-                    Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest, allowSearchByNameOnly: true)
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
 
-                    #No match found
-                    if userRequest.size != Ism.requestedSoftwares.size
-                        wrongArguments = Array(String).new
+                def start
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        userRequest = ARGV[2..-1].uniq
+                        Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest, allowSearchByNameOnly: true)
 
-                        userRequest.each do |request|
-                            exist = false
+                        #No match found
+                        if userRequest.size != Ism.requestedSoftwares.size
+                            wrongArguments = Array(String).new
 
-                            Ism.requestedSoftwares.each do |software|
-                                if request.downcase == software.fullName.downcase || request.downcase == software.fullVersionName.downcase
-                                    exist = true
-                                    break
+                            userRequest.each do |request|
+                                exist = false
+
+                                Ism.requestedSoftwares.each do |software|
+                                    if request.downcase == software.fullName.downcase || request.downcase == software.fullVersionName.downcase
+                                        exist = true
+                                        break
+                                    end
+                                end
+
+                                if !exist
+                                    wrongArguments.push(request)
                                 end
                             end
 
-                            if !exist
-                                wrongArguments.push(request)
-                            end
+                            Ism.showNoMatchFoundMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        Ism.showNoMatchFoundMessage(wrongArguments)
-                        Ism.exitProgram
-                    end
+                        #No available version found
+                        if Ism.requestedSoftwares.any? {|software| software.version == ""}
+                            wrongArguments = Array(String).new
 
-                    #No available version found
-                    if Ism.requestedSoftwares.any? {|software| software.version == ""}
-                        wrongArguments = Array(String).new
-
-                        Ism.requestedSoftwares.each do |software|
-                            if software.version == ""
-                                wrongArguments.push(software.versionName)
+                            Ism.requestedSoftwares.each do |software|
+                                if software.version == ""
+                                    wrongArguments.push(software.versionName)
+                                end
                             end
+
+                            Ism.showNoVersionAvailableMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        Ism.showNoVersionAvailableMessage(wrongArguments)
-                        Ism.exitProgram
-                    end
+                        Ism.showCalculationTitleMessage
 
-                    Ism.showCalculationTitleMessage
+                        neededSoftwares = Ism.getNeededSoftwares
 
-                    neededSoftwares = Ism.getNeededSoftwares
+                        Ism.showCalculationDoneMessage
+                        Ism.showSoftwares(neededSoftwares)
+                        Ism.showInstallationQuestion(neededSoftwares.size)
 
-                    Ism.showCalculationDoneMessage
-                    Ism.showSoftwares(neededSoftwares)
-                    Ism.showInstallationQuestion(neededSoftwares.size)
+                        userAgreement = Ism.getUserAgreement
 
-                    userAgreement = Ism.getUserAgreement
-
-                    if userAgreement
-                        Ism.startInstallationProcess(neededSoftwares)
+                        if userAgreement
+                            Ism.startInstallationProcess(neededSoftwares)
+                        end
                     end
                 end
+
             end
 
         end

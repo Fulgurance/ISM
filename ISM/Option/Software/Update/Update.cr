@@ -2,69 +2,73 @@ module ISM
 
     module Option
 
-        class SoftwareUpdate < ISM::CommandLineOption
+        class Software
 
-            module Default
+            class Update < ISM::CommandLineOption
 
-                ShortText = "-u"
-                LongText = "update"
-                Description = "Performs a software update"
-                UpdateTitle = "Checking avaible updates: "
+                module Default
 
-            end
+                    ShortText = "-u"
+                    LongText = "update"
+                    Description = "Performs a software update"
+                    UpdateTitle = "Checking avaible updates: "
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                print Default::UpdateTitle
-
-                Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
-
-                #No update
-                if Ism.requestedSoftwares.empty?
-                    Ism.showNoUpdateMessage
-                    Ism.exitProgram
                 end
 
-                Ism.showCalculationTitleMessage
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
 
-                neededSoftwares = Ism.getNeededSoftwares
+                def start
+                    print Default::UpdateTitle
 
-                Ism.showCalculationDoneMessage
-                Ism.showSoftwares(neededSoftwares)
-                Ism.showUpdateQuestion(neededSoftwares.size)
+                    Ism.requestedSoftwares = Ism.getSoftwaresToUpdate
 
-                userAgreement = Ism.getUserAgreement
+                    #No update
+                    if Ism.requestedSoftwares.empty?
+                        Ism.showNoUpdateMessage
+                        Ism.exitProgram
+                    end
 
-                if userAgreement
-                    Ism.startInstallationProcess(neededSoftwares)
-
-                    Ism.requestedSoftwares.clear
-
-                    #Clean the system and remove unneeded softwares
                     Ism.showCalculationTitleMessage
 
-                    unneededSoftwares = Ism.getUnneededSoftwares
+                    neededSoftwares = Ism.getNeededSoftwares
 
                     Ism.showCalculationDoneMessage
+                    Ism.showSoftwares(neededSoftwares)
+                    Ism.showUpdateQuestion(neededSoftwares.size)
 
-                    if unneededSoftwares.size > 0
-                        Ism.showSoftwares(unneededSoftwares, :uninstallation)
-                        Ism.showUninstallationQuestion(unneededSoftwares.size)
+                    userAgreement = Ism.getUserAgreement
 
-                        userAgreement = Ism.getUserAgreement
+                    if userAgreement
+                        Ism.startInstallationProcess(neededSoftwares)
 
-                        if userAgreement
-                            Ism.startUninstallationProcess(unneededSoftwares)
+                        Ism.requestedSoftwares.clear
+
+                        #Clean the system and remove unneeded softwares
+                        Ism.showCalculationTitleMessage
+
+                        unneededSoftwares = Ism.getUnneededSoftwares
+
+                        Ism.showCalculationDoneMessage
+
+                        if unneededSoftwares.size > 0
+                            Ism.showSoftwares(unneededSoftwares, :uninstallation)
+                            Ism.showUninstallationQuestion(unneededSoftwares.size)
+
+                            userAgreement = Ism.getUserAgreement
+
+                            if userAgreement
+                                Ism.startUninstallationProcess(unneededSoftwares)
+                            end
+                        else
+                            Ism.showNoCleaningRequiredMessage
                         end
-                    else
-                        Ism.showNoCleaningRequiredMessage
                     end
                 end
+
             end
 
         end

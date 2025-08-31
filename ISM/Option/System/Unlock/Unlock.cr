@@ -2,28 +2,32 @@ module ISM
 
     module Option
 
-        class SystemUnlock < ISM::CommandLineOption
+        class System
 
-            module Default
+            class Unlock < ISM::CommandLineOption
 
-                ShortText = "-u"
-                LongText = "unlock"
-                Description = "Unlock the system access"
-                SetText = "Unlocking manually system access"
+                module Default
 
-            end
+                    ShortText = "-u"
+                    LongText = "unlock"
+                    Description = "Unlock the system access"
+                    SetText = "Unlocking manually system access"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    Ism.setSystemAccess(locked: false)
-                    Ism.printProcessNotification(Default::SetText)
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        Ism.setSystemAccess(locked: false)
+                        Ism.printProcessNotification(Default::SetText)
+                    end
+                end
+
             end
 
         end

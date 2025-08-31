@@ -2,94 +2,98 @@ module ISM
 
     module Option
 
-        class SoftwareUninstall < ISM::CommandLineOption
+        class Software
 
-            module Default
+            class Uninstall < ISM::CommandLineOption
 
-                ShortText = "-ui"
-                LongText = "uninstall"
-                Description = "Uninstall specific(s) software(s)"
+                module Default
 
-            end
+                    ShortText = "-ui"
+                    LongText = "uninstall"
+                    Description = "Uninstall specific(s) software(s)"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
+                end
 
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    userRequest = ARGV[2..-1].uniq
-                    Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest, allowSearchByNameOnly: true)
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
 
-                    #No match found
-                    if userRequest.size != Ism.requestedSoftwares.size
-                        wrongArguments = Array(String).new
+                def start
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        userRequest = ARGV[2..-1].uniq
+                        Ism.requestedSoftwares = Ism.getRequestedSoftwares(userRequest, allowSearchByNameOnly: true)
 
-                        userRequest.each do |request|
-                            exist = false
+                        #No match found
+                        if userRequest.size != Ism.requestedSoftwares.size
+                            wrongArguments = Array(String).new
 
-                            Ism.requestedSoftwares.each do |software|
-                                if request.downcase == software.fullName.downcase || request.downcase == software.fullVersionName.downcase
-                                    exist = true
-                                    break
+                            userRequest.each do |request|
+                                exist = false
+
+                                Ism.requestedSoftwares.each do |software|
+                                    if request.downcase == software.fullName.downcase || request.downcase == software.fullVersionName.downcase
+                                        exist = true
+                                        break
+                                    end
+                                end
+
+                                if !exist
+                                    wrongArguments.push(request)
                                 end
                             end
 
-                            if !exist
-                                wrongArguments.push(request)
-                            end
+                            Ism.showNoMatchFoundMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        Ism.showNoMatchFoundMessage(wrongArguments)
-                        Ism.exitProgram
-                    end
+                        #No available version found
+                        if Ism.requestedSoftwares.any? {|software| software.version == ""}
+                            wrongArguments = Array(String).new
 
-                    #No available version found
-                    if Ism.requestedSoftwares.any? {|software| software.version == ""}
-                        wrongArguments = Array(String).new
-
-                        Ism.requestedSoftwares.each do |software|
-                            if software.version == ""
-                                wrongArguments.push(software.versionName)
+                            Ism.requestedSoftwares.each do |software|
+                                if software.version == ""
+                                    wrongArguments.push(software.versionName)
+                                end
                             end
+
+                            Ism.showNoVersionAvailableMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        Ism.showNoVersionAvailableMessage(wrongArguments)
-                        Ism.exitProgram
-                    end
+                        #Software not installed yet
+                        if Ism.requestedSoftwares.any? {|software| !Ism.softwareIsInstalled(software)}
+                            wrongArguments = Array(String).new
 
-                    #Software not installed yet
-                    if Ism.requestedSoftwares.any? {|software| !Ism.softwareIsInstalled(software)}
-                        wrongArguments = Array(String).new
-
-                        Ism.requestedSoftwares.each do |software|
-                            if !Ism.softwareIsInstalled(software)
-                                wrongArguments.push(software.name)
+                            Ism.requestedSoftwares.each do |software|
+                                if !Ism.softwareIsInstalled(software)
+                                    wrongArguments.push(software.name)
+                                end
                             end
+
+                            Ism.showSoftwareNotInstalledMessage(wrongArguments)
+                            Ism.exitProgram
                         end
 
-                        Ism.showSoftwareNotInstalledMessage(wrongArguments)
-                        Ism.exitProgram
-                    end
+                        Ism.showCalculationTitleMessage
 
-                    Ism.showCalculationTitleMessage
+                        unneededSoftwares = Ism.getUnneededSoftwares
 
-                    unneededSoftwares = Ism.getUnneededSoftwares
+                        Ism.showCalculationDoneMessage
+                        Ism.showSoftwares(unneededSoftwares, :uninstallation)
+                        Ism.showUninstallationQuestion(unneededSoftwares.size)
 
-                    Ism.showCalculationDoneMessage
-                    Ism.showSoftwares(unneededSoftwares, :uninstallation)
-                    Ism.showUninstallationQuestion(unneededSoftwares.size)
+                        userAgreement = Ism.getUserAgreement
 
-                    userAgreement = Ism.getUserAgreement
-
-                    if userAgreement
-                        Ism.startUninstallationProcess(unneededSoftwares)
+                        if userAgreement
+                            Ism.startUninstallationProcess(unneededSoftwares)
+                        end
                     end
                 end
+
             end
 
         end

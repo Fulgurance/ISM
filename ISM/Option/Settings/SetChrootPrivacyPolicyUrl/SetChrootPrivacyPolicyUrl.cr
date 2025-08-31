@@ -2,30 +2,34 @@ module ISM
 
     module Option
 
-        class SettingsSetChrootPrivacyPolicyUrl < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class SetChrootPrivacyPolicyUrl < ISM::CommandLineOption
 
-                ShortText = "-scppu"
-                LongText = "setchrootprivacypolicyurl"
-                Description = "Set the privacy policy url of the future chroot installed system"
-                SetText = "Setting the chroot system privacy policy url to the value "
+                module Default
 
-            end
+                    ShortText = "-scppu"
+                    LongText = "setchrootprivacypolicyurl"
+                    Description = "Set the privacy policy url of the future chroot installed system"
+                    SetText = "Setting the chroot system privacy policy url to the value "
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    Ism.settings.setChrootPrivacyPolicyUrl(ARGV[2])
-                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        Ism.settings.setChrootPrivacyPolicyUrl(ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
+                    end
+                end
+
             end
 
         end

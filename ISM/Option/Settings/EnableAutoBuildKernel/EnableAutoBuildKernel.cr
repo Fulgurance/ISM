@@ -2,28 +2,32 @@ module ISM
 
     module Option
 
-        class SettingsEnableAutoBuildKernel < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class EnableAutoBuildKernel < ISM::CommandLineOption
 
-                ShortText = "-eabk"
-                LongText = "enableautobuildkernel"
-                Description = "Enable automatic kernel building"
-                SetText = "Enabling automatic kernel building"
+                module Default
 
-            end
+                    ShortText = "-eabk"
+                    LongText = "enableautobuildkernel"
+                    Description = "Enable automatic kernel building"
+                    SetText = "Enabling automatic kernel building"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    Ism.settings.setAutoBuildKernel(true)
-                    Ism.printProcessNotification(Default::SetText)
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        Ism.settings.setAutoBuildKernel(true)
+                        Ism.printProcessNotification(Default::SetText)
+                    end
+                end
+
             end
 
         end

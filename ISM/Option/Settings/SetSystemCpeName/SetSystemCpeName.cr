@@ -2,30 +2,34 @@ module ISM
 
     module Option
 
-        class SettingsSetSystemCpeName < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class SetSystemCpeName < ISM::CommandLineOption
 
-                ShortText = "-sscpen"
-                LongText = "setsystemcpename"
-                Description = "Set the CPE name of the future installed system"
-                SetText = "Setting the system CPE name to the value "
+                module Default
 
-            end
+                    ShortText = "-sscpen"
+                    LongText = "setsystemcpename"
+                    Description = "Set the CPE name of the future installed system"
+                    SetText = "Setting the system CPE name to the value "
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    Ism.settings.setSystemCpeName(ARGV[2])
-                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        Ism.settings.setSystemCpeName(ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
+                    end
+                end
+
             end
 
         end

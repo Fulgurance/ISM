@@ -2,30 +2,34 @@ module ISM
 
     module Option
 
-        class SettingsSetChrootVariant < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class SetChrootVariant < ISM::CommandLineOption
 
-                ShortText = "-scv"
-                LongText = "setchrootvariant"
-                Description = "Set the variant of the future chroot installed system"
-                SetText = "Setting chroot system variant to the value "
+                module Default
 
-            end
+                    ShortText = "-scv"
+                    LongText = "setchrootvariant"
+                    Description = "Set the variant of the future chroot installed system"
+                    SetText = "Setting chroot system variant to the value "
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    Ism.settings.setChrootVariant(ARGV[2])
-                    Ism.printProcessNotification(Default::SetText+ARGV[2])
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        showHelp
+                    else
+                        Ism.settings.setChrootVariant(ARGV[2])
+                        Ism.printProcessNotification(Default::SetText+ARGV[2])
+                    end
+                end
+
             end
 
         end

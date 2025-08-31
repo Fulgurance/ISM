@@ -9,16 +9,16 @@ module ISM
                 ShortText = "-so"
                 LongText = "software"
                 Description = "Install, configure and remove softwares"
-                Options = [ ISM::Option::SoftwareSearch.new,
-                            ISM::Option::SoftwareUpdate.new,
-                            ISM::Option::SoftwareInstall.new,
-                            ISM::Option::SoftwareUninstall.new,
-                            ISM::Option::SoftwareClean.new,
-                            ISM::Option::SoftwareSelectDependency.new,
-                            ISM::Option::SoftwareEnableOption.new,
-                            ISM::Option::SoftwareDisableOption.new,
-                            ISM::Option::SoftwareAddPatch.new,
-                            ISM::Option::SoftwareDeletePatch.new]
+                Options = [ Option::Software::Search.new,
+                            Option::Software::Update.new,
+                            Option::Software::Install.new,
+                            Option::Software::Uninstall.new,
+                            Option::Software::Clean.new,
+                            Option::Software::SelectDependency.new,
+                            Option::Software::EnableOption.new,
+                            Option::Software::DisableOption.new,
+                            Option::Software::AddPatch.new,
+                            Option::Software::DeletePatch.new]
 
             end
 
@@ -43,32 +43,32 @@ module ISM
                         end
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareEnableOption::Default::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareEnableOption::Default::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::EnableOption::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::EnableOption::Default::LongText
                         matchingOption = true
                         @options[-4].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareDisableOption::Default::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareDisableOption::Default::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::DisableOption::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::DisableOption::Default::LongText
                         matchingOption = true
                         @options[-3].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareSelectDependency::Default::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareSelectDependency::Default::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::SelectDependency::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::SelectDependency::Default::LongText
                         matchingOption = true
                         @options[-5].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareAddPatch::Default::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareAddPatch::Default::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::AddPatch::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::AddPatch::Default::LongText
                         matchingOption = true
                         @options[-2].start
                     end
 
-                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareDeletePatch::Default::ShortText ||
-                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::SoftwareDeletePatch::Default::LongText
+                    if  !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::DeletePatch::Default::ShortText ||
+                        !matchingOption && ARGV.size > 2 && ARGV[2] == Option::Software::DeletePatch::Default::LongText
                         matchingOption = true
                         @options[-1].start
                     end

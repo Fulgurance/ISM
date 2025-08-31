@@ -2,28 +2,32 @@ module ISM
 
     module Option
 
-        class SettingsDisableBuildKernelOptionsAsModule < ISM::CommandLineOption
+        class Settings
 
-            module Default
+            class DisableBuildKernelOptionsAsModule < ISM::CommandLineOption
 
-                ShortText = "-dbkoam"
-                LongText = "disablebuildkerneloptionsasmodule"
-                Description = "Disable the building of the kernel options as loadable modules as a priority"
-                SetText = "Disabling building kernel options as module as a priority"
+                module Default
 
-            end
+                    ShortText = "-dbkoam"
+                    LongText = "disablebuildkerneloptionsasmodule"
+                    Description = "Disable the building of the kernel options as loadable modules as a priority"
+                    SetText = "Disabling building kernel options as module as a priority"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                if ARGV.size == 2
-                    Ism.settings.setBuildKernelOptionsAsModule(false)
-                    Ism.printProcessNotification(Default::SetText)
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        Ism.settings.setBuildKernelOptionsAsModule(false)
+                        Ism.printProcessNotification(Default::SetText)
+                    end
+                end
+
             end
 
         end

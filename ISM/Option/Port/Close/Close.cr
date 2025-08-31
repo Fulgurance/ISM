@@ -2,36 +2,40 @@ module ISM
 
     module Option
 
-        class PortClose < ISM::CommandLineOption
+        class Port
 
-            module Default
+            class Close < ISM::CommandLineOption
 
-                ShortText = "-c"
-                LongText = "close"
-                Description = "Close the specified port"
-                CloseText = "Closing port "
-                NoMatchFoundText1 = "The port "
-                NoMatchFoundText2 = " is not open"
+                module Default
 
-            end
+                    ShortText = "-c"
+                    LongText = "close"
+                    Description = "Close the specified port"
+                    CloseText = "Closing port "
+                    NoMatchFoundText1 = "The port "
+                    NoMatchFoundText2 = " is not open"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
+                end
 
-            def start
-                if ARGV.size == 2
-                    showHelp
-                else
-                    if ISM::Port.exists(ARGV[2])
-                        Ism.printProcessNotification(Default::CloseText+ARGV[2])
-                        ISM::Port.delete(ARGV[2])
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    if ARGV.size == 2
+                        showHelp
                     else
-                        Ism.printErrorNotification(Default::NoMatchFoundText1+ARGV[2]+Default::NoMatchFoundText2,nil)
+                        if ISM::Port.exists(ARGV[2])
+                            Ism.printProcessNotification(Default::CloseText+ARGV[2])
+                            ISM::Port.delete(ARGV[2])
+                        else
+                            Ism.printErrorNotification(Default::NoMatchFoundText1+ARGV[2]+Default::NoMatchFoundText2,nil)
+                        end
                     end
                 end
+
             end
 
         end

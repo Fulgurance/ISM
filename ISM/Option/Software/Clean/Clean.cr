@@ -2,41 +2,45 @@ module ISM
 
     module Option
 
-        class SoftwareClean < ISM::CommandLineOption
+        class Software
 
-            module Default
+            class Clean < ISM::CommandLineOption
 
-                ShortText = "-c"
-                LongText = "clean"
-                Description = "Clean the system by remove unneeded softwares"
+                module Default
 
-            end
+                    ShortText = "-c"
+                    LongText = "clean"
+                    Description = "Clean the system by remove unneeded softwares"
 
-            def initialize
-                super(  Default::ShortText,
-                        Default::LongText,
-                        Default::Description)
-            end
-
-            def start
-                Ism.showCalculationTitleMessage
-
-                unneededSoftwares = Ism.getUnneededSoftwares
-
-                Ism.showCalculationDoneMessage
-
-                if unneededSoftwares.size > 0
-                    Ism.showSoftwares(unneededSoftwares, :uninstallation)
-                    Ism.showUninstallationQuestion(unneededSoftwares.size)
-
-                    userAgreement = Ism.getUserAgreement
-
-                    if userAgreement
-                        Ism.startUninstallationProcess(unneededSoftwares)
-                    end
-                else
-                    Ism.showNoCleaningRequiredMessage
                 end
+
+                def initialize
+                    super(  Default::ShortText,
+                            Default::LongText,
+                            Default::Description)
+                end
+
+                def start
+                    Ism.showCalculationTitleMessage
+
+                    unneededSoftwares = Ism.getUnneededSoftwares
+
+                    Ism.showCalculationDoneMessage
+
+                    if unneededSoftwares.size > 0
+                        Ism.showSoftwares(unneededSoftwares, :uninstallation)
+                        Ism.showUninstallationQuestion(unneededSoftwares.size)
+
+                        userAgreement = Ism.getUserAgreement
+
+                        if userAgreement
+                            Ism.startUninstallationProcess(unneededSoftwares)
+                        end
+                    else
+                        Ism.showNoCleaningRequiredMessage
+                    end
+                end
+
             end
 
         end
