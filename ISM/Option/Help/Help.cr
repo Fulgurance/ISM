@@ -19,6 +19,8 @@ module ISM
             end
 
             def start
+                puts CommandLine::Default::Title
+
                 shortTextArray = Ism.options.map { |entry| entry.shortText}
                 longTextArray = Ism.options.map { |entry| entry.longText}
 
@@ -41,8 +43,6 @@ module ISM
                     (1..limit).each do
                         longTextPadding += " "
                     end
-
-                    puts CommandLine::Default::Title
 
                     puts    " #{option.shortText.colorize(:white)}#{shortTextPadding}" +
                             "#{option.longText.colorize(:white)}#{longTextPadding}" +
