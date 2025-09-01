@@ -25,34 +25,21 @@ module ISM
             @options.each do |option|
 
                 shortTextPadding = String.new
-
-                if option.shortText.size < 8
-                    shortTextPadding += "\t"
-                end
-
-                limit = (highestShortTextSize.size/8 - option.shortText.size/8)
-
-                (0..(limit)).each do |i|
-                    shortTextPadding += "\t"
-                end
-
-                ############################
-
                 longTextPadding = String.new
 
-                if option.longText.size < 8
-                    longTextPadding += "\t"
+                limit = (highestShortTextSize - option.shortText.size)
+
+                (1..limit).each do
+                    shortTextPadding += " "
                 end
 
-                limit = (highestLongTextSize.size/8 - option.longText.size/8)
+                limit = (highestLongTextSize - option.longText.size)
 
-                (0..(limit)).each do |i|
-                    longTextPadding += "\t"
+                (1..limit).each do
+                    longTextPadding += " "
                 end
 
-                #############################
-
-                puts    "\t#{option.shortText.colorize(:white)}#{shortTextPadding}" +
+                puts    " #{option.shortText.colorize(:white)}#{shortTextPadding}" +
                         "#{option.longText.colorize(:white)}#{longTextPadding}" +
                         "#{option.description.colorize(:green)}"
             end
