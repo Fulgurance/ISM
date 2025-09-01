@@ -27,13 +27,13 @@ module ISM
                 shortTextPadding = String.new
                 longTextPadding = String.new
 
-                limit = (highestShortTextSize - option.shortText.size)
+                limit = (highestShortTextSize.size - option.shortText.size)
 
                 (1..limit).each do
                     shortTextPadding += " "
                 end
 
-                limit = (highestLongTextSize - option.longText.size)
+                limit = (highestLongTextSize.size - option.longText.size)
 
                 (1..limit).each do
                     longTextPadding += " "
