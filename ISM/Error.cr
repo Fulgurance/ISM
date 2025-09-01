@@ -8,6 +8,7 @@ module ISM
             InstallerTitle = "Installer failure"
             Help = "#{CommandLine::Default::Name.upcase} raised that error because the ran script did not call properly a system command or the system command itself need to be fix."
             SystemCommandFailure = "The following system command failed to run: "
+            None = "(none)"
 
         end
 
@@ -23,7 +24,7 @@ module ISM
 
             title = (className == "Software" ? Default::InstallerTitle.colorize(:red) : Default::Title.colorize(:red))
 
-            errorText = "#{fullLog.colorize(:red)}"
+            errorText = ("#{fullLog}".empty? ? "#{Default::None.colorize(:red)}" : "\n#{fullLog.colorize(:red)}")
             help = "#{Default::Help.colorize(:red)}"
 
             errorReport = <<-REPORT
@@ -32,11 +33,10 @@ module ISM
             Class: #{className.colorize(:red)}
             Function: #{functionName.colorize(:red)}
 
-            #{errorTitle.colorize(:red)}
-            #{error}
+            #{errorTitle}:
+            #{error.colorize(:red)}
 
-            Exception:
-            #{errorText}
+            Exception: #{errorText}
 
             Exit code: #{errorCode.colorize(:red)}
 
