@@ -2,6 +2,12 @@ module ISM
 
     class CommandLineOption
 
+        module Default
+
+            Padding = "  "
+
+        end
+
         property shortText : String
         property longText : String
         property description : String
@@ -24,8 +30,8 @@ module ISM
 
             @options.each do |option|
 
-                shortTextPadding = String.new
-                longTextPadding = String.new
+                shortTextPadding = Default::Padding
+                longTextPadding = Default::Padding
 
                 limit = (highestShortTextSize.size - option.shortText.size)
 
@@ -43,12 +49,6 @@ module ISM
                         "#{option.longText.colorize(:white)}#{longTextPadding}" +
                         "#{option.description.colorize(:green)}"
             end
-
-            # @options.each do |argument|
-            #     puts    "\t" + "#{argument.shortText.colorize(:white)}" +
-            #             "\t" + "#{argument.longText.colorize(:white)}" +
-            #             "\t" + "#{argument.description.colorize(:green)}"
-            # end
 
             rescue exception
                 ISM::Error.show(className: "CommandLineOption",
