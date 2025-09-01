@@ -42,16 +42,12 @@ module ISM
                         longTextPadding += " "
                     end
 
+                    puts CommandLine::Default::Title
+
                     puts    " #{option.shortText.colorize(:white)}#{shortTextPadding}" +
                             "#{option.longText.colorize(:white)}#{longTextPadding}" +
                             "#{option.description.colorize(:green)}"
                 end
-                # puts CommandLine::Default::Title
-                # Ism.options.each do |argument|
-                #     puts    "\t" + "#{argument.shortText.colorize(:white)}" +
-                #             "\t" + "#{argument.longText.colorize(:white)}" +
-                #             "\t" + "#{argument.description.colorize(:green)}"
-                # end
             end
 
         end
