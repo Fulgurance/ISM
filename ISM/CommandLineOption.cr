@@ -40,7 +40,7 @@ module ISM
 
                 longTextPadding = String.new
 
-                if option.shortText.size < 8
+                if option.longText.size < 8
                     longTextPadding += "\t"
                 end
 
