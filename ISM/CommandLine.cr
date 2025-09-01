@@ -9,8 +9,6 @@ module ISM
             Id = 250
             RanAsSuperUserText = "ISM can't be run as root. Operation aborted."
             NotRanAsMemberOfIsmGroupText = "The current user is not in the #{Name} group (id: #{Id.to_s}). Operation aborted."
-            SystemDirectoryAccessFailureText1 = "ISM failed to create the system directory "
-            SystemDirectoryAccessFailureText2 = ". Please make sure the program is setup properly, with the right permissions."
             ErrorUnknowArgument = "ISM error: unknow argument "
             ErrorUnknowArgumentHelp1 = "Use "
             ErrorUnknowArgumentHelp2 = "ism --help "
@@ -335,18 +333,11 @@ module ISM
             }
 
             rescue exception
-                case exception.class
-                when File::AccessDeniedError
-                    message = "#{Default::SystemDirectoryAccessFailureText1}#{path}#{Default::SystemDirectoryAccessFailureText2}"
-
-                    puts "#{message.colorize(:yellow)}"
-                else
-                    ISM::Error.show(className: "CommandLine",
-                                    functionName: "createSystemDirectory",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-                end
+                ISM::Error.show(className: "CommandLine",
+                                functionName: "createSystemDirectory",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def loadNeededKernelOptions
