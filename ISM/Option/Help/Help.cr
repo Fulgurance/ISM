@@ -19,12 +19,39 @@ module ISM
             end
 
             def start
-                puts CommandLine::Default::Title
-                Ism.options.each do |argument|
-                    puts    "\t" + "#{argument.shortText.colorize(:white)}" +
-                            "\t" + "#{argument.longText.colorize(:white)}" +
-                            "\t" + "#{argument.description.colorize(:green)}"
+                shortTextArray = Ism.options.map { |entry| entry.shortText}
+                longTextArray = Ism.options.map { |entry| entry.longText}
+
+                highestShortTextSize = shortTextArray.max_by { |entry| entry.size }
+                highestLongTextSize = longTextArray.max_by { |entry| entry.size }
+
+                Ism.options.each do |option|
+
+                    shortTextPadding = CommandLineOption::Default::Padding
+                    longTextPadding = CommandLineOption::Default::Padding
+
+                    limit = (highestShortTextSize.size - option.shortText.size)
+
+                    (1..limit).each do
+                        shortTextPadding += " "
+                    end
+
+                    limit = (highestLongTextSize.size - option.longText.size)
+
+                    (1..limit).each do
+                        longTextPadding += " "
+                    end
+
+                    puts    " #{option.shortText.colorize(:white)}#{shortTextPadding}" +
+                            "#{option.longText.colorize(:white)}#{longTextPadding}" +
+                            "#{option.description.colorize(:green)}"
                 end
+                # puts CommandLine::Default::Title
+                # Ism.options.each do |argument|
+                #     puts    "\t" + "#{argument.shortText.colorize(:white)}" +
+                #             "\t" + "#{argument.longText.colorize(:white)}" +
+                #             "\t" + "#{argument.description.colorize(:green)}"
+                # end
             end
 
         end
