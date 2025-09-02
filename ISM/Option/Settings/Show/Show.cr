@@ -14,7 +14,7 @@ module ISM
                     TitleText = "Current ISM settings"
 
                     #Generic titles
-                    GlobalText = "Global"
+                    GlobalText = "(Global)"
                     ToolsPathText = "Tools path"
                     SourcesPathText = "Sources path"
                     RootPathText = "Root path"
@@ -24,7 +24,7 @@ module ISM
                     AutoDeployServicesText = "Auto deploy services"
 
                     #Host titles
-                    SystemText = "System"
+                    SystemText = "(System)"
                     SystemTargetArchitectureText = "System target architecture"
                     SystemTargetVendorText = "System target vendor"
                     SystemTargetOsText = "System target OS"
@@ -51,7 +51,7 @@ module ISM
                     SystemVariantIdText = "System variant ID"
 
                     #Chroot title
-                    ChrootText = "Chroot"
+                    ChrootText = "(Chroot)"
                     ChrootTargetArchitectureText = "Chroot target architecture"
                     ChrootTargetVendorText = "Chroot target vendor"
                     ChrootTargetOsText = "Chroot target OS"
