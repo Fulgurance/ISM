@@ -1224,6 +1224,7 @@ module ISM
         #   Chroot
         def setChrootTargetArchitecture(@chrootTargetArchitecture)
             writeSystemConfiguration
+            setChrootTarget
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
@@ -1235,6 +1236,7 @@ module ISM
 
         def setChrootTargetVendor(@chrootTargetVendor)
             writeSystemConfiguration
+            setChrootTarget
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
@@ -1246,6 +1248,7 @@ module ISM
 
         def setChrootTargetOs(@chrootTargetOs)
             writeSystemConfiguration
+            setChrootTarget
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
@@ -1257,6 +1260,7 @@ module ISM
 
         def setChrootTargetAbi(@chrootTargetAbi)
             writeSystemConfiguration
+            setChrootTarget
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
