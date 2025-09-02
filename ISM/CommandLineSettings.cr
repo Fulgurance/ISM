@@ -191,7 +191,7 @@ module ISM
             file.close
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "generateConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -206,7 +206,7 @@ module ISM
             return from_json(File.read(path))
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "loadConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -338,7 +338,7 @@ module ISM
             file.close
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "writeConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -404,7 +404,7 @@ module ISM
                                             Default::SystemVariantId)
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "writeChrootConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -475,7 +475,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "writeSystemConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -505,7 +505,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemTargetName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -520,7 +520,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemArchitecture",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -535,7 +535,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemTarget",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -550,7 +550,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemMakeOptions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -565,7 +565,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemBuildOptions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -580,7 +580,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -595,7 +595,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemFullName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -610,7 +610,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -625,7 +625,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemRelease",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -640,7 +640,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemCodeName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -655,7 +655,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemDescription",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -670,7 +670,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemVersion",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -685,7 +685,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemVersionId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -700,7 +700,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemAnsiColor",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -715,7 +715,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemCpeName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -730,7 +730,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemHomeUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -745,7 +745,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemSupportUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -760,7 +760,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemBugReportUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -775,7 +775,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemPrivacyPolicyUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -790,7 +790,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemBuildId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -805,7 +805,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemVariant",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -820,7 +820,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "systemVariantId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -834,7 +834,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setRootPath",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -845,7 +845,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setDefaultMirror",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -856,7 +856,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setBuildKernelOptionsAsModule",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -867,7 +867,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-            ISM::Error.show(className: "CommandLineSettings",
+            ISM::Error.show(className: self.class.name,
                             functionName: "setAutoBuildKernel",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
@@ -878,7 +878,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-            ISM::Error.show(className: "CommandLineSettings",
+            ISM::Error.show(className: self.class.name,
                             functionName: "setAutoDeployServices",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
@@ -891,7 +891,7 @@ module ISM
             setSystemTarget
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemTargetName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -903,7 +903,7 @@ module ISM
             setSystemTarget
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemArchitecture",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -915,7 +915,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemTarget",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -934,7 +934,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemMakeOptions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -945,7 +945,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemBuildOptions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -956,7 +956,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -967,7 +967,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemFullName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -978,7 +978,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -989,7 +989,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemRelease",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1000,7 +1000,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemCodeName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1011,7 +1011,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemDescription",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1022,7 +1022,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemVersion",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1033,7 +1033,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemVersionId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1044,7 +1044,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemAnsiColor",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1055,7 +1055,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemCpeName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1066,7 +1066,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemHomeUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1077,7 +1077,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemSupportUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1088,7 +1088,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemBugReportUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1099,7 +1099,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemPrivacyPolicyUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1110,7 +1110,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemBuildId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1121,7 +1121,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemVariant",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1132,7 +1132,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setSystemVariantId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1145,7 +1145,7 @@ module ISM
             setChrootTarget
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootTargetName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1156,7 +1156,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootArchitecture",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1168,7 +1168,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootTarget",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1187,7 +1187,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootMakeOptions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1198,7 +1198,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootBuildOptions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1209,7 +1209,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1221,7 +1221,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootFullName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1232,7 +1232,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1243,7 +1243,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootRelease",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1254,7 +1254,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootCodeName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1265,7 +1265,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootDescription",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1276,7 +1276,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootVersion",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1287,7 +1287,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootVersionId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1298,7 +1298,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootAnsiColor",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1309,7 +1309,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootCpeName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1320,7 +1320,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootHomeUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1331,7 +1331,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootSupportUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1342,7 +1342,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootBugReportUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1353,7 +1353,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootPrivacyPolicyUrl",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1364,7 +1364,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootBuildId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1375,7 +1375,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootVariant",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1386,7 +1386,7 @@ module ISM
             writeSystemConfiguration
 
             rescue exception
-                ISM::Error.show(className: "CommandLineSettings",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "setChrootVariantId",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

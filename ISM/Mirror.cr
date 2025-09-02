@@ -32,7 +32,7 @@ module ISM
             file.close
 
             rescue exception
-                ISM::Error.show(className: "Mirror",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "generateConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -47,7 +47,7 @@ module ISM
             return from_json(File.read(path))
 
             rescue exception
-                ISM::Error.show(className: "Mirror",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "loadConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -62,7 +62,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Mirror",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "sourcesLink",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -75,7 +75,7 @@ module ISM
             file.close
 
             rescue exception
-                ISM::Error.show(className: "Mirror",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "writeConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

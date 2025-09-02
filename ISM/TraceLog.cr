@@ -11,7 +11,7 @@ module ISM
             Ism.createSystemDirectory(logDirectoryPath)
 
             rescue exception
-                ISM::Error.show(className: "Tracelog",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "makeLogDirectory",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -40,7 +40,7 @@ module ISM
             File.write("#{logDirectoryPath}#{Filename::TraceLog}", record, mode: "a")
 
             rescue exception
-                ISM::Error.show(className: "Tracelog",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "record",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

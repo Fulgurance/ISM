@@ -51,7 +51,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "CommandLineOption",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "showHelp",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

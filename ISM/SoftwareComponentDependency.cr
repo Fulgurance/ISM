@@ -1,16 +1,18 @@
 module ISM
 
-    class SoftwareDependency
+    class SoftwareComponentDependency < SoftwareDependency
 
         def_clone
 
         include JSON::Serializable
 
+        property requiredComponent : String
         property port : String
         property name : String
         property options : Array(String)
 
-        def initialize( @port = String.new,
+        def initialize( @requiredComponent = String.new,
+                        @port = String.new,
                         @name = String.new,
                         @version = String.new,
                         @options = Array(String).new)
@@ -30,7 +32,7 @@ module ISM
             return String.new
 
             rescue exception
-                ISM::Error.show(className: self.class.name,
+                ISM::Error.show(className: "SoftwareDependency",
                                 functionName: "getEnabledPass",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -47,7 +49,7 @@ module ISM
             return false
 
             rescue exception
-                ISM::Error.show(className: self.class.name,
+                ISM::Error.show(className: "SoftwareDependency",
                                 functionName: "passEnabled",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -106,7 +108,7 @@ module ISM
             return dependencyInformation
 
             rescue exception
-                ISM::Error.show(className: self.class.name,
+                ISM::Error.show(className: "SoftwareDependency",
                                 functionName: "information",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -123,7 +125,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: self.class.name,
+                ISM::Error.show(className: "SoftwareDependency",
                                 functionName: "installedFiles",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

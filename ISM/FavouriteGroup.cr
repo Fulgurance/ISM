@@ -28,7 +28,7 @@ module ISM
             file.close
 
             rescue exception
-                ISM::Error.show(className: "FavouriteGroup",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "generateConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -43,7 +43,7 @@ module ISM
             return from_json(File.read(path))
 
             rescue exception
-                ISM::Error.show(className: "FavouriteGroup",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "loadConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -56,7 +56,7 @@ module ISM
             file.close
 
             rescue exception
-                ISM::Error.show(className: "FavouriteGroup",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "writeConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

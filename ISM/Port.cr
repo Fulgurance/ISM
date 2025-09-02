@@ -39,7 +39,7 @@ module ISM
             return false
 
             rescue exception
-                ISM::Error.show(className: "Port",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "exists",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -58,7 +58,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Port",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "delete",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -77,7 +77,7 @@ module ISM
             return from_json(File.read(path))
 
             rescue exception
-                ISM::Error.show(className: "Port",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "loadConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -88,7 +88,7 @@ module ISM
             return Dir.glob("#{self.directoryPath(name)}/*").size
 
             rescue exception
-                ISM::Error.show(className: "Port",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "softwareNumber",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -113,7 +113,7 @@ module ISM
             file.close
 
             rescue exception
-                ISM::Error.show(className: "Port",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "writeConfiguration",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -129,7 +129,7 @@ module ISM
             return result.success?
 
             rescue exception
-                ISM::Error.show(className: "Port",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "isAvailable",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -156,7 +156,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Port",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "open",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -183,7 +183,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Port",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "synchronize",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

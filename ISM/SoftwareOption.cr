@@ -31,7 +31,7 @@ module ISM
             return optionName.starts_with?(/Pass[0-9]/)
 
             rescue exception
-                ISM::Error.show(className: "SoftwareOption",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "isPassName",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -42,7 +42,7 @@ module ISM
             return self.class.isPassName(@name)
 
             rescue exception
-                ISM::Error.show(className: "SoftwareOption",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "isPass",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -61,7 +61,7 @@ module ISM
             return result
 
             rescue exception
-                ISM::Error.show(className: "SoftwareOption",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "dependencies",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

@@ -72,7 +72,7 @@ module ISM
             file.close
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -83,7 +83,7 @@ module ISM
             return (@port != "" && @name != "" && @version != "") && File.exists?(filePath)
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "isValid",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -106,7 +106,7 @@ module ISM
             return String.new
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "type",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -117,7 +117,7 @@ module ISM
             return (type == Default::SystemComponentSoftwareClassName)
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "isSystemComponent",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -128,7 +128,7 @@ module ISM
             return File.exists?(settingsFilePath)
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "isConfigured",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -145,7 +145,7 @@ module ISM
             return String.new
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "getEnabledPass",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -157,7 +157,7 @@ module ISM
             return stringNumber == "" ? 0 : stringNumber.gsub("Pass","").to_i
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "getEnabledPassNumber",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -236,7 +236,7 @@ module ISM
             return false
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "optionExist",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -253,7 +253,7 @@ module ISM
             return false
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "option",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -290,7 +290,7 @@ module ISM
             end
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "enableOption",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -305,7 +305,7 @@ module ISM
             end
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "disableOption",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -322,7 +322,7 @@ module ISM
             return false
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "passEnabled",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -378,7 +378,7 @@ module ISM
             end
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "dependencies",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -399,7 +399,7 @@ module ISM
             return @kernelDependencies+dependenciesArray
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "kernelDependencies",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -466,7 +466,7 @@ module ISM
             return softwareDependency
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "toSoftwareDependency",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -483,7 +483,7 @@ module ISM
             return @uniqueDependencies.map {|entry| entry.includes?(dependency)}.includes?(true)
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "dependencyIsUnique",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -511,7 +511,7 @@ module ISM
             return result
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "getMissingSelectedDependencies",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -545,7 +545,7 @@ module ISM
             return selected
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "selectUniqueDependency",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -556,7 +556,7 @@ module ISM
             return @selectedDependencies.any? { |item| item.downcase == dependency.downcase}
 
             rescue exception
-                    ISM::Error.show(className: "SoftwareInformation",
+                    ISM::Error.show(className: self.class.name,
                                     functionName: "uniqueDependencyIsEnabled",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -567,7 +567,7 @@ module ISM
             return mainDirectoryPath + Filename::SecurityMap
 
             rescue exception
-                ISM::Error.show(className: "SoftwareInformation",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "securityMapFilePath",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -578,7 +578,7 @@ module ISM
             return ISM::SoftwareSecurityMap.loadConfiguration(securityMapFilePath)
 
             rescue exception
-                ISM::Error.show(className: "SoftwareInformation",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "securityMap",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -589,7 +589,7 @@ module ISM
             return mainDirectoryPath + Filename::PublicKey
 
             rescue exception
-                ISM::Error.show(className: "SoftwareInformation",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "publicKeyFilePath",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -600,7 +600,7 @@ module ISM
             return ISM::SoftwarePublicKey.loadConfiguration(publicKeyFilePath)
 
             rescue exception
-                ISM::Error.show(className: "SoftwareInformation",
+                ISM::Error.show(className: self.class.name,
                                 functionName: "publicKey",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

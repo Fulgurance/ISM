@@ -22,7 +22,7 @@ module ISM
             return from_json(File.read(path))
 
             rescue exception
-            ISM::Error.show(className: "SoftwareSecurityMap",
+            ISM::Error.show(className: self.class.name,
                             functionName: "loadConfiguration",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
