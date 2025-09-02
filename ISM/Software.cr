@@ -2389,7 +2389,7 @@ module ISM
 
                     if text.starts_with?(Default::KconfigKeywords[:source]) && !text.includes?("Kconfig.include")
 
-                        mainArchitecture = (Ism.targetSystemInformation.handleChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemTargetArchitecture).gsub(/_.*/,"")
+                        mainArchitecture = (Ism.targetSystemInformation.handleChroot ? Ism.settings.chrootTargetArchitecture : Ism.settings.systemTargetArchitecture).gsub(/_.*/,"")
 
                         path = kernelSourcesPath+text.sub(Default::KconfigKeywords[:source],"").strip
                         path = path.gsub("\"","")
