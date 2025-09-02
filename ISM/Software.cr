@@ -117,7 +117,7 @@ module ISM
         end
 
         def workDirectoryPath : String
-            return Ism.targetSystemInformation.handleChroot ? "/#{ISM::Default::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
+            return Ism.targetSystemInformation.handleChroot ? "/#{ISM::Path::SourcesDirectory}"+@information.port+"/"+@information.name+"/"+@information.version : Ism.settings.sourcesPath+@information.port+"/"+@information.name+"/"+@information.version
         end
 
         def mainWorkDirectoryPath : String
@@ -304,10 +304,10 @@ module ISM
             find #{Ism.settings.rootPath} \
             -path #{Ism.settings.sourcesPath[0..-2]} -prune \
             -o -path #{Ism.settings.toolsPath[0..-2]} -prune \
-            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::RuntimeDataDirectory[0..-2]} -prune \
-            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::TemporaryDirectory[0..-2]} -prune \
-            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::SettingsDirectory[0..-2]} -prune \
-            -o -path #{Ism.settings.rootPath}#{ISM::Default::Path::LogsDirectory[0..-2]} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Path::RuntimeDataDirectory[0..-2]} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Path::TemporaryDirectory[0..-2]} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Path::SettingsDirectory[0..-2]} -prune \
+            -o -path #{Ism.settings.rootPath}#{ISM::Path::LogsDirectory[0..-2]} -prune \
             -o -exec chown --no-dereference root:root {} +
             COMMAND
 
@@ -917,8 +917,8 @@ module ISM
                 end
             end
 
-            if Dir.exists?(Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}")
-                Dir[Ism.settings.rootPath+ISM::Default::Path::PatchesDirectory+"/#{@information.versionName}/*"].each do |patch|
+            if Dir.exists?(Ism.settings.rootPath+ISM::Path::PatchesDirectory+"/#{@information.versionName}")
+                Dir[Ism.settings.rootPath+ISM::Path::PatchesDirectory+"/#{@information.versionName}/*"].each do |patch|
                     patchName = patch.lchop(patch[0..patch.rindex("/")])
                     Ism.notifyOfLocalPatch(patchName)
                     applyPatch(patch)
@@ -2311,7 +2311,7 @@ module ISM
         end
 
         def kernelOptionsDatabasePath : String
-            return Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+mainKernelName
+            return Ism.settings.rootPath+ISM::Path::KernelOptionsDirectory+mainKernelName
         end
 
         #Return an array splitted, except when there are conditions between parenthesis
@@ -2518,7 +2518,7 @@ module ISM
 
             kernelOptions.each do |option|
                 if !option.name.empty?
-                    option.writeConfiguration(Ism.settings.rootPath+ISM::Default::Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
+                    option.writeConfiguration(Ism.settings.rootPath+ISM::Path::KernelOptionsDirectory+"/"+mainKernelName+"/"+option.name+".json")
                 end
             end
 

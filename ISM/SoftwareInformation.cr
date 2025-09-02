@@ -182,7 +182,7 @@ module ISM
         end
 
         def builtSoftwareDirectoryPath
-            return "#{Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
+            return "#{ISM::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
         end
 
         def mainDirectoryPath : String

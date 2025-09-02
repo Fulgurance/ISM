@@ -2274,7 +2274,7 @@ module ISM
                         version = information.version
                         passNumber = information.getEnabledPassNumber
                         fullVersionName = information.fullVersionName
-                        builtSoftwareDirectoryPath = \"#\{Ism.settings.rootPath\}#\{Path::BuiltSoftwaresDirectory\}#\{information.port\}/#\{information.name\}/\"
+                        builtSoftwareDirectoryPath = \"#\{Ism.settings.rootPath\}#\{ISM::Path::BuiltSoftwaresDirectory\}#\{information.port\}/#\{information.name\}/\"
                         coloredFullVersionName = \"#\{information.fullName.colorize(:magenta)} /#\{version.colorize(Colorize::ColorRGB.new(255,100,100))}/\"
 
                         #START INSTALLATION PROCESS
