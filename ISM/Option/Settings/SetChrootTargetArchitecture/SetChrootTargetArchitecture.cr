@@ -4,14 +4,14 @@ module ISM
 
         class Settings
 
-            class SetChrootTargetName < ISM::CommandLineOption
+            class SetChrootTargetArchitecture < ISM::CommandLineOption
 
                 module Default
 
-                    ShortText = "-sctn"
-                    LongText = "setchroottargetname"
-                    Description = "Set the default chroot machine target for the compiler"
-                    SetText = "Setting chroot targetName to the value "
+                    ShortText = "-sctar"
+                    LongText = "setchroottargetarchitecture"
+                    Description = "Set the default chroot target architecture for the compiler"
+                    SetText = "Setting chroot target architecture to the value "
 
                 end
 
@@ -25,7 +25,7 @@ module ISM
                     if ARGV.size == 2
                         showHelp
                     else
-                        Ism.settings.setChrootTargetName(ARGV[2])
+                        Ism.settings.setChrootTargetArchitecture(ARGV[2])
                         Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end

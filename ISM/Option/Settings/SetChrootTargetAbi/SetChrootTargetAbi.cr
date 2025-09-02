@@ -4,14 +4,14 @@ module ISM
 
         class Settings
 
-            class SetSystemArchitecture < ISM::CommandLineOption
+            class SetChrootTargetAbi < ISM::CommandLineOption
 
                 module Default
 
-                    ShortText = "-ssa"
-                    LongText = "setsystemarchitecture"
-                    Description = "Set the default system architecture for the compiler"
-                    SetText = "Setting system architecture to the value "
+                    ShortText = "-scta"
+                    LongText = "setchroottargetabi"
+                    Description = "Set the default chroot machine target ABI for the compiler"
+                    SetText = "Setting chroot target ABI to the value "
 
                 end
 
@@ -25,7 +25,7 @@ module ISM
                     if ARGV.size == 2
                         showHelp
                     else
-                        Ism.settings.setSystemArchitecture(ARGV[2])
+                        Ism.settings.setChrootTargetAbi(ARGV[2])
                         Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end

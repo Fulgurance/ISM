@@ -23,8 +23,10 @@ module ISM
                     AutoDeployServicesText = "Auto deploy services"
 
                     #Host titles
-                    SystemTargetNameText = "System target name"
-                    SystemArchitectureText = "System architecture"
+                    SystemTargetArchitectureText = "System target architecture"
+                    SystemTargetVendorText = "System target vendor"
+                    SystemTargetOsText = "System target OS"
+                    SystemTargetAbiText = "System target ABI"
                     SystemTargetText = "System target"
                     SystemMakeOptionsText = "System make options"
                     SystemBuildOptionsText = "System build options"
@@ -47,8 +49,10 @@ module ISM
                     SystemVariantIdText = "System variant ID"
 
                     #Chroot title
-                    ChrootTargetNameText = "Chroot target name"
-                    ChrootArchitectureText = "Chroot architecture"
+                    ChrootTargetArchitectureText = "Chroot target architecture"
+                    ChrootTargetVendorText = "Chroot target vendor"
+                    ChrootTargetOsText = "Chroot target OS"
+                    ChrootTargetAbiText = "Chroot target ABI"
                     ChrootTargetText = "Chroot target"
                     ChrootMakeOptionsText = "Chroot make options"
                     ChrootBuildOptionsText = "Chroot build options"
@@ -87,8 +91,10 @@ module ISM
                     puts "\t#{Default::AutoBuildKernel}: #{Ism.settings.autoBuildKernel.colorize(:green)}"
                     puts "\t#{Default::AutoDeployServicesText}: #{Ism.settings.autoDeployServices.colorize(:green)}"
 
-                    puts "\t#{Default::SystemTargetNameText}: #{Ism.settings.systemTargetName(false).colorize(:green)}"
-                    puts "\t#{Default::SystemArchitectureText}: #{Ism.settings.systemArchitecture(false).colorize(:green)}"
+                    puts "\t#{Default::SystemTargetArchitectureText}: #{Ism.settings.systemTargetArchitecture(false).colorize(:green)}"
+                    puts "\t#{Default::SystemTargetVendorText}: #{Ism.settings.systemTargetVendor(false).colorize(:green)}"
+                    puts "\t#{Default::SystemTargetOsText}: #{Ism.settings.systemTargetOs(false).colorize(:green)}"
+                    puts "\t#{Default::SystemTargetAbiText}: #{Ism.settings.systemTargetAbi(false).colorize(:green)}"
                     puts "\t#{Default::SystemTargetText}: #{Ism.settings.systemTarget(false).colorize(:green)}"
                     puts "\t#{Default::SystemMakeOptionsText}: #{Ism.settings.systemMakeOptions(false).colorize(:green)}"
                     puts "\t#{Default::SystemBuildOptionsText}: #{Ism.settings.systemBuildOptions(false).colorize(:green)}"
@@ -112,8 +118,10 @@ module ISM
 
                     puts "\t=========================".colorize(:green)
 
-                    puts "\t#{Default::ChrootTargetNameText}: #{Ism.settings.chrootTargetName.colorize(:green)}"
-                    puts "\t#{Default::ChrootArchitectureText}: #{Ism.settings.chrootArchitecture.colorize(:green)}"
+                    puts "\t#{Default::ChrootTargetArchitectureText}: #{Ism.settings.chrootTargetArchitecture.colorize(:green)}"
+                    puts "\t#{Default::ChrootTargetVendorText}: #{Ism.settings.chrootTargetVendor.colorize(:green)}"
+                    puts "\t#{Default::ChrootTargetOsText}: #{Ism.settings.chrootTargetOs.colorize(:green)}"
+                    puts "\t#{Default::ChrootTargetAbiText}: #{Ism.settings.chrootTargetAbi.colorize(:green)}"
                     puts "\t#{Default::ChrootTargetText}: #{Ism.settings.chrootTarget.colorize(:green)}"
                     puts "\t#{Default::ChrootMakeOptionsText}: #{Ism.settings.chrootMakeOptions.colorize(:green)}"
                     puts "\t#{Default::ChrootBuildOptionsText}: #{Ism.settings.chrootBuildOptions.colorize(:green)}"

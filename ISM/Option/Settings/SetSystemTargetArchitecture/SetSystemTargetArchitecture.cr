@@ -4,14 +4,14 @@ module ISM
 
         class Settings
 
-            class SetChrootArchitecture < ISM::CommandLineOption
+            class SetSystemTargetArchitecture < ISM::CommandLineOption
 
                 module Default
 
-                    ShortText = "-sca"
-                    LongText = "setchrootarchitecture"
-                    Description = "Set the default chroot target architecture for the compiler"
-                    SetText = "Setting chroot architecture to the value "
+                    ShortText = "-sstar"
+                    LongText = "setsystemtargetarchitecture"
+                    Description = "Set the default system target architecture for the compiler"
+                    SetText = "Setting system target architecture to the value "
 
                 end
 
@@ -25,7 +25,7 @@ module ISM
                     if ARGV.size == 2
                         showHelp
                     else
-                        Ism.settings.setChrootArchitecture(ARGV[2])
+                        Ism.settings.setSystemTargetArchitecture(ARGV[2])
                         Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end

@@ -19,9 +19,11 @@ module ISM
             AutoDeployServices = true
 
             #Host related parameters
-            SystemTargetName = "unknown"
-            SystemArchitecture = "x86_64"
-            SystemTarget = "#{SystemArchitecture}-#{SystemTargetName}-linux-gnu"
+            SystemTargetArchitecture = "x86_64"
+            SystemTargetVendor = "unknown"
+            SystemTargetOs = "linux"
+            SystemTargetAbi = "gnu"
+            SystemTarget = "#{SystemTargetArchitecture}-#{SystemTargetVendor}-#{SystemTargetOs}-#{SystemTargetAbi}"
             SystemMakeOptions = "-j1"
             SystemBuildOptions = "-march=native -O2 -pipe"
             SystemName = "Unknown"
@@ -43,8 +45,10 @@ module ISM
             SystemVariantId = "None"
 
             #Chroot related parameters
-            ChrootTargetName = "#{SystemTargetName}"
-            ChrootArchitecture = "#{SystemArchitecture}"
+            ChrootTargetArchitecture = "#{SystemTargetArchitecture}"
+            ChrootTargetVendor = "#{SystemTargetVendor}"
+            ChrootTargetOs = "#{SystemTargetOs}"
+            ChrootTargetAbi = "#{SystemTargetAbi}"
             ChrootTarget = "#{SystemTarget}"
             ChrootMakeOptions = "#{SystemMakeOptions}"
             ChrootBuildOptions = "#{SystemBuildOptions}"
@@ -78,8 +82,10 @@ module ISM
         property    autoDeployServices : Bool
 
         #Host related parameters
-        property    systemTargetName : String
-        property    systemArchitecture : String
+        property    systemTargetArchitecture : String
+        property    systemTargetVendor : String
+        property    systemTargetOs : String
+        property    systemTargetAbi : String
         property    systemTarget : String
         property    systemMakeOptions : String
         property    systemBuildOptions : String
@@ -102,8 +108,10 @@ module ISM
         property    systemVariantId : String
 
         #Chroot related parameters
-        property    chrootTargetName : String
-        property    chrootArchitecture : String
+        property    chrootTargetArchitecture : String
+        property    chrootTargetVendor : String
+        property    chrootTargetOs : String
+        property    chrootTargetAbi : String
         property    chrootTarget : String
         property    chrootMakeOptions : String
         property    chrootBuildOptions : String
@@ -133,8 +141,10 @@ module ISM
                         @autoDeployServices = Default::AutoDeployServices,
 
                         #Host related parameters
-                        @systemTargetName = Default::SystemTargetName,
-                        @systemArchitecture = Default::SystemArchitecture,
+                        @systemTargetArchitecture = Default::SystemTargetArchitecture,
+                        @systemTargetVendor = Default::SystemTargetVendor,
+                        @systemTargetOs = Default::SystemTargetOs,
+                        @systemTargetAbi = Default::SystemTargetAbi,
                         @systemTarget = Default::SystemTarget,
                         @systemMakeOptions = Default::SystemMakeOptions,
                         @systemBuildOptions = Default::SystemBuildOptions,
@@ -157,8 +167,10 @@ module ISM
                         @systemVariantId = Default::SystemVariantId,
 
                         #Chroot related parameters
-                        @chrootTargetName = Default::ChrootTargetName,
-                        @chrootArchitecture = Default::ChrootArchitecture,
+                        @chrootTargetArchitecture = Default::ChrootTargetArchitecture,
+                        @chrootTargetVendor = Default::ChrootTargetVendor,
+                        @chrootTargetOs = Default::ChrootTargetOs,
+                        @chrootTargetAbi = Default::ChrootTargetAbi,
                         @chrootTarget = Default::ChrootTarget,
                         @chrootMakeOptions = Default::ChrootMakeOptions,
                         @chrootBuildOptions = Default::ChrootBuildOptions,
@@ -224,8 +236,10 @@ module ISM
                                     autoDeployServices : Bool,
 
                                     #Host related parameters
-                                    systemTargetName : String,
-                                    systemArchitecture : String,
+                                    systemTargetArchitecture : String,
+                                    systemTargetVendor : String,
+                                    systemTargetOs : String,
+                                    systemTargetAbi : String,
                                     systemTarget : String,
                                     systemMakeOptions : String,
                                     systemBuildOptions : String,
@@ -248,8 +262,10 @@ module ISM
                                     systemVariantId : String,
 
                                     #Chroot related parameters
-                                    chrootTargetName : String,
-                                    chrootArchitecture : String,
+                                    chrootTargetArchitecture : String,
+                                    chrootTargetVendor : String,
+                                    chrootTargetOs : String,
+                                    chrootTargetAbi : String,
                                     chrootTarget : String,
                                     chrootMakeOptions : String,
                                     chrootBuildOptions : String,
@@ -285,8 +301,10 @@ module ISM
                         "autoDeployServices" => autoDeployServices,
 
                         #Host related parameters
-                        "systemTargetName" => systemTargetName,
-                        "systemArchitecture" => systemArchitecture,
+                        "systemTargetArchitecture" => systemTargetArchitecture,
+                        "systemTargetVendor" => systemTargetVendor,
+                        "systemTargetOs" => systemTargetOs,
+                        "systemTargetAbi" => systemTargetAbi,
                         "systemTarget" => systemTarget,
                         "systemMakeOptions" => systemMakeOptions,
                         "systemBuildOptions" => systemBuildOptions,
@@ -309,8 +327,10 @@ module ISM
                         "systemVariantId" => systemVariantId,
 
                         #Chroot related parameters
-                        "chrootTargetName" => chrootTargetName,
-                        "chrootArchitecture" => chrootArchitecture,
+                        "chrootTargetArchitecture" => chrootTargetArchitecture,
+                        "chrootTargetVendor" => chrootTargetVendor,
+                        "chrootTargetOs" => chrootTargetOs,
+                        "chrootTargetAbi" => chrootTargetAbi,
                         "chrootTarget" => chrootTarget,
                         "chrootMakeOptions" => chrootMakeOptions,
                         "chrootBuildOptions" => chrootBuildOptions,
@@ -356,8 +376,10 @@ module ISM
                                             @autoDeployServices,
 
                                             #Host related parameters
-                                            @chrootTargetName,
-                                            @chrootArchitecture,
+                                            @chrootTargetArchitecture,
+                                            @chrootTargetVendor,
+                                            @chrootTargetOs,
+                                            @chrootTargetAbi,
                                             @chrootTarget,
                                             @chrootMakeOptions,
                                             @chrootBuildOptions,
@@ -380,8 +402,10 @@ module ISM
                                             @chrootVariantId,
 
                                             #Chroot related parameters
-                                            Default::SystemTargetName ,
-                                            Default::SystemArchitecture,
+                                            Default::SystemTargetArchitecture,
+                                            Default::SystemTargetVendor,
+                                            Default::SystemTargetOs,
+                                            Default::SystemTargetAbi,
                                             Default::SystemTarget,
                                             Default::SystemMakeOptions,
                                             Default::SystemBuildOptions,
@@ -423,8 +447,10 @@ module ISM
                                             @autoDeployServices,
 
                                             #Host related parameters
-                                            @systemTargetName,
-                                            @systemArchitecture,
+                                            @systemTargetArchitecture,
+                                            @systemTargetVendor,
+                                            @systemTargetOs,
+                                            @systemTargetAbi,
                                             @systemTarget,
                                             @systemMakeOptions,
                                             @systemBuildOptions,
@@ -447,8 +473,10 @@ module ISM
                                             @systemVariantId,
 
                                             #Chroot related parameters
-                                            @chrootTargetName,
-                                            @chrootArchitecture,
+                                            @chrootTargetArchitecture,
+                                            @chrootTargetVendor,
+                                            @chrootTargetOs,
+                                            @chrootTargetAbi,
                                             @chrootTarget,
                                             @chrootMakeOptions,
                                             @chrootBuildOptions,
@@ -497,31 +525,61 @@ module ISM
 
         #Host/Chroot methods
 
-        def systemTargetName(relatedToChroot = true) : String
+        def systemTargetArchitecture(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootTargetName : @systemTargetName)
+                return (@rootPath != "/" ? @chrootTargetArchitecture : @systemTargetArchitecture)
             else
-                return @systemTargetName
+                return @systemTargetArchitecture
             end
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
-                                functionName: "systemTargetName",
+                                functionName: "systemTargetArchitecture",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
 
-        def systemArchitecture(relatedToChroot = true) : String
+        def systemTargetVendor(relatedToChroot = true) : String
             if relatedToChroot
-                return (@rootPath != "/" ? @chrootArchitecture : @systemArchitecture)
+                return (@rootPath != "/" ? @chrootTargetVendor : @systemTargetVendor)
             else
-                return @systemArchitecture
+                return @systemTargetVendor
             end
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
-                                functionName: "systemArchitecture",
+                                functionName: "systemTargetVendor",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def systemTargetOs(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootTargetOs : @systemTargetOs)
+            else
+                return @systemTargetOs
+            end
+
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "systemTargetOs",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def systemTargetAbi(relatedToChroot = true) : String
+            if relatedToChroot
+                return (@rootPath != "/" ? @chrootTargetAbi : @systemTargetAbi)
+            else
+                return @systemTargetAbi
+            end
+
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "systemTargetAbi",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
@@ -886,32 +944,56 @@ module ISM
         end
 
         #   Host
-        def setSystemTargetName(@systemTargetName)
+        def setSystemTargetArchitecture(@systemTargetArchitecture)
             writeSystemConfiguration
             setSystemTarget
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
-                                functionName: "setSystemTargetName",
+                                functionName: "setSystemTargetArchitecture",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
 
-        def setSystemArchitecture(@systemArchitecture)
+        def setSystemTargetVendor(@systemTargetVendor)
             writeSystemConfiguration
             setSystemTarget
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
-                                functionName: "setSystemArchitecture",
+                                functionName: "setSystemTargetVendor",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def setSystemTargetOs(@systemTargetOs)
+            writeSystemConfiguration
+            setSystemTarget
+
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "setSystemTargetOs",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def setSystemTargetAbi(@systemTargetAbi)
+            writeSystemConfiguration
+            setSystemTarget
+
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "setSystemTargetAbi",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
 
         def setSystemTarget
-            @systemTarget = @systemArchitecture + "-" + @systemTargetName + "-" + "linux-gnu"
+            @systemTarget = "#{@systemTargetArchitecture}-#{@systemTargetVendor}-#{@systemTargetOs}-#{@systemTargetAbi}"
             writeSystemConfiguration
 
             rescue exception
@@ -1140,31 +1222,52 @@ module ISM
         end
 
         #   Chroot
-        def setChrootTargetName(@chrootTargetName)
+        def setChrootTargetArchitecture(@chrootTargetArchitecture)
             writeSystemConfiguration
-            setChrootTarget
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
-                                functionName: "setChrootTargetName",
+                                functionName: "setChrootTargetArchitecture",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
 
-        def setChrootArchitecture(@chrootArchitecture)
+        def setChrootTargetVendor(@chrootTargetVendor)
             writeSystemConfiguration
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
-                                functionName: "setChrootArchitecture",
+                                functionName: "setChrootTargetVendor",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def setChrootTargetOs(@chrootTargetOs)
+            writeSystemConfiguration
+
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "setChrootTargetOs",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def setChrootTargetAbi(@chrootTargetAbi)
+            writeSystemConfiguration
+
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "setChrootTargetAbi",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
         end
 
         def setChrootTarget
-            @chrootTarget = @chrootArchitecture + "-" + @chrootTargetName + "-" + "linux-gnu"
+            @chrootTarget = "#{@chrootTargetArchitecture}-#{@chrootTargetVendor}-#{@chrootTargetOs}-#{@chrootTargetAbi}"
             writeSystemConfiguration
 
             rescue exception

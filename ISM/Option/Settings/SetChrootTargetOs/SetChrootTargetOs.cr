@@ -4,14 +4,14 @@ module ISM
 
         class Settings
 
-            class SetSystemTargetName < ISM::CommandLineOption
+            class SetChrootTargetOs < ISM::CommandLineOption
 
                 module Default
 
-                    ShortText = "-sstn"
-                    LongText = "setsystemtargetname"
-                    Description = "Set the default machine target for the compiler"
-                    SetText = "Setting system target name to the value "
+                    ShortText = "-scto"
+                    LongText = "setchroottargetos"
+                    Description = "Set the default chroot machine target OS for the compiler"
+                    SetText = "Setting chroot target OS to the value "
 
                 end
 
@@ -25,7 +25,7 @@ module ISM
                     if ARGV.size == 2
                         showHelp
                     else
-                        Ism.settings.setSystemTargetName(ARGV[2])
+                        Ism.settings.setChrootTargetOs(ARGV[2])
                         Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end
