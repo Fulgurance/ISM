@@ -69,10 +69,6 @@ module ISM
 
         def versionName
             return @name+"-"+version
-
-            rescue error
-                Ism.printSystemCallErrorNotification(error)
-                Ism.exitProgram
         end
 
         def version
@@ -114,8 +110,6 @@ module ISM
         end
 
         def installedFiles
-            softwaresList = Array(ISM::SoftwareDependency).new
-
             @installedSoftwares.each do |software|
                 if software.toSoftwareDependency.hiddenName == hiddenName
                     return software.installedFiles
