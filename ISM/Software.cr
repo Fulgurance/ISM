@@ -2389,7 +2389,7 @@ module ISM
 
                     if text.starts_with?(Default::KconfigKeywords[:source]) && !text.includes?("Kconfig.include")
 
-                        mainArchitecture = (Ism.targetSystemInformation.handleChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemArchitecture).gsub(/_.*/,"")
+                        mainArchitecture = (Ism.targetSystemInformation.handleChroot ? Ism.settings.chrootArchitecture : Ism.settings.systemTargetArchitecture).gsub(/_.*/,"")
 
                         path = kernelSourcesPath+text.sub(Default::KconfigKeywords[:source],"").strip
                         path = path.gsub("\"","")
@@ -2709,7 +2709,7 @@ module ISM
         end
 
         def architecture(architecture : String) : Bool
-            return Ism.settings.systemArchitecture == architecture
+            return Ism.settings.systemTargetArchitecture == architecture
         end
 
         def selectedKernel : ISM::SoftwareInformation
