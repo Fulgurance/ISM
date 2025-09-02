@@ -14,6 +14,7 @@ module ISM
                     TitleText = "Current ISM settings"
 
                     #Generic titles
+                    GlobalText = "Global"
                     ToolsPathText = "Tools path"
                     SourcesPathText = "Sources path"
                     RootPathText = "Root path"
@@ -23,6 +24,7 @@ module ISM
                     AutoDeployServicesText = "Auto deploy services"
 
                     #Host titles
+                    SystemText = "System"
                     SystemTargetArchitectureText = "System target architecture"
                     SystemTargetVendorText = "System target vendor"
                     SystemTargetOsText = "System target OS"
@@ -49,6 +51,7 @@ module ISM
                     SystemVariantIdText = "System variant ID"
 
                     #Chroot title
+                    ChrootText = "Chroot"
                     ChrootTargetArchitectureText = "Chroot target architecture"
                     ChrootTargetVendorText = "Chroot target vendor"
                     ChrootTargetOsText = "Chroot target OS"
@@ -84,13 +87,13 @@ module ISM
 
                 def start
                     puts "#{Default::TitleText}:".colorize(:yellow)
-
+                    puts "\t#{Default::GlobalText}".colorize(:green)
                     puts "\t#{Default::RootPathText}: #{Ism.settings.rootPath.colorize(:green)}"
                     puts "\t#{Default::DefaultMirrorText}: #{Ism.settings.defaultMirror.colorize(:green)}"
                     puts "\t#{Default::BuildKernelOptionsAsModule}: #{Ism.settings.buildKernelOptionsAsModule.colorize(:green)}"
                     puts "\t#{Default::AutoBuildKernel}: #{Ism.settings.autoBuildKernel.colorize(:green)}"
                     puts "\t#{Default::AutoDeployServicesText}: #{Ism.settings.autoDeployServices.colorize(:green)}"
-
+                    puts "\t#{Default::SystemText}".colorize(:green)
                     puts "\t#{Default::SystemTargetArchitectureText}: #{Ism.settings.systemTargetArchitecture(false).colorize(:green)}"
                     puts "\t#{Default::SystemTargetVendorText}: #{Ism.settings.systemTargetVendor(false).colorize(:green)}"
                     puts "\t#{Default::SystemTargetOsText}: #{Ism.settings.systemTargetOs(false).colorize(:green)}"
@@ -115,9 +118,7 @@ module ISM
                     puts "\t#{Default::SystemBuildIdText}: #{Ism.settings.systemBuildId(false).colorize(:green)}"
                     puts "\t#{Default::SystemVariantText}: #{Ism.settings.systemVariant(false).colorize(:green)}"
                     puts "\t#{Default::SystemVariantIdText}: #{Ism.settings.systemVariantId(false).colorize(:green)}"
-
-                    puts "\t=========================".colorize(:green)
-
+                    puts "\t#{Default::ChrootText}".colorize(:green)
                     puts "\t#{Default::ChrootTargetArchitectureText}: #{Ism.settings.chrootTargetArchitecture.colorize(:green)}"
                     puts "\t#{Default::ChrootTargetVendorText}: #{Ism.settings.chrootTargetVendor.colorize(:green)}"
                     puts "\t#{Default::ChrootTargetOsText}: #{Ism.settings.chrootTargetOs.colorize(:green)}"
