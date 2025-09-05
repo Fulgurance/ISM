@@ -326,10 +326,6 @@ module ISM
                 if !Dir.exists?(path)
                     Dir.mkdir_p(path)
                 end
-
-                changeFileOwner(path: path,
-                                user: Default::Name,
-                                group: Default::Name)
             }
 
             rescue exception
