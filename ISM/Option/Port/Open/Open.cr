@@ -4,7 +4,7 @@ module ISM
 
         class Port
 
-            class Open < ISM::CommandLineOption
+            class Open < CommandLine::Option
 
                 module Default
 

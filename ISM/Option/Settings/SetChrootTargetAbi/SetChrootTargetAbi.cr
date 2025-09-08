@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootTargetAbi < ISM::CommandLineOption
+            class SetChrootTargetAbi < CommandLine::Option
 
                 module Default
 

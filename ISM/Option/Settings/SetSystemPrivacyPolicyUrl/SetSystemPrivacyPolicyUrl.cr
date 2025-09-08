@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemPrivacyPolicyUrl < ISM::CommandLineOption
+            class SetSystemPrivacyPolicyUrl < CommandLine::Option
 
                 module Default
 

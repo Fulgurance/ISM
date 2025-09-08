@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class DisableBuildKernelOptionsAsModule < ISM::CommandLineOption
+            class DisableBuildKernelOptionsAsModule < CommandLine::Option
 
                 module Default
 

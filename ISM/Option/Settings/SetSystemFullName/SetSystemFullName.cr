@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemFullName < ISM::CommandLineOption
+            class SetSystemFullName < CommandLine::Option
 
                 module Default
 

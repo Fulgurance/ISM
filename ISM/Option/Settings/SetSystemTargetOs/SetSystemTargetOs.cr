@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemTargetOs < ISM::CommandLineOption
+            class SetSystemTargetOs < CommandLine::Option
 
                 module Default
 

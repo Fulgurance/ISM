@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class SelectDependency < ISM::CommandLineOption
+            class SelectDependency < CommandLine::Option
 
                 module Default
 

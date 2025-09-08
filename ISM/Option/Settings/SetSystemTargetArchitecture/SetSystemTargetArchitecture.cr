@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemTargetArchitecture < ISM::CommandLineOption
+            class SetSystemTargetArchitecture < CommandLine::Option
 
                 module Default
 

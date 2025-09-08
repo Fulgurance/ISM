@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootCodeName < ISM::CommandLineOption
+            class SetChrootCodeName < CommandLine::Option
 
                 module Default
 

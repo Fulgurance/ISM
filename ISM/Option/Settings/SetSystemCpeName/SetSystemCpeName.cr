@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemCpeName < ISM::CommandLineOption
+            class SetSystemCpeName < CommandLine::Option
 
                 module Default
 

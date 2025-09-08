@@ -6,7 +6,7 @@ module ISM
 
             class Component
 
-                class SetupAll < ISM::CommandLineOption
+                class SetupAll < CommandLine::Option
 
                     module Default
 

@@ -4,7 +4,7 @@ module ISM
 
         class Port
 
-            class Synchronize < ISM::CommandLineOption
+            class Synchronize < CommandLine::Option
 
                 module Default
 

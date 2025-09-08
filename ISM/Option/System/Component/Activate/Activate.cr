@@ -6,7 +6,7 @@ module ISM
 
             class Component
 
-                class Activate < ISM::CommandLineOption
+                class Activate < CommandLine::Option
 
                     module Default
 

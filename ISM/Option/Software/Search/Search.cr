@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class Search < ISM::CommandLineOption
+            class Search < CommandLine::Option
 
                 module Default
 

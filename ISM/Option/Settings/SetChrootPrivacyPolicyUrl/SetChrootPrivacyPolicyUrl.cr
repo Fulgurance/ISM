@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootPrivacyPolicyUrl < ISM::CommandLineOption
+            class SetChrootPrivacyPolicyUrl < CommandLine::Option
 
                 module Default
 

@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class DisableAutoBuildKernel < ISM::CommandLineOption
+            class DisableAutoBuildKernel < CommandLine::Option
 
                 module Default
 

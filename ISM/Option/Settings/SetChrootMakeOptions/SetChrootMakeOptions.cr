@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootMakeOptions < ISM::CommandLineOption
+            class SetChrootMakeOptions < CommandLine::Option
 
                 module Default
 

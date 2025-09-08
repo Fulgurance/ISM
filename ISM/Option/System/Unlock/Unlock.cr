@@ -4,7 +4,7 @@ module ISM
 
         class System
 
-            class Unlock < ISM::CommandLineOption
+            class Unlock < CommandLine::Option
 
                 module Default
 

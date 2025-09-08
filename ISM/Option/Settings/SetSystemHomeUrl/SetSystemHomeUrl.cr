@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemHomeUrl < ISM::CommandLineOption
+            class SetSystemHomeUrl < CommandLine::Option
 
                 module Default
 

@@ -2,7 +2,7 @@ module ISM
 
     module Option
 
-        class Settings < ISM::CommandLineOption
+        class Settings < CommandLine::Option
 
             module Default
 

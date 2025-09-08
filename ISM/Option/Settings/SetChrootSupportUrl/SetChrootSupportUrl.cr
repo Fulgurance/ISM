@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootSupportUrl < ISM::CommandLineOption
+            class SetChrootSupportUrl < CommandLine::Option
 
                 module Default
 

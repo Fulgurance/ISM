@@ -151,18 +151,18 @@ module ISM
                         ISM::Option::Tools.new]
         end
 
-        property systemInformation : ISM::CommandLineSystemInformation
+        property systemInformation : CommandLine::SystemInformation
         property requestedSoftwares : Array(ISM::SoftwareInformation)
         property neededKernelOptions : Array(ISM::NeededKernelOption)
-        property options : Array(ISM::CommandLineOption)
-        property settings : ISM::CommandLineSettings
+        property options : Array(CommandLine::Option)
+        property settings : CommandLine::Settings
         property components : Array(ISM::SoftwareInformation)
         property kernels : Array(ISM::AvailableKernel)
         property softwares : Array(ISM::AvailableSoftware)
         property installedSoftwares : Array(ISM::SoftwareInformation)
         property ports : Array(ISM::Port)
         property mirrors : Array(ISM::Mirror)
-        property mirrorsSettings : ISM::CommandLineMirrorsSettings
+        property mirrorsSettings : CommandLine::MirrorsSettings
         property favouriteGroups : Array(ISM::FavouriteGroup)
         property totalInstalledDirectoryNumber : UInt128
         property totalInstalledSymlinkNumber : UInt128
@@ -170,7 +170,7 @@ module ISM
         property totalInstalledSize : UInt128
 
         def initialize
-            @systemInformation = ISM::CommandLineSystemInformation.new
+            @systemInformation = CommandLine::SystemInformation.new
             @requestedSoftwares = Array(ISM::SoftwareInformation).new
             @neededKernelOptions = Array(ISM::NeededKernelOption).new
             @calculationStartingTime = Time.monotonic
@@ -178,14 +178,14 @@ module ISM
             @reverseAnimation = false
             @text = Default::CalculationWaitingText
             @options = Default::Options
-            @settings = ISM::CommandLineSettings.new
+            @settings = CommandLine::Settings.new
             @components = Array(ISM::SoftwareInformation).new
             @kernels = Array(ISM::AvailableKernel).new
             @softwares = Array(ISM::AvailableSoftware).new
             @installedSoftwares = Array(ISM::SoftwareInformation).new
             @ports = Array(ISM::Port).new
             @mirrors = Array(ISM::Mirror).new
-            @mirrorsSettings = ISM::CommandLineMirrorsSettings.new
+            @mirrorsSettings = CommandLine::MirrorsSettings.new
             @favouriteGroups = Array(ISM::FavouriteGroup).new
             @initialTerminalTitle = String.new
             @unavailableDependencySignals = Array(Array(ISM::SoftwareInformation)).new
@@ -541,7 +541,7 @@ module ISM
 
             createSystemDirectory(path)
 
-            @systemInformation = ISM::CommandLineSystemInformation.loadConfiguration
+            @systemInformation = CommandLine::SystemInformation.loadConfiguration
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
@@ -556,8 +556,8 @@ module ISM
 
             createSystemDirectory(path)
 
-            @settings = ISM::CommandLineSettings.loadConfiguration
-            @mirrorsSettings = ISM::CommandLineMirrorsSettings.loadConfiguration
+            @settings = CommandLine::Settings.loadConfiguration
+            @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
@@ -3250,16 +3250,16 @@ module ISM
             return "#{taskAbsoluteDirectoryPath}#{Filename::Task}"
         end
 
-        def hostSystemInformation : ISM::CommandLineSystemInformation
-            filePath = "/#{CommandLineSystemInformation::Default::SystemInformationFilePath}"
+        def hostSystemInformation : CommandLine::SystemInformation
+            filePath = "/#{CommandLine::SystemInformation::Default::SystemInformationFilePath}"
 
-            return ISM::CommandLineSystemInformation.loadConfiguration(filePath)
+            return CommandLine::SystemInformation.loadConfiguration(filePath)
         end
 
-        def targetSystemInformation : ISM::CommandLineSystemInformation
-            filePath = "#{@settings.rootPath}#{CommandLineSystemInformation::Default::SystemInformationFilePath}"
+        def targetSystemInformation : CommandLine::SystemInformation
+            filePath = "#{@settings.rootPath}#{CommandLine::SystemInformation::Default::SystemInformationFilePath}"
 
-            return ISM::CommandLineSystemInformation.loadConfiguration(filePath)
+            return CommandLine::SystemInformation.loadConfiguration(filePath)
         end
 
         def runTasks(   tasks : String,

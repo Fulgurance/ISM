@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class Install < ISM::CommandLineOption
+            class Install < CommandLine::Option
 
                 module Default
 

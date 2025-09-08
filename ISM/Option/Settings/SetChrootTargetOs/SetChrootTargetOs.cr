@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootTargetOs < ISM::CommandLineOption
+            class SetChrootTargetOs < CommandLine::Option
 
                 module Default
 

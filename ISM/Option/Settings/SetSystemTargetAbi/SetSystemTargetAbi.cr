@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemTargetAbi < ISM::CommandLineOption
+            class SetSystemTargetAbi < CommandLine::Option
 
                 module Default
 

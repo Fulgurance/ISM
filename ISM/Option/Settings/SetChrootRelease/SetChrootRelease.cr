@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootRelease < ISM::CommandLineOption
+            class SetChrootRelease < CommandLine::Option
 
                 module Default
 

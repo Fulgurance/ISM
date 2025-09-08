@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemCodeName < ISM::CommandLineOption
+            class SetSystemCodeName < CommandLine::Option
 
                 module Default
 

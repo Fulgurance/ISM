@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootVariant < ISM::CommandLineOption
+            class SetChrootVariant < CommandLine::Option
 
                 module Default
 

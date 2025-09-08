@@ -4,7 +4,7 @@ module ISM
 
         class Version
 
-            class Switch < ISM::CommandLineOption
+            class Switch < CommandLine::Option
 
                 module Default
 

@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemVariant < ISM::CommandLineOption
+            class SetSystemVariant < CommandLine::Option
 
                 module Default
 

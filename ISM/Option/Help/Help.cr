@@ -2,7 +2,7 @@ module ISM
 
     module Option
 
-        class Help < ISM::CommandLineOption
+        class Help < CommandLine::Option
 
             module Default
 
@@ -29,8 +29,8 @@ module ISM
 
                 Ism.options.each do |option|
 
-                    shortTextPadding = CommandLineOption::Default::Padding
-                    longTextPadding = CommandLineOption::Default::Padding
+                    shortTextPadding = CommandLine::Option::Default::Padding
+                    longTextPadding = CommandLine::Option::Default::Padding
 
                     limit = (highestShortTextSize.size - option.shortText.size)
 

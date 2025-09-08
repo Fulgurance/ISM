@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootTargetVendor < ISM::CommandLineOption
+            class SetChrootTargetVendor < CommandLine::Option
 
                 module Default
 

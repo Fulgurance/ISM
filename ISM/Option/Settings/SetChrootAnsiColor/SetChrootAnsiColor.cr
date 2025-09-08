@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootAnsiColor < ISM::CommandLineOption
+            class SetChrootAnsiColor < CommandLine::Option
 
                 module Default
 

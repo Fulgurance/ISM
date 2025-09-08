@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class Clean < ISM::CommandLineOption
+            class Clean < CommandLine::Option
 
                 module Default
 

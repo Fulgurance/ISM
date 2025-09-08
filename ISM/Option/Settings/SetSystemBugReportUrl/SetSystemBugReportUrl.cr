@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemBugReportUrl < ISM::CommandLineOption
+            class SetSystemBugReportUrl < CommandLine::Option
 
                 module Default
 

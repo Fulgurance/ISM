@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class DisableOption < ISM::CommandLineOption
+            class DisableOption < CommandLine::Option
 
                 module Default
 

@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class Update < ISM::CommandLineOption
+            class Update < CommandLine::Option
 
                 module Default
 

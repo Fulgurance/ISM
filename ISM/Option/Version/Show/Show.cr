@@ -4,7 +4,7 @@ module ISM
 
         class Version
 
-            class Show < ISM::CommandLineOption
+            class Show < CommandLine::Option
 
                 module Default
 

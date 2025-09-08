@@ -6,7 +6,7 @@ module ISM
 
             class Component
 
-                class List < ISM::CommandLineOption
+                class List < CommandLine::Option
 
                     module Default
 

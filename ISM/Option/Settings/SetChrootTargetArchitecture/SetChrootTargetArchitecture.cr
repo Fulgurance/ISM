@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootTargetArchitecture < ISM::CommandLineOption
+            class SetChrootTargetArchitecture < CommandLine::Option
 
                 module Default
 

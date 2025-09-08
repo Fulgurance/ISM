@@ -6,7 +6,7 @@ module ISM
 
             class Component
 
-                class Desactivate < ISM::CommandLineOption
+                class Desactivate < CommandLine::Option
 
                     module Default
 

@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemDescription < ISM::CommandLineOption
+            class SetSystemDescription < CommandLine::Option
 
                 module Default
 

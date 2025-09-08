@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemId < ISM::CommandLineOption
+            class SetSystemId < CommandLine::Option
 
                 module Default
 

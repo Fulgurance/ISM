@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootBuildOptions < ISM::CommandLineOption
+            class SetChrootBuildOptions < CommandLine::Option
 
                 module Default
 

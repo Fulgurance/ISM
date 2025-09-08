@@ -2,14 +2,14 @@ module ISM
 
     module Option
 
-        class Tools < ISM::CommandLineOption
+        class Tools < CommandLine::Option
 
             module Default
 
                 ShortText = "-t"
                 LongText = "tools"
                 Description = "Development tools for ISM"
-                Options = [] of ISM::CommandLineOption
+                Options = [] of CommandLine::Option
 
             end
 

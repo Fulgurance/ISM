@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemAnsiColor < ISM::CommandLineOption
+            class SetSystemAnsiColor < CommandLine::Option
 
                 module Default
 

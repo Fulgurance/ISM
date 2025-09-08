@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootBugReportUrl < ISM::CommandLineOption
+            class SetChrootBugReportUrl < CommandLine::Option
 
                 module Default
 

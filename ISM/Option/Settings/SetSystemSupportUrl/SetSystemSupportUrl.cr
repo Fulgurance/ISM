@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemSupportUrl < ISM::CommandLineOption
+            class SetSystemSupportUrl < CommandLine::Option
 
                 module Default
 

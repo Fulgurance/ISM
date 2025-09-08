@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class DeletePatch < ISM::CommandLineOption
+            class DeletePatch < CommandLine::Option
 
                 module Default
 

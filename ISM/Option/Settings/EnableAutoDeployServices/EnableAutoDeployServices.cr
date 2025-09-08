@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class EnableAutoDeployServices < ISM::CommandLineOption
+            class EnableAutoDeployServices < CommandLine::Option
 
                 module Default
 

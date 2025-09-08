@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetRootPath < ISM::CommandLineOption
+            class SetRootPath < CommandLine::Option
 
                 module Default
 

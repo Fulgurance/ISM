@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemRelease < ISM::CommandLineOption
+            class SetSystemRelease < CommandLine::Option
 
                 module Default
 

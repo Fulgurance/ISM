@@ -4,7 +4,7 @@ module ISM
 
         class Port
 
-            class Close < ISM::CommandLineOption
+            class Close < CommandLine::Option
 
                 module Default
 

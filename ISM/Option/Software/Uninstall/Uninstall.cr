@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class Uninstall < ISM::CommandLineOption
+            class Uninstall < CommandLine::Option
 
                 module Default
 

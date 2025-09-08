@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemMakeOptions < ISM::CommandLineOption
+            class SetSystemMakeOptions < CommandLine::Option
 
                 module Default
 

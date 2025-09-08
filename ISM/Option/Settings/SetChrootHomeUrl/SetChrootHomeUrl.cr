@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootHomeUrl < ISM::CommandLineOption
+            class SetChrootHomeUrl < CommandLine::Option
 
                 module Default
 

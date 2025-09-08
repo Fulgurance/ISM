@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootVersion < ISM::CommandLineOption
+            class SetChrootVersion < CommandLine::Option
 
                 module Default
 

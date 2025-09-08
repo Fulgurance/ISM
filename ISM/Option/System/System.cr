@@ -2,7 +2,7 @@ module ISM
 
     module Option
 
-        class System < ISM::CommandLineOption
+        class System < CommandLine::Option
 
             module Default
 

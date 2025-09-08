@@ -4,7 +4,7 @@ module ISM
 
         class System
 
-            class Component < ISM::CommandLineOption
+            class Component < CommandLine::Option
 
                 module Default
 

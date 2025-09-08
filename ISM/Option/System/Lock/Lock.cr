@@ -4,7 +4,7 @@ module ISM
 
         class System
 
-            class Lock < ISM::CommandLineOption
+            class Lock < CommandLine::Option
 
                 module Default
 

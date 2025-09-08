@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetDefaultMirror < ISM::CommandLineOption
+            class SetDefaultMirror < CommandLine::Option
 
                 module Default
 

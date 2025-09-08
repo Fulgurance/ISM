@@ -2,7 +2,7 @@ module ISM
 
     module Option
 
-        class Port < ISM::CommandLineOption
+        class Port < CommandLine::Option
 
             module Default
 

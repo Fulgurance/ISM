@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemTargetVendor < ISM::CommandLineOption
+            class SetSystemTargetVendor < CommandLine::Option
 
                 module Default
 

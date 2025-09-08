@@ -2,7 +2,7 @@ module ISM
 
     module Option
 
-        class Software < ISM::CommandLineOption
+        class Software < CommandLine::Option
 
             module Default
 

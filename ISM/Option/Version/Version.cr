@@ -2,7 +2,7 @@ module ISM
 
     module Option
 
-        class Version < ISM::CommandLineOption
+        class Version < CommandLine::Option
 
             module Default
 

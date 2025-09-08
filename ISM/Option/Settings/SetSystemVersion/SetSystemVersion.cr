@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetSystemVersion < ISM::CommandLineOption
+            class SetSystemVersion < CommandLine::Option
 
                 module Default
 

@@ -4,7 +4,7 @@ module ISM
 
         class Software
 
-            class AddPatch < ISM::CommandLineOption
+            class AddPatch < CommandLine::Option
 
                 module Default
 

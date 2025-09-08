@@ -4,7 +4,7 @@ module ISM
 
         class Settings
 
-            class SetChrootFullName < ISM::CommandLineOption
+            class SetChrootFullName < CommandLine::Option
 
                 module Default
 
