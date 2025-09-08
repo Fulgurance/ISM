@@ -326,6 +326,10 @@ module ISM
                 if !Dir.exists?(path)
                     Dir.mkdir_p(path)
                 end
+
+                changeFileOwner(path: path,
+                                user: Default::Name,
+                                group: Default::Name)
             }
 
             rescue exception
@@ -334,6 +338,13 @@ module ISM
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
+        end
+
+        def loadBaseDirectories
+            createSystemDirectory(@settings.rootPath+Path::RuntimeDataDirectory)
+            createSystemDirectory(@settings.rootPath+Path::TemporaryDirectory)
+            createSystemDirectory(@settings.rootPath+Path::LogsDirectory)
+            createSystemDirectory(@settings.rootPath+Path::LibraryDirectory)
         end
 
         def loadNeededKernelOptions
