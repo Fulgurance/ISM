@@ -43,7 +43,7 @@ module ISM
                             else
                                 if ARGV[2] == @shortText || ARGV[2] == @longText
                                     match = false
-                                    matchingOption = ISM::SoftwareOption.new
+                                    matchingOption = ISM::Software::Option.new
 
                                     matchingSoftware.options.each do |option|
                                         if ARGV[3] == option.name || ARGV[3] == option.name.downcase

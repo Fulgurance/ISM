@@ -29,7 +29,7 @@ module ISM
                             showHelp
                         else
                             userRequest = ARGV[3]
-                            matchingComponent = ISM::SoftwareInformation.new
+                            matchingComponent = ISM::Software::Information.new
 
                             Ism.components.each do |component|
                                 if component.fullName.downcase == userRequest.downcase || component.name.downcase == userRequest.downcase

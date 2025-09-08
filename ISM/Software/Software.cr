@@ -34,7 +34,7 @@ module ISM
 
         end
 
-        property information : ISM::SoftwareInformation
+        property information : Software::Information
         property mainSourceDirectoryName : String
         property buildDirectory : Bool
         property buildDirectoryNames : Hash(String,String)
@@ -42,7 +42,7 @@ module ISM
         property additionsPublicKeys : Array(String)
 
         def initialize(informationPath : String)
-            @information = ISM::SoftwareInformation.loadConfiguration(informationPath)
+            @information = Software::Information.loadConfiguration(informationPath)
             @mainSourceDirectoryName = Default::SourcesDirectoryName
             @buildDirectory = false
             @buildDirectoryNames = { Default::MainBuildDirectoryEntry => "mainBuild" }
@@ -148,7 +148,7 @@ module ISM
         end
 
         def recordSelectedKernel
-            settingInformation = ISM::SoftwareInformation.loadConfiguration(@information.settingsFilePath)
+            settingInformation = Software::Information.loadConfiguration(@information.settingsFilePath)
 
             settingInformation.uniqueDependencies.each do |uniqueDependency|
                 uniqueDependency.each do |entry|
@@ -2235,7 +2235,7 @@ module ISM
                         finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
                         recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
 
-                        if !File.exists?(finalDestination) || Ism.softwareIsInstalled(@information) && ISM::SoftwareInformation.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
+                        if !File.exists?(finalDestination) || Ism.softwareIsInstalled(@information) && Software::Information.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
                             installedFiles << recordedFilePath
                         end
 
@@ -2591,14 +2591,14 @@ module ISM
             return @information.option(optionName)
         end
 
-        def dependency(fullName : String) : ISM::SoftwareInformation
+        def dependency(fullName : String) : Software::Information
             @information.dependencies(unsorted: true).each do |entry|
                 if entry.fullName == fullName
                     return entry.information
                 end
             end
 
-            return ISM::SoftwareInformation.new
+            return Software::Information.new
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
@@ -2712,7 +2712,7 @@ module ISM
             return Ism.settings.systemTargetArchitecture == architecture
         end
 
-        def selectedKernel : ISM::SoftwareInformation
+        def selectedKernel : Software::Information
             return Ism.selectedKernel
         end
 
@@ -2745,7 +2745,7 @@ module ISM
                                 exception: exception)
         end
 
-        def component(name : String) : ISM::SoftwareInformation
+        def component(name : String) : Software::Information
             return Ism.getSoftwareInformation(  userEntry: name,
                                                 allowSearchByNameOnly: true,
                                                 searchComponentsOnly: true)

@@ -152,14 +152,14 @@ module ISM
         end
 
         property systemInformation : CommandLine::SystemInformation
-        property requestedSoftwares : Array(ISM::SoftwareInformation)
+        property requestedSoftwares : Array(Software::Information)
         property neededKernelOptions : Array(ISM::NeededKernelOption)
         property options : Array(CommandLine::Option)
         property settings : CommandLine::Settings
-        property components : Array(ISM::SoftwareInformation)
+        property components : Array(Software::Information)
         property kernels : Array(ISM::AvailableKernel)
         property softwares : Array(ISM::AvailableSoftware)
-        property installedSoftwares : Array(ISM::SoftwareInformation)
+        property installedSoftwares : Array(Software::Information)
         property ports : Array(ISM::Port)
         property mirrors : Array(ISM::Mirror)
         property mirrorsSettings : CommandLine::MirrorsSettings
@@ -171,7 +171,7 @@ module ISM
 
         def initialize
             @systemInformation = CommandLine::SystemInformation.new
-            @requestedSoftwares = Array(ISM::SoftwareInformation).new
+            @requestedSoftwares = Array(Software::Information).new
             @neededKernelOptions = Array(ISM::NeededKernelOption).new
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0
@@ -179,16 +179,16 @@ module ISM
             @text = Default::CalculationWaitingText
             @options = Default::Options
             @settings = CommandLine::Settings.new
-            @components = Array(ISM::SoftwareInformation).new
+            @components = Array(Software::Information).new
             @kernels = Array(ISM::AvailableKernel).new
             @softwares = Array(ISM::AvailableSoftware).new
-            @installedSoftwares = Array(ISM::SoftwareInformation).new
+            @installedSoftwares = Array(Software::Information).new
             @ports = Array(ISM::Port).new
             @mirrors = Array(ISM::Mirror).new
             @mirrorsSettings = CommandLine::MirrorsSettings.new
             @favouriteGroups = Array(ISM::FavouriteGroup).new
             @initialTerminalTitle = String.new
-            @unavailableDependencySignals = Array(Array(ISM::SoftwareInformation)).new
+            @unavailableDependencySignals = Array(Array(Software::Information)).new
             @totalInstalledDirectoryNumber = UInt128.new(0)
             @totalInstalledSymlinkNumber = UInt128.new(0)
             @totalInstalledFileNumber = UInt128.new(0)
@@ -386,8 +386,8 @@ module ISM
                                 exception: exception)
         end
 
-        def loadSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
-            software = ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
+        def loadSoftware(port : String, name : String, version : String) : Software::Information
+            software = Software::Information.loadConfiguration(  @settings.rootPath +
                                                                     Path::SoftwaresDirectory +
                                                                     port + "/" +
                                                                     name + "/" +
@@ -398,7 +398,7 @@ module ISM
 
             if File.exists?(settingsFilePath)
 
-                softwareSettings = ISM::SoftwareInformation.loadConfiguration(settingsFilePath)
+                softwareSettings = Software::Information.loadConfiguration(settingsFilePath)
 
                 softwareSettings.options.each do |option|
 
@@ -441,7 +441,7 @@ module ISM
 
                 portSoftwareDirectories.each do |softwareDirectory|
                     versionDirectories = Dir.children("#{path}#{portDirectory}/#{softwareDirectory}")
-                    softwaresInformations = Array(ISM::SoftwareInformation).new
+                    softwaresInformations = Array(Software::Information).new
 
                     versionDirectories.each do |versionDirectory|
 
@@ -567,16 +567,16 @@ module ISM
                                 exception: exception)
         end
 
-        def loadInstalledSoftware(port : String, name : String, version : String) : ISM::SoftwareInformation
+        def loadInstalledSoftware(port : String, name : String, version : String) : Software::Information
             begin
-                return ISM::SoftwareInformation.loadConfiguration(  @settings.rootPath +
+                return Software::Information.loadConfiguration(  @settings.rootPath +
                                                                     Path::InstalledSoftwaresDirectory +
                                                                     port + "/" +
                                                                     name + "/" +
                                                                     version + "/" +
                                                                     Filename::Information)
             rescue
-                return ISM::SoftwareInformation.new
+                return Software::Information.new
             end
 
             rescue exception
@@ -618,11 +618,11 @@ module ISM
                                 exception: exception)
         end
 
-        def selectedKernel : ISM::SoftwareInformation
+        def selectedKernel : Software::Information
             if File.exists?("#{Ism.settings.rootPath}#{Path::SettingsDirectory}#{Filename::SelectedKernel}")
-                return ISM::SoftwareInformation.loadConfiguration("#{Ism.settings.rootPath}#{Path::SettingsDirectory}#{Filename::SelectedKernel}")
+                return Software::Information.loadConfiguration("#{Ism.settings.rootPath}#{Path::SettingsDirectory}#{Filename::SelectedKernel}")
             else
-                return ISM::SoftwareInformation.new
+                return Software::Information.new
             end
 
             rescue error
@@ -668,7 +668,7 @@ module ISM
                                 exception: exception)
         end
 
-        def reportMissingDependency(missingDependency : ISM::SoftwareInformation, relatedSoftware : ISM::SoftwareInformation)
+        def reportMissingDependency(missingDependency : Software::Information, relatedSoftware : Software::Information)
             @unavailableDependencySignals.push([relatedSoftware, missingDependency])
 
             rescue exception
@@ -679,7 +679,7 @@ module ISM
                                 exception: exception)
         end
 
-        def addInstalledSoftware(softwareInformation : ISM::SoftwareInformation, installedFiles = Array(String).new)
+        def addInstalledSoftware(softwareInformation : Software::Information, installedFiles = Array(String).new)
             softwareInformation.installedFiles = installedFiles
             softwareInformation.writeConfiguration(softwareInformation.installedFilePath)
 
@@ -723,14 +723,14 @@ module ISM
                                 exception: exception)
         end
 
-        def uninstallSoftware(software : ISM::SoftwareInformation)
+        def uninstallSoftware(software : Software::Information)
 
             if targetSystemInformation.handleChroot
                 unlockSystemAccess
             end
 
-            requestedVersion = ISM::SoftwareInformation.new
-            otherVersions = Array(ISM::SoftwareInformation).new
+            requestedVersion = Software::Information.new
+            otherVersions = Array(Software::Information).new
             protectedFiles = Array(String).new
             filesForRemoval = Array(String).new
             softwareForRemovalIndex = 0
@@ -808,7 +808,7 @@ module ISM
                                 exception: exception)
         end
 
-        def softwareIsRequestedSoftware(software : ISM::SoftwareInformation) : Bool
+        def softwareIsRequestedSoftware(software : Software::Information) : Bool
             return @requestedSoftwares.any? { |entry| entry.fullVersionName == software.fullVersionName}
 
             rescue exception
@@ -819,12 +819,12 @@ module ISM
                                 exception: exception)
         end
 
-        def softwareIsInstalled(software : ISM::SoftwareInformation) : Bool
+        def softwareIsInstalled(software : Software::Information) : Bool
 
-            installedOne = ISM::SoftwareInformation.new
+            installedOne = Software::Information.new
 
             if File.exists?(software.installedFilePath)
-                installedOne = ISM::SoftwareInformation.loadConfiguration(software.installedFilePath)
+                installedOne = Software::Information.loadConfiguration(software.installedFilePath)
             end
 
             alreadyInstalled = installedOne.isValid
@@ -888,7 +888,7 @@ module ISM
                                 exception: exception)
         end
 
-        def softwaresAreCodependent(software1 : ISM::SoftwareInformation, software2 : ISM::SoftwareInformation) : Bool
+        def softwaresAreCodependent(software1 : Software::Information, software2 : Software::Information) : Bool
             return software1.allowCodependencies.includes?(software2.fullName) && software2.allowCodependencies.includes?(software1.fullName) && !software1.passEnabled && !software2.passEnabled
 
             rescue exception
@@ -899,7 +899,7 @@ module ISM
                                 exception: exception)
         end
 
-        def getSoftwareStatus(software : ISM::SoftwareInformation) : Symbol
+        def getSoftwareStatus(software : Software::Information) : Symbol
             installedSoftware = loadInstalledSoftware(software.port,software.name,software.version)
 
             if !softwareIsInstalled(software)
@@ -963,10 +963,10 @@ module ISM
                                 exception: exception)
         end
 
-        def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false, searchComponentsOnly = false) : ISM::SoftwareInformation
+        def getSoftwareInformation(userEntry : String, allowSearchByNameOnly = false, searchComponentsOnly = false) : Software::Information
             entry = String.new
             matches = Array(String).new
-            result = ISM::SoftwareInformation.new
+            result = Software::Information.new
 
             if allowSearchByNameOnly
 
@@ -1053,7 +1053,7 @@ module ISM
                                 exception: exception)
         end
 
-        def softwareIsGreatestVersion(information : ISM::SoftwareInformation)
+        def softwareIsGreatestVersion(information : Software::Information)
             @softwares.each do |availableSoftware|
                 software = availableSoftware.greatestVersion
 
@@ -1155,7 +1155,7 @@ module ISM
             puts help
         end
 
-        def printInstallerImplementationErrorNotification(software : ISM::SoftwareInformation, error : ISM::TaskBuildingProcessError)
+        def printInstallerImplementationErrorNotification(software : Software::Information, error : ISM::TaskBuildingProcessError)
             limit = Default::InstallerImplementationErrorTitle.size
             errorText1 = "#{Default::InstallerImplementationErrorText1.colorize(Colorize::ColorRGB.new(255,100,100))}"
             softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
@@ -1233,7 +1233,7 @@ module ISM
             puts "#{message.colorize(:magenta).back(Colorize::ColorRGB.new(80, 80, 80))}"
         end
 
-        def notifyOfDownload(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfDownload(softwareInformation : Software::Information)
             printProcessNotification(Default::DownloadText+"#{softwareInformation.name.colorize(:green)}")
         end
 
@@ -1265,7 +1265,7 @@ module ISM
             printProcessNotification(Default::DownloadAdditionsText)
         end
 
-        def notifyOfCheck(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfCheck(softwareInformation : Software::Information)
             printProcessNotification(Default::CheckText+"#{softwareInformation.name.colorize(:green)}")
         end
 
@@ -1289,7 +1289,7 @@ module ISM
             printProcessNotification(Default::CheckAdditionsText)
         end
 
-        def notifyOfExtract(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfExtract(softwareInformation : Software::Information)
             printProcessNotification(Default::ExtractText+"#{softwareInformation.name.colorize(:green)}")
         end
 
@@ -1297,7 +1297,7 @@ module ISM
             printProcessNotification(Default::ExtractAdditionsText)
         end
 
-        def notifyOfPatch(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfPatch(softwareInformation : Software::Information)
             printProcessNotification(Default::PatchText+"#{softwareInformation.name.colorize(:green)}")
         end
 
@@ -1305,19 +1305,19 @@ module ISM
             printSubProcessNotification(Default::LocalPatchText+"#{patchName.colorize(:yellow)}")
         end
 
-        def notifyOfPrepare(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfPrepare(softwareInformation : Software::Information)
             printProcessNotification(Default::PrepareText+"#{softwareInformation.name.colorize(:green)}")
         end
 
-        def notifyOfConfigure(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfConfigure(softwareInformation : Software::Information)
             printProcessNotification(Default::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
         end
 
-        def notifyOfBuild(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfBuild(softwareInformation : Software::Information)
             printProcessNotification(Default::BuildText+"#{softwareInformation.name.colorize(:green)}")
         end
 
-        def notifyOfPrepareInstallation(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfPrepareInstallation(softwareInformation : Software::Information)
             printProcessNotification(Default::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
         end
 
@@ -1333,11 +1333,11 @@ module ISM
             printSubProcessNotification(Default::UpdateSystemCacheText)
         end
 
-        def notifyOfInstall(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfInstall(softwareInformation : Software::Information)
             printProcessNotification(Default::InstallText+"#{softwareInformation.name.colorize(:green)}")
         end
 
-        def notifyOfUpdateKernelOptionsDatabase(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfUpdateKernelOptionsDatabase(softwareInformation : Software::Information)
             printProcessNotification(Default::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
         end
 
@@ -1347,11 +1347,11 @@ module ISM
             printProcessNotification(Default::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
         end
 
-        def notifyOfClean(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfClean(softwareInformation : Software::Information)
             printProcessNotification(Default::CleanText+"#{softwareInformation.name.colorize(:green)}")
         end
 
-        def notifyOfUninstall(softwareInformation : ISM::SoftwareInformation)
+        def notifyOfUninstall(softwareInformation : Software::Information)
             printProcessNotification(Default::UninstallText+"#{softwareInformation.name.colorize(:green)}")
         end
 
@@ -1462,7 +1462,7 @@ module ISM
                                         error)
         end
 
-        def notifyOfUpdateKernelOptionsDatabaseError(software : ISM::SoftwareInformation, error = nil)
+        def notifyOfUpdateKernelOptionsDatabaseError(software : Software::Information, error = nil)
             printErrorNotification(Default::ErrorUpdateKernelOptionsDatabaseText+software.versionName, error)
         end
 
@@ -1602,8 +1602,8 @@ module ISM
                                 exception: exception)
         end
 
-        def getRequestedSoftwares(list : Array(String), allowSearchByNameOnly = false) : Array(ISM::SoftwareInformation)
-            softwaresList = Array(ISM::SoftwareInformation).new
+        def getRequestedSoftwares(list : Array(String), allowSearchByNameOnly = false) : Array(Software::Information)
+            softwaresList = Array(Software::Information).new
 
             list.each do |entry|
                 software = getSoftwareInformation(entry, allowSearchByNameOnly)
@@ -1663,7 +1663,7 @@ module ISM
             targetStartingLine = 0
             realLineNumber = 0
             targetPath = String.new
-            software = ISM::SoftwareInformation.new
+            software = Software::Information.new
 
             codeLines = taskCodeLines[0..taskError.line-1]
 
@@ -1679,7 +1679,7 @@ module ISM
                     realLineNumber = taskError.line-targetStartingLine
                     targetPath = line[line.index("/")..-1]
 
-                    software = ISM::SoftwareInformation.loadConfiguration(targetPath)
+                    software = Software::Information.loadConfiguration(targetPath)
                     break
                 end
 
@@ -1739,14 +1739,14 @@ module ISM
             puts
         end
 
-        def showUnconfiguredSystemComponentMessage(component : ISM::SoftwareInformation)
+        def showUnconfiguredSystemComponentMessage(component : Software::Information)
             componentText = "#{("@"+component.port).colorize(:red)}:#{component.name.colorize(:green)}"
 
             puts
             puts "#{Default::UnconfiguredSystemComponentText1.colorize(:yellow)}#{componentText}#{Default::UnconfiguredSystemComponentText2.colorize(:yellow)}"
         end
 
-        def showUnavailableDependencyMessage(software : ISM::SoftwareInformation, dependency : ISM::SoftwareInformation, allowTitle = true)
+        def showUnavailableDependencyMessage(software : Software::Information, dependency : Software::Information, allowTitle = true)
             puts
 
             if allowTitle
@@ -1797,8 +1797,8 @@ module ISM
             puts "#{Default::AmbiguousSearchText.colorize(:green)} #{names}"
         end
 
-        def showInextricableDependenciesMessage(treeArrays : Array(Array(ISM::SoftwareInformation)))
-            dependencyChains = Array(Array(ISM::SoftwareInformation)).new
+        def showInextricableDependenciesMessage(treeArrays : Array(Array(Software::Information)))
+            dependencyChains = Array(Array(Software::Information)).new
 
                 #TO DO ?
                 dependencyChains = treeArrays
@@ -1879,7 +1879,7 @@ module ISM
             print "#{Default::CalculationTitle}"
         end
 
-        def showSoftwares(neededSoftwares : Array(ISM::SoftwareInformation), mode = :installation)
+        def showSoftwares(neededSoftwares : Array(Software::Information), mode = :installation)
             checkedSoftwares = Array(String).new
 
             puts "\n"
@@ -2139,7 +2139,7 @@ module ISM
                                 exception: exception)
         end
 
-        def getRequiredTargets(neededSoftwares : Array(ISM::SoftwareInformation)) : String
+        def getRequiredTargets(neededSoftwares : Array(Software::Information)) : String
             requiredTargetArrayResult = "targets = ["
             requiredTargetOptionsResult = "\n"
             requiredTargetClassResult = String.new
@@ -2239,7 +2239,7 @@ module ISM
                                 exception: exception)
         end
 
-        def startInstallationProcess(neededSoftwares : Array(ISM::SoftwareInformation))
+        def startInstallationProcess(neededSoftwares : Array(Software::Information))
             tasks = <<-CODE
                     puts
 
@@ -2518,7 +2518,7 @@ module ISM
                                 exception: exception)
         end
 
-        def runTasksFile(logEnabled = false, softwareList = Array(ISM::SoftwareInformation).new)
+        def runTasksFile(logEnabled = false, softwareList = Array(Software::Information).new)
             # We first set proper rights for the binary and task file:
             #   -owned by root (uid 0 and gid 0)
             #   -suid bit set
@@ -2576,7 +2576,7 @@ module ISM
                                 exception: exception)
         end
 
-        def startUninstallationProcess(unneededSoftwares : Array(ISM::SoftwareInformation))
+        def startUninstallationProcess(unneededSoftwares : Array(Software::Information))
             tasks = <<-CODE
                     puts "\n"
 
@@ -2685,12 +2685,12 @@ module ISM
                                 exception: exception)
         end
 
-        def getRequiredDependencies(softwares : Array(ISM::SoftwareInformation), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false, skipSystemComponents = false) : Hash(String, ISM::SoftwareInformation)
+        def getRequiredDependencies(softwares : Array(Software::Information), allowRebuild = false, allowDeepSearch = false, allowSkipUnavailable = false, skipSystemComponents = false) : Hash(String, Software::Information)
 
-            dependencyHash = Hash(String, ISM::SoftwareInformation).new
+            dependencyHash = Hash(String, Software::Information).new
             currentDependencies = softwares.map { |entry| entry.toSoftwareDependency}
-            nextDependencies = Array(ISM::SoftwareDependency).new
-            invalidDependencies = Array(ISM::SoftwareInformation).new
+            nextDependencies = Array(Software::Dependency).new
+            invalidDependencies = Array(Software::Information).new
 
             if !skipSystemComponents
                 @components.each do |component|
@@ -2721,7 +2721,7 @@ module ISM
 
                         if !dependencyInformation.isValid
 
-                            invalidDependencies.push(ISM::SoftwareInformation.new(port: dependency.port, name: dependency.name, version: dependency.requiredVersion))
+                            invalidDependencies.push(Software::Information.new(port: dependency.port, name: dependency.name, version: dependency.requiredVersion))
 
                         end
 
@@ -2785,7 +2785,7 @@ module ISM
 
                 if allowSkipUnavailable
 
-                    return Hash(String, ISM::SoftwareInformation).new
+                    return Hash(String, Software::Information).new
 
                 else
 
@@ -2809,12 +2809,12 @@ module ISM
                                 exception: exception)
         end
 
-        def getDependencyTree(software : ISM::SoftwareInformation, softwareList : Hash(String, ISM::SoftwareInformation), calculatedDependencies = Hash(String, Array(ISM::SoftwareInformation)).new) : Array(ISM::SoftwareInformation)
+        def getDependencyTree(software : Software::Information, softwareList : Hash(String, Software::Information), calculatedDependencies = Hash(String, Array(Software::Information)).new) : Array(Software::Information)
 
-            dependencies = Hash(String, ISM::SoftwareInformation).new
+            dependencies = Hash(String, Software::Information).new
 
             currentDependencies = [software.toSoftwareDependency]
-            nextDependencies = Array(ISM::SoftwareDependency).new
+            nextDependencies = Array(Software::Dependency).new
 
             loop do
 
@@ -2865,9 +2865,9 @@ module ISM
                                 exception: exception)
         end
 
-        def getDependencyTable(softwareList : Hash(String, ISM::SoftwareInformation)) : Hash(String, Array(ISM::SoftwareInformation))
+        def getDependencyTable(softwareList : Hash(String, Software::Information)) : Hash(String, Array(Software::Information))
 
-            calculatedDependencies = Hash(String, Array(ISM::SoftwareInformation)).new
+            calculatedDependencies = Hash(String, Array(Software::Information)).new
 
             softwareList.values.each do |software|
                 playCalculationAnimation
@@ -2999,7 +2999,7 @@ module ISM
                                 exception: exception)
         end
 
-        def getSortedDependencies(dependencyTable : Hash(String, Array(ISM::SoftwareInformation))) : Array(ISM::SoftwareInformation)
+        def getSortedDependencies(dependencyTable : Hash(String, Array(Software::Information))) : Array(Software::Information)
 
             result = dependencyTable.to_a.sort_by { |k, v| v.size }
 
@@ -3038,7 +3038,7 @@ module ISM
                                 exception: exception)
         end
 
-        def getNeededSoftwares : Array(ISM::SoftwareInformation)
+        def getNeededSoftwares : Array(Software::Information)
             softwareHash = getRequiredDependencies(@requestedSoftwares, allowRebuild: true)
 
             dependencyTable = getDependencyTable(softwareHash)
@@ -3053,12 +3053,12 @@ module ISM
                                 exception: exception)
         end
 
-        def getUnneededSoftwares : Array(ISM::SoftwareInformation)
+        def getUnneededSoftwares : Array(Software::Information)
             wrongArguments = Array(String).new
-            requiredSoftwares = Hash(String,ISM::SoftwareInformation).new
-            unneededSoftwares = Array(ISM::SoftwareInformation).new
+            requiredSoftwares = Hash(String,Software::Information).new
+            unneededSoftwares = Array(Software::Information).new
             softwareList = Array(String).new
-            softwareInformationList = Array(ISM::SoftwareInformation).new
+            softwareInformationList = Array(Software::Information).new
 
             #Generate a list of all favourite softwares
             @favouriteGroups.each do |group|
@@ -3119,8 +3119,8 @@ module ISM
                                 exception: exception)
         end
 
-        def getSoftwaresToUpdate : Array(ISM::SoftwareInformation)
-            softwareToUpdate = Array(ISM::SoftwareInformation).new
+        def getSoftwaresToUpdate : Array(Software::Information)
+            softwareToUpdate = Array(Software::Information).new
             skippedUpdates = false
 
             #FOR EACH INSTALLED SOFTWARE, WE CHECK IF THERE IS ANY BETTER VERSION

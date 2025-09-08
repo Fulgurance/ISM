@@ -4,9 +4,9 @@ module ISM
 
         property port : String
         property name : String
-        property versions : Array(ISM::SoftwareInformation)
+        property versions : Array(Software::Information)
 
-        def initialize(@port = String.new, @name = String.new, @versions = Array(ISM::SoftwareInformation).new)
+        def initialize(@port = String.new, @name = String.new, @versions = Array(Software::Information).new)
         end
 
         def fullName : String
@@ -98,9 +98,9 @@ module ISM
                                 exception: exception)
         end
 
-        def getVersionByCondition(condition : String, returnMaximum = true) : ISM::SoftwareInformation
+        def getVersionByCondition(condition : String, returnMaximum = true) : Software::Information
 
-            temp = Array(ISM::SoftwareInformation).new
+            temp = Array(Software::Information).new
 
             if intervalComparator(condition)
 
@@ -113,7 +113,7 @@ module ISM
                 startSemanticVersion = SemanticVersion.parse(startVersion)
                 endSemanticVersion = SemanticVersion.parse(endVersion)
 
-                firstConditionFulfilledArray = Array(ISM::SoftwareInformation).new
+                firstConditionFulfilledArray = Array(Software::Information).new
 
                 @versions.each do |entry|
 
@@ -153,12 +153,12 @@ module ISM
                 elsif lessOrEqualComparator(condition)
                     temp = @versions.select {|entry| SemanticVersion.parse(entry.version) <= semanticVersion}
                 else
-                    return ISM::SoftwareInformation.new
+                    return Software::Information.new
                 end
 
             end
 
-            return temp.empty? ? ISM::SoftwareInformation.new : (returnMaximum ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
+            return temp.empty? ? Software::Information.new : (returnMaximum ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
 
             rescue exception
                 ISM::Error.show(className: "AvailableSoftware",
@@ -168,7 +168,7 @@ module ISM
                                 exception: exception)
         end
 
-        def greatestVersion(condition=String.new) : ISM::SoftwareInformation
+        def greatestVersion(condition=String.new) : Software::Information
             if @versions.size > 0
                 if condition == "" || condition == ">=0.0.0"
                     return @versions.max_by {|entry| SemanticVersion.parse(entry.version)}
@@ -183,7 +183,7 @@ module ISM
                 end
             end
 
-            return ISM::SoftwareInformation.new
+            return Software::Information.new
 
             rescue exception
                 ISM::Error.show(className: "AvailableSoftware",
