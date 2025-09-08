@@ -301,6 +301,7 @@ module ISM
         end
 
         def start
+            loadBaseDirectories
             loadSettingsFiles
             loadSystemInformationFile
             loadKernelOptionDatabase
