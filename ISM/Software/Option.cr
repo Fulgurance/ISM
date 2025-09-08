@@ -23,10 +23,6 @@ module ISM
 
             def == (other : Software::Option) : Bool
                 return @name == other.name && @active == other.active
-
-                rescue error
-                    Ism.printSystemCallErrorNotification(error)
-                    Ism.exitProgram
             end
 
             def self.isPassName(optionName : String) : Bool

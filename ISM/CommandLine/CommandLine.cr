@@ -637,9 +637,12 @@ module ISM
                 return Software::Information.new
             end
 
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "selectedKernel",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
         end
 
         def kernelIsSelected
@@ -647,7 +650,7 @@ module ISM
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
-                                functionName: "selectedKernel",
+                                functionName: "kernelIsSelected",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
@@ -1195,30 +1198,6 @@ module ISM
             printErrorNotification(Default::ErrorGetFileContentText+filePath, error)
         end
 
-        def printSystemCallErrorNotification(error : Exception)
-            limit = Default::InternalErrorTitle.size
-
-            separatorText = String.new
-
-            (0..limit).each do |index|
-                separatorText += "="
-            end
-
-            fullLog = (error.backtrace? ? error.backtrace.join("\n") : error.message)
-
-            title = "#{Default::InternalErrorTitle.colorize(:red)}"
-            separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{fullLog.colorize(Colorize::ColorRGB.new(255,100,100))}"
-            help = "\n#{Default::SystemCallErrorNotificationHelp.colorize(:red)}"
-
-            puts
-            puts separatorText
-            puts title
-            puts separatorText
-            puts errorText
-            puts help
-        end
-
         def printInformationNotificationTitle(name : String, version : String)
             limit = name.size+version.size+2
             text = "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
@@ -1482,10 +1461,6 @@ module ISM
             @calculationStartingTime = Time.monotonic
             @frameIndex = 0
             @reverseAnimation = false
-
-            rescue error
-                printSystemCallErrorNotification(error)
-                exitProgram
         end
 
         def playCalculationAnimation(@text = Default::CalculationWaitingText)
@@ -2617,6 +2592,7 @@ module ISM
                         name = information.name
                         version = information.version
                         versionName = information.versionName
+                        coloredFullVersionName = \"#\{information.fullName.colorize(:magenta)} /#\{version.colorize(Colorize::ColorRGB.new(255,100,100))}/\"
 
                         #START UNINSTALLATION PROCESS
 
@@ -2627,8 +2603,11 @@ module ISM
                         begin
                             target.uninstall
                         rescue error
-                            Ism.printSystemCallErrorNotification(error)
-                            Ism.exitProgram
+                            ISM::Error.show(className: "Software",
+                                            functionName: "uninstall",
+                                            errorTitle: "Uninstallation task failed",
+                                            error: "The #\{"uninstall".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
+                                            exception: exception)
                         end
 
                         Ism.showEndSoftwareUninstallingMessage(index, limit, port, name, version)
