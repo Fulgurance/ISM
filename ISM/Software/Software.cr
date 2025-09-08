@@ -608,6 +608,7 @@ module ISM
             downloaded = false
             error = String.new
             startingTime = Time.monotonic
+            previousTextSize = 0
 
             until downloaded
                 HTTP::Client.get(link) do |response|
@@ -658,7 +659,18 @@ module ISM
                                     text = "\t#{"| ".colorize(:green)} #{colorizedFileFullName} [#{"0%".colorize(:green)}] #{"{".colorize(:green)}#{average.humanize_bytes}/s#{"}".colorize(:green)} (#{colorizedLink})"
                                 end
 
-                                print text+"\r"
+                                padding = String.new
+
+                                if previousTextSize - text.size > 0
+                                    (1..(previousTextSize - text.size)).each do
+                                        padding += " "
+                                    end
+                                end
+
+                                print "#{text}#{padding}\r"
+
+                                previousTextSize = text.size
+
                             end
                         end
 
