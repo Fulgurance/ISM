@@ -43,12 +43,12 @@ module ISM
                 #Return the matching descriptor
                 @descriptors.each do |entry|
                     #Special entry for sources path
-                    if entry.target == SoftwareSecurityDescriptor::Default::SourcesPathEntryName && path == "/#{ISM::Path::SourcesDirectory}"[0..-2]
+                    if entry.target == Software::SecurityDescriptor::Default::SourcesPathEntryName && path == "/#{ISM::Path::SourcesDirectory}"[0..-2]
                         return entry
                     end
 
                     #Special entry for tools path
-                    if entry.target == SoftwareSecurityDescriptor::Default::ToolsPathEntryName && path == "/#{ISM::Path::ToolsDirectory}"[0..-2]
+                    if entry.target == Software::SecurityDescriptor::Default::ToolsPathEntryName && path == "/#{ISM::Path::ToolsDirectory}"[0..-2]
                         return entry
                     end
 
