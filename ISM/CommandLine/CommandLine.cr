@@ -328,9 +328,24 @@ module ISM
                     Dir.mkdir_p(path)
                 end
 
-                changeFileOwner(path: path,
-                                user: Default::Name,
-                                group: Default::Name)
+                #Special case: if we are doing cross compilation, we need to set all files and dirs as normal user/group
+                if !targetSystemInformation.handleChroot && @settings.rootPath != "/"
+                    splitPath = path.gsub(@settings.rootPath,"").split("/").reject { |entry| entry.empty?}
+
+                    path = @settings.rootPath
+
+                    splitPath.each do |dir|
+                        path += "/#{dir}"
+
+                        changeFileOwner(path: path,
+                                        user: Default::Name,
+                                        group: Default::Name)
+                    end
+                else
+                    changeFileOwner(path: path,
+                                    user: Default::Name,
+                                    group: Default::Name)
+                end
             }
 
             rescue exception
