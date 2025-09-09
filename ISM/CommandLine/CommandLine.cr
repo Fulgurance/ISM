@@ -332,12 +332,12 @@ module ISM
                 if !targetSystemInformation.handleChroot && @settings.rootPath != "/"
                     splitPath = path.gsub(@settings.rootPath,"").split("/").reject { |entry| entry.empty?}
 
-                    path = @settings.rootPath
+                    targetedPath = @settings.rootPath
 
                     splitPath.each do |dir|
-                        path += "/#{dir}"
+                        targetedPath += "/#{dir}"
 
-                        changeFileOwner(path: path,
+                        changeFileOwner(path: targetedPath,
                                         user: Default::Name,
                                         group: Default::Name)
                     end
