@@ -2,14 +2,6 @@ module ISM
 
     class Port
 
-        module Default
-
-            SynchronizeTextError1 = "The port "
-            SynchronizeTextError2 = " located at "
-            SynchronizeTextError3 = " does not exist anymore. #{CommandLine::Default::Name} deleted it."
-
-        end
-
         include JSON::Serializable
 
         property name : String
@@ -136,7 +128,7 @@ module ISM
                                 exception: exception)
         end
 
-        def open : Bool
+        def setup
             Dir.mkdir_p(directoryPath)
 
             Process.run("git init",
@@ -146,6 +138,10 @@ module ISM
             Process.run("git remote add origin #{@url}",
                         shell: true,
                         chdir: directoryPath)
+        end
+
+        def open : Bool
+            setup
 
             if isAvailable
                 writeConfiguration
@@ -164,23 +160,13 @@ module ISM
         end
 
         def synchronize : Process
-            Process.new("git reset --hard",
-                        shell: true,
-                        chdir: directoryPath)
+            FileUtils.rm_r(directoryPath)
 
-            if isAvailable
-                return Process.new( "git pull origin master",
+            setup
+
+            return Process.new( "git pull --depth 1 origin master",
                                     shell: true,
                                     chdir: directoryPath)
-            else
-                Ism.printErrorNotification(Default::SynchronizeTextError1+"#{@name.colorize(:red)}"+Default::SynchronizeTextError2+"#{@url.colorize(:red)}"+Default::SynchronizeTextError3,nil)
-
-                self.class.delete(@name)
-
-                return Process.new( "true",
-                                    shell: true,
-                                    chdir: directoryPath)
-            end
 
             rescue exception
                 ISM::Error.show(className: self.class.name,
