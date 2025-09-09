@@ -2213,19 +2213,6 @@ module ISM
                                 exception: exception)
         end
 
-        def makeLogDirectory(path : String)
-            if !Dir.exists?(path)
-                Dir.mkdir_p(path)
-            end
-
-            rescue exception
-                ISM::Error.show(className: self.class.name,
-                                functionName: "makeLogDirectory",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
         def startInstallationProcess(neededSoftwares : Array(Software::Information))
             tasks = <<-CODE
                     puts
@@ -2545,7 +2532,7 @@ module ISM
 
                 logs.each_with_index do |log, index|
 
-                    makeLogDirectory("#{@settings.rootPath}#{Path::LogsDirectory}#{softwareList[index].port}")
+                    createSystemDirectory("#{@settings.rootPath}#{Path::LogsDirectory}#{softwareList[index].port}")
                     File.write("#{@settings.rootPath}#{Path::LogsDirectory}#{softwareList[index].port}/#{softwareList[index].versionName}.log", log)
 
                 end
