@@ -329,7 +329,7 @@ module ISM
                 end
 
                 #Special case: if we are doing cross compilation, we need to set all files and dirs as normal user/group
-                if !targetSystemInformation.handleChroot && @settings.rootPath != "/"
+                if File.exists?(targetSystemInformationFilePath) && !targetSystemInformation.handleChroot && @settings.rootPath != "/"
                     splitPath = path.gsub(@settings.rootPath,"").split("/").reject { |entry| entry.empty?}
 
                     targetedPath = @settings.rootPath
@@ -3243,16 +3243,20 @@ module ISM
             return "#{taskAbsoluteDirectoryPath}#{Filename::Task}"
         end
 
-        def hostSystemInformation : CommandLine::SystemInformation
-            filePath = "/#{CommandLine::SystemInformation::Default::SystemInformationFilePath}"
+        def hostSystemInformationFilePath : String
+            return "/#{CommandLine::SystemInformation::Default::SystemInformationFilePath}"
+        end
 
-            return CommandLine::SystemInformation.loadConfiguration(filePath)
+        def hostSystemInformation : CommandLine::SystemInformation
+            return CommandLine::SystemInformation.loadConfiguration(hostSystemInformationFilePath)
+        end
+
+        def targetSystemInformationFilePath : String
+            return "#{@settings.rootPath}#{CommandLine::SystemInformation::Default::SystemInformationFilePath}"
         end
 
         def targetSystemInformation : CommandLine::SystemInformation
-            filePath = "#{@settings.rootPath}#{CommandLine::SystemInformation::Default::SystemInformationFilePath}"
-
-            return CommandLine::SystemInformation.loadConfiguration(filePath)
+            return CommandLine::SystemInformation.loadConfiguration(targetSystemInformationFilePath)
         end
 
         def runTasks(   tasks : String,
