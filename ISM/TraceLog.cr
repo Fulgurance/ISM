@@ -2,25 +2,10 @@ module ISM
 
     module TraceLog
 
-        def self.logDirectoryPath
-            return "#{Ism.settings.rootPath}#{Path::LogsDirectory}"
-        end
-
-        def self.makeLogDirectory
-
-            Ism.createSystemDirectory(logDirectoryPath)
-
-            rescue exception
-                ISM::Error.show(className: self.class.name,
-                                functionName: "makeLogDirectory",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
         def self.record(accessor : String,
                         function : String,
                         message : String)
+            logDirectoryPath = "#{Ism.settings.rootPath}#{Path::LogsDirectory}"
 
             recordingTime = Time.local
 
@@ -34,8 +19,6 @@ module ISM
             date = "------------------(#{day}/#{month}/#{year} #{hour}:#{minute}:#{second})------------------"
 
             record = "\n#{date}\n#{accessor}::#{function}:\n#{message}\n"
-
-            makeLogDirectory
 
             File.write("#{logDirectoryPath}#{Filename::TraceLog}", record, mode: "a")
 

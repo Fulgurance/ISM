@@ -357,10 +357,19 @@ module ISM
         end
 
         def loadBaseDirectories
-            pathList = [@settings.rootPath+Path::RuntimeDataDirectory,
-                        @settings.rootPath+Path::TemporaryDirectory,
-                        @settings.rootPath+Path::LogsDirectory,
-                        @settings.rootPath+Path::LibraryDirectory]
+            pathList = ["#{@settings.rootPath}#{Path::RuntimeDataDirectory}",
+                        "#{@settings.rootPath}#{Path::TemporaryDirectory}",
+                        "#{@settings.rootPath}#{Path::LogsDirectory}",
+                        "#{@settings.rootPath}#{Path::LibraryDirectory}",
+                        "#{@settings.rootPath}#{Path::NeededKernelOptionsDirectory}",
+                        "#{@settings.rootPath}#{Path::KernelOptionsDirectory}",
+                        "#{@settings.rootPath}#{Path::SoftwaresDirectory}",
+                        "#{@settings.rootPath}#{Path::PortsDirectory}",
+                        "#{@settings.rootPath}#{Path::MirrorsDirectory}",
+                        "#{@settings.rootPath}#{Path::FavouriteGroupsDirectory}",
+                        "#{@settings.rootPath}#{Path::SettingsDirectory}",
+                        "#{@settings.rootPath}#{Path::SettingsDirectory}",
+                        "#{@settings.rootPath}#{Path::InstalledSoftwaresDirectory}"]
 
             systemUnlocked = false
 
@@ -383,8 +392,6 @@ module ISM
         def loadNeededKernelOptions
             path = @settings.rootPath+Path::NeededKernelOptionsDirectory
 
-            createSystemDirectory(path)
-
             neededKernelOptions = Dir.children(path)
 
             neededKernelOptions.each do |option|
@@ -403,8 +410,6 @@ module ISM
 
         def loadKernelOptionDatabase
             path = @settings.rootPath+Path::KernelOptionsDirectory
-
-            createSystemDirectory(path)
 
             availableKernels = Dir.children(path)
 
@@ -476,8 +481,6 @@ module ISM
         def loadSoftwareDatabase
             path = "#{@settings.rootPath}#{Path::SoftwaresDirectory}"
 
-            createSystemDirectory(path)
-
             portDirectories = Dir.children(path)
 
             portDirectories.each do |portDirectory|
@@ -515,8 +518,6 @@ module ISM
         def loadPortsDatabase
             path = "#{@settings.rootPath}#{Path::PortsDirectory}"
 
-            createSystemDirectory(path)
-
             portsFiles = Dir.children(path)
 
             portsFiles.each do |portFile|
@@ -534,8 +535,6 @@ module ISM
 
         def loadMirrorsDatabase
             path = "#{@settings.rootPath}#{Path::MirrorsDirectory}"
-
-            createSystemDirectory(path)
 
             mirrorsFiles = Dir.children(path)
 
@@ -559,8 +558,6 @@ module ISM
         def loadFavouriteGroupsDatabase
             path = "#{@settings.rootPath}#{Path::FavouriteGroupsDirectory}"
 
-            createSystemDirectory(path)
-
             favouriteGroupsFiles = Dir.children(path)
 
             if favouriteGroupsFiles.size == 0
@@ -583,8 +580,6 @@ module ISM
         def loadSystemInformationFile
             path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
 
-            createSystemDirectory(path)
-
             @systemInformation = CommandLine::SystemInformation.loadConfiguration
 
             rescue exception
@@ -597,8 +592,6 @@ module ISM
 
         def loadSettingsFiles
             path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
-
-            createSystemDirectory(path)
 
             @settings = CommandLine::Settings.loadConfiguration
             @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration
@@ -633,8 +626,6 @@ module ISM
 
         def loadInstalledSoftwareDatabase
             path = "#{@settings.rootPath}#{Path::InstalledSoftwaresDirectory}"
-
-            createSystemDirectory(path)
 
             portDirectories = Dir.children(path)
 
