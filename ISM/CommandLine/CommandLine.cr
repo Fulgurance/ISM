@@ -368,6 +368,7 @@ module ISM
                 if !Dir.exists?(path)
                     if !systemUnlocked
                         unlockSystemAccess
+                        systemUnlocked = true
                     end
 
                     createSystemDirectory(path)
