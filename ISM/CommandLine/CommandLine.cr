@@ -357,10 +357,26 @@ module ISM
         end
 
         def loadBaseDirectories
-            createSystemDirectory(@settings.rootPath+Path::RuntimeDataDirectory)
-            createSystemDirectory(@settings.rootPath+Path::TemporaryDirectory)
-            createSystemDirectory(@settings.rootPath+Path::LogsDirectory)
-            createSystemDirectory(@settings.rootPath+Path::LibraryDirectory)
+            pathList = [@settings.rootPath+Path::RuntimeDataDirectory,
+                        @settings.rootPath+Path::TemporaryDirectory,
+                        @settings.rootPath+Path::LogsDirectory,
+                        @settings.rootPath+Path::LibraryDirectory]
+
+            systemUnlocked = false
+
+            if pathList.each do |path|
+                if !Dir.exists?(path)
+                    if !systemUnlocked
+                        unlockSystemAccess
+                    end
+
+                    createSystemDirectory(path)
+                end
+            end
+
+            if systemUnlocked
+                lockSystemAccess
+            end
         end
 
         def loadNeededKernelOptions
