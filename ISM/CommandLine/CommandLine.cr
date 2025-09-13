@@ -2491,7 +2491,7 @@ module ISM
 
             processResult.rewind
 
-            if processResult.to_s != ""
+            if processResult.to_s != "" && processResult.starts_with?("[")
                 taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
 
                 showTaskCompilationFailedMessage
