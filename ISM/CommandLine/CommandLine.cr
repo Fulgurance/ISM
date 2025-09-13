@@ -364,7 +364,7 @@ module ISM
 
             systemUnlocked = false
 
-            if pathList.each do |path|
+            pathList.each do |path|
                 if !Dir.exists?(path)
                     if !systemUnlocked
                         unlockSystemAccess
