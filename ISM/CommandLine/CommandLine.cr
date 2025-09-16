@@ -373,6 +373,21 @@ module ISM
 
             systemUnlocked = false
 
+            #We must first load the settings before anything else
+            settingsPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
+
+            if !Dir.exists?(path)
+                if !systemUnlocked
+                    unlockSystemAccess
+                    systemUnlocked = true
+                end
+
+                createSystemDirectory(settingsPath)
+            end
+
+            @settings = CommandLine::Settings.loadConfiguration
+            @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration
+
             pathList.each do |path|
                 if !Dir.exists?(path)
                     if !systemUnlocked
@@ -585,22 +600,6 @@ module ISM
             rescue exception
                 ISM::Error.show(className: self.class.name,
                                 functionName: "loadSystemInformationFile",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
-        def loadSettingsFiles
-            path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
-
-            createSystemDirectory(path)
-
-            @settings = CommandLine::Settings.loadConfiguration
-            @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration
-
-            rescue exception
-                ISM::Error.show(className: self.class.name,
-                                functionName: "loadSettingsFiles",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
@@ -2254,7 +2253,7 @@ module ISM
 
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
-                    Ism.loadSettingsFiles
+                    Ism.loadBaseDirectories
                     Ism.loadSoftwareDatabase
                     Ism.requestedSoftwares = requestedSoftwareFullVersionNames.map { |entry| Ism.getSoftwareInformation(entry)}
 
@@ -2590,8 +2589,8 @@ module ISM
 
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
+                    Ism.loadBaseDirectories
                     Ism.loadSystemInformationFile
-                    Ism.loadSettingsFiles
                     Ism.loadSoftwareDatabase
                     Ism.loadInstalledSoftwareDatabase
 
