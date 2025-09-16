@@ -375,7 +375,7 @@ module ISM
             #We must first load the settings before anything else
             settingsPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
 
-            if !Dir.exists?(path)
+            if !Dir.exists?(settingsPath)
                 if !systemUnlocked
                     unlockSystemAccess
                     systemUnlocked = true
