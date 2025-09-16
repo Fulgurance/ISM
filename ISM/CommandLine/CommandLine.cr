@@ -301,8 +301,8 @@ module ISM
         end
 
         def start
-            loadBaseDirectories
             loadSettingsFiles
+            loadBaseDirectories
             loadSystemInformationFile
             loadKernelOptionDatabase
             loadNeededKernelOptions
@@ -592,6 +592,8 @@ module ISM
 
         def loadSettingsFiles
             path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
+
+            createSystemDirectory(path)
 
             @settings = CommandLine::Settings.loadConfiguration
             @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration

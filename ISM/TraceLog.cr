@@ -7,6 +7,8 @@ module ISM
                         message : String)
             logDirectoryPath = "#{Ism.settings.rootPath}#{Path::LogsDirectory}"
 
+            Ism.createSystemDirectory(logDirectoryPath)
+
             recordingTime = Time.local
 
             day = recordingTime.day
