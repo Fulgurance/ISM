@@ -366,8 +366,6 @@ module ISM
                         "#{@settings.rootPath}#{Path::PortsDirectory}",
                         "#{@settings.rootPath}#{Path::MirrorsDirectory}",
                         "#{@settings.rootPath}#{Path::FavouriteGroupsDirectory}",
-                        "#{@settings.rootPath}#{Path::SettingsDirectory}",
-                        "#{@settings.rootPath}#{Path::SettingsDirectory}",
                         "#{@settings.rootPath}#{Path::InstalledSoftwaresDirectory}"]
 
             systemUnlocked = false
