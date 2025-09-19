@@ -302,7 +302,6 @@ module ISM
 
         def start
             loadBaseDirectories
-            loadSystemInformationFile
             loadKernelOptionDatabase
             loadNeededKernelOptions
             loadSoftwareDatabase
@@ -368,22 +367,19 @@ module ISM
                         "#{@settings.rootPath}#{Path::FavouriteGroupsDirectory}",
                         "#{@settings.rootPath}#{Path::InstalledSoftwaresDirectory}"]
 
-            systemUnlocked = false
-
-            #We must first load the settings before anything else
+            #We must first load the settings and system information before anything else
+            #TO DO: Check why there is a bug when checking if system is locked (Maybe because it use rootPath ?)
             settingsPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
+            systemInformationPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
 
-            if !Dir.exists?(settingsPath)
-                if !systemUnlocked
-                    unlockSystemAccess
-                    systemUnlocked = true
-                end
-
-                createSystemDirectory(settingsPath)
-            end
+            createSystemDirectory(settingsPath)
+            createSystemDirectory(systemInformationPath)
 
             @settings = CommandLine::Settings.loadConfiguration
             @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration
+            @systemInformation = CommandLine::SystemInformation.loadConfiguration
+
+            systemUnlocked = false
 
             pathList.each do |path|
                 if !Dir.exists?(path)
@@ -584,19 +580,6 @@ module ISM
             rescue exception
                 ISM::Error.show(className: self.class.name,
                                 functionName: "loadFavouriteGroupsDatabase",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
-        def loadSystemInformationFile
-            path = "#{@settings.rootPath}#{Path::SettingsDirectory}"
-
-            @systemInformation = CommandLine::SystemInformation.loadConfiguration
-
-            rescue exception
-                ISM::Error.show(className: self.class.name,
-                                functionName: "loadSystemInformationFile",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)

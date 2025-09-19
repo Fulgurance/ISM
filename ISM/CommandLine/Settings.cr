@@ -893,6 +893,8 @@ module ISM
             def setRootPath(@rootPath)
                 writeSystemConfiguration
 
+                Ism.loadBaseDirectories
+
                 rescue exception
                     ISM::Error.show(className: self.class.name,
                                     functionName: "setRootPath",
