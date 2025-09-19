@@ -301,6 +301,8 @@ module ISM
         end
 
         def start
+            loadSettingsFiles
+            loadSystemInformationFile
             loadBaseDirectories
             loadKernelOptionDatabase
             loadNeededKernelOptions
@@ -354,9 +356,39 @@ module ISM
                                 exception: exception)
         end
 
+        def loadSettingsFiles
+            settingsPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
+
+            createSystemDirectory(settingsPath)
+
+            @settings = CommandLine::Settings.loadConfiguration
+            @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration
+
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "loadSettingsFiles",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def loadSystemInformationFile
+            systemInformationPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
+
+            createSystemDirectory(systemInformationPath)
+
+            @systemInformation = CommandLine::SystemInformation.loadConfiguration
+
+            rescue exception
+                ISM::Error.show(className: self.class.name,
+                                functionName: "loadSystemInformationFile",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
         def loadBaseDirectories
-            pathList = ["#{@settings.rootPath}#{Path::RuntimeDataDirectory}",
-                        "#{@settings.rootPath}#{Path::TemporaryDirectory}",
+            pathList = ["#{@settings.rootPath}#{Path::TemporaryDirectory}",
                         "#{@settings.rootPath}#{Path::LogsDirectory}",
                         "#{@settings.rootPath}#{Path::LibraryDirectory}",
                         "#{@settings.rootPath}#{Path::NeededKernelOptionsDirectory}",
@@ -366,17 +398,6 @@ module ISM
                         "#{@settings.rootPath}#{Path::MirrorsDirectory}",
                         "#{@settings.rootPath}#{Path::FavouriteGroupsDirectory}",
                         "#{@settings.rootPath}#{Path::InstalledSoftwaresDirectory}"]
-
-            #We must first load the settings and system information before anything else
-            settingsPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
-            systemInformationPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
-
-            createSystemDirectory(settingsPath)
-            createSystemDirectory(systemInformationPath)
-
-            @settings = CommandLine::Settings.loadConfiguration
-            @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration
-            @systemInformation = CommandLine::SystemInformation.loadConfiguration
 
             pathList.each do |path|
                 if !Dir.exists?(path)
