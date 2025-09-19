@@ -368,7 +368,6 @@ module ISM
                         "#{@settings.rootPath}#{Path::InstalledSoftwaresDirectory}"]
 
             #We must first load the settings and system information before anything else
-            #TO DO: Check why there is a bug when checking if system is locked (Maybe because it use rootPath ?)
             settingsPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
             systemInformationPath = "#{@settings.rootPath}#{Path::SettingsDirectory}"
 
@@ -379,21 +378,10 @@ module ISM
             @mirrorsSettings = CommandLine::MirrorsSettings.loadConfiguration
             @systemInformation = CommandLine::SystemInformation.loadConfiguration
 
-            systemUnlocked = false
-
             pathList.each do |path|
                 if !Dir.exists?(path)
-                    if !systemUnlocked
-                        unlockSystemAccess
-                        systemUnlocked = true
-                    end
-
                     createSystemDirectory(path)
                 end
-            end
-
-            if systemUnlocked
-                lockSystemAccess
             end
         end
 
