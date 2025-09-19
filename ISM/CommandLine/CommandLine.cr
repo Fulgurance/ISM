@@ -390,7 +390,6 @@ module ISM
         def loadBaseDirectories
             pathList = ["#{@settings.rootPath}#{Path::TemporaryDirectory}",
                         "#{@settings.rootPath}#{Path::LogsDirectory}",
-                        "#{@settings.rootPath}#{Path::LibraryDirectory}",
                         "#{@settings.rootPath}#{Path::NeededKernelOptionsDirectory}",
                         "#{@settings.rootPath}#{Path::KernelOptionsDirectory}",
                         "#{@settings.rootPath}#{Path::SoftwaresDirectory}",
