@@ -2241,6 +2241,7 @@ module ISM
 
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
+                    Ism.loadSettingsFiles
                     Ism.loadBaseDirectories
                     Ism.loadSoftwareDatabase
                     Ism.requestedSoftwares = requestedSoftwareFullVersionNames.map { |entry| Ism.getSoftwareInformation(entry)}
@@ -2577,6 +2578,7 @@ module ISM
 
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
+                    Ism.loadSettingsFiles
                     Ism.loadBaseDirectories
                     Ism.loadSystemInformationFile
                     Ism.loadSoftwareDatabase
