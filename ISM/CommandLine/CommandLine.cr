@@ -329,7 +329,7 @@ module ISM
                 end
 
                 #Special case: if we are doing cross compilation, we need to set all files and dirs as normal user/group
-                if File.exists?(targetSystemInformationFilePath) && !targetSystemInformation.handleChroot && @settings.rootPath != "/"
+                if File.exists?(targetSystemInformationFilePath) && !targetSystemInformation.handleChroot && @settings.rootPath != "/" || !File.exists?(targetSystemInformationFilePath) && @settings.rootPath != "/"
                     splitPath = path.gsub(@settings.rootPath,"").split("/").reject { |entry| entry.empty?}
 
                     targetedPath = @settings.rootPath
