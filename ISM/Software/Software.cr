@@ -1903,7 +1903,8 @@ module ISM
         def runGtkUpdateIconCacheCommand(arguments = String.new)
             requestedCommands = "gtk-update-icon-cache #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: self.class.name,
@@ -1916,7 +1917,8 @@ module ISM
         def runUpdateDesktopDatabaseCommand(arguments = String.new)
             requestedCommands = "update-desktop-database #{arguments}"
 
-            process = Ism.runSystemCommand(requestedCommands)
+            process = Ism.runSystemCommand( command: requestedCommands,
+                                            asRoot: true)
 
             if !process.success?
                 ISM::Error.show(className: self.class.name,
