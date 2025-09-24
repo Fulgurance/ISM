@@ -438,6 +438,9 @@ module ISM
             end
 
             def writeSystemConfiguration
+                #We safely check first if a configuration exist already in the chroot, if not the function generate one
+                chrootConfiguration = self.class.loadConfiguration(@rootPath+Default::SettingsFilePath)
+
                 self.class.writeConfiguration(  #File path
                                                 self.class.filePath,
 
@@ -475,30 +478,30 @@ module ISM
                                                 @systemVariantId,
 
                                                 #Chroot related parameters
-                                                @chrootTargetArchitecture,
-                                                @chrootTargetVendor,
-                                                @chrootTargetOs,
-                                                @chrootTargetAbi,
-                                                @chrootTarget,
-                                                @chrootMakeOptions,
-                                                @chrootBuildOptions,
-                                                @chrootName,
-                                                @chrootFullName,
-                                                @chrootId,
-                                                @chrootRelease,
-                                                @chrootCodeName,
-                                                @chrootDescription,
-                                                @chrootVersion,
-                                                @chrootVersionId,
-                                                @chrootAnsiColor,
-                                                @chrootCpeName,
-                                                @chrootHomeUrl,
-                                                @chrootSupportUrl,
-                                                @chrootBugReportUrl,
-                                                @chrootPrivacyPolicyUrl,
-                                                @chrootBuildId,
-                                                @chrootVariant,
-                                                @chrootVariantId)
+                                                chrootConfiguration.systemTargetArchitecture,
+                                                chrootConfiguration.systemTargetVendor,
+                                                chrootConfiguration.systemTargetOs,
+                                                chrootConfiguration.systemTargetAbi,
+                                                chrootConfiguration.systemTarget,
+                                                chrootConfiguration.systemMakeOptions,
+                                                chrootConfiguration.systemBuildOptions,
+                                                chrootConfiguration.systemName,
+                                                chrootConfiguration.systemFullName,
+                                                chrootConfiguration.systemId,
+                                                chrootConfiguration.systemRelease,
+                                                chrootConfiguration.systemCodeName,
+                                                chrootConfiguration.systemDescription,
+                                                chrootConfiguration.systemVersion,
+                                                chrootConfiguration.systemVersionId,
+                                                chrootConfiguration.systemAnsiColor,
+                                                chrootConfiguration.systemCpeName,
+                                                chrootConfiguration.systemHomeUrl,
+                                                chrootConfiguration.systemSupportUrl,
+                                                chrootConfiguration.systemBugReportUrl,
+                                                chrootConfiguration.systemPrivacyPolicyUrl,
+                                                chrootConfiguration.systemBuildId,
+                                                chrootConfiguration.systemVariant,
+                                                chrootConfiguration.systemVariantId)
 
                 if @rootPath != "/"
                     writeChrootConfiguration
