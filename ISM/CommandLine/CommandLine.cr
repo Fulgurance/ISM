@@ -1084,7 +1084,7 @@ module ISM
             @softwares.each do |availableSoftware|
                 software = availableSoftware.greatestVersion
 
-                if information.fullName == software.fullName && information.version >= software.version
+                if information.fullName == software.fullName && SemanticVersion.parse(information.version) >= SemanticVersion.parse(software.version)
                     return true
                 end
             end
