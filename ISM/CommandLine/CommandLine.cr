@@ -1001,13 +1001,13 @@ module ISM
                     #For now, by default, we can search only component by fullName or name, not by fullVersionName
                     @components.each do |component|
                         if component.name.downcase == userEntry.downcase
-                            matches.push(component.name)
+                            matches.push(component.fullName)
                         end
                     end
 
                 else
 
-                    #Check first if the user entry if by name only or not, and if it is valid
+                    #Check first if the user entry if by name only or version name, and if it is valid
                     @softwares.each do |availableSoftware|
 
                         #Check if the user request a specific version or not
@@ -1042,7 +1042,7 @@ module ISM
 
             if searchComponentsOnly
                 @components.each do |component|
-                    if component.fullVersionName.downcase == entry.downcase
+                    if component.fullName.downcase == entry.downcase
 
                         return loadSoftware(component.port, component.name, component.version)
 
