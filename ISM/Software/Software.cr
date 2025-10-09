@@ -2333,8 +2333,8 @@ module ISM
             parenthesisArray = conditions.scan(/(!?\(.*?\))/)
 
             parenthesisArray.each do |old|
-                new = old.to_s.gsub(" && ","&&")
-                new = new.gsub(" || ","||")
+                new = old.to_s.gsub(/\s+\&\&\s+/,"&&")
+                new = new.gsub(/\s+\|\&|s+/,"||")
 
                 conditions = conditions.gsub(old.to_s,new)
             end
