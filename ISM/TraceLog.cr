@@ -25,7 +25,7 @@ module ISM
             File.write("#{logDirectoryPath}#{Filename::TraceLog}", record, mode: "a")
 
             rescue exception
-                ISM::Error.show(className: self.class.name,
+                ISM::Error.show(className: "TraceLog",
                                 functionName: "record",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",

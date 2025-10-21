@@ -32,7 +32,7 @@ module ISM
                 return String.new
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Dependency",
                                     functionName: "getEnabledPass",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -49,7 +49,7 @@ module ISM
                 return false
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Dependency",
                                     functionName: "passEnabled",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -104,7 +104,7 @@ module ISM
                 return dependencyInformation
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Dependency",
                                     functionName: "information",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -119,7 +119,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Dependency",
                                     functionName: "installedFiles",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
