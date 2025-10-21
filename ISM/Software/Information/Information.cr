@@ -17,7 +17,7 @@ module ISM
 
             def_clone
 
-            include JSON::Serializable
+            #include JSON::Serializable
 
             property port : String
             property name : String
@@ -51,15 +51,7 @@ module ISM
             end
 
             def self.loadConfiguration(path : String)
-                begin
-                    return from_json(File.read(path))
-                rescue error : JSON::ParseException
-                    puts    "#{Default::FileLoadProcessSyntaxErrorText1 +
-                            path +
-                            Default::FileLoadProcessSyntaxErrorText2 +
-                            error.line_number.to_s}".colorize(:yellow)
-                    return self.new
-                end
+                return Parser.fromInformationFile(path)
             end
 
             def writeConfiguration(path : String)
@@ -69,9 +61,7 @@ module ISM
                     Dir.mkdir_p(finalPath)
                 end
 
-                file = File.open(path,"w")
-                to_json(file)
-                file.close
+                toInformationFile(path)
 
                 rescue exception
                         ISM::Error.show(className: self.class.name,
