@@ -113,6 +113,8 @@ module ISM
                                     :kernelDependencies => "kernelDependencies"}
 
                 ConditionKeywords = {   :if => "if",
+                                        :elsif => "elsif",
+                                        :else => "else",
                                         :end => "end"}
 
                 LogicalKeywords = { :and => "&&",
