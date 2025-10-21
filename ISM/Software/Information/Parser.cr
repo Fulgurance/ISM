@@ -159,7 +159,7 @@ module ISM
                 WebsiteFilter = /\A[\s\S]+\z/
 
                 VersionDescriptorFilter = /((#{ComparatorGroupFilter})[\w.\-]+(\s\~\s(#{ComparatorGroupFilter})[\w.\-]+)?)/
-                OptionsFilter = /(\(\w*(,\w*)*\))?/
+                OptionsFilter = /(\([\w.-]*(,[\w.-]*)*\))?/
                 DependencyFilter = /\A@[\w-]+:[\w-]+\z/
                 DependencyVersionFilter = /\A@[\w-]+:[\w-]+#{VersionDescriptorFilter}\z/
                 DependencyVersionWithOptionsFilter = /\A@[\w-]+:[\w-]+#{VersionDescriptorFilter}#{OptionsFilter}\z/
