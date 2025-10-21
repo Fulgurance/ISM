@@ -23,7 +23,7 @@ module ISM
                     when Parser::SectionKeywords[:version]
                         Parser.appendLineToFile(line: section, path: path)
                         Parser.appendLineToFile(line: "    #{@version}", path: path)
-                    when Parser::SectionKeywords[:architecture]
+                    when Parser::SectionKeywords[:architectures]
                         Parser.appendLineToFile(line: section, path: path)
 
                         @architectures.each do |architecture|
