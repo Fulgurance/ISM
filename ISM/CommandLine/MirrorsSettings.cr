@@ -28,10 +28,10 @@ module ISM
                 file.close
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "MirrorsSettings",
                                     functionName: "generateConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
+                                    error: "Failed to generate configuration file to #{path}",
                                     exception: exception)
             end
 
@@ -43,10 +43,10 @@ module ISM
                 return from_json(File.read(path))
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "MirrorsSettings",
                                     functionName: "loadConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
+                                    error: "Failed to load configuration file from #{path}",
                                     exception: exception)
             end
 
@@ -56,10 +56,10 @@ module ISM
                 file.close
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "MirrorsSettings",
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
+                                    error: "Failed to write configuration file to #{path}",
                                     exception: exception)
             end
 
@@ -67,7 +67,7 @@ module ISM
                 writeConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "MirrorsSettings",
                                     functionName: "setDefaultMirror",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",

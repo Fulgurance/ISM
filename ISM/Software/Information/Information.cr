@@ -67,7 +67,7 @@ module ISM
                         ISM::Error.show(className: self.class.name,
                                         functionName: "writeConfiguration",
                                         errorTitle: "Execution failure",
-                                        error: "Failed to execute the function",
+                                        error: "Failed to write configuration file to #{path}",
                                         exception: exception)
             end
 

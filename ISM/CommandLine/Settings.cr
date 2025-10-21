@@ -205,10 +205,10 @@ module ISM
                 file.close
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "generateConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
+                                    error: "Failed to generate configuration file to #{path}",
                                     exception: exception)
             end
 
@@ -220,10 +220,10 @@ module ISM
                 return from_json(File.read(path))
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "loadConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
+                                    error: "Failed to load configuration file from #{path}",
                                     exception: exception)
             end
 
@@ -360,10 +360,10 @@ module ISM
                 file.close
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "writeConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
+                                    error: "Failed to write configuration file to #{path}",
                                     exception: exception)
             end
 
@@ -430,10 +430,10 @@ module ISM
                                                 Default::SystemVariantId)
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "writeChrootConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
+                                    error: "Failed to write chroot configuration file to #{@rootPath+Default::SettingsFilePath}",
                                     exception: exception)
             end
 
@@ -508,10 +508,10 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "writeSystemConfiguration",
                                     errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
+                                    error: "Failed to write system configuration file to #{self.class.filePath}",
                                     exception: exception)
             end
 
@@ -538,7 +538,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemTargetArchitecture",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -553,7 +553,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemTargetVendor",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -568,7 +568,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemTargetOs",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -583,7 +583,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemTargetAbi",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -598,7 +598,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemTarget",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -613,7 +613,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemMakeOptions",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -628,7 +628,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemBuildOptions",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -643,7 +643,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -658,7 +658,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemFullName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -673,7 +673,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -688,7 +688,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemRelease",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -703,7 +703,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemCodeName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -718,7 +718,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemDescription",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -733,7 +733,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemVersion",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -748,7 +748,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemVersionId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -763,7 +763,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemAnsiColor",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -778,7 +778,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemCpeName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -793,7 +793,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemHomeUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -808,7 +808,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemSupportUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -823,7 +823,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemBugReportUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -838,7 +838,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemPrivacyPolicyUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -853,7 +853,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemBuildId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -868,7 +868,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemVariant",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -883,7 +883,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "systemVariantId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -899,7 +899,7 @@ module ISM
                 Ism.loadBaseDirectories
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setRootPath",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -910,7 +910,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setDefaultMirror",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -921,7 +921,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setBuildKernelOptionsAsModule",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -932,7 +932,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                ISM::Error.show(className: self.class.name,
+                ISM::Error.show(className: "Settings",
                                 functionName: "setAutoBuildKernel",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -943,7 +943,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                ISM::Error.show(className: self.class.name,
+                ISM::Error.show(className: "Settings",
                                 functionName: "setAutoDeployServices",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -956,7 +956,7 @@ module ISM
                 setSystemTarget
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemTargetArchitecture",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -968,7 +968,7 @@ module ISM
                 setSystemTarget
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemTargetVendor",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -980,7 +980,7 @@ module ISM
                 setSystemTarget
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemTargetOs",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -992,7 +992,7 @@ module ISM
                 setSystemTarget
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemTargetAbi",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1004,7 +1004,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemTarget",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1023,7 +1023,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemMakeOptions",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1034,7 +1034,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemBuildOptions",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1045,7 +1045,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1056,7 +1056,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemFullName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1067,7 +1067,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1078,7 +1078,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemRelease",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1089,7 +1089,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemCodeName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1100,7 +1100,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemDescription",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1111,7 +1111,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemVersion",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1122,7 +1122,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemVersionId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1133,7 +1133,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemAnsiColor",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1144,7 +1144,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemCpeName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1155,7 +1155,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemHomeUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1166,7 +1166,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemSupportUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1177,7 +1177,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemBugReportUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1188,7 +1188,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemPrivacyPolicyUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1199,7 +1199,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemBuildId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1210,7 +1210,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemVariant",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1221,7 +1221,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setSystemVariantId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1234,7 +1234,7 @@ module ISM
                 setChrootTarget
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootTargetArchitecture",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1246,7 +1246,7 @@ module ISM
                 setChrootTarget
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootTargetVendor",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1258,7 +1258,7 @@ module ISM
                 setChrootTarget
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootTargetOs",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1270,7 +1270,7 @@ module ISM
                 setChrootTarget
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootTargetAbi",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1282,7 +1282,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootTarget",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1301,7 +1301,7 @@ module ISM
                 end
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootMakeOptions",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1312,7 +1312,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootBuildOptions",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1323,7 +1323,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1335,7 +1335,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootFullName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1346,7 +1346,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1357,7 +1357,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootRelease",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1368,7 +1368,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootCodeName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1379,7 +1379,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootDescription",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1390,7 +1390,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootVersion",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1401,7 +1401,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootVersionId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1412,7 +1412,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootAnsiColor",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1423,7 +1423,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootCpeName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1434,7 +1434,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootHomeUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1445,7 +1445,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootSupportUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1456,7 +1456,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootBugReportUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1467,7 +1467,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootPrivacyPolicyUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1478,7 +1478,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootBuildId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1489,7 +1489,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootVariant",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
@@ -1500,7 +1500,7 @@ module ISM
                 writeSystemConfiguration
 
                 rescue exception
-                    ISM::Error.show(className: self.class.name,
+                    ISM::Error.show(className: "Settings",
                                     functionName: "setChrootVariantId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
