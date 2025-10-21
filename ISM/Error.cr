@@ -20,7 +20,7 @@ module ISM
                         information = String.new,
                         errorCode = 1)
 
-            fullLog = (exception.backtrace? ? exception.backtrace.join("\n") : exception.message)
+            fullLog = "#{exception.message}\n#{exception.backtrace? ? exception.backtrace.join("\n") : ""}"
 
             title = (className == "Software" ? Default::InstallerTitle.colorize(:red) : Default::Title.colorize(:red))
 
