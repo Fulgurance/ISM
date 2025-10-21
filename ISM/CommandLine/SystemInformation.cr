@@ -24,6 +24,12 @@ module ISM
             end
 
             def self.generateConfiguration(path = filePath)
+                finalPath = path.chomp(path[path.rindex("/")..-1])
+
+                if !Dir.exists?(finalPath)
+                    Dir.mkdir_p(finalPath)
+                end
+
                 file = File.open(path,"w")
                 self.new.to_json(file)
                 file.close
