@@ -444,7 +444,7 @@ module ISM
                 def self.parseDependencyDescriptor(descriptor : String) : Dependency
                     port = descriptor[1..-1].partition(':').first
                     name = descriptor.gsub("@#{port}:","").partition(/[>=<]+/).first
-                    options = descriptor.partition('(').last.gsub(")","").split(",")
+                    options = descriptor.partition('(').last.gsub(")","").split(",").reject { |entry| entry.empty? }
                     version = descriptor.gsub("@#{port}:#{name}","").partition('(').first
 
                     return Dependency.new(port,name,version,options)
