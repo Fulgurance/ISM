@@ -5,10 +5,14 @@ module ISM
         class Information
 
             def toInformationFile(path : String)
-                finalPath = path.chomp(path[path.rindex("/")..-1])
+                if File.exists?(path)
+                    File.delete(path)
+                else
+                    finalPath = path.chomp(path[path.rindex("/")..-1])
 
-                if !Dir.exists?(finalPath)
-                    Dir.mkdir_p(finalPath)
+                    if !Dir.exists?(finalPath)
+                        Dir.mkdir_p(finalPath)
+                    end
                 end
 
                 Parser::SectionKeywords.values.each do |section|
