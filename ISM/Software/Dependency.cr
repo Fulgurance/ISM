@@ -66,6 +66,10 @@ module ISM
                 return "#{fullName}-#{version}"
             end
 
+            def versionDescriptor : String
+                return @version
+            end
+
             def version=(@version)
             end
 

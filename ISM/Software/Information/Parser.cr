@@ -39,7 +39,7 @@ module ISM
                         Parser.appendLineToFile(line: section, path: path)
 
                         @dependencies.each do |dependency|
-                            Parser.appendLineToFile(line: "        @#{dependency.port}:#{dependency.name}#{dependency.version}#{dependency.options.empty? ? "" : "(#{dependency.options.join(",")})"}", path: path)
+                            Parser.appendLineToFile(line: "        @#{dependency.port}:#{dependency.name}#{dependency.versionDescriptor}#{dependency.options.empty? ? "" : "(#{dependency.options.join(",")})"}", path: path)
                         end
                     when Parser::SectionKeywords[:kernelDependencies]
                         Parser.appendLineToFile(line: section, path: path)
@@ -57,7 +57,7 @@ module ISM
 
                             Parser.appendLineToFile(line: "    #{Parser::OptionKeywords[:dependencies]}:", path: path)
                             option.dependencies.each do |dependency|
-                                Parser.appendLineToFile(line: "        @#{dependency.port}:#{dependency.name}#{dependency.version}#{dependency.options.empty? ? "" : "(#{dependency.options.join(",")})"}", path: path)
+                                Parser.appendLineToFile(line: "        @#{dependency.port}:#{dependency.name}#{dependency.versionDescriptor}#{dependency.options.empty? ? "" : "(#{dependency.options.join(",")})"}", path: path)
                             end
 
                             Parser.appendLineToFile(line: "    #{Parser::OptionKeywords[:kernelDependencies]}:", path: path)
