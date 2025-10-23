@@ -440,9 +440,9 @@ module ISM
                                     filter = /\A#{dependenciesFilter}(,#{dependenciesFilter})*\z/
 
                                     if filter.matches?(strippedLine)
-                                        uniqueDependencies.push(strippedLine.split(","))
+                                        selectedDependencies.push(strippedLine.split(","))
                                     else
-                                        raise("Line #{index+1}\nFile: #{path}\nIllegal character: #{line}\nThe declared unique option list used an illegal character, used non-existent option or is not declared properly.")
+                                        raise("Line #{index+1}\nFile: #{path}\nIllegal character: #{line}\nThe declared selected dependency list used an illegal character, used non-existent dependency or is not declared properly.")
                                     end
                                 when Parser::SectionKeywords[:allowCodependencies]
                                     if Parser::AllowCodependenciesFilter.matches?(strippedLine)
