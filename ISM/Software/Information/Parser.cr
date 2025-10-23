@@ -103,11 +103,13 @@ module ISM
                                     :architectures => "ARCHITECTURES",
                                     :description => "DESCRIPTION",
                                     :website => "WEBSITE",
+                                    :installedFiles => "INSTALLEDFILES",
                                     :dependencies => "DEPENDENCIES",
                                     :kernelDependencies => "KERNELDEPENDENCIES",
                                     :options => "OPTIONS",
                                     :uniqueDependencies => "UNIQUEDEPENDENCIES",
                                     :uniqueOptions => "UNIQUEOPTIONS",
+                                    :selectedDependencies => "SELECTEDDEPENDENCIES"
                                     :allowCodependencies => "ALLOWCODEPENDENCIES"}
 
                 OptionKeywords = {  :name => "name",
@@ -302,6 +304,14 @@ module ISM
                                         #Website already defined
                                         raise("Line #{index+1}\nFile: #{path}\nInvalid line: #{line}\nThe website has already been defined.")
                                     end
+                                when Parser::SectionKeywords[:installedFiles]
+                                    #It is the line declaration for installedFiles
+                                    #We ensure the installedFiles pass the filter
+                                    #if Parser::InstalledFilesFilter.matches?(strippedLine)
+                                        installedFiles.push(strippedLine)
+                                    #else
+                                    #    raise("Line #{index+1}\nFile: #{path}\nIllegal character: #{line}\nThe declared installed file list used an illegal character or is not declared properly.")
+                                    #end
                                 when Parser::SectionKeywords[:dependencies]
                                     #It is the line declaration for dependencies
                                     #We ensure the dependencies pass the filter
@@ -411,6 +421,16 @@ module ISM
 
                                     if filter.matches?(strippedLine)
                                         uniqueOptions.push(strippedLine.split(","))
+                                    else
+                                        raise("Line #{index+1}\nFile: #{path}\nIllegal character: #{line}\nThe declared unique option list used an illegal character, used non-existent option or is not declared properly.")
+                                    end
+                                when Parser::SectionKeywords[:selectedDependencies]
+                                    #Special case: filter generated dynamically to check if we pass a valid unique dependency
+                                    dependenciesFilter = /(#{uniqueDependencies.flatten.uniq.join("|")})/
+                                    filter = /\A#{dependenciesFilter}(,#{dependenciesFilter})*\z/
+
+                                    if filter.matches?(strippedLine)
+                                        uniqueDependencies.push(strippedLine.split(","))
                                     else
                                         raise("Line #{index+1}\nFile: #{path}\nIllegal character: #{line}\nThe declared unique option list used an illegal character, used non-existent option or is not declared properly.")
                                     end
