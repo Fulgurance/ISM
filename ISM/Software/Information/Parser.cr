@@ -38,7 +38,13 @@ module ISM
                         Parser.appendLineToFile(line: "    #{@description}", path: path)
                     when Parser::SectionKeywords[:website]
                         Parser.appendLineToFile(line: section, path: path)
-                        Parser.appendLineToFile(line: "    #{website}", path: path)
+                        Parser.appendLineToFile(line: "    #{@website}", path: path)
+                    when Parser::SectionKeywords[:installedFiles]
+                        Parser.appendLineToFile(line: section, path: path)
+
+                        @installedFiles.each do |file|
+                            Parser.appendLineToFile(line: "    #{file}", path: path)
+                        end
                     when Parser::SectionKeywords[:dependencies]
                         Parser.appendLineToFile(line: section, path: path)
 
@@ -83,6 +89,10 @@ module ISM
                         @uniqueOptions.each do |uniqueSet|
                             Parser.appendLineToFile(line: "    #{uniqueSet.join(",")}", path: path)
                         end
+                    when Parser::SectionKeywords[:selectedDependencies]
+                        Parser.appendLineToFile(line: section, path: path)
+
+                        Parser.appendLineToFile(line: "    #{@selectedDependencies.join(",")}", path: path)
                     when Parser::SectionKeywords[:allowCodependencies]
                         Parser.appendLineToFile(line: section, path: path)
 
