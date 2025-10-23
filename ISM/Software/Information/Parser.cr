@@ -109,7 +109,7 @@ module ISM
                                     :options => "OPTIONS",
                                     :uniqueDependencies => "UNIQUEDEPENDENCIES",
                                     :uniqueOptions => "UNIQUEOPTIONS",
-                                    :selectedDependencies => "SELECTEDDEPENDENCIES"
+                                    :selectedDependencies => "SELECTEDDEPENDENCIES",
                                     :allowCodependencies => "ALLOWCODEPENDENCIES"}
 
                 OptionKeywords = {  :name => "name",
