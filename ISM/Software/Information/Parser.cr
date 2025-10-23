@@ -440,7 +440,9 @@ module ISM
                                     filter = /\A#{dependenciesFilter}(,#{dependenciesFilter})*\z/
 
                                     if filter.matches?(strippedLine)
-                                        selectedDependencies.push(strippedLine.split(","))
+                                        strippedLine.split(",").each do |selectedDependency|
+                                            selectedDependencies.push(selectedDependency)
+                                        end
                                     else
                                         raise("Line #{index+1}\nFile: #{path}\nIllegal character: #{line}\nThe declared selected dependency list used an illegal character, used non-existent dependency or is not declared properly.")
                                     end
