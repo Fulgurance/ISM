@@ -231,6 +231,17 @@ module ISM
                             #Update the current section
                             if Parser::SectionKeywords.values.any? { |entry| entry == line}
                                 currentSection = line
+
+                                #We ensure the last option from the previous section is added if there is any
+                                if Parser::SectionKeywords[:uniqueDependencies] == line
+                                    if !currentOption.empty?
+                                        options.push(Option.new(currentOption[Parser::OptionFieldKeywords[:name]],
+                                                                currentOption[Parser::OptionFieldKeywords[:description]],
+                                                                (currentOption[Parser::OptionFieldKeywords[:active]] == Parser::BoleanKeywords[:true]),
+                                                                currentOptionDependencies.dup,
+                                                                currentOptionKernelDependencies.dup))
+                                    end
+                                end
                             end
 
                             #Error if the first line is not a section
