@@ -10,8 +10,8 @@ module ISM
 
                     ShortText = "-ebkoam"
                     LongText = "enablebuildkerneloptionsasmodule"
-                    Description = "Enable the building of the kernel options as loadable modules as a priority"
-                    SetText = "Enabling building kernel options as module as a priority"
+                    Description = "Enable the building of the kernel options as loadable modules as a priority for the system"
+                    SetText = "Enabling building kernel options as module as a priority for the system"
 
                 end
 

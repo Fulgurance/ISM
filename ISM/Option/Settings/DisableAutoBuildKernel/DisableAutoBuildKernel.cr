@@ -10,8 +10,8 @@ module ISM
 
                     ShortText = "-dabk"
                     LongText = "disableautobuildkernel"
-                    Description = "Disable automatic kernel building"
-                    SetText = "Disabling automatic kernel building"
+                    Description = "Disable automatic kernel building for the system"
+                    SetText = "Disabling automatic kernel building for the system"
 
                 end
 

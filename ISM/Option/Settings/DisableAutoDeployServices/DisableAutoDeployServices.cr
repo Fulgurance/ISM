@@ -10,8 +10,8 @@ module ISM
 
                     ShortText = "-dads"
                     LongText = "disableautodeployservices"
-                    Description = "Disable service automatic deployement"
-                    SetText = "Disabling service automatic deployement"
+                    Description = "Disable service automatic deployement for the system"
+                    SetText = "Disabling service automatic deployement for the system"
 
                 end
 

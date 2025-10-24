@@ -4,14 +4,14 @@ module ISM
 
         class Settings
 
-            class SetDefaultMirror < CommandLine::Option
+            class SetChrootSystemTargetVendor < CommandLine::Option
 
                 module Default
 
-                    ShortText = "-sdm"
-                    LongText = "setdefaultmirror"
-                    Description = "Set the default mirror for the system"
-                    SetText = "Setting the default mirror for the system to "
+                    ShortText = "-scstv"
+                    LongText = "setchrootsystemtargetvendor"
+                    Description = "Set the default chroot system target vendor for the compiler"
+                    SetText = "Setting chroot system target vendor to the value "
 
                 end
 
@@ -25,7 +25,7 @@ module ISM
                     if ARGV.size == 2
                         showHelp
                     else
-                        Ism.settings.setDefaultMirror(ARGV[2])
+                        Ism.settings.setChrootSystemTargetVendor(ARGV[2])
                         Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end

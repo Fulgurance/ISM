@@ -4,14 +4,14 @@ module ISM
 
         class Settings
 
-            class SetDefaultMirror < CommandLine::Option
+            class SetChrootSystemFullName < CommandLine::Option
 
                 module Default
 
-                    ShortText = "-sdm"
-                    LongText = "setdefaultmirror"
-                    Description = "Set the default mirror for the system"
-                    SetText = "Setting the default mirror for the system to "
+                    ShortText = "-scsfn"
+                    LongText = "setchrootsystemfullname"
+                    Description = "Set the system full name of the future chroot installed system"
+                    SetText = "Setting chroot system full name to the value "
 
                 end
 
@@ -25,7 +25,7 @@ module ISM
                     if ARGV.size == 2
                         showHelp
                     else
-                        Ism.settings.setDefaultMirror(ARGV[2])
+                        Ism.settings.setChrootSystemFullName(ARGV[2])
                         Ism.printProcessNotification(Default::SetText+ARGV[2])
                     end
                 end

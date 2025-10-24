@@ -10,8 +10,8 @@ module ISM
 
                     ShortText = "-eads"
                     LongText = "enableautodeployservices"
-                    Description = "Enable service automatic deployement"
-                    SetText = "Enabling service automatic deployement"
+                    Description = "Enable service automatic deployement for the system"
+                    SetText = "Enabling service automatic deployement for the system"
 
                 end
 

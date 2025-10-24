@@ -10,8 +10,8 @@ module ISM
 
                     ShortText = "-eabk"
                     LongText = "enableautobuildkernel"
-                    Description = "Enable automatic kernel building"
-                    SetText = "Enabling automatic kernel building"
+                    Description = "Enable automatic kernel building for the system"
+                    SetText = "Enabling automatic kernel building for the system"
 
                 end
 

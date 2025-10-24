@@ -19,6 +19,8 @@ module ISM
                 BuildKernelOptionsAsModule = true
                 AutoBuildKernel = true
                 AutoDeployServices = true
+                MakeOptions = "-j1"
+                BuildOptions = "-march=native -O2 -pipe"
 
                 #Host related parameters
                 SystemTargetArchitecture = "x86_64"
@@ -26,8 +28,6 @@ module ISM
                 SystemTargetOs = "linux"
                 SystemTargetAbi = "gnu"
                 SystemTarget = "#{SystemTargetArchitecture}-#{SystemTargetVendor}-#{SystemTargetOs}-#{SystemTargetAbi}"
-                SystemMakeOptions = "-j1"
-                SystemBuildOptions = "-march=native -O2 -pipe"
                 SystemName = "Unknown"
                 SystemFullName ="Unknown Linux System"
                 SystemId = "?"
@@ -46,32 +46,6 @@ module ISM
                 SystemVariant = "None"
                 SystemVariantId = "None"
 
-                #Chroot related parameters
-                ChrootTargetArchitecture = "#{SystemTargetArchitecture}"
-                ChrootTargetVendor = "#{SystemTargetVendor}"
-                ChrootTargetOs = "#{SystemTargetOs}"
-                ChrootTargetAbi = "#{SystemTargetAbi}"
-                ChrootTarget = "#{SystemTarget}"
-                ChrootMakeOptions = "#{SystemMakeOptions}"
-                ChrootBuildOptions = "#{SystemBuildOptions}"
-                ChrootName = "#{SystemName}"
-                ChrootFullName = "#{SystemFullName}"
-                ChrootId = "#{SystemId}"
-                ChrootRelease = "#{SystemRelease}"
-                ChrootCodeName = "#{SystemCodeName}"
-                ChrootDescription = "#{SystemDescription}"
-                ChrootVersion = "#{SystemVersion}"
-                ChrootVersionId = "#{SystemVersionId}"
-                ChrootAnsiColor = "#{SystemAnsiColor}"
-                ChrootCpeName = "#{SystemCpeName}"
-                ChrootHomeUrl = "#{SystemHomeUrl}"
-                ChrootSupportUrl = "#{SystemSupportUrl}"
-                ChrootBugReportUrl = "#{SystemBugReportUrl}"
-                ChrootPrivacyPolicyUrl = "#{SystemPrivacyPolicyUrl}"
-                ChrootBuildId = "#{SystemBuildId}"
-                ChrootVariant = "#{SystemVariant}"
-                ChrootVariantId = "#{SystemVariantId}"
-
             end
 
             include JSON::Serializable
@@ -82,6 +56,8 @@ module ISM
             property    buildKernelOptionsAsModule : Bool
             property    autoBuildKernel : Bool
             property    autoDeployServices : Bool
+            property    makeOptions : String
+            property    buildOptions : String
 
             #Host related parameters
             property    systemTargetArchitecture : String
@@ -89,8 +65,6 @@ module ISM
             property    systemTargetOs : String
             property    systemTargetAbi : String
             property    systemTarget : String
-            property    systemMakeOptions : String
-            property    systemBuildOptions : String
             property    systemName : String
             property    systemFullName : String
             property    systemId : String
@@ -109,38 +83,14 @@ module ISM
             property    systemVariant : String
             property    systemVariantId : String
 
-            #Chroot related parameters
-            property    chrootTargetArchitecture : String
-            property    chrootTargetVendor : String
-            property    chrootTargetOs : String
-            property    chrootTargetAbi : String
-            property    chrootTarget : String
-            property    chrootMakeOptions : String
-            property    chrootBuildOptions : String
-            property    chrootName : String
-            property    chrootFullName : String
-            property    chrootId : String
-            property    chrootRelease : String
-            property    chrootCodeName : String
-            property    chrootDescription : String
-            property    chrootVersion : String
-            property    chrootVersionId : String
-            property    chrootAnsiColor : String
-            property    chrootCpeName : String
-            property    chrootHomeUrl : String
-            property    chrootSupportUrl : String
-            property    chrootBugReportUrl : String
-            property    chrootPrivacyPolicyUrl : String
-            property    chrootBuildId : String
-            property    chrootVariant : String
-            property    chrootVariantId : String
-
             def initialize( #Generic parameters
                             @rootPath = Default::RootPath,
                             @defaultMirror = Default::DefaultMirror,
                             @buildKernelOptionsAsModule = Default::BuildKernelOptionsAsModule,
                             @autoBuildKernel = Default::AutoBuildKernel,
                             @autoDeployServices = Default::AutoDeployServices,
+                            @makeOptions = Default::MakeOptions,
+                            @buildOptions = Default::BuildOptions,
 
                             #Host related parameters
                             @systemTargetArchitecture = Default::SystemTargetArchitecture,
@@ -148,8 +98,6 @@ module ISM
                             @systemTargetOs = Default::SystemTargetOs,
                             @systemTargetAbi = Default::SystemTargetAbi,
                             @systemTarget = Default::SystemTarget,
-                            @systemMakeOptions = Default::SystemMakeOptions,
-                            @systemBuildOptions = Default::SystemBuildOptions,
                             @systemName = Default::SystemName,
                             @systemFullName = Default::SystemFullName,
                             @systemId = Default::SystemId,
@@ -166,33 +114,7 @@ module ISM
                             @systemPrivacyPolicyUrl = Default::SystemPrivacyPolicyUrl,
                             @systemBuildId = Default::SystemBuildId,
                             @systemVariant = Default::SystemVariant,
-                            @systemVariantId = Default::SystemVariantId,
-
-                            #Chroot related parameters
-                            @chrootTargetArchitecture = Default::ChrootTargetArchitecture,
-                            @chrootTargetVendor = Default::ChrootTargetVendor,
-                            @chrootTargetOs = Default::ChrootTargetOs,
-                            @chrootTargetAbi = Default::ChrootTargetAbi,
-                            @chrootTarget = Default::ChrootTarget,
-                            @chrootMakeOptions = Default::ChrootMakeOptions,
-                            @chrootBuildOptions = Default::ChrootBuildOptions,
-                            @chrootName = Default::ChrootName,
-                            @chrootFullName = Default::ChrootFullName,
-                            @chrootId = Default::ChrootId,
-                            @chrootRelease = Default::ChrootRelease,
-                            @chrootCodeName = Default::ChrootCodeName,
-                            @chrootDescription = Default::ChrootDescription,
-                            @chrootVersion = Default::ChrootVersion,
-                            @chrootVersionId = Default::ChrootVersionId,
-                            @chrootAnsiColor = Default::ChrootAnsiColor,
-                            @chrootCpeName = Default::ChrootCpeName,
-                            @chrootHomeUrl = Default::ChrootHomeUrl,
-                            @chrootSupportUrl = Default::ChrootSupportUrl,
-                            @chrootBugReportUrl = Default::ChrootBugReportUrl,
-                            @chrootPrivacyPolicyUrl = Default::ChrootPrivacyPolicyUrl,
-                            @chrootBuildId = Default::ChrootBuildId,
-                            @chrootVariant = Default::ChrootVariant,
-                            @chrootVariantId = Default::ChrootVariantId)
+                            @systemVariantId = Default::SystemVariantId)
             end
 
             def self.filePath : String
@@ -242,6 +164,8 @@ module ISM
                                         buildKernelOptionsAsModule : Bool,
                                         autoBuildKernel : Bool,
                                         autoDeployServices : Bool,
+                                        makeOptions : String,
+                                        buildOptions : String,
 
                                         #Host related parameters
                                         systemTargetArchitecture : String,
@@ -249,8 +173,6 @@ module ISM
                                         systemTargetOs : String,
                                         systemTargetAbi : String,
                                         systemTarget : String,
-                                        systemMakeOptions : String,
-                                        systemBuildOptions : String,
                                         systemName : String,
                                         systemFullName : String,
                                         systemId : String,
@@ -267,33 +189,7 @@ module ISM
                                         systemPrivacyPolicyUrl : String,
                                         systemBuildId : String,
                                         systemVariant : String,
-                                        systemVariantId : String,
-
-                                        #Chroot related parameters
-                                        chrootTargetArchitecture : String,
-                                        chrootTargetVendor : String,
-                                        chrootTargetOs : String,
-                                        chrootTargetAbi : String,
-                                        chrootTarget : String,
-                                        chrootMakeOptions : String,
-                                        chrootBuildOptions : String,
-                                        chrootName : String,
-                                        chrootFullName : String,
-                                        chrootId : String,
-                                        chrootRelease : String,
-                                        chrootCodeName : String,
-                                        chrootDescription : String,
-                                        chrootVersion : String,
-                                        chrootVersionId : String,
-                                        chrootAnsiColor : String,
-                                        chrootCpeName : String,
-                                        chrootHomeUrl : String,
-                                        chrootSupportUrl : String,
-                                        chrootBugReportUrl : String,
-                                        chrootPrivacyPolicyUrl : String,
-                                        chrootBuildId : String,
-                                        chrootVariant : String,
-                                        chrootVariantId : String)
+                                        systemVariantId : String)
 
                 finalPath = path.chomp(path[path.rindex("/")..-1])
 
@@ -307,6 +203,8 @@ module ISM
                             "buildKernelOptionsAsModule" => buildKernelOptionsAsModule,
                             "autoBuildKernel" => autoBuildKernel,
                             "autoDeployServices" => autoDeployServices,
+                            "makeOptions" => makeOptions,
+                            "buildOptions" => buildOptions,
 
                             #Host related parameters
                             "systemTargetArchitecture" => systemTargetArchitecture,
@@ -314,8 +212,6 @@ module ISM
                             "systemTargetOs" => systemTargetOs,
                             "systemTargetAbi" => systemTargetAbi,
                             "systemTarget" => systemTarget,
-                            "systemMakeOptions" => systemMakeOptions,
-                            "systemBuildOptions" => systemBuildOptions,
                             "systemName" => systemName,
                             "systemFullName" => systemFullName,
                             "systemId" => systemId,
@@ -332,33 +228,7 @@ module ISM
                             "systemPrivacyPolicyUrl" => systemPrivacyPolicyUrl,
                             "systemBuildId" => systemBuildId,
                             "systemVariant" => systemVariant,
-                            "systemVariantId" => systemVariantId,
-
-                            #Chroot related parameters
-                            "chrootTargetArchitecture" => chrootTargetArchitecture,
-                            "chrootTargetVendor" => chrootTargetVendor,
-                            "chrootTargetOs" => chrootTargetOs,
-                            "chrootTargetAbi" => chrootTargetAbi,
-                            "chrootTarget" => chrootTarget,
-                            "chrootMakeOptions" => chrootMakeOptions,
-                            "chrootBuildOptions" => chrootBuildOptions,
-                            "chrootName" => chrootName,
-                            "chrootFullName" => chrootFullName,
-                            "chrootId" => chrootId,
-                            "chrootRelease" => chrootRelease,
-                            "chrootCodeName" => chrootCodeName,
-                            "chrootDescription" => chrootDescription,
-                            "chrootVersion" => chrootVersion,
-                            "chrootVersionId" => chrootVersionId,
-                            "chrootAnsiColor" => chrootAnsiColor,
-                            "chrootCpeName" => chrootCpeName,
-                            "chrootHomeUrl" => chrootHomeUrl,
-                            "chrootSupportUrl" => chrootSupportUrl,
-                            "chrootBugReportUrl" => chrootBugReportUrl,
-                            "chrootPrivacyPolicyUrl" => chrootPrivacyPolicyUrl,
-                            "chrootBuildId" => chrootBuildId,
-                            "chrootVariant" => chrootVariant,
-                            "chrootVariantId" => chrootVariantId}
+                            "systemVariantId" => systemVariantId}
 
 
                 file = File.open(path,"w")
@@ -373,80 +243,7 @@ module ISM
                                     exception: exception)
             end
 
-            def writeChrootConfiguration
-                self.class.writeConfiguration(  #File path
-                                                @rootPath+Default::SettingsFilePath,
-                                                #Generic parameters
-                                                Default::RootPath,
-                                                @defaultMirror,
-                                                @buildKernelOptionsAsModule,
-                                                @autoBuildKernel,
-                                                @autoDeployServices,
-
-                                                #Host related parameters
-                                                @chrootTargetArchitecture,
-                                                @chrootTargetVendor,
-                                                @chrootTargetOs,
-                                                @chrootTargetAbi,
-                                                @chrootTarget,
-                                                @chrootMakeOptions,
-                                                @chrootBuildOptions,
-                                                @chrootName,
-                                                @chrootFullName,
-                                                @chrootId,
-                                                @chrootRelease,
-                                                @chrootCodeName,
-                                                @chrootDescription,
-                                                @chrootVersion,
-                                                @chrootVersionId,
-                                                @chrootAnsiColor,
-                                                @chrootCpeName,
-                                                @chrootHomeUrl,
-                                                @chrootSupportUrl,
-                                                @chrootBugReportUrl,
-                                                @chrootPrivacyPolicyUrl,
-                                                @chrootBuildId,
-                                                @chrootVariant,
-                                                @chrootVariantId,
-
-                                                #Chroot related parameters
-                                                Default::SystemTargetArchitecture,
-                                                Default::SystemTargetVendor,
-                                                Default::SystemTargetOs,
-                                                Default::SystemTargetAbi,
-                                                Default::SystemTarget,
-                                                Default::SystemMakeOptions,
-                                                Default::SystemBuildOptions,
-                                                Default::SystemName,
-                                                Default::SystemFullName,
-                                                Default::SystemId,
-                                                Default::SystemRelease,
-                                                Default::SystemCodeName,
-                                                Default::SystemDescription,
-                                                Default::SystemVersion,
-                                                Default::SystemVersionId,
-                                                Default::SystemAnsiColor,
-                                                Default::SystemCpeName,
-                                                Default::SystemHomeUrl,
-                                                Default::SystemSupportUrl,
-                                                Default::SystemBugReportUrl,
-                                                Default::SystemPrivacyPolicyUrl,
-                                                Default::SystemBuildId,
-                                                Default::SystemVariant,
-                                                Default::SystemVariantId)
-
-                rescue exception
-                    ISM::Error.show(className: "Settings",
-                                    functionName: "writeChrootConfiguration",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to write chroot configuration file to #{@rootPath+Default::SettingsFilePath}",
-                                    exception: exception)
-            end
-
             def writeSystemConfiguration
-                #We safely check first if a configuration exist already in the chroot, if not the function generate one
-                chrootConfiguration = self.class.loadConfiguration(@rootPath+Default::SettingsFilePath)
-
                 self.class.writeConfiguration(  #File path
                                                 self.class.filePath,
 
@@ -456,6 +253,8 @@ module ISM
                                                 @buildKernelOptionsAsModule,
                                                 @autoBuildKernel,
                                                 @autoDeployServices,
+                                                @makeOptions,
+                                                @buildOptions,
 
                                                 #Host related parameters
                                                 @systemTargetArchitecture,
@@ -463,8 +262,6 @@ module ISM
                                                 @systemTargetOs,
                                                 @systemTargetAbi,
                                                 @systemTarget,
-                                                @systemMakeOptions,
-                                                @systemBuildOptions,
                                                 @systemName,
                                                 @systemFullName,
                                                 @systemId,
@@ -481,43 +278,82 @@ module ISM
                                                 @systemPrivacyPolicyUrl,
                                                 @systemBuildId,
                                                 @systemVariant,
-                                                @systemVariantId,
-
-                                                #Chroot related parameters
-                                                chrootConfiguration.systemTargetArchitecture,
-                                                chrootConfiguration.systemTargetVendor,
-                                                chrootConfiguration.systemTargetOs,
-                                                chrootConfiguration.systemTargetAbi,
-                                                chrootConfiguration.systemTarget,
-                                                chrootConfiguration.systemMakeOptions,
-                                                chrootConfiguration.systemBuildOptions,
-                                                chrootConfiguration.systemName,
-                                                chrootConfiguration.systemFullName,
-                                                chrootConfiguration.systemId,
-                                                chrootConfiguration.systemRelease,
-                                                chrootConfiguration.systemCodeName,
-                                                chrootConfiguration.systemDescription,
-                                                chrootConfiguration.systemVersion,
-                                                chrootConfiguration.systemVersionId,
-                                                chrootConfiguration.systemAnsiColor,
-                                                chrootConfiguration.systemCpeName,
-                                                chrootConfiguration.systemHomeUrl,
-                                                chrootConfiguration.systemSupportUrl,
-                                                chrootConfiguration.systemBugReportUrl,
-                                                chrootConfiguration.systemPrivacyPolicyUrl,
-                                                chrootConfiguration.systemBuildId,
-                                                chrootConfiguration.systemVariant,
-                                                chrootConfiguration.systemVariantId)
-
-                if @rootPath != "/"
-                    writeChrootConfiguration
-                end
+                                                @systemVariantId)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
                                     functionName: "writeSystemConfiguration",
                                     errorTitle: "Execution failure",
                                     error: "Failed to write system configuration file to #{self.class.filePath}",
+                                    exception: exception)
+            end
+
+            def writeChrootConfiguration(   defaultMirror = chrootConfiguration.defaultMirror,
+                                            buildKernelOptionsAsModule = chrootConfiguration.buildKernelOptionsAsModule,
+                                            autoBuildKernel = chrootConfiguration.autoBuildKernel,
+                                            autoDeployServices = chrootConfiguration.autoDeployServices,
+                                            makeOptions = chrootConfiguration.makeOptions,
+                                            buildOptions = chrootConfiguration.buildOptions,
+                                            systemTargetArchitecture = chrootConfiguration.systemTargetArchitecture,
+                                            systemTargetVendor = chrootConfiguration.systemTargetVendor,
+                                            systemTargetOs = chrootConfiguration.systemTargetOs,
+                                            systemTargetAbi = chrootConfiguration.systemTargetAbi,
+                                            systemTarget = chrootConfiguration.systemTarget,
+                                            systemName = chrootConfiguration.systemName,
+                                            systemFullName = chrootConfiguration.systemFullName,
+                                            systemId = chrootConfiguration.systemId,
+                                            systemRelease = chrootConfiguration.systemRelease,
+                                            systemCodeName = chrootConfiguration.systemCodeName,
+                                            systemDescription = chrootConfiguration.systemDescription,
+                                            systemVersion = chrootConfiguration.systemVersion,
+                                            systemVersionId = chrootConfiguration.systemVersionId,
+                                            systemAnsiColor = chrootConfiguration.systemAnsiColor,
+                                            systemCpeName = chrootConfiguration.systemCpeName,
+                                            systemHomeUrl = chrootConfiguration.systemHomeUrl,
+                                            systemSupportUrl = chrootConfiguration.systemSupportUrl,
+                                            systemBugReportUrl = chrootConfiguration.systemBugReportUrl,
+                                            systemPrivacyPolicyUrl = chrootConfiguration.systemPrivacyPolicyUrl,
+                                            systemBuildId = chrootConfiguration.systemBuildId,
+                                            systemVariant = chrootConfiguration.systemVariant,
+                                            systemVariantId = chrootConfiguration.systemVariantId)
+                self.class.writeConfiguration(  #File path
+                                                @rootPath+Default::SettingsFilePath,
+                                                #Generic parameters
+                                                Default::RootPath,
+                                                defaultMirror,
+                                                buildKernelOptionsAsModule,
+                                                autoBuildKernel,
+                                                autoDeployServices,
+                                                makeOptions,
+                                                buildOptions,
+                                                systemTargetArchitecture,
+                                                systemTargetVendor,
+                                                systemTargetOs,
+                                                systemTargetAbi,
+                                                systemTarget,
+                                                systemName,
+                                                systemFullName,
+                                                systemId,
+                                                systemRelease,
+                                                systemCodeName,
+                                                systemDescription,
+                                                systemVersion,
+                                                systemVersionId,
+                                                systemAnsiColor,
+                                                systemCpeName,
+                                                systemHomeUrl,
+                                                systemSupportUrl,
+                                                systemBugReportUrl,
+                                                systemPrivacyPolicyUrl,
+                                                systemBuildId,
+                                                systemVariant,
+                                                systemVariantId)
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "writeChrootConfiguration",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to write chroot configuration file to #{@rootPath+Default::SettingsFilePath}",
                                     exception: exception)
             end
 
@@ -534,11 +370,47 @@ module ISM
                 return "#{@rootPath}#{Path::ToolsDirectory}"
             end
 
-            #Host/Chroot methods
+            def chrootConfiguration
+                path = @rootPath+Default::SettingsFilePath
+
+                return self.class.loadConfiguration(path)
+            end
+
+            #Host/Chroot methods (Used by software installer API)
+
+            def systemMakeOptions(relatedToChroot = true) : String
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.makeOptions
+                else
+                    return @makeOptions
+                end
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "makeOptions",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def systemBuildOptions(relatedToChroot = true) : String
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.buildOptions
+                else
+                    return @buildOptions
+                end
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "buildOptions",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
 
             def systemTargetArchitecture(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootTargetArchitecture : @systemTargetArchitecture)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemTargetArchitecture
                 else
                     return @systemTargetArchitecture
                 end
@@ -552,8 +424,8 @@ module ISM
             end
 
             def systemTargetVendor(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootTargetVendor : @systemTargetVendor)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemTargetVendor
                 else
                     return @systemTargetVendor
                 end
@@ -567,8 +439,8 @@ module ISM
             end
 
             def systemTargetOs(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootTargetOs : @systemTargetOs)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemTargetOs
                 else
                     return @systemTargetOs
                 end
@@ -582,8 +454,8 @@ module ISM
             end
 
             def systemTargetAbi(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootTargetAbi : @systemTargetAbi)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemTargetAbi
                 else
                     return @systemTargetAbi
                 end
@@ -597,8 +469,8 @@ module ISM
             end
 
             def systemTarget(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootTarget : @systemTarget)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemTarget
                 else
                     return @systemTarget
                 end
@@ -611,39 +483,9 @@ module ISM
                                     exception: exception)
             end
 
-            def systemMakeOptions(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootMakeOptions : @systemMakeOptions)
-                else
-                    return @systemMakeOptions
-                end
-
-                rescue exception
-                    ISM::Error.show(className: "Settings",
-                                    functionName: "systemMakeOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-            end
-
-            def systemBuildOptions(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootBuildOptions : @systemBuildOptions)
-                else
-                    return @systemBuildOptions
-                end
-
-                rescue exception
-                    ISM::Error.show(className: "Settings",
-                                    functionName: "systemBuildOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-            end
-
             def systemName(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootName : @systemName)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemName
                 else
                     return @systemName
                 end
@@ -657,8 +499,8 @@ module ISM
             end
 
             def systemFullName(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootFullName : @systemFullName)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemFullName
                 else
                     return @systemFullName
                 end
@@ -672,8 +514,8 @@ module ISM
             end
 
             def systemId(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootId : @systemId)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemId
                 else
                     return @systemId
                 end
@@ -687,8 +529,8 @@ module ISM
             end
 
             def systemRelease(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootRelease : @systemRelease)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemRelease
                 else
                     return @systemRelease
                 end
@@ -702,8 +544,8 @@ module ISM
             end
 
             def systemCodeName(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootCodeName : @systemCodeName)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemCodeName
                 else
                     return @systemCodeName
                 end
@@ -717,8 +559,8 @@ module ISM
             end
 
             def systemDescription(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootDescription : @systemDescription)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemDescription
                 else
                     return @systemDescription
                 end
@@ -732,8 +574,8 @@ module ISM
             end
 
             def systemVersion(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootVersion : @systemVersion)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemVersion
                 else
                     return @systemVersion
                 end
@@ -747,8 +589,8 @@ module ISM
             end
 
             def systemVersionId(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootVersionId : @systemVersionId)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemVersionId
                 else
                     return @systemVersionId
                 end
@@ -762,8 +604,8 @@ module ISM
             end
 
             def systemAnsiColor(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootAnsiColor : @systemAnsiColor)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemAnsiColor
                 else
                     return @systemAnsiColor
                 end
@@ -777,8 +619,8 @@ module ISM
             end
 
             def systemCpeName(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootCpeName : @systemCpeName)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemCpeName
                 else
                     return @systemCpeName
                 end
@@ -792,8 +634,8 @@ module ISM
             end
 
             def systemHomeUrl(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootHomeUrl : @systemHomeUrl)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemHomeUrl
                 else
                     return @systemHomeUrl
                 end
@@ -807,8 +649,8 @@ module ISM
             end
 
             def systemSupportUrl(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootSupportUrl : @systemSupportUrl)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemSupportUrl
                 else
                     return @systemSupportUrl
                 end
@@ -822,8 +664,8 @@ module ISM
             end
 
             def systemBugReportUrl(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootBugReportUrl : @systemBugReportUrl)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemBugReportUrl
                 else
                     return @systemBugReportUrl
                 end
@@ -837,8 +679,8 @@ module ISM
             end
 
             def systemPrivacyPolicyUrl(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootPrivacyPolicyUrl : @systemPrivacyPolicyUrl)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemPrivacyPolicyUrl
                 else
                     return @systemPrivacyPolicyUrl
                 end
@@ -852,8 +694,8 @@ module ISM
             end
 
             def systemBuildId(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootBuildId : @systemBuildId)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemBuildId
                 else
                     return @systemBuildId
                 end
@@ -867,8 +709,8 @@ module ISM
             end
 
             def systemVariant(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootVariant : @systemVariant)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemVariant
                 else
                     return @systemVariant
                 end
@@ -882,8 +724,8 @@ module ISM
             end
 
             def systemVariantId(relatedToChroot = true) : String
-                if relatedToChroot
-                    return (@rootPath != "/" ? @chrootVariantId : @systemVariantId)
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.systemVariantId
                 else
                     return @systemVariantId
                 end
@@ -894,6 +736,120 @@ module ISM
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
+            end
+
+            #Chroot getter methods
+
+            def chrootDefaultMirror : String
+                return chrootConfiguration.defaultMirror
+            end
+
+            def chrootBuildKernelOptionsAsModule : String
+                return chrootConfiguration.buildKernelOptionsAsModule
+            end
+
+            def chrootAutoBuildKernel : String
+                return chrootConfiguration.autoBuildKernel
+            end
+
+            def chrootAutoDeployServices : String
+                return chrootConfiguration.autoDeployServices
+            end
+
+            def chrootMakeOptions : String
+                return chrootConfiguration.makeOptions
+            end
+
+            def chrootBuildOptions : String
+                return chrootConfiguration.buildOptions
+            end
+
+            def chrootSystemTargetArchitecture : String
+                return chrootConfiguration.systemTargetArchitecture
+            end
+
+            def chrootSystemTargetVendor : String
+                return chrootConfiguration.systemTargetVendor
+            end
+
+            def chrootSystemTargetOs : String
+                return chrootConfiguration.systemTargetOs
+            end
+
+            def chrootSystemTargetAbi : String
+                return chrootConfiguration.systemTargetAbi
+            end
+
+            def chrootSystemTarget : String
+                return chrootConfiguration.systemTarget
+            end
+
+            def chrootSystemName : String
+                return chrootConfiguration.systemName
+            end
+
+            def chrootSystemFullName : String
+                return chrootConfiguration.systemFullName
+            end
+
+            def chrootSystemId : String
+                return chrootConfiguration.systemId
+            end
+
+            def chrootSystemRelease : String
+                return chrootConfiguration.systemRelease
+            end
+
+            def chrootSystemCodeName : String
+                return chrootConfiguration.systemCodeName
+            end
+
+            def chrootSystemDescription : String
+                return chrootConfiguration.systemDescription
+            end
+
+            def chrootSystemVersion : String
+                return chrootConfiguration.systemVersion
+            end
+
+            def chrootSystemVersionId : String
+                return chrootConfiguration.systemVersionId
+            end
+
+            def chrootSystemAnsiColor : String
+                return chrootConfiguration.systemAnsiColor
+            end
+
+            def chrootSystemCpeName : String
+                return chrootConfiguration.systemCpeName
+            end
+
+            def chrootSystemHomeUrl : String
+                return chrootConfiguration.systemHomeUrl
+            end
+
+            def chrootSystemSupportUrl : String
+                return chrootConfiguration.systemSupportUrl
+            end
+
+            def chrootSystemBugReportUrl : String
+                return chrootConfiguration.systemBugReportUrl
+            end
+
+            def chrootSystemPrivacyPolicyUrl : String
+                return systemPrivacyPolicyUrl = chrootConfiguration.systemPrivacyPolicyUrl
+            end
+
+            def chrootSystemBuildId : String
+                return chrootConfiguration.systemBuildId
+            end
+
+            def chrootSystemVariant : String
+                return chrootConfiguration.systemVariant
+            end
+
+            def chrootSystemVariantId : String
+                return chrootConfiguration.systemVariantId
             end
 
             #Setter methods
@@ -912,6 +868,7 @@ module ISM
                                     exception: exception)
             end
 
+            #   Host
             def setDefaultMirror(@defaultMirror)
                 writeSystemConfiguration
 
@@ -956,10 +913,38 @@ module ISM
                                 exception: exception)
             end
 
-            #   Host
-            def setSystemTargetArchitecture(@systemTargetArchitecture)
+            def setMakeOptions(value : String)
+                if Default::MakeOptionsFilter.matches?(value)
+                    @makeOptions = value
+                    writeSystemConfiguration
+                else
+                    puts "#{Default::ErrorInvalidValueText.colorize(:red)}#{value.colorize(:red)}"
+                    puts "#{Default::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
+                    Ism.exitProgram
+                end
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "setMakeOptions",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def setBuildOptions(@buildOptions)
                 writeSystemConfiguration
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "setBuildOptions",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def setSystemTargetArchitecture(@systemTargetArchitecture)
                 setSystemTarget
+                writeSystemConfiguration
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -970,8 +955,8 @@ module ISM
             end
 
             def setSystemTargetVendor(@systemTargetVendor)
-                writeSystemConfiguration
                 setSystemTarget
+                writeSystemConfiguration
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -982,8 +967,8 @@ module ISM
             end
 
             def setSystemTargetOs(@systemTargetOs)
-                writeSystemConfiguration
                 setSystemTarget
+                writeSystemConfiguration
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -994,8 +979,8 @@ module ISM
             end
 
             def setSystemTargetAbi(@systemTargetAbi)
-                writeSystemConfiguration
                 setSystemTarget
+                writeSystemConfiguration
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1007,41 +992,10 @@ module ISM
 
             def setSystemTarget
                 @systemTarget = "#{@systemTargetArchitecture}-#{@systemTargetVendor}-#{@systemTargetOs}-#{@systemTargetAbi}"
-                writeSystemConfiguration
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
                                     functionName: "setSystemTarget",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-            end
-
-            def setSystemMakeOptions(@systemMakeOptions)
-                match,invalidValue = Ism.inputMatchWithFilter(@systemMakeOptions,Default::MakeOptionsFilter)
-
-                if match
-                    writeSystemConfiguration
-                else
-                    puts "#{Default::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
-                    puts "#{Default::ErrorMakeOptionsInvalidValueAdviceText.colorize(:green)}"
-                    Ism.exitProgram
-                end
-
-                rescue exception
-                    ISM::Error.show(className: "Settings",
-                                    functionName: "setSystemMakeOptions",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-            end
-
-            def setSystemBuildOptions(@systemBuildOptions)
-                writeSystemConfiguration
-
-                rescue exception
-                    ISM::Error.show(className: "Settings",
-                                    functionName: "setSystemBuildOptions",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
@@ -1235,73 +1189,55 @@ module ISM
             end
 
             #   Chroot
-            def setChrootTargetArchitecture(@chrootTargetArchitecture)
-                writeSystemConfiguration
-                setChrootTarget
+            def setChrootDefaultMirror(value : String)
+                writeChrootConfiguration(defaultMirror: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootTargetArchitecture",
+                                    functionName: "setChrootDefaultMirror",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootTargetVendor(@chrootTargetVendor)
-                writeSystemConfiguration
-                setChrootTarget
+            def setChrootBuildKernelOptionsAsModule(value : Bool)
+                writeChrootConfiguration(buildKernelOptionsAsModule: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootTargetVendor",
+                                    functionName: "setChrootBuildKernelOptionsAsModule",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootTargetOs(@chrootTargetOs)
-                writeSystemConfiguration
-                setChrootTarget
+            def setChrootAutoBuildKernel(value : Bool)
+                writeChrootConfiguration(autoBuildKernel: value)
 
                 rescue exception
-                    ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootTargetOs",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+                ISM::Error.show(className: "Settings",
+                                functionName: "setChrootAutoBuildKernel",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
             end
 
-            def setChrootTargetAbi(@chrootTargetAbi)
-                writeSystemConfiguration
-                setChrootTarget
+            def setChrootAutoDeployServices(value : Bool)
+                writeChrootConfiguration(autoDeployServices: value)
 
                 rescue exception
-                    ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootTargetAbi",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
+                ISM::Error.show(className: "Settings",
+                                functionName: "setChrootAutoDeployServices",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
             end
 
-            def setChrootTarget
-                @chrootTarget = "#{@chrootTargetArchitecture}-#{@chrootTargetVendor}-#{@chrootTargetOs}-#{@chrootTargetAbi}"
-                writeSystemConfiguration
-
-                rescue exception
-                    ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootTarget",
-                                    errorTitle: "Execution failure",
-                                    error: "Failed to execute the function",
-                                    exception: exception)
-            end
-
-            def setChrootMakeOptions(@chrootMakeOptions)
-                match,invalidValue = Ism.inputMatchWithFilter(@chrootMakeOptions,Default::MakeOptionsFilter)
-
-                if match
-                    writeSystemConfiguration
+            def setChrootMakeOptions(value : String)
+                if Default::MakeOptionsFilter.matches?(value)
+                    writeChrootConfiguration(makeOptions: value)
                 else
-                    puts "#{Default::ErrorInvalidValueText.colorize(:red)}#{invalidValue.colorize(:red)}"
+                    puts "#{Default::ErrorInvalidValueText.colorize(:red)}#{value.colorize(:red)}"
                     puts "#{Default::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
                     Ism.exitProgram
                 end
@@ -1314,8 +1250,8 @@ module ISM
                                     exception: exception)
             end
 
-            def setChrootBuildOptions(@chrootBuildOptions)
-                writeSystemConfiguration
+            def setChrootBuildOptions(value : String)
+                writeChrootConfiguration(buildOptions: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1325,189 +1261,252 @@ module ISM
                                     exception: exception)
             end
 
-            def setChrootName(@chrootName)
-                writeSystemConfiguration
+            def setChrootSystemTargetArchitecture(value : String)
+                setChrootSystemTarget(architecture: value)
+                writeChrootConfiguration(systemTargetArchitecture: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootName",
+                                    functionName: "setChrootSystemTargetArchitecture",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def setChrootSystemTargetVendor(value : String)
+                setChrootSystemTarget(vendor: value)
+                writeChrootConfiguration(systemTargetVendor: value)
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "setChrootSystemTargetVendor",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def setChrootSystemTargetOs(value : String)
+                setChrootSystemTarget(os: value)
+                writeChrootConfiguration(systemTargetOs: value)
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "setChrootSystemTargetOs",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def setChrootSystemTargetAbi(value : String)
+                setChrootSystemTarget(abi: value)
+                writeChrootConfiguration(systemTargetAbi: value)
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "setChrootSystemTargetAbi",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def setChrootSystemTarget(architecture = chrootConfiguration.systemTargetArchitecture,
+                                vendor = chrootConfiguration.systemTargetVendor,
+                                os = chrootConfiguration.systemTargetOs,
+                                abi = chrootConfiguration.systemTargetAbi)
+
+                writeChrootConfiguration(systemTarget: "#{architecture}-#{vendor}-#{os}-#{abi}")
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "setChrootSystemTarget",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def setChrootSystemName(value : String)
+                writeChrootConfiguration(systemName: value)
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "setChrootSystemName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
 
-            def setChrootFullName(@chrootFullName)
-                writeSystemConfiguration
+            def setChrootSystemFullName(value : String)
+                writeChrootConfiguration(systemFullName: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootFullName",
+                                    functionName: "setChrootSystemFullName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootId(@chrootId)
-                writeSystemConfiguration
+            def setChrootSystemId(value : String)
+                writeChrootConfiguration(systemId: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootId",
+                                    functionName: "setChrootSystemId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootRelease(@chrootRelease)
-                writeSystemConfiguration
+            def setChrootSystemRelease(value : String)
+                writeChrootConfiguration(systemRelease: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootRelease",
+                                    functionName: "setChrootSystemRelease",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootCodeName(@chrootCodeName)
-                writeSystemConfiguration
+            def setChrootSystemCodeName(value : String)
+                writeChrootConfiguration(systemCodeName: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootCodeName",
+                                    functionName: "setChrootSystemCodeName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootDescription(@chrootDescription)
-                writeSystemConfiguration
+            def setChrootSystemDescription(value : String)
+                writeChrootConfiguration(systemDescription: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootDescription",
+                                    functionName: "setChrootSystemDescription",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootVersion(@chrootVersion)
-                writeSystemConfiguration
+            def setChrootSystemVersion(value : String)
+                writeChrootConfiguration(systemVersion: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootVersion",
+                                    functionName: "setChrootSystemVersion",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootVersionId(@chrootVersionId)
-                writeSystemConfiguration
+            def setChrootSystemVersionId(value : String)
+                writeChrootConfiguration(systemVersionId: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootVersionId",
+                                    functionName: "setChrootSystemVersionId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootAnsiColor(@chrootAnsiColor)
-                writeSystemConfiguration
+            def setChrootSystemAnsiColor(value : String)
+                writeChrootConfiguration(systemAnsiColor: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootAnsiColor",
+                                    functionName: "setChrootSystemAnsiColor",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootCpeName(@chrootCpeName)
-                writeSystemConfiguration
+            def setChrootSystemCpeName(value : String)
+                writeChrootConfiguration(systemCpeName: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootCpeName",
+                                    functionName: "setChrootSystemCpeName",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootHomeUrl(@chrootHomeUrl)
-                writeSystemConfiguration
+            def setChrootSystemHomeUrl(value : String)
+                writeChrootConfiguration(systemHomeUrl: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootHomeUrl",
+                                    functionName: "setChrootSystemHomeUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootSupportUrl(@chrootSupportUrl)
-                writeSystemConfiguration
+            def setChrootSystemSupportUrl(value : String)
+                writeChrootConfiguration(systemSupportUrl: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootSupportUrl",
+                                    functionName: "setChrootSystemSupportUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootBugReportUrl(@chrootBugReportUrl)
-                writeSystemConfiguration
+            def setChrootSystemBugReportUrl(value : String)
+                writeChrootConfiguration(systemBugReportUrl: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootBugReportUrl",
+                                    functionName: "setChrootSystemBugReportUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootPrivacyPolicyUrl(@chrootPrivacyPolicyUrl)
-                writeSystemConfiguration
+            def setChrootSystemPrivacyPolicyUrl(value : String)
+                writeChrootConfiguration(systemPrivacyPolicyUrl: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootPrivacyPolicyUrl",
+                                    functionName: "setChrootSystemPrivacyPolicyUrl",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootBuildId(@chrootBuildId)
-                writeSystemConfiguration
+            def setChrootSystemBuildId(value : String)
+                writeChrootConfiguration(systemBuildId: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootBuildId",
+                                    functionName: "setChrootSystemBuildId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootVariant(@chrootVariant)
-                writeSystemConfiguration
+            def setChrootSystemVariant(value : String)
+                writeChrootConfiguration(systemVariant: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootVariant",
+                                    functionName: "setChrootSystemVariant",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)
             end
 
-            def setChrootVariantId(@chrootVariantId)
-                writeSystemConfiguration
+            def setChrootSystemVariantId(value : String)
+                writeChrootConfiguration(systemVariantId: value)
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
-                                    functionName: "setChrootVariantId",
+                                    functionName: "setChrootSystemVariantId",
                                     errorTitle: "Execution failure",
                                     error: "Failed to execute the function",
                                     exception: exception)

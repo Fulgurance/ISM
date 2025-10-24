@@ -4,14 +4,14 @@ module ISM
 
         class Settings
 
-            class DisableBuildKernelOptionsAsModule < CommandLine::Option
+            class DisableChrootAutoDeployServices < CommandLine::Option
 
                 module Default
 
-                    ShortText = "-dbkoam"
-                    LongText = "disablebuildkerneloptionsasmodule"
-                    Description = "Disable the building of the kernel options as loadable modules as a priority for the system"
-                    SetText = "Disabling building kernel options as module as a priority for the system"
+                    ShortText = "-dcads"
+                    LongText = "disablechrootautodeployservices"
+                    Description = "Disable service automatic deployement for the chroot"
+                    SetText = "Disabling service automatic deployement for the chroot"
 
                 end
 
@@ -23,7 +23,7 @@ module ISM
 
                 def start
                     if ARGV.size == 2
-                        Ism.settings.setBuildKernelOptionsAsModule(false)
+                        Ism.settings.setChrootAutoDeployServices(false)
                         Ism.printProcessNotification(Default::SetText)
                     end
                 end

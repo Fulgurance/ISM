@@ -668,33 +668,6 @@ module ISM
                                 exception: exception)
         end
 
-        def inputMatchWithFilter(input : String, filter : Regex | Array(Regex))
-            if filter.is_a?(Array(Regex))
-                userInput = input.split(" ")
-
-                userInput.each do |value|
-
-                    if !filter.any? {|rule| rule.matches?(value)}
-                        return false,value
-                    end
-
-                end
-            else
-                if !filter.matches?(input)
-                    return false,input
-                end
-            end
-
-            return true,String.new
-
-            rescue exception
-                ISM::Error.show(className: "CommandLine",
-                                functionName: "inputMatchWithFilter",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
         def reportMissingDependency(missingDependency : Software::Information, relatedSoftware : Software::Information)
             @unavailableDependencySignals.push([relatedSoftware, missingDependency])
 

@@ -4,14 +4,14 @@ module ISM
 
         class Settings
 
-            class DisableBuildKernelOptionsAsModule < CommandLine::Option
+            class EnableChrootAutoBuildKernel < CommandLine::Option
 
                 module Default
 
-                    ShortText = "-dbkoam"
-                    LongText = "disablebuildkerneloptionsasmodule"
-                    Description = "Disable the building of the kernel options as loadable modules as a priority for the system"
-                    SetText = "Disabling building kernel options as module as a priority for the system"
+                    ShortText = "-ecabk"
+                    LongText = "enablechrootautobuildkernel"
+                    Description = "Enable automatic kernel building for the chroot"
+                    SetText = "Enabling automatic kernel building for the chroot"
 
                 end
 
@@ -23,7 +23,7 @@ module ISM
 
                 def start
                     if ARGV.size == 2
-                        Ism.settings.setBuildKernelOptionsAsModule(false)
+                        Ism.settings.setChrootAutoBuildKernel(true)
                         Ism.printProcessNotification(Default::SetText)
                     end
                 end
