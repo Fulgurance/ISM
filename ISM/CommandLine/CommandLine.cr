@@ -1134,49 +1134,45 @@ module ISM
         end
 
         def printInternalErrorNotification(error : ISM::TaskBuildingProcessError)
-            limit = Default::InternalErrorTitle.size
-
-            separatorText = String.new
-
-            (0..limit).each do |index|
-                separatorText += "="
-            end
-
             title = "#{Default::InternalErrorTitle.colorize(:red)}"
-            separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{Default::TaskBuildingProcessErrorText1}#{error.file}#{Default::TaskBuildingProcessErrorText2}#{error.line.to_s}\n#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
+            errorText = "#{Default::TaskBuildingProcessErrorText1}#{error.file}#{Default::TaskBuildingProcessErrorText2}#{error.line.to_s}".colorize(Colorize::ColorRGB.new(255,100,100))
+            errorMessage = "#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
             help = "\n#{Default::TaskBuildingErrorNotificationHelp.colorize(:red)}"
 
-            puts
-            puts separatorText
-            puts title
-            puts separatorText
-            puts errorText
-            puts help
+            errorReport = <<-REPORT
+            [ #{title} ]
+
+            #{errorText}
+
+            #{errorMessage}
+
+            #{help}
+            REPORT
+
+            puts "\n#{errorReport}\n"
         end
 
         def printInstallerImplementationErrorNotification(software : Software::Information, error : ISM::TaskBuildingProcessError)
-            limit = Default::InstallerImplementationErrorTitle.size
             errorText1 = "#{Default::InstallerImplementationErrorText1.colorize(Colorize::ColorRGB.new(255,100,100))}"
             softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
             errorText2 = "#{Default::InstallerImplementationErrorText2}#{error.line.to_s}:".colorize(Colorize::ColorRGB.new(255,100,100))
-            separatorText = String.new
-
-            (0..limit).each do |index|
-                separatorText += "="
-            end
 
             title = "#{Default::InstallerImplementationErrorTitle.colorize(:red)}"
-            separatorText = "#{separatorText.colorize(:red)}"
-            errorText = "\n#{errorText1}#{softwareText}#{errorText2}\n\n#{error.message.colorize(:yellow)}"
+            errorText = "#{errorText1}#{softwareText}#{errorText2}"
+            errorMessage = "#{error.message.colorize(:yellow)}"
             help = "\n#{Default::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
 
-            puts
-            puts separatorText
-            puts title
-            puts separatorText
-            puts errorText
-            puts help
+            errorReport = <<-REPORT
+            [ #{title} ]
+
+            #{errorText}
+
+            #{errorMessage}
+
+            #{help}
+            REPORT
+
+            puts "\n#{errorReport}\n"
         end
 
         def notifyOfGetFileContentError(filePath : String, error = nil)
