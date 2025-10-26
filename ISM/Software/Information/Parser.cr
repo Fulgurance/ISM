@@ -146,7 +146,7 @@ module ISM
                 APIKeywords = { :component => "component",
                                 :software => "software"}
 
-                APIKeywordsFilters = {:component => /(#{APIKeywords[:component]}\(\"[\w-]+\"\))/}
+                APIKeywordsFilters = {:component => /(#{APIKeywords[:component]}\(\"[\s\S]+\"\))/}
 
                 BoleanKeywords = {  :true => "true",
                                     :false => "false"}
