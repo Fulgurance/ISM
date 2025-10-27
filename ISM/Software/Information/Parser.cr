@@ -514,7 +514,7 @@ module ISM
 
                         case keyword1
                         when Parser::APIKeywords[:component]
-                            subPath = string1.gsub(/[@:]/,"")
+                            subPath = string1.gsub(/[@:]/,"/")
                             results = Dir.glob("#{Ism.settings.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{subPath}/**/#{Filename::SoftwareSettings}")
 
                             if results.size > 1
@@ -522,10 +522,10 @@ module ISM
                             elsif results.size == 0
                                 raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
                             else
-                                return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1])
+                                return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1][1..-2])
                             end
                         when Parser::APIKeywords[:software]
-                            subPath = string1.gsub(/[@:]/,"")
+                            subPath = string1.gsub(/[@:]/,"/")
                             results = Dir.glob("#{Ism.settings.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{subPath}/**/#{Filename::SoftwareSettings}")
 
                             if results.size > 1
@@ -533,7 +533,7 @@ module ISM
                             elsif results.size == 0
                                 raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
                             else
-                                return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1])
+                                return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1][1..-2])
                             end
                         else
                             raise "Unknow keyword: #{keyword1}\nfor comparison: #{comparison}"
