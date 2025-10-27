@@ -521,7 +521,8 @@ module ISM
                             elsif results.size == 0
                                 raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
                             else
-                                return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1])
+                                result = results[0].gsub(/[@:]/,"")
+                                return fromInformationFile(result).uniqueDependencyIsEnabled(values[1])
                             end
                         when Parser::APIKeywords[:software]
                             results = Dir.glob("#{Ism.settings.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{string1}/**/#{Filename::SoftwareSettings}")
@@ -531,7 +532,8 @@ module ISM
                             elsif results.size == 0
                                 raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
                             else
-                                return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1])
+                                result = results[0].gsub(/[@:]/,"")
+                                return fromInformationFile(result).uniqueDependencyIsEnabled(values[1])
                             end
                         else
                             raise "Unknow keyword: #{keyword1}\nfor comparison: #{comparison}"
