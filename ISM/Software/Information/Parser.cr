@@ -510,7 +510,7 @@ module ISM
 
                         value1 = values[0].match(/(#{Parser::APIKeywordsGroupFilter})/).to_s
                         keyword1 = value1.gsub(stringFilter,"")
-                        string1 = value1.match(stringFilter).to_s[1..-2]
+                        string1 = value1.match(stringFilter).to_s[2..-3]
 
                         case keyword1
                         when Parser::APIKeywords[:component]
