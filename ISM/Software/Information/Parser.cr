@@ -515,7 +515,7 @@ module ISM
                         case keyword1
                         when Parser::APIKeywords[:component]
                             subPath = string1.gsub(/[@:]/,"/")
-                            results = Dir.glob("#{Ism.settings.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{subPath}/**/#{Filename::SoftwareSettings}")
+                            results = Dir.glob("#{CommandLine::Settings.loadConfiguration.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{subPath}/**/#{Filename::SoftwareSettings}")
 
                             if results.size > 1
                                 raise "Inacurate value: #{string1}\n for comparison: #{comparison}"
@@ -526,7 +526,7 @@ module ISM
                             end
                         when Parser::APIKeywords[:software]
                             subPath = string1.gsub(/[@:]/,"/")
-                            results = Dir.glob("#{Ism.settings.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{subPath}/**/#{Filename::SoftwareSettings}")
+                            results = Dir.glob("#{CommandLine::Settings.loadConfiguration.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{subPath}/**/#{Filename::SoftwareSettings}")
 
                             if results.size > 1
                                 raise "Inacurate value: #{string1}\n for comparison: #{comparison}"
