@@ -199,8 +199,11 @@ module ISM
                     file = File.read_lines(path)
 
                     currentSection = String.new
-                    currentIfLevel = 0
+
+                    ifNumber = 0
                     ifLevelsValidity = Array(Bool).new
+                    endNumber = 0
+
                     currentOption = Hash(String, String).new
                     underOptionDependenciesSubSection = false
                     underOptionKernelDependenciesSubSection = false
@@ -337,12 +340,14 @@ module ISM
                                     #It is the line declaration for dependencies
                                     #We ensure the dependencies pass the filter
                                     if Parser::DependencyVersionFilter.matches?(strippedLine) || Parser::DependencyVersionWithOptionsFilter.matches?(strippedLine)
-                                        if currentIfLevel == 0 || currentIfLevel > 0 && !ifLevelsValidity[0..currentIfLevel-1].any? { |entry| entry == false }
+                                        if  ifNumber == 0 ||
+                                            ifNumber > 0 && endNumber == ifNumber ||
+                                            ifNumber > 0 && endNumber < ifNumber && !ifLevelsValidity[ifLevelsValidity.size-endNumber..-1].any? { |entry| entry == false }
                                             dependencies.push(parseDependencyDescriptor(strippedLine))
                                         end
                                     elsif Parser::IfFilter.matches?(strippedLine)
 
-                                        currentIfLevel += 1
+                                        ifNumber += 1
 
                                         ifLevelsValidity.push(parseCondition(conditions: strippedLine.gsub(/\A#{Parser::ConditionKeywords[:if]}\s+/,"")))
                                     elsif Parser::ElsifFilter.matches?(strippedLine)
@@ -350,10 +355,10 @@ module ISM
                                     elsif Parser::ElseFilter.matches?(strippedLine)
 
                                     elsif Parser::EndFilter.matches?(strippedLine)
-                                        if currentIfLevel == 0
+                                        if ifNumber == 0
                                             raise("Line #{index+1}\nFile: #{path}\nExtra end: #{line}\n.An extra end section is declared.")
                                         else
-                                            currentIfLevel -= 1
+                                            endNumber += 1
                                         end
                                     else
                                         raise("Line #{index+1}\nFile: #{path}\nIllegal character: #{line}\nThe declared dependency list used an illegal character or is not declared properly.")
