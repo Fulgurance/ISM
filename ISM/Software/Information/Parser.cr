@@ -514,17 +514,25 @@ module ISM
 
                         case keyword1
                         when Parser::APIKeywords[:component]
-                            component = Ism.getSoftwareInformation( userEntry: string1,
-                                                                    allowSearchByNameOnly: true,
-                                                                    searchComponentsOnly: true)
+                            results = Dir.glob("#{Ism.settings.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{string1}/**/#{Filename::SoftwareSettings}")
 
-                            return component.uniqueDependencyIsEnabled(values[1])
+                            if results.size > 1
+                                raise "Inacurate value: #{string1}\n for comparison: #{comparison}"
+                            elsif results.size == 0
+                                raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
+                            else
+                                return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1])
+                            end
                         when Parser::APIKeywords[:software]
-                            software = Ism.getSoftwareInformation(  userEntry: string1,
-                                                                    allowSearchByNameOnly: true,
-                                                                    searchComponentsOnly: false)
+                            results = Dir.glob("#{Ism.settings.rootPath}#{Path::SettingsSoftwaresDirectory}/**/#{string1}/**/#{Filename::SoftwareSettings}")
 
-                            return software.uniqueDependencyIsEnabled(values[1])
+                            if results.size > 1
+                                raise "Inacurate value: #{string1}\n for comparison: #{comparison}"
+                            elsif results.size == 0
+                                raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
+                            else
+                                return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1])
+                            end
                         else
                             raise "Unknow keyword: #{keyword1}\nfor comparison: #{comparison}"
                         end
