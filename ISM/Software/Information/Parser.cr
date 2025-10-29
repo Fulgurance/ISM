@@ -552,7 +552,8 @@ module ISM
                             if results.size > 1
                                 raise "Inacurate value: #{string1}\n for comparison: #{comparison}"
                             elsif results.size == 0
-                                raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
+                                return false
+                                #raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
                             else
                                 return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1][1..-2])
                             end
@@ -563,7 +564,8 @@ module ISM
                             if results.size > 1
                                 raise "Inacurate value: #{string1}\n for comparison: #{comparison}"
                             elsif results.size == 0
-                                raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
+                                return false
+                                #raise "Unvalid value: #{string1}\n for comparison: #{comparison}"
                             else
                                 return fromInformationFile(results[0]).uniqueDependencyIsEnabled(values[1][1..-2])
                             end
