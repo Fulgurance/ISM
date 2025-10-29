@@ -24,7 +24,7 @@ module ISM
                 def start
                     if ARGV.size == 2
                         Ism.setSystemAccess(locked: false)
-                        Ism.printProcessNotification(Default::SetText)
+                        ISM::Core::Notification.runningProcess(Default::SetText)
                     end
                 end
 

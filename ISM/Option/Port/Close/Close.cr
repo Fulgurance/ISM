@@ -28,10 +28,10 @@ module ISM
                         showHelp
                     else
                         if ISM::Port.exists(ARGV[2])
-                            Ism.printProcessNotification(Default::CloseText+ARGV[2])
+                            ISM::Core::Notification.runningProcess(Default::CloseText+ARGV[2])
                             ISM::Port.delete(ARGV[2])
                         else
-                            Ism.printErrorNotification(Default::NoMatchFoundText1+ARGV[2]+Default::NoMatchFoundText2,nil)
+                            ISM::Core::Notification.error(Default::NoMatchFoundText1+ARGV[2]+Default::NoMatchFoundText2,nil)
                         end
                     end
                 end

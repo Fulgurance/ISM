@@ -53,10 +53,10 @@ module ISM
                         end
 
                         if !matchingOption
-                            puts "#{CommandLine::Default::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[1].colorize(:white)}"
-                            puts    "#{CommandLine::Default::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                                    "#{CommandLine::Default::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                                    "#{CommandLine::Default::ErrorUnknowArgumentHelp3.colorize(:white)}"
+                            puts "#{ISM::Core::Notification::Default::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[1].colorize(:white)}"
+                            puts    "#{ISM::Core::Notification::Default::ErrorUnknowArgumentHelp1.colorize(:white)}" +
+                                    "#{ISM::Core::Notification::Default::ErrorUnknowArgumentHelp2.colorize(:green)}" +
+                                    "#{ISM::Core::Notification::Default::ErrorUnknowArgumentHelp3.colorize(:white)}"
                         end
                     end
                 end

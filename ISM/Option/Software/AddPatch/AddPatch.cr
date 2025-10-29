@@ -43,12 +43,12 @@ module ISM
                                 patchPath = ARGV[3]
 
                                 if Ism.addPatch(patchPath,matchingSoftware.versionName)
-                                    Ism.printProcessNotification(   Default::Text1 +
+                                    ISM::Core::Notification.runningProcess(   Default::Text1 +
                                                                 patchPath +
                                                                 Default::Text2 +
                                                                 matchingSoftware.name)
                                 else
-                                    Ism.printErrorNotification( Default::NoFileFound1 +
+                                    ISM::Core::Notification.error( Default::NoFileFound1 +
                                                             patchPath +
                                                             Default::NoFileFound2 +
                                                             matchingSoftware.name,nil)

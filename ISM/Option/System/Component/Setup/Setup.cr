@@ -46,7 +46,7 @@ module ISM
 
                             matchingComponent.writeConfiguration(matchingComponent.settingsFilePath)
 
-                            Ism.printProcessNotification(   Default::Text1 +
+                            ISM::Core::Notification.runningProcess(   Default::Text1 +
                                                             "#{("@"+matchingComponent.port).colorize(:red)}:#{matchingComponent.name.colorize(:green)}" +
                                                             Default::Text2)
                         end

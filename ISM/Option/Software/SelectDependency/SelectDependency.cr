@@ -49,12 +49,12 @@ module ISM
                                 if matchingSoftware.selectUniqueDependency(dependency.fullName)
                                     matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
 
-                                    Ism.printProcessNotification(   Default::SetText1 +
+                                    ISM::Core::Notification.runningProcess(   Default::SetText1 +
                                                                     dependencyText +
                                                                     Default::SetText2 +
                                                                     matchingSoftwareText)
                                 else
-                                    Ism.printErrorNotification( Default::DependencyNoMatchFound1 +
+                                    ISM::Core::Notification.error( Default::DependencyNoMatchFound1 +
                                                                 dependencyText +
                                                                 Default::DependencyNoMatchFound2 +
                                                                 matchingSoftwareText,nil)

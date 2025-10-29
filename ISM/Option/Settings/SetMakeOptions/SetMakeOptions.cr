@@ -26,7 +26,7 @@ module ISM
                         showHelp
                     else
                         Ism.settings.setMakeOptions(ARGV[2])
-                        Ism.printProcessNotification(Default::SetText+ARGV[2])
+                        ISM::Core::Notification.runningProcess(Default::SetText+ARGV[2])
                     end
                 end
 

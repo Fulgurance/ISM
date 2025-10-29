@@ -6,86 +6,10 @@ module ISM
 
             Title = "Ingenius System Manager"
             Name = "ism"
-            Id = 250
-            RanAsSuperUserText = "ISM can't be run as root. Operation aborted."
-            NotRanAsMemberOfIsmGroupText = "The current user is not in the #{Name} group (id: #{Id.to_s}). Operation aborted."
-            ErrorUnknowArgument = "ISM error: unknow argument "
-            ErrorUnknowArgumentHelp1 = "Use "
-            ErrorUnknowArgumentHelp2 = "ism --help "
-            ErrorUnknowArgumentHelp3 = "to know how to use ISM"
-            ProcessNotificationCharacters = "■"
-            InternalErrorTitle = "Internal error"
-            TaskBuildingProcessErrorText1 = "The ISM task at "
-            TaskBuildingProcessErrorText2 = " encountered an error at line number "
-            InstallerImplementationErrorTitle = "Software installer implementation error"
-            InstallerImplementationErrorText1 = "The installer for the software "
-            InstallerImplementationErrorText2 = " encountered an error at line number "
-            InstallerImplementationErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean the related installer need to be fix."
-            TaskBuildingErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean probably the task building process need to be fix."
             SystemCallErrorNotificationHelp = "ISM raised that error because the ran script did not call properly a system command or the system command itself need to be fix."
             TaskCompilationText = "Task compilation in process: "
             CompilationWaitingText = "Compiling the requested task"
             TaskCompilationFailedText = "Failed !"
-            SetupChrootPermissionsText = "Setting default permissions for the targeted system"
-            PrepareChrootProcText = "Mounting /proc in the targeted system"
-            PrepareChrootSysText = "Mounting /sys in the targeted system"
-            PrepareChrootProcDev = "Mounting /dev in the targeted system"
-            PrepareChrootRunText = "Mounting /run in the targeted system"
-            PrepareChrootNetworkText = "Copying network details in the targeted system"
-            DownloadText = "Downloading "
-            DownloadAdditionsText = "Downloading additions"
-            CheckText = "Checking "
-            CheckAdditionsText = "Checking additions"
-            CheckIntegrityText = "Checking files integrity"
-            CheckAuthenticityText = "Checking files authenticity"
-            CheckIntegrityFileText = "Checking integrity for"
-            CheckAuthenticityFileText = "Checking authenticity for"
-            ExtractText = "Extracting "
-            ExtractAdditionsText = "Extracting additions"
-            PatchText = "Patching "
-            LocalPatchText = "Applying local patch added by the user "
-            PrepareText =  "Preparing "
-            ConfigureText = "Configuring "
-            BuildText = "Building "
-            PrepareInstallationText = "Preparing installation for "
-            StripFilesText = "Stripping files"
-            DeployText = "Deploying"
-            UpdateSystemCacheText = "Updating system caches"
-            InstallText = "Installing "
-            RecordNeededKernelOptionsText = "Recording needed kernel options for "
-            CleanText = "Cleaning "
-            FuturKernelText = "future kernel (not installed yet)"
-            UpdateKernelOptionsDatabaseText = "Updating kernel options database for "
-            UninstallText = "Uninstalling "
-            ErrorDownloadText = "Failed to download from "
-            ErrorConnexionText1 = "Failed to connect to "
-            ErrorConnexionText2 = ". The connexion is unaivalable"
-            ErrorCheckText1 = "Failed check because the sha512 digest of "
-            ErrorCheckText2 = " doesn't match with the given sha512 value "
-            ErrorExtractText1 = "Failed to extract the archive located at "
-            ErrorExtractText2 = " to "
-            ErrorApplyPatchText = "Failed to apply the patch "
-            ErrorUpdateUserFileText = "Failed to update the user file with the data: "
-            ErrorUpdateGroupFileText = "Failed to update the group file with the data: "
-            ErrorCopyFileText1 = "Failed to copy the file from "
-            ErrorCopyFileText2 = " to "
-            ErrorCopyDirectoryText1 = "Failed to copy the directory from "
-            ErrorCopyDirectoryText2 = " to "
-            ErrorDeleteFileText = "Failed to delete the file "
-            ErrorMoveFileText1 = "Failed to move "
-            ErrorMoveFileText2 = " to "
-            ErrorMakeDirectoryText = "Failed to make directory "
-            ErrorDeleteDirectoryText = "Failed to delete directory "
-            ErrorMakeLinkUnknowTypeText1 = "Failed to make symbolic link from "
-            ErrorMakeLinkUnknowTypeText2 = " to "
-            ErrorMakeLinkUnknowTypeText3 = ". Unknow link type: "
-            ErrorGetFileContentText = "Failed to get file content from "
-            ErrorRunSystemCommandText1 = "Failed to run "
-            ErrorRunSystemCommandText2 = " in "
-            ErrorRunSystemCommandText3 = " with given environment "
-            ErrorRunSystemCommandText4 = " with the loaded environment file "
-            ErrorRunSystemCommandUnknownError = "ISM encountered an error with the last executed command, but was not able to record it. The reason is unknown."
-            ErrorUpdateKernelOptionsDatabaseText = "Failed to update the option database for the kernel "
             AmbiguousSearchTitle = "The searched software name is ambiguous."
             AmbiguousSearchText = "ISM is unable to find the requested software because there are multiple entry in the database for this name:"
             InextricableText = "ISM stopped due to an inextricable problem of dependencies with these softwares:"
@@ -103,7 +27,7 @@ module ISM
             SynchronizationWaitingText = "Synchronization with the online database"
             CodependencyExtensionText = "Codependency"
             CalculationDoneText = "Done !"
-            Separator = "============"
+            Separator = "<<<<<<>>>>>>"
             NoOptionText = "no option"
             NewText = "New!"
             AdditionalVersionText = "Additional Version"
@@ -989,7 +913,7 @@ module ISM
             end
 
             if !matchingOption
-                showErrorUnknowArgument
+                ISM::Core::Notification.unknownArgumentError
             end
 
             rescue exception
@@ -998,344 +922,6 @@ module ISM
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
                                 exception: exception)
-        end
-
-        def printRanAsSuperUserErrorNotification
-            puts "#{Default::RanAsSuperUserText.colorize(:yellow)}"
-        end
-
-        def printNotRanAsMemberOfIsmGroupErrorNotification
-            puts "#{Default::NotRanAsMemberOfIsmGroupText.colorize(:yellow)}"
-        end
-
-        def showErrorUnknowArgument
-            puts "#{Default::ErrorUnknowArgument.colorize(:yellow)}" + "#{ARGV[0].colorize(:white)}"
-            puts    "#{Default::ErrorUnknowArgumentHelp1.colorize(:white)}" +
-                    "#{Default::ErrorUnknowArgumentHelp2.colorize(:green)}" +
-                    "#{Default::ErrorUnknowArgumentHelp3.colorize(:white)}"
-        end
-
-        def printProcessNotification(message : String)
-            puts "#{Default::ProcessNotificationCharacters.colorize(:green)} #{message}"
-        end
-
-        def printSubProcessNotification(message : String)
-            puts "\t#{"|".colorize(:green)} #{message}"
-        end
-
-        def printErrorNotification(message : String, error)
-            puts
-            puts "[#{"!".colorize(:red)}] #{message.colorize(Colorize::ColorRGB.new(255,100,100))}"
-
-            if typeof(error) == Exception
-                puts "[#{"!".colorize(:red)}] "
-                puts "#{error.colorize(Colorize::ColorRGB.new(255,100,100))}"
-            end
-        end
-
-        def printInternalErrorNotification(error : ISM::TaskBuildingProcessError)
-            title = "#{Default::InternalErrorTitle.colorize(:red)}"
-            errorText = "#{Default::TaskBuildingProcessErrorText1}#{error.file}#{Default::TaskBuildingProcessErrorText2}#{error.line.to_s}".colorize(Colorize::ColorRGB.new(255,100,100))
-            errorMessage = "#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
-            help = "\n#{Default::TaskBuildingErrorNotificationHelp.colorize(:red)}"
-
-            errorReport = <<-REPORT
-            [ #{title} ]
-
-            #{errorText}
-
-            #{errorMessage}
-
-            #{help}
-            REPORT
-
-            puts "\n#{errorReport}\n"
-        end
-
-        def printInstallerImplementationErrorNotification(software : Software::Information, error : ISM::TaskBuildingProcessError)
-            errorText1 = "#{Default::InstallerImplementationErrorText1.colorize(Colorize::ColorRGB.new(255,100,100))}"
-            softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
-            errorText2 = "#{Default::InstallerImplementationErrorText2}#{error.line.to_s}:".colorize(Colorize::ColorRGB.new(255,100,100))
-
-            title = "#{Default::InstallerImplementationErrorTitle.colorize(:red)}"
-            errorText = "#{errorText1}#{softwareText}#{errorText2}"
-            errorMessage = "#{error.message.colorize(:yellow)}"
-            help = "\n#{Default::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
-
-            errorReport = <<-REPORT
-            [ #{title} ]
-
-            #{errorText}
-
-            #{errorMessage}
-
-            #{help}
-            REPORT
-
-            puts "\n#{errorReport}\n"
-        end
-
-        def notifyOfGetFileContentError(filePath : String, error = nil)
-            printErrorNotification(Default::ErrorGetFileContentText+filePath, error)
-        end
-
-        def printInformationNotificationTitle(name : String, version : String)
-            limit = name.size+version.size+2
-            text = "#{name.colorize(:green)} /#{version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
-
-            separatorText = String.new
-
-            (0..limit).each do |index|
-                separatorText += "-"
-            end
-
-            separatorText = "#{separatorText.colorize(:green)}"
-
-            puts
-            puts separatorText
-            puts text
-            puts separatorText
-        end
-
-        def printInformationNotification(message : String)
-            puts "[#{"Info".colorize(:green)}] #{message}"
-        end
-
-        def printInformationCodeNotification(message : String)
-            puts "#{message.colorize(:magenta).back(Colorize::ColorRGB.new(80, 80, 80))}"
-        end
-
-        def notifyOfDownload(softwareInformation : Software::Information)
-            printProcessNotification(Default::DownloadText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfSetupChrootPermissions
-            printSubProcessNotification(Default::SetupChrootPermissionsText)
-        end
-
-        def notifyOfPrepareChrootProc
-            printSubProcessNotification(Default::PrepareChrootProcText)
-        end
-
-        def notifyOfPrepareChrootSys
-            printSubProcessNotification(Default::PrepareChrootSysText)
-        end
-
-        def notifyOfPrepareChrootDev
-            printSubProcessNotification(Default::PrepareChrootProcDev)
-        end
-
-        def notifyOfPrepareChrootRun
-            printSubProcessNotification(Default::PrepareChrootRunText)
-        end
-
-        def notifyOfPrepareChrootNetwork
-            printSubProcessNotification(Default::PrepareChrootNetworkText)
-        end
-
-        def notifyOfDownloadAdditions
-            printProcessNotification(Default::DownloadAdditionsText)
-        end
-
-        def notifyOfCheck(softwareInformation : Software::Information)
-            printProcessNotification(Default::CheckText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfCheckIntegrity
-            printSubProcessNotification("#{Default::CheckIntegrityText.colorize(:green)}")
-        end
-
-        def notifyOfCheckAuthenticity
-            printSubProcessNotification("#{Default::CheckAuthenticityText.colorize(:green)}")
-        end
-
-        def notifyOfCheckIntegrityFile(file : String)
-            printSubProcessNotification(Default::CheckIntegrityFileText+" #{file.colorize(:green)}")
-        end
-
-        def notifyOfCheckAuthenticityFile(file : String)
-            printSubProcessNotification(Default::CheckAuthenticityFileText+" #{file.colorize(:green)}")
-        end
-
-        def notifyOfCheckAdditions
-            printProcessNotification(Default::CheckAdditionsText)
-        end
-
-        def notifyOfExtract(softwareInformation : Software::Information)
-            printProcessNotification(Default::ExtractText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfExtractAdditions
-            printProcessNotification(Default::ExtractAdditionsText)
-        end
-
-        def notifyOfPatch(softwareInformation : Software::Information)
-            printProcessNotification(Default::PatchText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfLocalPatch(patchName : String)
-            printSubProcessNotification(Default::LocalPatchText+"#{patchName.colorize(:yellow)}")
-        end
-
-        def notifyOfPrepare(softwareInformation : Software::Information)
-            printProcessNotification(Default::PrepareText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfConfigure(softwareInformation : Software::Information)
-            printProcessNotification(Default::ConfigureText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfBuild(softwareInformation : Software::Information)
-            printProcessNotification(Default::BuildText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfPrepareInstallation(softwareInformation : Software::Information)
-            printProcessNotification(Default::PrepareInstallationText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfStripFiles
-            printSubProcessNotification(Default::StripFilesText)
-        end
-
-        def notifyOfDeploy
-            printSubProcessNotification(Default::DeployText)
-        end
-
-        def notifyOfUpdateSystemCache
-            printSubProcessNotification(Default::UpdateSystemCacheText)
-        end
-
-        def notifyOfInstall(softwareInformation : Software::Information)
-            printProcessNotification(Default::InstallText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfUpdateKernelOptionsDatabase(softwareInformation : Software::Information)
-            printProcessNotification(Default::UpdateKernelOptionsDatabaseText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfRecordNeededKernelOptions
-            kernelName = (selectedKernel.name == "" ? Default::FuturKernelText : selectedKernel.name )
-
-            printProcessNotification(Default::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
-        end
-
-        def notifyOfClean(softwareInformation : Software::Information)
-            printProcessNotification(Default::CleanText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfUninstall(softwareInformation : Software::Information)
-            printProcessNotification(Default::UninstallText+"#{softwareInformation.name.colorize(:green)}")
-        end
-
-        def notifyOfDownloadError(link : String, error = nil)
-            printErrorNotification(Default::ErrorDownloadText+link, error)
-        end
-
-        def notifyOfConnexionError(link : String, error = nil)
-            printErrorNotification( Default::ErrorConnexionText1 +
-                                    link +
-                                    Default::ErrorConnexionText2,
-                                    error)
-        end
-
-        def notifyOfCheckError(archive : String, sha512 : String, error = nil)
-            printErrorNotification( Default::ErrorCheckText1 +
-                                    archive +
-                                    Default::ErrorCheckText2 +
-                                    sha512, error)
-        end
-
-        def notifyOfExtractError(archivePath : String, destinationPath : String ,error = nil)
-            printErrorNotification( Default::ErrorExtractText1 +
-                                    archivePath +
-                                    Default::ErrorExtractText2 +
-                                    destinationPath,
-                                    error)
-        end
-
-        def notifyOfApplyPatchError(patchName : String, error = nil)
-            printErrorNotification(Default::ErrorApplyPatchText+patchName, error)
-        end
-
-        def notifyOfCopyFileError(path : String | Enumerable(String), targetPath : String, error = nil)
-            if path.is_a?(Enumerable(String))
-                path = path.join(",")
-
-            end
-            printErrorNotification(Default::ErrorCopyFileText1 +
-                                   path +
-                                   Default::ErrorCopyFileText2 +
-                                   targetPath, error)
-        end
-
-        def notifyOfCopyDirectoryError(path : String, targetPath : String, error = nil)
-            printErrorNotification(Default::ErrorCopyDirectoryText1 +
-                                   path +
-                                   Default::ErrorCopyDirectoryText2 +
-                                   targetPath, error)
-        end
-
-        def notifyOfDeleteFileError(path : String | Enumerable(String), error = nil)
-            if path.is_a?(Enumerable(String))
-                path = path.join(",")
-            end
-
-            printErrorNotification(Default::ErrorDeleteFileText+path, error)
-        end
-
-        def notifyOfMoveFileError(path : String | Enumerable(String), newPath : String, error = nil)
-            if path.is_a?(Enumerable(String))
-                path = path.join(",")
-            end
-
-            printErrorNotification( Default::ErrorMoveFileText1 +
-                                    path +
-                                    Default::ErrorMoveFileText2 +
-                                    newPath, error)
-        end
-
-        def notifyOfMakeDirectoryError(directory : String, error = nil)
-            printErrorNotification(Default::ErrorMakeDirectoryText+directory, error)
-        end
-
-        def notifyOfDeleteDirectoryError(directory : String, error = nil)
-            printErrorNotification(Default::ErrorDeleteDirectoryText+directory, error)
-        end
-
-        def notifyOfMakeLinkUnknowTypeError(path : String, targetPath : String, linkType : Symbol, error = nil)
-            printErrorNotification( Default::ErrorMakeLinkUnknowTypeText1 +
-                                    path +
-                                    Default::ErrorMakeLinkUnknowTypeText2 +
-                                    targetPath +
-                                    Default::ErrorMakeLinkUnknowTypeText3 +
-                                    linkType.to_s, error)
-        end
-
-        def notifyOfRunSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
-
-            argumentText = "#{Default::ErrorRunSystemCommandText1}#{arguments.squeeze(" ")}"
-            pathText = String.new
-            environmentText = String.new
-            environmentFilePathText = String.new
-
-            if !path.empty?
-                pathText = "#{Default::ErrorRunSystemCommandText2}#{(targetSystemInformation.handleChroot ? @settings.rootPath : "")}#{path}".squeeze("/")
-            end
-
-            if !environment.empty?
-                environmentText = "#{Default::ErrorRunSystemCommandText3}#{(environment.map { |key| key.join("=") }).join(" ")}"
-            end
-
-            if !environmentFilePath.empty?
-                environmentFilePathText = "#{Default::ErrorRunSystemCommandText4}#{environmentFilePath}"
-            end
-
-            printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
-                                        error)
-        end
-
-        def notifyOfUpdateKernelOptionsDatabaseError(software : Software::Information, error = nil)
-            printErrorNotification(Default::ErrorUpdateKernelOptionsDatabaseText+software.versionName, error)
         end
 
         def resetCalculationAnimation
@@ -1555,15 +1141,15 @@ module ISM
 
             #Not related to target installer implementation
             if targetStartingLine == 0
-                printInternalErrorNotification(taskError)
+                ISM::Core::Notification.internalError(taskError)
             else
             #Related to target installer implementation
-                printInstallerImplementationErrorNotification(  software,
-                                                                ISM::TaskBuildingProcessError.new(  file:       targetPath,
-                                                                                                    line:       realLineNumber,
-                                                                                                    column:     taskError.column,
-                                                                                                    size:       taskError.size,
-                                                                                                    message:    taskError.message))
+                ISM::Core::Notification.installerImplementationError(   software,
+                                                                        ISM::TaskBuildingProcessError.new(  file:       targetPath,
+                                                                                                            line:       realLineNumber,
+                                                                                                            column:     taskError.column,
+                                                                                                            size:       taskError.size,
+                                                                                                            message:    taskError.message))
             end
         end
 
@@ -3156,7 +2742,7 @@ module ISM
             }
 
             if viaChroot
-                user = (asRoot ? "0" : Default::Id.to_s)
+                user = (asRoot ? "0" : Core::Security::Default::Id.to_s)
                 userspec = "--userspec=#{user}:#{user}"
 
                 command = "HOME=/var/lib/ism chroot #{userspec} #{@settings.rootPath} #{taskRelativeFilePath}"
@@ -3273,7 +2859,7 @@ module ISM
             process = runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                notifyOfRunSystemCommandError(requestedCommands, path, environment, environmentFilePath)
+                ISM::Core::Notification.runSystemCommandError(requestedCommands, path, environment, environmentFilePath)
                 exitProgram
             end
 
@@ -3313,7 +2899,7 @@ module ISM
                                         path: path)
 
             if !process.success?
-                notifyOfRunSystemCommandError(requestedCommands, path)
+                ISM::Core::Notification.runSystemCommandError(requestedCommands, path)
                 exitProgram
             end
 
@@ -3335,7 +2921,7 @@ module ISM
                                         path: path)
 
             if !process.success?
-                notifyOfRunSystemCommandError(requestedCommands, path)
+                ISM::Core::Notification.runSystemCommandError(requestedCommands, path)
                 exitProgram
             end
 
@@ -3356,7 +2942,7 @@ module ISM
                                         path: path)
 
             if !process.success?
-                notifyOfRunSystemCommandError(requestedCommands, path)
+                ISM::Core::Notification.runSystemCommandError(requestedCommands, path)
                 exitProgram
             end
 
@@ -3378,7 +2964,7 @@ module ISM
                                         path: path)
 
             if !process.success?
-                notifyOfRunSystemCommandError(requestedCommands, path)
+                ISM::Core::Notification.runSystemCommandError(requestedCommands, path)
                 exitProgram
             end
 

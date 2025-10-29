@@ -6,7 +6,6 @@ module ISM
 
             module Default
 
-                Name = "ism"
                 Id = 250
 
             end
@@ -67,7 +66,7 @@ module ISM
                 groupSystemFile.each do |line|
                     userName = System::User.find_by(id: LibC.getuid.to_s).username
 
-                    if line.starts_with?(Default::Name) && (line.includes?(userName) || userName == Default::Name)
+                    if line.starts_with?(CommandLine::Default::Name) && (line.includes?(userName) || userName == CommandLine::Default::Name)
                         return true
                     end
                 end

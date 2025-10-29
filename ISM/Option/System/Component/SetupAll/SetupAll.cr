@@ -24,7 +24,7 @@ module ISM
                     end
 
                     def start
-                        Ism.printProcessNotification(Default::Text)
+                        ISM::Core::Notification.runningProcess(Default::Text)
 
                         Ism.components.each do |component|
                             component.writeConfiguration(component.settingsFilePath)

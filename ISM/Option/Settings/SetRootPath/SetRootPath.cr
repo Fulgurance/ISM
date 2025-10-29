@@ -32,7 +32,7 @@ module ISM
                         end
 
                         Ism.settings.setRootPath(path)
-                        Ism.printProcessNotification(Default::SetText+path)
+                        ISM::Core::Notification.runningProcess(Default::SetText+path)
                     end
                 end
 

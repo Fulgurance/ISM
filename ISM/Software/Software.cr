@@ -296,7 +296,7 @@ module ISM
         end
 
         def setupChrootPermissions
-            Ism.notifyOfSetupChrootPermissions
+            ISM::Core::Notification.setupChrootPermissions
 
             commandList = Array(String).new
 
@@ -330,7 +330,7 @@ module ISM
 
         # Internal use only
         def prepareChrootProc
-            Ism.notifyOfPrepareChrootProc
+            ISM::Core::Notification.prepareChrootProc
 
             requestedCommands = "/usr/bin/mount --types proc /proc #{Ism.settings.rootPath}/proc"
 
@@ -348,7 +348,7 @@ module ISM
 
         # Internal use only
         def prepareChrootSys
-            Ism.notifyOfPrepareChrootSys
+            ISM::Core::Notification.prepareChrootSys
 
             requestedCommands = "/usr/bin/mount --rbind /sys #{Ism.settings.rootPath}/sys"
 
@@ -366,7 +366,7 @@ module ISM
 
         # Internal use only
         def prepareChrootDev
-            Ism.notifyOfPrepareChrootDev
+            ISM::Core::Notification.prepareChrootDev
 
             requestedCommands = "/usr/bin/mount --rbind /dev #{Ism.settings.rootPath}/dev"
 
@@ -384,7 +384,7 @@ module ISM
 
         # Internal use only
         def prepareChrootRun
-            Ism.notifyOfPrepareChrootRun
+            ISM::Core::Notification.prepareChrootRun
 
             requestedCommands = "/usr/bin/mount --bind /run #{Ism.settings.rootPath}/run"
 
@@ -402,7 +402,7 @@ module ISM
 
         # Internal use only
         def prepareChrootNetwork
-            Ism.notifyOfPrepareChrootNetwork
+            ISM::Core::Notification.prepareChrootNetwork
 
             requestedCommands = "/usr/bin/cp --dereference /etc/resolv.conf #{Ism.settings.rootPath}/etc/resolv.conf"
 
@@ -442,7 +442,7 @@ module ISM
         end
 
         def download
-            Ism.notifyOfDownload(@information)
+            ISM::Core::Notification.download(@information)
 
             cleanWorkDirectoryPath
 
@@ -464,7 +464,7 @@ module ISM
         end
 
         def downloadAdditions
-            Ism.notifyOfDownloadAdditions
+            ISM::Core::Notification.downloadAdditions
 
             downloadAdditionalSources
             downloadAdditionalSourcesSha512
@@ -619,7 +619,7 @@ module ISM
                         rescue
                             error = "#{Default::DownloadSourceRedirectionErrorText1}#{response.status_code}#{Default::DownloadSourceRedirectionErrorText2}"
 
-                            Ism.notifyOfDownloadError(link, error)
+                            ISM::Core::Notification.downloadError(link, error)
                             Ism.exitProgram
                         end
                         break
@@ -678,7 +678,7 @@ module ISM
                     else
                         error = "#{Default::DownloadSourceCodeErrorText}#{response.status_code}"
 
-                        Ism.notifyOfDownloadError(link, error)
+                        ISM::Core::Notification.downloadError(link, error)
                         Ism.exitProgram
                     end
                 end
@@ -708,7 +708,7 @@ module ISM
         end
 
         def check
-            Ism.notifyOfCheck(@information)
+            ISM::Core::Notification.check(@information)
 
             checkSourcesIntegrity
             checkSourcesAuthenticity
@@ -722,7 +722,7 @@ module ISM
         end
 
         def checkSourcesIntegrity
-            Ism.notifyOfCheckIntegrity
+            ISM::Core::Notification.checkIntegrity
 
             checkSourcesSha512
 
@@ -739,7 +739,7 @@ module ISM
         end
 
         def checkSourcesAuthenticity
-            Ism.notifyOfCheckAuthenticity
+            ISM::Core::Notification.checkAuthenticity
 
             checkSourcesSignature
 
@@ -756,7 +756,7 @@ module ISM
         end
 
         def checkSourcesSha512
-            Ism.notifyOfCheckIntegrityFile("#{Default::SourcesArchiveName}")
+            ISM::Core::Notification.checkIntegrityFile("#{Default::SourcesArchiveName}")
 
             checkIntegrity( archive:    "#{workDirectoryPathNoChroot}/#{Default::SourcesArchiveName}",
                             sha512:     getFileContent(workDirectoryPathNoChroot+"/"+Default::SourcesSha512ArchiveName).strip)
@@ -770,7 +770,7 @@ module ISM
         end
 
         def checkSourcesSignature
-            Ism.notifyOfCheckAuthenticityFile("#{Default::SourcesArchiveName}")
+            ISM::Core::Notification.checkAuthenticityFile("#{Default::SourcesArchiveName}")
 
             checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{Default::SourcesArchiveName}",
                                 archiveSignature:   "#{workDirectoryPathNoChroot}/#{Default::SourcesSignatureArchiveName}",
@@ -788,7 +788,7 @@ module ISM
             @additions.each do |link|
                 archiveName = link.lchop(link[0..link.rindex("/")]).gsub(Default::ArchiveExtensionName,"")
 
-                Ism.notifyOfCheckIntegrityFile("#{archiveName}#{Default::ArchiveExtensionName}")
+                ISM::Core::Notification.checkIntegrityFile("#{archiveName}#{Default::ArchiveExtensionName}")
 
                 checkIntegrity( archive:    "#{workDirectoryPathNoChroot}/#{archiveName}#{Default::ArchiveExtensionName}",
                                 sha512:     getFileContent("#{workDirectoryPathNoChroot}/#{archiveName}#{Default::ArchiveSha512ExtensionName}").strip)
@@ -806,7 +806,7 @@ module ISM
             @additions.each do |link|
                 fileName = link.lchop(link[0..link.rindex("/")]).gsub(Default::ArchiveExtensionName,"")
 
-                Ism.notifyOfCheckAuthenticityFile("#{fileName}#{Default::ArchiveExtensionName}")
+                ISM::Core::Notification.checkAuthenticityFile("#{fileName}#{Default::ArchiveExtensionName}")
 
                 checkAuthenticity(  archive:            "#{workDirectoryPathNoChroot}/#{Default::SourcesArchiveName}",
                                     archiveSignature:   "#{workDirectoryPathNoChroot}/#{Default::SourcesSignatureArchiveName}",
@@ -857,7 +857,7 @@ module ISM
         end
 
         def extract
-            Ism.notifyOfExtract(@information)
+            ISM::Core::Notification.extract(@information)
 
             extractSources
 
@@ -891,7 +891,7 @@ module ISM
         end
 
         def extractAdditions
-            Ism.notifyOfExtractAdditions
+            ISM::Core::Notification.extractAdditions
 
             @additions.each do |link|
                 archiveName = link.lchop(link[0..link.rindex("/")])
@@ -921,7 +921,7 @@ module ISM
         end
         
         def patch
-            Ism.notifyOfPatch(@information)
+            ISM::Core::Notification.patch(@information)
 
             if Dir.exists?("#{workDirectoryPathNoChroot+"/"+Default::PatchesDirectoryName}")
                 Dir["#{workDirectoryPathNoChroot+"/"+Default::PatchesDirectoryName}/*"].each do |patch|
@@ -932,7 +932,7 @@ module ISM
             if Dir.exists?(Ism.settings.rootPath+ISM::Path::PatchesDirectory+"/#{@information.versionName}")
                 Dir[Ism.settings.rootPath+ISM::Path::PatchesDirectory+"/#{@information.versionName}/*"].each do |patch|
                     patchName = patch.lchop(patch[0..patch.rindex("/")])
-                    Ism.notifyOfLocalPatch(patchName)
+                    ISM::Core::Notification.localPatch(patchName)
                     applyPatch(patch)
                 end
             end
@@ -959,7 +959,7 @@ module ISM
         end
 
         def prepare
-            Ism.notifyOfPrepare(@information)
+            ISM::Core::Notification.prepare(@information)
 
             #Generate all build directories
             @buildDirectoryNames.keys.each do |key|
@@ -1959,7 +1959,7 @@ module ISM
         end
 
         def configure
-            Ism.notifyOfConfigure(@information)
+            ISM::Core::Notification.configure(@information)
         end
 
         def configureSource(arguments = String.new, path = String.new, configureDirectory = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, relatedToMainBuild = true)
@@ -1978,7 +1978,7 @@ module ISM
         end
         
         def build
-            Ism.notifyOfBuild(@information)
+            ISM::Core::Notification.build(@information)
         end
 
         def makePerlSource(path = String.new)
@@ -2086,7 +2086,7 @@ module ISM
         end
 
         def prepareInstallation
-            Ism.notifyOfPrepareInstallation(@information)
+            ISM::Core::Notification.prepareInstallation(@information)
         end
 
         def recordInstallationInformation : Tuple(UInt128, UInt128, UInt128, UInt128)
@@ -2132,7 +2132,7 @@ module ISM
         end
 
         def updateSystemCache
-            Ism.notifyOfUpdateSystemCache
+            ISM::Core::Notification.updateSystemCache
 
             if commandIsAvailable("ldconfig") && Ism.targetSystemInformation.handleChroot
                 runLdconfigCommand
@@ -2147,7 +2147,7 @@ module ISM
         end
 
         def deploy
-            Ism.notifyOfDeploy
+            ISM::Core::Notification.deploy
         end
 
         #Special function for the installation process without chroot (Internal use only)
@@ -2214,7 +2214,7 @@ module ISM
         end
 
         def install(preserveLibtoolArchives = false, stripFiles = true)
-            Ism.notifyOfInstall(@information)
+            ISM::Core::Notification.install(@information)
 
             condition = (Ism.targetSystemInformation.handleChroot || !Ism.targetSystemInformation.handleChroot && Ism.settings.rootPath == "/")
 
@@ -2235,7 +2235,7 @@ module ISM
 
             #Strip the file if needed
             if stripFiles
-                Ism.notifyOfStripFiles
+                ISM::Core::Notification.stripFiles
 
                 stripFileListNoChroot(fileList)
             end
@@ -2545,7 +2545,7 @@ module ISM
         end
 
         def updateKernelOptionsDatabase
-            Ism.notifyOfUpdateKernelOptionsDatabase(Ism.selectedKernel)
+            ISM::Core::Notification.updateKernelOptionsDatabase(Ism.selectedKernel)
 
             makeDirectoryNoChroot(kernelOptionsDatabasePath)
 
@@ -2564,11 +2564,11 @@ module ISM
         end
 
         def recordNeededKernelOptions
-            Ism.notifyOfRecordNeededKernelOptions
+            ISM::Core::Notification.recordNeededKernelOptions
         end
         
         def clean
-            Ism.notifyOfClean(@information)
+            ISM::Core::Notification.clean(@information)
 
             cleanWorkDirectoryPath
         end
@@ -2592,11 +2592,11 @@ module ISM
 
         def showInformations
             puts
-            Ism.printInformationNotificationTitle(@information.name,@information.version)
+            ISM::Core::Notification.informationsTitle(@information.name,@information.version)
         end
 
         def uninstall
-            Ism.notifyOfUninstall(@information)
+            ISM::Core::Notification.uninstall(@information)
 
             Ism.uninstallSoftware(@information)
         end
@@ -2739,11 +2739,11 @@ module ISM
         end
 
         def showInfo(message : String)
-            Ism.printInformationNotification(message)
+            ISM::Core::Notification.information(message)
         end
 
         def showInfoCode(message : String)
-            Ism.printInformationCodeNotification(message)
+            ISM::Core::Notification.informationCode(message)
         end
 
         def commandIsAvailable(command : String) : Bool

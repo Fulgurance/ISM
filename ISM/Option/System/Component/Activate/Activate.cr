@@ -57,12 +57,12 @@ module ISM
 
                                     if match
                                         matchingSoftware.writeConfiguration(matchingSoftware.settingsFilePath)
-                                        Ism.printProcessNotification(   Default::SetText1 +
+                                        ISM::Core::Notification.runningProcess(   Default::SetText1 +
                                                                     "#{matchingOption.name.colorize(:green)}" +
                                                                     Default::SetText2 +
                                                                     matchingSoftwareText)
                                     else
-                                        Ism.printErrorNotification( Default::OptionNoMatchFound1 +
+                                        ISM::Core::Notification.error( Default::OptionNoMatchFound1 +
                                                                 "#{ARGV[3].colorize(:green)}" +
                                                                 Default::OptionNoMatchFound2 +
                                                                 matchingSoftwareText,nil)
