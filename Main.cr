@@ -3,10 +3,10 @@ require "./RequiredLibraries"
 Ism = ISM::CommandLine.new
 
 begin
-    if Ism.ranAsSuperUser
+    if ISM::Core::Security.ranAsSuperUser
         Ism.printRanAsSuperUserErrorNotification
         Ism.exitProgram(code: 2)
-    elsif !Ism.ranAsMemberOfIsmGroup
+    elsif !ISM::Core::Security.ranAsMemberOfIsmGroup
         Ism.printNotRanAsMemberOfIsmGroupErrorNotification
         Ism.exitProgram(code: 3)
     else

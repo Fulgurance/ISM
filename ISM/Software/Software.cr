@@ -52,12 +52,12 @@ module ISM
 
         #Special function to improve performance (Internal use only)
         def changeFileModeNoChroot(path : String, mode : String)
-            Ism.changeFileMode(path,mode)
+            Core::Security.changeFileMode(path,mode)
         end
 
         #Special function to improve performance (Internal use only)
         def changeFileOwnerNoChroot(path : String, user : String, group : String)
-            Ism.changeFileOwner(path,user,group)
+            Core::Security.changeFileOwner(path,user,group)
         end
 
         def autoBuildKernel
@@ -2240,7 +2240,7 @@ module ISM
                 stripFileListNoChroot(fileList)
             end
 
-            Ism.runAsSuperUser(validCondition: condition) {
+            Core::Security.runAsSuperUser(validCondition: condition) {
                 fileList.each do |entry|
 
                     #Don't keep libtool archives by default except if explicitely specified
@@ -2574,7 +2574,7 @@ module ISM
         end
 
         def cleanWorkDirectoryPath
-            Ism.runAsSuperUser {
+            Core::Security.runAsSuperUser {
                 if Dir.exists?(workDirectoryPathNoChroot)
                     deleteDirectoryNoChroot(workDirectoryPathNoChroot)
                 end

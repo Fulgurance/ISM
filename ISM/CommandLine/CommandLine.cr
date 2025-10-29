@@ -200,106 +200,6 @@ module ISM
             @green = UInt8.new(55)
         end
 
-        def runAsSuperUser(validCondition = true, &)
-            if validCondition
-                uidResult = LibC.setresuid( realId: 0,
-                                            effectiveId: 0,
-                                            savedId: Default::Id)
-                gidResult = LibC.setresgid( realId: 0,
-                                            effectiveId: 0,
-                                            savedId: Default::Id)
-
-                if uidResult.negative? || gidResult.negative?
-                    ISM::Error.show(className: "CommandLine",
-                                    functionName: "runAsSuperUser",
-                                    errorTitle: "Privilege escalation failure",
-                                    error: "It mean probably that the uid and gid bit are not set.")
-                end
-            end
-
-            begin
-                yield
-            ensure
-                #We ensure we exit without superuser access
-                LibC.setresuid( realId: Default::Id,
-                                effectiveId: Default::Id,
-                                savedId: 0)
-                LibC.setresgid( realId: Default::Id,
-                                effectiveId: Default::Id,
-                                savedId: 0)
-            end
-
-            rescue exception
-                ISM::Error.show(className: "CommandLine",
-                                functionName: "runAsSuperUser",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
-        def ranAsSuperUser : Bool
-            return (LibC.getuid == 0)
-
-            rescue exception
-                ISM::Error.show(className: "CommandLine",
-                                functionName: "ranAsSuperUser",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
-        def ranAsMemberOfIsmGroup : Bool
-            groupSystemFile = runAsSuperUser {
-                File.read_lines("/etc/group")
-            }
-
-            groupSystemFile.each do |line|
-                userName = System::User.find_by(id: LibC.getuid.to_s).username
-
-                if line.starts_with?(Default::Name) && (line.includes?(userName) || userName == Default::Name)
-                    return true
-                end
-            end
-
-            return false
-
-
-            rescue exception
-                ISM::Error.show(className: "CommandLine",
-                                functionName: "ranAsMemberOfGroupIsm",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
-        end
-
-        def changeFileMode(path : String, mode : String)
-            File.chmod( path: path,
-                        permissions: mode.to_i(8))
-
-            rescue exception
-                ISM::Error.show(className: "CommandLine",
-                                functionName: "changeFileMode",
-                                errorTitle: "Execution failure",
-                                error: "Failed to set mode #{mode} to #{path}",
-                                exception: exception)
-        end
-
-        def changeFileOwner(path : String, user : String, group : String)
-            uid = (user.to_i? ? System::User.find_by(id: user).id.to_i : System::User.find_by(name: user).id.to_i)
-            gid = (group.to_i? ? System::Group.find_by(id: group).id.to_i : System::Group.find_by(name: group).id.to_i)
-
-            File.chown( path: path,
-                        uid: uid,
-                        gid: gid)
-
-            rescue exception
-                ISM::Error.show(className: "CommandLine",
-                                functionName: "changeFileOwner",
-                                errorTitle: "Execution failure",
-                                error: "Failed to change the owner of #{path} to #{user}:#{group}",
-                                exception: exception)
-        end
-
         def start
             loadSettingsFiles
             loadSystemInformationFile
@@ -323,7 +223,7 @@ module ISM
 
         #This function ensure that the generated directory is owned by ism user:group
         def createSystemDirectory(path : String)
-            runAsSuperUser {
+            Core::Security.runAsSuperUser {
                 if !Dir.exists?(path)
                     Dir.mkdir_p(path)
                 end
@@ -337,14 +237,14 @@ module ISM
                     splitPath.each do |dir|
                         targetedPath += "/#{dir}"
 
-                        changeFileOwner(path: targetedPath,
-                                        user: Default::Name,
-                                        group: Default::Name)
+                        Core::Security.changeFileOwner( path: targetedPath,
+                                                        user: Default::Name,
+                                                        group: Default::Name)
                     end
                 else
-                    changeFileOwner(path: path,
-                                    user: Default::Name,
-                                    group: Default::Name)
+                    Core::Security.changeFileOwner( path: path,
+                                                    user: Default::Name,
+                                                    group: Default::Name)
                 end
             }
 
@@ -1987,7 +1887,7 @@ module ISM
 
         def cleanBuildingDirectory(path : String)
 
-            runAsSuperUser {
+            Core::Security.runAsSuperUser {
                 if Dir.exists?(path)
                     FileUtils.rm_r(path)
                 end
@@ -2434,7 +2334,7 @@ module ISM
 
         def buildTasksFile
             if File.exists?("#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}")
-                runAsSuperUser {
+                Core::Security.runAsSuperUser {
                     Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                                 shell: true)
 
@@ -2479,7 +2379,7 @@ module ISM
             #   -owned by root (uid 0 and gid 0)
             #   -suid bit set
             #   -set as immutable to don't allow any suppression
-            runAsSuperUser {
+            Core::Security.runAsSuperUser {
                 Process.run(command: "/usr/bin/chown 0:0 #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                             shell: true)
 
@@ -2980,7 +2880,7 @@ module ISM
             end
 
             if File.exists?("#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr")
-                runAsSuperUser {
+                Core::Security.runAsSuperUser {
                     Process.run(command: "/usr/bin/chattr -f -i #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr",
                                 shell: true)
 
@@ -3235,7 +3135,7 @@ module ISM
 
             # We first check if there is any task left
             if File.exists?("#{taskAbsoluteFilePath}")
-                process = runAsSuperUser {
+                process = Core::Security.runAsSuperUser {
                     Process.run(command: "rm #{taskAbsoluteFilePath}",
                                 shell: true)
                 }
@@ -3247,7 +3147,7 @@ module ISM
 
             File.write(taskAbsoluteFilePath, tasks)
 
-            process = runAsSuperUser {
+            process = Core::Security.runAsSuperUser {
                 Process.run(command:    "chmod +x #{taskAbsoluteFilePath}",
                             input:      quietMode,
                             output:     quietMode,
@@ -3264,7 +3164,7 @@ module ISM
                 command = "#{taskAbsoluteFilePath}"
             end
 
-            process = runAsSuperUser(validCondition: (viaChroot || asRoot)) {
+            process = Core::Security.runAsSuperUser(validCondition: (viaChroot || asRoot)) {
                 Process.run(command:    command,
                             input:      quietMode,
                             output:     quietMode,
