@@ -6,12 +6,14 @@ module ISM
 
             module Default
 
-                #Class related
-                MakeOptionsFilter = /-j[0-9]/
-                SettingsFilePath = "#{Path::SettingsDirectory}#{Filename::Settings}"
                 ErrorInvalidValueText = "Invalid value detected: "
                 ErrorMakeOptionsInvalidValueAdviceText = "The input value must be of the form -jX where X is the number of jobs to run simultaneously"
                 ErrorChrootMakeOptionsInvalidValueAdviceText = "The input value must be of the form -jX where X is the number of jobs to run simultaneously"
+                ErrorChrootPathNotSetText = "The path to the new system is actually not set. Please set the root path first."
+
+                #Class related
+                MakeOptionsFilter = /-j[0-9]/
+                SettingsFilePath = "#{Path::SettingsDirectory}#{Filename::Settings}"
 
                 #Generic parameters
                 RootPath = "/"
@@ -1190,7 +1192,12 @@ module ISM
 
             #   Chroot
             def setChrootDefaultMirror(value : String)
-                writeChrootConfiguration(defaultMirror: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(defaultMirror: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1201,7 +1208,12 @@ module ISM
             end
 
             def setChrootBuildKernelOptionsAsModule(value : Bool)
-                writeChrootConfiguration(buildKernelOptionsAsModule: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(buildKernelOptionsAsModule: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1212,7 +1224,12 @@ module ISM
             end
 
             def setChrootAutoBuildKernel(value : Bool)
-                writeChrootConfiguration(autoBuildKernel: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(autoBuildKernel: value)
+                end
 
                 rescue exception
                 ISM::Error.show(className: "Settings",
@@ -1223,7 +1240,12 @@ module ISM
             end
 
             def setChrootAutoDeployServices(value : Bool)
-                writeChrootConfiguration(autoDeployServices: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(autoDeployServices: value)
+                end
 
                 rescue exception
                 ISM::Error.show(className: "Settings",
@@ -1234,12 +1256,17 @@ module ISM
             end
 
             def setChrootMakeOptions(value : String)
-                if Default::MakeOptionsFilter.matches?(value)
-                    writeChrootConfiguration(makeOptions: value)
-                else
-                    puts "#{Default::ErrorInvalidValueText.colorize(:red)}#{value.colorize(:red)}"
-                    puts "#{Default::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
                     Ism.exitProgram
+                else
+                    if Default::MakeOptionsFilter.matches?(value)
+                        writeChrootConfiguration(makeOptions: value)
+                    else
+                        puts "#{Default::ErrorInvalidValueText.colorize(:red)}#{value.colorize(:red)}"
+                        puts "#{Default::ErrorChrootMakeOptionsInvalidValueAdviceText.colorize(:green)}"
+                        Ism.exitProgram
+                    end
                 end
 
                 rescue exception
@@ -1251,7 +1278,12 @@ module ISM
             end
 
             def setChrootBuildOptions(value : String)
-                writeChrootConfiguration(buildOptions: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(buildOptions: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1262,8 +1294,13 @@ module ISM
             end
 
             def setChrootSystemTargetArchitecture(value : String)
-                setChrootSystemTarget(architecture: value)
-                writeChrootConfiguration(systemTargetArchitecture: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    setChrootSystemTarget(architecture: value)
+                    writeChrootConfiguration(systemTargetArchitecture: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1274,8 +1311,13 @@ module ISM
             end
 
             def setChrootSystemTargetVendor(value : String)
-                setChrootSystemTarget(vendor: value)
-                writeChrootConfiguration(systemTargetVendor: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    setChrootSystemTarget(vendor: value)
+                    writeChrootConfiguration(systemTargetVendor: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1286,8 +1328,13 @@ module ISM
             end
 
             def setChrootSystemTargetOs(value : String)
-                setChrootSystemTarget(os: value)
-                writeChrootConfiguration(systemTargetOs: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    setChrootSystemTarget(os: value)
+                    writeChrootConfiguration(systemTargetOs: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1298,8 +1345,13 @@ module ISM
             end
 
             def setChrootSystemTargetAbi(value : String)
-                setChrootSystemTarget(abi: value)
-                writeChrootConfiguration(systemTargetAbi: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    setChrootSystemTarget(abi: value)
+                    writeChrootConfiguration(systemTargetAbi: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1313,8 +1365,12 @@ module ISM
                                 vendor = chrootConfiguration.systemTargetVendor,
                                 os = chrootConfiguration.systemTargetOs,
                                 abi = chrootConfiguration.systemTargetAbi)
-
-                writeChrootConfiguration(systemTarget: "#{architecture}-#{vendor}-#{os}-#{abi}")
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemTarget: "#{architecture}-#{vendor}-#{os}-#{abi}")
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1325,7 +1381,12 @@ module ISM
             end
 
             def setChrootSystemName(value : String)
-                writeChrootConfiguration(systemName: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemName: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1337,7 +1398,12 @@ module ISM
 
 
             def setChrootSystemFullName(value : String)
-                writeChrootConfiguration(systemFullName: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemFullName: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1348,7 +1414,12 @@ module ISM
             end
 
             def setChrootSystemId(value : String)
-                writeChrootConfiguration(systemId: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemId: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1359,7 +1430,12 @@ module ISM
             end
 
             def setChrootSystemRelease(value : String)
-                writeChrootConfiguration(systemRelease: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemRelease: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1370,7 +1446,12 @@ module ISM
             end
 
             def setChrootSystemCodeName(value : String)
-                writeChrootConfiguration(systemCodeName: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemCodeName: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1381,7 +1462,12 @@ module ISM
             end
 
             def setChrootSystemDescription(value : String)
-                writeChrootConfiguration(systemDescription: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemDescription: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1392,7 +1478,12 @@ module ISM
             end
 
             def setChrootSystemVersion(value : String)
-                writeChrootConfiguration(systemVersion: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemVersion: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1403,7 +1494,12 @@ module ISM
             end
 
             def setChrootSystemVersionId(value : String)
-                writeChrootConfiguration(systemVersionId: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemVersionId: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1414,7 +1510,12 @@ module ISM
             end
 
             def setChrootSystemAnsiColor(value : String)
-                writeChrootConfiguration(systemAnsiColor: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemAnsiColor: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1425,7 +1526,12 @@ module ISM
             end
 
             def setChrootSystemCpeName(value : String)
-                writeChrootConfiguration(systemCpeName: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemCpeName: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1436,7 +1542,12 @@ module ISM
             end
 
             def setChrootSystemHomeUrl(value : String)
-                writeChrootConfiguration(systemHomeUrl: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemHomeUrl: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1447,7 +1558,12 @@ module ISM
             end
 
             def setChrootSystemSupportUrl(value : String)
-                writeChrootConfiguration(systemSupportUrl: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemSupportUrl: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1458,7 +1574,12 @@ module ISM
             end
 
             def setChrootSystemBugReportUrl(value : String)
-                writeChrootConfiguration(systemBugReportUrl: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemBugReportUrl: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1469,7 +1590,12 @@ module ISM
             end
 
             def setChrootSystemPrivacyPolicyUrl(value : String)
-                writeChrootConfiguration(systemPrivacyPolicyUrl: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemPrivacyPolicyUrl: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1480,7 +1606,12 @@ module ISM
             end
 
             def setChrootSystemBuildId(value : String)
-                writeChrootConfiguration(systemBuildId: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemBuildId: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1491,7 +1622,12 @@ module ISM
             end
 
             def setChrootSystemVariant(value : String)
-                writeChrootConfiguration(systemVariant: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemVariant: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
@@ -1502,7 +1638,12 @@ module ISM
             end
 
             def setChrootSystemVariantId(value : String)
-                writeChrootConfiguration(systemVariantId: value)
+                if Ism.settings.rootPath == "/"
+                    puts "#{Default::ErrorChrootPathNotSetText.colorize(:green)}"
+                    Ism.exitProgram
+                else
+                    writeChrootConfiguration(systemVariantId: value)
+                end
 
                 rescue exception
                     ISM::Error.show(className: "Settings",
