@@ -51,6 +51,7 @@ module ISM
                 FuturKernelText = "future kernel (not installed yet)"
                 UpdateKernelOptionsDatabaseText = "Updating kernel options database for "
                 UninstallText = "Uninstalling "
+                ErrorDownloadText = "Failed to download from "
                 ErrorRunSystemCommandText1 = "Failed to run "
                 ErrorRunSystemCommandText2 = " in "
                 ErrorRunSystemCommandText3 = " with given environment "
@@ -272,6 +273,10 @@ module ISM
 
             def self.uninstall(softwareInformation : Software::Information)
                 runningProcess(Default::UninstallText+"#{softwareInformation.name.colorize(:green)}")
+            end
+
+            def self.downloadError(link : String, error = nil)
+                error(Default::ErrorDownloadText+link, error)
             end
 
             def self.runSystemCommandError(arguments : String, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new, error = nil)
