@@ -28,6 +28,7 @@ module ISM
                 PrepareChrootRunText = "Mounting /run in the targeted system"
                 PrepareChrootNetworkText = "Copying network details in the targeted system"
                 DownloadText = "Downloading "
+                DownloadAdditionsText = "Downloading additions"
                 CheckText = "Checking "
                 CheckAdditionsText = "Checking additions"
                 CheckIntegrityText = "Checking files integrity"
@@ -163,6 +164,10 @@ module ISM
 
             def self.download(softwareInformation : Software::Information)
                 runningProcess(Default::DownloadText+"#{softwareInformation.name.colorize(:green)}")
+            end
+
+            def self.downloadAdditions
+                runningProcess(Default::DownloadAdditionsText)
             end
 
             def self.setupChrootPermissions
