@@ -896,7 +896,7 @@ module ISM
 
             if ARGV.empty?
                 matchingOption = true
-                @options[0].start
+                ISM::Option::Help.new.start
                 resetTerminalTitle
             else
                 @options.each_with_index do |argument, index|
