@@ -292,7 +292,7 @@ module ISM
                 environmentFilePathText = String.new
 
                 if !path.empty?
-                    pathText = "#{Default::ErrorRunSystemCommandText2}#{(Ism.targetSystemInformation.handleChroot ? @settings.rootPath : "")}#{path}".squeeze("/")
+                    pathText = "#{Default::ErrorRunSystemCommandText2}#{(Ism.targetSystemInformation.handleChroot ? Ism.settings.rootPath : "")}#{path}".squeeze("/")
                 end
 
                 if !environment.empty?
