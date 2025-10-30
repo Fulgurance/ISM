@@ -267,7 +267,7 @@ module ISM
             end
 
             def self.recordNeededKernelOptions
-                kernelName = (selectedKernel.name == "" ? Default::FuturKernelText : selectedKernel.name )
+                kernelName = (Ism.selectedKernel.name == "" ? Default::FuturKernelText : Ism.selectedKernel.name )
 
                 runningProcess(Default::RecordNeededKernelOptionsText+"#{kernelName.colorize(:green)}")
             end
