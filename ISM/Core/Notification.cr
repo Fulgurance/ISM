@@ -16,7 +16,7 @@ module ISM
                 InternalErrorTitle = "Internal error"
                 TaskBuildingProcessErrorText1 = "The ISM's task located at "
                 TaskBuildingProcessErrorText2 = " is facing a compilation issue:"
-                TaskBuildingErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean probably the task building process need to be fix."
+                TaskBuildingErrorNotificationHelp = "This issue can be related to a software installer or ISM itself. Please join this log when you report the bug."
                 SetupChrootPermissionsText = "Setting default permissions for the targeted system"
                 PrepareChrootProcText = "Mounting /proc in the targeted system"
                 PrepareChrootSysText = "Mounting /sys in the targeted system"
