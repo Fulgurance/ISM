@@ -1107,52 +1107,8 @@ module ISM
         end
 
         #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
-        def showTaskBuildingProcessErrorMessage(taskErrors : Array(ISM::TaskBuildingProcessError), taskPath : String)
-            taskErrors.each do |error|
-                ISM::Core::Notification.internalError(error)
-            end
-            # targetMarkPointFilter = /^#TARGET[0-9]+#\//
-            # endTargetSectionMarkPoint = "#END TARGET SECTION"
-            #
-            # taskCodeLines = File.read_lines(taskPath)
-            #
-            # targetStartingLine = 0
-            # realLineNumber = 0
-            # targetPath = String.new
-            # software = Software::Information.new
-            #
-            # codeLines = taskCodeLines[0..taskError.line-1]
-            #
-            # #Instead to start from zero, start from passed index to gain performance
-            # codeLines.reverse_each.with_index do |line, index|
-            #
-            #     if line == endTargetSectionMarkPoint
-            #         break
-            #     end
-            #
-            #     if targetMarkPointFilter.matches?(line)
-            #         targetStartingLine = codeLines.size-index
-            #         realLineNumber = taskError.line-targetStartingLine
-            #         targetPath = line[line.index("/")..-1]
-            #
-            #         software = Software::Information.loadConfiguration(targetPath)
-            #         break
-            #     end
-            #
-            # end
-            #
-            # #Not related to target installer implementation
-            # if targetStartingLine == 0
-            #     ISM::Core::Notification.internalError(taskError)
-            # else
-            # #Related to target installer implementation
-            #     ISM::Core::Notification.installerImplementationError(   software,
-            #                                                             ISM::TaskBuildingProcessError.new(  file:       targetPath,
-            #                                                                                                 line:       realLineNumber,
-            #                                                                                                 column:     taskError.column,
-            #                                                                                                 size:       taskError.size,
-            #                                                                                                 message:    taskError.message))
-            # end
+        def showTaskBuildingProcessErrorMessage(error : String, path : String)
+            ISM::Core::Notification.internalError(error: error, path: path)
         end
 
         def showNoMatchFoundMessage(wrongArguments : Array(String))
@@ -1933,7 +1889,7 @@ module ISM
 
             processResult = IO::Memory.new
 
-            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{Filename::Task}.cr -o #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task} -f json",
+            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{Filename::Task}.cr -o #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                         error: processResult,
                         shell: true,
                         chdir: "#{@settings.rootPath}#{Path::RuntimeDataDirectory}") do |process|
@@ -1946,11 +1902,10 @@ module ISM
 
             processResult.rewind
 
-            if processResult.to_s != "" && processResult.to_s.starts_with?("[")
-                taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))
-
+            if processResult.to_s != ""
                 showTaskCompilationFailedMessage
-                showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr")
+                showTaskBuildingProcessErrorMessage(error: processResult.to_s,
+                                                    path: "#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr")
                 exitProgram(code: 1)
             end
 

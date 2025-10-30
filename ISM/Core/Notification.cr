@@ -14,12 +14,8 @@ module ISM
                 ErrorUnknowArgumentHelp3 = "to learn how to use ISM"
                 ProcessNotificationCharacters = "■"
                 InternalErrorTitle = "Internal error"
-                InstallerImplementationErrorTitle = "Software installer implementation error"
-                InstallerImplementationErrorText1 = "The installer for the software "
-                InstallerImplementationErrorText2 = " encountered an error at line number "
-                InstallerImplementationErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean the related installer need to be fix."
-                TaskBuildingProcessErrorText1 = "The ISM task at "
-                TaskBuildingProcessErrorText2 = " encountered an error at line number "
+                TaskBuildingProcessErrorText1 = "The ISM's task located at "
+                TaskBuildingProcessErrorText2 = " is facing a compilation issue:"
                 TaskBuildingErrorNotificationHelp = "ISM raised that error because the task cannot be compiled. That mean probably the task building process need to be fix."
                 SetupChrootPermissionsText = "Setting default permissions for the targeted system"
                 PrepareChrootProcText = "Mounting /proc in the targeted system"
@@ -94,34 +90,11 @@ module ISM
                 end
             end
 
-            def self.internalError(error : ISM::TaskBuildingProcessError)
+            def self.internalError(error : String, path : String)
                 title = "#{Default::InternalErrorTitle.colorize(:red)}"
-                errorText = "#{Default::TaskBuildingProcessErrorText1}#{error.file}#{Default::TaskBuildingProcessErrorText2}#{error.line.to_s}".colorize(Colorize::ColorRGB.new(255,100,100))
-                errorMessage = "#{error.message}".colorize(Colorize::ColorRGB.new(255,100,100))
+                errorText = "#{Default::TaskBuildingProcessErrorText1}#{path}#{Default::TaskBuildingProcessErrorText2}".colorize(Colorize::ColorRGB.new(255,100,100))
+                errorMessage = "#{error}".colorize(Colorize::ColorRGB.new(255,100,100))
                 help = "\n#{Default::TaskBuildingErrorNotificationHelp.colorize(:red)}"
-
-                errorReport = <<-REPORT
-                [ #{title} ]
-
-                #{errorText}
-
-                #{errorMessage}
-
-                #{help}
-                REPORT
-
-                puts "\n#{errorReport}\n"
-            end
-
-            def self.installerImplementationError(software : Software::Information, error : ISM::TaskBuildingProcessError)
-                errorText1 = "#{Default::InstallerImplementationErrorText1.colorize(Colorize::ColorRGB.new(255,100,100))}"
-                softwareText = "#{"@#{software.port}".colorize(:red)}:#{software.name.colorize(:green)} /#{software.version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
-                errorText2 = "#{Default::InstallerImplementationErrorText2}#{error.line.to_s}:".colorize(Colorize::ColorRGB.new(255,100,100))
-
-                title = "#{Default::InstallerImplementationErrorTitle.colorize(:red)}"
-                errorText = "#{errorText1}#{softwareText}#{errorText2}"
-                errorMessage = "#{error.message.colorize(:yellow)}"
-                help = "\n#{Default::InstallerImplementationErrorNotificationHelp.colorize(:red)}"
 
                 errorReport = <<-REPORT
                 [ #{title} ]
