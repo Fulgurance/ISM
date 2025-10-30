@@ -66,8 +66,7 @@ module ISM
             InstalledText = "is installed"
             UninstalledText = "is uninstalled"
 
-            Options = [ ISM::Option::Help.new,
-                        ISM::Option::Version.new,
+            Options = [ ISM::Option::Version.new,
                         ISM::Option::Software.new,
                         ISM::Option::System.new,
                         ISM::Option::Port.new,
