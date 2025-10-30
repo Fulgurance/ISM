@@ -1107,49 +1107,52 @@ module ISM
         end
 
         #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
-        def showTaskBuildingProcessErrorMessage(taskError : ISM::TaskBuildingProcessError, taskPath : String)
-            targetMarkPointFilter = /^#TARGET[0-9]+#\//
-            endTargetSectionMarkPoint = "#END TARGET SECTION"
-
-            taskCodeLines = File.read_lines(taskPath)
-
-            targetStartingLine = 0
-            realLineNumber = 0
-            targetPath = String.new
-            software = Software::Information.new
-
-            codeLines = taskCodeLines[0..taskError.line-1]
-
-            #Instead to start from zero, start from passed index to gain performance
-            codeLines.reverse_each.with_index do |line, index|
-
-                if line == endTargetSectionMarkPoint
-                    break
-                end
-
-                if targetMarkPointFilter.matches?(line)
-                    targetStartingLine = codeLines.size-index
-                    realLineNumber = taskError.line-targetStartingLine
-                    targetPath = line[line.index("/")..-1]
-
-                    software = Software::Information.loadConfiguration(targetPath)
-                    break
-                end
-
+        def showTaskBuildingProcessErrorMessage(taskErrors : Array(ISM::TaskBuildingProcessError), taskPath : String)
+            taskErrors.each do |error|
+                ISM::Core::Notification.internalError(error)
             end
-
-            #Not related to target installer implementation
-            if targetStartingLine == 0
-                ISM::Core::Notification.internalError(taskError)
-            else
-            #Related to target installer implementation
-                ISM::Core::Notification.installerImplementationError(   software,
-                                                                        ISM::TaskBuildingProcessError.new(  file:       targetPath,
-                                                                                                            line:       realLineNumber,
-                                                                                                            column:     taskError.column,
-                                                                                                            size:       taskError.size,
-                                                                                                            message:    taskError.message))
-            end
+            # targetMarkPointFilter = /^#TARGET[0-9]+#\//
+            # endTargetSectionMarkPoint = "#END TARGET SECTION"
+            #
+            # taskCodeLines = File.read_lines(taskPath)
+            #
+            # targetStartingLine = 0
+            # realLineNumber = 0
+            # targetPath = String.new
+            # software = Software::Information.new
+            #
+            # codeLines = taskCodeLines[0..taskError.line-1]
+            #
+            # #Instead to start from zero, start from passed index to gain performance
+            # codeLines.reverse_each.with_index do |line, index|
+            #
+            #     if line == endTargetSectionMarkPoint
+            #         break
+            #     end
+            #
+            #     if targetMarkPointFilter.matches?(line)
+            #         targetStartingLine = codeLines.size-index
+            #         realLineNumber = taskError.line-targetStartingLine
+            #         targetPath = line[line.index("/")..-1]
+            #
+            #         software = Software::Information.loadConfiguration(targetPath)
+            #         break
+            #     end
+            #
+            # end
+            #
+            # #Not related to target installer implementation
+            # if targetStartingLine == 0
+            #     ISM::Core::Notification.internalError(taskError)
+            # else
+            # #Related to target installer implementation
+            #     ISM::Core::Notification.installerImplementationError(   software,
+            #                                                             ISM::TaskBuildingProcessError.new(  file:       targetPath,
+            #                                                                                                 line:       realLineNumber,
+            #                                                                                                 column:     taskError.column,
+            #                                                                                                 size:       taskError.size,
+            #                                                                                                 message:    taskError.message))
+            # end
         end
 
         def showNoMatchFoundMessage(wrongArguments : Array(String))
@@ -1944,7 +1947,7 @@ module ISM
             processResult.rewind
 
             if processResult.to_s != "" && processResult.to_s.starts_with?("[")
-                taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))[-1]
+                taskError = Array(ISM::TaskBuildingProcessError).from_json(processResult.to_s.gsub("\"size\":null","\"size\":0"))
 
                 showTaskCompilationFailedMessage
                 showTaskBuildingProcessErrorMessage(taskError, "#{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}.cr")
