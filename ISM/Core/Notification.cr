@@ -303,7 +303,7 @@ module ISM
                     environmentFilePathText = "#{Default::ErrorRunSystemCommandText4}#{environmentFilePath}"
                 end
 
-                printErrorNotification( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
+                error( "#{argumentText}#{pathText}#{environmentText}#{environmentFilePathText}",
                                             error)
             end
 
