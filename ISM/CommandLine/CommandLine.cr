@@ -1609,9 +1609,9 @@ module ISM
                     if index == 0
                         requiredTargetArrayResult += "\tTarget#{index}.new(\"#{software.filePath}\"),\n"
                     elsif index != neededSoftwares.size-1
-                        requiredTargetArrayResult += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\"),\n"
+                        requiredTargetArrayResult += "\t\t\tTarget#{index}.new(\"#{software.filePath}\"),\n"
                     else
-                        requiredTargetArrayResult += "\t\t\t\t\t\t\t\t\tTarget#{index}.new(\"#{software.filePath}\")]\n"
+                        requiredTargetArrayResult += "\t\t\tTarget#{index}.new(\"#{software.filePath}\")]\n"
                     end
                 end
 
@@ -1648,9 +1648,9 @@ module ISM
                         if additionalInformationNumber == 0
                             indexResult += "\t#{index}"
                         elsif index != neededSoftwares.size-1
-                            indexResult += "\t\t\t\t\t\t\t\t\t#{index}"
+                            indexResult += "\t\t\t#{index}"
                         else
-                            indexResult += "\t\t\t\t\t\t\t\t\t#{index}"
+                            indexResult += "\t\t\t#{index}"
                         end
 
                         additionalInformationNumber += 1
@@ -1668,6 +1668,7 @@ module ISM
             end
 
             return  requiredTargetClassResult +
+                    "#END TARGET SECTION\n" +
                     requiredTargetArrayResult +
                     requiredTargetOptionsResult +
                     indexResult
@@ -1692,7 +1693,6 @@ module ISM
 
                     #LOADING TARGETS, ADDITIONAL INFORMATION INDEX AND NEEDED OPTIONS
                     #{getRequiredTargets(neededSoftwares)}
-                    #END TARGET SECTION
 
                     #LOADING DATABASE
                     Ism = ISM::CommandLine.new
