@@ -69,7 +69,7 @@ module ISM
         end
 
         def systemId : String
-            return CommandLine::Default::Id.to_s
+            return Core::Security::Default::Id.to_s
         end
 
         def recordCrossToolchainAsFullyBuilt
