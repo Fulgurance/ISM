@@ -107,25 +107,6 @@ module ISM
 
             module Parser
 
-                class CatchedKeyword
-
-                    property level : Int32
-
-                    def initialize(@level)
-                    end
-
-                end
-
-                class CatchedConditionalKeyword < CatchedKeyword
-
-                    property validCondition : Bool
-
-                    def initialize(@level,@validCondition)
-                        super(@level)
-                    end
-
-                end
-
                 SectionKeywords = { :port => "PORT",
                                     :name => "NAME",
                                     :version => "VERSION",
@@ -219,8 +200,7 @@ module ISM
 
                     currentSection = String.new
 
-                    ifArray = Array(Parser::CatchedConditionalKeyword).new
-                    endArray = Array(Parser::CatchedKeyword).new
+                    ifArray = Array(Bool).new
 
                     currentOption = Hash(String, String).new
                     underOptionDependenciesSubSection = false
@@ -358,34 +338,24 @@ module ISM
                                     #It is the line declaration for dependencies
                                     #We ensure the dependencies pass the filter
                                     if Parser::DependencyVersionFilter.matches?(strippedLine) || Parser::DependencyVersionWithOptionsFilter.matches?(strippedLine)
-                                        if  ifArray.size == 0
+                                        if ifArray.size == 0
                                             dependencies.push(parseDependencyDescriptor(strippedLine))
                                         else
-                                            ifValidityArray = Array(Bool).new
-
-                                            ifArray.each do |ifKeyword|
-                                                if !endArray.any? {|entry| entry.level == ifKeyword.level}
-                                                    ifValidityArray.push(ifKeyword.validCondition)
-                                                end
-                                            end
-
-                                            if !ifValidityArray.any? { |entry| entry == false}
+                                            if !ifArray.any? { |entry| entry == false}
                                                 dependencies.push(parseDependencyDescriptor(strippedLine))
                                             end
                                         end
                                     elsif Parser::IfFilter.matches?(strippedLine)
-
-                                        ifArray.push(CatchedConditionalKeyword.new( level: ifArray.size+1,
-                                                                                    validCondition: parseCondition(conditions: strippedLine.gsub(/\A#{Parser::ConditionKeywords[:if]}\s+/,""))))
+                                        ifArray.push(parseCondition(conditions: strippedLine.gsub(/\A#{Parser::ConditionKeywords[:if]}\s+/,"")))
                                     elsif Parser::ElsifFilter.matches?(strippedLine)
 
                                     elsif Parser::ElseFilter.matches?(strippedLine)
 
                                     elsif Parser::EndFilter.matches?(strippedLine)
-                                        if ifArray.size == 0 || ifArray.size < endArray.size
+                                        if ifArray.size == 0
                                             raise("Line #{index+1}\nFile: #{path}\nExtra end: #{line}\n.An extra end section is declared.")
                                         else
-                                            endArray.push(CatchedKeyword.new( level: ifArray.size))
+                                            ifArray = ifArray[0..-2]
                                         end
                                     else
                                         raise("Line #{index+1}\nFile: #{path}\nIllegal character: #{line}\nThe declared dependency list used an illegal character or is not declared properly.")
