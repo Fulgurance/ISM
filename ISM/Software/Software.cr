@@ -1491,11 +1491,11 @@ module ISM
             else
 
                 if !environment.has_key?("CFLAGS")
-                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.buildOptions : buildOptions}"
                 end
 
                 if !environment.has_key?("CXXFLAGS")
-                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.buildOptions : buildOptions}"
                 end
             end
 
@@ -1553,11 +1553,11 @@ module ISM
                 prefix =    "#{makeOptions == "" ? Ism.settings.makeOptions : makeOptions} "
 
                 if !environment.has_key?("CFLAGS")
-                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.buildOptions : buildOptions}"
                 end
 
                 if !environment.has_key?("CXXFLAGS")
-                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.buildOptions : buildOptions}"
                 end
             end
 
@@ -2065,11 +2065,11 @@ module ISM
                 prefix =    "#{makeOptions == "" ? Ism.settings.makeOptions : makeOptions} "
 
                 if !environment.has_key?("CFLAGS")
-                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                    environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.buildOptions : buildOptions}"
                 end
 
                 if !environment.has_key?("CXXFLAGS")
-                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
+                    environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.buildOptions : buildOptions}"
                 end
             end
 
