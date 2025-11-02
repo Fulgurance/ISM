@@ -1465,7 +1465,7 @@ module ISM
         end
 
         def runCrystalCommand(arguments = String.new, path = String.new, environment = Hash(String, String).new, environmentFilePath = String.new)
-            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal #{arguments}"
+            requestedCommands = "CRYSTAL_WORKERS=#{Ism.settings.makeOptions[2..-1]} crystal #{arguments}"
 
             process = Ism.runSystemCommand(requestedCommands, path, environment)
 
@@ -1550,7 +1550,7 @@ module ISM
                     environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
                 end
             else
-                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
+                prefix =    "#{makeOptions == "" ? Ism.settings.makeOptions : makeOptions} "
 
                 if !environment.has_key?("CFLAGS")
                     environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"
@@ -2062,7 +2062,7 @@ module ISM
                     environment["CXXFLAGS"] = "#{buildOptions == "" ? Ism.settings.chrootBuildOptions : buildOptions}"
                 end
             else
-                prefix =    "#{makeOptions == "" ? Ism.settings.systemMakeOptions : makeOptions} "
+                prefix =    "#{makeOptions == "" ? Ism.settings.makeOptions : makeOptions} "
 
                 if !environment.has_key?("CFLAGS")
                     environment["CFLAGS"] = "#{buildOptions == "" ? Ism.settings.systemBuildOptions : buildOptions}"

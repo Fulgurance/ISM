@@ -1106,7 +1106,6 @@ module ISM
             exit code
         end
 
-        #TO IMPROVE: Pass the beginning of class generation to check if its class related problem
         def showTaskBuildingProcessErrorMessage(error : String, path : String)
             ISM::Core::Notification.internalError(error: error, path: path)
         end
@@ -1889,7 +1888,7 @@ module ISM
 
             processResult = IO::Memory.new
 
-            Process.run("CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build #{Filename::Task}.cr -o #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
+            Process.run("CRYSTAL_WORKERS=#{Ism.settings.makeOptions[2..-1]} crystal build #{Filename::Task}.cr -o #{@settings.rootPath}#{Path::RuntimeDataDirectory}#{Filename::Task}",
                         error: processResult,
                         shell: true,
                         chdir: "#{@settings.rootPath}#{Path::RuntimeDataDirectory}") do |process|
@@ -2848,7 +2847,7 @@ module ISM
         end
 
         def cleanKernelSources
-            requestedCommands = "make #{@settings.systemMakeOptions} mrproper"
+            requestedCommands = "make #{@settings.makeOptions} mrproper"
             path = kernelSourcesPath
 
             process = runSystemCommand( command: requestedCommands,
@@ -2870,7 +2869,7 @@ module ISM
 
         #Build by default all modules. Will change in the future
         def generateKernelConfiguration
-            requestedCommands = "make #{@settings.systemMakeOptions} allmodconfig"
+            requestedCommands = "make #{@settings.makeOptions} allmodconfig"
             path = kernelSourcesPath
 
             process = runSystemCommand( command: requestedCommands,
@@ -2891,7 +2890,7 @@ module ISM
         end
 
         def buildKernel
-            requestedCommands = "make #{@settings.systemMakeOptions} modules_prepare && make #{@settings.systemMakeOptions} && make #{@settings.systemMakeOptions} modules_install && make #{@settings.systemMakeOptions} install"
+            requestedCommands = "make #{@settings.makeOptions} modules_prepare && make #{@settings.makeOptions} && make #{@settings.makeOptions} modules_install && make #{@settings.makeOptions} install"
             path = kernelSourcesPath
 
             process = runSystemCommand( command: requestedCommands,

@@ -380,7 +380,67 @@ module ISM
 
             #Host/Chroot methods (Used by software installer API)
 
-            def systemMakeOptions(relatedToChroot = true) : String
+            def defaultMirror(relatedToChroot = true) : String
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.defaultMirror
+                else
+                    return @defaultMirror
+                end
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "defaultMirror",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def buildKernelOptionsAsModule(relatedToChroot = true) : Bool
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.buildKernelOptionsAsModule
+                else
+                    return @buildKernelOptionsAsModule
+                end
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "buildKernelOptionsAsModule",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def autoBuildKernel(relatedToChroot = true) : Bool
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.autoBuildKernel
+                else
+                    return @autoBuildKernel
+                end
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "autoBuildKernel",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def autoDeployServices(relatedToChroot = true) : Bool
+                if relatedToChroot && @rootPath != "/"
+                    return chrootConfiguration.autoDeployServices
+                else
+                    return @autoDeployServices
+                end
+
+                rescue exception
+                    ISM::Error.show(className: "Settings",
+                                    functionName: "autoDeployServices",
+                                    errorTitle: "Execution failure",
+                                    error: "Failed to execute the function",
+                                    exception: exception)
+            end
+
+            def makeOptions(relatedToChroot = true) : String
                 if relatedToChroot && @rootPath != "/"
                     return chrootConfiguration.makeOptions
                 else
@@ -395,7 +455,7 @@ module ISM
                                     exception: exception)
             end
 
-            def systemBuildOptions(relatedToChroot = true) : String
+            def buildOptions(relatedToChroot = true) : String
                 if relatedToChroot && @rootPath != "/"
                     return chrootConfiguration.buildOptions
                 else
@@ -746,15 +806,15 @@ module ISM
                 return chrootConfiguration.defaultMirror
             end
 
-            def chrootBuildKernelOptionsAsModule : String
+            def chrootBuildKernelOptionsAsModule : Bool
                 return chrootConfiguration.buildKernelOptionsAsModule
             end
 
-            def chrootAutoBuildKernel : String
+            def chrootAutoBuildKernel : Bool
                 return chrootConfiguration.autoBuildKernel
             end
 
-            def chrootAutoDeployServices : String
+            def chrootAutoDeployServices : Bool
                 return chrootConfiguration.autoDeployServices
             end
 

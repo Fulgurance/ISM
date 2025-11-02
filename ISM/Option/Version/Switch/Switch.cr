@@ -44,7 +44,7 @@ module ISM
                                                     chdir: "/"+Path::LibraryDirectory)
                         end
 
-                        process = Process.run(  "CRYSTAL_WORKERS=#{Ism.settings.systemMakeOptions[2..-1]} crystal build --release Main.cr -o #{Ism.settings.rootPath+Path::BinaryDirectory+Filename::IsmBinary}",
+                        process = Process.run(  "CRYSTAL_WORKERS=#{Ism.settings.makeOptions[2..-1]} crystal build --release Main.cr -o #{Ism.settings.rootPath+Path::BinaryDirectory+Filename::IsmBinary}",
                                                 shell: true,
                                                 chdir: "/"+Path::LibraryDirectory)
 

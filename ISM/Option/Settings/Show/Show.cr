@@ -52,6 +52,10 @@ module ISM
 
                     #Chroot title
                     ChrootText = "(Chroot)"
+                    ChrootDefaultMirrorText = "Chroot Default mirror"
+                    ChrootAutoBuildKernel = "Chroot Auto build the kernel"
+                    ChrootBuildKernelOptionsAsModule = "Chroot Build kernel options as module"
+                    ChrootAutoDeployServicesText = "Chroot Auto deploy services"
                     ChrootMakeOptionsText = "Chroot make options"
                     ChrootBuildOptionsText = "Chroot build options"
                     ChrootSystemTargetArchitectureText = "Chroot target architecture"
@@ -96,8 +100,8 @@ module ISM
                     puts "\t#{Default::BuildKernelOptionsAsModule}: #{Ism.settings.buildKernelOptionsAsModule.colorize(:green)}"
                     puts "\t#{Default::AutoBuildKernel}: #{Ism.settings.autoBuildKernel.colorize(:green)}"
                     puts "\t#{Default::AutoDeployServicesText}: #{Ism.settings.autoDeployServices.colorize(:green)}"
-                    puts "\t#{Default::MakeOptionsText}: #{Ism.settings.systemMakeOptions(false).colorize(:green)}"
-                    puts "\t#{Default::BuildOptionsText}: #{Ism.settings.systemBuildOptions(false).colorize(:green)}"
+                    puts "\t#{Default::MakeOptionsText}: #{Ism.settings.makeOptions(false).colorize(:green)}"
+                    puts "\t#{Default::BuildOptionsText}: #{Ism.settings.buildOptions(false).colorize(:green)}"
                     puts "\t#{Default::SystemTargetArchitectureText}: #{Ism.settings.systemTargetArchitecture(false).colorize(:green)}"
                     puts "\t#{Default::SystemTargetVendorText}: #{Ism.settings.systemTargetVendor(false).colorize(:green)}"
                     puts "\t#{Default::SystemTargetOsText}: #{Ism.settings.systemTargetOs(false).colorize(:green)}"
@@ -121,6 +125,10 @@ module ISM
                     puts "\t#{Default::SystemVariantText}: #{Ism.settings.systemVariant(false).colorize(:green)}"
                     puts "\t#{Default::SystemVariantIdText}: #{Ism.settings.systemVariantId(false).colorize(:green)}"
                     puts "\t#{Default::ChrootText}".colorize(:green)
+                    puts "\t#{Default::ChrootDefaultMirrorText}: #{Ism.settings.chrootDefaultMirror.colorize(:green)}"
+                    puts "\t#{Default::ChrootBuildKernelOptionsAsModule}: #{Ism.settings.chrootBuildKernelOptionsAsModule.colorize(:green)}"
+                    puts "\t#{Default::ChrootAutoBuildKernel}: #{Ism.settings.chrootAutoBuildKernel.colorize(:green)}"
+                    puts "\t#{Default::ChrootAutoDeployServicesText}: #{Ism.settings.chrootAutoDeployServices.colorize(:green)}"
                     puts "\t#{Default::ChrootMakeOptionsText}: #{Ism.settings.chrootMakeOptions.colorize(:green)}"
                     puts "\t#{Default::ChrootBuildOptionsText}: #{Ism.settings.chrootBuildOptions.colorize(:green)}"
                     puts "\t#{Default::ChrootSystemTargetArchitectureText}: #{Ism.settings.chrootSystemTargetArchitecture.colorize(:green)}"
