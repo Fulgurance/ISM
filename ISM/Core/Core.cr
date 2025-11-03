@@ -13,14 +13,12 @@ module ISM
         def self.getMissingLibrariesList : Hash(String,Array(String))
             list = Hash(String,Array(String)).new
 
-            rootPath = "#{CommandLine::Settings.loadConfiguration.rootPath}"
-
-            binBinariesPath = Dir.glob("#{rootPath}/usr/bin/**/*")
-            sbinBinariesPath = Dir.glob("#{rootPath}/usr/sbin/**/*")
-            libexecBinariesPath = Dir.glob("#{rootPath}/usr/libexec/**/*")
-            localBinBinariesPath = Dir.glob("#{rootPath}/usr/local/bin/**/*")
-            localSbinBinariesPath = Dir.glob("#{rootPath}/usr/local/sbin/**/*")
-            localLibexecBinariesPath = Dir.glob("#{rootPath}/usr/local/libexec/**/*")
+            binBinariesPath = Dir.glob("#{Ism.settings.rootPath}/usr/bin/**/*")
+            sbinBinariesPath = Dir.glob("#{Ism.settings.rootPath}/usr/sbin/**/*")
+            libexecBinariesPath = Dir.glob("#{Ism.settings.rootPath}/usr/libexec/**/*")
+            localBinBinariesPath = Dir.glob("#{Ism.settings.rootPath}/usr/local/bin/**/*")
+            localSbinBinariesPath = Dir.glob("#{Ism.settings.rootPath}/usr/local/sbin/**/*")
+            localLibexecBinariesPath = Dir.glob("#{Ism.settings.rootPath}/usr/local/libexec/**/*")
 
             binariesPath =  binBinariesPath +
                             sbinBinariesPath +
@@ -49,9 +47,28 @@ module ISM
         end
 
         def self.getSoftwareThatNeedRebuild : Array(ISM::SoftwareInformation)
+            list = Array(ISM::SoftwareInformation).new
+
             missingLibrariesList = getMissingLibrariesList
 
+            Ism.installedSoftwares.each do |software|
 
+                missingLibrariesList.keys.each do |binary|
+
+                    path = binary
+
+                    if Ism.settings.rootPath != "/"
+                        path = path.gsub(Ism.settings.rootPath[0..-2],"")
+                    end
+
+                    if software.installedFiles.includes?(path)
+                        list.push(software)
+                    end
+                end
+
+            end
+
+            return list
         end
 
     end
