@@ -2945,8 +2945,7 @@ module ISM
         end
 
         def kernelSourcesPath : String
-            root = (@systemInformation.handleChroot && @settings.rootPath != "/" ? "/" : @settings.rootPath)
-            return "#{root}usr/src/#{mainKernelName}/"
+            return "#{@settings.rootPath}/usr/src/#{mainKernelName}/"
         end
 
         def kernelConfigPath : String
