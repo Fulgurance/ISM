@@ -1686,7 +1686,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "setup",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"setup".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1698,7 +1698,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "download",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"download".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1710,7 +1710,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "check",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"check".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1722,7 +1722,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "extract",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"extract".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1734,7 +1734,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "patch",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"patch".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1746,7 +1746,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "prepare",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"prepare".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1758,7 +1758,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "configure",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"configure".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1770,7 +1770,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "build",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"build".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1782,7 +1782,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "prepareInstallation",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"prepareInstallation".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1795,7 +1795,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "recordInstallationInformation",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"recordInstallationInformation".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1807,7 +1807,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "install",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"install".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1819,7 +1819,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "recordNeededKernelOptions",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"recordNeededKernelOptions".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -1831,7 +1831,7 @@ module ISM
                         rescue exception
                             Ism.uninstallSoftware(target.information)
 
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "clean",
                                             errorTitle: "Installation task failed",
                                             error: "The #\{"clean".colorize(:magenta)} process failed for #\{coloredFullVersionName}",
@@ -2015,7 +2015,7 @@ module ISM
                         begin
                             target.uninstall
                         rescue error
-                            ISM::Error.show(className: "Software",
+                            ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "uninstall",
                                             errorTitle: "Uninstallation task failed",
                                             error: "The #\{"uninstall".colorize(:magenta)} process failed for #\{coloredFullVersionName}",

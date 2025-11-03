@@ -173,6 +173,10 @@ module ISM
                 return "#{fullName}-#{@version}"
             end
 
+            def coloredFullVersionName : String
+                return "#{"@#{@port}".colorize(:red)}:#{@name.colorize(:green)} /#{@version.colorize(Colorize::ColorRGB.new(255,100,100))}/"
+            end
+
             def builtSoftwareDirectoryPath
                 return "#{ISM::Path::BuiltSoftwaresDirectory}#{@port}/#{@name}/#{@version}/"
             end

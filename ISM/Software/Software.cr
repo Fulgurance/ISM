@@ -140,7 +140,7 @@ module ISM
             return fileList.map { |file| (Ism.targetSystemInformation.handleChroot ? file[(Ism.settings.rootPath.size-1)..-1] : file)}
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "directoryContent",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -184,7 +184,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "recordSelectedKernel",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -234,7 +234,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "updateKernelSymlinks",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -264,7 +264,7 @@ module ISM
             updateKernelSymlinks
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareKernelSourcesInstallation",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -321,7 +321,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareChrootPermissions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -339,7 +339,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareChrootProc",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -357,7 +357,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareChrootSys",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -375,7 +375,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareChrootDev",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -393,7 +393,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareChrootRun",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -411,7 +411,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareChrootRun",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -431,7 +431,7 @@ module ISM
             Ism.lockSystemAccess
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareChrootFileSystem",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -456,7 +456,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "download",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -472,7 +472,7 @@ module ISM
             downloadAdditionalSourcesPublicKey
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadAdditions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -489,7 +489,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadAdditionalSources",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -507,7 +507,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadAdditionalSourcesSha512",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -525,7 +525,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadAdditionalSourcesSignature",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -543,7 +543,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadAdditionalSourcesSignature",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -556,7 +556,7 @@ module ISM
                             Default::ArchiveExtensionName)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadSources",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -569,7 +569,7 @@ module ISM
                             Default::ArchiveSha512ExtensionName)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadSourcesSha512",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -582,7 +582,7 @@ module ISM
                             Default::ArchiveSignatureExtensionName)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadSourcesSha512",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -595,7 +595,7 @@ module ISM
                             Default::PublicKeyExtensionName)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadSourcesSha512",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -687,7 +687,7 @@ module ISM
             puts
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "downloadFile",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -700,7 +700,7 @@ module ISM
             return content
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "getFileContent",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -714,7 +714,7 @@ module ISM
             checkSourcesAuthenticity
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "check",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -731,7 +731,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkSourcesIntegrity",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -748,7 +748,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkSourcesAuthenticity",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -762,7 +762,7 @@ module ISM
                             sha512:     getFileContent(workDirectoryPathNoChroot+"/"+Default::SourcesSha512ArchiveName).strip)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkSourcesSha512",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -777,7 +777,7 @@ module ISM
                                 publicSignature:    "#{workDirectoryPathNoChroot}/#{Default::SourcesPublicKeyFileName}")
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkSourcesSignature",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -795,7 +795,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkAdditionsSha512",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -814,7 +814,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkAdditionsSignature",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -827,14 +827,14 @@ module ISM
             archiveSha512 = digest.hexfinal
 
             if archiveSha512 != sha512
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkIntegrity",
                                 errorTitle: "Integrity test failed",
                                 error: "The SHA512 value of the file does not match")
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkIntegrity",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -849,7 +849,7 @@ module ISM
 
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "checkAuthenticity",
                                 errorTitle: "Authenticity test failed",
                                 error: "The file signature does not match with the public key. The file can be compromise")
@@ -871,7 +871,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "extract",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -883,7 +883,7 @@ module ISM
             moveFileNoChroot(workDirectoryPathNoChroot+"/"+@information.versionName,workDirectoryPathNoChroot+"/"+Default::SourcesDirectoryName)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "extractSources",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -900,7 +900,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "extractAdditions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -913,7 +913,7 @@ module ISM
                                     chdir: destinationPath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "extractArchive",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -938,7 +938,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "patch",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -951,7 +951,7 @@ module ISM
                                     shell: true,
                                     chdir: mainWorkDirectoryPathNoChroot)
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "applyPatch",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -969,7 +969,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepare",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -981,7 +981,7 @@ module ISM
             FileUtils.cp(path, targetPath)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "copyFileNoChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -993,7 +993,7 @@ module ISM
             FileUtils.cp_r(path, targetPath)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "copyDirectoryNoChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1005,7 +1005,7 @@ module ISM
             FileUtils.rm(path)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "deleteFileNoChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1017,7 +1017,7 @@ module ISM
             FileUtils.mv(path, newPath)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "moveFileNoChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1029,7 +1029,7 @@ module ISM
             FileUtils.mkdir_p(path)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "makeDirectoryNoChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1041,7 +1041,7 @@ module ISM
             FileUtils.rm_r(path)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "deleteDirectoryNoChroot",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1056,7 +1056,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "fileUpdateContent",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1071,7 +1071,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "fileReplaceText",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1086,7 +1086,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "fileReplaceLineContaining",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1101,7 +1101,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "fileReplaceTextAtLineNumber",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1116,7 +1116,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "fileDeleteLine",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1133,7 +1133,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "fileWriteData",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1148,7 +1148,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "fileAppendData",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1163,7 +1163,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "fileAppendDataFromFile",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1178,7 +1178,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "replaceTextAllFilesRecursivelyNamed",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1200,7 +1200,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "deleteAllFilesRecursivelyFinishing",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1224,7 +1224,7 @@ module ISM
 
                 command = "ln -sf"
             else
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "makeLink",
                                 errorTitle: "Unknown link type",
                                 error: "The requested link type does not exist")
@@ -1235,7 +1235,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "makeLink",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1248,7 +1248,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "generateEmptyFile",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1261,7 +1261,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "copyFile",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1274,7 +1274,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "copyDirectory",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1287,7 +1287,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "moveFile",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1300,7 +1300,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "makeDirectory",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1313,7 +1313,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "deleteDirectory",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1326,7 +1326,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "deleteFile",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1340,7 +1340,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runChmodCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1354,7 +1354,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runChownCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1369,7 +1369,7 @@ module ISM
                                             viaChroot: false)
 
             if !process.success? && process.exit_code != 9
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runUserAddCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1384,7 +1384,7 @@ module ISM
                                             viaChroot: false)
 
             if !process.success? && process.exit_code != 9
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runUserDelCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1399,7 +1399,7 @@ module ISM
                                             viaChroot: false)
 
             if !process.success? && process.exit_code != 9
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGroupAddCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1414,7 +1414,7 @@ module ISM
                                             viaChroot: false)
 
             if !process.success? && process.exit_code != 9
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGroupDelCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1431,7 +1431,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runTarCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1444,7 +1444,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runPythonCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1457,7 +1457,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runPipCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1470,7 +1470,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runCrystalCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1504,7 +1504,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runCmakeCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1517,7 +1517,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runQmakeCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1530,7 +1530,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runMesonCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1566,7 +1566,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runNinjaCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1580,7 +1580,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runPwconvCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1594,7 +1594,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGrpconvCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1608,7 +1608,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runUdevadmCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1622,7 +1622,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runDbusUuidgenCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1635,7 +1635,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runMakeinfoCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1649,7 +1649,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runInstallInfoCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1662,7 +1662,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runAutoconfCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1675,7 +1675,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runAutoreconfCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1689,7 +1689,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runLocaledefCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1702,7 +1702,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGunzipCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1716,7 +1716,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runMakeCaCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1730,7 +1730,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runInstallCatalogCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1744,7 +1744,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runXmlCatalogCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1758,7 +1758,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runLdconfigCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1772,7 +1772,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGtkQueryImmodules2Command",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1786,7 +1786,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGtkQueryImmodules3Command",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1800,7 +1800,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGlibCompileSchemasCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1813,7 +1813,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGdkPixbufQueryLoadersCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1826,7 +1826,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runUpdateMimeDatabaseCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1839,7 +1839,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runCargoCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1852,7 +1852,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runXargoCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1865,7 +1865,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGccCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1879,7 +1879,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runRcUpdateCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1893,7 +1893,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runAlsactlCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1907,7 +1907,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runGtkUpdateIconCacheCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1921,7 +1921,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runUpdateDesktopDatabaseCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1936,7 +1936,7 @@ module ISM
                                             path: path)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runZicCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1951,7 +1951,7 @@ module ISM
             runChmodCommand("+x #{builtSoftwareDirectoryPath}#{Ism.settings.rootPath}#{servicesPath}#{name}")
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "prepareOpenrcServiceInstallation",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -1970,7 +1970,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "configureSource",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -1987,7 +1987,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "makePerlSource",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -2001,7 +2001,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runCpanCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -2015,7 +2015,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runDircolorsCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -2029,7 +2029,7 @@ module ISM
                                             asRoot: true)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runDepmodCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -2042,7 +2042,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "runSshKeygenCommand",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -2078,7 +2078,7 @@ module ISM
             process = Ism.runSystemCommand(requestedCommands, path, environment, environmentFilePath)
 
             if !process.success?
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "makeSource",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function")
@@ -2124,7 +2124,7 @@ module ISM
             return directoryNumber, symlinkNumber, fileNumber, totalSize
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "recordInstallationInformation",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2139,7 +2139,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "updateSystemCache",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2160,7 +2160,7 @@ module ISM
             # end
 
             rescue exception
-            ISM::Error.show(className: "Software",
+            ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                             functionName: "installFile",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
@@ -2178,7 +2178,7 @@ module ISM
             # end
 
             rescue exception
-            ISM::Error.show(className: "Software",
+            ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                             functionName: "installDirectory",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
@@ -2190,7 +2190,7 @@ module ISM
             moveFileNoChroot(target,path)
 
             rescue exception
-            ISM::Error.show(className: "Software",
+            ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                             functionName: "installSymlink",
                             errorTitle: "Execution failure",
                             error: "Failed to execute the function",
@@ -2297,7 +2297,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "install",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2342,7 +2342,7 @@ module ISM
             return conditions.split(" && ")
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "getConditionArray",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2377,7 +2377,7 @@ module ISM
             return dependencies,singleChoiceDependencies,blockers
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "parseKconfigConditions",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2431,7 +2431,7 @@ module ISM
             return result
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "getFullKernelKconfigFile",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2537,7 +2537,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "generateKernelOptionsFiles",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2555,7 +2555,7 @@ module ISM
             rescue exception
                 deleteDirectoryNoChroot(kernelOptionsDatabasePath)
 
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "updateKernelOptionsDatabase",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2583,7 +2583,7 @@ module ISM
             makeDirectoryNoChroot(workDirectoryPathNoChroot)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "cleanWorkDirectoryPath",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2615,7 +2615,7 @@ module ISM
             return Software::Information.new
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "dependency",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2666,7 +2666,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "softwareVersion",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2681,7 +2681,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "softwareMajorVersion",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2696,7 +2696,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "softwareMinorVersion",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2711,7 +2711,7 @@ module ISM
             end
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "softwarePatchVersion",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
@@ -2752,7 +2752,7 @@ module ISM
             return (process.exit_code == 0)
 
             rescue exception
-                ISM::Error.show(className: "Software",
+                ISM::Error.show(className: "Software<|#{information.coloredFullVersionName}|>",
                                 functionName: "commandIsAvailable",
                                 errorTitle: "Execution failure",
                                 error: "Failed to execute the function",
