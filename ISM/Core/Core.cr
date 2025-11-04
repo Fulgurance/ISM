@@ -6,7 +6,9 @@ module ISM
             processResult = IO::Memory.new
 
             process = Ism.runSystemCommand( command: "ldd #{path}",
-                                            output: processResult)
+                                            input: Process::Redirect::Close,
+                                            output: processResult,
+                                            error: Process::Redirect::Close)
 
             return processResult.to_s.split(/\s{2,}/,remove_empty: true)
         end
