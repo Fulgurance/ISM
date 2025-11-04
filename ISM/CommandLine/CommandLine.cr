@@ -2672,8 +2672,10 @@ module ISM
         def runTasks(   tasks : String,
                         asRoot = false,
                         viaChroot = false,
-                        quiet = false) : Process::Status
-            quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
+                        quiet = false,
+                        input = Process::Redirect::Inherit,
+                        output = Process::Redirect::Inherit,
+                        error = Process::Redirect::Inherit) : Process::Status
 
             # We first check if there is any task left
             if File.exists?("#{taskAbsoluteFilePath}")
@@ -2691,9 +2693,9 @@ module ISM
 
             process = Core::Security.runAsSuperUser {
                 Process.run(command:    "chmod +x #{taskAbsoluteFilePath}",
-                            input:      quietMode,
-                            output:     quietMode,
-                            error:      quietMode,
+                            input: (quiet ? Process::Redirect::Close : input),
+                            output: (quiet ? Process::Redirect::Close : output),
+                            error: (quiet ? Process::Redirect::Close : error),
                             shell:      true)
             }
 
@@ -2708,9 +2710,9 @@ module ISM
 
             process = Core::Security.runAsSuperUser(validCondition: (viaChroot || asRoot)) {
                 Process.run(command:    command,
-                            input:      quietMode,
-                            output:     quietMode,
-                            error:      quietMode,
+                            input: (quiet ? Process::Redirect::Close : input),
+                            output: (quiet ? Process::Redirect::Close : output),
+                            error: (quiet ? Process::Redirect::Close : error),
                             shell:      true)
             }
 
@@ -2735,9 +2737,11 @@ module ISM
                                 environmentFilePath = String.new,
                                 quiet = false,
                                 asRoot = false,
-                                viaChroot = true) : Process::Status
+                                viaChroot = true,
+                                input = Process::Redirect::Inherit,
+                                output = Process::Redirect::Inherit,
+                                error = Process::Redirect::Inherit) : Process::Status
 
-            quietMode = (quiet ? Process::Redirect::Close : Process::Redirect::Inherit)
             rootMode = false
 
             environmentCommand = String.new
@@ -2785,7 +2789,10 @@ module ISM
             process = runTasks( tasks: tasks,
                                 asRoot: rootMode,
                                 viaChroot: targetSystemInformation.handleChroot && viaChroot && @settings.rootPath != "/",
-                                quiet: quiet)
+                                quiet: quiet,
+                                input: (quiet ? Process::Redirect::Close : input),
+                                output: (quiet ? Process::Redirect::Close : output),
+                                error: (quiet ? Process::Redirect::Close : error))
 
             #TRACELOG-------------------------------------------------------------
             ISM::TraceLog.record(   accessor:   "CommandLine",

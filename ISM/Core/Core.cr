@@ -5,7 +5,8 @@ module ISM
         def self.getLibraryDependenciesList(path : String) : Array(String)
             processResult = IO::Memory.new
 
-            Process.run("ldd #{path}", shell: true, output: processResult)
+            process = Ism.runSystemCommand( command: "ldd #{path}",
+                                            output: processResult)
 
             return processResult.to_s.split(/\s{2,}/,remove_empty: true)
         end
@@ -27,6 +28,10 @@ module ISM
                             localSbinBinariesPath +
                             localLibexecBinariesPath
 
+            if Ism.settings.rootPath != "/"
+                binariesPath = binariesPath.map { |path| path.gsub(Ism.settings.rootPath[0..-2],"")}
+            end
+
             binariesPath.each_with_index do |binary, index|
 
                 array = getLibraryDependenciesList(binary)
@@ -46,8 +51,8 @@ module ISM
             return list
         end
 
-        def self.getSoftwareThatNeedRebuild : Array(ISM::SoftwareInformation)
-            list = Array(ISM::SoftwareInformation).new
+        def self.getSoftwareThatNeedRebuild : Array(ISM::Software::Information)
+            list = Hash(String,ISM::Software::Information).new
 
             missingLibrariesList = getMissingLibrariesList
 
@@ -62,13 +67,13 @@ module ISM
                     end
 
                     if software.installedFiles.includes?(path)
-                        list.push(software)
+                        list[software.hiddenName] = software
                     end
                 end
 
             end
 
-            return list
+            return list.values
         end
 
     end
