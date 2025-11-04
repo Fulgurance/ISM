@@ -24,6 +24,7 @@ module ISM
                     Ism.showCalculationTitleMessage
 
                     unneededSoftwares = Ism.getUnneededSoftwares
+                    Ism.requestedSoftwares = unneededSoftwares
 
                     Ism.showCalculationDoneMessage
 

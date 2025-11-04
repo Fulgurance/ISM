@@ -583,17 +583,19 @@ module ISM
                     filesForRemoval = requestedVersion.installedFiles
                 end
 
-                filesForRemoval.each do |file|
-                    if File.exists?(file)
-                        FileUtils.rm_r(file)
+                Core::Security.runAsSuperUser {
+                    filesForRemoval.each do |file|
+                        if File.exists?(file)
+                            FileUtils.rm_r(file)
+                        end
                     end
-                end
 
-                FileUtils.rm_r("#{software.installedDirectoryPath}/#{software.version}")
+                    FileUtils.rm_r("#{software.installedDirectoryPath}/#{software.version}")
 
-                if Dir.empty?(software.installedDirectoryPath)
-                    FileUtils.rm_r(software.installedDirectoryPath)
-                end
+                    if Dir.empty?(software.installedDirectoryPath)
+                        FileUtils.rm_r(software.installedDirectoryPath)
+                    end
+                }
 
                 #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
                 @installedSoftwares.delete(softwareForRemovalIndex)
@@ -1976,7 +1978,7 @@ module ISM
 
         def startUninstallationProcess(unneededSoftwares : Array(Software::Information))
             tasks = <<-CODE
-                    puts "\n"
+                    puts
 
                     #LOADING LIBRARIES
                     #{getRequiredLibraries}
@@ -2014,7 +2016,7 @@ module ISM
 
                         begin
                             target.uninstall
-                        rescue error
+                        rescue exception
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "uninstall",
                                             errorTitle: "Uninstallation task failed",
