@@ -585,8 +585,8 @@ module ISM
 
                 Core::Security.runAsSuperUser {
                     filesForRemoval.each do |file|
-                        if File.exists?(file)
-                            FileUtils.rm_r(file)
+                        if File.exists?(Ism.settings.rootPath+file) || File.symlink?(Ism.settings.rootPath+file)
+                            FileUtils.rm_r(Ism.settings.rootPath+file)
                         end
                     end
 
