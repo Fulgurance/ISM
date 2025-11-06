@@ -548,6 +548,8 @@ module ISM
 
         #Uninstall one or more software. If multiple are uninstalled at the same time, will check if we need to preserve any file.
         def uninstallSoftwares(softwares : Array(Software::Information))
+            #MEMO:
+            #ISM::Core::Notification.uninstall(@information)
 
             if targetSystemInformation.handleChroot
                 unlockSystemAccess
@@ -1683,8 +1685,6 @@ module ISM
                         begin
                             target.setup
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "setup",
                                             errorTitle: "Installation task failed",
@@ -1695,8 +1695,6 @@ module ISM
                         begin
                             target.download
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "download",
                                             errorTitle: "Installation task failed",
@@ -1707,8 +1705,6 @@ module ISM
                         begin
                             target.check
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "check",
                                             errorTitle: "Installation task failed",
@@ -1719,8 +1715,6 @@ module ISM
                         begin
                             target.extract
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "extract",
                                             errorTitle: "Installation task failed",
@@ -1731,8 +1725,6 @@ module ISM
                         begin
                             target.patch
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "patch",
                                             errorTitle: "Installation task failed",
@@ -1743,8 +1735,6 @@ module ISM
                         begin
                             target.prepare
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "prepare",
                                             errorTitle: "Installation task failed",
@@ -1755,8 +1745,6 @@ module ISM
                         begin
                             target.configure
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "configure",
                                             errorTitle: "Installation task failed",
@@ -1767,8 +1755,6 @@ module ISM
                         begin
                             target.build
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "build",
                                             errorTitle: "Installation task failed",
@@ -1779,8 +1765,6 @@ module ISM
                         begin
                             target.prepareInstallation
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "prepareInstallation",
                                             errorTitle: "Installation task failed",
@@ -1792,8 +1776,6 @@ module ISM
                             directoryNumber, symlinkNumber, fileNumber, totalSize = target.recordInstallationInformation
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "recordInstallationInformation",
                                             errorTitle: "Installation task failed",
@@ -1804,8 +1786,6 @@ module ISM
                         begin
                             target.install
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "install",
                                             errorTitle: "Installation task failed",
@@ -1816,8 +1796,6 @@ module ISM
                         begin
                             target.recordNeededKernelOptions
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "recordNeededKernelOptions",
                                             errorTitle: "Installation task failed",
@@ -1828,8 +1806,6 @@ module ISM
                         begin
                             target.clean
                         rescue exception
-                            Ism.uninstallSoftwares(target.information)
-
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "clean",
                                             errorTitle: "Installation task failed",

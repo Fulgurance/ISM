@@ -2595,12 +2595,6 @@ module ISM
             ISM::Core::Notification.informationsTitle(@information.name,@information.version)
         end
 
-        def uninstall
-            ISM::Core::Notification.uninstall(@information)
-
-            Ism.uninstallSoftware(@information)
-        end
-
         def option(optionName : String) : Bool
             return @information.option(optionName)
         end
