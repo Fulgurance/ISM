@@ -89,7 +89,7 @@ module ISM
                         userAgreement = Ism.getUserAgreement
 
                         if userAgreement
-                            Ism.startUninstallationProcess(unneededSoftwares)
+                            Ism.uninstallSoftwares(unneededSoftwares)
                         end
                     end
                 end
