@@ -27,7 +27,7 @@ module ISM
             SynchronizationWaitingText = "Synchronization with the online database"
             CodependencyExtensionText = "Codependency"
             CalculationDoneText = "Done !"
-            Separator = "<<<<<<>>>>>>"
+            Separator = "> > > > >"
             NoOptionText = "no option"
             NewText = "New!"
             AdditionalVersionText = "Additional Version"
@@ -546,63 +546,60 @@ module ISM
                                 exception: exception)
         end
 
-        def uninstallSoftware(software : Software::Information)
+        #Uninstall one or more software. If multiple are uninstalled at the same time, will check if we need to preserve any file.
+        def uninstallSoftwares(softwares : Array(Software::Information))
 
             if targetSystemInformation.handleChroot
                 unlockSystemAccess
             end
 
-            requestedVersion = Software::Information.new
             otherVersions = Array(Software::Information).new
             protectedFiles = Array(String).new
             filesForRemoval = Array(String).new
-            softwareForRemovalIndex = 0
+            softwareForRemovalArray = Array(Software::Information)
 
             @installedSoftwares.each_with_index do |installedSoftware, index|
-                if software.hiddenName == installedSoftware.hiddenName
-                    requestedVersion = installedSoftware
-                    softwareForRemovalIndex = index
-                else
-                    if software.fullName == installedSoftware.fullName
-                        otherVersions.push(installedSoftware)
-                    end
+
+                if softwares.any? { |software| software.fullName == installedSoftware.fullName && !(software.hiddenName == installedSoftware.hiddenName)}
+                    otherVersions.push(installedSoftware)
                 end
+
             end
 
-            if requestedVersion.isValid
-                protectedFiles = otherVersions.map {|version| version.installedFiles }.flatten.uniq
+            protectedFiles = otherVersions.map { |version| version.installedFiles }.flatten.uniq
+            installedFilesForRemoval = softwareForRemovalArray.map { |software| software.installedFiles}.flatten.uniq
 
-                if protectedFiles.size > 0
-                    protectedFiles.each do |file|
+            if protectedFiles.size > 0
+                protectedFiles.each do |file|
 
-                        if !requestedVersion.installedFiles.includes?(file)
-                            filesForRemoval.push(file)
-                        end
+                    if !installedFilesForRemoval.includes?(file)
+                        filesForRemoval.push(file)
                     end
-                else
-                    filesForRemoval = requestedVersion.installedFiles
                 end
+            else
+                filesForRemoval = installedFilesForRemoval
+            end
 
-                Core::Security.runAsSuperUser {
-                    filesForRemoval.each do |file|
-                        if File.exists?(Ism.settings.rootPath+file) || File.symlink?(Ism.settings.rootPath+file)
-                            FileUtils.rm_r(Ism.settings.rootPath+file)
-                        end
+            Core::Security.runAsSuperUser {
+                filesForRemoval.each do |file|
+                    if File.exists?(Ism.settings.rootPath+file) || File.symlink?(Ism.settings.rootPath+file)
+                        FileUtils.rm_r(Ism.settings.rootPath+file)
                     end
+                end
+            }
 
+            softwareForRemovalArray.each do |software|
+                Core::Security.runAsSuperUser {
                     FileUtils.rm_r("#{software.installedDirectoryPath}/#{software.version}")
 
                     if Dir.empty?(software.installedDirectoryPath)
                         FileUtils.rm_r(software.installedDirectoryPath)
                     end
                 }
+            end
 
-                #Update the ISM instance to make sure the database is up to date and avoiding to reload everything
-                @installedSoftwares.delete(softwareForRemovalIndex)
-
-                if targetSystemInformation.handleChroot
-                    lockSystemAccess
-                end
+            if targetSystemInformation.handleChroot
+                lockSystemAccess
             end
 
             rescue exception
@@ -1686,7 +1683,7 @@ module ISM
                         begin
                             target.setup
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "setup",
@@ -1698,7 +1695,7 @@ module ISM
                         begin
                             target.download
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "download",
@@ -1710,7 +1707,7 @@ module ISM
                         begin
                             target.check
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "check",
@@ -1722,7 +1719,7 @@ module ISM
                         begin
                             target.extract
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "extract",
@@ -1734,7 +1731,7 @@ module ISM
                         begin
                             target.patch
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "patch",
@@ -1746,7 +1743,7 @@ module ISM
                         begin
                             target.prepare
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "prepare",
@@ -1758,7 +1755,7 @@ module ISM
                         begin
                             target.configure
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "configure",
@@ -1770,7 +1767,7 @@ module ISM
                         begin
                             target.build
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "build",
@@ -1782,7 +1779,7 @@ module ISM
                         begin
                             target.prepareInstallation
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "prepareInstallation",
@@ -1795,7 +1792,7 @@ module ISM
                             directoryNumber, symlinkNumber, fileNumber, totalSize = target.recordInstallationInformation
                             Ism.recordInstallationDetails(directoryNumber, symlinkNumber, fileNumber, totalSize)
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "recordInstallationInformation",
@@ -1807,7 +1804,7 @@ module ISM
                         begin
                             target.install
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "install",
@@ -1819,7 +1816,7 @@ module ISM
                         begin
                             target.recordNeededKernelOptions
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "recordNeededKernelOptions",
@@ -1831,7 +1828,7 @@ module ISM
                         begin
                             target.clean
                         rescue exception
-                            Ism.uninstallSoftware(target.information)
+                            Ism.uninstallSoftwares(target.information)
 
                             ISM::Error.show(className: "Software<|#\{information.coloredFullVersionName}|>",
                                             functionName: "clean",
