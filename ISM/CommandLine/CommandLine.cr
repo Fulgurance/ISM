@@ -567,7 +567,7 @@ module ISM
             end
 
             protectedFiles = otherVersions.map { |version| version.installedFiles }.flatten.uniq
-            installedFilesForRemoval = softwareForRemovalArray.map { |software| software.installedFiles}.flatten.uniq
+            installedFilesForRemoval = softwares.map { |software| software.installedFiles}.flatten.uniq
 
             if protectedFiles.size > 0
                 protectedFiles.each do |file|
@@ -588,17 +588,17 @@ module ISM
                 end
             }
 
-            softwareForRemovalArray.each_with_index do |software, index|
+            softwares.each_with_index do |software, index|
 
                 ISM::Core::Notification.uninstall(software)
 
                 updateUninstallationTerminalTitle(  index,
-                                                    softwareForRemovalArray.size,
+                                                    softwares.size,
                                                     software.port,
                                                     software.name,
                                                     software.version)
                 showStartSoftwareUninstallingMessage(   index,
-                                                        softwareForRemovalArray.size,
+                                                        softwares.size,
                                                         software.port,
                                                         software.name,
                                                         software.version)
@@ -612,12 +612,12 @@ module ISM
                 }
 
                 showEndSoftwareUninstallingMessage( index,
-                                                    softwareForRemovalArray.size,
+                                                    softwares.size,
                                                     software.port,
                                                     software.name,
                                                     software.version)
 
-                if index < softwareForRemovalArray.size-1
+                if index < softwares.size-1
                     showSeparator
                 end
             end
