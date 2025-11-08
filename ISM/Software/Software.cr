@@ -2249,10 +2249,24 @@ module ISM
                         finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
                         recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
 
-                        #Put a warning if we are installing a file that already exist: !File.exists?(finalDestination)
-                        #if Ism.softwareIsInstalled(@information) && Software::Information.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
-                        installedFiles << recordedFilePath
-                        #end
+                        otherVersions = Array(Software::Information).new
+
+                        Ism.installedSoftwares.each_with_index do |installedSoftware, index|
+
+                            if @information.fullName == installedSoftware.fullName && @information.hiddenName != installedSoftware.hiddenName
+                                otherVersions.push(installedSoftware)
+                            end
+
+                        end
+
+                        otherVersionsFiles = otherVersions.map { |version| version.installedFiles }.flatten.uniq
+
+
+                        if  !File.exists?(finalDestination) ||
+                            Ism.softwareIsInstalled(@information) && Software::Information.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath) ||
+                            otherVersionsFiles.includes?(recordedFilePath)
+                            installedFiles << recordedFilePath
+                        end
 
                         securityDescriptor = @information.securityMap.descriptor(   path:  recordedFilePath,
                                                                                     realPath:   entry)
