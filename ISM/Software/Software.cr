@@ -2250,9 +2250,9 @@ module ISM
                         recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
 
                         #Put a warning if we are installing a file that already exist: !File.exists?(finalDestination)
-                        if Ism.softwareIsInstalled(@information) && Software::Information.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
-                            installedFiles << recordedFilePath
-                        end
+                        #if Ism.softwareIsInstalled(@information) && Software::Information.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath)
+                        installedFiles << recordedFilePath
+                        #end
 
                         securityDescriptor = @information.securityMap.descriptor(   path:  recordedFilePath,
                                                                                     realPath:   entry)
