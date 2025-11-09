@@ -570,9 +570,8 @@ module ISM
             installedFilesForRemoval = softwares.map { |software| software.installedFiles}.flatten.uniq
 
             if protectedFiles.size > 0
-                protectedFiles.each do |file|
-
-                    if !installedFilesForRemoval.includes?(file)
+                installedFilesForRemoval.each do |file|
+                    if !protectedFiles.includes?(file)
                         filesForRemoval.push(file)
                     end
                 end
