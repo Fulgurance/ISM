@@ -560,7 +560,7 @@ module ISM
 
             @installedSoftwares.each_with_index do |installedSoftware, index|
 
-                if softwares.any? { |software| software.fullName == installedSoftware.fullName && !(software.hiddenName == installedSoftware.hiddenName)}
+                if softwares.any? { |software| software.fullName == installedSoftware.fullName && software.versionName != installedSoftware.versionName }
                     otherVersions.push(installedSoftware)
                 end
 

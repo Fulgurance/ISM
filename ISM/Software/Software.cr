@@ -2253,7 +2253,7 @@ module ISM
 
                         Ism.installedSoftwares.each_with_index do |installedSoftware, index|
 
-                            if @information.fullName == installedSoftware.fullName && @information.hiddenName != installedSoftware.hiddenName
+                            if @information.fullName == installedSoftware.fullName && @information.versionName != installedSoftware.versionName
                                 otherVersions.push(installedSoftware)
                             end
 
