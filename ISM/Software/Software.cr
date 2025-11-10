@@ -2241,6 +2241,19 @@ module ISM
             end
 
             Core::Security.runAsSuperUser(validCondition: condition) {
+
+                otherVersions = Array(Software::Information).new
+
+                Ism.installedSoftwares.each_with_index do |installedSoftware, index|
+
+                    if @information.fullName == installedSoftware.fullName && @information.fullVersionName != installedSoftware.fullVersionName
+                        otherVersions.push(installedSoftware)
+                    end
+
+                end
+
+                otherVersionsFiles = otherVersions.map { |version| version.installedFiles }.flatten.uniq
+
                 fileList.each do |entry|
 
                     #Don't keep libtool archives by default except if explicitely specified
@@ -2248,19 +2261,6 @@ module ISM
 
                         finalDestination = "/#{entry.sub(builtSoftwareDirectoryPathNoChroot,"")}"
                         recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
-
-                        otherVersions = Array(Software::Information).new
-
-                        Ism.installedSoftwares.each_with_index do |installedSoftware, index|
-
-                            if @information.fullName == installedSoftware.fullName && @information.versionName != installedSoftware.versionName
-                                otherVersions.push(installedSoftware)
-                            end
-
-                        end
-
-                        otherVersionsFiles = otherVersions.map { |version| version.installedFiles }.flatten.uniq
-
 
                         if  !File.exists?(finalDestination) ||
                             Ism.softwareIsInstalled(@information) && Software::Information.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath) ||

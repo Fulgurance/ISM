@@ -560,7 +560,7 @@ module ISM
 
             @installedSoftwares.each_with_index do |installedSoftware, index|
 
-                if softwares.any? { |software| software.fullName == installedSoftware.fullName && software.versionName != installedSoftware.versionName }
+                if softwares.any? { |software| software.fullName == installedSoftware.fullName && software.fullVersionName != installedSoftware.fullVersionName }
                     otherVersions.push(installedSoftware)
                 end
 
@@ -1678,6 +1678,7 @@ module ISM
                     Ism.loadSettingsFiles
                     Ism.loadBaseDirectories
                     Ism.loadSoftwareDatabase
+                    Ism.loadInstalledSoftwareDatabase
                     Ism.requestedSoftwares = requestedSoftwareFullVersionNames.map { |entry| Ism.getSoftwareInformation(entry)}
 
                     limit = targets.size
