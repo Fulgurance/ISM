@@ -2263,7 +2263,7 @@ module ISM
                         recordedFilePath = "/#{finalDestination.sub(Ism.settings.rootPath,"")}".squeeze("/")
 
                         if  !File.exists?(finalDestination) ||
-                            Ism.softwareIsInstalled(@information) && Software::Information.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath) ||
+                            File.exists?(@information.installedFilePath) && Software::Information.loadConfiguration(@information.installedFilePath).installedFiles.includes?(recordedFilePath) ||
                             otherVersionsFiles.includes?(recordedFilePath)
                             installedFiles << recordedFilePath
                         end
