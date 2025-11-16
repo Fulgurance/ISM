@@ -194,7 +194,7 @@ module ISM
             end
 
             def requireFilePath : String
-                return mainDirectoryPath + @version + ".cr"
+                return mainDirectoryPath + Filename::Installer
             end
 
             def settingsFilePath : String

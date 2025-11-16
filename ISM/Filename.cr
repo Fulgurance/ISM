@@ -7,6 +7,7 @@ module ISM
         RequiredLibraries = "RequiredLibraries.cr"
         SystemInformation = "SystemInformation.json"
         Information = "Information.inf"
+        Installer = "Installer.cr"
         Settings = "Settings.json"
         SoftwareSettings = "Settings.inf"
         PortsSettings = "PortsSettings.json"
