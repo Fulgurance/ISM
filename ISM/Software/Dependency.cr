@@ -78,7 +78,7 @@ module ISM
             end
 
             def version
-                return Ism.getAvailableSoftware(fullName).greatestVersion(@version).version
+                return Ism.getAvailableSoftware(fullName).greatestVersion(condition: @version).version
             end
 
             def requiredVersion : String

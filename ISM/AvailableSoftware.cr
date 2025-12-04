@@ -98,7 +98,7 @@ module ISM
                                 exception: exception)
         end
 
-        def getVersionByCondition(condition : String, returnMaximum = true) : Software::Information
+        def getVersionsByCondition(condition : String) : Array(Software::Information)
 
             temp = Array(Software::Information).new
 
@@ -153,12 +153,47 @@ module ISM
                 elsif lessOrEqualComparator(condition)
                     temp = @versions.select {|entry| SemanticVersion.parse(entry.version) <= semanticVersion}
                 else
-                    return Software::Information.new
+                    temp = Array(Software::Information).new
                 end
 
             end
 
-            return temp.empty? ? Software::Information.new : (returnMaximum ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
+            return temp
+
+            rescue exception
+                ISM::Error.show(className: "AvailableSoftware",
+                                functionName: "getVersionsByCondition",
+                                errorTitle: "Execution failure",
+                                error: "Failed to execute the function",
+                                exception: exception)
+        end
+
+        def getVersionByCondition(condition : String, returnGreatest = true, prioritizeInstalledVersion = true) : Software::Information
+
+            temp = getVersionsByCondition(condition)
+
+            installedOnes = Array(Software::Information).new
+
+            if prioritizeInstalledVersion
+
+                temp.each do |software|
+                    if Ism.softwareIsInstalled(software)
+                        installedOnes.push(software)
+                    end
+                end
+            end
+
+            if !installedOnes.empty?
+                return (returnGreatest ? installedOnes.max_by {|entry| SemanticVersion.parse(entry.version)} : installedOnes.min_by {|entry| SemanticVersion.parse(entry.version)})
+            else
+                if temp.empty?
+                    return Software::Information.new
+                else
+                    return (returnGreatest ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
+                end
+            end
+
+            #return temp.empty? ? Software::Information.new : (returnGreatest ? temp.max_by {|entry| SemanticVersion.parse(entry.version)} : temp.min_by {|entry| SemanticVersion.parse(entry.version)})
 
             rescue exception
                 ISM::Error.show(className: "AvailableSoftware",
@@ -179,7 +214,7 @@ module ISM
                         end
                     end
                 else
-                    return getVersionByCondition(condition: condition, returnMaximum: true)
+                    return getVersionByCondition(condition: condition, returnGreatest: true, prioritizeInstalledVersion: true)
                 end
             end
 

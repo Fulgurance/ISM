@@ -17,8 +17,6 @@ module ISM
 
             def_clone
 
-            #include JSON::Serializable
-
             property port : String
             property name : String
             property version : String
