@@ -2121,7 +2121,7 @@ module ISM
             ISM::Core::Notification.updateSystemCache
 
             if Ism.targetSystemInformation.handleChroot
-                requestedCommands = "ldconfig #{arguments}"
+                requestedCommands = "ldconfig"
 
                 process = Ism.runSystemCommand( command: requestedCommands,
                                                 asRoot: true)
