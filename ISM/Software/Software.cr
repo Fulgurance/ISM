@@ -1751,20 +1751,6 @@ module ISM
             end
         end
 
-        def runLdconfigCommand(arguments = String.new)
-            requestedCommands = "ldconfig #{arguments}"
-
-            process = Ism.runSystemCommand( command: requestedCommands,
-                                            asRoot: true)
-
-            if !process.success?
-                ISM::Error.show(className: "Software: #{information.colouredFullVersionName}",
-                                functionName: "runLdconfigCommand",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function")
-            end
-        end
-
         def runGtkQueryImmodules2Command(arguments = String.new)
             requestedCommands = "gtk-query-immodules-2.0 #{arguments}"
 
@@ -2134,16 +2120,15 @@ module ISM
         def updateSystemCache
             ISM::Core::Notification.updateSystemCache
 
-            if commandIsAvailable("ldconfig") && Ism.targetSystemInformation.handleChroot
-                runLdconfigCommand
+            if Ism.targetSystemInformation.handleChroot
+                requestedCommands = "ldconfig #{arguments}"
+
+                process = Ism.runSystemCommand( command: requestedCommands,
+                                                asRoot: true)
             end
 
-            rescue exception
-                ISM::Error.show(className: "Software: #{information.colouredFullVersionName}",
-                                functionName: "updateSystemCache",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
+            #No exit process because if ldconfig is not available, we can just keep going
+            rescue
         end
 
         def deploy
@@ -2753,19 +2738,6 @@ module ISM
 
         def showInfoCode(message : String)
             ISM::Core::Notification.informationCode(message)
-        end
-
-        def commandIsAvailable(command : String) : Bool
-            process = Ism.runSystemCommand("type #{command} > /dev/null 2>&1")
-
-            return (process.exit_code == 0)
-
-            rescue exception
-                ISM::Error.show(className: "Software: #{information.colouredFullVersionName}",
-                                functionName: "commandIsAvailable",
-                                errorTitle: "Execution failure",
-                                error: "Failed to execute the function",
-                                exception: exception)
         end
 
         def component(name : String) : Software::Information
