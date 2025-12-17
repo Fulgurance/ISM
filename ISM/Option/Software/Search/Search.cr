@@ -91,7 +91,7 @@ module ISM
                                 #AVAILABLE VERSIONS
                                 versionsText = ""
 
-                                versionArray = software.versions.sort { |a, b| SemanticVersion.parse(b.version) <=> SemanticVersion.parse(a.version) }
+                                versionArray = software.versions.sort { |a, b| SemanticVersion.parse(a.version) <=> SemanticVersion.parse(b.version) }
 
                                 versionArray.each_with_index do |version, index|
                                     versionsText += "#{version.version.colorize(:green)}"
@@ -106,7 +106,7 @@ module ISM
                                 #INSTALLED VERSIONS
                                 installedVersionText = ""
 
-                                versionArray = Ism.installedSoftwares.select { |entry| software.fullName == entry.fullName}.sort { |a, b| SemanticVersion.parse(b.version) <=> SemanticVersion.parse(a.version) }
+                                versionArray = Ism.installedSoftwares.select { |entry| software.fullName == entry.fullName}.sort { |a, b| SemanticVersion.parse(a.version) <=> SemanticVersion.parse(b.version) }
 
                                 versionArray.each do |installed|
 
