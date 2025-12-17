@@ -57,18 +57,20 @@ module ISM
                             matchingSoftwaresArray.each_with_index do |software, index|
                                 greatestVersion = software.greatestVersion
 
+                                #TYPE
                                 puts    Default::TypeField +
                                             "#{(greatestVersion.type).colorize(:magenta)}"
-
+                                #PORT
                                 puts    Default::PortField +
                                             "#{("@"+greatestVersion.port).colorize(Colorize::ColorRGB.new(255,100,100))}"
-
+                                #NAME
                                 puts    Default::NameField +
                                             "#{greatestVersion.name.colorize(:green)}"
-
+                                #DESCRIPTION
                                 puts    Default::DescriptionField +
                                             "#{greatestVersion.description.colorize(:green)}"
 
+                                #ARCHITECTURE
                                 architecturesText = ""
                                 greatestVersion.architectures.each_with_index do |architecture, index|
                                     architecturesText += architecture
@@ -82,12 +84,18 @@ module ISM
                                 puts    Default::AvailablesArchitecturesField +
                                             "#{architecturesText.colorize(Colorize::ColorRGB.new(255,170,0))}"
 
+                                #WEBSITE
                                 puts    Default::WebsiteField +
                                             "#{greatestVersion.website.colorize(:green)}"
 
+                                #AVAILABLE VERSIONS
                                 versionsText = ""
-                                software.versions.each_with_index do |version, index|
+
+                                versionArray = software.versions.sort { |a, b| SemanticVersion.parse(b.version) <=> SemanticVersion.parse(a.version) }
+
+                                versionArray.each_with_index do |version, index|
                                     versionsText += "#{version.version.colorize(:green)}"
+
                                     if index+1 < software.versions.size
                                             versionsText += " | "
                                     end
@@ -95,35 +103,37 @@ module ISM
                                 puts    Default::AvailablesVersionsField +
                                             "#{versionsText}"
 
+                                #INSTALLED VERSIONS
                                 installedVersionText = ""
-                                Ism.installedSoftwares.each_with_index do |installed, index|
-                                    if software.fullName == installed.fullName
-                                        installedVersionText += "#{"\n\t| ".colorize(:green)}"
 
-                                        #TO DO
-                                        #.colorize(Colorize::ColorRGB.new(255,100,100)).back(:green).bold
-                                        installedVersionText += "#{installed.version.colorize(Colorize::ColorRGB.new(255,100,100))}"
+                                versionArray = Ism.installedSoftwares.select { |entry| software.fullName == entry.fullName}.sort { |a, b| SemanticVersion.parse(b.version) <=> SemanticVersion.parse(a.version) }
 
-                                        installedVersionText += " { "
+                                versionArray.each do |installed|
 
-                                        if installed.options.empty?
-                                            installedVersionText += "#{"#{CommandLine::Default::NoOptionText} ".colorize(:dark_gray)}"
-                                        end
+                                    installedVersionText += "#{"\n\t| ".colorize(:green)}"
 
-                                        installed.options.each do |option|
+                                    #TO DO
+                                    #.colorize(Colorize::ColorRGB.new(255,100,100)).back(:green).bold
+                                    installedVersionText += "#{installed.version.colorize(Colorize::ColorRGB.new(255,100,100))}"
 
-                                            if option.active
-                                                installedVersionText += "#{option.name.colorize(:red)}"
-                                            else
-                                                installedVersionText += "#{option.name.colorize(:blue)}"
-                                            end
+                                    installedVersionText += " { "
 
-                                            installedVersionText += " "
-                                        end
-
-                                        installedVersionText += "}"
-
+                                    if installed.options.empty?
+                                        installedVersionText += "#{"#{CommandLine::Default::NoOptionText} ".colorize(:dark_gray)}"
                                     end
+
+                                    installed.options.each do |option|
+
+                                        if option.active
+                                            installedVersionText += "#{option.name.colorize(:red)}"
+                                        else
+                                            installedVersionText += "#{option.name.colorize(:blue)}"
+                                        end
+
+                                        installedVersionText += " "
+                                    end
+
+                                    installedVersionText += "}"
 
                                 end
 
@@ -152,6 +162,7 @@ module ISM
                                     end
                                 end
 
+                                #UNIQUE DEPENDENCIES
                                 uniqueDependenciesSettedText = String.new
 
                                 greatestVersion.uniqueDependencies.each do |uniqueGroup|
@@ -173,6 +184,7 @@ module ISM
                                 puts    Default::UniqueDependenciesField +
                                         (uniqueDependenciesSettedText.empty? ? "#{Default::None.colorize(:green)}" : uniqueDependenciesSettedText)
 
+                                #OPTIONS
                                 uniqueGroupText = String.new
 
                                 greatestVersion.uniqueOptions.each do |uniqueOptionGroup|
@@ -207,6 +219,7 @@ module ISM
 
                                 puts    Default::OptionsField + optionSettedText
 
+                                #LOCAL PATCHES
                                 localPatchesText = String.new
 
                                 Dir[Ism.settings.rootPath+Path::PatchesDirectory+"/#{greatestVersion.versionName}/*"].each do |patch|
